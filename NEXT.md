@@ -453,3 +453,22 @@ pruefen.
 - Resolver-Migration + JSONL-Journal-Umbau: die offenen Punkte stehen
   ausführlich in der Sektion „Aus dem Runtime-Session-Resolver +
   Journal-Mirror-Refactor" weiter oben — nicht doppeln.
+
+## Aus dem Session-Tab Mobil-Feinschliff (2026-09-10, Commit `e6de3e5`, released)
+
+- **Keine Browser-/PWA-Durchklick-Verifikation** der drei Fixes — nur Build +
+  ESLint. Der Nutzer-Painpoint war explizit mobil/iOS-PWA. Offen zu prüfen
+  gegen den live-deployten Stand (`fitness-aos.web.app`):
+  - Bottom-Nav: transparenter Streifen unter der Bar als iOS-PWA wirklich weg,
+    Bar sitzt bündig an der Unterkante, Icons nicht unter dem Home-Indicator.
+  - SessionEditor: letzter Block „Details & Notizen" auf dem Handy vollständig
+    über Bottom-Nav + Save-FAB scrollbar, nicht mehr verdeckt. Gleiches für den
+    `skills`-Subtab.
+  - SessionHeader: die drei Icons oben rechts (Kalender / Menü / Speichern)
+    treffen auf iOS Safari/PWA jeweils ihr eigenes Ziel; Datums-Picker öffnet
+    weiterhin per Kalender-Icon-Tap.
+- **CI-Run des Release-Pushs** (`vitalos` GitHub Actions, „Deploy Fitness PWA"
+  + „Deploy VitalOS Shell") nach `fitness-release` nicht per `gh` gegengeprüft.
+- Pre-Commit-Hook-Reminder: `src/views/Session/`-Code geändert, aber
+  `ARCHITECTURE.md`/`AUDIT.md` nicht im Commit — bewusst nicht aktualisiert
+  (reine CSS/Layout-Fixes ohne Architektur-Relevanz), kein Nachtrag geplant.
