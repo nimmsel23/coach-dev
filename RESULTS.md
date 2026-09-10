@@ -1,3 +1,41 @@
+# Session-Tab Mobil-Feinschliff: Bottom-Nav bündig, Bottom-Spacing, Header-Icon-Hitbox (2026-09-10)
+
+Drei zusammenhängende Mobil-Layout-Fixes am Session-Tab (Nutzer-Befund: „oben
+rum schon ok, aber unten rum + die Mobil-Nav-Bar brauchen noch Anpassungen"),
+alle rein CSS/Layout ohne Verhaltensänderung. Als ein Commit `e6de3e5` auf
+`dev`, danach vom Nutzer per `fitness-release --yes` voll durchgereleased
+(dev→vitalos→Firebase). Build- und ESLint-verifiziert; **keine** Browser-/PWA-
+Durchklick-Verifikation (siehe `NEXT.md`).
+
+* **`src/components/layout/MobileNav.jsx`**: `bg-fit-card/90` + `backdrop-blur`
+  + `border-t` wandern vom inneren `<div>` aufs `<nav>` selbst (füllt bis zur
+  echten Unterkante); der `env(safe-area-inset-bottom)`-Inset steckt jetzt im
+  `padding-bottom` des Content-`div` (`calc(0.75rem + env(...))`). Behebt den
+  transparenten Streifen unter der Bar als iOS-PWA (`viewport-fit=cover` +
+  `black-translucent` → Inset ≠ 0).
+* **`src/views/Session/SessionEditor.jsx`**: fixes `pb-36` (144px) →
+  `paddingBottom: calc(10rem + env(safe-area-inset-bottom))` (inline-style, da
+  `env()` nötig). Vorher lag der letzte Block „Details & Notizen" unter
+  Bottom-Nav (~76px + Safe-Area) **und** dem darüber schwebenden Save-FAB
+  (`bottom: 6rem + safe`, 56px).
+* **`src/views/Session/index.jsx`**: `skills`-Subtab-Container `pb-32` →
+  `calc(8rem + env(safe-area-inset-bottom))`, gleicher Grund.
+* **`src/views/Session/SessionHeader.jsx`**: das `<input type="date">` im
+  Kalender-Button war ein volles `absolute inset-0 opacity-0`-Overlay — auf
+  iOS Safari hat ein transparentes Date-Input einen intrinsisch größeren, nach
+  links verschobenen Touch-Bereich, sodass Taps auf „Menü"/„Speichern"
+  unsichtbar das Datumsfeld trafen. Jetzt `pointer-events-none` + `h-0 w-0` +
+  `tabIndex={-1}` + `aria-hidden` (Picker wird ohnehin nur programmatisch via
+  `showPicker()`/`.click()` geöffnet); `aria-label="Datum wählen"` auf den
+  Button gewandert.
+* **Release** (`fitness-release --yes`): `dev` → `origin/dev`, in den
+  `vitalos`-Worktree gemergt (`e68b9d2..f6e3b0f`), Firebase-Build + Deploy nach
+  **fitness-aos.web.app** (`release complete`), SW/Manifest gestampt
+  (`fitness-vmtvvfx3k`), Submodule-Pointer im `vitalos`-Parent gebumpt
+  (`eb3a2ea`, `master` gepusht).
+
+---
+
 # Runtime-Session-Resolver + Journal-Mirror-Konsolidierung + Yuhonas-Regionsnamen-Fix (2026-09-09)
 
 Drei kleinere Refactor-/Fix-Commits nach dem Ort/Dauer-Release (Eintrag unten),
