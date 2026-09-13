@@ -12,6 +12,9 @@ import { db } from "../../../firebase.js";
 import { getStaticMuscle, getStaticMuscleDocs } from "../../kb/muscles.js";
 import { normalizeExerciseRecord } from "../shared/exercise.js";
 import { EXERCISE_BULK_DATA } from "./exerciseBulkData.generated.js";
+import { PUSH_EXERCISES } from "./push.generated.js";
+import { PULL_EXERCISES } from "./pull.generated.js";
+import { LEGS_EXERCISES } from "./legs.generated.js";
 export { getFavourites, toggleFavourite } from "../shared/favourites.js";
 
 // EXERCISE_BULK_DATA (scripts/build-exercise-bulk-data.mjs, aus
@@ -153,6 +156,14 @@ function _isSupersededExternalExercise(ex, refs) {
   if (ex.yuhonas_id && refs.yuhonas.has(String(ex.yuhonas_id))) return true;
   const hay = [ex.display_name, ex.german, ex.english, ex.name, ex.exercise_id, ex.id].map(_normalize);
   return hay.some((item) => item && refs.names.has(item));
+}
+
+// Push/Pull/Legs-Split der expert-approved Exercises, offline verfügbar wie
+// EXERCISE_BULK_DATA (scripts/build-ppl-data.mjs, aus kb/exercises/**/*.yml,
+// siehe fitness/catalog/kb/AGENTS.md). Kein Firestore-Fetch nötig — Bucket
+// wächst nur, wenn ein Coach eine neue Übung approved + neu gebaut wird.
+export function getPushPullLegsCatalog() {
+  return { push: PUSH_EXERCISES, pull: PULL_EXERCISES, legs: LEGS_EXERCISES };
 }
 
 // ── Anatomy & Muscles ─────────────────────────────────────────────────────────
