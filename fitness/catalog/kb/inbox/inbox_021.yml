@@ -27,8 +27,8 @@ exercises:
   - 403_brachialis
   secondary_muscles:
   - 207_teres_major
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 205_rhomboids
   - 404_brachioradialis
   stabilizers:

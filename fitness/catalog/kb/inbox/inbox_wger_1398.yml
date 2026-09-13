@@ -15,17 +15,17 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 501_rectus_abdominis
   - 602_adductors
   stabilizers:
   - 206_erector_spinae
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 205_rhomboids
   - 502_obliquus_externus
   - 503_obliquus_internus

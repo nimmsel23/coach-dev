@@ -21,12 +21,12 @@ exercises:
   - cable
   primary_muscles:
   - 303_posterior_deltoid
-  - 203_trapezius_middle
+  - 202b_trapezius_middle
   - 205_rhomboids
   secondary_muscles:
   - 306_infraspinatus
   - 307_teres_minor
-  - 204_trapezius_lower
+  - 202c_trapezius_lower
   - 403_brachialis
   - 404_brachioradialis
   stabilizers:
@@ -103,9 +103,9 @@ exercises:
       german: Face Pulls
       category: shoulders
       primary_muscles:
-      - 202_trapezius_upper
-      - 203_trapezius_middle
-      - 204_trapezius_lower
+      - 202a_trapezius_upper
+      - 202b_trapezius_middle
+      - 202c_trapezius_lower
       - 303_posterior_deltoid
       secondary_muscles: []
       equipment: []

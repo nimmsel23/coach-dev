@@ -26,8 +26,8 @@ exercises:
   - 301_anterior_deltoid
   stabilizers:
   - 304_rotator_cuff
-  - 202_trapezius_upper
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202c_trapezius_lower
   - 105_serratus_anterior
   - 504_transverse_abdominis
   - 502_obliquus_externus

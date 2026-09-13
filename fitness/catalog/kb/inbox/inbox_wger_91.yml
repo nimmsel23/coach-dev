@@ -20,7 +20,7 @@ exercises:
   - 405_forearm_flexors
   - 501_rectus_abdominis
   - 504_transverse_abdominis
-  - 203_trapezius_middle
+  - 202b_trapezius_middle
   - 205_rhomboids
   movements:
   - elbow_flexion

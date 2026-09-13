@@ -1,9 +1,10 @@
-id: 202_trapezius_upper
+id: 202a_trapezius_upper
 display_name: Trapezius Upper
 label_de: Oberer Trapezmuskel
 label_en: Traps (Upper)
 label_lat: M. trapezius (pars descendens)
 wger_id: 9
+parent: 202_trapezius
 aliases:
 - upper trapezius
 - oberer trapezmuskel

@@ -19,7 +19,7 @@ exercises:
   - 301_anterior_deltoid
   - 302_lateral_deltoid
   stabilizers:
-  - 202_trapezius_upper
+  - 202a_trapezius_upper
   - 105_serratus_anterior
   - 501_rectus_abdominis
   movements:

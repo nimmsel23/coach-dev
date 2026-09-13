@@ -25,8 +25,8 @@ exercises:
   - 201_latissimus_dorsi
   - 207_teres_major
   secondary_muscles:
-  - 204_trapezius_lower
-  - 203_trapezius_middle
+  - 202c_trapezius_lower
+  - 202b_trapezius_middle
   - 205_rhomboids
   - 402_biceps_brachii
   - 403_brachialis

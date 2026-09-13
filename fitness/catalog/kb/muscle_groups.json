@@ -1,17 +1,17 @@
 {
   "100_chest": ["101_pectoralis_major", "102_pectoralis_major_clavicular", "103_pectoralis_major_sternal", "104_pectoralis_minor", "105_serratus_anterior"],
-  "200_back": ["201_latissimus_dorsi", "202_trapezius_upper", "203_trapezius_middle", "204_trapezius_lower", "205_rhomboids", "206_erector_spinae", "207_teres_major"],
+  "200_back": ["201_latissimus_dorsi", "202_trapezius", "202a_trapezius_upper", "202b_trapezius_middle", "202c_trapezius_lower", "205_rhomboids", "206_erector_spinae", "207_teres_major"],
   "300_shoulders": ["301_anterior_deltoid", "302_lateral_deltoid", "303_posterior_deltoid", "304_rotator_cuff"],
   "400_arms": ["401_triceps_brachii", "401a_triceps_long_head", "401b_triceps_lateral_head", "401c_triceps_medial_head", "402_biceps_brachii", "403_brachialis", "404_brachioradialis", "405_forearm_flexors", "405a_flexor_digitorum_superficialis", "405b_flexor_carpi_ulnaris", "405c_flexor_carpi_radialis", "405d_palmaris_longus", "406_forearm_extensors", "406a_extensor_digitorum", "406b_extensor_carpi_radialis_longus", "406c_extensor_carpi_radialis_brevis", "406d_extensor_carpi_ulnaris", "407_anconeus"],
   "500_abs": ["501_rectus_abdominis", "502_obliquus_externus", "503_obliquus_internus", "504_transverse_abdominis", "505_quadratus_lumborum", "506_diaphragm", "507_multifidus", "508_pelvic_floor"],
-  "600_legs": ["601a_rectus_femoris", "601b_vastus_lateralis", "601c_vastus_medialis", "601d_vastus_intermedius", "602_adductors", "602a_adductor_magnus", "602b_adductor_longus", "602c_adductor_brevis", "603_gluteus_maximus", "604_biceps_femoris", "605_semitendinosus", "606_semimembranosus", "607_iliopsoas", "608_gluteus_medius", "609_gluteus_minimus"],
+  "600_legs": ["601a_rectus_femoris", "601b_vastus_lateralis", "601c_vastus_medialis", "601d_vastus_intermedius", "602_adductors", "602a_adductor_magnus", "602b_adductor_longus", "602c_adductor_brevis", "603_gluteus_maximus", "604_hamstrings", "604a_biceps_femoris", "604b_semitendinosus", "604c_semimembranosus", "607_iliopsoas", "608_gluteus_medius", "609_gluteus_minimus"],
   "700_calves": ["701_gastrocnemius", "701a_gastrocnemius_medial", "701b_gastrocnemius_lateral", "702_soleus", "703_tibialis_anterior"],
   "quadriceps": ["601_quadriceps_femoris", "601a_rectus_femoris", "601b_vastus_lateralis", "601c_vastus_medialis", "601d_vastus_intermedius"],
-  "hamstrings": ["604_biceps_femoris", "605_semitendinosus", "606_semimembranosus"],
+  "hamstrings": ["604_hamstrings", "604a_biceps_femoris", "604b_semitendinosus", "604c_semimembranosus"],
   "obliques": ["502_obliquus_externus", "503_obliquus_internus"],
   "transverse_abdominis": ["504_transverse_abdominis"],
   "lats": ["201_latissimus_dorsi", "207_teres_major"],
-  "trapezius": ["202_trapezius_upper", "203_trapezius_middle", "204_trapezius_lower"],
+  "trapezius": ["202_trapezius", "202a_trapezius_upper", "202b_trapezius_middle", "202c_trapezius_lower"],
   "glutes": ["603_gluteus_maximus", "608_gluteus_medius", "609_gluteus_minimus"],
   "abductors": ["608_gluteus_medius", "609_gluteus_minimus"]
 }

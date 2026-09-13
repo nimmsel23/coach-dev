@@ -1,9 +1,10 @@
-id: 204_trapezius_lower
+id: 202c_trapezius_lower
 display_name: Trapezius Lower
 label_de: Unterer Trapezmuskel
 label_en: Traps (Lower)
 label_lat: M. trapezius (pars ascendens)
 wger_id: 9
+parent: 202_trapezius
 aliases: [lower trapezius, unterer trapezmuskel, trapezius lower]
 viz:
   body_muscles:

@@ -24,9 +24,9 @@ exercises:
   - kettlebell
   primary_muscles:
   - 206_erector_spinae
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 603_gluteus_maximus
   stabilizers:

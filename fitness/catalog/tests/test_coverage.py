@@ -20,7 +20,7 @@ class CoverageTest(unittest.TestCase):
                 display_name="Front Squat Test",
                 source_file="test.yml",
                 primary_muscles=["601_quadriceps_femoris", "603_gluteus_maximus"],
-                secondary_muscles=["604_biceps_femoris", "701_gastrocnemius"],
+                secondary_muscles=["604a_biceps_femoris", "701_gastrocnemius"],
                 stabilizers=["206_erector_spinae"],
             )
         ]
@@ -64,7 +64,7 @@ class CoverageTest(unittest.TestCase):
         self.assertEqual(region_index["601_quadriceps_femoris"], "quadriceps")
         self.assertEqual(region_index["601a_rectus_femoris"], "quadriceps")
         self.assertEqual(region_index["603_gluteus_maximus"], "glutes")
-        self.assertEqual(region_index["604_biceps_femoris"], "hamstrings")
+        self.assertEqual(region_index["604a_biceps_femoris"], "hamstrings")
         self.assertEqual(region_index["701_gastrocnemius"], "calves")
         self.assertEqual(resolve_muscle_id("601", alias_map), "601_quadriceps_femoris")
         self.assertEqual(resolve_muscle_id("603_rectus_femoris", alias_map), "603_rectus_femoris")

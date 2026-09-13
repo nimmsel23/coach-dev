@@ -21,11 +21,11 @@ exercises:
   - 302_lateral_deltoid
   secondary_muscles:
   - 305_supraspinatus
-  - 202_trapezius_upper
+  - 202a_trapezius_upper
   - 105_serratus_anterior
   stabilizers:
   - 304_rotator_cuff
-  - 204_trapezius_lower
+  - 202c_trapezius_lower
   - 504_transverse_abdominis
   - 502_obliquus_externus
   - 206_erector_spinae

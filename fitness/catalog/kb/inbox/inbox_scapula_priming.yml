@@ -26,10 +26,10 @@ exercises:
   primary_muscles:
   - 105_serratus_anterior
   - 205_rhomboids
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   secondary_muscles:
-  - 202_trapezius_upper
+  - 202a_trapezius_upper
   - 304_rotator_cuff
   - 303_posterior_deltoid
   stabilizers:

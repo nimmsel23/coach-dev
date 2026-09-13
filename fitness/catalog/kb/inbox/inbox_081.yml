@@ -22,9 +22,9 @@ exercises:
   - barbell
   - dumbbell
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 603_gluteus_maximus
   secondary_muscles:
   - 206_erector_spinae
@@ -35,8 +35,8 @@ exercises:
   - 503_obliquus_internus
   - 507_multifidus
   - 201_latissimus_dorsi
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 405_forearm_flexors
   - 608_gluteus_medius
   - 609_gluteus_minimus

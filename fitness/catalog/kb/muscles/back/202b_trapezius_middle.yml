@@ -1,9 +1,10 @@
-id: 203_trapezius_middle
+id: 202b_trapezius_middle
 display_name: Trapezius Middle
 label_de: Mittlerer Trapezmuskel
 label_en: Traps (Middle)
 label_lat: M. trapezius (pars transversa)
 wger_id: 9
+parent: 202_trapezius
 aliases: [middle trapezius, mittlerer trapezmuskel, trapezius middle]
 viz:
   body_muscles:

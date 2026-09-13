@@ -31,9 +31,9 @@ exercises:
   - 507_multifidus
   - 505_quadratus_lumborum
   - 206_erector_spinae
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 205_rhomboids
   - 301_anterior_deltoid
   - 304_rotator_cuff

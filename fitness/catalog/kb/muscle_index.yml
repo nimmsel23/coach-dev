@@ -15,18 +15,20 @@ muscles:
   701a_gastrocnemius_medial:       {wger_id: 7, parent: 701_gastrocnemius}
   701b_gastrocnemius_lateral:      {wger_id: 7, parent: 701_gastrocnemius}
   603_gluteus_maximus:             {wger_id: 8}
-  202_trapezius_upper:             {wger_id: 9}
-  203_trapezius_middle:            {wger_id: 9}
-  204_trapezius_lower:             {wger_id: 9}
+  202_trapezius:                   {wger_id: 9}
+  202a_trapezius_upper:            {wger_id: 9, parent: 202_trapezius}
+  202b_trapezius_middle:           {wger_id: 9, parent: 202_trapezius}
+  202c_trapezius_lower:            {wger_id: 9, parent: 202_trapezius}
   303_posterior_deltoid:           {wger_id: 9}
   601_quadriceps_femoris:          {wger_id: 10}
   601a_rectus_femoris:             {wger_id: 10, parent: 601_quadriceps_femoris}
   601b_vastus_lateralis:           {wger_id: 10, parent: 601_quadriceps_femoris}
   601c_vastus_medialis:            {wger_id: 10, parent: 601_quadriceps_femoris}
   601d_vastus_intermedius:         {wger_id: 10, parent: 601_quadriceps_femoris}
-  604_biceps_femoris:              {wger_id: 11}
-  605_semitendinosus:              {wger_id: 11}
-  606_semimembranosus:             {wger_id: 11}
+  604_hamstrings:                  {wger_id: 11}
+  604a_biceps_femoris:             {wger_id: 11, parent: 604_hamstrings}
+  604b_semitendinosus:             {wger_id: 11, parent: 604_hamstrings}
+  604c_semimembranosus:            {wger_id: 11, parent: 604_hamstrings}
   201_latissimus_dorsi:            {wger_id: 12}
   403_brachialis:                  {wger_id: 13}
   502_obliquus_externus:           {wger_id: 14}
@@ -88,10 +90,10 @@ string_aliases:
   chest:       101_pectoralis_major
   forearms:    405_forearm_flexors
   glutes:      603_gluteus_maximus
-  hamstrings:  604_biceps_femoris
+  hamstrings:  604_hamstrings
   lower_back:  206_erector_spinae
   middle_back: 205_rhomboids
-  traps:       202_trapezius_upper
+  traps:       202_trapezius
 
 wger_groups:
   # wger unterscheidet pro Muskel-ID KEINE Teilköpfe/-anteile — ein Import,
@@ -99,8 +101,14 @@ wger_groups:
   # 4 -> Pectoralis major UND Clavicular- UND Sternal-Kopf gleichzeitig),
   # behauptet mehr Praezision als die Quelle je hatte. Fuer 4/5/7/10 existiert
   # eine echte, verlustfreie Parent-ID in der Taxonomie -> nur die nutzen.
-  # 9 und 11 bleiben Mehrfach-Listen, weil dort KEINE einzelne Parent-ID
-  # existiert (Taxonomie-Luecke, kein Fall fuer denselben Fix).
+  # 9 und 11 hatten urspruenglich dieselbe Luecke (kein Parent, nur die
+  # Mehrfach-Liste ihrer Anteile) — seit der Trapezius-/Hamstrings-
+  # Restrukturierung (202_trapezius/604_hamstrings als echte Parent-IDs,
+  # siehe muscles/back/202_trapezius.yml bzw. muscles/legs/604_hamstrings.yml)
+  # nutzt 11 jetzt ebenfalls eine verlustfreie Parent-ID. 9 bleibt eine
+  # Mehrfach-Liste, weil wger_id 9 zusaetzlich 303_posterior_deltoid
+  # (ein Deltoid-Kopf, keine Trapezius-Faser) mit demselben Rohwert
+  # zusammenwirft — das ist eine wger-Datenungenauigkeit, kein Taxonomie-Fall.
   1:  [402_biceps_brachii]
   2:  [301_anterior_deltoid]
   3:  [105_serratus_anterior]
@@ -109,9 +117,9 @@ wger_groups:
   6:  [501_rectus_abdominis]
   7:  [701_gastrocnemius]
   8:  [603_gluteus_maximus]
-  9:  [202_trapezius_upper, 203_trapezius_middle, 204_trapezius_lower, 303_posterior_deltoid]
+  9:  [202_trapezius, 303_posterior_deltoid]
   10: [601_quadriceps_femoris]
-  11: [604_biceps_femoris, 605_semitendinosus, 606_semimembranosus]
+  11: [604_hamstrings]
   12: [201_latissimus_dorsi]
   13: [403_brachialis]
   14: [502_obliquus_externus, 503_obliquus_internus]

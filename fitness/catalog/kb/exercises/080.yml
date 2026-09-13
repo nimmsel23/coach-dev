@@ -21,15 +21,15 @@ exercises:
   - barbell
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 206_erector_spinae
   secondary_muscles:
   - 601_quadriceps_femoris
   - 201_latissimus_dorsi
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 405_forearm_flexors
   stabilizers:
   - 504_transverse_abdominis

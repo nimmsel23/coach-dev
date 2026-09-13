@@ -9,7 +9,7 @@ primal_movement_rules:
     description: "Push patterns should target chest, shoulders, and/or triceps."
 
   pull:
-    required_primary: [back, middle_back, upper_back, lower_back, shoulders, arms, bizeps, hamstrings, glutes, 201_latissimus_dorsi, 203_trapezius_middle, 204_trapezius_lower, 205_rhomboids, 206_erector_spinae, 303_posterior_deltoid, 304_rotator_cuff, 306_infraspinatus, 307_teres_minor, 402_biceps_brachii, 403_brachialis, 603_gluteus_maximus, 604_biceps_femoris, 605_semitendinosus, 606_semimembranosus]
+    required_primary: [back, middle_back, upper_back, lower_back, shoulders, arms, bizeps, hamstrings, glutes, 201_latissimus_dorsi, 202b_trapezius_middle, 202c_trapezius_lower, 205_rhomboids, 206_erector_spinae, 303_posterior_deltoid, 304_rotator_cuff, 306_infraspinatus, 307_teres_minor, 402_biceps_brachii, 403_brachialis, 603_gluteus_maximus, 604a_biceps_femoris, 604b_semitendinosus, 604c_semimembranosus]
     description: "Pull patterns should target back, elbow flexors, rear shoulder, or posterior chain."
 
   horizontal_press:
@@ -25,7 +25,7 @@ primal_movement_rules:
     description: "Vertical pulling should target the lats/back."
     
   horizontal_pull:
-    required_primary: [back, middle_back, rhomboids, 203_trapezius_middle, 204_trapezius_lower, 205_rhomboids, 201_latissimus_dorsi]
+    required_primary: [back, middle_back, rhomboids, 202b_trapezius_middle, 202c_trapezius_lower, 205_rhomboids, 201_latissimus_dorsi]
     description: "Horizontal pulling (rows) should target the back (lats, trapezius, rhomboids)."
     
   squat:
@@ -45,11 +45,11 @@ primal_movement_rules:
     description: "Twist patterns should target trunk rotation or anti-rotation."
 
   carry:
-    required_primary: [abs, lower_back, upper_back, shoulders, 501_rectus_abdominis, 504_transverse_abdominis, 206_erector_spinae, 202_trapezius_upper]
+    required_primary: [abs, lower_back, upper_back, shoulders, 501_rectus_abdominis, 504_transverse_abdominis, 206_erector_spinae, 202a_trapezius_upper]
     description: "Carry patterns should target bracing, posture, and load carriage."
     
   hinge:
-    required_primary: [glutes, hamstrings, lower_back, 603_gluteus_maximus, 604_biceps_femoris, 206_erector_spinae]
+    required_primary: [glutes, hamstrings, lower_back, 603_gluteus_maximus, 604a_biceps_femoris, 206_erector_spinae]
     description: "Hinge patterns (deadlifts) should target the posterior chain."
 
 isolation_rules:

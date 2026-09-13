@@ -1,9 +1,10 @@
-id: 605_semitendinosus
+id: 604b_semitendinosus
 display_name: Semitendinosus
 label_de: Halbsehniger Muskel
 label_en: Hamstrings (Inner)
 label_lat: M. semitendinosus
 wger_id: 11
+parent: 604_hamstrings
 aliases: [semitendinosus, halbsehniger muskel]
 viz:
   body_muscles:

@@ -30,8 +30,8 @@ exercises:
   stabilizers:
   - 305_supraspinatus
   - 308_subscapularis
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 205_rhomboids
   - 502_obliquus_externus
   - 503_obliquus_internus

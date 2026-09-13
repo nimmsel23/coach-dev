@@ -28,18 +28,18 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 202_trapezius_upper
+  - 202a_trapezius_upper
   - 701_gastrocnemius
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 206_erector_spinae
   - 201_latissimus_dorsi
   - 301_anterior_deltoid
   - 302_lateral_deltoid
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   stabilizers:
   - 304_rotator_cuff
   - 105_serratus_anterior

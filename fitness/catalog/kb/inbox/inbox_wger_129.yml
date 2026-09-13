@@ -15,8 +15,8 @@ exercises:
   - 301_anterior_deltoid
   - 401_triceps_brachii
   stabilizers:
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 205_rhomboids
   - 304_rotator_cuff
   - 501_rectus_abdominis

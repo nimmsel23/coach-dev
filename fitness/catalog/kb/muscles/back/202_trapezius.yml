@@ -1,0 +1,23 @@
+id: 202_trapezius
+display_name: Trapezius
+label_de: Trapezmuskel
+label_en: Traps
+label_lat: M. trapezius
+wger_id: 9
+aliases: [trapezius, trapezmuskel, traps]
+viz:
+  body_muscles:
+    view: BACK
+    ids:
+    - traps-upper-left
+    - traps-mid-left
+    - traps-lower-left
+    - traps-upper-right
+    - traps-mid-right
+    - traps-lower-right
+origin: Os occipitale, Processus spinosi C1-T12.
+insertion: Clavicula, Acromion, Spina scapulae.
+innervation: Nervus accessorius (XI), Plexus cervicalis (C2-C4).
+function: Stabilisierung und Bewegung der Scapula; oberer/mittlerer/unterer Anteil
+  (pars descendens/transversa/ascendens) wirken je nach Bewegungsrichtung synergistisch
+  oder gegensinnig (siehe 202a/202b/202c für Detail pro Anteil).

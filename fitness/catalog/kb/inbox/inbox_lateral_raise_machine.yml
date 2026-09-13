@@ -24,8 +24,8 @@ exercises:
   secondary_muscles:
   - 305_supraspinatus
   - 105_serratus_anterior
-  - 204_trapezius_lower
-  - 202_trapezius_upper
+  - 202c_trapezius_lower
+  - 202a_trapezius_upper
   stabilizers:
   - 304_rotator_cuff
   - 504_transverse_abdominis

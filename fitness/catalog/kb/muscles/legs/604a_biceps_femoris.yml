@@ -1,9 +1,10 @@
-id: 604_biceps_femoris
+id: 604a_biceps_femoris
 display_name: Biceps Femoris
 label_de: Zweiköpfiger Oberschenkelmuskel
 label_en: Hamstrings (Outer)
 label_lat: M. biceps femoris
 wger_id: 11
+parent: 604_hamstrings
 aliases:
 - biceps femoris
 - zweiköpfiger oberschenkelmuskel

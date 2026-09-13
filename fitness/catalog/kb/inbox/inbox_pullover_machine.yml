@@ -22,8 +22,8 @@ exercises:
   - 207_teres_major
   secondary_muscles:
   - 401a_triceps_long_head
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   stabilizers:
   - 304_rotator_cuff
   - 504_transverse_abdominis

@@ -29,8 +29,8 @@ exercises:
   - 105_serratus_anterior
   stabilizers:
   - 304_rotator_cuff
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 504_transverse_abdominis
   - 507_multifidus
   coaching_notes:

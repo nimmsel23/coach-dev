@@ -37,8 +37,8 @@ exercises:
   - 402_biceps_brachii
   - 403_brachialis
   - 405_forearm_flexors
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 205_rhomboids
   stabilizers:
   - 206_erector_spinae

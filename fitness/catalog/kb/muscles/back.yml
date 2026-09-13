@@ -8,9 +8,7 @@ label_lat: Dorsum
 # künftigen Erweiterungen der Sub-Regionen.
 muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202_trapezius
   - 205_rhomboids
   - 206_erector_spinae
   - 207_teres_major

@@ -22,7 +22,7 @@ exercises:
   - 303_posterior_deltoid
   secondary_muscles:
   - 205_rhomboids
-  - 203_trapezius_middle
+  - 202b_trapezius_middle
   - 306_infraspinatus
   - 307_teres_minor
   stabilizers:
@@ -105,9 +105,9 @@ exercises:
       primary_muscles:
       - 303_posterior_deltoid
       secondary_muscles:
-      - 202_trapezius_upper
-      - 203_trapezius_middle
-      - 204_trapezius_lower
+      - 202a_trapezius_upper
+      - 202b_trapezius_middle
+      - 202c_trapezius_lower
       - 303_posterior_deltoid
       equipment: []
       coaching_notes:

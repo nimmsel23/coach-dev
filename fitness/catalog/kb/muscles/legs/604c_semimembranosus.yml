@@ -1,9 +1,10 @@
-id: 606_semimembranosus
+id: 604c_semimembranosus
 display_name: Semimembranosus
 label_de: Halbmembranöser Muskel
 label_en: Hamstrings (Deep)
 label_lat: M. semimembranosus
 wger_id: 11
+parent: 604_hamstrings
 aliases: [semimembranosus, halbmembranöser muskel]
 viz:
   body_muscles:

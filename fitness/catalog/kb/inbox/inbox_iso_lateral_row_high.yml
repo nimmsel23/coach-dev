@@ -24,10 +24,10 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   - 207_teres_major
-  - 203_trapezius_middle
+  - 202b_trapezius_middle
   secondary_muscles:
   - 205_rhomboids
-  - 204_trapezius_lower
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 402_biceps_brachii
   - 403_brachialis

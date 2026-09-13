@@ -15,7 +15,7 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   - 205_rhomboids
-  - 203_trapezius_middle
+  - 202b_trapezius_middle
   - 303_posterior_deltoid
   - 402_biceps_brachii
   secondary_muscles:
@@ -26,9 +26,9 @@ exercises:
   stabilizers:
   - 206_erector_spinae
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 504_transverse_abdominis
   movements:
   - horizontal_pull

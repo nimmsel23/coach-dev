@@ -58,9 +58,9 @@ exercises:
   german: Seated Hamstring Curl
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 701_gastrocnemius
   equipment: []
@@ -548,9 +548,9 @@ exercises:
   primary_muscles:
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - 'Ausgangsposition: Auf den Rücken legen. Großer Gymnastikball unter die Beine legen und schräg in
@@ -628,9 +628,9 @@ exercises:
   german: Vorgebeugtes High Pull
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -652,9 +652,9 @@ exercises:
   category: arms
   primary_muscles:
   - 301_anterior_deltoid
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 402_biceps_brachii
   - 502_obliquus_externus
@@ -953,9 +953,9 @@ exercises:
   - 201_latissimus_dorsi
   - 501_rectus_abdominis
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 702_soleus
   equipment:
   - barbell
@@ -1101,9 +1101,9 @@ exercises:
   german: Fahrrad fahren
   category: cardio
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 502_obliquus_externus
   - 503_obliquus_internus
@@ -1112,9 +1112,9 @@ exercises:
   - 403_brachialis
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes: []
@@ -1197,9 +1197,9 @@ exercises:
   german: Face Pulls
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment: []
@@ -1607,9 +1607,9 @@ exercises:
   german: Frontheben Mit Scheibe
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -1868,9 +1868,9 @@ exercises:
   german: Seated Leg Curl
   category: arms
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment: []
   coaching_notes:
@@ -1930,9 +1930,9 @@ exercises:
   primary_muscles:
   - 302_lateral_deltoid
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment: []
   coaching_notes:
@@ -1972,9 +1972,9 @@ exercises:
   german: Hyperextensions
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment: []
@@ -2024,9 +2024,9 @@ exercises:
   category: cardio
   primary_muscles:
   - 601_quadriceps_femoris
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   - 702_soleus
   secondary_muscles:
@@ -2175,9 +2175,9 @@ exercises:
   german: Handstand-Liegestütz
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 401_triceps_brachii
   secondary_muscles: []
@@ -2273,9 +2273,9 @@ exercises:
   german: Beinbeuger Liegend
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment: []
   coaching_notes:
@@ -2333,9 +2333,9 @@ exercises:
   german: Leg Curls (sitting)
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment: []
   coaching_notes: []
@@ -2434,9 +2434,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment: []
   coaching_notes:
@@ -2458,9 +2458,9 @@ exercises:
   german: Seitheben zum Frontheben
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 302_lateral_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -2612,9 +2612,9 @@ exercises:
   primary_muscles:
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - kettlebell
   coaching_notes:
@@ -2935,9 +2935,9 @@ exercises:
   category: back
   primary_muscles:
   - 402_biceps_brachii
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - pull-up bar
@@ -2971,9 +2971,9 @@ exercises:
   german: Beinbeuger Stehend
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment: []
   coaching_notes:
@@ -3070,9 +3070,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   secondary_muscles:
   - 603_gluteus_maximus
@@ -3120,9 +3120,9 @@ exercises:
   german: Schulterblatt-Retraktion in Bauchlage – Arme seitlich
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment: []
@@ -3146,9 +3146,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 401_triceps_brachii
@@ -3200,9 +3200,9 @@ exercises:
   german: Push Press
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 603_gluteus_maximus
@@ -3350,9 +3350,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 301_anterior_deltoid
   - 402_biceps_brachii
@@ -3380,9 +3380,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 402_biceps_brachii
@@ -3406,9 +3406,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 402_biceps_brachii
@@ -3551,9 +3551,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 601_quadriceps_femoris
@@ -3716,9 +3716,9 @@ exercises:
   german: Glute-Ham Raise
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 603_gluteus_maximus
   equipment:
@@ -4484,9 +4484,9 @@ exercises:
   german: Schulterzucken
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -4716,9 +4716,9 @@ exercises:
   german: Stiff-legged Deadlifts
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 603_gluteus_maximus
   equipment:
@@ -4924,9 +4924,9 @@ exercises:
   german: Aufrechtes Rudern mit Kurzhanteln
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 302_lateral_deltoid
   - 303_posterior_deltoid
   secondary_muscles:
@@ -5105,9 +5105,9 @@ exercises:
   - 201_latissimus_dorsi
   secondary_muscles:
   - 105_serratus_anterior
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 403_brachialis
@@ -5139,9 +5139,9 @@ exercises:
   german: Rudern Aufrecht ß-Stange
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 302_lateral_deltoid
   - 303_posterior_deltoid
   secondary_muscles:
@@ -5173,9 +5173,9 @@ exercises:
   - 401_triceps_brachii
   secondary_muscles:
   - 105_serratus_anterior
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 501_rectus_abdominis
   - 603_gluteus_maximus
@@ -5202,9 +5202,9 @@ exercises:
   german: Rudern Aufrecht MP
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 302_lateral_deltoid
   - 303_posterior_deltoid
   secondary_muscles:
@@ -5318,9 +5318,9 @@ exercises:
   category: legs
   primary_muscles:
   - 601_quadriceps_femoris
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -5342,15 +5342,15 @@ exercises:
   category: back
   primary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 401_triceps_brachii
   - 402_biceps_brachii
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -5418,9 +5418,9 @@ exercises:
   primary_muscles:
   - 301_anterior_deltoid
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - barbell
@@ -5708,9 +5708,9 @@ exercises:
   german: Reverse Fly auf der Schrägbank
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -5804,9 +5804,9 @@ exercises:
   - 301_anterior_deltoid
   - 603_gluteus_maximus
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 501_rectus_abdominis
   - 601_quadriceps_femoris
@@ -5951,9 +5951,9 @@ exercises:
   german: Crosstrainer
   category: cardio
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
@@ -6835,9 +6835,9 @@ exercises:
   german: Nordic Curl
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 603_gluteus_maximus
   equipment: []
@@ -7204,9 +7204,9 @@ exercises:
   category: back
   primary_muscles:
   - 105_serratus_anterior
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 603_gluteus_maximus
@@ -7272,9 +7272,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -7433,9 +7433,9 @@ exercises:
   german: Rear Delt Fly Machine
   category: arms
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -7458,9 +7458,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 402_biceps_brachii
   equipment: []
@@ -7503,9 +7503,9 @@ exercises:
   primary_muscles:
   - 101_pectoralis_major
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 403_brachialis
   secondary_muscles:
@@ -7543,9 +7543,9 @@ exercises:
   - 603_gluteus_maximus
   secondary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 402_biceps_brachii
   - 501_rectus_abdominis
@@ -7725,9 +7725,9 @@ exercises:
   primary_muscles:
   - 105_serratus_anterior
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 402_biceps_brachii
@@ -7737,9 +7737,9 @@ exercises:
   - 503_obliquus_internus
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   - 702_soleus
   secondary_muscles: []
@@ -7857,9 +7857,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -8090,9 +8090,9 @@ exercises:
   category: cardio
   primary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles:
@@ -8101,9 +8101,9 @@ exercises:
   - 501_rectus_abdominis
   - 502_obliquus_externus
   - 503_obliquus_internus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   equipment:
   - none (bodyweight exercise)
@@ -8231,9 +8231,9 @@ exercises:
   - 402_biceps_brachii
   secondary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 501_rectus_abdominis
   equipment:
@@ -8464,9 +8464,9 @@ exercises:
   - 601_quadriceps_femoris
   secondary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   equipment:
   - none (bodyweight exercise)
@@ -8626,9 +8626,9 @@ exercises:
   category: core
   primary_muscles:
   - 105_serratus_anterior
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 501_rectus_abdominis
@@ -8762,9 +8762,9 @@ exercises:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   equipment: []
   coaching_notes:
@@ -9038,9 +9038,9 @@ exercises:
   - 503_obliquus_internus
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   secondary_muscles: []
   equipment:
@@ -9104,9 +9104,9 @@ exercises:
   - 702_soleus
   secondary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 502_obliquus_externus
   - 503_obliquus_internus
@@ -9152,9 +9152,9 @@ exercises:
   german: Reverse Butterfly am Kabel
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles:
@@ -9361,9 +9361,9 @@ exercises:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - Bei dieser Übung hältst du eine Kurzhantel in einer Hand und führst eine Kniebeuge aus, während du
@@ -9386,9 +9386,9 @@ exercises:
   - 304_rotator_cuff
   - 403_brachialis
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - dumbbell
@@ -9864,9 +9864,9 @@ exercises:
   - 201_latissimus_dorsi
   - 303_posterior_deltoid
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - dumbbell
@@ -9893,9 +9893,9 @@ exercises:
   - 301_anterior_deltoid
   - 402_biceps_brachii
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - none (bodyweight exercise)
@@ -10030,9 +10030,9 @@ exercises:
   - 603_gluteus_maximus
   secondary_muscles:
   - 601_quadriceps_femoris
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - barbell
   coaching_notes:
@@ -10265,9 +10265,9 @@ exercises:
   - 201_latissimus_dorsi
   - 402_biceps_brachii
   - 501_rectus_abdominis
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - bench
   - dumbbell
@@ -10318,9 +10318,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - dumbbell
@@ -10343,9 +10343,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -10441,9 +10441,9 @@ exercises:
   category: core
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 402_biceps_brachii
@@ -10603,9 +10603,9 @@ exercises:
   german: Reverse Snow Angel
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 303_posterior_deltoid
@@ -10613,9 +10613,9 @@ exercises:
   - 502_obliquus_externus
   - 503_obliquus_internus
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes:
@@ -10661,9 +10661,9 @@ exercises:
   primary_muscles:
   - 101_pectoralis_major
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -10742,9 +10742,9 @@ exercises:
   german: Kurzhantel-Rudern für die hintere Schulter
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 303_posterior_deltoid
   - 403_brachialis
@@ -10976,9 +10976,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles:
@@ -11083,9 +11083,9 @@ exercises:
   primary_muscles:
   - 701_gastrocnemius
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes:
@@ -11220,9 +11220,9 @@ exercises:
   - 402_biceps_brachii
   - 403_brachialis
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   equipment: []
@@ -11353,15 +11353,15 @@ exercises:
   primary_muscles: []
   secondary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 401_triceps_brachii
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   equipment:
   - none (bodyweight exercise)
@@ -11401,9 +11401,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - dumbbell
@@ -11571,9 +11571,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 402_biceps_brachii
   equipment:
@@ -11596,9 +11596,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 402_biceps_brachii
@@ -11740,9 +11740,9 @@ exercises:
   - 403_brachialis
   secondary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 702_soleus
@@ -11870,9 +11870,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 402_biceps_brachii
   secondary_muscles: []
@@ -12036,9 +12036,9 @@ exercises:
   primary_muscles:
   - 701_gastrocnemius
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes:
@@ -12097,9 +12097,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 301_anterior_deltoid
   equipment:
@@ -12149,9 +12149,9 @@ exercises:
   german: Wall Angels
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 301_anterior_deltoid
@@ -12246,9 +12246,9 @@ exercises:
   - 401_triceps_brachii
   - 402_biceps_brachii
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - dumbbell
   coaching_notes:
@@ -12321,9 +12321,9 @@ exercises:
   german: Beinpendel (vor und zurück)
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
@@ -12541,9 +12541,9 @@ exercises:
   german: Doppeltes Kettlebell Clean and Press
   category: arms
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 401_triceps_brachii
@@ -12554,9 +12554,9 @@ exercises:
   - 201_latissimus_dorsi
   - 501_rectus_abdominis
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - kettlebell
   coaching_notes:
@@ -12588,9 +12588,9 @@ exercises:
   - 603_gluteus_maximus
   secondary_muscles:
   - 501_rectus_abdominis
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   equipment:
   - kettlebell
@@ -12654,9 +12654,9 @@ exercises:
   german: Einbeiniges Kreuzheben mit gestreckten Beinen (Single Leg RDL)
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 603_gluteus_maximus
   equipment:
@@ -12708,9 +12708,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   secondary_muscles: []
   equipment: []
@@ -12801,9 +12801,9 @@ exercises:
   german: Upper Back
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles:
@@ -12851,9 +12851,9 @@ exercises:
   german: Hamstring-Kicks
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 603_gluteus_maximus
   equipment:
@@ -12904,9 +12904,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 701_gastrocnemius
   equipment:
@@ -12935,13 +12935,13 @@ exercises:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   equipment:
   - dumbbell
@@ -12970,9 +12970,9 @@ exercises:
   german: Elephant Walks
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 701_gastrocnemius
   equipment:
@@ -12995,9 +12995,9 @@ exercises:
   german: Good Morning
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -13018,9 +13018,9 @@ exercises:
   german: Einbeiniges Dehnen der hinteren Oberschenkelmuskulatur
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -13040,9 +13040,9 @@ exercises:
   german: Sit & Reach
   category: back
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - gym mat
@@ -13063,9 +13063,9 @@ exercises:
   german: Beinschwingen über Kreuz
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -13086,9 +13086,9 @@ exercises:
   german: Stehender Pancake
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -13108,9 +13108,9 @@ exercises:
   german: Hamstring Chokes
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -13133,9 +13133,9 @@ exercises:
   category: back
   primary_muscles: []
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes:
@@ -13155,9 +13155,9 @@ exercises:
   german: Dehnung der hinteren Oberschenkelmuskulatur über Kreuz
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -13419,9 +13419,9 @@ exercises:
   - 601_quadriceps_femoris
   secondary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   equipment: []
   coaching_notes:
@@ -13448,9 +13448,9 @@ exercises:
   german: Kickstand RDL
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - barbell
@@ -13690,9 +13690,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -13742,9 +13742,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 501_rectus_abdominis
   equipment:
@@ -13776,9 +13776,9 @@ exercises:
   secondary_muscles:
   - 201_latissimus_dorsi
   - 501_rectus_abdominis
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - barbell
   coaching_notes:
@@ -13991,14 +13991,14 @@ exercises:
   - 301_anterior_deltoid
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 401_triceps_brachii
   - 501_rectus_abdominis
@@ -14031,9 +14031,9 @@ exercises:
   - 301_anterior_deltoid
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 201_latissimus_dorsi
   equipment:
@@ -14097,9 +14097,9 @@ exercises:
   - 601_quadriceps_femoris
   secondary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - Die ClimbMill, auch als Treppensteiger bekannt, ist ein auf Cardio ausgerichtetes Gerät, das das Treppensteigen
@@ -14184,9 +14184,9 @@ exercises:
   primary_muscles:
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes:
@@ -14282,9 +14282,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -14392,9 +14392,9 @@ exercises:
   - 601_quadriceps_femoris
   secondary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   equipment: []
   coaching_notes:
@@ -14584,9 +14584,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment: []
@@ -14606,9 +14606,9 @@ exercises:
   german: Cable Shrug-In
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment: []
@@ -14629,9 +14629,9 @@ exercises:
   primary_muscles:
   - 303_posterior_deltoid
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment: []
   coaching_notes:
@@ -15791,9 +15791,9 @@ exercises:
   german: Trizepsstrecken über Kopf
   category: arms
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -15960,9 +15960,9 @@ exercises:
   secondary_muscles:
   - 301_anterior_deltoid
   - 401_triceps_brachii
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - 'Belade den Schlitten mit 25 % deiner maximalen Last. Wenn du diese nicht kennst, wähle ein Gewicht,
@@ -15998,14 +15998,14 @@ exercises:
   - 503_obliquus_internus
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 401_triceps_brachii
@@ -16081,9 +16081,9 @@ exercises:
   category: cardio
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 401_triceps_brachii
   - 701_gastrocnemius
@@ -16091,9 +16091,9 @@ exercises:
   - 501_rectus_abdominis
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - 'Beginne stehend auf der Plattform, die Füße hüftbreit auseinander.
@@ -16131,9 +16131,9 @@ exercises:
   - 601_quadriceps_femoris
   secondary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes:
@@ -16157,9 +16157,9 @@ exercises:
   - 603_gluteus_maximus
   secondary_muscles:
   - 601_quadriceps_femoris
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - Lege dich auf das Rückenpolster und schnalle dich mit dem Bauchgurt fest. Positioniere deine Füße
@@ -16357,9 +16357,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 402_biceps_brachii
   secondary_muscles: []
@@ -16444,9 +16444,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 402_biceps_brachii
@@ -16503,9 +16503,9 @@ exercises:
   - 501_rectus_abdominis
   secondary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 401_triceps_brachii
   - 403_brachialis
@@ -16539,9 +16539,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 402_biceps_brachii
   equipment: []
@@ -16598,9 +16598,9 @@ exercises:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - dumbbell
   coaching_notes:
@@ -16624,9 +16624,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   secondary_muscles: []
   equipment:
@@ -16672,9 +16672,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - bench
@@ -16738,9 +16738,9 @@ exercises:
   primary_muscles:
   - 301_anterior_deltoid
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - none (bodyweight exercise)
@@ -16775,9 +16775,9 @@ exercises:
   - 401_triceps_brachii
   - 502_obliquus_externus
   - 503_obliquus_internus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - dumbbell
   coaching_notes:
@@ -16917,9 +16917,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 501_rectus_abdominis
   - 701_gastrocnemius
@@ -16959,9 +16959,9 @@ exercises:
   secondary_muscles:
   - 101_pectoralis_major
   - 201_latissimus_dorsi
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - 'So führst du die Bretzel-Dehnung aus    Ausgangsposition:        Lege dich auf den Rücken auf eine
@@ -17196,9 +17196,9 @@ exercises:
   - 603_gluteus_maximus
   secondary_muscles:
   - 601_quadriceps_femoris
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   - 702_soleus
   equipment: []
@@ -17250,9 +17250,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - dumbbell
@@ -17292,9 +17292,9 @@ exercises:
   primary_muscles:
   - 105_serratus_anterior
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles:
@@ -17336,9 +17336,9 @@ exercises:
   german: Kurzhantel-Scaption
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 301_anterior_deltoid
@@ -17628,9 +17628,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 501_rectus_abdominis
   - 601_quadriceps_femoris
@@ -17711,9 +17711,9 @@ exercises:
   german: Innenrotation in Seitenlage
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -17738,9 +17738,9 @@ exercises:
   german: Arm- und Nackendehnung
   category: core
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   - 401_triceps_brachii
@@ -17881,9 +17881,9 @@ exercises:
   german: Supine press
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -17947,9 +17947,9 @@ exercises:
   german: Einarmiges Landmine-Rudern (senkrecht)
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -17976,9 +17976,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   secondary_muscles:
   - 301_anterior_deltoid
@@ -18043,9 +18043,9 @@ exercises:
   german: Reverse Fly im Stehen
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -18122,9 +18122,9 @@ exercises:
   primary_muscles:
   - 701_gastrocnemius
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - resistance band
   coaching_notes:
@@ -18186,9 +18186,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - dumbbell
@@ -18235,9 +18235,9 @@ exercises:
   - 201_latissimus_dorsi
   - 402_biceps_brachii
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - none (bodyweight exercise)
@@ -18265,9 +18265,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 502_obliquus_externus
   - 503_obliquus_internus
@@ -18302,9 +18302,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   equipment: []
@@ -18327,9 +18327,9 @@ exercises:
   german: Trapez-Press
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -18376,9 +18376,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 201_latissimus_dorsi
   equipment:
@@ -18466,9 +18466,9 @@ exercises:
   category: legs
   primary_muscles:
   - 601_quadriceps_femoris
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - barbell
@@ -18628,9 +18628,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - kettlebell
@@ -18712,9 +18712,9 @@ exercises:
   - 603_gluteus_maximus
   secondary_muscles:
   - 105_serratus_anterior
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 502_obliquus_externus
   - 503_obliquus_internus
@@ -18915,9 +18915,9 @@ exercises:
   primary_muscles:
   - 201_latissimus_dorsi
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - resistance band
@@ -18964,9 +18964,9 @@ exercises:
   - 603_gluteus_maximus
   secondary_muscles:
   - 501_rectus_abdominis
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - barbell
   coaching_notes:
@@ -19094,9 +19094,9 @@ exercises:
   category: shoulders
   primary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -19163,9 +19163,9 @@ exercises:
   primary_muscles:
   - 303_posterior_deltoid
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - bench
@@ -19263,9 +19263,9 @@ exercises:
   category: legs
   primary_muscles:
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - bench
@@ -19371,9 +19371,9 @@ exercises:
   primary_muscles:
   - 301_anterior_deltoid
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment:
   - dumbbell
@@ -19617,9 +19617,9 @@ exercises:
   german: YTWL-Übung
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -19889,9 +19889,9 @@ exercises:
   german: Stehendes Good Morning mit weitem Stand (Pancake)
   category: legs
   primary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -19929,9 +19929,9 @@ exercises:
   german: Trap-3-Raise
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -20157,9 +20157,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - Eine Kombination aus den Prinzipien von Kniebeuge und Kreuzheben unter Verwendung einer Hex-/Trap-Bar,
@@ -20247,9 +20247,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 501_rectus_abdominis
   - 701_gastrocnemius
@@ -20388,9 +20388,9 @@ exercises:
   german: Schulter-Rückzieher
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 301_anterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -20413,9 +20413,9 @@ exercises:
   german: Dehnung mit Außenrotation
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 303_posterior_deltoid
   secondary_muscles: []
@@ -20622,9 +20622,9 @@ exercises:
   primary_muscles:
   - 302_lateral_deltoid
   secondary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   equipment: []
   coaching_notes:
@@ -20989,9 +20989,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 402_biceps_brachii
@@ -21109,9 +21109,9 @@ exercises:
   primary_muscles:
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   - 701_gastrocnemius
   - 702_soleus
   equipment:
@@ -21195,9 +21195,9 @@ exercises:
   primary_muscles:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - dumbbell
@@ -21235,9 +21235,9 @@ exercises:
   - 301_anterior_deltoid
   secondary_muscles:
   - 105_serratus_anterior
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   - 401_triceps_brachii
   - 501_rectus_abdominis
@@ -21304,9 +21304,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 105_serratus_anterior
@@ -21444,9 +21444,9 @@ exercises:
   category: legs
   primary_muscles:
   - 601_quadriceps_femoris
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -21553,9 +21553,9 @@ exercises:
   secondary_muscles:
   - 501_rectus_abdominis
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes:
@@ -21699,9 +21699,9 @@ exercises:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment: []
   coaching_notes:
   - 'Belt Squat: eine Kniebeuge-Variante, die mit einem Gürtel ausgeführt wird, der an einer Lademaschine
@@ -21755,13 +21755,13 @@ exercises:
   german: Kniender Superman
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles:
   - 501_rectus_abdominis
   equipment:
@@ -21821,9 +21821,9 @@ exercises:
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
   secondary_muscles:
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - none (bodyweight exercise)
   coaching_notes:
@@ -21844,9 +21844,9 @@ exercises:
   category: shoulders
   primary_muscles:
   - 101_pectoralis_major
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment: []
@@ -21917,9 +21917,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 105_serratus_anterior
@@ -22093,9 +22093,9 @@ exercises:
   german: Butterfly Superman
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -22176,9 +22176,9 @@ exercises:
   german: Langhantel-Silverback-Shrug
   category: shoulders
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles: []
   equipment:
@@ -22302,17 +22302,17 @@ exercises:
   german: Kettlebell Sumo High Pull
   category: back
   primary_muscles:
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 301_anterior_deltoid
   - 601_quadriceps_femoris
   - 603_gluteus_maximus
-  - 604_biceps_femoris
-  - 605_semitendinosus
-  - 606_semimembranosus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   equipment:
   - kettlebell
   coaching_notes:
@@ -22352,9 +22352,9 @@ exercises:
   category: back
   primary_muscles:
   - 201_latissimus_dorsi
-  - 202_trapezius_upper
-  - 203_trapezius_middle
-  - 204_trapezius_lower
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
   - 303_posterior_deltoid
   secondary_muscles:
   - 105_serratus_anterior

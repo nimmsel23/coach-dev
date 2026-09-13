@@ -104,9 +104,9 @@ exercises:
       german: Push Press
       category: shoulders
       primary_muscles:
-      - 202_trapezius_upper
-      - 203_trapezius_middle
-      - 204_trapezius_lower
+      - 202a_trapezius_upper
+      - 202b_trapezius_middle
+      - 202c_trapezius_lower
       - 303_posterior_deltoid
       secondary_muscles:
       - 603_gluteus_maximus
