@@ -1,3 +1,57 @@
+# AGENTS.md-Punkte umgesetzt: Push/Pull/Legs-Build, Trapezius/Hamstrings als Muskel-Komplexe, Federation-Aufräumen (2026-09-13)
+
+Zwei fachliche Aufträge abgearbeitet (`catalog/kb/AGENTS.md` durchgehen; danach
+das offene `~/TODO.md`-Item zu Trapezius/Hamstrings), plus ein Aufräum-
+Nebeneffekt beim anschließenden `fitness-release`-Versuch. Vier Commits auf
+`dev` (`99994fc`, `d0c6aa3`, `d80814f`, `f477717`), Build/Lint/Pytest jeweils
+grün, kein Deploy in dieser Session.
+
+* **`scripts/build-ppl-data.mjs`** (neu): generiert `push.generated.js` /
+  `pull.generated.js` / `legs.generated.js` aus den expert-approved Exercises
+  (`kb/exercises/**/*.yml`, `source == "expert"`), gruppiert nach `category`
+  via `fitness.catalog.core.resolver.build_exercise_index()`-Äquivalent in JS
+  (Musterwahl: `.mjs` statt Python, um konsistent mit den Sibling-Build-
+  Skripten zu bleiben — eine erste Python-Fassung wurde verworfen).
+* **`scripts/exercise-data.mjs`** (neu): dünner Wrapper, der
+  `build-exercise-bulk-data.mjs` + `build-ppl-data.mjs` bündelt (beide lesen
+  dieselbe KB); `package.json`s `build:kb-data` ruft jetzt diesen Wrapper statt
+  die Einzelskripte direkt.
+* **`src/lib/db/firestore/kb.js`**: neuer Konsum-Helper für die generierten
+  Push/Pull/Legs-Bundles, analog zu `getAllExercises()`/`_getCuratedExercises()`
+  — damit bleiben die generierten Dateien kein toter Code.
+* **`.gitignore`**: `push.generated.js`/`pull.generated.js`/`legs.generated.js`
+  ergänzt (analog zu `exerciseBulkData.generated.js`).
+* **`fitness/catalog/kb/muscles/back/`, `.../legs/`**: Trapezius (`202`) und
+  Hamstrings (`604`) waren als drei bzw. drei eigenständige Top-Level-IDs
+  nebeneinander angelegt statt als Parent+Kinder (anders als Trizeps/
+  Quadrizeps/Gastrocnemius). Umbenannt zu `202a/b/c_trapezius_*` bzw.
+  `604a/b/c_*` (Kinder, `git mv`, `parent:`-Feld ergänzt) plus zwei neue
+  Parent-Dateien `202_trapezius.yml` und `604_hamstrings.yml`. Schließt die in
+  `muscle_index.yml` selbst dokumentierte "Taxonomie-Lücke" für wger-IDs 9/11
+  und den offenen `~/TODO.md`-Punkt zu fehlerhaften Trapezius-/Hamstrings-
+  Anteilen (Trizeps war laut Prüfung bereits korrekt angelegt).
+* **`fitness/catalog/kb/muscle_index.yml`, `muscle_groups.json`,
+  `back.yml`/`legs.yml`/`upper_back.yml`/`hamstrings.yml`,
+  `src/lib/kb/muscleLabels.js`, `src/lib/kb/muscleTranslations.js`**: alle
+  Referenzen auf die alten Flach-IDs auf die neue Parent+Kinder-Struktur
+  nachgezogen, per Grep verifiziert dass keine alten IDs mehr referenziert
+  werden.
+* **`fitness/catalog/kb/exercises/080.yml`, `jefferson_curl.yml`,
+  `unreviewed_wger.yml`, diverse `inbox/*.yml`**: Muskel-ID-Referenzen auf die
+  neuen Trapezius-/Hamstrings-IDs mitgezogen.
+* **`dist-federation/`**: komplett aus Git-Tracking entfernt (war trotz
+  bestehendem `.gitignore`-Eintrag bereits eingecheckt, sodass jeder lokale
+  Build das Repo als "dirty" markierte — Ursache für einen `fitness-release
+  --yes`-Abbruch mit `require_clean_repo`) und vom Dateisystem gelöscht.
+* **`package.json`/`package-lock.json`**: ungenutztes
+  `@originjs/vite-plugin-federation` deinstalliert (kein aktiver Nutzer im
+  `vite.config.js`, `npm run build` blieb danach grün).
+* Alle vier Commits nur auf `dev`/`origin/dev` — kein `fitness-release` in
+  dieser Session ausgeführt (der eine Versuch des Nutzers scheiterte initial
+  am `dist-federation`-Dirty-State, danach nicht erneut gestartet).
+
+---
+
 # Session-Tab Mobil-Feinschliff: Bottom-Nav bündig, Bottom-Spacing, Header-Icon-Hitbox (2026-09-10)
 
 Drei zusammenhängende Mobil-Layout-Fixes am Session-Tab (Nutzer-Befund: „oben
