@@ -1,0 +1,52 @@
+name: inbox_20260917_163738_cd8ef8
+description: 'Inbox queued for: Latzug'
+queued_at: '2026-09-17T16:37:38.896083'
+exercises:
+- exercise_id: wger_355
+  id: wger_355
+  display_name: Latzug
+  german: Latzug
+  english: Latzug
+  category: back
+  primary_muscles:
+  - 201_latissimus_dorsi
+  coaching_notes:
+  - Der Latzug ist eine Übung zum Aufbau der Rückenmuskulatur. Während die Übung in
+    erster Linie den Latissimus beansprucht, wirst du auch eine deutliche Aktivierung
+    des Bizeps und der mittleren Rückenmuskulatur bemerken.
+  original_description:
+  - Der Latzug ist eine Übung zum Aufbau der Rückenmuskulatur. Während die Übung in
+    erster Linie den Latissimus beansprucht, wirst du auch eine deutliche Aktivierung
+    des Bizeps und der mittleren Rückenmuskulatur bemerken.
+  wger_id: 355
+  wger_muscle_ids:
+    primary:
+    - 12
+    secondary: []
+  external_ids:
+    wger:
+    - 355
+  tags:
+  - unreviewed
+  - wger
+  name: Latzug
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: external
+    source_refs:
+      wger:
+      - '355'
+  source_snapshot:
+    wger:
+      wger_id: 355
+      wger_muscle_ids:
+        primary:
+        - 12
+        secondary: []
+      original_description:
+      - Der Latzug ist eine Übung zum Aufbau der Rückenmuskulatur. Während die Übung
+        in erster Linie den Latissimus beansprucht, wirst du auch eine deutliche Aktivierung
+        des Bizeps und der mittleren Rückenmuskulatur bemerken.
+  review_state:
+    status: draft
+    ai_reviewed: false

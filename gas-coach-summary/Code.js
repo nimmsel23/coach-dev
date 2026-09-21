@@ -260,7 +260,17 @@ function generateBriefing(timeframe) {
   if (briefing) {
     const message = `🧠 <b>Coach ${timeframe.toUpperCase()} Briefing</b>\n\n${briefing}`;
     sendTelegramMessage(props, message);
+    sendBriefingEmail(timeframe, briefing);
   }
+}
+
+// Sendet das Haupt-Briefing zusätzlich per Mail (nur generateBriefing, nicht die einzelnen Alert-Checks)
+function sendBriefingEmail(timeframe, briefing) {
+  MailApp.sendEmail({
+    to: "nimmdaniel+coachbriefing@gmail.com",
+    subject: `Coach ${timeframe.toUpperCase()} Briefing`,
+    body: briefing
+  });
 }
 
 // === HILFSFUNKTIONEN ===
