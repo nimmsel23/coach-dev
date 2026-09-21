@@ -24,6 +24,7 @@ const ACTIVITY_TYPES = [
   { value: 'stretching',label: 'Stretching',  icon: '🤸' },
   { value: 'hiit',      label: 'HIIT',        icon: '⚡' },
   { value: 'walking',   label: 'Spazieren',   icon: '🚶' },
+  { value: 'parkour',   label: 'Parkour',     icon: '🤾' },
 ];
 
 const MUSCLE_TARGETS = [

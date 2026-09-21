@@ -14,6 +14,7 @@ ACTIVITY_EMOJI: dict[str, str] = {
     "stretching": "🤸",
     "hiit":       "⚡",
     "walking":    "🚶",
+    "parkour":    "🤾",
 }
 
 ACTIVITY_LABEL: dict[str, str] = {
@@ -27,6 +28,7 @@ ACTIVITY_LABEL: dict[str, str] = {
     "stretching": "Stretching",
     "hiit":       "HIIT",
     "walking":    "Spazieren",
+    "parkour":    "Parkour",
 }
 
 # Textual Rich-Markup Styles (für TUI)
