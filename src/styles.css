@@ -13,9 +13,6 @@
 @import "./styles/themes/sweet-mars.css";
 @import "./styles/themes/sweet-purple.css";
 
-/* Coach Console — scoped "Hidden Chamber" theme for views/Coach/** */
-@import "./styles/coach-console.css";
-
 /* Light Themes */
 @import "./styles/themes/honey.css";
 @import "./styles/themes/latte.css";

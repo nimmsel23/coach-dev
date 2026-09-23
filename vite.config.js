@@ -34,7 +34,8 @@ async function resolveCrossAppAliases() {
 }
 
 export default defineConfig(async ({ mode }) => {
-  const isFirebase = mode === 'firebase'
+  const isFirebase = mode === 'firebase' || mode === 'coach'
+  const isCoach = mode === 'coach'
   const crossAppAliases = await resolveCrossAppAliases()
   delete crossAppAliases['@fuel']
 
@@ -106,9 +107,10 @@ export default defineConfig(async ({ mode }) => {
       },
     },
     build: {
-      outDir: 'dist',
+      outDir: isCoach ? 'dist-coach' : 'dist',
       target: 'modules',
       rollupOptions: {
+        input: isCoach ? resolve(__dirname, 'coach.html') : undefined,
         output: {
           manualChunks: {
             react: ['react', 'react-dom'],

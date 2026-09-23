@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-firebase/
+dist-coach/
 dist-federation/
 .firebase/
 .firebase/hosting.*.cache

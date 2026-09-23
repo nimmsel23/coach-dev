@@ -52,6 +52,5 @@ export const VALID_TABS = new Set([
   ...baseItems.map(item => item.id),
   'anamnese',
   'focus',
-  'coach',
   'inbox',
 ]);

@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "fitness-aos"
+  },
+  "targets": {
+    "fitness-aos": {
+      "hosting": {
+        "client": [
+          "fitness-aos"
+        ],
+        "coach": [
+          "vos-coach"
+        ]
+      }
+    }
   }
 }

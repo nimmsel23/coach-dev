@@ -1,7 +1,6 @@
-import { Activity, ChevronLeft, ChevronRight, Shield, Bell, ClipboardList } from "lucide-react";
-import { isLocalMode } from "@db";
+import { Activity, ChevronLeft, ChevronRight, Bell, ClipboardList } from "lucide-react";
 
-export default function Sidebar({ tab, navigate, subTab, navigateSub, navigateToPlan, pinned, setPinned, children, user, navItems }) {
+export default function Sidebar({ tab, navigate, subTab, navigateSub, navigateToPlan, pinned, setPinned, children, navItems }) {
   return (
     <aside className={`hidden lg:flex flex-col alpha-glass border-r border-fit-line fixed inset-y-0 z-40 transition-all duration-500 ease-in-out ${pinned ? 'w-[280px]' : 'w-24'}`}>
       <div className={`p-8 flex flex-col h-full ${!pinned ? 'items-center' : ''}`}>
@@ -76,13 +75,6 @@ export default function Sidebar({ tab, navigate, subTab, navigateSub, navigateTo
             {pinned && <span className="text-sm truncate animate-in fade-in slide-in-from-left-4 duration-500">Mitteilungen</span>}
           </button>
 
-          {(isLocalMode() || user?.email?.includes('alpha') || user?.uid === '59ole36uNpNwml5H6VDYCXyCME92') && (
-            <button onClick={() => navigate('coach')} title={!pinned ? 'Coach' : ''}
-              className={`w-full flex items-center transition-all duration-300 mt-2 ${pinned ? 'gap-4 px-5 py-3.5 rounded-2xl' : 'justify-center p-4 rounded-2xl'} ${tab === 'coach' ? 'bg-red-500 text-white shadow-xl shadow-red-500/20 font-black scale-[1.02]' : 'text-fit-dim hover:bg-red-500/10 font-bold'}`}>
-              <Shield size={20} className={tab === 'coach' ? 'stroke-[3]' : ''} />
-              {pinned && <span className="text-sm truncate animate-in fade-in slide-in-from-left-4 duration-500">Coach</span>}
-            </button>
-          )}
         </nav>
 
         <div className={`mt-auto space-y-4 pt-6 border-t border-fit-line/30 ${!pinned ? 'w-full flex flex-col items-center overflow-hidden' : ''}`}>

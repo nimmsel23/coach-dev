@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#080b12" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>VitalOS Coach</title>
+    <script>
+      (function() {
+        const theme = localStorage.getItem('fitness-theme') || 'nordic';
+        const mode = localStorage.getItem('fitness-theme-mode') || 'manual';
+        if (mode === 'manual') {
+          document.documentElement.setAttribute('data-theme', theme);
+        } else {
+          const hour = new Date().getHours();
+          const dark = localStorage.getItem('fitness-circ-dark') || 'nordic';
+          const light = localStorage.getItem('fitness-circ-light') || 'honey';
+          document.documentElement.setAttribute('data-theme', (hour >= 8 && hour < 20) ? light : dark);
+        }
+      })();
+    </script>
+    <script type="module" src="/src/coach-main.jsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

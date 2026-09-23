@@ -6,7 +6,6 @@ import WeeklyReview from './views/WeeklyReview/index.jsx'
 import Settings from './views/Settings/index.jsx'
 import Anamnese from './views/Anamnese/index.jsx'
 import Fokus from './views/Fokus/index.jsx'
-import Coach from './views/Coach/index.jsx'
 import Inbox from './views/Inbox/index.js'
 import ExerciseInsightModal from './components/ExerciseInsightModal.jsx'
 import { isLocalMode, getAnatomy, getAllMuscles } from '@db'
@@ -255,7 +254,7 @@ export default function App() {
 
   const navigateToTab = (newTabId) => {
     const targetTabId = resolveFlowTab(newTabId);
-    const isSpecialTab = targetTabId === 'coach' || targetTabId === 'inbox';
+    const isSpecialTab = targetTabId === 'inbox';
     if (targetTabId === 'gate') {
       setSubTab(null);
       setTab('gate');
@@ -455,7 +454,7 @@ export default function App() {
         }}
       />
       <ErrorBoundary>
-        <div className={`app-shell isolate flex min-h-screen overflow-x-hidden w-full bg-fit-bg text-fit-ink font-sans transition-colors duration-500 ${tab === 'coach' ? 'coach-console' : ''}`}>
+        <div className="app-shell isolate flex min-h-screen overflow-x-hidden w-full bg-fit-bg text-fit-ink font-sans transition-colors duration-500">
 
         <Sidebar
           tab={tab}
@@ -517,7 +516,6 @@ export default function App() {
                       {tab === 'session'  && <Session key={sessionDate || 'today'} initialDate={sessionDate} initialDraft={sessionDraft} onInspectExercise={inspectExercise} onOpenSession={openSession} recentDays={recentDays} coverageThreshold={coverageThreshold} subTab={subTab} onDateChange={setSessionDate} onSubNav={navigateSub} planView={planView} planId={planId} onPlanRouteChange={(view, id) => { setPlanView(view); setPlanId(id); }} gateAutoOpenFlag={gateAutoOpenFlag} onGateAutoOpenConsumed={() => setGateAutoOpenFlag(false)} />}
                       {tab === 'review'   && <WeeklyReview onOpenSession={openSession} onInspectExercise={inspectExercise} muscleLanguage={muscleLanguage} taxonomy={taxonomy} gender={gender} recentDays={recentDays} subTab={subTab} onSubNav={navigateSub} />}
                       {tab === 'learn'    && <Learn subTab={subTab} />}
-                      {tab === 'coach'    && (isLocalMode() || user?.email?.includes('alpha') || user?.uid === '59ole36uNpNwml5H6VDYCXyCME92') && <Coach onInspectExercise={inspectExercise} />}
                       {tab === 'inbox'    && (user ? <Inbox /> : (
                         <div className="card mx-auto max-w-2xl p-6 text-center">
                           <h2 className="text-lg font-black tracking-tight">Inbox nur mit Login</h2>
