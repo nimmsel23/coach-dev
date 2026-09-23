@@ -160,6 +160,7 @@ export default function SessionHistory({
               >
                 <Timer size={8} />
                 {s.activity?.duration}min
+                {s.activity?.distanceKm ? ` · ${s.activity.distanceKm}km` : ''}
               </div>
             ) : (
               <div

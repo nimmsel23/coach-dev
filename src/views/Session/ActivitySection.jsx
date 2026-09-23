@@ -33,6 +33,9 @@ const MUSCLE_TARGETS = [
   { value: 'full',  label: 'Full Body' },
 ];
 
+// Distanz (km) macht nur bei tatsächlich streckenbasierten Aktivitäten Sinn.
+const DISTANCE_ACTIVITY_TYPES = new Set(['cycling', 'running', 'walking', 'hiking', 'rowing']);
+
 const SWIM_STYLES = [
   { value: 'breast', label: 'Brust' },
   { value: 'back',   label: 'Rücken' },
@@ -179,6 +182,28 @@ export default function ActivitySection({ activity, setActivity }) {
           </span>
         </div>
       </div>
+
+      {/* Distanz — nur bei streckenbasierten Aktivitäten (z.B. Radfahren) */}
+      {DISTANCE_ACTIVITY_TYPES.has(activity.type) && (
+        <div>
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-fit-dim/40 mb-2 block ml-1">
+            📍 Distanz
+          </label>
+          <div className="relative">
+            <input
+              type="number"
+              step="0.1"
+              placeholder="z.B. 21"
+              value={activity.distanceKm || ''}
+              onChange={e => setActivity({ ...activity, distanceKm: e.target.value })}
+              className="w-full p-4 pr-20 rounded-2xl border bg-fit-bg2 border-fit-line text-fit-ink font-bold text-sm focus:border-fit-orange outline-none transition-all"
+            />
+            <span className="absolute right-5 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-fit-dim/30">
+              km
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Notes */}
       <div>

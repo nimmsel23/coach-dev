@@ -17,7 +17,7 @@
 import { useState } from 'react';
 import { deleteActivityAddon } from '@db';
 
-const DEFAULT_ACTIVITY = { type: 'hiit', duration: '', notes: '', muscleTarget: 'core', muscles: ['core'] };
+const DEFAULT_ACTIVITY = { type: 'hiit', duration: '', distanceKm: '', notes: '', muscleTarget: 'core', muscles: ['core'] };
 
 export { DEFAULT_ACTIVITY };
 
