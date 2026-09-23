@@ -25,6 +25,7 @@ const ACTIVITY_TYPES = [
   { value: 'hiit',      label: 'HIIT',        icon: '⚡' },
   { value: 'walking',   label: 'Spazieren',   icon: '🚶' },
   { value: 'parkour',   label: 'Parkour',     icon: '🤾' },
+  { value: 'beachvolleyball', label: 'Beachvolleyball', icon: '🏐' },
 ];
 
 const MUSCLE_TARGETS = [

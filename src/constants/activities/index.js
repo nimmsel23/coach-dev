@@ -9,6 +9,7 @@ import Yoga from './Yoga';
 import Stretching from './Stretching';
 import HIIT from './HIIT';
 import Parkour from './Parkour';
+import Beachvolleyball from './Beachvolleyball';
 
 export const ACTIVITY_TYPES = [
   Laufen,
@@ -22,6 +23,7 @@ export const ACTIVITY_TYPES = [
   Stretching,
   HIIT,
   Parkour,
+  Beachvolleyball,
 ];
 
 export default ACTIVITY_TYPES;
