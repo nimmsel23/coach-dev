@@ -33,18 +33,16 @@ damit ein aktives `core.hooksPath` nicht versehentlich die alte
 Doppel-Deploy-Logik reaktiviert.
 
 ### pre-push
-Baut + deployt zu Firebase (`npm run firebase`) wenn ein Push auf `master`
-relevante Dateien enthält (`src/`, `public/`, `index.html`, `vite.config.*`,
-`package.json`, `firebase.json`, Firestore-Configs).
+Baut + deployt die Coach-App zu Firebase, wenn ein Push auf `dev` Änderungen
+unter `src/` enthält.
 
-- Trigger nur auf `master`, prüft alle gepushten Refs von stdin
+- Trigger nur auf `dev`, prüft alle gepushten Refs von stdin
 - Vergleicht `remote_sha..local_sha` (bzw. den ganzen Branch bei neuem Remote-Ref)
-- `cloud_chamber/`, Doku-Dateien und `dist-firebase/` selbst zählen **nicht**
-  als Deploy-Grund — das ist Build-Output des vorherigen Laufs, sonst
-  triggert sich der Hook bei jedem Push auf sich selbst
-- `npm run firebase` = `build:firebase` (Vite-Build, dann
-  `scripts/stamp-sw.mjs` stempelt die Cache-Version per Zeitstempel post-build
-  direkt in `dist-firebase/`, `public/sw.js`/`public/manifest.json` bleiben
-  unverändert) gefolgt von `deploy:firebase` (`firebase deploy --only hosting`)
-- Schlägt der Build/Deploy fehl, wird der Push abgebrochen (kein halb-deployter
-  Stand) — Override mit `git push --no-verify`
+- Nur `src/` triggert den Auto-Deploy; Rules/Docs/Build-Hilfsänderungen werden
+  committet und gepusht, ohne Firebase Hosting automatisch neu zu deployen
+- Deploy-Befehl: `npm run build:firebase:coach` gefolgt von
+  `firebase deploy --only hosting:coach --project fitness-aos`
+- Firestore Rules werden hier nie deployed; gemeinsames Ruleset bleibt
+  `~/vitalos/firestore.rules`
+- Schlägt der Build/Deploy fehl, wird der Push abgebrochen — Override mit
+  `git push --no-verify`

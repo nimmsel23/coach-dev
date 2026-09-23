@@ -1,149 +1,39 @@
 #!/bin/bash
-# pre-push hook: build + deploy to Firebase when relevant frontend files are
-# part of the push to vitalos (sw-cache-bump + manifest-version-bump happen
-# inside `npm run build:firebase` via scripts/bump-sw.mjs). Also pushes
-# changed catalog/KB YAMLs (fitness/catalog/kb/) to Firestore via
-# `fitness-catalog push-changed` — scoped to the pushed range, no
-# FITNESS_ENV=prod-Gate noetig (im Unterschied zu `fitness-catalog push`).
+# pre-push hook for coach-dev.
 #
-# Runs once per push (not per ref), reads pushed refs from stdin.
-#
-# 2026-08-14: wiederhergestellt, nachdem ein Auto-Commit (bb4d9b8) die Datei
-# versehentlich geloescht hatte (README.md dokumentierte sie weiterhin, nur
-# die Datei selbst fehlte — Deploy lief seither nur noch ueber den GH-Actions-
-# Workflow, nicht mehr lokal). KB-Push-Block ist neu dazugekommen.
+# Deploys only the Firebase Hosting target `coach` (vos-coach.web.app) when
+# source code under src/ is part of a push to dev. Firestore rules are not
+# deployed here; the shared ruleset is owned by ~/vitalos.
+
+set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
 
-# public/sw.js + public/manifest.json + dist-firebase/ sind Build-Output des
-# vorherigen Laufs (bump-sw.mjs, vite build) — nie selbst ein Deploy-Grund,
-# sonst triggert der Hook sich bei jedem Push auf sich selbst (endlose
-# Bump-Spirale ohne echten Inhalt).
-SKIP='^cloud_chamber/|\.(md|txt|bak|bak2)$|^public/sw\.js$|^public/manifest\.json$|^dist-firebase/'
-TRIGGER='^(src/|public/|index.html$|vite.config.(js|ts|mjs)$|package.json$|firebase.json$|firestore.rules$|firestore.indexes.json$)'
-KB_TRIGGER='^fitness/catalog/kb/'
-# Backend-Aenderungen im dev-Branch -> ./deploy.sh staging (rsync nach
-# ~/.local/fitness + Neustart fitness-preview.service, :8100). Getrennt vom
-# vitalos-Firebase-Trigger oben, da Python-Backend und Firebase-Frontend
-# unabhaengige Deploy-Ziele sind.
-BACKEND_TRIGGER='^(fitness/|db/|alembic/|server\.mjs$|fitness-runtime\.mjs$|firestore-mirror\.mjs$)'
-
 should_deploy=false
-should_deploy_staging=false
-should_build_dev=false
-kb_since=""
-kb_until=""
 
 while read -r local_ref local_sha remote_ref remote_sha; do
-  [ -z "$local_ref" ] && continue
+  [ -z "${local_ref:-}" ] && continue
   branch="${local_ref#refs/heads/}"
 
-  # Reminder: der volle Release-Flow (fitness-dev dev -> vitalos/fitness-app
-  # vitalos -> vitalos-Pointer-Bump) läuft bereits automatisiert über
-  # ~/vitalos/bin/fitness-release (bzw. vos-release fitness). Der kritische
-  # Moment ist der Push von dev — direkt danach folgt sonst von Hand: Merge
-  # in vitalos/fitness-app vitalos, Push, Submodule-Pointer in vitalos
-  # bumpen. Deshalb hier auf "dev" triggern, nicht erst auf "vitalos" (das
-  # waere schon der vorletzte Schritt der manuellen Kette).
-  if [ "$branch" = "dev" ]; then
-    echo "💡 Tipp: für den kompletten dev->vitalos->vitalos-Flow gibt es ~/vitalos/bin/fitness-release (vos-release fitness --help)." >&2
-  fi
+  [ "$branch" = "dev" ] || continue
 
   if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
-    # New branch on remote — diff against empty tree
-    range="$local_sha"
-    changed=$(git diff-tree --no-commit-id --name-only -r "$range")
-    kb_since=$(git hash-object -t tree /dev/null)
+    changed="$(git diff-tree --no-commit-id --name-only -r "$local_sha")"
   else
-    changed=$(git diff --name-only "$remote_sha" "$local_sha")
-    kb_since="$remote_sha"
-  fi
-  kb_until="$local_sha"
-
-  if [ "$branch" = "dev" ] && echo "$changed" | grep -Ev "$SKIP" | grep -Eq "$BACKEND_TRIGGER"; then
-    should_deploy_staging=true
+    changed="$(git diff --name-only "$remote_sha" "$local_sha")"
   fi
 
-  [ "$branch" = "dev" ] && should_build_dev=true
-
-  [ "$branch" != "vitalos" ] && continue
-
-  relevant=$(echo "$changed" | grep -Ev "$SKIP" || true)
-  if echo "$relevant" | grep -Eq "$TRIGGER"; then
+  if echo "$changed" | grep -Eq '^src/'; then
     should_deploy=true
-  fi
-
-  if echo "$changed" | grep -Eq "$KB_TRIGGER"; then
-    if command -v gum >/dev/null 2>&1; then
-      gum log --level info "fitness-dev: KB-Aenderungen im Push zu vitalos — pushe geaenderte Exercises/Muskeln zu Firestore…"
-    else
-      echo "🔍 fitness-dev: KB-Aenderungen im Push zu vitalos — pushe geaenderte Exercises/Muskeln zu Firestore…"
-    fi
-    if command -v fitness-catalog >/dev/null 2>&1; then
-      fitness-catalog push-changed --since "$kb_since" --until "$kb_until"
-      kb_status=$?
-      if [ $kb_status -ne 0 ]; then
-        echo "⚠️  fitness-catalog push-changed fehlgeschlagen — Push wird NICHT abgebrochen (Firestore-Sync ist nachholbar, Frontend-Deploy nicht blockieren)." >&2
-      fi
-    else
-      echo "⚠️  fitness-catalog nicht gefunden (uv tool) — KB-Push uebersprungen, manuell nachholen: fitness-catalog push-changed --since $kb_since --until $kb_until" >&2
-    fi
   fi
 done
 
-if [ "$should_build_dev" = true ]; then
-  if command -v gum >/dev/null 2>&1; then
-    gum log --level info "fitness-dev: Push zu dev — baue UI (npm run build) als Build-Verifikation…"
-  else
-    echo "🔍 fitness-dev: Push zu dev — baue UI (npm run build) als Build-Verifikation…"
-  fi
-  npm run build
-  build_status=$?
-  if [ $build_status -ne 0 ]; then
-    echo "❌ npm run build fehlgeschlagen — Push wird abgebrochen (kein kaputter Stand auf dev)." >&2
-    echo "   Mit 'git push --no-verify' kannst du den Hook überspringen, falls das Absicht ist." >&2
-    exit 1
-  fi
-  echo "✅ Build-Verifikation OK (dist/ aktuell)."
-fi
-
-if [ "$should_deploy_staging" = true ]; then
-  if command -v gum >/dev/null 2>&1; then
-    gum log --level info "fitness-dev: Backend-Aenderungen im Push zu dev — deploye nach staging (:8100)…"
-  else
-    echo "🔍 fitness-dev: Backend-Aenderungen im Push zu dev — deploye nach staging (:8100)…"
-  fi
-  if [ -x ./deploy.sh ]; then
-    ./deploy.sh staging
-    staging_status=$?
-    if [ $staging_status -ne 0 ]; then
-      echo "⚠️  ./deploy.sh staging fehlgeschlagen — Push wird NICHT abgebrochen (Staging ist jederzeit erneut deploybar, dev-Push nicht blockieren)." >&2
-    else
-      echo "✅ Staging-Deploy abgeschlossen (fitness-preview.service, :8100)."
-    fi
-  else
-    echo "⚠️  deploy.sh nicht ausfuehrbar/gefunden — Staging-Deploy uebersprungen, manuell nachholen: ./deploy.sh staging" >&2
-  fi
-fi
-
 if [ "$should_deploy" != true ]; then
+  echo "coach-dev: no src/ changes in pushed dev range; skipping Firebase deploy."
   exit 0
 fi
 
-if command -v gum >/dev/null 2>&1; then
-  gum log --level info "fitness-dev: relevante Änderungen im Push zu vitalos — baue + deploye zu Firebase…"
-else
-  echo "🔍 fitness-dev: relevante Änderungen im Push zu vitalos — baue + deploye zu Firebase…"
-fi
-
-npm run firebase
-status=$?
-
-if [ $status -ne 0 ]; then
-  echo "❌ npm run firebase fehlgeschlagen — Push wird abgebrochen (kein halb-deployter Stand)." >&2
-  echo "   Mit 'git push --no-verify' kannst du den Hook überspringen, falls das Absicht ist." >&2
-  exit 1
-fi
-
-echo "✅ Deploy abgeschlossen. sw.js/manifest.json wurden gestampt — kein Folge-Commit nötig."
-exit 0
+echo "coach-dev: src/ changes detected; building and deploying hosting:coach..."
+npm run build:firebase:coach
+firebase deploy --only hosting:coach --project fitness-aos
+echo "coach-dev: deployed https://vos-coach.web.app"
