@@ -27,6 +27,30 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Hosted Coach reads local Python snapshots and submits reviewed commands.
+    // Only the local Admin SDK worker may publish snapshots or finish commands.
+    match /coachInbox/{id} {
+      allow read: if isCoach();
+      allow write: if false;
+    }
+    match /coachState/{id} {
+      allow read: if isCoach();
+      allow write: if false;
+    }
+    match /coachCommands/{id} {
+      allow read: if isCoach();
+      allow create: if isCoach()
+        && request.resource.data.keys().hasOnly(['action', 'item_id', 'uid', 'payload', 'requested_by', 'status', 'created_at'])
+        && request.resource.data.requested_by == request.auth.uid
+        && request.resource.data.status == 'queued'
+        && request.resource.data.action in ['approve', 'reenrich', 'delete', 'link-source', 'duplicates', 'merge-duplicates']
+        && request.resource.data.item_id is string
+        && request.resource.data.item_id.size() > 0
+        && request.resource.data.item_id.size() <= 200
+        && request.resource.data.payload is map;
+      allow update, delete: if false;
+    }
+
     // Coach needs full direct access to client fitness records for review,
     // feedback, routine edits, assigned plans, macrocycles and habit-cycle setup.
     match /fitness/{uid}/{document=**} {

@@ -85,6 +85,7 @@ function cleanApiBase(value) {
 }
 
 function resolveLocalFitnessApiBase() {
+  if (import.meta.env.MODE === "coach") return "";
   if (typeof window !== "undefined") {
     try {
       const stored = cleanApiBase(window.localStorage?.getItem(LOCAL_FITNESS_API_STORAGE_KEY));
@@ -97,7 +98,7 @@ function resolveLocalFitnessApiBase() {
 
   if (typeof window !== "undefined") {
     const host = window.location?.hostname || "";
-    if (["fitness-aos.web.app", "fitness-aos.firebaseapp.com", "vos-coach.web.app", "vos-coach.firebaseapp.com"].includes(host)) {
+    if (host === "fitness-aos.web.app" || host === "fitness-aos.firebaseapp.com") {
       return FUNNEL_FITNESS_API_BASE;
     }
   }
@@ -108,5 +109,6 @@ function resolveLocalFitnessApiBase() {
 export const LOCAL_FITNESS_API_BASE = resolveLocalFitnessApiBase();
 const LOCAL_FITNESS_NOTIFY = `${LOCAL_FITNESS_API_BASE}/notify`;
 export function pingBridge() {
+  if (import.meta.env.MODE === "coach") return;
   fetch(LOCAL_FITNESS_NOTIFY, { method: "POST" }).catch(() => {});
 }
