@@ -97,7 +97,9 @@ function resolveLocalFitnessApiBase() {
 
   if (typeof window !== "undefined") {
     const host = window.location?.hostname || "";
-    if (host === "fitness-aos.web.app" || host === "fitness-aos.firebaseapp.com") return FUNNEL_FITNESS_API_BASE;
+    if (["fitness-aos.web.app", "fitness-aos.firebaseapp.com", "vos-coach.web.app", "vos-coach.firebaseapp.com"].includes(host)) {
+      return FUNNEL_FITNESS_API_BASE;
+    }
   }
 
   return DESKTOP_FITNESS_API_BASE;
