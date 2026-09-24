@@ -39,6 +39,7 @@
   --cc-serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
 
   position: relative;
+  min-height: 100dvh;
   isolation: isolate;
   color: var(--ink);
   font-family: var(--cc-mono);
@@ -49,6 +50,18 @@
     repeating-linear-gradient(0deg, rgba(255, 180, 84, 0.025) 0px, rgba(255, 180, 84, 0.025) 1px, transparent 1px, transparent 34px),
     repeating-linear-gradient(90deg, rgba(255, 180, 84, 0.025) 0px, rgba(255, 180, 84, 0.025) 1px, transparent 1px, transparent 34px),
     var(--bg);
+}
+
+.coach-console > header {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.coach-console > main {
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 .coach-console::before {

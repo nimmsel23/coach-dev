@@ -16,16 +16,43 @@
       "rewrites": [
         {
           "source": "**",
-          "destination": "/coach.html"
+          "destination": "/index.html"
         }
       ],
       "headers": [
         {
-          "source": "**/*.@(js|css|woff2)",
+          "source": "/assets/**",
           "headers": [
             {
               "key": "Cache-Control",
               "value": "max-age=31536000, immutable"
+            }
+          ]
+        },
+        {
+          "source": "/coach-sw.js",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, must-revalidate"
+            }
+          ]
+        },
+        {
+          "source": "/index.html",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/coach-manifest.webmanifest",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
             }
           ]
         }

@@ -1,0 +1,15 @@
+{
+  "id": "/",
+  "name": "VitalOS Coach",
+  "short_name": "VOS Coach",
+  "description": "Coach-Konsole fuer VitalOS",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#100e0a",
+  "theme_color": "#100e0a",
+  "icons": [
+    { "src": "/coach-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/coach-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

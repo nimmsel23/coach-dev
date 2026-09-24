@@ -40,6 +40,7 @@ export default defineConfig(async ({ mode }) => {
   delete crossAppAliases['@fuel']
 
   return {
+    publicDir: isCoach ? resolve(__dirname, 'public-coach') : resolve(__dirname, 'public'),
     // Relativ statt absolut — sonst lösen Assets unter einem Funnel-Pfad-
     // Präfix (z.B. /fitness-dev/) fälschlich zur Domain-Wurzel auf (404 →
     // Whitescreen). Core4/Door/Game/Fuel haben denselben Fix schon.
