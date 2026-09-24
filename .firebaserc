@@ -5,9 +5,6 @@
   "targets": {
     "fitness-aos": {
       "hosting": {
-        "client": [
-          "fitness-aos"
-        ],
         "coach": [
           "vos-coach"
         ]
