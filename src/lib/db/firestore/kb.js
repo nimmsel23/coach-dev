@@ -109,7 +109,7 @@ export async function searchExercises(query, limit = 12) {
   const qTokens = qn.split(" ").filter(Boolean);
   const scored = pool.map((ex) => {
     if (ex.merged_into || ex.superseded_by) return { ex, score: 0 };
-    const hay = [ex.display_name, ex.german, ex.name, ex.exercise_id, ex.id, ...(ex.aliases || []), ...(ex.search_aliases || []), ...(ex.tags || [])].map(_normalize);
+    const hay = [ex.display_name, ex.german, ex.english, ex.name, ex.exercise_id, ex.id, ...(ex.aliases || []), ...(ex.search_aliases || []), ...(ex.tags || [])].map(_normalize);
     let score = 0;
     if (hay.some((h) => h === qn))                                                    score = 100;
     else if (hay.some((h) => h.startsWith(qn)))                                       score = 80;

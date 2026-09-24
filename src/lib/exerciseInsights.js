@@ -79,7 +79,7 @@ function inferMovement(ex) {
   const description = Array.isArray(ex?.original_description)
     ? cleanList(ex.original_description).join(' ')
     : String(ex?.original_description || '').trim()
-  const rawCoachingNotes = isUnreviewedExercise(ex)
+  const rawCoachingNotes = (isUnreviewedExercise(ex) || ex?.tags?.includes('bulk_import'))
     ? cleanList(ex?.coaching_notes).join(' ')
     : ''
   const primary = cleanList(ex?.primaryMuscles)

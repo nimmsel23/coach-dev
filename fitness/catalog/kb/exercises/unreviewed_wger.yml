@@ -54,8 +54,9 @@ exercises:
     - 3
     - 5
 - exercise_id: wger_1767
-  display_name: Seated Hamstring Curl
-  german: Seated Hamstring Curl
+  display_name: Beinbeuger sitzend
+  german: Beinbeuger sitzend
+  english: Seated Hamstring Curl
   category: legs
   primary_muscles:
   - 604a_biceps_femoris
@@ -1864,9 +1865,10 @@ exercises:
     - 2
     secondary: []
 - exercise_id: wger_1770
-  display_name: Seated Leg Curl
-  german: Seated Leg Curl
-  category: arms
+  display_name: Beinbeuger sitzend
+  german: Beinbeuger sitzend
+  english: Seated Leg Curl
+  category: legs
   primary_muscles:
   - 604a_biceps_femoris
   - 604b_semitendinosus
@@ -2329,8 +2331,9 @@ exercises:
     - 12
     secondary: []
 - exercise_id: wger_366
-  display_name: Leg Curls (sitting)
-  german: Leg Curls (sitting)
+  display_name: Beinbeuger sitzend
+  german: Beinbeuger sitzend
+  english: Leg Curls (sitting)
   category: legs
   primary_muscles:
   - 604a_biceps_femoris
@@ -2433,7 +2436,6 @@ exercises:
   german: Beinbeuger
   category: legs
   primary_muscles:
-  - 603_gluteus_maximus
   - 604a_biceps_femoris
   - 604b_semitendinosus
   - 604c_semimembranosus
@@ -11244,12 +11246,14 @@ exercises:
     - 2
     - 9
 - exercise_id: wger_1300
-  display_name: Single-leg hamstring curl
-  german: Single-leg hamstring curl
-  category: back
+  display_name: Einbeiniger Beinbeuger
+  german: Einbeiniger Beinbeuger
+  english: Single-leg hamstring curl
+  category: legs
   primary_muscles:
-  - 201_latissimus_dorsi
-  - 603_gluteus_maximus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment:
   - none (bodyweight exercise)
@@ -18116,15 +18120,16 @@ exercises:
     - 3
     secondary: []
 - exercise_id: wger_1534
-  display_name: Leg curl with elastic
-  german: Leg curl with elastic
+  display_name: Beinbeuger mit Widerstandsband
+  german: Beinbeuger mit Widerstandsband
+  english: Leg curl with elastic
   category: legs
   primary_muscles:
-  - 701_gastrocnemius
-  secondary_muscles:
   - 604a_biceps_femoris
   - 604b_semitendinosus
   - 604c_semimembranosus
+  secondary_muscles:
+  - 701_gastrocnemius
   equipment:
   - resistance band
   coaching_notes:
@@ -19436,8 +19441,11 @@ exercises:
 - exercise_id: wger_1635
   display_name: Beinbeuger am Boden mit Glidern
   german: Beinbeuger am Boden mit Glidern
-  category: shoulders
-  primary_muscles: []
+  category: legs
+  primary_muscles:
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
   secondary_muscles: []
   equipment: []
   coaching_notes:
