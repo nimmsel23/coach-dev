@@ -130,7 +130,7 @@ function runNutritionCheck() {
   const userMap = fetchUserMap(token);
 
   if (mealLogs.length === 0) {
-    sendTelegramMessage(props, `🥗 <b>Fuel-Check ${today}</b>\n\nNoch keine Ernährungsdaten heute.`);
+    sendTelegramMessage(props, `🥗 **Fuel-Check ${today}**\n\nNoch keine Ernährungsdaten heute.`);
     return;
   }
 
@@ -140,7 +140,7 @@ function runNutritionCheck() {
   const prompt = getNutritionPrompt(today, mealLogs);
 
   const check = callGeminiAPI(props.getProperty('GEMINI_API_KEY'), prompt);
-  sendTelegramMessage(props, `🥗 <b>Fuel-Check ${today}</b>\n\n${check}`);
+  sendTelegramMessage(props, `🥗 **Fuel-Check ${today}**\n\n${check}`);
 }
 
 /**
@@ -179,7 +179,7 @@ function runMoodTrendAlert() {
   const prompt = getMoodPrompt(alerts);
 
   const alert = callGeminiAPI(props.getProperty('GEMINI_API_KEY'), prompt);
-  sendTelegramMessage(props, `🔴 <b>Mood-Alarm</b>\n\n${alert}`);
+  sendTelegramMessage(props, `🔴 **Mood-Alarm**\n\n${alert}`);
 }
 
 /**
@@ -211,11 +211,11 @@ function runMissingLogAlert() {
   const silent = [...allKnownUsers].filter(u => !activeUsers.has(u));
 
   if (silent.length === 0) {
-    sendTelegramMessage(props, `✅ <b>Log-Check ${today}</b>\n\nAlle aktiven Klienten haben heute geloggt.`);
+    sendTelegramMessage(props, `✅ **Log-Check ${today}**\n\nAlle aktiven Klienten haben heute geloggt.`);
     return;
   }
 
-  const msg = `📭 <b>Log-Check ${today}</b>\n\nNoch keine Aktivität heute:\n${silent.map(u => `- ${userMap[u] || u}`).join('\n')}\n\n<i>Evtl. Erinnerung schicken?</i>`;
+  const msg = `📭 **Log-Check ${today}**\n\nNoch keine Aktivität heute:\n${silent.map(u => `- ${userMap[u] || u}`).join('\n')}\n\n_Evtl. Erinnerung schicken?_`;
   sendTelegramMessage(props, msg);
 }
 
@@ -224,7 +224,7 @@ function runMissingLogAlert() {
  */
 function sendTestMessage() {
   const props = PropertiesService.getScriptProperties();
-  sendTelegramMessage(props, '✅ <b>VitalOS Coach Bot</b> ist aktiv und verbunden!');
+  sendTelegramMessage(props, '✅ **VitalOS Coach Bot** ist aktiv und verbunden!');
 }
 
 // === KERN-FUNKTION ===
@@ -246,7 +246,7 @@ function generateBriefing(timeframe) {
   const expectedClients = Object.entries(userMap).map(([id, name]) => ({ id, name }));
   
   if (journals.length === 0 && sessions.length === 0) {
-    sendTelegramMessage(props, `ℹ️ <b>Keine Logs</b> im Zeitraum ${dates.startStr} bis ${dates.endStr} (${timeframe}) gefunden.`);
+    sendTelegramMessage(props, `ℹ️ **Keine Logs** im Zeitraum ${dates.startStr} bis ${dates.endStr} (${timeframe}) gefunden.`);
     return;
   }
 
@@ -258,7 +258,7 @@ function generateBriefing(timeframe) {
 
   // 4. Per Telegram versenden
   if (briefing) {
-    const message = `🧠 <b>Coach ${timeframe.toUpperCase()} Briefing</b>\n\n${briefing}`;
+    const message = `🧠 **Coach ${timeframe.toUpperCase()} Briefing**\n\n${briefing}`;
     sendTelegramMessage(props, message);
     sendBriefingEmail(timeframe, briefing);
   }
@@ -269,8 +269,40 @@ function sendBriefingEmail(timeframe, briefing) {
   MailApp.sendEmail({
     to: "nimmdaniel+coachbriefing@gmail.com",
     subject: `Coach ${timeframe.toUpperCase()} Briefing`,
-    body: briefing
+    body: briefing, // Plain-Text-Fallback (rohes Markdown, auch unformatiert lesbar)
+    htmlBody: markdownToHtml(briefing)
   });
+}
+
+// === MARKDOWN-KONVERTIERUNG ===
+// Gemini liefert jetzt einheitlich Markdown (**fett**, - Listen). Telegram
+// erwartet HTML (parse_mode: 'HTML'), Gmail-htmlBody ebenfalls — beides wird
+// hier aus derselben Markdown-Quelle abgeleitet statt zwei Prompt-Formate zu pflegen.
+
+function escapeHtml_(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Markdown -> Telegram-HTML (nur die von Telegrams parse_mode:'HTML' erlaubten Tags: b, i)
+function markdownToTelegramHtml(md) {
+  return escapeHtml_(md)
+    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    .replace(/(?<![*_])_(.+?)_(?![*_])/g, '<i>$1</i>');
+}
+
+// Markdown -> volles HTML für den E-Mail-Body
+function markdownToHtml(md) {
+  const body = escapeHtml_(md)
+    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    .replace(/(?<![*_])_(.+?)_(?![*_])/g, '<i>$1</i>')
+    .split('\n')
+    .map(line => line.replace(/^- (.*)/, '&nbsp;&nbsp;• $1'))
+    .join('<br>');
+
+  return `<html><body style="font-family:sans-serif;font-size:14px;line-height:1.5;">${body}</body></html>`;
 }
 
 // === HILFSFUNKTIONEN ===
@@ -442,7 +474,7 @@ function sendTelegramMessage(props, text) {
     const res = UrlFetchApp.fetch(url, {
       method: 'post',
       contentType: 'application/json',
-      payload: JSON.stringify({ chat_id: chatId, text: text, parse_mode: 'HTML' }),
+      payload: JSON.stringify({ chat_id: chatId, text: markdownToTelegramHtml(text), parse_mode: 'HTML' }),
       muteHttpExceptions: true
     });
     

@@ -7,24 +7,24 @@ function getHabitStreakPrompt(today, habitData) {
     Analysiere die Habit-Daten der Klienten (Stand: ${today}) und erstelle ein Streak-Update für den Coach.
     
     WICHTIGE REGEL:
-    VERWENDE KEIN MARKDOWN! Nutze ausschließlich HTML-Tags (<b>Text</b>) für Fettgedrucktes und normale Bindestriche (-) für Listen.
-    
+    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+
     Bewerte:
     - Wer hat aktuell beeindruckende Streaks (≥7 Tage)?
     - Wer hat heute oder gestern einen Streak gebrochen?
     - Welche Habits werden von wem am konsistentesten durchgehalten?
     - Gibt es Klienten mit sehr niedrigen Completion-Raten (<50%)?
-    
+
     Format:
-    <b>🔥 Habit-Streak-Update ${today}</b>
-    
-    <b>Top-Streaks</b>
+    **🔥 Habit-Streak-Update ${today}**
+
+    **Top-Streaks**
     - [Name]: [Habit], [X] Tage am Stück
-    
-    <b>Gebrochene Ketten</b>
+
+    **Gebrochene Ketten**
     - [Name]: [Habit] nach [X] Tagen — Follow-up?
-    
-    <b>Auffällig niedrig</b>
+
+    **Auffällig niedrig**
     - [Name]: [Completion-Rate]%
     
     DATEN:

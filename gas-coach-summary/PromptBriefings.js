@@ -23,20 +23,20 @@ function getBriefingPrompt(timeframe, startStr, endStr, expectedClients, journal
     2. Da dies ein ${timeframe}-Review ist, suche nach langfristigen Trends, nicht nur nach tagesaktuellen Schwankungen.
     3. Wer war durchgehend konsistent? Wer hatte mehrere Ausfälle (z.B. gehäuft schlechter Schlaf, fehlende Sessions)?
     4. Nutze die Liste der "Erwarteten Klienten", um unter "Fehlende Logs" präzise alle Klienten aufzulisten, für die in den Rohdaten KEIN Journal- und KEIN Session-Eintrag vorliegt. Nutze immer deren Klarnamen.
-    5. VERWENDE KEIN MARKDOWN! Keine Sternchen (*), keine Rauten (#). Nutze für Fettgedrucktes ausschließlich HTML-Tags (<b>Text</b>) und für Listen normale Bindestriche (-).
-    
-    Erstelle eine kompakte Telegram-Zusammenfassung exakt in diesem HTML-Format:
-    
-    <b>🎯 ${timeframe.toUpperCase()} Review (${startStr} bis ${endStr})</b>
+    5. Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+
+    Erstelle eine kompakte Zusammenfassung exakt in diesem Markdown-Format:
+
+    **🎯 ${timeframe.toUpperCase()} Review (${startStr} bis ${endStr})**
     [2-3 Sätze zum Gesamttrend der eingegangenen Logs im gesamten Zeitraum]
-    
-    <b>🟢 Konsistent (On Track)</b>
+
+    **🟢 Konsistent (On Track)**
     - [Name des Klienten]: [Kurzer Grund, warum es gut lief]
-    
-    <b>🟡 Feedback & Check-in Bedarf</b>
+
+    **🟡 Feedback & Check-in Bedarf**
     - [Name des Klienten]: [Erkannte Muster/Probleme über den Zeitraum & Grund für Eingreifen]
-    
-    <b>🔴 Fehlende Logs (Follow-up)</b>
+
+    **🔴 Fehlende Logs (Follow-up)**
     - [Name des Klienten]
     
     Rohdaten:

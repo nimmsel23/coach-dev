@@ -10,6 +10,7 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 should_deploy=false
+should_clasp_deploy=false
 
 while read -r local_ref local_sha remote_ref remote_sha; do
   [ -z "${local_ref:-}" ] && continue
@@ -26,14 +27,35 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   if echo "$changed" | grep -Eq '^src/'; then
     should_deploy=true
   fi
+
+  if echo "$changed" | grep -Eq '^gas-coach-summary/'; then
+    should_clasp_deploy=true
+  fi
 done
 
-if [ "$should_deploy" != true ]; then
+if [ "$should_deploy" = true ]; then
+  echo "coach-dev: src/ changes detected; building and deploying hosting:coach..."
+  npm run build:firebase:coach
+  firebase deploy --only hosting:coach --project fitness-aos
+  echo "coach-dev: deployed https://vos-coach.web.app"
+else
   echo "coach-dev: no src/ changes in pushed dev range; skipping Firebase deploy."
-  exit 0
 fi
 
-echo "coach-dev: src/ changes detected; building and deploying hosting:coach..."
-npm run build:firebase:coach
-firebase deploy --only hosting:coach --project fitness-aos
-echo "coach-dev: deployed https://vos-coach.web.app"
+if [ "$should_clasp_deploy" = true ]; then
+  echo "coach-dev: gas-coach-summary/ changes detected; clasp push + deploy..."
+  (
+    cd gas-coach-summary
+    clasp push --force
+    deployment_id="$(clasp deployments | grep -- '- Coach Summary' | head -1 | awk '{print $2}')"
+    if [ -z "$deployment_id" ]; then
+      echo "coach-dev: WARNUNG - keine benannte 'Coach Summary'-Deployment gefunden, deploye ohne -i (neue Deployment-ID)."
+      clasp deploy -d "auto-deploy $(date -Iseconds)"
+    else
+      clasp deploy -i "$deployment_id" -d "auto-deploy $(date -Iseconds)"
+    fi
+  )
+  echo "coach-dev: gas-coach-summary deployed."
+else
+  echo "coach-dev: no gas-coach-summary/ changes in pushed dev range; skipping clasp deploy."
+fi

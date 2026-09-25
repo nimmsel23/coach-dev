@@ -7,17 +7,17 @@ function getTrainingLoadPrompt(weekStart, weekEnd, sessions) {
     Du bist ein Leistungsdiagnostiker. Analysiere die Trainingsbelastung der Klienten für KW ${weekStart} bis ${weekEnd}.
     
     WICHTIGE REGEL:
-    VERWENDE KEIN MARKDOWN! Nutze ausschließlich HTML-Tags (<b>Text</b>) für Fettgedrucktes und normale Bindestriche (-) für Listen.
-    
+    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+
     Bewerte für jeden Klienten:
     - Trainingsfrequenz (wie viele Sessions diese Woche?)
     - Intensität (RPE-Durchschnitt wenn vorhanden)
     - Volumen-Trend: mehr oder weniger als letzte Woche?
     - Erholungsrisiko: wer riskiert Übertraining, wer zu wenig Reiz?
-    
+
     Format (kompakt, max 2 Zeilen pro Klient, mit Emoji):
-    <b>📊 Load-Check ${weekStart}–${weekEnd}</b>
-    
+    **📊 Load-Check ${weekStart}–${weekEnd}**
+
     - [Name]: [Frequenz], RPE Ø [X], Trend: [↑↓→], [kurze Einschätzung]
     
     DATEN:

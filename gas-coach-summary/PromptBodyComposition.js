@@ -7,17 +7,17 @@ function getBodyCompositionPrompt(startStr, endStr, bodyLogs) {
     Analysiere die Körperzusammensetzungs-Daten der Klienten für den Zeitraum ${startStr} bis ${endStr}.
     
     WICHTIGE REGEL:
-    VERWENDE KEIN MARKDOWN! Nutze ausschließlich HTML-Tags (<b>Text</b>) für Fettgedrucktes und normale Bindestriche (-) für Listen.
-    
+    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+
     Berechne und bewerte:
     - Gewichtsveränderung (Start vs. Ende, Tendenz)
     - Körperfett-Trend wenn vorhanden
     - Konsistenz der Messungen (wer misst regelmäßig, wer lückenhaft?)
     - Ist die Veränderung im Einklang mit dem erklärten Ziel (Aufbau/Abnehmen/Halten)?
-    
+
     Format:
-    <b>⚖️ Body-Check ${startStr}–${endStr}</b>
-    
+    **⚖️ Body-Check ${startStr}–${endStr}**
+
     - [Name]: [Δ Gewicht], [Trend Körperfett wenn vorhanden], [Einschätzung]
     
     Kein Floskeln, direkt auf den Punkt. Nutze Klarnamen.

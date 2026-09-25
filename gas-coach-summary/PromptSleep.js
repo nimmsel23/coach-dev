@@ -7,8 +7,8 @@ function getSleepPrompt(today, sleepLogs) {
     Analysiere diese Schlaf-Daten vom ${today} und gib mir als Coach eine kurze Einschätzung.
     
     WICHTIGE REGEL:
-    VERWENDE KEIN MARKDOWN! Nutze ausschließlich HTML-Tags (<b>Text</b>) für Fettgedrucktes und normale Bindestriche (-) für Listen.
-    
+    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+
     Fokus:
     - Wer schläft gut (>7h, gute Qualität)?
     - Wer schläft kritisch (<6h oder Qualität <5)?

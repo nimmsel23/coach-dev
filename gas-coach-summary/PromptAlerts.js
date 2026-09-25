@@ -5,8 +5,8 @@ function getNutritionPrompt(today, mealLogs) {
   return `
     Analysiere diese Ernährungs-Logs vom ${today} und erstelle eine kurze Zusammenfassung für den Coach.
     WICHTIGE REGEL:
-    VERWENDE KEIN MARKDOWN! Keine Sternchen (*), keine Rauten (#). Nutze für Fettgedrucktes ausschließlich HTML-Tags (<b>Text</b>) und für Listen normale Bindestriche (-).
-    
+    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+
     Inhalt:
     - Wer hat gut getankt (Kalorien, Makros)?
     - Wer fehlt noch / hat sehr wenig geloggt?
@@ -28,8 +28,8 @@ function getMoodPrompt(alerts) {
     ${JSON.stringify(alerts, null, 2)}
     
     WICHTIGE REGEL:
-    VERWENDE KEIN MARKDOWN! Keine Sternchen (*), keine Rauten (#). Nutze für Fettgedrucktes ausschließlich HTML-Tags (<b>Text</b>) und für Listen normale Bindestriche (-).
-    
+    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+
     Formuliere eine kurze, empathische Coach-Warnung für mich (den Coach) auf Deutsch:
     - Wer ist betroffen? (Nutze Klarnamen)
     - Empfehlung (proaktiv ansprechen? Check-in einplanen?)

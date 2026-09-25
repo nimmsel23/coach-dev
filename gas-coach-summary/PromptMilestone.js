@@ -7,17 +7,17 @@ function getMilestonePrompt(sessions) {
     Analysiere diese Trainingsdaten und identifiziere bemerkenswerte Fortschritte oder Personal Records (PRs).
     
     WICHTIGE REGEL:
-    VERWENDE KEIN MARKDOWN! Nutze ausschließlich HTML-Tags (<b>Text</b>) für Fettgedrucktes und normale Bindestriche (-) für Listen.
-    
+    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+
     Suche nach:
     - Neue Gewichts-PRs bei einer Übung
     - Deutliche Volumen-Steigerung (>10% im Vergleich zur Vorwoche)
     - Erreichte Streak-Meilensteine (z.B. 30. Session, 50. Session)
     - Erstmals komplettierte schwierige Übungen oder Fortschritte in Progression
-    
+
     Format (nur ausgeben wenn es tatsächlich Meilensteine gibt):
-    <b>🏆 Meilensteine</b>
-    
+    **🏆 Meilensteine**
+
     - [Name]: [Beschreibung des Erfolgs] 🎯
     
     Wenn keine Meilensteine erkennbar: einfach nichts ausgeben.
