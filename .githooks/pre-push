@@ -42,18 +42,14 @@ else
   echo "coach-dev: no src/ changes in pushed dev range; skipping Firebase deploy."
 fi
 
+COACH_SUMMARY_DEPLOYMENT_ID="AKfycbzYPrXQMym0hR7qexG3HcKI12oWSEgoxt0h5mStFh7PRWZzU7g_ZzisJdybN4m4yXzq"
+
 if [ "$should_clasp_deploy" = true ]; then
   echo "coach-dev: gas-coach-summary/ changes detected; clasp push + deploy..."
   (
     cd gas-coach-summary
     clasp push --force
-    deployment_id="$(clasp deployments | grep -- '- Coach Summary' | head -1 | awk '{print $2}')"
-    if [ -z "$deployment_id" ]; then
-      echo "coach-dev: WARNUNG - keine benannte 'Coach Summary'-Deployment gefunden, deploye ohne -i (neue Deployment-ID)."
-      clasp deploy -d "auto-deploy $(date -Iseconds)"
-    else
-      clasp deploy -i "$deployment_id" -d "auto-deploy $(date -Iseconds)"
-    fi
+    clasp deploy -i "$COACH_SUMMARY_DEPLOYMENT_ID" -d "auto-deploy $(date -Iseconds)"
   )
   echo "coach-dev: gas-coach-summary deployed."
 else
