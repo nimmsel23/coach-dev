@@ -261,6 +261,65 @@ function generateBriefing(timeframe) {
     const message = `🧠 **Coach ${timeframe.toUpperCase()} Briefing**\n\n${briefing}`;
     sendTelegramMessage(props, message);
     sendBriefingEmail(timeframe, briefing);
+    saveClientRecords_(token, timeframe, dates, briefing, userMap);
+  }
+}
+
+// === PER-KLIENT RECORD (Firestore) ===
+// Persistiert pro Briefing-Lauf eine kompakte Notiz pro erwähntem Klienten unter
+// coachRecords/{clientId}/entries/{timeframe}_{endStr} — damit über die Zeit eine
+// Historie der Coach-Einschätzungen pro Klient entsteht, nicht nur der Chat-Verlauf.
+
+function saveClientRecords_(token, timeframe, dates, briefingMd, userMap) {
+  const nameToId = {};
+  Object.entries(userMap).forEach(([id, name]) => { if (name) nameToId[name] = id; });
+
+  let section = '';
+  const records = [];
+
+  briefingMd.split('\n').forEach(rawLine => {
+    const line = rawLine.trim();
+    if (/^\*\*.*(Konsistent|Feedback|Fehlende Logs).*\*\*$/.test(line)) {
+      section = line.replace(/\*\*/g, '');
+      return;
+    }
+    if (!line.startsWith('-')) return;
+
+    for (const name of Object.keys(nameToId)) {
+      if (line.includes(name)) {
+        records.push({ clientId: nameToId[name], clientName: name, note: line.replace(/^-\s*/, '') });
+        break;
+      }
+    }
+  });
+
+  records.forEach(r => {
+    const docPath = `coachRecords/${r.clientId}/entries/${timeframe}_${dates.endStr}`;
+    firestoreWriteDoc_(token, docPath, {
+      clientName: { stringValue: r.clientName },
+      timeframe: { stringValue: timeframe },
+      period: { stringValue: `${dates.startStr} bis ${dates.endStr}` },
+      section: { stringValue: section },
+      note: { stringValue: r.note },
+      createdAt: { timestampValue: new Date().toISOString() }
+    });
+  });
+
+  return records.length;
+}
+
+function firestoreWriteDoc_(token, docPath, fields) {
+  const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/${docPath}`;
+  const options = {
+    method: 'patch',
+    contentType: 'application/json',
+    headers: { Authorization: `Bearer ${token}` },
+    payload: JSON.stringify({ fields }),
+    muteHttpExceptions: true
+  };
+  const res = UrlFetchApp.fetch(url, options);
+  if (res.getResponseCode() >= 300) {
+    console.error(`Firestore Write Fehler (${docPath}): ${res.getContentText()}`);
   }
 }
 

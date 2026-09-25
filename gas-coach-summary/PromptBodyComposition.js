@@ -12,15 +12,16 @@ function getBodyCompositionPrompt(startStr, endStr, bodyLogs) {
     Berechne und bewerte:
     - Gewichtsveränderung (Start vs. Ende, Tendenz)
     - Körperfett-Trend wenn vorhanden
-    - Konsistenz der Messungen (wer misst regelmäßig, wer lückenhaft?)
-    - Ist die Veränderung im Einklang mit dem erklärten Ziel (Aufbau/Abnehmen/Halten)?
+    - Konsistenz der Messungen (wer misst regelmäßig, wer lückenhaft — unregelmäßiges Messen verzerrt den Trend, sag das wenn relevant)
+    - Ist die Veränderung im Einklang mit dem erklärten Ziel (Aufbau/Abnehmen/Halten)? Wenn NICHT: das ist die wichtigste Zeile im ganzen Report, nicht eine Randnotiz.
+    - Bei Diskrepanz zwischen Ziel und Trend: eine kurze Hypothese warum (Adhärenz? Plateau? Messfehler?) + was ich als Coach als nächstes prüfen sollte.
 
     Format:
     **⚖️ Body-Check ${startStr}–${endStr}**
 
-    - [Name]: [Δ Gewicht], [Trend Körperfett wenn vorhanden], [Einschätzung]
-    
-    Kein Floskeln, direkt auf den Punkt. Nutze Klarnamen.
+    - [Name]: [Δ Gewicht], [Trend Körperfett wenn vorhanden], [Einschätzung — bei Zielabweichung: Hypothese + nächster Schritt]
+
+    Keine Floskeln, direkt auf den Punkt. Nutze Klarnamen.
     
     DATEN:
     ${JSON.stringify(bodyLogs, null, 2)}

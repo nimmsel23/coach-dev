@@ -15,11 +15,13 @@ function getMilestonePrompt(sessions) {
     - Erreichte Streak-Meilensteine (z.B. 30. Session, 50. Session)
     - Erstmals komplettierte schwierige Übungen oder Fortschritte in Progression
 
+    Ein Meilenstein verdient eine echte Würdigung, keine trockene Zahlenmeldung — formuliere so, dass ich das direkt (leicht angepasst) an den Klienten weiterschicken könnte, um ihn zu feiern.
+
     Format (nur ausgeben wenn es tatsächlich Meilensteine gibt):
     **🏆 Meilensteine**
 
-    - [Name]: [Beschreibung des Erfolgs] 🎯
-    
+    - [Name]: [Beschreibung des Erfolgs, konkret mit Zahlen] — [warum das bemerkenswert ist, z.B. im Vergleich zum bisherigen Verlauf] 🎯
+
     Wenn keine Meilensteine erkennbar: einfach nichts ausgeben.
     
     DATEN:
