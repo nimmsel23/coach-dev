@@ -1,0 +1,4 @@
+[submodule "plan-dev"]
+	path = plan-dev
+	url = git@github.com:nimmsel23/plan-dev.git
+	branch = coach
