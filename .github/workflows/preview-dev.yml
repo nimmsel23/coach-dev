@@ -38,31 +38,35 @@ jobs:
 
       - name: fitness-app auf den ausgelösten Commit setzen
         run: |
-          cd fitness-app
+          cd coach-app
           SHA="${{ github.event.pull_request.head.sha || github.sha }}"
           git fetch origin "$SHA"
           git checkout "$SHA"
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
 
       - name: Install (Workspaces)
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
-      - name: Firebase config bereitstellen (fitness-app/firebase.config.js ist gitignored)
+      - name: Firebase config bereitstellen (coach-app/firebase.config.js ist gitignored)
         run: |
           if [ -n "$FIREBASE_CONFIG" ]; then
-            echo "$FIREBASE_CONFIG" > fitness-app/firebase.config.js
-          elif [ ! -f fitness-app/firebase.config.js ]; then
-            cp firebase.config.js fitness-app/firebase.config.js
+            echo "$FIREBASE_CONFIG" > coach-app/firebase.config.js
+          elif [ ! -f coach-app/firebase.config.js ]; then
+            cp firebase.config.js coach-app/firebase.config.js
           fi
         env:
           FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
 
       - name: Build Fitness
-        run: npm run build:firebase --workspace=fitness-app
+        run: pnpm --filter ./coach-app run build:firebase
 
       - name: Deploy Preview Channel
         id: firebase_deploy
@@ -71,7 +75,7 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS || secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: fitness-aos
-          entryPoint: fitness-app
+          entryPoint: coach-app
           channelId: ${{ github.event_name != 'pull_request' && 'dev' || '' }}
           expires: 24h
 
