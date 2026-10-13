@@ -10,7 +10,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/home/alpha/fitness-dev/.claude/hooks/pre-compact-fill-docs.sh",
+            "command": "/home/alpha/coach-dev/.claude/hooks/pre-compact-fill-docs.sh",
             "statusMessage": "TODO/RESULTS/NEXT.md aktualisieren..."
           }
         ]
@@ -22,7 +22,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/home/alpha/fitness-dev/.claude/hooks/post-edit-commit-docs.sh",
+            "command": "/home/alpha/coach-dev/.claude/hooks/post-edit-commit-docs.sh",
             "statusMessage": "Doku auto-committen..."
           }
         ]
