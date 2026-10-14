@@ -15,7 +15,7 @@
     "ui:dev": "vite",
     "lint": "eslint src/ --ext .js,.jsx",
     "prebuild": "npm run build:kb-data",
-    "build": "npm run lint && vite build && node scripts/snapshot.mjs dist",
+    "build": "npm run lint && npm run build:firebase:coach",
     "build:preview": "npm run deploy:preview",
     "prebuild:firebase": "npm run build:kb-data",
     "build:kb-data": "npm run build:sixpack-data && npm run build:exercise-data && npm run build:coaching-notes",
