@@ -68,6 +68,31 @@ zweiter State-Speicher.
 3. ⏳ **Senden an Klient** (Telegram/Firestore) — noch nicht gebaut. Braucht 1+2
    als Voraussetzung: nur *freigegebene* (`status: approved`) Entwürfe sollten
    automatisiert rausgehen, sonst verschickt man ungeprüfte KI-Texte direkt.
+4. ✅ **Web-UI statt nur Terminal** (2026-10-06): `fitness-log console` bleibt
+   der Endlos-Loop-Weg (Watcher + 30min-Gap-Zyklus + interaktive a/d/s-Freigabe
+   per TTY). Für den Coach-Tab in coach-dev kam ein zweiter, UI-seitiger
+   Zugang auf dieselbe Persistenz dazu — Einmal-Check statt Loop, Freigabe per
+   Klick statt Tastendruck:
+   - `fitness/api/routers/coaching.py`: `GET /fitness/coach/gaps[?uid=]`
+     (führt `check_training_gap()` einmalig aus, persistiert Treffer über
+     `save_draft()` — identischer Pfad wie `gap_check.py`),
+     `GET /fitness/coach/drafts[?uid=&status=]` (wrapt `list_drafts()`),
+     `POST /fitness/coach/drafts/{id}/review` (wrapt `mark_status()`,
+     Body `{uid, status: approved|dismissed}`).
+   - `drafts.py::list_drafts()` liefert seitdem zusätzlich `id` (Dateiname
+     ohne Endung) pro Eintrag, `find_draft_path(uid, draft_id)` ist das
+     Gegenstück für die Review-Route (keine Pfade von außen, nur dieses ID-
+     Format).
+   - `server.mjs`: reine Proxy-Routen (Node→Python, gleiches Muster wie
+     `/fitness/coach/macrocycles/*`), kein eigener Node-Zustand.
+   - Frontend: `src/views/Coach/ClientInsights.jsx`, neuer Sub-Tab
+     "KI-Insights" in `ClientsPanel.jsx`. Nur lokal/Desktop-Build erreichbar
+     (`lib/db/local/coach.js` + `lib/db/firestore/coach.js` via
+     `LOCAL_FITNESS_API_BASE`) — der reine Remote-Coach-Build (`MODE===
+     "coach"`, `LOCAL_FITNESS_API_BASE=""`) liefert hier bewusst leer statt
+     Fehler, gleiche Einschränkung wie `getInboxMergeCandidates()`
+     (`src/lib/db/firestore/inbox.js`): die KI-Calls + Datei-Persistenz
+     brauchen den lokalen Python-Prozess, sind nicht Firestore-portierbar.
 
 ---
 

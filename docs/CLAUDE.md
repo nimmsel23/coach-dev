@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+⚠️ **Diese Datei ist größtenteils 1:1 aus `~/fitness-dev/CLAUDE.md` kopiert**
+und beschreibt fälschlich "fitness-dev" statt "coach-dev" — Inhalt nicht
+blind übernehmen. Fakten, die stimmen: `coach-dev` ist ein **eigenständiges**
+Repo (`git@github.com:nimmsel23/coach-dev.git`), `fitness-dev` ist nur als
+zusätzlicher Git-Remote verknüpft (gemeinsame Historie/Fork-Basis). Backend
+(`server.mjs`) nutzt **Hono**, wie fitness-dev. Vollständige Neufassung
+dieser Doku steht noch aus.
+
 **Sub-Docs (lies mit, je nach Bereich):**
 - `../fitness/CLAUDE.md` — Python-Backend (Prod-API :9150, Dispatcher, Alembic, Packages)
 - `../fitness/catalog/CLAUDE.md` — Katalog-/KB-Tool-Set (Sub-Package von `fitness/`: KB-Struktur, Coverage-Formel, Gemini-Enrichment)

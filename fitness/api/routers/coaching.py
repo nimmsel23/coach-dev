@@ -19,6 +19,9 @@ from fitness.catalog import coverage as cov_module
 from fitness.catalog.planner import build_plan
 from fitness.catalog.weekly import build_weekly_coverage
 from fitness.firestore.mirror import mirror_session
+from fitness.data import load_client_registry
+from fitness.log.console.drafts import find_draft_path, list_drafts, mark_status
+from fitness.paths import AOS_USERS
 
 router = APIRouter()
 
@@ -456,3 +459,113 @@ async def fitness_export_legacy(request: Request):
     if not kind:
         raise HTTPException(400, detail="missing_kind")
     return await _run_export(kind, data)
+
+
+# ── KI-Insights: Trainingslücken-Check + persistierte Drafts ──────────────
+# Portiert aus fitness/log/console/gap_check.py — dort läuft derselbe Check
+# als Endlos-Loop für die Live-TUI (fitness-log console), hier als Einmal-
+# Check on-demand für den Coach-Tab in coach-dev. Gleiche Persistenz
+# (fitness/log/console/drafts.py), damit `fitness-log drafts` UND die
+# Coach-UI dieselben Entwürfe sehen — ein Speicher, zwei Oberflächen.
+NON_COACHING_STATUSES = frozenset({"freund", "interessent"})
+
+
+def _client_last_session_and_journal(uids: list[str]) -> tuple[str | None, str]:
+    last_date = None
+    for uid in uids:
+        sdir = AOS_USERS / uid / "fitness" / "sessions"
+        if not sdir.exists():
+            continue
+        dates = sorted((f.stem[:10] for f in sdir.glob("*.json") if len(f.stem) >= 10), reverse=True)
+        if dates and (last_date is None or dates[0] > last_date):
+            last_date = dates[0]
+
+    journal_text = ""
+    for uid in uids:
+        jdir = AOS_USERS / uid / "fitness" / "journal"
+        if not jdir.exists():
+            continue
+        for jf in sorted(jdir.glob("*.md"), reverse=True)[:5]:
+            journal_text += jf.read_text(encoding="utf-8") + "\n"
+    return last_date, journal_text
+
+
+@router.get("/fitness/coach/gaps")
+def coach_gaps(uid: str | None = Query(None)):
+    """Einmal-Check (kein Loop): für aktive Klienten (oder einen einzelnen,
+    via ?uid=) wird geprüft, ob eine Trainingslücke >= GAP_THRESHOLD_DAYS
+    besteht und ob das Journal sie plausibel erklärt (Gemini + Haiku-Review,
+    siehe coach_ai.py). Best-effort: liefert leere Liste statt 500, wenn die
+    KI-Calls fehlschlagen (kein API-Key etc.) — das Frontend zeigt dann
+    einfach keine Gap-Badges, bricht aber nicht."""
+    from fitness.catalog.agent.coach_ai import GAP_THRESHOLD_DAYS, check_training_gap
+
+    registry = load_client_registry()
+    seen_uids: set[str] = set()
+    results: list[dict[str, Any]] = []
+
+    for meta in registry.values():
+        primary_uid = meta["uid"]
+        if primary_uid in seen_uids:
+            continue
+        seen_uids.add(primary_uid)
+        if uid and uid not in (meta.get("uids") or [primary_uid]):
+            continue
+        if meta.get("status") in NON_COACHING_STATUSES:
+            continue
+
+        uids = meta.get("uids") or [primary_uid]
+        name = meta["name"]
+        last_date, journal_text = _client_last_session_and_journal(uids)
+        if not last_date:
+            continue
+        try:
+            days_gap = (date.today() - date.fromisoformat(last_date)).days
+        except Exception:
+            continue
+        if days_gap < GAP_THRESHOLD_DAYS:
+            continue
+
+        try:
+            ai_result = check_training_gap(name, last_date, journal_text)
+        except Exception as exc:
+            logger.exception(f"coach_gaps: KI-Check fehlgeschlagen fuer '{name}'")
+            ai_result = None
+
+        explained = bool(ai_result and ai_result.get("explained"))
+        reason = (ai_result or {}).get("reason", "")
+        if not explained:
+            try:
+                from fitness.log.console.drafts import save_draft
+                save_draft(primary_uid, name, "gap", reason, days_gap=days_gap, last_session_date=last_date)
+            except Exception:
+                logger.exception(f"coach_gaps: Draft-Persistenz fehlgeschlagen fuer '{name}'")
+
+        results.append({
+            "uid": primary_uid, "name": name, "daysGap": days_gap,
+            "lastSessionDate": last_date, "explained": explained, "reason": reason,
+        })
+
+    return {"ok": True, "gaps": results}
+
+
+@router.get("/fitness/coach/drafts")
+def coach_drafts(uid: str | None = Query(None), status: str | None = Query(None)):
+    drafts = list_drafts(uid)
+    if status:
+        drafts = [d for d in drafts if d.get("status", "pending") == status]
+    return {"ok": True, "drafts": drafts}
+
+
+@router.post("/fitness/coach/drafts/{draft_id}/review")
+async def coach_drafts_review(draft_id: str, request: Request):
+    body = await request.json()
+    uid = str(body.get("uid") or "").strip()
+    new_status = str(body.get("status") or "").strip()
+    if not uid or new_status not in ("approved", "dismissed"):
+        raise HTTPException(400, detail="uid and status (approved|dismissed) required")
+    path = find_draft_path(uid, draft_id)
+    if not path:
+        raise HTTPException(404, detail="draft not found")
+    mark_status(path, new_status)
+    return {"ok": True}

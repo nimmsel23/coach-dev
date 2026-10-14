@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Users, Star, UserCheck, Dumbbell, Layers, Target, RotateCw } from 'lucide-react';
+import { Users, Star, UserCheck, Dumbbell, Layers, Target, RotateCw, Sparkles } from 'lucide-react';
 import { getAllUserProfiles, getUserProfile, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
 import AssignPlan from './AssignPlan';
 import ClientPlan from './ClientPlan';
 import ClientTrainingPlans from './ClientTrainingPlans';
 import ClientHabitCycle from './ClientHabitCycle';
+import ClientInsights from './ClientInsights';
 
 const STATUS_OPTIONS = [
   { id: 'client', label: 'Klient', hint: 'Zahlend & committed — volle Coach-Aufmerksamkeit', icon: Star, color: 'text-fit-accent' },
@@ -14,6 +15,7 @@ const STATUS_OPTIONS = [
 
 const DETAIL_TABS = [
   { id: 'workouts', label: 'Workouts', icon: Dumbbell },
+  { id: 'insights', label: 'KI-Insights', icon: Sparkles },
   { id: 'habits', label: 'Habits', icon: RotateCw },
   { id: 'templates', label: 'Templates', icon: Target },
   { id: 'trainingplan', label: 'Trainingsplan', icon: Layers },
@@ -181,6 +183,7 @@ export default function ClientsPanel() {
 
             <div className="flex-1 overflow-y-auto p-4">
               {detailTab === 'workouts' && <ClientWorkoutsFeed clientUid={selectedUid} />}
+              {detailTab === 'insights' && <ClientInsights clientUid={selectedUid} />}
               {detailTab === 'habits' && <ClientHabitCycle clientUid={selectedUid} />}
               {detailTab === 'templates' && <ClientPlan clientUid={selectedUid} />}
               {detailTab === 'trainingplan' && <ClientTrainingPlans clientUid={selectedUid} />}
