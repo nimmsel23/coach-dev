@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PostToolUse hook (Edit|Write) — fitness-dev, repo-lokal. Committet
+# PostToolUse hook (Edit|Write) — coach-dev, repo-lokal. Committet
 # automatisch, sobald eine der Session-Handoff-/Doku-Dateien geändert
 # wurde: TODO.md, RESULTS.md, NEXT.md, docs/CLAUDE.md, docs/BACKEND.md.
 # Zweck: diese Dateien sollen nie unkommittiert liegen bleiben — weder
@@ -16,7 +16,7 @@
 # .claude/hooks/-Selbstmodifikation geblockt hatte.
 set -euo pipefail
 
-REPO="/home/alpha/fitness-dev"
+REPO="/home/alpha/coach-dev"
 LOCK="$REPO/.claude/hooks/.commit-docs.lock"
 DOC_FILES=("TODO.md" "RESULTS.md" "NEXT.md" "docs/CLAUDE.md" "docs/BACKEND.md")
 
