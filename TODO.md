@@ -51,3 +51,6 @@ wird so ähnlich erfolgen wie der Skills-Runner
 tägliche Push benachrichtigungen bei fehlenden Logs - direkt im Benachrichtigungscenter interaktiv? 
 weiteführende Idee: falls in Settings PPL-Split eingestellt dann könnte täglich eine zB Pull=done? Message aufs handy kommen bis das jeweils nächste Workout done ist.
 Impuls hierzu: Klient:Matthias fehlende Ambition zum kontinuierlichen Loggen von Workouts.
+
+## [x] 2026-10-16: nimmdaniel@gmail.com als Coach freischalten
+Coach-Zugang anhand der verifizierten Firebase-UID ergänzen und zentrale Rolle setzen.

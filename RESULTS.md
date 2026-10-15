@@ -1298,3 +1298,6 @@ Damit wird kein Expert-Exercise mehr ohne lokale YAML-Lineage erzeugt, nur weil
 der lokale Server fehlt. `sendToInbox()` queued neue Items zuerst lokal ueber
 `/fitness/inbox/queue`; Firestore wird nur noch als Offline-Warteschlange mit
 `sync_status: pending_local` genutzt, falls local nicht erreichbar ist.
+
+## 2026-10-16: Zusätzlicher Coach-Account
+`nimmdaniel@gmail.com` (Firebase-UID `pJay0LeAwDN93Q4NT6i5FNxrQHH2`) in den Coach-Zugangsprüfungen ergänzt. Zentrale Firebase-Rolle `roles/pJay0LeAwDN93Q4NT6i5FNxrQHH2` auf `coach` gesetzt und zurückgelesen; gilt für alle Apps mit dem zentralen Ruleset. Bestehender Coach bleibt freigeschaltet. Kein Push oder Deployment.
