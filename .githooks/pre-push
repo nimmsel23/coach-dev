@@ -33,6 +33,13 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   fi
 done
 
+# CI-Deploy aktiv (.github/workflows/deploy-coach.yml)? Dann hier nicht doppelt deployen.
+# Einschalten: git config coach.ciDeploy true   (Secret FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS vorher setzen)
+if [ "$(git config --bool coach.ciDeploy || echo false)" = true ]; then
+  should_deploy=false
+  echo "coach-dev: coach.ciDeploy=true; Hosting-Deploy übernimmt GitHub Actions."
+fi
+
 if [ "$should_deploy" = true ]; then
   echo "coach-dev: src/ changes detected; building and deploying hosting:coach..."
   npm run build:firebase:coach

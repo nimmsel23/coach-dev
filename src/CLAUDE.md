@@ -18,6 +18,12 @@ Python-Backend-Details: `../fitness/CLAUDE.md` (API/Dispatcher) und
 | `learn` | Lernen | `views/Learn/` | Anatomie-Lehre (aus `fitness/catalog/kb/`) |
 | `settings` | Setup | `views/Settings/` | Themes, Split, Nav-Modus etc. |
 
+**Coach-App (`coach.html`, Einstieg `coach-main.jsx`)** läuft seit 2026-10-15 in
+der eigenen Coach-Shell `src/shell/` (Fork der VitalOS-Shell: Sidebar,
+Tab-Bar, Header, Theme-Sheet; Design-CSS `vos-*` in `styles.css`, Default-Theme
+`vital`). Details: `views/Coach/ARCHITECTURE.md`. Die Tabelle oben beschreibt
+den fitness-dev-Stand und gilt für die Coach-App nur teilweise.
+
 **Versteckte Views** (nicht in Nav, per URL erreichbar): `views/Coach/`
 (`#coach`), `views/AppGate.jsx` (Hub-Homescreen, nur `navMode=home` als `#gate`).
 

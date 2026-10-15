@@ -1,3 +1,10 @@
+# Coach-App auf VitalOS-Shell-Design umgebaut + deployt (2026-10-15)
+
+* Shell-Design aus `~/vitalos/src` geforkt: `styles.css` (Safe-Area, `vos-*`), Themes `vital`/`vital-light` (neuer Default), neue `src/shell/` (CoachShell/Sidebar/TabBar/Header/ThemeSheet).
+* `coach-console.css` („Hidden Chamber") + `cc-*`-Klassen entfernt, Views auf `vos-*` umgestellt; Katalog mobil als Liste → Detail.
+* Commit `805e86b`, Deploy `hosting:coach` → https://vos-coach.web.app. Nicht visuell im Browser abgenommen.
+* CI-Deploy bei `git push` (GitHub Actions) eingerichtet — braucht noch das Secret `FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS`, siehe `.githooks/README.md`.
+
 # AGENTS.md-Punkte umgesetzt: Push/Pull/Legs-Build, Trapezius/Hamstrings als Muskel-Komplexe, Federation-Aufräumen (2026-09-13)
 
 Zwei fachliche Aufträge abgearbeitet (`catalog/kb/AGENTS.md` durchgehen; danach
