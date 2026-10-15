@@ -7,6 +7,7 @@ import ClientPlan from './ClientPlan';
 import ClientTrainingPlans from './ClientTrainingPlans';
 import ClientHabitCycle from './ClientHabitCycle';
 import ClientInsights from './ClientInsights';
+import { useCoachRoute } from './useCoachRoute.js';
 
 const STATUS_OPTIONS = [
   { id: 'client', label: 'Klient', hint: 'Zahlend & committed — volle Coach-Aufmerksamkeit', icon: Star, color: 'text-fit-accent' },
@@ -32,8 +33,11 @@ export default function ClientsPanel() {
   const [statuses, setStatuses] = useState({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(null);
-  const [selectedUid, setSelectedUid] = useState('');
-  const [detailTab, setDetailTab] = useState('workouts');
+  const [route, navigate] = useCoachRoute();
+  const selectedUid = route.client;
+  const detailTab = route.detail;
+  const setSelectedUid = (uid) => navigate({ sub: 'clients', client: uid, detail: 'workouts', date: '' });
+  const setDetailTab = (detail) => navigate({ sub: 'clients', detail, date: '' });
 
   useEffect(() => {
     load();
@@ -106,7 +110,7 @@ export default function ClientsPanel() {
               <li
                 key={uid}
                 className={`px-4 py-3 cursor-pointer transition-all border-l-2 flex items-start gap-2.5 ${isSelected ? 'bg-fit-accent/10 border-l-fit-accent' : 'border-l-transparent hover:bg-fit-bg'}`}
-                onClick={() => { setSelectedUid(uid); setDetailTab('workouts'); }}
+                onClick={() => setSelectedUid(uid)}
               >
                 <span className={`cc-led ${status} mt-1.5`} />
                 <div className="min-w-0">
