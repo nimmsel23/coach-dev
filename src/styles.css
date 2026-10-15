@@ -1,4 +1,5 @@
 /* Dark Themes */
+@import "./styles/themes/vital.css";
 @import "./styles/themes/sixpack.css";
 @import "./styles/themes/skills.css";
 @import "./styles/themes/nordic.css";
@@ -14,6 +15,7 @@
 @import "./styles/themes/sweet-purple.css";
 
 /* Light Themes */
+@import "./styles/themes/vital-light.css";
 @import "./styles/themes/honey.css";
 @import "./styles/themes/latte.css";
 @import "./styles/themes/solarized.css";
@@ -60,6 +62,130 @@
   --accent-subtle-hover: color-mix(in srgb, var(--accent) 16%, transparent);
   --accent-border: color-mix(in srgb, var(--accent) 30%, transparent);
 }
+
+/* ==========================================================================
+   1a. VitalOS-Shell-Basis (geforkt aus ~/vitalos/src/styles.css)
+   Safe-Area, Touch-Defaults, Body + vos-* Design-Primitives.
+   ========================================================================== */
+
+/* safe-area insets for iOS notch / home indicator.
+   Bewusst NICHT mehr als Padding auf .app-shell/main/.mobile-shell —
+   die drei waren verschachtelt und haben das Inset bis zu dreifach
+   addiert. Header (oben) und Tab-Bar (unten) konsumieren es jetzt selbst. */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --tabbar-h: 58px;
+  --nav-grip-h: 28px;
+}
+
+/* touch defaults — keine globale 44px-Mindestgröße mehr: die hat jedes
+   Icon-Chip und jede Wochenleisten-Zelle aufgeblasen und überlappen lassen.
+   Wer ein großes Touch-Target braucht, nutzt .tap-target. */
+button, a, input, select, textarea, .tap-target {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.tap-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* momentum scrolling for overflow containers */
+.scroll-y {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* ensure inputs are scrolled into view on focus */
+input, textarea {
+  scroll-margin-bottom: calc(56px + var(--safe-bottom, 0px));
+}
+
+/* ==========================================================================
+   3. GLOBAL STYLES: Base element styling using the variables
+   ========================================================================== */
+
+html, body {
+  /* clip begrenzt nur horizontal, ohne einen zusätzlichen vertikalen
+     Scroll-Container zu erzeugen. Die Seite scrollt über das Dokument. */
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100vw;
+}
+
+html {
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   VitalOS Shell — Design-Primitives (Header, Tab-Bar, Sheets, Karten)
+   Farben laufen über color-mix(), weil die fit-* Tailwind-Farben reine
+   var()-Werte ohne <alpha-value> sind: `bg-fit-card/90` erzeugt NICHTS.
+   ========================================================================== */
+
+.vos-bar {
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(180%) blur(22px);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+}
+
+.vos-hairline-b { box-shadow: inset 0 -0.5px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
+.vos-hairline-t { box-shadow: inset 0 0.5px 0 color-mix(in srgb, var(--ink) 12%, transparent); }
+
+.vos-nav-sheet { transition: transform 240ms cubic-bezier(.2,.8,.2,1); }
+
+.vos-surface {
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.vos-fill {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.vos-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.vos-press {
+  transition: transform 160ms cubic-bezier(.2,.8,.2,1), background-color 160ms, opacity 160ms;
+}
+.vos-press:active { transform: scale(0.97); }
+
+.vos-sheet {
+  background: var(--bg2);
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+}
+
+@keyframes vos-sheet-in { from { transform: translateY(24px); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes vos-fade-in { from { opacity: 0 } to { opacity: 1 } }
+.vos-sheet-in { animation: vos-sheet-in 280ms cubic-bezier(.2,.8,.2,1) both; }
+.vos-fade-in { animation: vos-fade-in 200ms ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vos-nav-sheet { transition: none; }
+  .vos-sheet-in, .vos-fade-in { animation: none; }
+  .vos-press:active { transform: none; }
+}
+
 
 /* ==========================================================================
    1b. MOTION: shared entrance-animation utilities
@@ -226,3 +352,140 @@
 }
 
 /* ═════════════════════════════════════════════════════════════════════════════ */
+
+/* ==========================================================================
+   Coach-Bausteine auf VitalOS-Shell-Basis
+   Ersetzen die frueheren cc-* Klassen ("Hidden Chamber", coach-console.css).
+   Nur Theme-Variablen — funktionieren in allen Themes.
+   ========================================================================== */
+
+.card {
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+  border-radius: 20px;
+  transition: border-color 160ms, background-color 160ms;
+}
+.card:hover { border-color: color-mix(in srgb, var(--ink) 14%, transparent); }
+
+.vos-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.vos-btn {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  transition: transform 160ms cubic-bezier(.2,.8,.2,1), background-color 160ms, opacity 160ms;
+}
+.vos-btn:hover { background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.vos-btn:active { transform: scale(0.97); }
+.vos-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.vos-btn.go   { color: var(--green);  background: color-mix(in srgb, var(--green) 14%, transparent); }
+.vos-btn.no   { color: var(--red);    background: color-mix(in srgb, var(--red) 14%, transparent); }
+.vos-btn.mid  { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.vos-btn.primary { color: var(--bg); background: var(--accent); }
+.vos-btn.go:hover  { background: color-mix(in srgb, var(--green) 22%, transparent); }
+.vos-btn.no:hover  { background: color-mix(in srgb, var(--red) 22%, transparent); }
+.vos-btn.mid:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.vos-action-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+.vos-led { width: 8px; height: 8px; border-radius: 9999px; flex-shrink: 0; background: var(--dim); }
+.vos-led.client { background: var(--green); }
+.vos-led.friend { background: color-mix(in srgb, var(--dim) 60%, transparent); }
+
+.vos-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.vos-panel {
+  display: flex;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+}
+.vos-panel-side { background: color-mix(in srgb, var(--bg2) 60%, var(--card)); }
+.vos-panel-head {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.vos-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  color: var(--dim);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.vos-search:focus-within { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent); }
+.vos-search input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: var(--ink);
+}
+.vos-search input::placeholder { color: var(--dim); }
+
+.vos-tabstrip { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.vos-tabstrip::-webkit-scrollbar { display: none; }
+.vos-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  transition: transform 160ms cubic-bezier(.2,.8,.2,1), background-color 160ms, color 160ms;
+}
+.vos-chip:active { transform: scale(0.97); }
+.vos-chip.active { color: var(--bg); background: var(--ink); }
+
+.vos-list-row { transition: background-color 160ms; }
+.vos-list-row:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.vos-list-row.selected { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+
+.vos-card-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+
+::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--ink); }

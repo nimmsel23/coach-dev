@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#100e0a" />
+    <meta name="theme-color" content="#0b0e14" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Coach" />
@@ -14,14 +14,14 @@
     <title>Coach - VitalOS</title>
     <script>
       (function() {
-        const theme = localStorage.getItem('fitness-theme') || 'nordic';
+        const theme = localStorage.getItem('fitness-theme') || 'vital';
         const mode = localStorage.getItem('fitness-theme-mode') || 'manual';
         if (mode === 'manual') {
           document.documentElement.setAttribute('data-theme', theme);
         } else {
           const hour = new Date().getHours();
-          const dark = localStorage.getItem('fitness-circ-dark') || 'nordic';
-          const light = localStorage.getItem('fitness-circ-light') || 'honey';
+          const dark = localStorage.getItem('fitness-circ-dark') || 'vital';
+          const light = localStorage.getItem('fitness-circ-light') || 'vital-light';
           document.documentElement.setAttribute('data-theme', (hour >= 8 && hour < 20) ? light : dark);
         }
       })();

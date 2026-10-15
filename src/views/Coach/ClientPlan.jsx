@@ -192,7 +192,7 @@ export default function ClientPlan({ clientUid }) {
         <button
           onClick={handleCreate}
           disabled={creating || !newName.trim()}
-          className="flex items-center gap-1.5 px-3.5 py-2 bg-fit-accent text-black rounded-xl text-sm font-semibold disabled:opacity-50 transition-all"
+          className="flex items-center gap-1.5 px-3.5 py-2 bg-fit-accent text-fit-bg rounded-xl text-sm font-semibold disabled:opacity-50 transition-all"
         >
           <Plus size={15} /> Routine
         </button>

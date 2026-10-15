@@ -1,0 +1,20 @@
+/* VitalOS default dark — tiefes Tinten-Blau, ruhige Flächen, ein Akzent. */
+[data-theme="vital"] {
+  --bg: #0b0e14;
+  --bg2: #10141c;
+  --panel: #141924;
+  --card: #161b26;
+  --card-hover: #1c2230;
+  --line: #262d3b;
+  --ink: #f1f4f9;
+  --muted: #c3cad8;
+  --dim: #8590a6;
+  --accent: #6ee7b7;
+  --accent-glow: rgba(110, 231, 183, 0.16);
+  --green: #4ade80;
+  --red: #f87171;
+  --orange: #fb923c;
+  --glass: rgba(11, 14, 20, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  color-scheme: dark;
+}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Dumbbell, Search, Loader2, Sparkles, Brain, Save, ExternalLink, Activity } from 'lucide-react';
+import { Dumbbell, Search, Loader2, Sparkles, Brain, Save, ExternalLink, Activity, ChevronLeft } from 'lucide-react';
 import { searchExercises, getAnatomy, saveExercise } from '@db';
 
 export default function CatalogBrowser({ onInspectExercise }) {
@@ -74,27 +74,26 @@ export default function CatalogBrowser({ onInspectExercise }) {
   }
 
   return (
-    <div className="cc-panel flex h-[calc(100vh-12rem)] overflow-hidden bg-fit-bg">
-      <span className="cc-br1" /><span className="cc-br2" />
+    <div className="vos-panel h-[calc(100dvh-15rem)] lg:h-[calc(100dvh-9rem)] min-h-[480px]">
       {/* Left Sidebar: Search & Results */}
-      <div className="cc-panel-side w-80 border-r border-fit-line/30 flex flex-col shrink-0">
+      <div className={`vos-panel-side w-full md:w-80 md:border-r border-fit-line/30 flex-col shrink-0 ${selectedExercise ? 'hidden md:flex' : 'flex'}`}>
         <div className="p-4 border-b border-fit-line/30">
-          <span className="cc-panel-head block mb-2">02 · Archiv-Suche</span>
-          <div className="cc-terminal-input">
-            <span className="cc-prompt">&gt;</span>
+          <span className="vos-panel-head block mb-2">Übungen durchsuchen</span>
+          <div className="vos-search">
+            <Search className="text-fit-dim shrink-0" size={14} />
             <input
               type="text"
-              placeholder="search exercises... (name, muskel, quelle)"
+              placeholder="Name, Muskel, Quelle …"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            {loading ? <Loader2 className="text-fit-accent animate-spin shrink-0" size={14} /> : <Search className="text-fit-dim shrink-0" size={14} />}
+            {loading && <Loader2 className="text-fit-accent animate-spin shrink-0" size={14} />}
           </div>
         </div>
 
         <div className="flex-1 overflow-y-auto">
           {results.length === 0 && !loading && (
-            <div className="cc-panel-head p-8 text-center">
+            <div className="vos-panel-head p-8 text-center">
               Keine Ergebnisse gefunden.
             </div>
           )}
@@ -106,7 +105,7 @@ export default function CatalogBrowser({ onInspectExercise }) {
               return (
                 <li
                   key={exId}
-                  className={`cc-list-row p-3.5 cursor-pointer group ${isSelected ? 'selected' : ''}`}
+                  className={`vos-list-row p-3.5 cursor-pointer group ${isSelected ? 'selected' : ''}`}
                   onClick={() => setSelectedExercise(ex)}
                 >
                   <div className={`text-sm font-semibold truncate ${isSelected ? 'text-fit-accent' : 'text-fit-ink group-hover:text-fit-accent'}`}>
@@ -130,9 +129,12 @@ export default function CatalogBrowser({ onInspectExercise }) {
       </div>
 
       {/* Main Content: Exercise Enhancer & Detail View */}
-      <div className="flex-1 p-6 overflow-y-auto relative bg-fit-bg space-y-6">
+      <div className={`flex-1 min-w-0 p-4 md:p-6 overflow-y-auto relative space-y-6 ${selectedExercise ? 'block' : 'hidden md:block'}`}>
         {selectedExercise ? (
           <div className="space-y-6 animate-in fade-in duration-300">
+            <button onClick={() => setSelectedExercise(null)} className="vos-press -mb-3 inline-flex items-center gap-1 text-[13px] font-medium text-fit-accent md:hidden">
+              <ChevronLeft size={16} /> Übungen
+            </button>
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-fit-line/30 pb-4">
               <div>
@@ -246,7 +248,7 @@ export default function CatalogBrowser({ onInspectExercise }) {
                 <button
                   onClick={handleSaveExercise}
                   disabled={saving}
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 bg-fit-accent text-black rounded-full text-xs font-semibold hover:opacity-90 transition-all disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 bg-fit-accent text-fit-bg rounded-full text-xs font-semibold hover:opacity-90 transition-all disabled:opacity-50"
                 >
                   {saving ? 'Speichern…' : <><Save size={12} /> Speichern</>}
                 </button>
@@ -271,7 +273,7 @@ export default function CatalogBrowser({ onInspectExercise }) {
         )}
 
         {toastMsg && (
-          <div className="fixed bottom-12 right-12 px-4 py-2 bg-fit-card border border-fit-accent text-fit-accent text-xs font-semibold rounded-full shadow-lg animate-in fade-in duration-200">
+          <div className="fixed bottom-[calc(var(--mobile-nav-height,0px)+16px)] right-4 lg:bottom-12 lg:right-12 z-[65] px-4 py-2 bg-fit-card border border-fit-accent text-fit-accent text-xs font-semibold rounded-full shadow-lg animate-in fade-in duration-200">
             {toastMsg}
           </div>
         )}

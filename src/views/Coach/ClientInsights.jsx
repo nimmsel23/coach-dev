@@ -83,7 +83,7 @@ export default function ClientInsights({ clientUid }) {
         <button
           onClick={runGapCheck}
           disabled={checking}
-          className="flex items-center gap-2 px-4 py-2 bg-fit-accent text-black rounded-full font-semibold text-xs transition-all disabled:opacity-50 hover:opacity-90"
+          className="flex items-center gap-2 px-4 py-2 bg-fit-accent text-fit-bg rounded-full font-semibold text-xs transition-all disabled:opacity-50 hover:opacity-90"
         >
           {checking ? (
             <><RotateCw size={13} className="animate-spin" /> Prüfe… (kann ~20s dauern)</>
@@ -151,7 +151,7 @@ export default function ClientInsights({ clientUid }) {
                 <button
                   onClick={() => handleReview(d, 'approved')}
                   disabled={reviewing === d.id}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-fit-accent text-black rounded-full font-semibold text-xs disabled:opacity-50 hover:opacity-90"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-fit-accent text-fit-bg rounded-full font-semibold text-xs disabled:opacity-50 hover:opacity-90"
                 >
                   <Check size={12} /> Freigeben
                 </button>
