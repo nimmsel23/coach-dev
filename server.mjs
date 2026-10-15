@@ -1428,6 +1428,32 @@ app.openapi(defineJsonRoute({
   params: z.object({ clientUid: z.string(), cycleId: z.string(), routineId: z.string() }),
 }), (c) => proxyToPython(c, `/fitness/coach/macrocycles/${c.req.param("clientUid")}/${c.req.param("cycleId")}/routines/${c.req.param("routineId")}/last`));
 
+// ── KI-Insights (Trainingslücken-Check + Drafts) — Logik lebt in Python
+// (fitness/log/console/{gap_check,drafts}.py, portiert nach coaching.py),
+// Node ist hier reiner Proxy wie bei macrocycles oben.
+app.openapi(defineJsonRoute({
+  method: "get",
+  path: "/fitness/coach/gaps",
+  tags: ["coach"],
+  summary: "Einmal-Check: Trainingslücken aktiver Klienten (optional ?uid=)",
+  query: z.object({ uid: z.string().optional() }),
+}), (c) => proxyToPython(c, "/fitness/coach/gaps"));
+app.openapi(defineJsonRoute({
+  method: "get",
+  path: "/fitness/coach/drafts",
+  tags: ["coach"],
+  summary: "Persistierte KI-Drafts (Gap-Erklärungen/Feedback), optional ?uid=&status=",
+  query: z.object({ uid: z.string().optional(), status: z.string().optional() }),
+}), (c) => proxyToPython(c, "/fitness/coach/drafts"));
+app.openapi(defineJsonRoute({
+  method: "post",
+  path: "/fitness/coach/drafts/{draftId}/review",
+  tags: ["coach"],
+  summary: "Draft freigeben/verwerfen (status: approved|dismissed)",
+  params: z.object({ draftId: z.string() }),
+  jsonBody: looseObjectSchema,
+}), (c) => proxyToPython(c, `/fitness/coach/drafts/${c.req.param("draftId")}/review`));
+
 // Einzelnen Finisher aus activityAddons löschen — Node selbst kennt kein
 // Addon-Merging (siehe /session oben, reiner 1:1-Dateischreiber), die
 // Löschlogik lebt nur in Python (fitness/api/routers/sessions.py).

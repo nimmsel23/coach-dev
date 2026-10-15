@@ -7,6 +7,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../../../firebase.js";
+import { LOCAL_FITNESS_API_BASE } from "./core.js";
 import { normalizeRoutineExercise } from "./routines.js";
 import { createWorkout, getWorkout, updateWorkout } from "./workouts.js";
 
@@ -333,4 +334,55 @@ export async function saveWorkoutFeedback(clientUid, workoutId, text) {
     coachFeedback: String(text || "").trim(),
   });
   return { ok: true };
+}
+
+// ── KI-Insights: Trainingslücken-Check + persistierte Drafts ────────────────
+// Die eigentliche Logik (Gemini/Haiku-Check, Datei-Persistenz unter
+// ~/.aos/fitness/console/drafts/) läuft nur im Python-Backend, nicht
+// portierbar nach reinem Firestore — identischer Fall wie
+// getInboxMergeCandidates() oben. Im echten Coach-Build (import.meta.env.MODE
+// === "coach") ist LOCAL_FITNESS_API_BASE bewusst "" (kein Heimnetz-Zugriff
+// von remote) — liefert dann leer statt Fehler, Gap-Badges/Drafts bleiben im
+// Remote-Coach-Build schlicht aus, kein kritischer Pfad.
+export async function checkClientGaps(clientUid = null) {
+  if (!LOCAL_FITNESS_API_BASE) return [];
+  try {
+    const qs = clientUid ? `?uid=${encodeURIComponent(clientUid)}` : '';
+    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/gaps${qs}`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data?.gaps || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function getCoachDrafts({ uid = null, status = null } = {}) {
+  if (!LOCAL_FITNESS_API_BASE) return [];
+  try {
+    const params = new URLSearchParams();
+    if (uid) params.set('uid', uid);
+    if (status) params.set('status', status);
+    const qs = params.toString();
+    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/drafts${qs ? `?${qs}` : ''}`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data?.drafts || [];
+  } catch {
+    return [];
+  }
+}
+
+export async function reviewCoachDraft(draftId, uid, status) {
+  if (!LOCAL_FITNESS_API_BASE) return { ok: false };
+  try {
+    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/drafts/${encodeURIComponent(draftId)}/review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid, status }),
+    });
+    return { ok: res.ok };
+  } catch {
+    return { ok: false };
+  }
 }

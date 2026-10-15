@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { CheckCircle2, Dumbbell, Users } from 'lucide-react';
 import { useInbox } from '../Inbox/useInbox';
 import InboxCard from '../Inbox/InboxCard';
 import CatalogBrowser from './CatalogBrowser';
 import ClientsPanel from './ClientsPanel';
+import { useCoachRoute } from './useCoachRoute.js';
 
 const SUB_TABS = [
   { id: 'exercises', idx: '01 · UPLINK', label: () => 'Übungsanfragen', cnt: (n) => `(${n})` },
@@ -13,7 +13,8 @@ const SUB_TABS = [
 
 export default function Coach({ onInspectExercise }) {
   const { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich, linkSource } = useInbox({ global: true });
-  const [activeSubTab, setActiveSubTab] = useState('exercises');
+  const [route, navigate] = useCoachRoute();
+  const activeSubTab = route.sub;
 
   if (loading) return (
     <div className="flex items-center justify-center py-20">
@@ -40,7 +41,7 @@ export default function Coach({ onInspectExercise }) {
         {SUB_TABS.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveSubTab(tab.id)}
+            onClick={() => navigate({ sub: tab.id, client: '', date: '' })}
             className={`cc-switch ${activeSubTab === tab.id ? 'active' : ''}`}
           >
             <span className="cc-idx">{tab.idx}</span>
