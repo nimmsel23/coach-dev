@@ -1,0 +1,27 @@
+{
+  "apps": {
+    "coach": {
+      "name": "VitalOS Coach",
+      "short": "Coach",
+      "description": "Coach-Konsole fuer VitalOS",
+      "accent": "#a78bfa",
+      "html": "index.html",
+      "manifest": "coach-manifest.webmanifest",
+      "splash": { "icon": "./coach-icon-192.png" },
+      "register": { "expose": true },
+      "sw": {
+        "file": "coach-sw.js",
+        "prefix": "vos-coach-",
+        "precacheAssets": true,
+        "shell": [
+          "./index.html",
+          "./coach-manifest.webmanifest",
+          "./coach-icon.svg",
+          "./coach-icon-180.png",
+          "./coach-icon-192.png",
+          "./coach-icon-512.png"
+        ]
+      }
+    }
+  }
+}
