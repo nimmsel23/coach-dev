@@ -1358,3 +1358,11 @@ Vite und Tailwind verwenden denselben Plan-Quellresolver, sodass Utility-Klassen
 der eingebundenen Editor-/Dialogkomponenten im Produktions-CSS erhalten bleiben.
 Der erste Firebase-Upload wurde durch eine Netzwerkunterbrechung abgebrochen;
 Release wird nach Build-/CSS-Prüfung erneut ausgeführt.
+
+### Coach Preview-CI: Standalone-Installation
+
+Der korrigierte Plan-Checkout läuft erfolgreich. Der anschließende npm-Install
+scheiterte an der optionalen workspace-Abhängigkeit. Preview nutzt nun pnpm
+11.3.0, entfernt ausschließlich die im Standalone fehlende Alias-Dependency
+im temporären Runner und verwendet den Hoisted-Linker wie Plan. Coach besitzt
+kein eigenes Lockfile; der Produktionsbuild bleibt durch den Parent-Lockfile fixiert.

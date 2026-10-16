@@ -58,19 +58,27 @@ jobs:
           ref: 0643b99b58ed7de0b1600c27d841e74589ef60ea
           path: .shared/plan
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Install
-        run: npm install --no-audit --no-fund --ignore-scripts
+        # The optional alias package exists only in the VitalOS workspace.
+        # Standalone Vite already provides its own fallback aliases.
+        run: |
+          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));delete p.optionalDependencies?.['@vos/cross-app-aliases'];fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
+          pnpm install --no-frozen-lockfile --ignore-scripts --config.node-linker=hoisted
 
       # *.generated.js sind gitignored; build:firebase:coach erzeugt sie nicht selbst
       - name: KB-Daten generieren
-        run: npm run build:kb-data
+        run: pnpm run build:kb-data
 
       - name: Build (Coach)
-        run: npm run build:firebase:coach
+        run: pnpm run build:firebase:coach
 
       - name: Preview hosting:coach (24h-Channel dev)
         env:
