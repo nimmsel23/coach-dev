@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: nimmsel23/plan-dev
-          ref: 0643b99
+          ref: 0643b99b58ed7de0b1600c27d841e74589ef60ea
           path: .shared/plan
 
       - uses: actions/setup-node@v4

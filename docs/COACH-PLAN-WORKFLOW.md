@@ -29,7 +29,8 @@ Vorlageneditor, Übungsauswahl, Katalogadapter, API-Adapter, Trainingsplankompos
 und Makrozyklus-Vertrag gehören zu **plan-dev**. Coach importiert diese Bausteine
 über `@plan`; kein zweiter Editor und keine zweite Publikationslogik.
 
-`scripts/shared-plan.mjs` findet die Quelle als Geschwister `plan-app`, `plan-dev`
+`scripts/shared-plan-root.cjs` findet die Quelle für Vite und Tailwind gemeinsam;
+`scripts/shared-plan.mjs` exportiert den Resolver für ESM. Gefunden wird die Quelle als Geschwister `plan-app`, `plan-dev`
 oder als isolierten CI-Checkout `.shared/plan`. Das Vorhandensein des neuen
 Workflow-Moduls wird geprüft. Der Coach-CI-Workflow checkt Plan auf dem geprüften
 Commit `0643b99` aus. Im VitalOS-Workspace pinnt der vorhandene Plan-Gitlink den

@@ -144,3 +144,10 @@ prüfen und leeren Coach-Datenpfad bestätigen. 390-px-Ansicht ohne horizontalen
 Offen: authentifizierte Firebase-Abnahme, Versionierung veröffentlichter Pläne,
 Mehrgeräte-Konfliktauflösung und persistenter Entwurf ungespeicherter
 Vorlagenänderungen. Die Snapshot-Grenzen des Plan-Owners gelten auch in Coach.
+
+
+### Releaseprüfung: CSS der gemeinsamen Komponenten
+
+Tailwind scannt dieselbe aufgelöste Plan-Quelle wie Vite. Der zentrale Resolver
+ist für ESM und CommonJS verfügbar. Damit bleiben nur in Plan verwendete
+Editor-/Dialogklassen (z. B. 88dvh-Dialoghöhe) im Coach-Release erhalten.

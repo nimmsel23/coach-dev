@@ -1350,3 +1350,11 @@ gewählten Klienten, leerer Coach-Pfad, Planbereitstellung, mobile Breite 390 px
 und keine unbehandelten Browser-Ausnahmen. Keine echten Klientendaten geschrieben,
 keine authentifizierte Firebase-Abnahme. Coach-Upgrade nicht gepusht, gemergt oder
 deployed; der vorherige Release-Auftrag betraf Plan und Fitness.
+
+
+## 2026-10-16: Coach-Release — gemeinsame Tailwind-Quelle abgesichert
+
+Vite und Tailwind verwenden denselben Plan-Quellresolver, sodass Utility-Klassen
+der eingebundenen Editor-/Dialogkomponenten im Produktions-CSS erhalten bleiben.
+Der erste Firebase-Upload wurde durch eine Netzwerkunterbrechung abgebrochen;
+Release wird nach Build-/CSS-Prüfung erneut ausgeführt.
