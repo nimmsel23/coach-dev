@@ -32,6 +32,10 @@ on:
       - 'firebase.json'
       - 'firebase.config.js'
       - '.github/workflows/deploy-coach.yml'
+      - '!**/*.md'
+      - '!**/*.txt'
+      - '!**/*.bak*'
+      - '!docs/**'
 
 concurrency:
   group: deploy-coach
