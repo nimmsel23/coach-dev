@@ -1366,3 +1366,7 @@ scheiterte an der optionalen workspace-Abhängigkeit. Preview nutzt nun pnpm
 11.3.0, entfernt ausschließlich die im Standalone fehlende Alias-Dependency
 im temporären Runner und verwendet den Hoisted-Linker wie Plan. Coach besitzt
 kein eigenes Lockfile; der Produktionsbuild bleibt durch den Parent-Lockfile fixiert.
+
+Der Preview-Runner deaktiviert zusätzlich pnpm-Auto-Install vor Scripts: Die
+explizite Installation mit deaktivierten Dependency-Scripts darf beim KB-Build
+nicht durch einen zweiten Install ohne diese Option ersetzt werden.

@@ -45,6 +45,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      # Dependencies are installed explicitly below, with scripts disabled.
+      npm_config_verify_deps_before_run: "false"
     permissions:
       contents: read
     steps:
