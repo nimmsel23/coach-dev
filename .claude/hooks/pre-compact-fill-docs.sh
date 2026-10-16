@@ -37,7 +37,7 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"   # repo-agnostisch: 
 LOCK="$REPO/.claude/hooks/.fill-docs.lock"
 LOG="$REPO/.claude/hooks/pre-compact-fill-docs.log"
 GEMINI_ENV="$HOME/.env/gemini.env"
-GEMINI_MODELS=(gemini-2.5-flash gemini-2.0-flash gemini-2.0-flash-001 gemini-flash-lite-latest)
+GEMINI_MODELS=(gemini-2.5-flash gemini-flash-lite-latest) # 2.0-flash(-001) abgeschaltet (404), 2.5-flash-lite/2.5-pro nicht für neue Nutzer (Stand 2026-10-16)
 
 log() { printf '%s [%s] %s\n' "$(date -Is)" "$$" "$1" >> "$LOG" 2>/dev/null || true; }
 
@@ -126,22 +126,30 @@ gemini_available() {
 }
 
 gemini_call() {
-  # $1 = prompt text; Ausgabe: generierter Text auf stdout, leer bei Fehler
+  # $1 = prompt text; Ausgabe: generierter Text auf stdout, leer bei Fehler.
+  # Der Prompt geht über stdin->Datei, NIE als argv (jq --arg / curl -d "$body"): Linux begrenzt ein
+  # einzelnes Argument auf 131072 Bytes, große Transcript-Ausschnitte sprengten das still
+  # ("Argument list too long", vom alten 2>/dev/null verschluckt) -> alle Modelle "fehlgeschlagen".
+  # Fix 2026-10-16. Fehlerursache je Modell landet jetzt im Log.
   local prompt="$1"
   ( set -a; . "$GEMINI_ENV"; set +a
     [ -n "${GEMINI_API_KEY:-}" ] || exit 1
     local models=("${GEMINI_MODEL:-gemini-2.5-flash}" "${GEMINI_MODELS[@]}")
-    local body resp text model
-    body="$(jq -n --arg t "$prompt" '{contents:[{parts:[{text:$t}]}], generationConfig:{temperature:0.3,maxOutputTokens:2048}}')"
+    local bodyf resp text model
+    bodyf="$(mktemp)" || exit 1
+    trap 'rm -f "$bodyf"' EXIT
+    printf '%s' "$prompt" | jq -Rs '{contents:[{parts:[{text:.}]}], generationConfig:{temperature:0.3,maxOutputTokens:4096}}' > "$bodyf" 2>/dev/null \
+      || { log "gemini: Request-Body konnte nicht gebaut werden"; exit 1; }
     for model in "${models[@]}"; do
-      resp="$(curl -sS --max-time 45 \
+      resp="$(curl -sS --max-time 90 \
         "https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}" \
-        -H "Content-Type: application/json" -d "$body" 2>/dev/null || true)"
+        -H "Content-Type: application/json" --data-binary @"$bodyf" 2>&1 || true)"
       text="$(printf '%s' "$resp" | jq -r '.candidates[0].content.parts[0].text // empty' 2>/dev/null || true)"
       if [ -n "$text" ]; then
         printf '%s' "$text"
         exit 0
       fi
+      log "gemini $model: kein Text ($(printf '%s' "$resp" | jq -r '(.error.status // .candidates[0].finishReason // "unbekannt") + " " + ((.error.message // "")[0:100])' 2>/dev/null || printf '%s' "$resp" | head -c 100))"
     done
     exit 1
   )
