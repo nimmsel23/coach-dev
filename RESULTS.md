@@ -1309,3 +1309,21 @@ der lokale Server fehlt. `sendToInbox()` queued neue Items zuerst lokal ueber
 
 ## 2026-10-16: Zusätzlicher Coach-Account
 `nimmdaniel@gmail.com` (Firebase-UID `pJay0LeAwDN93Q4NT6i5FNxrQHH2`) in den Coach-Zugangsprüfungen ergänzt. Zentrale Firebase-Rolle `roles/pJay0LeAwDN93Q4NT6i5FNxrQHH2` auf `coach` gesetzt und zurückgelesen; gilt für alle Apps mit dem zentralen Ruleset. Bestehender Coach bleibt freigeschaltet. Kein Push oder Deployment.
+
+## 2026-10-16: Coach-Befehle per Live-Listener, Worker-Statuschip (deployt)
+Freigeben/Zusammenführen in `vos-coach.web.app` scheiterte, weil der Consumer der
+`coachCommands` nur als Thread im abgeschalteten `:9150`-Prozess lief (21 Befehle
+hingen auf `queued`). Backend-Seite: `coach-sync.service` in `~/fitness-dev`
+(`fitness/coach/sync.py`, Commits `67614b8`, `b6e4f17`; die 21 Altbefehle wurden
+abgearbeitet). Frontend (Commit `e9cb805`, `firebase deploy --only hosting:coach`
+am 2026-10-16, gepusht auf `origin/dev`): `coachCommand()` nutzt `onSnapshot` statt Polling,
+prüft vorher den Heartbeat `coachState/bridge` (>60 s → `coach_worker_offline`, kein
+Befehl wird abgelegt), `describeCoachError()` für Klartext-Toasts, `WorkerChip` im Header.
+Doku: `src/CLAUDE.md` („Coach-Befehle & Coach-Rechner-Status"), `docs/FIRESTORE.md`.
+Nicht nach `fitness-dev` gemergt (Branches getrennt, `fitness-dev` kennt den Firebase-Transport nicht).
+
+## 2026-10-16: Claude-Hooks repo-agnostisch
+`.claude/hooks/{post-edit-commit-docs,pre-compact-fill-docs}.sh` leiten `REPO` aus dem
+Skriptpfad ab (vorher fest `/home/alpha/fitness-dev`: in `coach-dev` liefen die Hooks gegen
+das falsche Repo). Identische Kopien in `fitness-dev`, `coach-dev`, `plan-dev`, `6pack-dev`;
+`coach-dev/.claude/settings.json` zeigt jetzt auf die eigenen Pfade, `6pack-dev` neu eingerichtet.
