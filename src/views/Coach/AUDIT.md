@@ -125,3 +125,22 @@ hinzufügen → Ziel setzen → verifizieren → löschen).
 - `coach-console.css` und alle `cc-*`-Klassen entfernt → `vos-*` (siehe ARCHITECTURE.md). Kernfeature, das erhalten bleiben muss: Auswahl Klient/Detail-Tab/Datum steckt im URL-Hash (Push-Links aus `functions/clientWorkout.js`).
 - `CatalogBrowser` ist mobil als Liste → Detail (mit „Übungen"-Zurück-Button) nutzbar.
 - Nicht visuell im Browser abgenommen (nur Lint/Build/Route-Tests) — bei Gelegenheit auf Handy + Desktop, dunkel + hell prüfen.
+
+
+## 2026-10-16: Trainingspläne und Klientenablauf
+
+Den bisherigen Basis-Template-Editor durch den gemeinsamen Plan-Editor ersetzt:
+Yuhonas-Suche mit Anleitung und Atlas-Link, Satzvorgaben, Pausen, Reihenfolge und
+Hinweise. Trainingsplanentwürfe werden explizit bereitgestellt. Vorlagen und
+Trainingspläne haben einen sichtbaren nächsten Schritt; echte Plan-Ergebnisse
+stehen im selben Klientenkontext. Ältere Zusatzbereiche sind weiterhin erreichbar.
+E-Mail-Heuristik zur Coach-Freigabe entfernt; die gemeinsame Rollenprüfung gilt.
+
+Browserabnahme mit isolierten Testidentitäten bestanden: Vorlage beim Klienten
+anlegen, Sätze/Hinweise bearbeiten, Plan bereitstellen, gespeicherte Klientenwerte
+prüfen und leeren Coach-Datenpfad bestätigen. 390-px-Ansicht ohne horizontalen
+Überlauf, keine unbehandelten Browser-Ausnahmen. Build und Routingtests bestanden.
+
+Offen: authentifizierte Firebase-Abnahme, Versionierung veröffentlichter Pläne,
+Mehrgeräte-Konfliktauflösung und persistenter Entwurf ungespeicherter
+Vorlagenänderungen. Die Snapshot-Grenzen des Plan-Owners gelten auch in Coach.

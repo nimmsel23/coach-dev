@@ -1327,3 +1327,26 @@ Nicht nach `fitness-dev` gemergt (Branches getrennt, `fitness-dev` kennt den Fir
 Skriptpfad ab (vorher fest `/home/alpha/fitness-dev`: in `coach-dev` liefen die Hooks gegen
 das falsche Repo). Identische Kopien in `fitness-dev`, `coach-dev`, `plan-dev`, `6pack-dev`;
 `coach-dev/.claude/settings.json` zeigt jetzt auf die eigenen Pfade, `6pack-dev` neu eingerichtet.
+
+
+## 2026-10-16: Coach-Trainingspläne und Klientenablauf auf Plan ausgerichtet
+
+Gemeinsame Quelle über `@plan`: Vorlageneditor, Yuhonas-Suche, Anleitung/Bildpaar,
+Atlas-Link, Klienten-CRUD und Trainingsplankomposition einschließlich Entwurf und
+Bereitstellen. Coach-CI erhält einen gepinnten Plan-Checkout; der bestehende
+Plan-Kataloggenerator erzeugt die benötigten Daten. Keine zweite Importpipeline.
+
+Klientenauswahl führt zum Trainingsplan. Vorlageneditor und Planbereich sind
+mit nächsten Schritten verbunden; tatsächliche Workout-Sätze erscheinen bei den
+Klientenergebnissen. Zusatzbereiche bleiben unter „Weitere Bereiche“ und über
+bestehende Deep-Links erreichbar. Zugriff auf Coach folgt der gemeinsamen
+rollenbasierten Prüfung. Der nicht vorhandene lokale Coach-DB-Barrel wird vom
+Dev-Modus nicht mehr referenziert; Dev und Release nutzen Coach-Firebase.
+
+Validiert: vollständiges ESLint, `npm run build:firebase:coach`, bestehende
+Coach-Routingtests und isolierter Browserdurchlauf mit echten Komponenten und
+lokalem temporärem Backend. Nachgewiesen: Vorlage/Satzvorgaben/Hinweise beim
+gewählten Klienten, leerer Coach-Pfad, Planbereitstellung, mobile Breite 390 px
+und keine unbehandelten Browser-Ausnahmen. Keine echten Klientendaten geschrieben,
+keine authentifizierte Firebase-Abnahme. Coach-Upgrade nicht gepusht, gemergt oder
+deployed; der vorherige Release-Auftrag betraf Plan und Fitness.

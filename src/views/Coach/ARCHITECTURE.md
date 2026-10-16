@@ -81,3 +81,27 @@ Sub-Tab, Klient und Detail-Tab stehen im URL-Hash (`coachRoute.js` rein, `useCoa
 Zurück-Taste und Reload bleiben an derselben Stelle. Die Push-Links der Cloud Function `onClientWorkout`
 (fitness-dev, `functions/clientWorkout.js`) zeigen auf dieses Format. `?date=` wird gelesen, der Eintrag aber
 noch nicht hervorgehoben. Test: `node --test src/views/Coach/coachRoute.test.mjs`.
+
+
+## 2026-10-16: Gemeinsamer Trainingsplan-Workflow mit Plan
+
+`ClientsPanel` startet einen ausgewählten Klienten im Trainingsplan-Bereich.
+Drei Hauptbereiche bilden den Weg ab: Trainingsplan, Workout-Vorlagen und
+Verlauf/Feedback. KI-Insights, Habits und alte Rotation bleiben hinter
+„Weitere Bereiche“ sowie über bestehende Deep-Links erreichbar.
+
+`ClientPlan` und `ClientTrainingPlans` sind dünne Aufrufer von
+`ClientTrainingWorkspace`. Dieser hält Klienten-UID, Listenladezustand und
+Vorlageneditor-Route, ignoriert veraltete Antworten nach einem Klientenwechsel
+und übergibt eine feste UID an `createPlanApi`. Editor und `TrainingPlans` werden
+direkt aus Plan über `@plan` eingebunden. `ClientWorkoutResults` zeigt tatsächliche
+abgeschlossene Workouts und deren Event-Log-Sätze. Kein weiterer Trainingslogger.
+
+`@db` bleibt die vollständige Coach-Firebase-Schnittstelle, auch beim Dev-Server.
+Der Makrozyklus-Adapter reexportiert Plan als SSOT. `@plan` wird vom Build über
+`scripts/shared-plan.mjs` aufgelöst. Die CI checkt die geprüfte Plan-Revision in
+`.shared/plan` aus; vor dem Build wird Plan-eigener Bulk-Katalog-Generator
+aufgerufen. Quelle/Bedienung/Tests: `../../../docs/COACH-PLAN-WORKFLOW.md`.
+
+CoachShell verwendet die mit Plan gemeinsame rollenbasierte Zugangsprüfung.
+Firestore Rules und ihre Durchsetzung bleiben im VitalOS-Owner.

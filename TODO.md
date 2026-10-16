@@ -54,3 +54,17 @@ Impuls hierzu: Klient:Matthias fehlende Ambition zum kontinuierlichen Loggen von
 
 ## [x] 2026-10-16: nimmdaniel@gmail.com als Coach freischalten
 Coach-Zugang anhand der verifizierten Firebase-UID ergänzen und zentrale Rolle setzen.
+
+
+## 2026-10-16: Coach-Upgrade — Trainingspläne und Klientenablauf
+
+- [x] Gemeinsamen Plan-Editor und Yuhonas-/Atlas-Auswahl integrieren.
+- [x] Trainingsplanentwurf und explizites Bereitstellen aus Plan wiederverwenden.
+- [x] Klientenpfad fest binden und tatsächliche Plan-Ergebnisse anzeigen.
+- [x] Hauptablauf vereinfachen; ältere Zusatzbereiche und Deep-Links erhalten.
+- [x] Rollenprüfung an tatsächliche Claims/Rollen statt E-Mail-Heuristik binden.
+- [x] Isolierten Browserdurchlauf, Build, Lint und Routingtests prüfen.
+- [ ] Authentifizierter Cloud-Durchlauf mit isolierten Coach-/Klientenkonten.
+- [ ] Coach-Release nach ausdrücklichem Push-/Merge-/Deploy-Auftrag.
+
+Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.

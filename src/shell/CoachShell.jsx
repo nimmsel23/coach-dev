@@ -1,3 +1,4 @@
+import { usePlanCoach } from '@plan/hooks/usePlanCoach.js'
 import { useCallback, useState } from 'react'
 import { Shield } from 'lucide-react'
 import Coach from '../views/Coach/index.jsx'
@@ -16,20 +17,9 @@ import WorkerChip from './WorkerChip.jsx'
 import ThemeSheet from './ThemeSheet.jsx'
 import { findNavItem } from './NavigationItems.js'
 
-const COACH_UIDS = new Set([
-  '59ole36uNpNwml5H6VDYCXyCME92',
-  'pJay0LeAwDN93Q4NT6i5FNxrQHH2', // nimmdaniel@gmail.com (Firebase Auth)
-])
-
-function isCoachUser(user) {
-  if (!user) return false
-  return COACH_UIDS.has(user.uid) || String(user.email || '').includes('alpha')
-}
-
-// App-Shell der Coach-Konsole auf dem VitalOS-Shell-Design:
-// Glas-Sidebar (Desktop) + Tab-Bar (Mobile) + sticky vos-bar-Header.
 export default function CoachShell() {
   const { user, authLoading, signIn, signInEmail, signUpEmail, signOut } = useUser()
+  const allowed = usePlanCoach(user)
   const { sidebarPinned, setSidebarPinned } = useSettingsStore()
   const pinned = sidebarPinned !== false && sidebarPinned !== 'false'
   const [route, navigateRoute] = useCoachRoute()
@@ -80,7 +70,6 @@ export default function CoachShell() {
     )
   }
 
-  const allowed = isCoachUser(user)
   const current = findNavItem(route.sub)
   const subtitle = route.sub === 'exercises'
     ? (counts.exercises > 0 ? `${counts.exercises} offen` : 'Alles freigegeben')

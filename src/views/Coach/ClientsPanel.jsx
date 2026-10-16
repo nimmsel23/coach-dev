@@ -15,11 +15,13 @@ const STATUS_OPTIONS = [
 ];
 
 const DETAIL_TABS = [
-  { id: 'workouts', label: 'Workouts', icon: Dumbbell },
+  { id: 'trainingplan', label: 'Trainingsplan', icon: Layers },
+  { id: 'templates', label: 'Workout-Vorlagen', icon: Target },
+  { id: 'workouts', label: 'Verlauf & Feedback', icon: Dumbbell },
+];
+const EXTRA_TABS = [
   { id: 'insights', label: 'KI-Insights', icon: Sparkles },
   { id: 'habits', label: 'Habits', icon: RotateCw },
-  { id: 'templates', label: 'Templates', icon: Target },
-  { id: 'trainingplan', label: 'Trainingsplan', icon: Layers },
   { id: 'plan', label: 'Rotation (alt)', icon: Layers },
 ];
 
@@ -33,10 +35,12 @@ export default function ClientsPanel() {
   const [statuses, setStatuses] = useState({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(null);
+  const [error, setError] = useState('');
+  const [extras, setExtras] = useState(false);
   const [route, navigate] = useCoachRoute();
   const selectedUid = route.client;
   const detailTab = route.detail;
-  const setSelectedUid = (uid) => navigate({ sub: 'clients', client: uid, detail: 'workouts', date: '' });
+  const setSelectedUid = (uid) => navigate({ sub: 'clients', client: uid, detail: 'trainingplan', date: '' });
   const setDetailTab = (detail) => navigate({ sub: 'clients', detail, date: '' });
 
   useEffect(() => {
@@ -52,16 +56,21 @@ export default function ClientsPanel() {
         Object.keys(p).map(async (uid) => [uid, (await getUserProfile(uid))?.clientStatus || 'friend'])
       );
       setStatuses(Object.fromEntries(entries));
-    } finally {
+    } catch (err) { setError(err.message || "Klienten konnten nicht geladen werden."); } finally {
       setLoading(false);
     }
   }
 
   async function setStatus(uid, status) {
+    const previous = statuses[uid];
+    setError('');
     setSaving(uid);
     setStatuses(prev => ({ ...prev, [uid]: status }));
     try {
       await updateUserProfile(uid, { clientStatus: status });
+    } catch (err) {
+      setStatuses((prev) => ({ ...prev, [uid]: previous }));
+      setError(err.message || "Status konnte nicht gespeichert werden.");
     } finally {
       setSaving(null);
     }
@@ -79,6 +88,8 @@ export default function ClientsPanel() {
     </div>
   );
 
+  if (error && uids.length === 0) return <div role="alert" className="p-6 text-fit-red">{error}<button onClick={load} className="ml-3 underline">Erneut versuchen</button></div>;
+
   if (uids.length === 0) return (
     <div className="card py-16 flex flex-col items-center justify-center text-center">
       <Users size={40} className="mb-3 text-fit-dim" />
@@ -88,7 +99,7 @@ export default function ClientsPanel() {
   );
 
   const selectedProfile = selectedUid ? profiles[selectedUid] : null;
-  const selectedName = selectedProfile ? (selectedProfile.displayName || selectedProfile.email || selectedUid) : '';
+  const selectedName = selectedProfile ? (selectedProfile.displayName || selectedProfile?.email || selectedUid) : '';
 
   return (
     <div className="vos-panel flex-col md:flex-row h-[calc(100dvh-15rem)] lg:h-[calc(100dvh-9rem)] min-h-[480px]">
@@ -144,8 +155,8 @@ export default function ClientsPanel() {
                 <span className="vos-avatar">{selectedName.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase()}</span>
                 <div className="min-w-0">
                   <h3 className="text-base font-semibold text-fit-ink truncate">{selectedName}</h3>
-                  {selectedProfile.email && selectedProfile.email !== selectedName && (
-                    <p className="text-xs truncate" style={{ color: 'var(--dim)', opacity: 0.6 }}>{selectedProfile.email}</p>
+                  {selectedProfile?.email && selectedProfile?.email !== selectedName && (
+                    <p className="text-xs truncate" style={{ color: 'var(--dim)', opacity: 0.6 }}>{selectedProfile?.email}</p>
                   )}
                 </div>
               </div>
@@ -170,7 +181,7 @@ export default function ClientsPanel() {
             </div>
 
             <div className="vos-tabstrip px-4 py-2.5 border-b border-fit-line/30 shrink-0">
-              {DETAIL_TABS.map(tab => {
+              {[...DETAIL_TABS, ...(extras || EXTRA_TABS.some((t) => t.id === detailTab) ? EXTRA_TABS : [])].map(tab => {
                 const Icon = tab.icon;
                 return (
                   <button
@@ -184,12 +195,14 @@ export default function ClientsPanel() {
               })}
             </div>
 
+            <div className="px-4 pt-2"><button onClick={() => setExtras(!extras)} className="text-xs text-fit-muted">{extras ? 'Weniger Bereiche' : 'Weitere Bereiche'}</button></div>
+            {error && <p role="alert" className="px-4 pt-2 text-sm text-fit-red">{error}</p>}
             <div className="flex-1 overflow-y-auto p-4">
               {detailTab === 'workouts' && <ClientWorkoutsFeed clientUid={selectedUid} />}
               {detailTab === 'insights' && <ClientInsights clientUid={selectedUid} />}
               {detailTab === 'habits' && <ClientHabitCycle clientUid={selectedUid} />}
-              {detailTab === 'templates' && <ClientPlan clientUid={selectedUid} />}
-              {detailTab === 'trainingplan' && <ClientTrainingPlans clientUid={selectedUid} />}
+              {detailTab === 'templates' && <ClientPlan key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
+              {detailTab === 'trainingplan' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
               {detailTab === 'plan' && <AssignPlan clientUid={selectedUid} clientName={selectedName} />}
             </div>
           </>
