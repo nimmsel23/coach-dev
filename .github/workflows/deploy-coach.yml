@@ -8,8 +8,12 @@
 # Einmalig nötig: Repo-Secret FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS
 # (Service-Account-JSON mit Rolle "Firebase Hosting Admin" für Projekt fitness-aos).
 # Fehlt das Secret, baut der Job nur und überspringt den Deploy mit Warnung.
+#
+# PREVIEW statt Live (Regel 2026-10-16): echte Prod-URLs (vos-*.web.app) werden nur noch
+# aus dem Branch `vitalos` der Meta-Repo-Checkouts (~/vitalos/*-app) deployt. Dieser
+# Workflow veröffentlicht auf dem Branch `dev` ausschließlich einen 24h-Preview-Channel `dev`.
 
-name: Deploy Coach
+name: Preview Coach
 
 on:
   workflow_dispatch:
@@ -56,7 +60,7 @@ jobs:
       - name: Build (Coach)
         run: npm run build:firebase:coach
 
-      - name: Deploy hosting:coach
+      - name: Preview hosting:coach (24h-Channel dev)
         env:
           SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS }}
         run: |
@@ -66,5 +70,5 @@ jobs:
           fi
           printf '%s' "$SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
-          npx --yes firebase-tools@13 deploy --only hosting:coach --project fitness-aos --non-interactive
+          npx --yes firebase-tools@13 hosting:channel:deploy dev --only coach --expires 24h --project fitness-aos --non-interactive
           rm -f "$RUNNER_TEMP/sa.json"

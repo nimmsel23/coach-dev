@@ -16,7 +16,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   [ -z "${local_ref:-}" ] && continue
   branch="${local_ref#refs/heads/}"
 
-  [ "$branch" = "dev" ] || continue
+  [ "$branch" = "dev" ] || [ "$branch" = "vitalos" ] || continue
 
   if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
     changed="$(git diff-tree --no-commit-id --name-only -r "$local_sha")"
@@ -24,21 +24,20 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     changed="$(git diff --name-only "$remote_sha" "$local_sha")"
   fi
 
-  if echo "$changed" | grep -Eq '^src/'; then
+  # Echte Prod-URL (vos-coach.web.app): nur aus dem Branch `vitalos` (Checkout
+  # ~/vitalos/coach-app). Auf `dev` gibt es nur den 24h-Preview-Channel per GitHub Action.
+  if [ "$branch" = "vitalos" ] && echo "$changed" | grep -Eq '^src/'; then
     should_deploy=true
   fi
 
-  if echo "$changed" | grep -Eq '^gas-coach-summary/'; then
+  if [ "$branch" = "dev" ] && echo "$changed" | grep -Eq '^gas-coach-summary/'; then
     should_clasp_deploy=true
   fi
 done
 
 # CI-Deploy aktiv (.github/workflows/deploy-coach.yml)? Dann hier nicht doppelt deployen.
 # Einschalten: git config coach.ciDeploy true   (Secret FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS vorher setzen)
-if [ "$(git config --bool coach.ciDeploy || echo false)" = true ]; then
-  should_deploy=false
-  echo "coach-dev: coach.ciDeploy=true; Hosting-Deploy übernimmt GitHub Actions."
-fi
+# (coach.ciDeploy entfällt: GitHub Actions deployt nur noch Previews, nie live.)
 
 if [ "$should_deploy" = true ]; then
   echo "coach-dev: src/ changes detected; building and deploying hosting:coach..."
@@ -46,7 +45,7 @@ if [ "$should_deploy" = true ]; then
   firebase deploy --only hosting:coach --project fitness-aos
   echo "coach-dev: deployed https://vos-coach.web.app"
 else
-  echo "coach-dev: no src/ changes in pushed dev range; skipping Firebase deploy."
+  echo "coach-dev: kein Prod-Deploy (nur Push auf vitalos mit src/-Änderungen deployt live); skipping Firebase deploy."
 fi
 
 COACH_SUMMARY_DEPLOYMENT_ID="AKfycbzYPrXQMym0hR7qexG3HcKI12oWSEgoxt0h5mStFh7PRWZzU7g_ZzisJdybN4m4yXzq"
