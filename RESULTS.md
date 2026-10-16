@@ -1,3 +1,11 @@
+# Coach: Splash, coach-sw.js und SW-Register aus @vos/mini-app-shell (2026-10-16)
+
+- Splash, Service Worker und SW-Register kommen aus `@vos/mini-app-shell` (SSOT `~/vitalos/packages/mini-app-shell`, hier vendored unter `scripts/mini-app-shell/` — nicht editieren, Aktualisieren/Drift: `node ~/vitalos/packages/mini-app-shell/cli.mjs vendor scripts/mini-app-shell [--check]`; Konfig `mini-app.json`).
+- `coach.html` ohne Inline-Splash/-Register; `prepare-coach-dist.mjs` kopiert nur noch `coach.html` → `index.html`, danach stempelt `build:firebase:coach` Splash, Register und `coach-sw.js` (Precache aller `/assets/*`).
+- Dateiname `coach-sw.js` und Präfix `vos-coach-` bleiben (bestehende Installationen). Reload bei SW-Wechsel weiter nur in den ersten 10 s.
+- Alter SW: `docs/archive/coach-sw.static-v1.js`. Commit `7500de0` auf `dev`, Build geprüft, nicht gepusht.
+- Release wie fitness-dev: `vos-release coach` (dev → vitalos); `.githooks/pre-push`-Konflikt → dev gewinnt.
+
 # Coach-App auf VitalOS-Shell-Design umgebaut + deployt (2026-10-15)
 
 * Shell-Design aus `~/vitalos/src` geforkt: `styles.css` (Safe-Area, `vos-*`), Themes `vital`/`vital-light` (neuer Default), neue `src/shell/` (CoachShell/Sidebar/TabBar/Header/ThemeSheet).
