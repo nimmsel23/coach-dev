@@ -324,7 +324,7 @@ export default function AssignPlan({ clientUid: presetClientUid, clientName: pre
                 key={p.label}
                 onClick={() => setPreset(p)}
                 className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-colors ${
-                  preset.label === p.label ? 'bg-fit-accent text-black' : 'bg-fit-bg border border-fit-line text-fit-dim hover:text-fit-ink'
+                  preset.label === p.label ? 'bg-fit-accent text-fit-bg' : 'bg-fit-bg border border-fit-line text-fit-dim hover:text-fit-ink'
                 }`}
               >
                 {p.label} ({p.sets}×{p.reps})

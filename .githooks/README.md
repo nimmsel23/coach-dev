@@ -46,3 +46,16 @@ unter `src/` enthält.
   `~/vitalos/firestore.rules`
 - Schlägt der Build/Deploy fehl, wird der Push abgebrochen — Override mit
   `git push --no-verify`
+
+## CI-Deploy (GitHub Actions)
+`.github/workflows/deploy-coach.yml` baut (`npm run build:firebase:coach`) und
+deployt `hosting:coach` bei jedem Push auf `dev`, der Frontend-Code berührt.
+Die geerbten Fitness-Workflows (`preview-dev.yml`, `deploy-vitalos.yml`) liegen
+in `.github/workflows.disabled/`.
+
+Einrichtung (einmalig):
+1. Service-Account-Key mit Rolle „Firebase Hosting Admin" für Projekt `fitness-aos` anlegen.
+2. `gh secret set FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS -R nimmsel23/coach-dev < key.json`
+3. Lokalen Deploy im `pre-push` abschalten: `git config coach.ciDeploy true`
+   (sonst deployen Hook und CI doppelt). Ohne Secret überspringt der Workflow den Deploy.
+

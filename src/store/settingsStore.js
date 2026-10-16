@@ -20,10 +20,10 @@ export function createSettingsStore(prefix, extraFields = {}) {
   const key = (name) => `${prefix}-${name}`;
 
   const FIELDS = {
-    theme:             [key('theme'),             () => ls(key('theme'), 'nordic')],
+    theme:             [key('theme'),             () => ls(key('theme'), 'vital')],
     themeMode:         [key('theme-mode'),        () => ls(key('theme-mode'), 'manual')],
-    circDark:          [key('circ-dark'),         () => ls(key('circ-dark'), 'nordic')],
-    circLight:         [key('circ-light'),        () => ls(key('circ-light'), 'honey')],
+    circDark:          [key('circ-dark'),         () => ls(key('circ-dark'), 'vital')],
+    circLight:         [key('circ-light'),        () => ls(key('circ-light'), 'vital-light')],
     recentDays:        [key('recentDays'),        () => lsInt(key('recentDays'), 7)],
     coverageThreshold: [key('coverageThreshold'), () => lsFloat(key('coverageThreshold'), 1.0)],
     showAdvanced:      [key('showAdvanced'),      () => ls(key('showAdvanced'), 'false') === 'true'],

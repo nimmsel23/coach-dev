@@ -1,7 +1,7 @@
 # Audit: Coach
 
 ## Zweck
-Versteckte Admin-Ansicht ("Hidden Chamber") für Coach-seitige Verwaltung — nicht in der Nav, erreichbar per `#coach` (fitness-dev) bzw. eigener Sidebar-Button (vitalos, Sichtbarkeit per UID/Local-Mode-Gate).
+Admin-Ansicht für Coach-seitige Verwaltung — nicht in der Nav, erreichbar per `#coach` (fitness-dev) bzw. eigener Sidebar-Button (vitalos, Sichtbarkeit per UID/Local-Mode-Gate).
 
 ## Komponenten
 | Datei | Zweck | Zeilen |
@@ -118,3 +118,10 @@ hinzufügen → Ziel setzen → verifizieren → löschen).
   `ClientManagement.jsx`. Build grün, keine funktionale Änderung.
 - Der unter "Auffälligkeiten" genannte Punkt (kein gemeinsamer State zwischen
   Tabs) besteht unverändert fort — reiner Struktur-Split, keine State-Arbeit.
+
+## Update 2026-10-15 — Coach-Shell auf VitalOS-Design
+- Die Tabelle/Sub-Tab-Liste oben ist historisch: aktuell 3 Bereiche (Übungsanfragen, Katalog, Klienten), Klienten-Detail-Tabs in `ClientsPanel.jsx`, Routing per Hash (`coachRoute.js`).
+- `index.jsx` enthält keine Navigation/Command-Bar mehr; die liegt in `src/shell/` (Sidebar/Tab-Bar/Header). Der offene-Anfragen-Zähler wird per `onInboxCount` an die Shell gemeldet.
+- `coach-console.css` und alle `cc-*`-Klassen entfernt → `vos-*` (siehe ARCHITECTURE.md). Kernfeature, das erhalten bleiben muss: Auswahl Klient/Detail-Tab/Datum steckt im URL-Hash (Push-Links aus `functions/clientWorkout.js`).
+- `CatalogBrowser` ist mobil als Liste → Detail (mit „Übungen"-Zurück-Button) nutzbar.
+- Nicht visuell im Browser abgenommen (nur Lint/Build/Route-Tests) — bei Gelegenheit auf Handy + Desktop, dunkel + hell prüfen.

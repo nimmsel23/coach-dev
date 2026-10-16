@@ -121,8 +121,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
   }
 
   return (
-    <div className="card cc-dossier p-4 flex flex-col">
-      <span className="cc-br1" /><span className="cc-br2" />
+    <div className="card p-4 flex flex-col">
 
       {showUserId && userId && (
         <div className="flex items-center gap-2 mb-2">
@@ -133,7 +132,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
 
       <div className="flex items-start justify-between gap-2 mb-2.5">
         <h3 className="text-[13.5px] font-bold uppercase tracking-wide text-fit-ink leading-snug">{data.display_name || data.name}</h3>
-        {data.category && <span className="cc-tag shrink-0">{data.category}</span>}
+        {data.category && <span className="vos-tag shrink-0">{data.category}</span>}
       </div>
 
       <div className="flex flex-wrap gap-1.5 mb-2.5">
@@ -220,10 +219,10 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
         "{data.coaching_notes?.[0] || 'Keine Notizen generiert.'}"
       </p>
 
-      <div className="cc-action-row">
+      <div className="vos-action-row">
         <button
           onClick={() => onInspect?.({ ...buildInspectPayload(ex, data), mergeCandidate })}
-          className="cc-btn-ghost"
+          className="vos-btn"
           title="Details"
         >
           <Info size={13} /> Details
@@ -231,7 +230,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
         <button
           onClick={() => onDelete(fileId)}
           disabled={busy}
-          className="cc-btn-ghost no"
+          className="vos-btn no"
           title="Löschen"
         >
           <Trash2 size={13} /> Löschen
@@ -240,7 +239,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
           <button
             onClick={() => onReenrich(fileId)}
             disabled={busy}
-            className="cc-btn-ghost mid"
+            className="vos-btn mid"
             title="Neu anreichern (Gemini)"
           >
             <RefreshCw size={13} className={busy ? 'animate-spin' : ''} />
@@ -250,7 +249,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
           <button
             onClick={() => onApprove(fileId)}
             disabled={busy}
-            className="cc-btn-ghost go"
+            className="vos-btn go"
           >
             {busy ? 'Warte…' : <><CheckCircle2 size={13} /> Freigeben</>}
           </button>

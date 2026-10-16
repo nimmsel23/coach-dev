@@ -120,7 +120,7 @@ export default function ClientWorkoutsFeed({ clientUid }) {
             <button
               key={f.id}
               onClick={() => setFilterType(f.id)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${filterType === f.id ? 'bg-fit-accent text-black' : 'text-fit-dim hover:text-fit-ink'}`}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${filterType === f.id ? 'bg-fit-accent text-fit-bg' : 'text-fit-dim hover:text-fit-ink'}`}
             >
               {f.label}
             </button>
@@ -264,7 +264,7 @@ export default function ClientWorkoutsFeed({ clientUid }) {
                 <button
                   onClick={() => handleCommentSubmit(item)}
                   disabled={submittingComment === item.id}
-                  className="flex items-center gap-2 px-4 py-2 bg-fit-accent text-black rounded-full font-semibold text-xs transition-all disabled:opacity-50 hover:opacity-90"
+                  className="flex items-center gap-2 px-4 py-2 bg-fit-accent text-fit-bg rounded-full font-semibold text-xs transition-all disabled:opacity-50 hover:opacity-90"
                 >
                   {submittingComment === item.id ? 'Warte…' : (
                     <>

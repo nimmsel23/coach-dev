@@ -3,7 +3,7 @@
  */
 
 import {
-  collection, doc, addDoc, getDoc, getDocs, deleteDoc, updateDoc,
+  collection, doc, addDoc, getDoc, getDocs, deleteDoc, updateDoc, onSnapshot,
   query, orderBy, serverTimestamp, collectionGroup,
 } from "firebase/firestore";
 
@@ -13,20 +13,85 @@ import { normalizeExerciseRecord } from "../shared/exercise.js";
 
 const FIREBASE_COACH = import.meta.env.MODE === "coach";
 
+// ── Coach-Worker (coach-sync.service auf dem Coach-Rechner) ──────────────────
+// Die Web-App führt Inbox-Befehle nicht selbst aus: sie schreibt `coachCommands`
+// (status queued), der Worker übernimmt sie und schreibt das Ergebnis zurück.
+// Der Worker meldet sich alle <=15 s in `coachState/bridge` (`last_seen`).
+const WORKER_STALE_MS = 60000;      // älter = Worker gilt als offline
+const COMMAND_TIMEOUT_MS = 190000;  // so lange wartet die UI auf ein laufendes Ergebnis
+
+const COACH_ERROR_TEXT = {
+  coach_worker_offline: "Coach-Rechner offline – Befehl nicht gesendet",
+  coach_command_timeout: "Keine Antwort vom Coach-Rechner – Ergebnis unklar, Liste neu laden",
+};
+
+function coachError(code, message) {
+  const err = new Error(message || code);
+  err.code = code;
+  return err;
+}
+
+/** Kurztext für Toasts: bekannte Codes → Klartext, sonst Fallback. */
+export function describeCoachError(err, fallback = "Fehlgeschlagen") {
+  const code = err?.code || err?.message;
+  return COACH_ERROR_TEXT[code] || (err?.message && !String(err.message).startsWith("coach_") ? err.message : fallback);
+}
+
+function workerStatus(data, now = Date.now()) {
+  const lastSeen = data?.last_seen?.toDate?.() ?? null;
+  if (!lastSeen) return { state: "unknown", lastSeen: null, ageMs: null, queued: 0, stale: 0 };
+  const ageMs = now - lastSeen.getTime();
+  return {
+    state: ageMs > WORKER_STALE_MS ? "offline" : "online",
+    lastSeen, ageMs,
+    queued: data.queued || 0, stale: data.stale || 0, processing: data.processing || 0,
+  };
+}
+
+/**
+ * Live-Status des Coach-Workers. `cb({state: online|offline|unknown, lastSeen, ageMs, queued, stale})`
+ * kommt bei jeder Heartbeat-Änderung und alle 15 s neu bewertet (Alter wächst ohne neue Daten).
+ * Gibt die Abmelde-Funktion zurück.
+ */
+export function watchCoachWorker(cb) {
+  let last = null;
+  const emit = () => cb(workerStatus(last));
+  const unsub = onSnapshot(
+    doc(db, "coachState", "bridge"),
+    (snap) => { last = snap.exists() ? snap.data() : null; emit(); },
+    () => { last = null; emit(); },
+  );
+  const timer = setInterval(emit, 15000);
+  return () => { unsub(); clearInterval(timer); };
+}
+
 async function coachCommand(action, itemId, uid = null, payload = {}) {
+  // Offline-Worker sofort melden, statt 190 s zu warten und einen Befehl abzulegen,
+  // der erst Stunden später (oder nie) ausgeführt würde.
+  try {
+    const hb = await getDoc(doc(db, "coachState", "bridge"));
+    if (workerStatus(hb.exists() ? hb.data() : null).state === "offline") {
+      throw coachError("coach_worker_offline");
+    }
+  } catch (e) {
+    if (e?.code === "coach_worker_offline") throw e;
+    // Heartbeat nicht lesbar: unbekannt, Befehl trotzdem versuchen.
+  }
   const ref = await addDoc(collection(db, "coachCommands"), {
     action, item_id: itemId, uid, payload,
     requested_by: getUid(), status: "queued", created_at: serverTimestamp(),
   });
-  const deadline = Date.now() + 190000;
-  while (Date.now() < deadline) {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    const snap = await getDoc(ref);
-    const data = snap.data();
-    if (data?.status === "done") return data.result;
-    if (data?.status === "error") throw new Error(data.error || "coach_command_failed");
-  }
-  throw new Error("coach_command_timeout");
+  // Ergebnis per Live-Listener auf das Befehls-Dokument, kein Polling.
+  return new Promise((resolve, reject) => {
+    let unsub = () => {};
+    const timer = setTimeout(() => { unsub(); reject(coachError("coach_command_timeout")); }, COMMAND_TIMEOUT_MS);
+    const finish = (fn, value) => { clearTimeout(timer); unsub(); fn(value); };
+    unsub = onSnapshot(ref, (snap) => {
+      const data = snap.data();
+      if (data?.status === "done") finish(resolve, data.result);
+      else if (data?.status === "error") finish(reject, new Error(data.error || "coach_command_failed"));
+    }, (e) => finish(reject, e));
+  });
 }
 
 function mapLocalInboxItems(data) {

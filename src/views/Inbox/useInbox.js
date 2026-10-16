@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getInbox, getGlobalInbox, approveInbox, deleteInbox, reenrichInbox, getInboxMergeCandidates, linkInboxSource } from '@db';
+import { getInbox, getGlobalInbox, approveInbox, deleteInbox, reenrichInbox, getInboxMergeCandidates, linkInboxSource, describeCoachError } from '@db';
 
 export function useInbox({ global = false } = {}) {
   const [exercises, setExercises] = useState([]);
@@ -50,8 +50,8 @@ export function useInbox({ global = false } = {}) {
       } else {
         showToast('Freigabe fehlgeschlagen');
       }
-    } catch {
-      showToast('Fehler beim Freigeben');
+    } catch (err) {
+      showToast(describeCoachError(err, 'Fehler beim Freigeben'));
     } finally {
       setActioning(null);
     }
@@ -69,8 +69,8 @@ export function useInbox({ global = false } = {}) {
       } else {
         showToast('Anreicherung fehlgeschlagen');
       }
-    } catch {
-      showToast('Anreicherung fehlgeschlagen');
+    } catch (err) {
+      showToast(describeCoachError(err, 'Anreicherung fehlgeschlagen'));
     } finally {
       setActioning(null);
     }
@@ -89,8 +89,8 @@ export function useInbox({ global = false } = {}) {
       } else {
         showToast('Quelle konnte nicht verlinkt werden');
       }
-    } catch {
-      showToast('Quelle konnte nicht verlinkt werden');
+    } catch (err) {
+      showToast(describeCoachError(err, 'Quelle konnte nicht verlinkt werden'));
     } finally {
       setActioning(null);
     }
@@ -104,8 +104,8 @@ export function useInbox({ global = false } = {}) {
       await deleteInbox(fileId, userId);
       setExercises(prev => prev.filter(ex => ex.file_id !== fileId));
       showToast('Gelöscht');
-    } catch {
-      showToast('Fehler beim Löschen');
+    } catch (err) {
+      showToast(describeCoachError(err, 'Fehler beim Löschen'));
     } finally {
       setActioning(null);
     }

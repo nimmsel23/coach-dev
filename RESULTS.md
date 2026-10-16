@@ -1,3 +1,18 @@
+# Coach: Splash, coach-sw.js und SW-Register aus @vos/mini-app-shell (2026-10-16)
+
+- Splash, Service Worker und SW-Register kommen aus `@vos/mini-app-shell` (SSOT `~/vitalos/packages/mini-app-shell`, hier vendored unter `scripts/mini-app-shell/` — nicht editieren, Aktualisieren/Drift: `node ~/vitalos/packages/mini-app-shell/cli.mjs vendor scripts/mini-app-shell [--check]`; Konfig `mini-app.json`).
+- `coach.html` ohne Inline-Splash/-Register; `prepare-coach-dist.mjs` kopiert nur noch `coach.html` → `index.html`, danach stempelt `build:firebase:coach` Splash, Register und `coach-sw.js` (Precache aller `/assets/*`).
+- Dateiname `coach-sw.js` und Präfix `vos-coach-` bleiben (bestehende Installationen). Reload bei SW-Wechsel weiter nur in den ersten 10 s.
+- Alter SW: `docs/archive/coach-sw.static-v1.js`. Commit `7500de0` auf `dev`, Build geprüft, nicht gepusht.
+- Release wie fitness-dev: `vos-release coach` (dev → vitalos); `.githooks/pre-push`-Konflikt → dev gewinnt.
+
+# Coach-App auf VitalOS-Shell-Design umgebaut + deployt (2026-10-15)
+
+* Shell-Design aus `~/vitalos/src` geforkt: `styles.css` (Safe-Area, `vos-*`), Themes `vital`/`vital-light` (neuer Default), neue `src/shell/` (CoachShell/Sidebar/TabBar/Header/ThemeSheet).
+* `coach-console.css` („Hidden Chamber") + `cc-*`-Klassen entfernt, Views auf `vos-*` umgestellt; Katalog mobil als Liste → Detail.
+* Commit `805e86b`, Deploy `hosting:coach` → https://vos-coach.web.app. Nicht visuell im Browser abgenommen.
+* CI-Deploy bei `git push` (GitHub Actions) eingerichtet — braucht noch das Secret `FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS`, siehe `.githooks/README.md`.
+
 # AGENTS.md-Punkte umgesetzt: Push/Pull/Legs-Build, Trapezius/Hamstrings als Muskel-Komplexe, Federation-Aufräumen (2026-09-13)
 
 Zwei fachliche Aufträge abgearbeitet (`catalog/kb/AGENTS.md` durchgehen; danach
@@ -1291,3 +1306,24 @@ Damit wird kein Expert-Exercise mehr ohne lokale YAML-Lineage erzeugt, nur weil
 der lokale Server fehlt. `sendToInbox()` queued neue Items zuerst lokal ueber
 `/fitness/inbox/queue`; Firestore wird nur noch als Offline-Warteschlange mit
 `sync_status: pending_local` genutzt, falls local nicht erreichbar ist.
+
+## 2026-10-16: Zusätzlicher Coach-Account
+`nimmdaniel@gmail.com` (Firebase-UID `pJay0LeAwDN93Q4NT6i5FNxrQHH2`) in den Coach-Zugangsprüfungen ergänzt. Zentrale Firebase-Rolle `roles/pJay0LeAwDN93Q4NT6i5FNxrQHH2` auf `coach` gesetzt und zurückgelesen; gilt für alle Apps mit dem zentralen Ruleset. Bestehender Coach bleibt freigeschaltet. Kein Push oder Deployment.
+
+## 2026-10-16: Coach-Befehle per Live-Listener, Worker-Statuschip (deployt)
+Freigeben/Zusammenführen in `vos-coach.web.app` scheiterte, weil der Consumer der
+`coachCommands` nur als Thread im abgeschalteten `:9150`-Prozess lief (21 Befehle
+hingen auf `queued`). Backend-Seite: `coach-sync.service` in `~/fitness-dev`
+(`fitness/coach/sync.py`, Commits `67614b8`, `b6e4f17`; die 21 Altbefehle wurden
+abgearbeitet). Frontend (Commit `e9cb805`, `firebase deploy --only hosting:coach`
+am 2026-10-16, gepusht auf `origin/dev`): `coachCommand()` nutzt `onSnapshot` statt Polling,
+prüft vorher den Heartbeat `coachState/bridge` (>60 s → `coach_worker_offline`, kein
+Befehl wird abgelegt), `describeCoachError()` für Klartext-Toasts, `WorkerChip` im Header.
+Doku: `src/CLAUDE.md` („Coach-Befehle & Coach-Rechner-Status"), `docs/FIRESTORE.md`.
+Nicht nach `fitness-dev` gemergt (Branches getrennt, `fitness-dev` kennt den Firebase-Transport nicht).
+
+## 2026-10-16: Claude-Hooks repo-agnostisch
+`.claude/hooks/{post-edit-commit-docs,pre-compact-fill-docs}.sh` leiten `REPO` aus dem
+Skriptpfad ab (vorher fest `/home/alpha/fitness-dev`: in `coach-dev` liefen die Hooks gegen
+das falsche Repo). Identische Kopien in `fitness-dev`, `coach-dev`, `plan-dev`, `6pack-dev`;
+`coach-dev/.claude/settings.json` zeigt jetzt auf die eigenen Pfade, `6pack-dev` neu eingerichtet.

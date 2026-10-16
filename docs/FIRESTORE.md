@@ -82,3 +82,13 @@ loggen. `POST /firestore/sync` liest diese Datei bei jedem Aufruf, versucht
 die markierten Sessions erneut zu pushen und leert die Datei danach
 (best-effort — ein erneuter Fehlschlag hängt sich über denselben
 `fire()`-Pfad wieder an).
+
+## coachCommands / coachState (Stand 2026-10-16)
+
+Coach-Web-App (`vos-coach.web.app`) → Coach-Rechner: `coachCommands/{id}`
+(`action`, `item_id`, `uid`, `payload`, `status` queued → processing → done|error,
+`result`/`error`) wird vom Worker `coach-sync.service` verarbeitet (transaktionaler
+Claim mit 5-min-Lease). `coachState/bridge` ist der Heartbeat (`last_seen`,
+`queued`, `processing`, `stale`); die App zeigt daraus den Statuschip und lehnt
+Befehle bei Worker-Alter > 60 s ab. `coachInbox/*` ist der Inbox-Snapshot für die
+App. Frontend-Seite: `src/CLAUDE.md` → „Coach-Befehle & Coach-Rechner-Status".

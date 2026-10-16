@@ -18,6 +18,12 @@ Python-Backend-Details: `../fitness/CLAUDE.md` (API/Dispatcher) und
 | `learn` | Lernen | `views/Learn/` | Anatomie-Lehre (aus `fitness/catalog/kb/`) |
 | `settings` | Setup | `views/Settings/` | Themes, Split, Nav-Modus etc. |
 
+**Coach-App (`coach.html`, Einstieg `coach-main.jsx`)** läuft seit 2026-10-15 in
+der eigenen Coach-Shell `src/shell/` (Fork der VitalOS-Shell: Sidebar,
+Tab-Bar, Header, Theme-Sheet; Design-CSS `vos-*` in `styles.css`, Default-Theme
+`vital`). Details: `views/Coach/ARCHITECTURE.md`. Die Tabelle oben beschreibt
+den fitness-dev-Stand und gilt für die Coach-App nur teilweise.
+
 **Versteckte Views** (nicht in Nav, per URL erreichbar): `views/Coach/`
 (`#coach`), `views/AppGate.jsx` (Hub-Homescreen, nur `navMode=home` als `#gate`).
 
@@ -447,3 +453,38 @@ dabei die zwei bisher parallel existierenden Block-Vokabulare (`"Full"` vs.
 tatsächlichen `SPLITS`-Werte aus `SplitPicker.jsx` — Tippfehler/Groß-
 Kleinschreibungs-Varianten jenseits von `normalizeBlock()`s einfachem
 Lowercase+"full body"-Mapping matchen nicht.
+
+---
+
+## Coach-Befehle & Coach-Rechner-Status (2026-10-16, `lib/db/firestore/inbox.js`)
+
+Im Coach-Build (`MODE === "coach"`) führt die Web-App Inbox-Aktionen (approve,
+reenrich, delete, link-source, duplicates, merge-duplicates) **nicht selbst**
+aus: `coachCommand()` legt ein Dokument in `coachCommands` (Status `queued`) ab,
+der **Worker auf dem Coach-Rechner** (`coach-sync.service`, Code
+`~/fitness-dev/fitness/coach/sync.py`) übernimmt es und schreibt `done`/`error`
+samt `result` zurück. Vorher lief dieser Consumer nur als Thread im
+`:9150`-API-Prozess; war der aus, scheiterte jede Freigabe nach 190 s.
+
+- **Kein Polling mehr:** das Ergebnis kommt per `onSnapshot` auf das
+  Befehls-Dokument (Timeout weiter 190 s → `coach_command_timeout`; Ergebnis dann
+  unklar, Liste neu laden).
+- **Offline-Worker sofort melden:** vor dem Ablegen wird `coachState/bridge`
+  gelesen. Ist `last_seen` älter als 60 s (Worker schreibt alle ≤15 s), wirft
+  `coachCommand()` `coach_worker_offline` und legt **keinen** Befehl ab, damit
+  nichts Stunden später überraschend ausgeführt wird (der Worker fasst
+  `queued`-Befehle älter als 6 h ohnehin nicht an). Heartbeat nicht lesbar →
+  Befehl wird trotzdem versucht.
+- **Fehlertexte:** `describeCoachError(err, fallback)` (aus `@db`) macht aus den
+  Codes Klartext für Toasts; `useInbox.js` und `ExerciseInsightModal.jsx` nutzen
+  es in ihren `catch`-Zweigen.
+- **Statuschip:** `watchCoachWorker(cb)` (Live-Listener + 15-s-Neubewertung)
+  speist `src/shell/WorkerChip.jsx` im Header (`CoachShell.jsx` →
+  `CoachHeader actions`): grün „Coach-Rechner online [· N wartend]", rot „offline
+  seit …"; ohne Heartbeat-Dokument unsichtbar.
+- Rules (SSOT `~/vitalos/firestore.rules`, nur von dort deployen):
+  `coachState` lesbar für Coaches, `coachCommands` create nur mit
+  Whitelist-Feldern/-Aktionen, kein update/delete — daher kann die App einen
+  einmal abgelegten Befehl nicht zurückziehen.
+- Betrieb Worker: `coach-sync status|drain` (`~/fitness-dev/bin/coach-sync`),
+  Details `~/fitness-dev/docs/COACH_APP.md`.

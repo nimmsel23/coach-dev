@@ -1,11 +1,31 @@
 # View Architecture: Coach
 
-Command Center für Coach-seitige Exercise-Freigabe, Klienten-Betreuung und Katalog-Enhancer. Erreichbar im Coach-Tab oder per `#coach` für den Coach Superuser (`isCoach()`).
+Command Center für Coach-seitige Exercise-Freigabe, Klienten-Betreuung und Katalog-Enhancer. Läuft als eigenständige App (`coach.html` → `vos-coach.web.app`) in der Coach-Shell (`src/shell/`, siehe unten); Zugang nur für Coach-Accounts (`isCoachUser()` in `CoachShell.jsx`).
+
+## Shell & Design (seit 2026-10-15)
+
+Die App nutzt das Design der VitalOS-Shell (`~/vitalos/src`): `src/styles.css`
+enthält die geforkte Shell-Basis (Safe-Area, `vos-*`-Primitives) plus die
+Coach-Bausteine (`.card`, `vos-btn`, `vos-panel`, `vos-chip`, `vos-tag`,
+`vos-list-row`, `vos-search`, `vos-avatar`, `vos-led`). Themes: `vital` (Default
+dunkel) und `vital-light`; Auswahl über `ThemeSheet`. Das frühere
+„Hidden Chamber"-Theme (`coach-console.css`, `cc-*`-Klassen) ist entfernt —
+neue Views nur mit Theme-Variablen (`var(--accent)`, `fit-*`) und `vos-*`
+bauen, keine festen Farben.
+
+`src/shell/` (Forks der VitalOS-Shell, bewusst entkoppelt, nicht synchron gehalten):
+- `CoachShell.jsx` — Layout + Auth-Gate + Hash-Route (`useCoachRoute`), hält die Zähl-Badge der Übungsanfragen
+- `CoachSidebar.jsx` — Desktop-Glas-Leiste (einklappbar, `sidebarPinned` im Settings-Store)
+- `CoachTabBar.jsx` — Mobile Tab-Bar (einklappbar per Griff) + „Mehr"-Sheet (Theme, Neu laden, Abmelden)
+- `CoachHeader.jsx` — Sticky `vos-bar`-Kopfleiste
+- `ThemeSheet.jsx`, `themes.js`, `NavigationItems.js` — Theme-Picker, Registry, die drei Bereiche
+Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wrapper gesetzt).
 
 ## Komponenten
 
-- **`index.jsx`**: reiner Tab-Router, seit 2026-08-20 (Teil 2) auf 3 Sub-Tabs
-  reduziert (vorher 5 — siehe Update 2026-08-20 in `AUDIT.md` für die
+- **`index.jsx`**: rendert den Inhalt des per Prop `sub` (Hash-Route) gewählten
+  Bereichs; Navigation und Titel liegen seit 2026-10-15 in der Shell. Seit
+  2026-08-20 (Teil 2) auf 3 Sub-Tabs reduziert (vorher 5 — siehe Update 2026-08-20 in `AUDIT.md` für die
   Vorgeschichte):
   1. `Übungsanfragen` (`InboxCard` / `useInbox`, weiterhin inline in `index.jsx`)
   2. `Katalog Browser` (`CatalogBrowser.jsx`)
@@ -49,3 +69,15 @@ Command Center für Coach-seitige Exercise-Freigabe, Klienten-Betreuung und Kata
 - **Feedback**: `saveCoachFeedback()` speichert Kommentare direkt in der entsprechenden Klienten-Dokument-Referenz.
 - **Katalog**: `searchExercises()`, `getAnatomy()`, `saveExercise()` arbeiten direkt mit `fitness/kb/exercises` und `fitness/kb/anatomy`.
 - **Plan-Zuweisung**: `assignPlanToClient(coachUid, clientUid, plan)` — Firestore schreibt per `setDoc` (merge) auf `fitness/{clientUid}/wf_workouts/{planId}` (neue ID via `doc(collection(...)).id` falls `plan.id` fehlt); Local-Build ruft `POST /fitness/coach/plans/:clientUid` (`server.mjs`) auf, das nach `~/.aos/fitness/users/<clientUid>/plans/<planId>.json` schreibt. Beide Backends teilen sich dieselbe Funktionssignatur (`src/lib/db/{firestore,local}/assignedPlans.js`). Klienten-seitiges Abarbeiten des zugewiesenen Plans läuft außerhalb dieses View-Ordners in `src/views/Plan/AssignedPlans.jsx` (Training-Tab, kein eigener Coach-Unterpunkt).
+
+## Hash-Routing (seit 2026-10-15)
+
+Sub-Tab, Klient und Detail-Tab stehen im URL-Hash (`coachRoute.js` rein, `useCoachRoute.js` als Hook):
+
+- `#/exercises` · `#/catalog` · `#/clients`
+- `#/clients/<uid>/<tab>?date=YYYY-MM-DD` — `<tab>` ∈ `workouts` (Standard), `insights`, `habits`, `templates`, `trainingplan`, `plan`
+- Älterer Push-Link `#/coach?client=<uid>&date=…` wird nach `#/clients/<uid>` übersetzt.
+
+Zurück-Taste und Reload bleiben an derselben Stelle. Die Push-Links der Cloud Function `onClientWorkout`
+(fitness-dev, `functions/clientWorkout.js`) zeigen auf dieses Format. `?date=` wird gelesen, der Eintrag aber
+noch nicht hervorgehoben. Test: `node --test src/views/Coach/coachRoute.test.mjs`.

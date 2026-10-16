@@ -75,12 +75,12 @@ export default function ClientsPanel() {
 
   if (loading) return (
     <div className="flex items-center justify-center py-20">
-      <div className="w-6 h-6 border-2 border-fit-accent/30 border-t-fit-accent rounded-full animate-spin" />
+      <div className="spinner" />
     </div>
   );
 
   if (uids.length === 0) return (
-    <div className="card py-16 flex flex-col items-center justify-center text-center" style={{ opacity: 0.5 }}>
+    <div className="card py-16 flex flex-col items-center justify-center text-center">
       <Users size={40} className="mb-3 text-fit-dim" />
       <h3 className="text-base font-semibold text-fit-ink">Keine Nutzer</h3>
       <p className="text-xs mt-1" style={{ color: 'var(--dim)' }}>Es haben sich noch keine Klienten registriert</p>
@@ -91,12 +91,11 @@ export default function ClientsPanel() {
   const selectedName = selectedProfile ? (selectedProfile.displayName || selectedProfile.email || selectedUid) : '';
 
   return (
-    <div className="cc-panel flex flex-col md:flex-row h-[calc(100vh-16rem)] min-h-[480px] overflow-hidden bg-fit-bg">
-      <span className="cc-br1" /><span className="cc-br2" />
+    <div className="vos-panel flex-col md:flex-row h-[calc(100dvh-15rem)] lg:h-[calc(100dvh-9rem)] min-h-[480px]">
       {/* Klientenliste */}
-      <div className="cc-panel-side w-full md:w-72 md:border-r border-b md:border-b-0 border-fit-line/30 flex flex-col shrink-0 max-h-56 md:max-h-none overflow-y-auto">
-        <div className="cc-panel-head px-4 py-3 sticky top-0 bg-fit-bg2/80 backdrop-blur-sm">
-          03 · {uids.length} Klient{uids.length === 1 ? '' : 'en'}
+      <div className="vos-panel-side w-full md:w-72 md:border-r border-b md:border-b-0 border-fit-line/30 flex flex-col shrink-0 max-h-56 md:max-h-none overflow-y-auto">
+        <div className="vos-panel-head vos-bar px-4 py-3 sticky top-0">
+          {uids.length} Klient{uids.length === 1 ? '' : 'en'}
         </div>
         <ul className="divide-y divide-fit-line/20">
           {uids.map((uid) => {
@@ -109,10 +108,10 @@ export default function ClientsPanel() {
             return (
               <li
                 key={uid}
-                className={`px-4 py-3 cursor-pointer transition-all border-l-2 flex items-start gap-2.5 ${isSelected ? 'bg-fit-accent/10 border-l-fit-accent' : 'border-l-transparent hover:bg-fit-bg'}`}
+                className={`vos-list-row px-4 py-3 cursor-pointer flex items-start gap-2.5 ${isSelected ? 'selected' : ''}`}
                 onClick={() => setSelectedUid(uid)}
               >
-                <span className={`cc-led ${status} mt-1.5`} />
+                <span className={`vos-led ${status} mt-1.5`} />
                 <div className="min-w-0">
                   <div className={`text-sm font-semibold truncate ${isSelected ? 'text-fit-accent' : 'text-fit-ink'}`}>{name}</div>
                   {statusOpt && (
@@ -142,7 +141,7 @@ export default function ClientsPanel() {
           <>
             <div className="p-4 border-b border-fit-line/30 flex flex-wrap items-center justify-between gap-3 shrink-0">
               <div className="flex items-center gap-3.5 min-w-0">
-                <span className="cc-avatar">{selectedName.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase()}</span>
+                <span className="vos-avatar">{selectedName.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase()}</span>
                 <div className="min-w-0">
                   <h3 className="text-base font-semibold text-fit-ink truncate">{selectedName}</h3>
                   {selectedProfile.email && selectedProfile.email !== selectedName && (
@@ -160,7 +159,7 @@ export default function ClientsPanel() {
                       title={opt.hint}
                       disabled={saving === selectedUid}
                       onClick={() => setStatus(selectedUid, opt.id)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all disabled:opacity-50 ${active ? 'bg-fit-accent text-black' : 'text-fit-dim hover:text-fit-ink'}`}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all disabled:opacity-50 ${active ? 'bg-fit-accent text-fit-bg' : 'text-fit-dim hover:text-fit-ink'}`}
                     >
                       <Icon size={12} className={active ? '' : opt.color} />
                       {opt.label}
@@ -170,14 +169,14 @@ export default function ClientsPanel() {
               </div>
             </div>
 
-            <div className="cc-tabstrip px-4 border-b border-fit-line/30 shrink-0">
+            <div className="vos-tabstrip px-4 py-2.5 border-b border-fit-line/30 shrink-0">
               {DETAIL_TABS.map(tab => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setDetailTab(tab.id)}
-                    className={`cc-tab ${detailTab === tab.id ? 'active' : ''}`}
+                    className={`vos-chip ${detailTab === tab.id ? 'active' : ''}`}
                   >
                     <Icon size={13} /> {tab.label}
                   </button>
