@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import {
   approveInbox,
+  describeCoachError,
   deleteInbox,
   downloadText,
   exportFitnessData,
@@ -511,8 +512,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
       onExerciseChange?.(next)
       publishInboxUpdate('approved')
       setNotice('Inbox-Eintrag freigegeben')
-    } catch {
-      setNotice('Freigabe fehlgeschlagen')
+    } catch (err) {
+      setNotice(describeCoachError(err, 'Freigabe fehlgeschlagen'))
     } finally {
       setReviewAction('')
     }
@@ -545,8 +546,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
       onExerciseChange?.(next)
       publishInboxUpdate('ai_enriched')
       setNotice(result?.via === 'vertex' ? 'Neu angereichert (Vertex-Fallback)' : 'Neu angereichert')
-    } catch {
-      setNotice('Neu-Anreicherung fehlgeschlagen')
+    } catch (err) {
+      setNotice(describeCoachError(err, 'Neu-Anreicherung fehlgeschlagen'))
     } finally {
       setReviewAction('')
     }
@@ -579,8 +580,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
       onExerciseChange?.(next)
       publishInboxUpdate('source_linked')
       setNotice(`${sourceKey} verlinkt`)
-    } catch {
-      setNotice('Quelle konnte nicht verlinkt werden')
+    } catch (err) {
+      setNotice(describeCoachError(err, 'Quelle konnte nicht verlinkt werden'))
     } finally {
       setReviewAction('')
     }
@@ -600,8 +601,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
       onExerciseChange?.(next)
       publishInboxUpdate('rejected')
       setNotice('Inbox-Eintrag verworfen')
-    } catch {
-      setNotice('Verwerfen fehlgeschlagen')
+    } catch (err) {
+      setNotice(describeCoachError(err, 'Verwerfen fehlgeschlagen'))
     } finally {
       setReviewAction('')
     }

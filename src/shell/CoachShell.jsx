@@ -12,6 +12,7 @@ import { getStaticMuscleTaxonomy } from '../lib/kb/muscles.js'
 import CoachSidebar from './CoachSidebar.jsx'
 import CoachTabBar from './CoachTabBar.jsx'
 import CoachHeader from './CoachHeader.jsx'
+import WorkerChip from './WorkerChip.jsx'
 import ThemeSheet from './ThemeSheet.jsx'
 import { findNavItem } from './NavigationItems.js'
 
@@ -105,7 +106,7 @@ export default function CoachShell() {
               onSignOut={signOut}
             />
             <div className={`min-w-0 transition-all duration-500 ease-in-out ${pinned ? 'lg:ml-[304px]' : 'lg:ml-[108px]'}`}>
-              <CoachHeader title={current.title} subtitle={subtitle} />
+              <CoachHeader title={current.title} subtitle={subtitle} actions={<WorkerChip />} />
               <main
                 className="mx-auto max-w-[1600px] pb-[calc(var(--mobile-nav-height)+12px)] lg:pb-6"
                 style={{ paddingLeft: 'var(--safe-left)', paddingRight: 'var(--safe-right)' }}
