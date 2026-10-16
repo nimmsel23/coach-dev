@@ -1370,3 +1370,7 @@ kein eigenes Lockfile; der Produktionsbuild bleibt durch den Parent-Lockfile fix
 Der Preview-Runner deaktiviert zusätzlich pnpm-Auto-Install vor Scripts: Die
 explizite Installation mit deaktivierten Dependency-Scripts darf beim KB-Build
 nicht durch einen zweiten Install ohne diese Option ersetzt werden.
+
+Korrektur nach Runner-Prüfung: pnpm 11 wertet die bisherige npm_config-Variable
+hier nicht aus. Die Standalone-Optionen werden deshalb vor Install explizit in
+einer temporären pnpm-workspace.yaml im Runner gesetzt.

@@ -45,9 +45,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      # Dependencies are installed explicitly below, with scripts disabled.
-      npm_config_verify_deps_before_run: "false"
     permissions:
       contents: read
     steps:
@@ -74,7 +71,8 @@ jobs:
         # Standalone Vite already provides its own fallback aliases.
         run: |
           node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));delete p.optionalDependencies?.['@vos/cross-app-aliases'];fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
-          pnpm install --no-frozen-lockfile --ignore-scripts --config.node-linker=hoisted
+          printf 'packages: ["."]\nnodeLinker: hoisted\nverifyDepsBeforeRun: false\nignoreScripts: true\n' > pnpm-workspace.yaml
+          pnpm install --no-frozen-lockfile --ignore-scripts
 
       # *.generated.js sind gitignored; build:firebase:coach erzeugt sie nicht selbst
       - name: KB-Daten generieren
