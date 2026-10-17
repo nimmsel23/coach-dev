@@ -91,7 +91,7 @@ export function stampApp({ outDir, app, root = process.cwd(), log = console.log 
     const extra = sw.extraFile ? readFileSync(resolve(root, sw.extraFile), "utf8") : sw.extra || "";
     const file = sw.file || "sw.js";
     let cfg = sw;
-    if (sw.precacheAssets && existsSync(resolve(out, "assets"))) {
+    if (sw.precacheAssets !== false && existsSync(resolve(out, "assets"))) {
       // alle gehashten Build-Assets beim Installieren vorladen (voll offline ab dem ersten Start)
       const assets = readdirSync(resolve(out, "assets")).map((n) => `./assets/${n}`);
       cfg = { ...sw, shell: [...(sw.shell || ["./", "./index.html"]), ...assets] };
@@ -102,4 +102,45 @@ export function stampApp({ outDir, app, root = process.cwd(), log = console.log 
 
   log(`✨ ${out}: ${app.short} — ${done.join(", ")}`);
   return { version, done };
+}
+
+// Nur den Service Worker (+ Versionsstempel im Manifest) erzeugen — für Apps, deren Manifest/HTML/Icons
+// unangetastet bleiben (z. B. die Fitness-Haupt-App). Ersetzt dort stamp-sw.mjs.
+export function stampSw({ outDir, app, root = process.cwd(), log = console.log }) {
+  if (!app.id) throw new Error("mini-app.json: id fehlt");
+  const out = resolve(outDir);
+  const sw = app.sw || {};
+  const version = newVersion();
+  const extra = sw.extraFile ? readFileSync(resolve(root, sw.extraFile), "utf8") : sw.extra || "";
+  const file = sw.file || "sw.js";
+  let cfg = sw;
+  if (sw.precacheAssets !== false && existsSync(resolve(out, "assets"))) {
+    const assets = readdirSync(resolve(out, "assets")).map((n) => `./assets/${n}`);
+    cfg = { ...sw, shell: [...(sw.shell || ["./", "./index.html"]), ...assets] };
+  }
+  writeFileSync(resolve(out, file), buildSw({ appId: app.id, sw: cfg, version, extra }));
+  for (const mf of ["manifest.json", "manifest.webmanifest"]) {
+    const p = resolve(out, mf);
+    if (!existsSync(p)) continue;
+    const m = JSON.parse(readFileSync(p, "utf8"));
+    m.version = version;
+    writeFileSync(p, JSON.stringify(m, null, 2) + "\n");
+  }
+  log(`🔢 ${out}/${file}: CACHE → ${sw.prefix || `vos-${app.id}-`}v${version}`);
+  return { version };
+}
+
+// Nur den Splash (+ Update-Loader) in die index.html des Build-Outputs setzen — für Haupt-Apps, die Manifest,
+// Titel, Icons und SW-Registrierung selbst verwalten (Fitness, Fuel). Idempotent.
+export function stampSplash({ outDir, app, log = console.log }) {
+  if (!app.short || !app.accent) throw new Error("mini-app.json: short und accent sind für den Splash Pflicht");
+  const htmlPath = resolve(outDir, app.html || "index.html");
+  if (!existsSync(htmlPath)) { log(`⚠️  ${htmlPath} nicht gefunden — kein Splash`); return { done: false }; }
+  const opts = { name: app.short, accent: app.accent, icon: "./icon-192.png", ...(app.bg && { bg: app.bg }), ...(typeof app.splash === "object" && app.splash) };
+  let html = injectSplash(readFileSync(htmlPath, "utf8"), opts);
+  // optional auch die SW-Registrierung (wenn die App sie nicht selbst im Quell-HTML/JS macht): app.register
+  if (app.register) html = injectRegister(html, { swUrl: `./${(app.sw && app.sw.file) || "sw.js"}`, exposeRegistration: !!app.register.expose });
+  writeFileSync(htmlPath, html);
+  log(`✨ ${htmlPath}: Splash "${opts.name}" (${opts.icon})${app.register ? " + SW-Register" : ""}`);
+  return { done: true };
 }

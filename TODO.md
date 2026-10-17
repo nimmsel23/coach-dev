@@ -68,3 +68,5 @@ Coach-Zugang anhand der verifizierten Firebase-UID ergänzen und zentrale Rolle 
 - [ ] Coach-Release nach ausdrücklichem Push-/Merge-/Deploy-Auftrag.
 
 Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
+
+- [x] Offline-Cache über App-Updates erhalten: gemeinsame SW-Strategie, API-Migration, vollständiges Asset-Precache und sichere Installation.

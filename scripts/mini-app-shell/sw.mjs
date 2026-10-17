@@ -28,9 +28,11 @@ export function swConfig(appId, sw = {}, version) {
     assetsPath: "/assets/",
     cacheAllSameOrigin: false,
     api: { swr: [], networkFirst: [] },
+    neverCache: [],
     imageCaches: [],
     keepCaches: [],
     notificationLink: "./",
+    notificationClick: true,
     ...sw,
     // Build-Zeit-Optionen gehören nicht in die Laufzeit-Config
     extra: undefined,
