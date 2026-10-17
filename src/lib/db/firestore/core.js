@@ -7,7 +7,7 @@ import {
 } from "firebase/firestore";
 import {
   onAuthStateChanged,
-  signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signInWithPopup, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   signOut as fbSignOut, updateProfile,
 } from "firebase/auth";
 
@@ -52,7 +52,26 @@ export function watchAuth(callback) {
   });
 }
 
+// iOS (Safari/PWA/In-App-Browser) blockt Auth-Popups bzw. verliert ihren Rückkanal
+// → dort Redirect-Flow. iPadOS meldet sich als "MacIntel" mit Touch.
+function needsRedirectAuth() {
+  const ua = navigator.userAgent || "";
+  const iOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const standalone = window.matchMedia?.("(display-mode: standalone)").matches || navigator.standalone;
+  return iOS || standalone;
+}
+
+// Ergebnis eines vorangegangenen Redirect-Logins einsammeln; fängt vor allem Fehler ab
+// (onAuthStateChanged feuert ohnehin).
+getRedirectResult(auth).catch((error) => {
+  console.error("Redirect-Login Fehler:", error);
+});
+
 export async function signIn() {
+  if (needsRedirectAuth()) {
+    await signInWithRedirect(auth, googleProvider);
+    return;
+  }
   await signInWithPopup(auth, googleProvider);
 }
 
