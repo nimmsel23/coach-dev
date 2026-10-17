@@ -128,11 +128,40 @@ export async function getBodyEntries(days = 30) {
 
 // ── User profile ──────────────────────────────────────────────────────────────
 
+// Gemeinsames Profil (app-übergreifend, fuel/fitness/vitalos): users/{uid}/meta/profile.
+// Nur Felder mit gleicher Bedeutung in jeder App; Anamnese/clientStatus/Coach-Daten
+// bleiben in fitness/{uid}/profile/metadata (Coach-Panel liest dort).
+const SHARED_PROFILE_FIELDS = ["gender", "age", "heightCm", "weightKg", "chronicConditions", "medications"];
+
+function pickShared(data) {
+  const out = {};
+  for (const k of SHARED_PROFILE_FIELDS) if (data?.[k] !== undefined && data[k] !== null && data[k] !== "") out[k] = data[k];
+  if (out.gender === "male") out.gender = "m";
+  if (out.gender === "female") out.gender = "f";
+  return out;
+}
+
 export async function getUserProfile(uid) {
   if (!uid) return null;
   try {
-    const snap = await getDoc(doc(db, "fitness", uid, "profile", "metadata"));
-    return snap.exists() ? snap.data() : null;
+    const [legacySnap, sharedSnap] = await Promise.all([
+      getDoc(doc(db, "fitness", uid, "profile", "metadata")),
+      getDoc(doc(db, "users", uid, "meta", "profile")),
+    ]);
+    const legacy = legacySnap.exists() ? legacySnap.data() : null;
+    const shared = sharedSnap.exists() ? pickShared(sharedSnap.data()) : {};
+    // Gemeinsames Profil gewinnt; fehlende Felder werden einmalig aus dem Altbestand übernommen.
+    const backfill = {};
+    for (const [k, v] of Object.entries(pickShared(legacy))) if (shared[k] === undefined) backfill[k] = v;
+    if (Object.keys(backfill).length && uid === getUid()) {
+      try {
+        await setDoc(doc(db, "users", uid, "meta", "profile"), { ...backfill, updated_at: serverTimestamp() }, { merge: true });
+      } catch (error) {
+        console.error("Profil-Backfill fehlgeschlagen:", error);
+      }
+    }
+    if (!legacy && !Object.keys(shared).length) return null;
+    return { ...legacy, ...backfill, ...shared };
   } catch (error) {
     console.error("Fehler beim Laden des Profils:", error);
     return null;
@@ -146,6 +175,13 @@ export async function updateUserProfile(uid, data) {
       ...data,
       updated_at: serverTimestamp(),
     }, { merge: true });
+    const shared = pickShared(data);
+    if (Object.keys(shared).length) {
+      await setDoc(doc(db, "users", uid, "meta", "profile"), {
+        ...shared,
+        updated_at: serverTimestamp(),
+      }, { merge: true });
+    }
     return true;
   } catch (error) {
     console.error("Fehler beim Speichern des Profils:", error);
