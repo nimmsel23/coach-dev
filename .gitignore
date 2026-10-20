@@ -1,4 +1,7 @@
 node_modules/
+# pnpm install artifacts for local/CI standalone workspace setup
+pnpm-lock.yaml
+pnpm-workspace.yaml
 dist/
 dist-firebase/
 dist-coach/
