@@ -46,3 +46,6 @@ src/lib/coachNotesData.generated.js
 # Isolated CI checkout for shared Plan components
 .shared/
 .claude/hooks/*.log
+
+# Local Coach catalog UI output
+dist-catalog/

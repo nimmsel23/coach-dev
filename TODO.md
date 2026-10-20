@@ -1,3 +1,7 @@
+## 2026-10-20 — Python Coach server
+
+- [x] Add a local `server.py` entrypoint with Catalog UI and existing API integration.
+
 ## 2026-10-20 — Coach fork tooling
 
 - [x] Audit inherited hooks and active commands; use Coach entrypoints and disable Fitness service deploy/controllers in this fork.

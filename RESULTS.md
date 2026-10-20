@@ -1,3 +1,7 @@
+## 2026-10-20 — Python Coach server and Catalog UI
+
+Added `server.py` (FastAPI/httpx/uvicorn), serving Catalog UI at `/` and `/catalog-ui/`, built Firebase Coach at `/coach/`, and forwarding existing catalog API requests to `127.0.0.1:9150`. Local server health lives at `/_coach/health`; unavailable backend requests return 502. `npm start` / `server` run Python; `server:dev` enables reload. `build:catalog-ui` reuses the existing Fitness UI source and outputs `dist-catalog` inside Coach. Dependency pins and operation docs included. No new catalog database, data migration, systemd service, push or Firebase deployment. Six isolated tests passed; Catalog UI build and temporary live HTTP smoke checks on port 5903 passed, then test listener stopped. Fitness source checkout stayed clean.
+
 ## 2026-10-20 — Coach fork tooling audit
 
 Corrected Coach commit-hook triggers, dev/preview entrypoints, build/deploy runner, Hosting preview target and cache stamp. Replaced inherited Fitness systemd deployment/controllers with explicit errors; removed inherited Functions deployment config and obsolete client build command. Corrected agent instructions and limited documentation auto-commit to its own path. Firebase project/data names remain shared by design. Validation: script/config syntax, isolated command/hook checks, lint and Coach build; no deployment or runtime-data writes.

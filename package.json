@@ -7,7 +7,7 @@
   "scripts": {
     "predev": "pnpm run build:kb-data",
     "dev": "node scripts/dev-runner.mjs",
-    "start": "vite preview --mode coach --outDir dist-coach --host 127.0.0.1 --port 5902",
+    "start": "python3 server.py",
     "ui:dev": "vite --mode coach --open /coach.html",
     "test:coach:browser": "bash scripts/tests/run-coach-browser.sh",
     "lint": "eslint src/ --ext .js,.jsx",
@@ -34,7 +34,10 @@
     "build:catalog": "python3 scripts/build-catalog.py",
     "deploy:preview": "pnpm run build:firebase && node scripts/deploy-preview.mjs",
     "deploy:prev": "pnpm run deploy:preview",
-    "build:prev": "pnpm run deploy:preview"
+    "build:prev": "pnpm run deploy:preview",
+    "server": "python3 server.py",
+    "server:dev": "python3 server.py --reload",
+    "build:catalog-ui": "node scripts/build-catalog-ui.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
