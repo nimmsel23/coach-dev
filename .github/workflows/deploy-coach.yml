@@ -1,25 +1,20 @@
-# Deploy der Coach-App (Firebase Hosting, Target `coach` -> https://vos-coach.web.app)
-# bei jedem Push auf `dev`, der Frontend-Code berührt.
-#
-# Ersetzt die geerbten Fitness-Workflows (liegen jetzt in workflows.disabled/):
-# die bauten die Fitness-App über das vitalos-Meta-Repo, nicht die Coach-App.
-# Firestore-Rules werden hier nie deployed (SSOT: ~/vitalos/firestore.rules).
-#
-# Einmalig nötig: Repo-Secret FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS
-# (Service-Account-JSON mit Rolle "Firebase Hosting Admin" für Projekt fitness-aos).
-# Fehlt das Secret, baut der Job nur und überspringt den Deploy mit Warnung.
-#
-# PREVIEW statt Live (Regel 2026-10-16): echte Prod-URLs (vos-*.web.app) werden nur noch
-# aus dem Branch `vitalos` der Meta-Repo-Checkouts (~/vitalos/*-app) deployt. Dieser
-# Workflow veröffentlicht auf dem Branch `dev` ausschließlich einen 24h-Preview-Channel `dev`.
+# Coach owns its preview and production Hosting releases.
+# Firestore rules remain owned by VitalOS.
 
-name: Preview Coach
+name: Deploy Coach
 
 on:
   workflow_dispatch:
+    inputs:
+      production:
+        description: Deploy to the live Coach site
+        type: boolean
+        default: false
   push:
     branches: [dev]
     paths:
+      - '.gitmodules'
+      - 'vitalos'
       - 'src/**'
       - 'coach.html'
       - 'public-coach/**'
@@ -38,7 +33,7 @@ on:
       - '!docs/**'
 
 concurrency:
-  group: deploy-coach
+  group: coach-${{ github.event_name == 'workflow_dispatch' && inputs.production && 'production' || 'preview' }}
   cancel-in-progress: true
 
 jobs:
@@ -81,15 +76,24 @@ jobs:
       - name: Build (Coach)
         run: pnpm run build:firebase:coach
 
-      - name: Preview hosting:coach (24h-Channel dev)
+      - name: Deploy hosting:coach
         env:
+          PRODUCTION: ${{ github.event_name == 'workflow_dispatch' && inputs.production }}
           SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS }}
         run: |
           if [ -z "$SERVICE_ACCOUNT" ]; then
-            echo "::warning::Secret FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS fehlt - Deploy übersprungen."
-            exit 0
+            echo "::error::Secret FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS fehlt."
+            exit 1
           fi
+          if [ "$PRODUCTION" = true ] && [ "$GITHUB_REF" != refs/heads/dev ]; then
+            echo "::error::Production releases must use the Coach dev branch."
+            exit 1
+          fi
+          trap 'rm -f "$RUNNER_TEMP/sa.json"' EXIT
           printf '%s' "$SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
           export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
-          npx --yes firebase-tools@13 hosting:channel:deploy dev --only coach --expires 24h --project fitness-aos --non-interactive
-          rm -f "$RUNNER_TEMP/sa.json"
+          if [ "$PRODUCTION" = true ]; then
+            npx --yes firebase-tools@13 deploy --only hosting:coach --project fitness-aos --non-interactive
+          else
+            npx --yes firebase-tools@13 hosting:channel:deploy dev --only coach --expires 24h --project fitness-aos --non-interactive
+          fi

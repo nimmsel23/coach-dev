@@ -1,8 +1,3 @@
 #!/bin/bash
-# Stellt sicher, dass ~/vitalos/<repo>-app/node_modules ein Symlink auf
-# ~/<repo>-dev/node_modules ist (statt doppelt installiert). Siehe
-# ~/vitalos/bin/ensure-node-modules-symlinks.sh. Non-blocking.
-repo="$(basename "$(git rev-parse --show-toplevel)")"
-[ -x /home/alpha/vitalos/bin/ensure-node-modules-symlinks.sh ] && \
-  /home/alpha/vitalos/bin/ensure-node-modules-symlinks.sh "$repo"
+# Coach owns its dependencies; no VitalOS parent symlink repair is needed.
 exit 0

@@ -1,22 +1,16 @@
 #!/bin/bash
-# pre-push hook for coach-dev.
-#
-# Deploys only the Firebase Hosting target `coach` (vos-coach.web.app) when
-# source code under src/ is part of a push to dev. Firestore rules are not
-# deployed here; the shared ruleset is owned by ~/vitalos.
-
+# Hosting releases are owned by Coach CI or bin/coach-release.
+# This hook only retains the existing GAS summary deployment on dev.
 set -euo pipefail
-
 cd "$(git rev-parse --show-toplevel)"
 
-should_deploy=false
 should_clasp_deploy=false
 
 while read -r local_ref local_sha remote_ref remote_sha; do
   [ -z "${local_ref:-}" ] && continue
   branch="${local_ref#refs/heads/}"
 
-  [ "$branch" = "dev" ] || [ "$branch" = "vitalos" ] || continue
+  [ "$branch" = "dev" ] || continue
 
   if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
     changed="$(git diff-tree --no-commit-id --name-only -r "$local_sha")"
@@ -24,29 +18,10 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     changed="$(git diff --name-only "$remote_sha" "$local_sha")"
   fi
 
-  # Echte Prod-URL (vos-coach.web.app): nur aus dem Branch `vitalos` (Checkout
-  # ~/vitalos/coach-app). Auf `dev` gibt es nur den 24h-Preview-Channel per GitHub Action.
-  if [ "$branch" = "vitalos" ] && echo "$changed" | grep -Eq '^src/'; then
-    should_deploy=true
-  fi
-
   if [ "$branch" = "dev" ] && echo "$changed" | grep -Eq '^gas-coach-summary/'; then
     should_clasp_deploy=true
   fi
 done
-
-# CI-Deploy aktiv (.github/workflows/deploy-coach.yml)? Dann hier nicht doppelt deployen.
-# Einschalten: git config coach.ciDeploy true   (Secret FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS vorher setzen)
-# (coach.ciDeploy entfällt: GitHub Actions deployt nur noch Previews, nie live.)
-
-if [ "$should_deploy" = true ]; then
-  echo "coach-dev: src/ changes detected; building and deploying hosting:coach..."
-  npm run build:firebase:coach
-  firebase deploy --only hosting:coach --project fitness-aos
-  echo "coach-dev: deployed https://vos-coach.web.app"
-else
-  echo "coach-dev: kein Prod-Deploy (nur Push auf vitalos mit src/-Änderungen deployt live); skipping Firebase deploy."
-fi
 
 COACH_SUMMARY_DEPLOYMENT_ID="AKfycbzYPrXQMym0hR7qexG3HcKI12oWSEgoxt0h5mStFh7PRWZzU7g_ZzisJdybN4m4yXzq"
 

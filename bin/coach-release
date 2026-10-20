@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Build and deploy the current committed Coach dev checkout, without Git pushes.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+dry_run=false
+for arg in "$@"; do
+  case "$arg" in
+    --yes) ;; # Compatibility with the former vos-release wrapper.
+    --dry-run) dry_run=true ;;
+    -h|--help)
+      echo 'Usage: coach-release [--yes] [--dry-run]'
+      echo 'Build committed Coach dev and deploy hosting:coach. Does not push or merge Git branches.'
+      exit 0 ;;
+    *) echo "Unknown option: $arg" >&2; exit 2 ;;
+  esac
+done
+cd "$ROOT"
+[ "$(git branch --show-current)" = dev ] || { echo 'Release from the Coach dev branch.' >&2; exit 1; }
+[ -z "$(git status --porcelain)" ] || { echo 'Commit or stash pending changes before releasing Coach.' >&2; exit 1; }
+if "$dry_run"; then
+  echo "cd $ROOT && npm run firebase"
+  exit 0
+fi
+npm run firebase

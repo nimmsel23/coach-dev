@@ -1,3 +1,7 @@
+## 2026-10-20 — Repository ownership
+
+- [x] Make Coach the parent product; pin VitalOS on branch `coach`, remove the reverse direct submodule and migrate Coach release ownership.
+
 
 # [NEW] Coach Office 
 Beispielfeature: Trainingsplanbesprechung zwischen Klient und Coach. Social Media Style. Comment-feed per Exercise

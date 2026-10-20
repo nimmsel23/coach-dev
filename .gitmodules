@@ -1,0 +1,4 @@
+[submodule "vitalos"]
+	path = vitalos
+	url = git@github.com:nimmsel23/vitalos.git
+	branch = coach
