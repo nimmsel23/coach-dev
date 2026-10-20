@@ -28,22 +28,18 @@ if [ -n "$staged_all" ]; then
   fi
 fi
 
-# SW/Manifest-Bump (früher hier, nur master) wurde entfernt (2026-07-22) —
-# Cache-Versionierung läuft jetzt per Zeitstempel post-build in
-# dist-firebase (scripts/stamp-sw.mjs), analog zu fuel-dev. public/sw.js
-# und public/manifest.json bleiben als getrackte Quelle unverändert
-# (Platzhalter fitness-v0 / version "0"), kein Bump-Commit mehr nötig.
+# Coach cache versions are stamped into dist-coach after the build.
 
 # --- Build-Verifikation (blocking, nur bei build-relevanten Dateien) ----
 # Analog zum TRIGGER-Pattern im pre-push-Hook. Verhindert kaputte Commits
 # frueh, statt erst beim dev-Push zu bemerken, dass npm run build fehlschlaegt.
-BUILD_TRIGGER='^(src/|public/|index.html$|vite.config.(js|ts|mjs)$|package.json$)'
+BUILD_TRIGGER='^(src/|public-coach/|coach.html$|vite\.config\.(js|ts|mjs)$|tailwind\.config\.cjs$|postcss\.config\.cjs$|mini-app\.json$|package\.json$|firebase\.config\.js$|scripts/|fitness/catalog/kb/|vitalos$)'
 staged_files="$(git diff --cached --name-only)"
 if echo "$staged_files" | grep -Eq "$BUILD_TRIGGER"; then
   if command -v gum >/dev/null 2>&1; then
-    gum log --level info "fitness-dev: build-relevante Dateien gestaged — npm run build zur Verifikation…"
+    gum log --level info "coach-dev: build-relevante Dateien gestaged — npm run build zur Verifikation…"
   else
-    echo "🔍 fitness-dev: build-relevante Dateien gestaged — npm run build zur Verifikation…"
+    echo "🔍 coach-dev: build-relevante Dateien gestaged — npm run build zur Verifikation…"
   fi
   if ! npm run build; then
     echo "❌ npm run build fehlgeschlagen — Commit wird abgebrochen." >&2

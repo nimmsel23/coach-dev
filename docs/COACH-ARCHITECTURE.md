@@ -32,4 +32,12 @@ The shared Plan editor resolves `.shared/plan` (pinned CI checkout), then `vital
 - Firestore rules remain owned by VitalOS. Coach only deploys `hosting:coach`.
 - VitalOS Shell production remains on `master`; the `coach` branch has no automatic Shell production deploy.
 
-Initial migration is committed locally; publish VitalOS `coach` before publishing the Coach parent pointer. No push or Hosting deployment is part of the structural migration. The old clean `~/vitalos/coach-app` checkout, including ignored local files, is retained at `~/coach-dev/.worktrees/legacy-vitalos-coach`.
+Publish VitalOS `coach` before publishing an updated Coach parent pointer. The initial migration branches have been published; the Coach push passed preview CI. The old clean `~/vitalos/coach-app` checkout, including ignored local files, is retained at `~/coach-dev/.worktrees/legacy-vitalos-coach`.
+
+## Local commands and inherited tooling audit (2026-10-20)
+
+`npm run dev` and `npm run ui:dev` run Vite in Coach mode and open `/coach.html`; they do not launch or reuse the Fitness Node API. `npm start` serves the built `dist-coach` on loopback port 5902. Existing explicit Vite proxy routes to the shared Fitness backend remain available for integrations.
+
+`npm run deploy` builds and deploys Coach Hosting, as does `npm run firebase`. Local systemd staging/prod deployment is not implemented for Coach. `deploy.sh`, `deploy:local`, `deploy:prod`, and the inherited `fitness*ctl` executables return an error before accessing Fitness directories or services. Manage real Fitness services from the Fitness repository.
+
+The commit hook checks Coach HTML/assets, configs, source, generators, KB and the VitalOS pin. The documentation auto-commit hook commits only the changed documentation path, preserving other staged work. The active CI is Coach-owned. Firebase config contains only Coach Hosting; inherited Functions sources and legacy server/runtime files are not deployment entrypoints. Shared Firebase project `fitness-aos`, backend/data contracts and catalog paths keep their established names.

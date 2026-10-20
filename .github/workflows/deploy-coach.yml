@@ -24,6 +24,7 @@ on:
       - 'tailwind.config.cjs'
       - 'postcss.config.cjs'
       - 'package.json'
+      - 'mini-app.json'
       - 'firebase.json'
       - 'firebase.config.js'
       - '.github/workflows/deploy-coach.yml'

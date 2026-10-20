@@ -8,7 +8,7 @@
 #
 # Bewusst eng: kein `git add -A`, nur die exakt fünf Dateien unten. Kein
 # `git push` — Commits bleiben lokal, das Pushen bleibt ein bewusster,
-# separater Schritt (z.B. via fitness-release).
+# separater Schritt (git push origin dev).
 #
 # Autorisierung: User hat diesen Hook 2026-08-31 explizit bestätigt
 # (AskUserQuestion "Ja, genau so bauen"), nachdem der Auto-Mode-Classifier
@@ -47,11 +47,11 @@ cd "$REPO"
 git diff --quiet -- "$rel" 2>/dev/null && git diff --cached --quiet -- "$rel" 2>/dev/null && exit 0
 
 git add -- "$rel"
-git commit --quiet -m "$(cat <<EOF
+git commit --only --quiet -m "$(cat <<EOF
 docs: auto-update $rel
 
 Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
 EOF
-)" 2>/dev/null || true
+)" -- "$rel" 2>/dev/null || true
 
 exit 0

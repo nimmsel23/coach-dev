@@ -1,3 +1,5 @@
+> Coach release instructions: [COACH-ARCHITECTURE.md](COACH-ARCHITECTURE.md). The inherited Fitness paths and services below are historical context, not Coach deploy commands.
+
 # Firebase - AlphaOS Fitness
 
 Stand: 2026-09-06

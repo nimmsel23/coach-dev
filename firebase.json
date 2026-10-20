@@ -1,9 +1,5 @@
 {
-  "_note": "Firestore rules SSOT = ~/vitalos/firestore.rules — NEVER add a firestore block here or deploy rules from fitness-dev. Only vitalos deploys rules.",
-  "functions": {
-    "source": "functions",
-    "runtime": "nodejs22"
-  },
+  "_note": "Firestore rules SSOT = ~/vitalos/firestore.rules \u2014 NEVER add a firestore block here or deploy rules from coach-dev. Only vitalos deploys rules.",
   "hosting": [
     {
       "target": "coach",

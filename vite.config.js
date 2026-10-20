@@ -6,22 +6,15 @@ import { existsSync } from 'fs'
 
 const BACKEND = 'http://localhost:9150'
 
-// Sibling-Repos existieren unter zwei Namen, je nach Checkout-Kontext:
-// ~/<name>-dev (Home-Root, dev-Branch-Arbeitskopie) oder
-// ~/vitalos/<name>-app (vitalos-Submodule, master-Branch, "habit-app" ist Singular).
-// Diese Datei ist in beiden Checkouts identisch (gleiches Repo) — ein hartcodierter
-// Pfad kann nur in einem der beiden Kontexte stimmen. Deshalb zur Build-Zeit prüfen,
-// welches Sibling tatsächlich existiert, statt es fest zu verdrahten.
+// Prefer the pinned VitalOS client apps, then standalone sibling checkouts.
 function siblingDir(devName, appName) {
+  const nestedPath = resolve(__dirname, 'vitalos', appName)
+  if (existsSync(resolve(nestedPath, 'src'))) return nestedPath
   const appPath = resolve(__dirname, '..', appName)
   return existsSync(appPath) ? appPath : resolve(__dirname, '..', devName)
 }
 
-// SSOT für Cross-App-Aliase (@relax, @learn + interne Cross-DB-Exports)
-// ist @vos/cross-app-aliases (~/vitalos/packages/cross-app-aliases) —
-// nur erreichbar, wenn dieses Repo als vitalos-Submodule genestet ist (npm
-// Workspace-Symlink). Standalone-Checkout (~/fitness-dev ohne vitalos-Parent)
-// fällt auf die alte siblingDir()-Auflösung zurück.
+// The optional workspace alias package has a standalone fallback for Coach.
 async function resolveCrossAppAliases() {
   try {
     const { crossAppAliases } = await import('@vos/cross-app-aliases')
@@ -29,7 +22,7 @@ async function resolveCrossAppAliases() {
   } catch {
     return {
       '@relax':      resolve(siblingDir('relax-dev', 'relax-app'), 'src'),
-      '@learn':      resolve(__dirname, '../learn-dev/src'),
+      '@learn':      resolve(siblingDir('learn-dev', 'learn-app'), 'src'),
     }
   }
 }
@@ -43,7 +36,7 @@ export default defineConfig(async ({ mode }) => {
   return {
     publicDir: isCoach ? resolve(__dirname, 'public-coach') : resolve(__dirname, 'public'),
     // Relativ statt absolut — sonst lösen Assets unter einem Funnel-Pfad-
-    // Präfix (z.B. /fitness-dev/) fälschlich zur Domain-Wurzel auf (404 →
+    // Präfix (z.B. /coach-dev/) fälschlich zur Domain-Wurzel auf (404 →
     // Whitescreen). Core4/Door/Game/Fuel haben denselben Fix schon.
     base: './',
     plugins: [react()],

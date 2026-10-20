@@ -1,36 +1,13 @@
-// Starts both the API server and Vite in parallel for dev mode.
-import { spawn } from 'child_process'
-import { createConnection } from 'net'
+// Coach uses Firestore in the browser; do not start the inherited Fitness API.
+import { spawn } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 
-function run(cmd, args, env = {}) {
-  const p = spawn(cmd, args, {
-    stdio: 'inherit',
-    shell: false,
-    env: { ...process.env, ...env },
-  })
-  p.on('error', err => { console.error(`[${cmd}]`, err.message); process.exit(1) })
-  return p
-}
-
-function portInUse(port) {
-  return new Promise(resolve => {
-    const c = createConnection({ port, host: '127.0.0.1' })
-    c.on('connect', () => { c.destroy(); resolve(true) })
-    c.on('error',   () => resolve(false))
-  })
-}
-
-const API_PORT = Number(process.env.FITNESS_NODE_PORT || 9100)
-
-const alreadyRunning = await portInUse(API_PORT)
-
-if (alreadyRunning) {
-  console.log(`[dev-runner] server.mjs already running on :${API_PORT} — skipping nodemon`)
-} else {
-  run('node', ['node_modules/.bin/nodemon', '--watch', 'server.mjs', '--ext', 'mjs', '--signal', 'SIGTERM', 'server.mjs'])
-}
-
-const vite = run('node', ['node_modules/.bin/vite'], { VITE_API_BASE: '' })
-
-process.on('SIGTERM', () => { vite.kill() })
-process.on('SIGINT',  () => { vite.kill() })
+const root = fileURLToPath(new URL('../', import.meta.url))
+const vite = spawn(process.execPath, [
+  fileURLToPath(new URL('../node_modules/vite/bin/vite.js', import.meta.url)),
+  '--mode', 'coach', '--open', '/coach.html', ...process.argv.slice(2),
+], { cwd: root, stdio: 'inherit', shell: false })
+vite.on('error', error => { console.error(error.message); process.exit(1) })
+vite.on('exit', (code, signal) => { process.exit(signal ? 1 : (code ?? 1)) })
+process.on('SIGTERM', () => vite.kill('SIGTERM'))
+process.on('SIGINT', () => vite.kill('SIGINT'))

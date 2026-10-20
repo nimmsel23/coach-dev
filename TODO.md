@@ -1,3 +1,7 @@
+## 2026-10-20 — Coach fork tooling
+
+- [x] Audit inherited hooks and active commands; use Coach entrypoints and disable Fitness service deploy/controllers in this fork.
+
 ## 2026-10-20 — Repository ownership
 
 - [x] Make Coach the parent product; pin VitalOS on branch `coach`, remove the reverse direct submodule and migrate Coach release ownership.

@@ -1,3 +1,7 @@
+## 2026-10-20 — Coach fork tooling audit
+
+Corrected Coach commit-hook triggers, dev/preview entrypoints, build/deploy runner, Hosting preview target and cache stamp. Replaced inherited Fitness systemd deployment/controllers with explicit errors; removed inherited Functions deployment config and obsolete client build command. Corrected agent instructions and limited documentation auto-commit to its own path. Firebase project/data names remain shared by design. Validation: script/config syntax, isolated command/hook checks, lint and Coach build; no deployment or runtime-data writes.
+
 ## 2026-10-20 — Coach owns VitalOS client Shell
 
 Added `vitalos` gitlink tracking VitalOS branch `coach`; removed the reverse direct relationship in VitalOS. Coach owns preview CI and explicit manual production CI. Added `bin/coach-release` for a clean committed local build/deploy. Retired parent dependency-repair hooks and implicit Hosting deploy in pre-push. Shared Plan resolution supports the nested Shell. Migration remains local, with no push or deploy.

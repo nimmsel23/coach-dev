@@ -1,7 +1,3 @@
 #!/bin/bash
-# Retired (2026-07-12): Auto-deploy moved to pre-push (see .githooks/pre-push).
-# Deploying on every commit to master was premature for multi-commit local
-# work; pre-push only ships once you actually push. Kept as a no-op stub
-# instead of deleting so a stale core.hooksPath doesn't silently resurrect
-# the old double-deploy behavior.
+# Coach Hosting releases run via CI or bin/coach-release. No deploy on commit.
 exit 0
