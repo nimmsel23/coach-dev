@@ -7,7 +7,7 @@ import {
 } from "firebase/firestore";
 import {
   onAuthStateChanged,
-  signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signInWithPopup, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   signOut as fbSignOut, updateProfile,
 } from "firebase/auth";
 
@@ -52,8 +52,23 @@ export function watchAuth(callback) {
   });
 }
 
+// Ergebnis eines vorangegangenen Redirect-Logins einsammeln; fängt vor allem Fehler ab
+// (onAuthStateChanged feuert ohnehin).
+getRedirectResult(auth).catch((error) => {
+  console.error("Redirect-Login Fehler:", error);
+});
+
 export async function signIn() {
-  await signInWithPopup(auth, googleProvider);
+  try {
+    await signInWithPopup(auth, googleProvider);
+  } catch (error) {
+    // Popup vom Browser geblockt → Redirect als Fallback.
+    if (error?.code === "auth/popup-blocked") {
+      await signInWithRedirect(auth, googleProvider);
+      return;
+    }
+    throw error;
+  }
 }
 
 export async function signInEmail(email, password) {
