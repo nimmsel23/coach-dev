@@ -243,26 +243,59 @@ function generateBriefing(timeframe) {
   journals.forEach(j => j._userName = userMap[j._userId] || j._userId);
   sessions.forEach(s => s._userName = userMap[s._userId] || s._userId);
 
-  const expectedClients = Object.entries(userMap).map(([id, name]) => ({ id, name }));
-  
   if (journals.length === 0 && sessions.length === 0) {
     sendTelegramMessage(props, `ℹ️ **Keine Logs** im Zeitraum ${dates.startStr} bis ${dates.endStr} (${timeframe}) gefunden.`);
     return;
   }
 
-  // 2. Erstelle einen KI-Prompt
-  const prompt = getBriefingPrompt(timeframe, dates.startStr, dates.endStr, expectedClients, journals, sessions);
+  // 2. Zählungen im Code statt im LLM: wer hat geloggt, wer nicht
+  const activity = buildActivitySummary_(userMap, journals, sessions);
 
-  // 3. KI-Zusammenfassung generieren
-  const briefing = callGeminiAPI(props.getProperty('GEMINI_API_KEY'), prompt);
+  // 3. Erstelle einen KI-Prompt (Zählungen als fertige Fakten)
+  const prompt = getBriefingPrompt(timeframe, dates.startStr, dates.endStr, activity, journals, sessions);
 
-  // 4. Per Telegram versenden
+  // 4. KI-Zusammenfassung generieren
+  const aiPart = callGeminiAPI(props.getProperty('GEMINI_API_KEY'), prompt);
+
+  // 5. Fehlende-Logs-Liste deterministisch anhängen (nicht vom LLM formuliert)
+  const missingPart = buildMissingSection_(activity);
+  const briefing = [aiPart, missingPart].filter(Boolean).join('\n\n');
+
+  // 6. Per Telegram versenden
   if (briefing) {
     const message = `🧠 **Coach ${timeframe.toUpperCase()} Briefing**\n\n${briefing}`;
     sendTelegramMessage(props, message);
     sendBriefingEmail(timeframe, briefing);
     saveClientRecords_(token, timeframe, dates, briefing, userMap);
   }
+}
+
+// Zählt pro bekanntem Klienten die Journal- und Session-Einträge im Zeitraum.
+// Nur _userId und _source werden gelesen, also keine Feldnamen-Annahmen.
+function buildActivitySummary_(userMap, journals, sessions) {
+  const stats = {};
+  const row = (uid) => {
+    if (!stats[uid]) stats[uid] = { name: userMap[uid] || uid, journal: 0, sessions: 0 };
+    return stats[uid];
+  };
+
+  Object.keys(userMap).forEach(row);
+  journals.forEach(j => row(j._userId).journal++);
+  sessions.forEach(s => row(s._userId).sessions++);
+
+  const rows = Object.values(stats);
+  return {
+    total: rows.length,
+    active: rows.filter(r => r.journal + r.sessions > 0).map(r => r.name),
+    missing: rows.filter(r => r.journal + r.sessions === 0).map(r => r.name),
+    perClient: rows.map(r => ({ name: r.name, journal: r.journal, sessions: r.sessions })),
+  };
+}
+
+// Fehlende-Logs-Abschnitt; leer, wenn alle Klienten im Zeitraum geloggt haben.
+function buildMissingSection_(activity) {
+  if (activity.missing.length === 0) return '';
+  return `**🔴 Fehlende Logs (Follow-up)**\n${activity.missing.map(n => `- ${n}`).join('\n')}`;
 }
 
 // === PER-KLIENT RECORD (Firestore) ===
