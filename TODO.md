@@ -1,3 +1,7 @@
+## 2026-10-21 — Shared Coach backend
+
+- [x] Assign port 9150 to Coach with Fitness/Fuel/Relax domain routing, compatibility paths, readiness, and managed runtime units.
+
 ## 2026-10-20 — Python Coach server
 
 - [x] Add a local `server.py` entrypoint with Catalog UI and existing API integration.

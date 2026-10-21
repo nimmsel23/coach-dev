@@ -49,3 +49,7 @@ src/lib/coachNotesData.generated.js
 
 # Local Coach catalog UI output
 dist-catalog/
+
+# Local context links supplied by the workspace owner
+/klienten-dev
+/workspace

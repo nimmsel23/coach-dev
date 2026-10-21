@@ -1,0 +1,18 @@
+[Unit]
+Description=Coach backend (Fitness, Fuel, Relax) :9150
+After=network.target coach-relax.service
+Wants=coach-relax.service
+
+[Service]
+Type=simple
+WorkingDirectory=%h/coach-dev
+ExecStart=/usr/bin/python3 %h/coach-dev/server.py
+Environment=COACH_HOST=127.0.0.1
+Environment=COACH_PORT=9150
+EnvironmentFile=-%h/.config/coach/backend.env
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+Alias=fitness-api.service

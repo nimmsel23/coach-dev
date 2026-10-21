@@ -23,12 +23,12 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
         self.requests = []
 
     @asynccontextmanager
-    async def client(self, handler=None):
+    async def client(self, handler=None, backend_urls=None):
         def backend(request):
             self.requests.append(request)
             return handler(request) if handler else httpx.Response(200, stream=httpx.ByteStream(b'{"ok":true}'))
         app = create_app(catalog_directory=self.catalog, coach_directory=self.coach,
-                         upstream_url="http://catalog.test:9150", transport=httpx.MockTransport(backend))
+                         upstream_url="http://catalog.test:9150", backend_urls=backend_urls, transport=httpx.MockTransport(backend))
         async with app.router.lifespan_context(app):
             async with httpx.AsyncClient(transport=httpx.ASGITransport(app), base_url="http://testserver", follow_redirects=True) as client:
                 yield client
@@ -63,13 +63,13 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
         packed = gzip.compress(b'{"ok":true}')
         async with self.client(lambda request: httpx.Response(200, headers={"content-encoding": "gzip", "content-length": str(len(packed))},
                                                       stream=httpx.ByteStream(packed))) as client:
-            self.assertEqual((await client.get("/health")).json(), {"ok": True})
+            self.assertEqual((await client.get("/api/fitness/health")).json(), {"ok": True})
 
     async def test_backend_failure_does_not_hide_local_health(self):
         def unavailable(request):
             raise httpx.ConnectError("unavailable", request=request)
         async with self.client(unavailable) as client:
-            self.assertEqual((await client.get("/health")).status_code, 502)
+            self.assertEqual((await client.get("/api/fitness/health")).status_code, 502)
             self.assertEqual((await client.get("/_coach/health")).status_code, 200)
 
     async def test_static_paths_cannot_escape_build_or_follow_external_symlinks(self):
@@ -84,6 +84,42 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
         async with self.client() as client:
             self.assertEqual((await client.get("/")).status_code, 503)
             self.assertEqual((await client.get("/coach/")).text, "coach")
+
+    async def test_domains_route_to_their_own_backend_and_preserve_suffix(self):
+        origins = {"fuel": "http://fuel.test:4000", "relax": "http://relax.test:9123"}
+        async with self.client(backend_urls=origins) as client:
+            for incoming, outgoing in [
+                ("/api/fuel/nutrition?date=2026-10-21", "http://fuel.test:4000/nutrition?date=2026-10-21"),
+                ("/fuel-api/journal", "http://fuel.test:4000/journal"),
+                ("/api/relax/techniques", "http://relax.test:9123/techniques"),
+                ("/relax-api/health", "http://relax.test:9123/health"),
+                ("/api/fitness/exercise/a%2Fb", "http://catalog.test:9150/exercise/a%2Fb"),
+                ("/api/%66uel/nutrition", "http://fuel.test:4000/nutrition"),
+                ("/api/workouts", "http://catalog.test:9150/api/workouts"),
+                ("/session?uid=fixture", "http://catalog.test:9150/session?uid=fixture"),
+            ]:
+                self.assertEqual((await client.get(incoming)).status_code, 200)
+                self.assertEqual(str(self.requests[-1].url), outgoing)
+
+    async def test_readiness_reports_each_domain_without_changing_liveness(self):
+        def reply(request):
+            return httpx.Response(503 if request.url.host == "relax.test" else 200,
+                                  stream=httpx.ByteStream(b'{}'))
+        async with self.client(reply, {"relax": "http://relax.test:9123"}) as client:
+            response = (await client.get("/_coach/backends")).json()
+            self.assertFalse(response["ok"])
+            self.assertTrue(response["backends"]["fitness"]["ready"])
+            self.assertFalse(response["backends"]["relax"]["ready"])
+            self.assertEqual((await client.get("/health")).json()["service"], "coach")
+
+    async def test_registry_can_add_a_domain_without_server_code_changes(self):
+        async with self.client(backend_urls={"skills": "http://skills.test:9300"}) as client:
+            self.assertEqual((await client.get("/api/skills/health")).status_code, 200)
+            self.assertEqual(str(self.requests[-1].url), "http://skills.test:9300/health")
+
+    async def test_self_proxy_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "points back to Coach"):
+            create_app(backend_urls={"fitness": "http://127.0.0.1:9150"})
 
 
 if __name__ == "__main__":

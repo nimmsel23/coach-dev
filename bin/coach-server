@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Project-owned runtime control; no Git push or data migration.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+case "${1:-status}" in
+  install)
+    units="$HOME/.config/systemd/user"
+    mkdir -p "$units"
+    # Preserve the old inactive Fitness unit; keep its name as a compatibility alias.
+    if [[ -f "$units/fitness-api.service" && ! -L "$units/fitness-api.service" ]]; then
+      if systemctl --user is-active --quiet fitness-api.service; then
+        echo 'Stop the existing fitness-api.service before installing Coach.' >&2
+        exit 1
+      fi
+      archive="$ROOT/.worktrees/legacy-services"
+      mkdir -p "$archive"
+      [[ ! -e "$archive/fitness-api.service" ]] || { echo 'Legacy unit already archived; inspect before replacing.' >&2; exit 1; }
+      mv "$units/fitness-api.service" "$archive/fitness-api.service"
+    fi
+    ln -sfn "$ROOT/systemd/coach-api.service" "$units/coach-api.service"
+    ln -sfn "$ROOT/systemd/coach-relax.service" "$units/coach-relax.service"
+    ln -sfn coach-api.service "$units/fitness-api.service"
+    systemctl --user daemon-reload
+    systemctl --user enable --now coach-api.service
+    ;;
+  start|stop|restart|status)
+    systemctl --user "${1:-status}" coach-api.service
+    ;;
+  logs) journalctl --user -u coach-api.service -n 80 --no-pager ;;
+  health) curl --fail --silent --show-error http://127.0.0.1:9150/_coach/backends ;;
+  *) echo 'Usage: bin/coach-server install|start|stop|restart|status|logs|health' >&2; exit 2 ;;
+esac

@@ -78,6 +78,8 @@ export default defineConfig(async ({ mode }) => {
           // (OOM/EMFILE) abschmieren lassen (beobachtet 2026-09-02).
           '**/.venv/**',
           '**/.worktrees/**',
+          '**/klienten-dev/**',
+          '**/workspace/**',
           '**/__pycache__/**',
           '**/.pytest_cache/**',
           '**/catalog-ui/**',
@@ -88,6 +90,8 @@ export default defineConfig(async ({ mode }) => {
       },
       proxy: {
         '/api': BACKEND,
+        '/fuel-api': BACKEND,
+        '/relax-api': BACKEND,
         '/exercises': BACKEND,
         '/session':   BACKEND,
         '/journal':   BACKEND,

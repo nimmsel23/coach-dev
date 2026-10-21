@@ -36,7 +36,7 @@ Publish VitalOS `coach` before publishing an updated Coach parent pointer. The i
 
 ## Local commands and inherited tooling audit (2026-10-20)
 
-`npm run dev` and `npm run ui:dev` run Vite in Coach mode and open `/coach.html`; they do not launch or reuse the Fitness Node API. `npm start` runs the Python Coach server on loopback port 5903; Catalog UI is at `/` and `dist-coach` at `/coach/`. See [COACH-SERVER.md](COACH-SERVER.md). Existing explicit Vite proxy routes to the shared Fitness backend remain available for integrations.
+`npm run dev` and `npm run ui:dev` run Vite in Coach mode and open `/coach.html`; they do not launch or reuse the Fitness Node API. `npm start` runs the Python Coach server on loopback port 9150; Catalog UI is at `/` and `dist-coach` at `/coach/`. See [COACH-SERVER.md](COACH-SERVER.md). The Vite API proxy points to the shared Coach backend on `9150`. Fitness, Fuel and Relax use explicit domain namespaces there.
 
 `npm run deploy` builds and deploys Coach Hosting, as does `npm run firebase`. Local systemd staging/prod deployment is not implemented for Coach. `deploy.sh`, `deploy:local`, `deploy:prod`, and the inherited `fitness*ctl` executables return an error before accessing Fitness directories or services. Manage real Fitness services from the Fitness repository.
 

@@ -1,3 +1,11 @@
+## 2026-10-21 — Port 9150 belongs to Coach
+
+`server.py` is now the shared Coach backend on `127.0.0.1:9150`. `coach-backends.json` dispatches Fitness/Fuel/Relax and permits further domain entries without server-code changes. Canonical `/api/<domain>` and `<domain>-api` paths preserve encoded suffixes, requests, and responses; legacy Fitness paths remain available. Liveness and domain readiness are separate; self-proxy loops are rejected.
+
+Installed/enabled project-owned `coach-api.service` and its Relax domain worker `coach-relax.service` (existing Relax source on 9123). Existing Fitness staging on 8100 and Fuel Python on 4000 remain their current domain workers. Archived the inactive old Fitness API unit locally and made `fitness-api.service` a compatibility alias for Coach. Boot inventory and shell PATH updated in dotfiles. User-supplied `klienten-dev` and `workspace` links remain untouched, locally ignored and excluded from Vite watching.
+
+Validation: 10 isolated tests passed. Live readiness is true for all three domains; UI routes, all domain health endpoints and Relax techniques returned 200. Relax runtime data hash and both source Git worktrees remained unchanged. No user-data write tests or push performed. Domain logic is still delegated to existing workers; this is unified Coach API ownership, not an in-process migration of every domain implementation.
+
 ## 2026-10-20 — Python Coach server and Catalog UI
 
 Added `server.py` (FastAPI/httpx/uvicorn), serving Catalog UI at `/` and `/catalog-ui/`, built Firebase Coach at `/coach/`, and forwarding existing catalog API requests to `127.0.0.1:9150`. Local server health lives at `/_coach/health`; unavailable backend requests return 502. `npm start` / `server` run Python; `server:dev` enables reload. `build:catalog-ui` reuses the existing Fitness UI source and outputs `dist-catalog` inside Coach. Dependency pins and operation docs included. No new catalog database, data migration, systemd service, push or Firebase deployment. Six isolated tests passed; Catalog UI build and temporary live HTTP smoke checks on port 5903 passed, then test listener stopped. Fitness source checkout stayed clean.
