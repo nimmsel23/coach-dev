@@ -1,22 +1,14 @@
 /**
- * Prompt für den Schlaf-Qualitäts-Check.
- * Triggert wenn Klienten konsistent schlechte Schlaf-Scores loggen.
+ * Prompt für den Schlaf-Check (heute).
  */
 function getSleepPrompt(today, sleepLogs) {
   return `
-    Analysiere diese Schlaf-Daten vom ${today} und gib mir als Coach eine kurze Einschätzung.
-    
-    WICHTIGE REGEL:
-    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+    Schlaf-Check ${today}. Meldepflichtig: < 6 h oder Qualität < 5.
+    ${PROMPT_BASE_RULES}
+    Pro meldepflichtigem Klienten: **Name**: Wert → Einzeltag oder Muster (Zahl der Tage) → Trainingsempfehlung heute (Intensität/Volumen anpassen ja/nein).
+    Klienten ohne Befund nicht erwähnen.
 
-    Fokus, in dieser Priorität:
-    - Wer schläft kritisch (<6h oder Qualität <5)? Das ist die eigentliche Meldung — wenn hier niemand auffällt, reicht ein Halbsatz für den Rest.
-    - Ist das ein Einzeltag oder ein wiederkehrendes Muster (späte Schlafzeiten, häufiges Aufwachen)? Ein Einzeltag ist Rauschen, ein Muster ist ein Trainings-/Recovery-Risiko.
-    - Konkrete Auswirkung auf die Trainingsfähigkeit HEUTE — soll ich Intensität/Volumen für diese Person anpassen?
-
-    Max 4 Zeilen, direkt, mit Emojis. Nutze Klarnamen. Keine Floskeln wie "sollte beobachtet werden".
-    
     DATEN:
-    ${JSON.stringify(sleepLogs, null, 2)}
+    ${formatPromptData(sleepLogs)}
   `;
 }

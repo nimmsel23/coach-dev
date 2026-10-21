@@ -1,40 +1,26 @@
 /**
- * Generiert den Prompt für den Nutrition/Fuel-Check.
+ * Prompts für die Alerts: Nutrition-Check (heute) und Mood-Trend (3 Tage).
  */
 function getNutritionPrompt(today, mealLogs) {
   return `
-    Du bist Ernährungscoach und checkst die Logs vom ${today} nicht um sie zu zählen, sondern um zu entscheiden, wo du heute noch eingreifst.
-
-    WICHTIGE REGEL:
-    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
-
-    Fokus, in dieser Priorität:
-    - Wer braucht heute noch eine Nachricht von dir (kein Log, klarer Makro-Ausreißer, wiederholtes Muster)? Nenne den Grund, nicht nur den Befund.
-    - Wer hat sauber getankt — kurz erwähnen, nicht ausbreiten.
-    - Wenn ein Muster über mehrere Tage erkennbar ist (nicht nur heute), sag das explizit — Einzeltage sind uninteressant, Wiederholung ist das Signal.
-
-    Sei direkt, max 5 Zeilen, mit Emojis. Keine Floskeln wie "alles im grünen Bereich".
+    Nutrition-Check ${today}. Ziel: nur Klienten nennen, bei denen ich heute noch eingreifen muss.
+    ${PROMPT_BASE_RULES}
+    Eingreifen heißt: fehlendes Log am Tag, Makro-Ausreißer mit Zahl, oder Muster über mehrere Tage.
+    Format: pro Klient eine Zeile "- **Name**: Grund (Zahl) → Aktion". Max 5 Zeilen insgesamt.
 
     DATEN:
-    ${JSON.stringify(mealLogs, null, 2)}
+    ${formatPromptData(mealLogs)}
   `;
 }
 
-/**
- * Generiert den Prompt für den Mood-Trend-Alert.
- */
 function getMoodPrompt(alerts) {
   return `
-    Folgende Klienten zeigen einen anhaltend niedrigen Mood-Score (letzte 3 Tage, alle Werte < 6):
-    ${JSON.stringify(alerts, null, 2)}
+    Mood-Alarm: Klienten mit Mood < 6 an allen der letzten 3 Tage.
+    ${PROMPT_BASE_RULES}
+    Pro Klient: **Name** — Muster oder Delle (ein Satz, mit Werten), mögliche Ursache aus den Daten oder "keine erkennbar", und eine heutige Aktion (anrufen / Training anpassen / gezielt nachfragen).
+    Max 3 Sätze pro Klient.
 
-    WICHTIGE REGEL:
-    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
-
-    Du kennst diese Menschen — das ist kein anonymer Datenpunkt, sondern jemand, dem es seit Tagen schlecht geht. Formuliere für mich (den Coach):
-    - Wer ist betroffen, und wirkt das wie eine vorübergehende Delle oder wie ein echtes Muster (nutze Klarnamen)?
-    - Eine konkrete, unmittelbare Handlungsempfehlung — nicht "im Auge behalten", sondern was genau tue ich heute (anrufen, Training anpassen, gezielt nachfragen was los ist)?
-    - Falls aus den Daten erkennbar: ein möglicher Auslöser (Training, Schlaf, Ernährung, sonst nichts erkennbar → sag das auch).
-    Max 3–4 Sätze, direkt, keine Floskeln, kein Corporate-Ton.
+    DATEN:
+    ${formatPromptData(alerts)}
   `;
 }

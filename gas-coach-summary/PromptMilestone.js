@@ -1,30 +1,15 @@
 /**
- * Prompt für den Fortschritts-Meilenstein-Check.
- * Erkennt automatisch wenn Klienten signifikante Fortschritte oder neue PRs erreicht haben.
+ * Prompt für den Meilenstein-Check (PRs, Volumen-Sprünge, Session-Zähler).
  */
 function getMilestonePrompt(sessions) {
   return `
-    Analysiere diese Trainingsdaten und identifiziere bemerkenswerte Fortschritte oder Personal Records (PRs).
-    
-    WICHTIGE REGEL:
-    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+    Meilenstein-Check aus den Trainingsdaten.
+    ${PROMPT_BASE_RULES}
+    Zählt nur: neuer Gewichts-PR bei einer Übung, Volumen > 10 % über Vorwoche, runde Session-Zahl (30, 50, 100 …), erstmals komplett geschaffte schwere Übung.
+    Format pro Treffer: **Name**: Übung/Zahl → was daran neu ist (mit Vorwert, wenn in den Daten). Kein Glückwunsch-Text, keine Adjektive.
+    Keine Treffer: Ausgabe "Nichts auffällig.".
 
-    Suche nach:
-    - Neue Gewichts-PRs bei einer Übung
-    - Deutliche Volumen-Steigerung (>10% im Vergleich zur Vorwoche)
-    - Erreichte Streak-Meilensteine (z.B. 30. Session, 50. Session)
-    - Erstmals komplettierte schwierige Übungen oder Fortschritte in Progression
-
-    Ein Meilenstein verdient eine echte Würdigung, keine trockene Zahlenmeldung — formuliere so, dass ich das direkt (leicht angepasst) an den Klienten weiterschicken könnte, um ihn zu feiern.
-
-    Format (nur ausgeben wenn es tatsächlich Meilensteine gibt):
-    **🏆 Meilensteine**
-
-    - [Name]: [Beschreibung des Erfolgs, konkret mit Zahlen] — [warum das bemerkenswert ist, z.B. im Vergleich zum bisherigen Verlauf] 🎯
-
-    Wenn keine Meilensteine erkennbar: einfach nichts ausgeben.
-    
     DATEN:
-    ${JSON.stringify(sessions, null, 2)}
+    ${formatPromptData(sessions)}
   `;
 }

@@ -1,29 +1,14 @@
 /**
- * Prompt für den Körpergewicht- und Körperfett-Trend-Check.
- * Wöchentlicher oder monatlicher Body-Composition-Überblick pro Klient.
+ * Prompt für den Körpergewicht- und Körperfett-Trend-Check (wöchentlich/monatlich).
  */
 function getBodyCompositionPrompt(startStr, endStr, bodyLogs) {
   return `
-    Analysiere die Körperzusammensetzungs-Daten der Klienten für den Zeitraum ${startStr} bis ${endStr}.
-    
-    WICHTIGE REGEL:
-    Nutze Markdown: **Text** für Fettgedrucktes, Bindestriche (-) für Listen. Keine HTML-Tags.
+    Body-Check ${startStr}–${endStr}. Nur Klienten mit Zielabweichung oder Messlücke ausführlich.
+    ${PROMPT_BASE_RULES}
+    Pro Klient, wenn auffällig: **Name**: Δ Gewicht (kg) und ggf. Δ Körperfett, Ziel (Aufbau/Abnehmen/Halten) vs. Trend, Hypothese (Adhärenz / Plateau / Messfehler), nächster Schritt.
+    Wer unauffällig im Ziel ist, bekommt höchstens eine Zeile mit Δ. Lücken in der Messung nennen, wenn sie den Trend verzerren.
 
-    Berechne und bewerte:
-    - Gewichtsveränderung (Start vs. Ende, Tendenz)
-    - Körperfett-Trend wenn vorhanden
-    - Konsistenz der Messungen (wer misst regelmäßig, wer lückenhaft — unregelmäßiges Messen verzerrt den Trend, sag das wenn relevant)
-    - Ist die Veränderung im Einklang mit dem erklärten Ziel (Aufbau/Abnehmen/Halten)? Wenn NICHT: das ist die wichtigste Zeile im ganzen Report, nicht eine Randnotiz.
-    - Bei Diskrepanz zwischen Ziel und Trend: eine kurze Hypothese warum (Adhärenz? Plateau? Messfehler?) + was ich als Coach als nächstes prüfen sollte.
-
-    Format:
-    **⚖️ Body-Check ${startStr}–${endStr}**
-
-    - [Name]: [Δ Gewicht], [Trend Körperfett wenn vorhanden], [Einschätzung — bei Zielabweichung: Hypothese + nächster Schritt]
-
-    Keine Floskeln, direkt auf den Punkt. Nutze Klarnamen.
-    
     DATEN:
-    ${JSON.stringify(bodyLogs, null, 2)}
+    ${formatPromptData(bodyLogs)}
   `;
 }
