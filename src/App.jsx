@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState, useEffect, useRef } from 'react'
+import { onMessage } from 'firebase/messaging'
 import { RefreshCw } from 'lucide-react'
 import Session from './views/Session/index.jsx'
 import { useTodayGateWatcher } from './views/Session/useTodayGateWatcher.js'
@@ -12,6 +13,7 @@ const Fokus = lazy(() => import('./views/Fokus/index.jsx'))
 const Inbox = lazy(() => import('./views/Inbox/index.js'))
 import ExerciseInsightModal from './components/ExerciseInsightModal.jsx'
 import { isLocalMode, getAnatomy, getAllMuscles } from '@db'
+import { getMessagingIfSupported } from '@cloud/firebase.js'
 
 import { getNavItems, VALID_TABS, IS_SOLO, SOLO_TAB } from './constants/NavigationItems.js'
 
@@ -42,6 +44,25 @@ function isIsoDate(value) {
 
 function localToday() {
   return new Date().toISOString().slice(0, 10)
+}
+
+function showForegroundSixpackReminder(data) {
+  if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return
+
+  const options = {
+    body: data.body || 'Zeit fürs Training',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+    tag: data.tag || 'sixpack-reminder',
+    renotify: false,
+    data: { link: data.link || '/#session/timer', tab: 'session' },
+  }
+
+  navigator.serviceWorker.getRegistration('/fitness-push/')
+    .then((registration) => registration || navigator.serviceWorker.ready)
+    .then((registration) => registration?.showNotification(data.title || '6Pack', options))
+    .catch(() => {})
 }
 
 function parseHashRoute({ resolveFlowTab, navMode }) {
@@ -225,6 +246,27 @@ export default function App() {
     if (!user) return;
     getAllMuscles().catch(() => {});
   }, [user]);
+
+  // FCM-Datenmeldungen im Vordergrund erreichen onMessage, nicht den
+  // onBackgroundMessage-Handler im Service Worker. Die gemeinsame Tag-ID
+  // hält Vordergrund-, Hintergrund- und lokale Erinnerung dedupliziert.
+  useEffect(() => {
+    let disposed = false
+    let unsubscribe = () => {}
+
+    getMessagingIfSupported().then((messaging) => {
+      if (!messaging || disposed) return
+      unsubscribe = onMessage(messaging, (payload) => {
+        const data = payload?.data || {}
+        if (data.app === 'sixpack') showForegroundSixpackReminder(data)
+      })
+    }).catch(() => {})
+
+    return () => {
+      disposed = true
+      unsubscribe()
+    }
+  }, [])
 
   useEffect(() => {
     if (isLocalMode()) return undefined;
