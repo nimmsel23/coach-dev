@@ -163,6 +163,26 @@ def fetch_client(db, uid: str) -> list[dict]:
     return build_events(uid, program, sessions, index_entries)
 
 
+def fetch_client_status(db, uid: str) -> str:
+    """'client' (zahlend, wird gemeldet) oder 'friend' (Freund/Test, nur Anzeige).
+    Quelle ist dieselbe wie im Coach-Tab: fitness/{uid}/profile/metadata.clientStatus.
+    Fehlt der Wert, gilt 'friend' - im Zweifel lieber keine Meldung."""
+    snap = db.collection("fitness").document(uid).collection("profile").document("metadata").get()
+    status = (snap.to_dict() or {}).get("clientStatus") if snap.exists else None
+    return "client" if status == "client" else "friend"
+
+
+def meta_path(uid: str) -> Path:
+    return archive_path(uid).with_name("6pack.meta.json")
+
+
+def read_status(uid: str) -> str:
+    try:
+        return json.loads(meta_path(uid).read_text()).get("clientStatus", "friend")
+    except (OSError, ValueError):
+        return "friend"
+
+
 def write_archive(uid: str, events: list[dict]) -> Path:
     """Atomar schreiben: temp-Datei im Zielordner, dann replace."""
     path = archive_path(uid)
@@ -269,9 +289,11 @@ def build_digest(today: date_cls | None = None) -> dict:
             continue
         streaks = compute_streaks(active_dates(read_archive(uid)), today)
         status = classify(streaks)
-        entry = {"uid": uid, "name": meta.get("name"), "status": status, "streaks": streaks}
+        client_status = read_status(uid)
+        entry = {"uid": uid, "name": meta.get("name"), "status": status, "clientStatus": client_status, "streaks": streaks}
         clients.append(entry)
-        if status == "lapsed" and streaks["daysSinceActive"] in NOTIFY_AT_DAYS:
+        # Nur zahlende Klienten werden gemeldet; Freunde/Test erscheinen im Digest, bleiben aber still.
+        if client_status == "client" and status == "lapsed" and streaks["daysSinceActive"] in NOTIFY_AT_DAYS:
             alerts.append(entry)
     return {"date": today.isoformat(), "clients": clients, "alerts": alerts}
 
@@ -285,14 +307,15 @@ def render_digest(digest: dict, only_alerts: bool = False) -> str:
         st = c["streaks"]
         if c["status"] == "lapsed":
             n = st['daysSinceActive']
-            detail = f"seit {n} {'Tag' if n == 1 else 'Tagen'} nicht aktiv (letzte Streak {days(st['lastRun'])})"
+            detail = f"seit {n} {'Tag' if n == 1 else 'Tagen'} nichts geloggt (letzte Streak {days(st['lastRun'])})"
         elif c["status"] == "open":
             detail = f"Streak {days(st['current'])}, heute noch offen"
         elif c["status"] == "active":
-            detail = f"Streak {days(st['current'])}, heute aktiv"
+            detail = f"Streak {days(st['current'])}, heute geloggt"
         else:
             detail = "noch nichts"
-        lines.append(f"{icons[c['status']]} {c['name']}: {detail}")
+        tag = " (Freund)" if c.get("clientStatus") != "client" else ""
+        lines.append(f"{icons[c['status']]} {c['name']}{tag}: {detail}")
     return "\n".join(lines)
 
 
@@ -336,7 +359,10 @@ def sync_clients(uids: list[str], get_db: Callable = _get_db) -> dict:
             if not events:
                 results.append({"uid": uid, "events": 0, "skipped": "no_sixpack_data"})
                 continue
-            results.append(_summary(uid, events, write_archive(uid, events)))
+            path = write_archive(uid, events)
+            status = fetch_client_status(db, uid)
+            meta_path(uid).write_text(json.dumps({"clientStatus": status, "syncedAt": datetime.now(timezone.utc).isoformat()}))
+            results.append({**_summary(uid, events, path), "clientStatus": status})
         except Exception as exc:  # ein kaputter Klient stoppt die anderen nicht
             log.warning("6pack sync %s: %s", uid, exc)
             errors.append({"uid": uid, "error": str(exc)})
