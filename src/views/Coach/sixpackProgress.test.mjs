@@ -44,3 +44,14 @@ test('Dauer aus sessionGate', () => {
   assert.equal(sessionMinutes({ sessionGate: { startedAt: '2026-10-01T10:00:00Z', endedAt: '2026-10-01T10:12:20Z' } }), 12)
   assert.equal(sessionMinutes({}), null)
 })
+
+import { computeStreaks } from './sixpackProgress.js'
+
+test('Streaks: aktuelle und längste, heute offen hält, gestern leer reißt', () => {
+  const program = { completedOn: { 1: '2026-10-01', 2: '2026-10-02', 3: '2026-10-03', 4: '2026-10-04', 5: '2026-10-21' } }
+  const sessions = [{ date: '2026-10-22' }]
+  assert.deepEqual(computeStreaks(program, sessions, '2026-10-22'), { current: 2, longest: 4, activeDays: 6, daysSinceActive: 0 })
+  assert.equal(computeStreaks(program, sessions, '2026-10-23').current, 2)
+  assert.equal(computeStreaks(program, sessions, '2026-10-24').current, 0)
+  assert.equal(computeStreaks(null, [], '2026-10-24').daysSinceActive, null)
+})

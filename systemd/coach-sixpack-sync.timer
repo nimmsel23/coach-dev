@@ -1,0 +1,9 @@
+[Unit]
+Description=Coach: 6Pack-Archive täglich aktualisieren
+
+[Timer]
+OnCalendar=*-*-* 06:30:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -55,3 +55,28 @@ export function sessionMinutes(session) {
   if (Number.isFinite(start) && Number.isFinite(end) && end > start) return Math.max(1, Math.round((end - start) / 60000))
   return null
 }
+
+const dayMs = 86400000
+const asDay = (iso) => Date.parse(`${String(iso).slice(0, 10)}T00:00:00Z`)
+
+// Streak = lückenlose Folge von Kalendertagen mit Aktivität (abgehakter Programm-Tag
+// inkl. automatisch abgehakter Ruhetage, oder geloggte Einheit). Dieselbe Regel wie
+// coach_sixpack.py::compute_streaks: heute noch offen hält die Streak, gestern leer reißt sie.
+export function computeStreaks(program, sessions, today = new Date().toISOString().slice(0, 10)) {
+  const days = new Set()
+  for (const iso of Object.values(program?.completedOn || {})) if (Number.isFinite(asDay(iso))) days.add(asDay(iso))
+  for (const s of sessions) if (Number.isFinite(asDay(s.date))) days.add(asDay(s.date))
+  const sorted = [...days].sort((a, b) => a - b)
+  let longest = 0, run = 0, prev = null
+  for (const d of sorted) {
+    run = prev !== null && d - prev === dayMs ? run + 1 : 1
+    longest = Math.max(longest, run)
+    prev = d
+  }
+  const t = asDay(today)
+  let cursor = days.has(t) ? t : t - dayMs
+  let current = 0
+  while (days.has(cursor)) { current += 1; cursor -= dayMs }
+  const last = sorted.length ? sorted[sorted.length - 1] : null
+  return { current, longest, activeDays: sorted.length, daysSinceActive: last === null ? null : Math.round((t - last) / dayMs) }
+}

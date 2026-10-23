@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Check, Flag, Flame } from 'lucide-react';
 import { getClientSixpack } from '@db';
 import {
-  DAYS_PER_WEEK, PROGRAM_WEEKS, dayInWeek, dayStatus, pickSixpackSessions, sessionMinutes, summarizeProgram, weekOf,
+  DAYS_PER_WEEK, PROGRAM_WEEKS, computeStreaks, dayInWeek, dayStatus, pickSixpackSessions, sessionMinutes, summarizeProgram, weekOf,
 } from './sixpackProgress.js';
 
 // Schreibgeschützter Spiegel der 6Pack-App (~/6pack-dev, TrackScreen): gleiche
@@ -45,6 +45,7 @@ export default function ClientSixPack({ clientUid }) {
 
   const summary = useMemo(() => summarizeProgram(data?.program), [data]);
   const sessions = useMemo(() => pickSixpackSessions(data?.sessions || []), [data]);
+  const streaks = useMemo(() => computeStreaks(data?.program, sessions), [data, sessions]);
 
   if (error) return <p role="alert" className="text-sm text-fit-red">{error}</p>;
   if (!data) return <div className="flex items-center justify-center py-20"><div className="spinner" /></div>;
@@ -69,8 +70,12 @@ export default function ClientSixPack({ clientUid }) {
           value={summary.finished ? 'Fertig' : `Woche ${summary.currentWeek} · Tag ${summary.currentDayInWeek}`}
         />
         <Stat label="Trainingstage" value={`${summary.trainingDone}/${summary.trainingTotal}`} hint={`${summary.percent} %`} />
-        <Stat label="Zuletzt trainiert" value={summary.lastCompletedOn ? formatDate(summary.lastCompletedOn) : '–'} />
-        <Stat label="Einheiten geloggt" value={sessions.length} />
+        <Stat
+          label="Streak"
+          value={`${streaks.current} ${streaks.current === 1 ? 'Tag' : 'Tage'}`}
+          hint={`längste ${streaks.longest} · ${streaks.daysSinceActive === null ? 'noch nie aktiv' : streaks.daysSinceActive === 0 ? 'heute aktiv' : `zuletzt vor ${streaks.daysSinceActive} Tg.`}`}
+        />
+        <Stat label="Zuletzt trainiert" value={summary.lastCompletedOn ? formatDate(summary.lastCompletedOn) : '–'} hint={`${sessions.length} Einheiten geloggt`} />
       </div>
 
       <section className="overflow-hidden rounded-xl" style={{ border: '1px solid #000' }}>
