@@ -214,6 +214,7 @@ def compute_streaks(days: set[date_cls], today: date_cls | None = None) -> dict:
         if run > longest:
             longest, longest_end = run, d
         prev = d
+    last_run = run  # Länge der Folge, die am letzten aktiven Tag endet
 
     current = 0
     cursor = today if today in days else today - timedelta(days=1)
@@ -226,6 +227,7 @@ def compute_streaks(days: set[date_cls], today: date_cls | None = None) -> dict:
         "longest": longest,
         "longestEnd": longest_end.isoformat() if longest_end else None,
         "lastActive": ordered[-1].isoformat() if ordered else None,
+        "lastRun": last_run if ordered else 0,
         "activeDays": len(ordered),
         "daysSinceActive": (today - ordered[-1]).days if ordered else None,
     }
@@ -241,6 +243,66 @@ def _summary(uid: str, events: list[dict], path: Path) -> dict:
         "first": min(dated) if dated else None, "last": max(dated) if dated else None,
         "streaks": compute_streaks(active_dates(events)),
     }
+
+
+# --- Digest: wer ist dran, wessen Streak ist gerissen ---------------------------------
+
+NOTIFY_AT_DAYS = {2, 3, 7, 14}  # Meldung nur an diesen Tagen ohne Aktivität, kein Dauer-Spam
+
+
+def classify(streaks: dict) -> str:
+    since = streaks["daysSinceActive"]
+    if since is None:
+        return "never"
+    if since == 0:
+        return "active"
+    return "open" if since == 1 else "lapsed"
+
+
+def build_digest(today: date_cls | None = None) -> dict:
+    """Status aller Klienten mit 6Pack-Archiv, aus den lokalen Archiven (kein Firestore)."""
+    today = today or date_cls.today()
+    registry = load_registry()
+    clients, alerts = [], []
+    for uid, meta in sorted(registry.items(), key=lambda kv: str(kv[1].get("name"))):
+        if not archive_path(uid).is_file():
+            continue
+        streaks = compute_streaks(active_dates(read_archive(uid)), today)
+        status = classify(streaks)
+        entry = {"uid": uid, "name": meta.get("name"), "status": status, "streaks": streaks}
+        clients.append(entry)
+        if status == "lapsed" and streaks["daysSinceActive"] in NOTIFY_AT_DAYS:
+            alerts.append(entry)
+    return {"date": today.isoformat(), "clients": clients, "alerts": alerts}
+
+
+def render_digest(digest: dict, only_alerts: bool = False) -> str:
+    days = lambda n: f"{n} {'Tag' if n == 1 else 'Tage'}"  # noqa: E731
+    icons = {"active": "✅", "open": "🕐", "lapsed": "⚠️", "never": "·"}
+    rows = digest["alerts"] if only_alerts else digest["clients"]
+    lines = [f"6Pack · {digest['date']}"]
+    for c in rows:
+        st = c["streaks"]
+        if c["status"] == "lapsed":
+            n = st['daysSinceActive']
+            detail = f"seit {n} {'Tag' if n == 1 else 'Tagen'} nicht aktiv (letzte Streak {days(st['lastRun'])})"
+        elif c["status"] == "open":
+            detail = f"Streak {days(st['current'])}, heute noch offen"
+        elif c["status"] == "active":
+            detail = f"Streak {days(st['current'])}, heute aktiv"
+        else:
+            detail = "noch nichts"
+        lines.append(f"{icons[c['status']]} {c['name']}: {detail}")
+    return "\n".join(lines)
+
+
+def send_telegram(text: str, token: str, chat_id: str) -> None:
+    import urllib.parse
+    import urllib.request
+    data = urllib.parse.urlencode({"chat_id": chat_id, "text": text}).encode()
+    with urllib.request.urlopen(f"https://api.telegram.org/bot{token}/sendMessage", data=data, timeout=15) as resp:
+        if resp.status != 200:
+            raise RuntimeError(f"Telegram antwortete {resp.status}")
 
 
 def _check_uid(uid: str) -> str:
@@ -293,6 +355,12 @@ def sync(uid: str = Query("", description="Nur dieser Klient; leer = alle regist
         raise HTTPException(503, detail=str(exc)) from None
 
 
+@router.get("/digest")
+def digest():
+    result = build_digest()
+    return {"ok": True, **result, "text": render_digest(result)}
+
+
 @router.get("")
 def status():
     registry = load_registry()
@@ -324,3 +392,44 @@ def get_archive(uid: str, download: bool = Query(False), since: str = Query(""))
             raise HTTPException(400, detail="invalid_since") from None
     events = [e for e in read_archive(uid) if not since or str(e.get("date") or "") >= since]
     return {"ok": True, "uid": uid, "streaks": compute_streaks(active_dates(read_archive(uid))), "events": events}
+
+
+def _cli() -> None:
+    import typer
+    cli = typer.Typer(add_completion=False, help="6Pack-Archive und Streak-Digest (Coach)")
+
+    @cli.callback()
+    def _main():
+        """6Pack-Archive und Streak-Digest."""
+
+    @cli.command()
+    def daily(
+        notify: bool = typer.Option(False, help="Bei Anlass per Telegram melden (BOT_TOKEN/CHAT_ID aus der Umgebung)"),
+        dry_run: bool = typer.Option(False, help="Nichts senden, Meldung nur ausgeben"),
+        sync: bool = typer.Option(True, help="Vorher aus Firestore aktualisieren"),
+    ):
+        """Archive aktualisieren, Digest bilden, bei Anlass melden."""
+        logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+        if sync:
+            out = sync_clients(sorted(load_registry()))
+            for err in out["errors"]:
+                log.error("Sync %s: %s", err["uid"], err["error"])
+        result = build_digest()
+        typer.echo(render_digest(result))
+        if not result["alerts"]:
+            return
+        text = render_digest(result, only_alerts=True)
+        if dry_run or not notify:
+            typer.echo(f"\n[nicht gesendet]\n{text}")
+            return
+        token, chat = os.getenv("BOT_TOKEN"), os.getenv("CHAT_ID")
+        if not token or not chat:
+            raise typer.Exit(typer.echo("BOT_TOKEN/CHAT_ID fehlen in der Umgebung", err=True) or 2)
+        send_telegram(text, token, chat)
+        typer.echo("Telegram gesendet")
+
+    cli()
+
+
+if __name__ == "__main__":
+    _cli()

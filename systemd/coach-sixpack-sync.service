@@ -1,8 +1,8 @@
 [Unit]
-Description=Coach: 6Pack-Archive aller Klienten aus Firestore aktualisieren
-After=coach-api.service
-Wants=coach-api.service
+Description=Coach: 6Pack-Archive aus Firestore aktualisieren und Streak-Digest melden
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/curl -fsS -m 300 -X POST http://127.0.0.1:9150/api/coach/sixpack/sync
+WorkingDirectory=%h/coach-dev
+EnvironmentFile=-%h/.env/telegram.env
+ExecStart=/usr/bin/python3 %h/coach-dev/coach_sixpack.py daily --notify
