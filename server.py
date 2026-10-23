@@ -15,6 +15,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse
 from starlette.background import BackgroundTask
 
+from coach_sixpack import router as sixpack_router
+
 ROOT = Path(__file__).resolve().parent
 API_PREFIXES = (
     "api", "fitness", "exercise", "exercises", "coverage", "blocks", "coaching-notes",
@@ -152,6 +154,9 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
         async def endpoint(request: Request):
             return await proxy(request, name, strip_segments)
         return endpoint
+
+    # Coach-eigene Routen (kein Proxy) stehen vor den Domain- und /api-Catch-alls.
+    app.include_router(sixpack_router)
 
     # Explicit domains precede the compatibility /api catch-all.
     for name in backends:
