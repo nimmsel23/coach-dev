@@ -75,7 +75,7 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
 Sub-Tab, Klient und Detail-Tab stehen im URL-Hash (`coachRoute.js` rein, `useCoachRoute.js` als Hook):
 
 - `#/exercises` · `#/catalog` · `#/clients`
-- `#/clients/<uid>/<tab>?date=YYYY-MM-DD` — `<tab>` ∈ `workouts` (Standard), `insights`, `habits`, `templates`, `trainingplan`, `plan`
+- `#/clients/<uid>/<tab>?date=YYYY-MM-DD` — `<tab>` ∈ `workouts` (Standard), `sixpack` (schreibgeschützter 6Pack-Spiegel, `ClientSixPack.jsx`), `insights`, `habits`, `templates`, `trainingplan`, `plan`
 - Älterer Push-Link `#/coach?client=<uid>&date=…` wird nach `#/clients/<uid>` übersetzt.
 
 Zurück-Taste und Reload bleiben an derselben Stelle. Die Push-Links der Cloud Function `onClientWorkout`

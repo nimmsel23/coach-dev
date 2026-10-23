@@ -386,3 +386,17 @@ export async function reviewCoachDraft(draftId, uid, status) {
     return { ok: false };
   }
 }
+
+// 6Pack-Spiegel (nur lesen): Programm-Fortschritt users/{uid}/meta/sixpack
+// (geschrieben von ~/6pack-dev/standaloneSync.js) plus die 6Pack-Einheiten
+// aus fitness/{uid}/sessions. Coach-Leserechte decken beide Pfade ab.
+export async function getClientSixpack(clientUid) {
+  const [programSnap, sessionsSnap] = await Promise.all([
+    getDoc(doc(db, "users", clientUid, "meta", "sixpack")),
+    getDocs(collection(db, "fitness", clientUid, "sessions")),
+  ]);
+  return {
+    program: programSnap.exists() ? programSnap.data() : null,
+    sessions: sessionsSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
+  };
+}

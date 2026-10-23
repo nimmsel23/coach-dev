@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Star, UserCheck, Dumbbell, Layers, Target, RotateCw, Sparkles } from 'lucide-react';
+import { Users, Star, UserCheck, Dumbbell, Layers, Target, RotateCw, Sparkles, Flame } from 'lucide-react';
 import { getAllUserProfiles, getUserProfile, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
 import AssignPlan from './AssignPlan';
@@ -7,6 +7,7 @@ import ClientPlan from './ClientPlan';
 import ClientTrainingPlans from './ClientTrainingPlans';
 import ClientHabitCycle from './ClientHabitCycle';
 import ClientInsights from './ClientInsights';
+import ClientSixPack from './ClientSixPack';
 import { useCoachRoute } from './useCoachRoute.js';
 
 const STATUS_OPTIONS = [
@@ -18,6 +19,7 @@ const DETAIL_TABS = [
   { id: 'trainingplan', label: 'Trainingsplan', icon: Layers },
   { id: 'templates', label: 'Workout-Vorlagen', icon: Target },
   { id: 'workouts', label: 'Verlauf & Feedback', icon: Dumbbell },
+  { id: 'sixpack', label: '6Pack', icon: Flame },
 ];
 const EXTRA_TABS = [
   { id: 'insights', label: 'KI-Insights', icon: Sparkles },
@@ -199,6 +201,7 @@ export default function ClientsPanel() {
             {error && <p role="alert" className="px-4 pt-2 text-sm text-fit-red">{error}</p>}
             <div className="flex-1 overflow-y-auto p-4">
               {detailTab === 'workouts' && <ClientWorkoutsFeed clientUid={selectedUid} />}
+              {detailTab === 'sixpack' && <ClientSixPack key={selectedUid} clientUid={selectedUid} />}
               {detailTab === 'insights' && <ClientInsights clientUid={selectedUid} />}
               {detailTab === 'habits' && <ClientHabitCycle clientUid={selectedUid} />}
               {detailTab === 'templates' && <ClientPlan key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
