@@ -1,3 +1,19 @@
+## 2026-10-24 — Klienten-Integration: klienten-dev geht in coach-dev auf (Branch `integrate-klienten`)
+
+`klienten-dev` (ClientForge/Konsole) und der Coach-Gateway laufen jetzt in einer App; Klienten-Pläne (`plan.json`) werden als Routinen nach Firestore gepusht. Entscheidung: Klientendaten bleiben unter `~/.aos` (per Symlink), ein Coach-Server. `klienten-dev` und `klienten-python` blieben bis auf eine Doku-Ergänzung unangetastet.
+
+- **`coach_klienten.py`** (neu, Commit `d221d57`): Einstiegspunkt auf :5200. Nimmt `server.create_app()` (Domain-Proxies, Coach-UI, 6Pack) und setzt die Routen von `klienten-python` davor (`/k/*`, `/api/clients`, `/konsole/*`, `/clientforge/*`). Läuft im venv von `klienten-python`.
+- **`systemd/coach-klienten.service`** (neu): Unit-Vorlage, nicht installiert, nichts gestartet oder neu gestartet.
+- **`coach_plan_push.py`** (neu, Commit `9547667`): `plan.json` (`{einheiten:[…]}`) → `fitness/<uid>/routines/plan-<slug>` samt Übungen; deterministische IDs, nur `source: "klienten-plan"` wird geändert/entfernt, Gewichte nur bei Zahlenwert. Läuft im System-Python (`firebase_admin`). CLI mit `--dry-run`.
+- **`coach_klienten.py`**: Endpoint `POST /k/<id>/plan/push` und Auto-Push (fire-and-forget) nach erfolgreichem Speichern eines Plans.
+- **`tests/test_plan_push.py`** (neu): Umwandlung, Idempotenz, Schutz fremder Routinen gegen Fake-DB; Suite grün.
+- **Real ausgeführt:** Jakobs Push-Routine `plan-push-rpe-5-7` (5 Maschinen-Übungen, 3 Sätze, Gewichte leer) nach Firestore geschrieben und per Rücklesen verifiziert. Plan-Quelle: `~/.local/Klienten/jakob-stadler/data/plan.json`.
+- **`docs/COACH-ARCHITECTURE.md`** (Commit `3b19fb8`): Abschnitt „Klienten-Integration (2026-10-24)" mit Routen-Reihenfolge, Plan-Push-Regeln, Auslösern und offenen Punkten.
+
+Validation: nur `TestClient`-GETs gegen echte Daten für die kombinierte App; Auto-Push noch nicht im laufenden Dienst erprobt; nichts gepusht. Ob Jakob die Routine in seiner App sieht, ist nicht geprüft.
+
+---
+
 ## 2026-10-21 — Port 9150 belongs to Coach
 
 `server.py` is now the shared Coach backend on `127.0.0.1:9150`. `coach-backends.json` dispatches Fitness/Fuel/Relax and permits further domain entries without server-code changes. Canonical `/api/<domain>` and `<domain>-api` paths preserve encoded suffixes, requests, and responses; legacy Fitness paths remain available. Liveness and domain readiness are separate; self-proxy loops are rejected.

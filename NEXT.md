@@ -500,3 +500,15 @@ pruefen.
 - Pre-Commit-Hook-Reminder: `src/views/Session/`-Code geändert, aber
   `ARCHITECTURE.md`/`AUDIT.md` nicht im Commit — bewusst nicht aktualisiert
   (reine CSS/Layout-Fixes ohne Architektur-Relevanz), kein Nachtrag geplant.
+- **Klienten-Integration (Branch `integrate-klienten`, nicht gepusht/gemergt):**
+  `coach-klienten.service` installieren und `klienten-dev.service` (:5200)
+  bzw. `coach-api.service` (:9150) ersetzen; ClientForge/Konsole-UI in die
+  Coach-SPA übernehmen; `CLAUDE.md` neu schreiben und `bin` aus der
+  Klientenliste filtern; Plan-Änderungen aus der App fließen nicht nach
+  `plan.json` zurück; Auto-Push erst im laufenden Dienst verifizieren und
+  prüfen, ob Jakob die Routine `plan-push-rpe-5-7` in seiner App sieht.
+
+**Gemini-Review (potenzielle blinde Flecken, 2026-10-24):**
+*   **Unverifizierte Behauptung:** Claude behauptet, Jakobs Push-Plan liege in Firestore, obwohl die unmittelbar folgende Tool-Ausgabe (`GET /routines` nach einem `DELETE`) zeigt, dass keine Routinen mehr für den Client existieren. Es scheint, dass der "Aufräum"-Schritt den gerade gepushten Plan gelöscht hat.
+*   **Ungeprüfte Annahme:** Claude löscht eine Routine mit einer spezifischen UUID (`2bf790fd-...`) im Glauben, es sei eine "lokale Test-Routine". Es wird nicht explizit geprüft, ob diese UUID tatsächlich der ID des gerade gepushten Plans `plan-push-rpe-5-7` entspricht oder ob es sich um eine andere Routine handelt. Die Ausgabe legt nahe, dass es der gepushte Plan war.
+*   **Teilweise gelöstes Problem:** Der Hauptzweck, Jakobs Plan nach Firestore zu pushen, wurde durch den nachfolgenden Aufräumschritt effektiv rückgängig gemacht, ohne dass dies im Selbstbericht oder in der abschließenden Zusammenfassung reflektiert wird.
