@@ -51,5 +51,4 @@ src/lib/coachNotesData.generated.js
 dist-catalog/
 
 # Local context links supplied by the workspace owner
-/klienten-dev
 /workspace

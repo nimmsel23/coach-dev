@@ -2,3 +2,7 @@
 	path = vitalos
 	url = git@github.com:nimmsel23/vitalos.git
 	branch = coach
+[submodule "klienten-dev"]
+	path = klienten-dev
+	url = /home/alpha/klienten-dev
+	branch = main
