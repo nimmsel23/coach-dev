@@ -36,7 +36,7 @@ Added `vitalos` gitlink tracking VitalOS branch `coach`; removed the reverse dir
 
 # 2026-10-29 — Fuel über VitalOS-API
 
-Coach routet `/api/fuel/*` und `/fuel-api/*` an die unter `/api/fuel` konfigurierte VitalOS-API auf `127.0.0.1:8000`. Der Gateway unterstützt dafür API-Basis-Pfade bei Forwarding und Readiness-Healthchecks. Fuel-Domain- und Datenverantwortung bleiben bei Fuel. Laufzeit-Aktivierung nicht geprüft.
+Coach routet `/api/fuel/*` und `/fuel-api/*` an die unter `/api/fuel` konfigurierte VitalOS-API auf `127.0.0.1:8000`. Der Gateway unterstützt dafür API-Basis-Pfade bei Forwarding und Readiness-Healthchecks. `coach-api.service` wurde neu gestartet; `/api/fuel/health` und die konfigurierte Upstream-Adresse wurden live mit 200 bestätigt. Fuel-Domain- und Datenverantwortung bleiben bei Fuel.
 
 # Coach: Splash, coach-sw.js und SW-Register aus @vos/mini-app-shell (2026-10-16)
 
