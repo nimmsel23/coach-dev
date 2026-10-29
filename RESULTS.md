@@ -34,6 +34,10 @@ Corrected Coach commit-hook triggers, dev/preview entrypoints, build/deploy runn
 
 Added `vitalos` gitlink tracking VitalOS branch `coach`; removed the reverse direct relationship in VitalOS. Coach owns preview CI and explicit manual production CI. Added `bin/coach-release` for a clean committed local build/deploy. Retired parent dependency-repair hooks and implicit Hosting deploy in pre-push. Shared Plan resolution supports the nested Shell. Migration remains local, with no push or deploy.
 
+# 2026-10-29 — Fuel über VitalOS-API
+
+Coach routet `/api/fuel/*` und `/fuel-api/*` an die unter `/api/fuel` konfigurierte VitalOS-API auf `127.0.0.1:8000`. Der Gateway unterstützt dafür API-Basis-Pfade bei Forwarding und Readiness-Healthchecks. Fuel-Domain- und Datenverantwortung bleiben bei Fuel. Laufzeit-Aktivierung nicht geprüft.
+
 # Coach: Splash, coach-sw.js und SW-Register aus @vos/mini-app-shell (2026-10-16)
 
 - Splash, Service Worker und SW-Register kommen aus `@vos/mini-app-shell` (SSOT `~/vitalos/packages/mini-app-shell`, hier vendored unter `scripts/mini-app-shell/` — nicht editieren, Aktualisieren/Drift: `node ~/vitalos/packages/mini-app-shell/cli.mjs vendor scripts/mini-app-shell [--check]`; Konfig `mini-app.json`).

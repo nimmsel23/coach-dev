@@ -9,7 +9,7 @@ Coach dispatches to existing domain workers. Domain implementations, databases, 
 | Coach route | Current worker | Forwarded path example |
 | --- | --- | --- |
 | `/api/fitness/*` or `/fitness-api/*` | Fitness preview API `127.0.0.1:8100` | `/api/fitness/fitness/inbox` → `/fitness/inbox` |
-| `/api/fuel/*` or `/fuel-api/*` | Fuel Python service `127.0.0.1:4000` | `/api/fuel/nutrition` → `/nutrition` |
+| `/api/fuel/*` or `/fuel-api/*` | VitalOS unified API `127.0.0.1:8000/api/fuel` | `/api/fuel/nutrition` → `/api/fuel/nutrition` |
 | `/api/relax/*` or `/relax-api/*` | Relax worker `127.0.0.1:9123` | `/api/relax/techniques` → `/techniques` |
 
 The Fitness worker is currently the existing staging instance; Coach does not claim that it is a dedicated production worker. Existing root Fitness APIs (`/fitness`, `/exercise`, `/session`, `/workouts`, `/api/workouts`, etc.) are forwarded unchanged for compatibility. Domain routes are registered first so Fuel/Relax requests never fall into that legacy Fitness dispatcher.
@@ -35,7 +35,7 @@ bin/coach-server logs
 bin/coach-server restart
 ```
 
-The installer links the project-owned units into the user systemd directory and enables `coach-api.service`. It starts the existing Relax Node implementation via `coach-relax.service`. Fitness preview (`8100`) and Fuel (`4000`) are already managed separately and are not restarted by Coach. The inactive old `fitness-api.service` unit is archived locally under `.worktrees/legacy-services`; its unit name becomes an alias for `coach-api.service`, preventing a second server from claiming `9150`. Stopping/restarting Coach also stops/restarts its Relax worker. The unit defaults to loopback and optionally reads `~/.config/coach/backend.env`.
+The installer links the project-owned units into the user systemd directory and enables `coach-api.service`. It starts the existing Relax Node implementation via `coach-relax.service`. Fitness preview (`8100`) and Fuel's unified VitalOS API (`8000`) are separate services and are not restarted by Coach. The inactive old `fitness-api.service` unit is archived locally under `.worktrees/legacy-services`; its unit name becomes an alias for `coach-api.service`, preventing a second server from claiming `9150`. Stopping/restarting Coach also stops/restarts its Relax worker. The unit defaults to loopback and optionally reads `~/.config/coach/backend.env`.
 
 ## Add a domain or change workers
 
