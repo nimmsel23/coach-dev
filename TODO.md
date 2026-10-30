@@ -104,6 +104,12 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 - [x] Übungen bei Klientenzuweisung in Subcollections schreiben; Null-Pausen erhalten.
 - [x] Veröffentlichte Snapshots, Klientengrenze und Fehlerbereinigung testen.
 
+## 2026-10-30 — Vue-Shell über Coach-Hosting
+
+- [x] Vue-Shell aus dem Workbench-Muster als Hosting-Startseite einbinden;
+  React-Coach unter `/coach.html` same-origin weiterverwenden.
+- [ ] Preview und installierte PWA visuell sowie mit Coach-Login prüfen.
+
 ## 2026-10-30 — Plan editor ownership
 
 - [x] Pin Plan as `plan` submodule; source editor and program logic from it.

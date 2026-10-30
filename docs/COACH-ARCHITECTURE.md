@@ -21,7 +21,7 @@ General VitalOS changes start on its `master` branch. Merge them into `coach` de
 
 To update the Shell pin, commit changes on `vitalos/coach`, publish that branch when authorized, then commit the `vitalos` gitlink in Coach. `git submodule update --remote vitalos` follows remote `coach`; normal checkout uses the recorded commit.
 
-Coach's current entrypoint is still the React app (`coach.html` → `src/coach-main.jsx`). The Coach UI consumes the shared editor and plan logic from its pinned `modules/plan` submodule (source: `~/plan-dev`). The shared Firebase contract still connects assigned plans to the client app. The intended Coach-only UI direction is Vue, generated with the workbench at `~/workspace/VitalOS/app`. See [Coach Vue Workbench](COACH-VUE-WORKBENCH.md). The workbench is not currently part of Coach's build or runtime.
+The deployed entrypoint is the Vue shell (`/` → `coach-shell.html` → `src/vue-shell/CoachFrame.vue`), adapted from the Coach wrapper in `~/workspace/VitalOS/app`. It embeds the React Coach app from `/coach.html` on the same origin. Both pages ship in `dist-coach` through one Coach build and Firebase Hosting target; Workbench source itself is not imported by CI or runtime. Local development can open either entry. See [Coach Vue Workbench](COACH-VUE-WORKBENCH.md). The Plan editor remains owned by the pinned `modules/plan` submodule; client delivery uses its established Firebase contract.
 
 Plan ownership and update procedure: [Plan editor integration](COACH-PLAN-WORKFLOW.md).
 

@@ -111,7 +111,12 @@ export default defineConfig(async ({ mode }) => {
       outDir: isCoach ? 'dist-coach' : 'dist',
       target: 'modules',
       rollupOptions: {
-        input: isCoach ? resolve(__dirname, 'coach.html') : undefined,
+        input: isCoach
+          ? {
+              shell: resolve(__dirname, 'coach-shell.html'),
+              coach: resolve(__dirname, 'coach.html'),
+            }
+          : undefined,
         output: {
           manualChunks: {
             react: ['react', 'react-dom'],

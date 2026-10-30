@@ -1475,3 +1475,13 @@ entfernt; isolierte Browser- und authentifizierte Cloud-Abnahmen bleiben offen.
 
 Plan-Eigentümerschaft, Submodulpfad, Verantwortungsmatrix und unabhängige Fitness-/Shell-/Hosting-Übernahmen in den Entwicklerdokumenten ergänzt.
 Nur Dokumentation; keine Quell-/Daten-/Pointer-Änderung und kein Deployment.
+## 2026-10-30 — Vue-Shell für Coach-Hosting
+
+Die Hosting-Startseite wird als Vue-Shell gebaut und bettet die unveränderte
+React-Anwendung same-origin unter `/coach.html` ein. Shell und React-Einstieg
+liegen im selben Build und Firebase-Hosting-Target. Authentifizierung und
+Coach-Fachlogik bleiben in der React-Anwendung. ESLint, Dual-Entry-Vite-Build,
+PWA-Stempelung und Service-Worker-Precache liefen lokal erfolgreich. Für die
+lokale Build-Prüfung kam Vue aus der vorhandenen Workbench-Installation, weil
+der pnpm-Store-Lock in dieser Umgebung schreibgeschützt ist; Cloud-Preview und
+saubere CI-Installation sind noch offen.

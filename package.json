@@ -8,7 +8,7 @@
     "predev": "pnpm run build:kb-data && node scripts/prepare-shared-plan.mjs",
     "dev": "node scripts/dev-runner.mjs",
     "start": "python3 server.py",
-    "ui:dev": "vite --mode coach --open /coach.html",
+    "ui:dev": "vite --mode coach --open /coach-shell.html",
     "test:plan:browser": "bash scripts/tests/run-shared-editor-browser.sh",
     "test:plan:contract": "node scripts/tests/plan-contract.test.mjs",
     "lint": "eslint src/ --ext .js,.jsx",
@@ -64,6 +64,7 @@
     "react-is": "^19.2.7",
     "react-muscle-highlighter": "^1.2.0",
     "recharts": "^3.8.1",
+    "vue": "^3.5.17",
     "zod": "^4.5.1",
     "zustand": "^5.0.14"
   },
