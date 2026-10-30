@@ -109,3 +109,7 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 - [x] Pin Plan as `plan` submodule; source editor and program logic from it.
 - [x] Connect program and individual-client editor routes; remove duplicate logic.
 - [x] Configure Vite/Tailwind/CI and document deliberate pointer updates.
+
+## 2026-10-30 — Plan-/Coach-Dokumentation
+
+- [x] Plan-Eigentümerschaft, Submodulpfad, Verantwortungsmatrix und unabhängige Fitness-/Shell-/Hosting-Übernahmen in den Entwicklerdokumenten ergänzt.

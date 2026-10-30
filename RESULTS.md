@@ -1470,3 +1470,8 @@ entfernt; isolierte Browser- und authentifizierte Cloud-Abnahmen bleiben offen.
   tests, ESLint, build and 390px browser editor→preview→program-save flow.
 - Neither new Plan commits nor this Coach pointer were pushed or deployed.
   Plan commits must be published first before pushing the parent pointer.
+
+## 2026-10-30 — Plan-/Coach-Dokumentation
+
+Plan-Eigentümerschaft, Submodulpfad, Verantwortungsmatrix und unabhängige Fitness-/Shell-/Hosting-Übernahmen in den Entwicklerdokumenten ergänzt.
+Nur Dokumentation; keine Quell-/Daten-/Pointer-Änderung und kein Deployment.

@@ -4,6 +4,7 @@ Coach is the coach-facing product, developed on `coach-dev/dev`. Its client Shel
 
 ```text
 coach-dev/                  Coach product (dev)
+  modules/plan/             Pinned Plan editor and plan logic
   vitalos/                  VitalOS client Shell (coach)
     fitness-app/, plan-app/, ...
 ```
@@ -21,6 +22,8 @@ General VitalOS changes start on its `master` branch. Merge them into `coach` de
 To update the Shell pin, commit changes on `vitalos/coach`, publish that branch when authorized, then commit the `vitalos` gitlink in Coach. `git submodule update --remote vitalos` follows remote `coach`; normal checkout uses the recorded commit.
 
 Coach's current entrypoint is still the React app (`coach.html` → `src/coach-main.jsx`). The Coach UI consumes the shared editor and plan logic from its pinned `modules/plan` submodule (source: `~/plan-dev`). The shared Firebase contract still connects assigned plans to the client app. The intended Coach-only UI direction is Vue, generated with the workbench at `~/workspace/VitalOS/app`. See [Coach Vue Workbench](COACH-VUE-WORKBENCH.md). The workbench is not currently part of Coach's build or runtime.
+
+Plan ownership and update procedure: [Plan editor integration](COACH-PLAN-WORKFLOW.md).
 
 ## Coach releases
 

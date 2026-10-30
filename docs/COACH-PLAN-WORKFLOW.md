@@ -60,3 +60,18 @@ optionaler Test-Override, kein Build-Fallback. Der mobile Browsertest läuft mit
 `aos-kitty-launch 'cd /home/alpha/coach-dev && bash scripts/tests/run-shared-editor-browser.sh'`.
 Er verwendet eine Fixture, keine echten Konten oder Klientendaten.
 Authentifizierte Cloud-Abnahme und Hosting-Deployment bleiben eigene Schritte.
+
+## Zuständigkeit und Abgrenzung
+
+| Änderung | Ort |
+| --- | --- |
+| Editor, Übungsvorgaben, Programm-/Planversionen und Zuweisungslogik | `~/plan-dev` |
+| Klientenwahl, Rollen, Navigation und Coach-Hosting | `~/coach-dev` |
+| Übernahme eines geprüften Plan-Stands | Coach-Gitlink `modules/plan` |
+| Fitness-Integration / VitalOS-Shell / Standalone-Releases | jeweils eigener Übernahmepfad |
+
+Erster gemeinsamer Code-Stand: Plan `4dbe020`, Coach `31dde02`. Die Entwicklerdoku
+in Plan ist `docs/PLAN-COACH-INTEGRATION.md`. Reine Dokumentationsänderungen
+benötigen keinen Pointer-Bump. Dieser Auftrag veröffentlicht keinen der Repos.
+Ein Coach-Pointer-Update aktualisiert weder Fitness noch die VitalOS-Shell oder
+die eigenständige Plan-Website automatisch.
