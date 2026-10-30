@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Users, Star, UserCheck, Dumbbell, Layers, Target, RotateCw, Sparkles, Flame } from 'lucide-react';
+import { Users, Star, UserCheck, Dumbbell, Layers, RotateCw, Sparkles, Flame } from 'lucide-react';
 import { getAllUserProfiles, getUserProfile, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
 import AssignPlan from './AssignPlan';
-import ClientPlan from './ClientPlan';
 import ClientTrainingPlans from './ClientTrainingPlans';
 import ClientHabitCycle from './ClientHabitCycle';
 import ClientInsights from './ClientInsights';
@@ -17,7 +16,6 @@ const STATUS_OPTIONS = [
 
 const DETAIL_TABS = [
   { id: 'trainingplan', label: 'Trainingsplan', icon: Layers },
-  { id: 'templates', label: 'Workout-Vorlagen', icon: Target },
   { id: 'workouts', label: 'Verlauf & Feedback', icon: Dumbbell },
   { id: 'sixpack', label: '6Pack', icon: Flame },
 ];
@@ -204,7 +202,7 @@ export default function ClientsPanel() {
               {detailTab === 'sixpack' && <ClientSixPack key={selectedUid} clientUid={selectedUid} />}
               {detailTab === 'insights' && <ClientInsights clientUid={selectedUid} />}
               {detailTab === 'habits' && <ClientHabitCycle clientUid={selectedUid} />}
-              {detailTab === 'templates' && <ClientPlan key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
+              {detailTab === 'templates' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
               {detailTab === 'trainingplan' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
               {detailTab === 'plan' && <AssignPlan clientUid={selectedUid} clientName={selectedName} />}
             </div>

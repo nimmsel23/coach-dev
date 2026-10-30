@@ -15,6 +15,15 @@
 - [x] Make Coach the parent product; pin VitalOS on branch `coach`, remove the reverse direct submodule and migrate Coach release ownership.
 
 
+# 2026-10-30 — Coach-Trainingsprogramme
+
+- [x] Wiederverwendbare Coach-Programmbibliothek, versionierte Veröffentlichung
+  und explizite Klientenzuweisung mit eingefrorenen Übungssnapshots.
+- [x] Klientenansicht auf Planstatus + Programmwahl konzentriert; Workout-Logs
+  bleiben als separate Historie erhalten.
+- [x] Coach-Lint und Firebase-Mode-Vite-Build verifizieren.
+- [ ] Authentifizierten Cloud-Ablauf mit isoliertem Coach-/Klientenkonto prüfen.
+
 # [NEW] Coach Office 
 Beispielfeature: Trainingsplanbesprechung zwischen Klient und Coach. Social Media Style. Comment-feed per Exercise
 

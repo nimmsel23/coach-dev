@@ -83,25 +83,20 @@ Zurück-Taste und Reload bleiben an derselben Stelle. Die Push-Links der Cloud F
 noch nicht hervorgehoben. Test: `node --test src/views/Coach/coachRoute.test.mjs`.
 
 
-## 2026-10-16: Gemeinsamer Trainingsplan-Workflow mit Plan
+## 2026-10-30: Coach-owned Trainingsprogramme
 
-`ClientsPanel` startet einen ausgewählten Klienten im Trainingsplan-Bereich.
-Drei Hauptbereiche bilden den Weg ab: Trainingsplan, Workout-Vorlagen und
-Verlauf/Feedback. KI-Insights, Habits und alte Rotation bleiben hinter
-„Weitere Bereiche“ sowie über bestehende Deep-Links erreichbar.
+Die Klientenansicht bündelt Planstatus, Programmauswahl und Verlauf. Coach
+erstellt wiederverwendbare Workout-Vorlagen und Programme im eigenen Firebase-
+Datenraum. Ein Programm wird als Version veröffentlicht und erst auf explizite
+Zuweisung in den Datenraum des gewählten Klienten kopiert. Die Version enthält
+Übungssnapshots, damit spätere Änderungen an Coach-Vorlagen bestehende
+Zuweisungen nicht verändern.
 
-`ClientPlan` und `ClientTrainingPlans` sind dünne Aufrufer von
-`ClientTrainingWorkspace`. Dieser hält Klienten-UID, Listenladezustand und
-Vorlageneditor-Route, ignoriert veraltete Antworten nach einem Klientenwechsel
-und übergibt eine feste UID an `createPlanApi`. Editor und `TrainingPlans` werden
-direkt aus Plan über `@plan` eingebunden. `ClientWorkoutResults` zeigt tatsächliche
-abgeschlossene Workouts und deren Event-Log-Sätze. Kein weiterer Trainingslogger.
+Die Zuweisung erstellt Klienten-Routinen plus einen veröffentlichten
+`macrocycles`-Datensatz, den die bestehende Plan-App lesen kann. Trainingslogs
+bleiben unabhängig davon in den normalen Klienten-Workouts. Autor, Editoren und
+Plan-/Routine-CRUD nutzen Coach-UID bzw. die fest ausgewählte Klienten-UID;
+veraltete Antworten nach einem Klientenwechsel werden verworfen.
 
-`@db` bleibt die vollständige Coach-Firebase-Schnittstelle, auch beim Dev-Server.
-Der Makrozyklus-Adapter reexportiert Plan als SSOT. `@plan` wird vom Build über
-`scripts/shared-plan.mjs` aufgelöst. Die CI checkt die geprüfte Plan-Revision in
-`.shared/plan` aus; vor dem Build wird Plan-eigener Bulk-Katalog-Generator
-aufgerufen. Quelle/Bedienung/Tests: `../../../docs/COACH-PLAN-WORKFLOW.md`.
-
-CoachShell verwendet die mit Plan gemeinsame rollenbasierte Zugangsprüfung.
-Firestore Rules und ihre Durchsetzung bleiben im VitalOS-Owner.
+Firestore Rules und ihre Durchsetzung bleiben im VitalOS-Owner. Datenmodell und
+Bedienung: `../../../docs/COACH-PLAN-WORKFLOW.md`.

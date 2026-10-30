@@ -1,76 +1,53 @@
-# Coach → Trainingsplan → Klient
+# Coach → Trainingsprogramm → Klient
 
-Stand: 2026-10-16. Entwicklungsstand, noch kein veröffentlichter Coach-Release.
+Stand: 2026-10-30. Coach-Authoring und Klientenzuweisung liegen in `coach-dev`;
+Hosting-Release bleibt ein eigener, ausdrücklicher Schritt.
 
-## Bedienung
+## Arbeitsablauf
 
-1. **Klienten** öffnen und den gewünschten Klienten wählen.
-2. **Workout-Vorlagen bearbeiten** führt zur Vorbereitung einzelner Einheiten.
-   Namen eingeben, **Erstellen**, Übungen aus Yuhonas auswählen und deren
-   Satzvorgaben, Pausen und Hinweise im Plan-Editor bearbeiten. Das Informationssymbol
-   öffnet Ausführung/Bildpaar und den Link zur separaten Atlas-App.
-3. Nach dem Speichern zurück zur Liste und **Weiter zum Trainingsplan**.
-4. **Neuer Trainingsplan** erstellt einen Entwurf. Über **Workout-Vorlage
-   hinzufügen** Einheiten samt Häufigkeit und Zeitraum aufnehmen.
-5. **Trainingsplan für Klienten bereitstellen** macht den gebündelten Plan im
-   persönlichen Plan-Bereich des Klienten sichtbar. Vorlagen selbst liegen
-   bereits im Klientenpfad und sind für ihn verfügbar.
-6. Der Klient öffnet Plan → Training → Trainingspläne und startet seine Einheit.
-   Er protokolliert tatsächliche Sätze im normalen Workout-Logger.
-7. **Ergebnisse aus Plan** zeigt in Coach die abgeschlossenen Workouts des
-   gewählten Klienten; Aufklappen zeigt dessen tatsächliche Satzwerte.
+1. Unter **Klienten → Trainingspläne** einen Klienten wählen.
+2. **Programm auswählen** öffnet die Coach-eigene Programmbibliothek.
+3. Ein Programm mit Ziel, Dauer und Hinweisen erstellen. Workout-Einheiten
+   werden einmal in der Coach-Bibliothek vorbereitet und können in mehreren
+   Programmen verwendet werden.
+4. Einheiten samt Zielhäufigkeit und Zeitraum bündeln, Entwurf speichern und
+   eine Version veröffentlichen.
+5. Die veröffentlichte Version gezielt dem ausgewählten Klienten zuweisen.
+   Dabei werden Einheiten und Plan als Klienten-Snapshots in dessen bestehenden
+   `fitness/{uid}`-Planbereich kopiert. Neue Versionen der Coach-Vorlage ändern
+   bestehende Klientenzuweisungen nicht.
+6. Der Klient startet die Einheit in der bestehenden Plan-/Training-Oberfläche.
+   Tatsächliche Trainingsdaten bleiben in dessen normalen Workout-Logs; Coach
+   liest diese für Ergebnisse und Verlauf.
 
-Die bisherigen Bereiche KI-Insights, Habits und Rotation bleiben unter
-**Weitere Bereiche** verfügbar. Vorhandene Hash-/Push-Links funktionieren weiter.
+## Datenmodell
 
-## Gemeinsame Quelle und Build
+- Coach-Vorlagen: `fitness/{coachUid}/routines` samt Übungs-Subcollections.
+- Coach-Programme: `fitness/{coachUid}/coachTrainingPrograms/{programId}`.
+- Unveränderliche veröffentlichte Programm-Snapshots:
+  `.../coachTrainingPrograms/{programId}/versions/vN` (inklusive kopierter
+  Übungsdaten, nicht nur veränderlicher Vorlagen-IDs).
+- Zuweisung: neue Klienten-Routinen und veröffentlichter Makrozyklus unter
+  `fitness/{clientUid}/routines` und `fitness/{clientUid}/macrocycles`. Dieses
+  Format wird von der bestehenden Plan-App gelesen.
+- Workout-Historie bleibt in `fitness/{clientUid}/workouts` und wird nicht in
+  den Programm-Snapshot geschrieben.
 
-Vorlageneditor, Übungsauswahl, Katalogadapter, API-Adapter, Trainingsplankomposition
-und Makrozyklus-Vertrag gehören zu **plan-dev**. Coach importiert diese Bausteine
-über `@plan`; kein zweiter Editor und keine zweite Publikationslogik.
+Die Firestore-Regeln bleiben in VitalOS die Source of Truth. Die bestehenden
+Coach-Regeln erlauben Coach-Operationen in `fitness/{uid}`; Coach-Secrets oder
+eine neue Backend-Datenbank werden nicht eingeführt.
 
-`scripts/shared-plan-root.cjs` findet die Quelle für Vite und Tailwind gemeinsam;
-`scripts/shared-plan.mjs` exportiert den Resolver für ESM. Gefunden wird die Quelle als Geschwister `plan-app`, `plan-dev`
-oder als isolierten CI-Checkout `.shared/plan`. Das Vorhandensein des neuen
-Workflow-Moduls wird geprüft. Der Coach-CI-Workflow checkt Plan auf dem geprüften
-Commit `0643b99` aus. Im VitalOS-Workspace pinnt der vorhandene Plan-Gitlink den
-verwendeten Stand. Eine Änderung dieser Quelle benötigt entsprechende Builds
-und Prüfungen der Consumer.
+## Grenze und nächste sinnvolle Ausbaustufen
 
-Vor dem Coach-Build führt `scripts/prepare-shared-plan.mjs` den vorhandenen
-Yuhonas-/Bulk-Generator aus Plan aus. Keine neue Importpipeline und kein
-weiteres verschachteltes Submodule. React/Firebase bleiben über Vite dedupliziert.
-Coach nutzt auch im normalen Dev-Modus seine Firebase-Datenebene; der zuvor
-referenzierte lokale Coach-Barrel existiert in diesem Repo nicht. Nur der
-isolierte Test-Harness ersetzt Auth und Datenzugriff durch Testadapter.
-
-## Rechte und Daten
-
-Die Sichtbarkeit der Coach-Konsole folgt derselben Rollenprüfung wie Plan:
-Custom Claim, eigenes `roles/{uid}`-Dokument oder bestehende Alpha-UID. Eine
-E-Mail-Teilzeichenfolge erteilt keinen Coach-Zugang. Firestore Rules bleiben
-SSOT in VitalOS. Alle Editorzugriffe binden die ausgewählte Klienten-UID.
-Alte Ladeantworten dürfen nach einem Klientenwechsel keine neuen Daten ersetzen.
-
-Plan-Einheiten sind Snapshots ihrer Workout-Vorlage. Vorlagenänderungen ändern
-bereitgestellte Snapshots nicht automatisch. Laufende/abgeschlossene Einheiten
-bleiben ebenfalls eigenständig. Noch keine Versionsverwaltung veröffentlichter
-Planänderungen und keine Mehrgeräte-Konfliktauflösung.
+Der erste Workflow deckt wiederverwendbare Programme, Workout-Vorlagen,
+Veröffentlichung, client-spezifische Zuweisung und unveränderliche Snapshots ab.
+Er bietet noch keine visuelle Kalenderplanung, automatische Plan-Updates,
+Mehrgeräte-Konfliktauflösung oder Ernährung. Der bestehende Workout-Logger und
+die Fitness-Datenhoheit bleiben bestehen. wger ist keine Laufzeitabhängigkeit.
 
 ## Prüfung
 
-- `npm run build:firebase:coach` und vollständiges ESLint.
-- `node --test src/views/Coach/coachRoute.test.mjs` für bestehende Deep-Links.
-- `aos-kitty-launch npm run test:coach:browser` für den isolierten Browserablauf.
-
-Browserprüfung: echter Coach-View, gemeinsamer Yuhonas-Editor, Satzvorgaben und
-Hinweise, Wechsel zum Trainingsplan, Bereitstellen und anschließendes Lesen der
-Testdaten. Die Daten liegen ausschließlich beim Testklienten; der Coach-Pfad
-bleibt leer. Mobile Breite 390 px ohne horizontalen Seitenüberlauf; keine
-unbehandelten Browser-Ausnahmen im geprüften Ablauf. Temporäre Backend-Dateien
-und separates Browserprofil; keine echten Klientendaten oder Cloud-Schreibtests.
-Ports 15903, 15915 und 19222 müssen für den Harness frei sein. Benötigt Node,
-Python/FastAPI/uvicorn, curl und Chromium (`PLAN_TEST_BROWSER`).
-
-Authentifizierter Cloud-Durchlauf steht separat aus. Der neue Coach-Stand wird
-nicht automatisch mit dem bereits angeforderten Plan-/Fitness-Release veröffentlicht.
+Der Coach-Build und ESLint für die geänderten UI-Dateien liefen lokal
+erfolgreich. Das belegt keine echte Cloud-Schreib-/Lesekette mit Coach- und
+Klientenkonten; ein solcher Durchlauf ist separat offen und wird nicht
+stillschweigend gegen echte Klientendaten ausgeführt.

@@ -1,3 +1,19 @@
+# 2026-10-30 — Trainingspläne als Coach-Programme
+
+Die Klientenansicht wurde auf den tatsächlichen Coach-Ablauf umgestellt:
+wiederverwendbare Einheiten/Programme gehören zur Coach-UID; veröffentlichte
+Versionen frieren Übungen als Snapshot ein; explizite Zuweisung kopiert den
+Plan und Klienten-Routinen in den bestehenden Firebase-Planbereich des
+ausgewählten Klienten. Workout-Protokolle bleiben getrennt. Die doppelte
+Workout-Vorlagen-Klientennavigation wurde aus den Haupttabs entfernt.
+
+Änderungen: `ClientTrainingWorkspace.jsx`, `trainingProgramStore.js`,
+`ClientsPanel.jsx`, Coach-Architektur und Workflow-Doku. ESLint für die
+geänderten UI-Dateien sowie der Vite-Coach-Build liefen erfolgreich. pnpm war
+wegen des schreibgeschützten Store-Locks nicht nutzbar; die vorhandenen
+Projekt-Binaries wurden direkt ausgeführt. Kein authentifizierter Cloud-
+Durchlauf und kein Release.
+
 ## 2026-10-24 — Klienten-Integration: klienten-dev geht in coach-dev auf (Branch `integrate-klienten`)
 
 `klienten-dev` (ClientForge/Konsole) und der Coach-Gateway laufen jetzt in einer App; Klienten-Pläne (`plan.json`) werden als Routinen nach Firestore gepusht. Entscheidung: Klientendaten bleiben unter `~/.aos` (per Symlink), ein Coach-Server. `klienten-dev` und `klienten-python` blieben bis auf eine Doku-Ergänzung unangetastet.
