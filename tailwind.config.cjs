@@ -1,4 +1,3 @@
-const { sharedPlanRoot } = require('./scripts/shared-plan-root.cjs')
 const path = require("path")
 const fs = require("fs")
 
@@ -18,7 +17,6 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
-    path.join(sharedPlanRoot(), "src", "**", "*.{js,jsx}"),
     siblingGlob("journal-dev", "journal-app"),
     siblingGlob("habits-dev", "habit-app"),
     path.resolve(__dirname, "..", "learn-dev", "src", "**", "*.{js,jsx}"),

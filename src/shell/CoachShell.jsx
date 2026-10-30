@@ -1,4 +1,3 @@
-import { usePlanCoach } from '@plan/hooks/usePlanCoach.js'
 import { useCallback, useState } from 'react'
 import { Shield } from 'lucide-react'
 import Coach from '../views/Coach/index.jsx'
@@ -8,6 +7,7 @@ import AuthGateModal from '../components/AuthGateModal.jsx'
 import ErrorBoundary from '../components/common/ErrorBoundary.jsx'
 import { useUser } from '../contexts/UserContext.jsx'
 import { useSettingsStore } from '../store/index.js'
+import { useCoachAccess } from '../hooks/useCoachAccess.js'
 import { getAnatomy } from '@db'
 import { getStaticMuscleTaxonomy } from '../lib/kb/muscles.js'
 import CoachSidebar from './CoachSidebar.jsx'
@@ -19,7 +19,7 @@ import { findNavItem } from './NavigationItems.js'
 
 export default function CoachShell() {
   const { user, authLoading, signIn, signInEmail, signUpEmail, signOut } = useUser()
-  const allowed = usePlanCoach(user)
+  const allowed = useCoachAccess(user)
   const { sidebarPinned, setSidebarPinned } = useSettingsStore()
   const pinned = sidebarPinned !== false && sidebarPinned !== 'false'
   const [route, navigateRoute] = useCoachRoute()

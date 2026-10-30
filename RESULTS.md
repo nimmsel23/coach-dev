@@ -1433,3 +1433,11 @@ einer temporären pnpm-workspace.yaml im Runner gesetzt.
 
 ## 2026-10-17 — Offline-Cache bei Updates
 Gemeinsame mini-app-shell erweitert bzw. aktualisiert: versionsunabhängiger öffentlicher API-Cache mit Migration, Asset-Precache standardmäßig aktiv, fehlgeschlagene Installation ersetzt bestehenden Worker nicht. IndexedDB/localStorage bleiben unverändert. Geprüft: 13 Shell-/Update-Tests, Private-Request-Test, Vendor-Parität. Kein Push/Release; kein physischer Geräte-Test.
+## 2026-10-30 — Coach-Trainingsprogramme von plan-dev entkoppelt
+
+Coach besitzt jetzt die benötigten Routine- und Makrozyklus-Firestore-Adapter,
+den Coach-Routine-Editor, die Coach-Zugriffsprüfung und die Ergebnisformatierung.
+CI, Vite und Tailwind beziehen keinen Quellcode mehr aus `plan-dev`. Die
+Klienten-App liest weiterhin den bestehenden Makrozyklus-Datenvertrag. Ein
+veralteter Browser-Harness, der nur den früheren Plan-Codepfad abdeckte, wurde
+entfernt; isolierte Browser- und authentifizierte Cloud-Abnahmen bleiben offen.

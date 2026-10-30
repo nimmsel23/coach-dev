@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, BookOpen, Check, ChevronRight, Plus, RefreshCw } from 'lucide-react';
-import { getClientRoutinesProgress, getUid } from '@db';
-import { createPlanApi } from '@plan/views/Plan/api.js';
-import RoutineBuilder from '@plan/views/Plan/RoutineBuilder.jsx';
+import { createRoutine, getClientRoutinesProgress, getUid } from '@db';
 import ClientWorkoutResults from './ClientWorkoutResults.jsx';
+import CoachRoutineEditor from './CoachRoutineEditor.jsx';
 import {
   assignCoachProgram,
   listClientTrainingPlans,
   listCoachPrograms,
+  listCoachWorkoutTemplates,
   publishCoachProgram,
   saveCoachProgram,
 } from './trainingProgramStore.js';
@@ -16,7 +16,6 @@ const field = 'w-full rounded-xl border border-fit-line bg-fit-bg px-3 py-2.5 te
 
 export default function ClientTrainingWorkspace({ clientUid }) {
   const coachUid = getUid();
-  const api = useMemo(() => createPlanApi(coachUid), [coachUid]);
   const [screen, setScreen] = useState('client');
   const [programs, setPrograms] = useState([]);
   const [plans, setPlans] = useState([]);
@@ -38,20 +37,20 @@ export default function ClientTrainingWorkspace({ clientUid }) {
       const [nextPrograms, nextPlans, nextTemplates, clientProgress] = await Promise.all([
         listCoachPrograms(coachUid),
         listClientTrainingPlans(clientUid),
-        api.get('/routines'),
+        listCoachWorkoutTemplates(coachUid),
         getClientRoutinesProgress(clientUid),
       ]);
       if (selectedClient.current !== clientUid) return;
       setPrograms(nextPrograms);
       setPlans(nextPlans || []);
-      setTemplates(nextTemplates.routines || []);
+      setTemplates(nextTemplates);
       setWorkouts(clientProgress.workouts || []);
     } catch (err) {
       if (selectedClient.current === clientUid) setError(err.message || 'Trainingspläne konnten nicht geladen werden.');
     } finally {
       if (selectedClient.current === clientUid) setBusy(false);
     }
-  }, [api, clientUid, coachUid]);
+  }, [clientUid, coachUid]);
 
   useEffect(() => {
     setScreen('client');
@@ -132,15 +131,15 @@ export default function ClientTrainingWorkspace({ clientUid }) {
 
   async function createTemplate() {
     try {
-      const created = await api.post('/routines', { name: 'Neue Einheit' });
+      const created = await createRoutine({ name: 'Neue Einheit' }, coachUid);
       setTemplateEditor(created.id);
     } catch (err) { setError(err.message); }
   }
 
-  if (templateEditor) return <RoutineBuilder
+  if (templateEditor) return <CoachRoutineEditor
     key={`${coachUid}:${templateEditor}`}
+    coachUid={coachUid}
     routineId={templateEditor}
-    apiClient={api}
     onBack={async () => { setTemplateEditor(null); await load(); }}
   />;
 

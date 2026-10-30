@@ -46,8 +46,8 @@ function routineDoc(uid, id) { return doc(db, "fitness", uid, "routines", id); }
 function exercisesCol(uid, routineId) { return collection(db, "fitness", uid, "routines", routineId, "exercises"); }
 function exerciseDoc(uid, routineId, eid) { return doc(db, "fitness", uid, "routines", routineId, "exercises", eid); }
 
-export async function listRoutines() {
-  const uid = getUid();
+export async function listRoutines(uidOverride) {
+  const uid = uidOverride || getUid();
   const snap = await getDocs(routinesCol(uid));
   const routines = snap.docs
     .map((d) => ({ id: d.id, ...d.data() }))
@@ -55,8 +55,8 @@ export async function listRoutines() {
   return { routines };
 }
 
-export async function createRoutine(body) {
-  const uid = getUid();
+export async function createRoutine(body, uidOverride) {
+  const uid = uidOverride || getUid();
   const ref = doc(routinesCol(uid));
   await setDoc(ref, {
     name: body.name,
@@ -79,14 +79,14 @@ export async function getRoutine(routineId, uidOverride) {
   return { routine: { id: metaSnap.id, ...metaSnap.data(), exercises } };
 }
 
-export async function updateRoutine(routineId, patch) {
-  const uid = getUid();
+export async function updateRoutine(routineId, patch, uidOverride) {
+  const uid = uidOverride || getUid();
   await updateDoc(routineDoc(uid, routineId), patch);
   return { ok: true };
 }
 
-export async function deleteRoutine(routineId) {
-  const uid = getUid();
+export async function deleteRoutine(routineId, uidOverride) {
+  const uid = uidOverride || getUid();
   const exSnap = await getDocs(exercisesCol(uid, routineId));
   const batch = writeBatch(db);
   exSnap.docs.forEach((d) => batch.delete(d.ref));
@@ -95,8 +95,8 @@ export async function deleteRoutine(routineId) {
   return { ok: true };
 }
 
-export async function addRoutineExercise(routineId, body) {
-  const uid = getUid();
+export async function addRoutineExercise(routineId, body, uidOverride) {
+  const uid = uidOverride || getUid();
   const exSnap = await getDocs(exercisesCol(uid, routineId));
   const order = exSnap.size;
   const ref = doc(exercisesCol(uid, routineId));
@@ -108,14 +108,14 @@ export async function addRoutineExercise(routineId, body) {
   return { id: ref.id };
 }
 
-export async function updateRoutineExercise(routineId, eid, patch) {
-  const uid = getUid();
+export async function updateRoutineExercise(routineId, eid, patch, uidOverride) {
+  const uid = uidOverride || getUid();
   await updateDoc(exerciseDoc(uid, routineId, eid), patch);
   return { ok: true };
 }
 
-export async function deleteRoutineExercise(routineId, eid) {
-  const uid = getUid();
+export async function deleteRoutineExercise(routineId, eid, uidOverride) {
+  const uid = uidOverride || getUid();
   const exSnap = await getDocs(exercisesCol(uid, routineId));
   const batch = writeBatch(db);
   batch.delete(exerciseDoc(uid, routineId, eid));
@@ -124,8 +124,8 @@ export async function deleteRoutineExercise(routineId, eid) {
   return { ok: true };
 }
 
-export async function reorderRoutineExercises(routineId, order) {
-  const uid = getUid();
+export async function reorderRoutineExercises(routineId, order, uidOverride) {
+  const uid = uidOverride || getUid();
   const batch = writeBatch(db);
   for (const { id, order: pos } of order || []) {
     batch.update(exerciseDoc(uid, routineId, id), { order: pos });

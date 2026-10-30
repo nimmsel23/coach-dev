@@ -1,4 +1,3 @@
-import { sharedPlanRoot } from './scripts/shared-plan.mjs'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
@@ -45,7 +44,6 @@ export default defineConfig(async ({ mode }) => {
       alias: {
         ...crossAppAliases,
 
-        '@plan':               resolve(sharedPlanRoot(), 'src'),
         '@src':                resolve(__dirname, './src'),
         '@db':                 resolve(__dirname, './src/lib/db/index.firestore.app.js'),
         '@fitness-db':         resolve(__dirname, './src/lib/db'),

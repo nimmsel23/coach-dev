@@ -33,6 +33,11 @@ Hosting-Release bleibt ein eigener, ausdrücklicher Schritt.
 - Workout-Historie bleibt in `fitness/{clientUid}/workouts` und wird nicht in
   den Programm-Snapshot geschrieben.
 
+Coach enthält seine eigenen Firestore-Adapter für Routinen und Makrozyklen,
+den Coach-Routine-Editor und die Rollenprüfung. Beim Schreiben des Klientenplans
+formt Coach den bestehenden Firestore-Datenvertrag direkt; Build und Laufzeit
+importieren keinen Code aus `plan-dev`.
+
 Die Firestore-Regeln bleiben in VitalOS die Source of Truth. Die bestehenden
 Coach-Regeln erlauben Coach-Operationen in `fitness/{uid}`; Coach-Secrets oder
 eine neue Backend-Datenbank werden nicht eingeführt.
@@ -47,7 +52,7 @@ die Fitness-Datenhoheit bleiben bestehen. wger ist keine Laufzeitabhängigkeit.
 
 ## Prüfung
 
-Der Coach-Build und ESLint für die geänderten UI-Dateien liefen lokal
-erfolgreich. Das belegt keine echte Cloud-Schreib-/Lesekette mit Coach- und
-Klientenkonten; ein solcher Durchlauf ist separat offen und wird nicht
-stillschweigend gegen echte Klientendaten ausgeführt.
+Der lokale Coach-Build und ESLint liefen nach der Entkopplung erneut. Eine
+isolierte Browser-Abnahme für den neuen Ablauf und eine echte Cloud-Schreib-/
+Lesekette mit Coach- und Klientenkonten sind offen. Es wurden keine echten
+Klientendaten verwendet.

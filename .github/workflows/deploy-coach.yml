@@ -46,14 +46,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Shared workout editor and plan composer are owned by Plan.
-      - name: Checkout shared Plan workflow
-        uses: actions/checkout@v4
-        with:
-          repository: nimmsel23/plan-dev
-          ref: 0643b99b58ed7de0b1600c27d841e74589ef60ea
-          path: .shared/plan
-
       - uses: pnpm/action-setup@v4
         with:
           version: 11.3.0

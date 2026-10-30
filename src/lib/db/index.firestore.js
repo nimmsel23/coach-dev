@@ -9,6 +9,17 @@ export * from "./firestore/inbox.js";
 export * from "./firestore/coach.js";
 export * from "./firestore/assignedPlans.js";
 export * from "./firestore/macrocycles.js";
+export {
+  listRoutines,
+  createRoutine,
+  getRoutine,
+  updateRoutine as updateWorkoutRoutine,
+  deleteRoutine as deleteWorkoutRoutine,
+  addRoutineExercise,
+  updateRoutineExercise,
+  deleteRoutineExercise,
+  reorderRoutineExercises,
+} from "./firestore/routines.js";
 export * from "./firestore/analysis.js";
 export * from "./firestore/user.js";
 export * from "./firestore/slotTemplates.js";

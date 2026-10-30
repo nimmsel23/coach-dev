@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { groupWorkoutSets, formatSet, workoutTotals, formatDuration } from '@plan/views/Plan/lib/history.js';
+import { groupWorkoutSets, formatSet, workoutTotals, formatDuration } from './workoutResultsFormat.js';
 
 export default function ClientWorkoutResults({ workouts }) {
   const [open, setOpen] = useState(null);

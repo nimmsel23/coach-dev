@@ -23,6 +23,8 @@
   bleiben als separate Historie erhalten.
 - [x] Coach-Lint und Firebase-Mode-Vite-Build verifizieren.
 - [ ] Authentifizierten Cloud-Ablauf mit isoliertem Coach-/Klientenkonto prüfen.
+- [ ] Isolierte Browser-Abnahme für Coach-Editor, Veröffentlichung und Zuweisung
+  aufsetzen; der frühere Harness prüfte die inzwischen entfernte Plan-Codekopplung.
 
 # [NEW] Coach Office 
 Beispielfeature: Trainingsplanbesprechung zwischen Klient und Coach. Social Media Style. Comment-feed per Exercise

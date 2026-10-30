@@ -1,11 +1,15 @@
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase.js';
-import { createPlanApi } from '@plan/views/Plan/api.js';
 import {
+  createRoutine,
   createMacrocycle,
+  deleteWorkoutRoutine,
   deleteMacrocycle,
+  getRoutine,
   listMacrocycles,
+  listRoutines,
   publishMacrocycle,
+  updateWorkoutRoutine,
 } from '@db';
 
 const programs = (uid) => collection(db, 'fitness', uid, 'coachTrainingPrograms');
@@ -41,9 +45,8 @@ export async function publishCoachProgram(uid, program) {
   if (!snap.exists()) throw new Error('Trainingsprogramm wurde nicht gefunden.');
   const current = snap.data();
   if (!current.name || !current.workouts?.length) throw new Error('Füge zuerst mindestens eine Einheit hinzu.');
-  const api = createPlanApi(uid);
   const workouts = await Promise.all(current.workouts.map(async (item) => {
-    const result = await api.get(`/routines/${encodeURIComponent(item.templateId)}`);
+    const result = await getRoutine(item.templateId, uid);
     if (!result.routine?.exercises?.length) throw new Error(`Die Einheit „${item.label}“ enthält keine Übungen.`);
     return { ...item, exercises: result.routine.exercises };
   }));
@@ -72,20 +75,19 @@ export async function assignCoachProgram({ coachUid, clientUid, program }) {
   const versionSnap = await getDoc(doc(versions(coachUid, program.id), `v${program.headVersion}`));
   if (!versionSnap.exists()) throw new Error('Die veröffentlichte Programmversion fehlt.');
   const snapshot = versionSnap.data().snapshot;
-  const clientApi = createPlanApi(clientUid);
   const prepared = [];
   const createdRoutineIds = [];
   let assignedId = null;
   try {
     for (const item of snapshot.workouts || []) {
       if (!item.exercises?.length) throw new Error(`Die Einheit „${item.label}“ enthält keine Übungen.`);
-      const created = await clientApi.post('/routines', {
+      const created = await createRoutine({
         name: `${snapshot.name} · ${item.label}`,
         goal: snapshot.goal,
         category: null,
-      });
+      }, clientUid);
       createdRoutineIds.push(created.id);
-      await clientApi.patch(`/routines/${encodeURIComponent(created.id)}`, { exercises: item.exercises });
+      await updateWorkoutRoutine(created.id, { exercises: item.exercises }, clientUid);
       prepared.push({
         label: item.label || item.name || 'Trainingseinheit',
         targetCount: Number(item.targetCount) || 1,
@@ -115,7 +117,7 @@ export async function assignCoachProgram({ coachUid, clientUid, program }) {
   } catch (error) {
     await Promise.allSettled([
       ...(assignedId ? [deleteMacrocycle(clientUid, assignedId)] : []),
-      ...createdRoutineIds.map((id) => clientApi.delete(`/routines/${encodeURIComponent(id)}`)),
+      ...createdRoutineIds.map((id) => deleteWorkoutRoutine(id, clientUid)),
     ]);
     throw error;
   }
@@ -123,4 +125,8 @@ export async function assignCoachProgram({ coachUid, clientUid, program }) {
 
 export async function listClientTrainingPlans(clientUid) {
   return listMacrocycles(clientUid);
+}
+
+export async function listCoachWorkoutTemplates(coachUid) {
+  return (await listRoutines(coachUid)).routines || [];
 }
