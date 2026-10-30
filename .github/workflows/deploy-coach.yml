@@ -15,6 +15,7 @@ on:
     paths:
       - '.gitmodules'
       - 'vitalos'
+      - 'modules/plan'
       - 'src/**'
       - 'coach.html'
       - 'public-coach/**'
@@ -45,6 +46,9 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+
+      - name: Initialize pinned Plan source
+        run: git submodule update --init modules/plan
 
       - uses: pnpm/action-setup@v4
         with:

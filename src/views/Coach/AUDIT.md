@@ -151,3 +151,11 @@ Vorlagenänderungen. Die Snapshot-Grenzen des Plan-Owners gelten auch in Coach.
 Tailwind scannt dieselbe aufgelöste Plan-Quelle wie Vite. Der zentrale Resolver
 ist für ESM und CommonJS verfügbar. Damit bleiben nur in Plan verwendete
 Editor-/Dialogklassen (z. B. 88dvh-Dialoghöhe) im Coach-Release erhalten.
+
+## 2026-10-30 — Pinned Plan authoring
+
+Replaced duplicate Coach editors/plan stores with adapters to the `plan`
+submodule. Client context, permissions and routing remain Coach-owned. Existing
+programs hydrate their template references; new edits capture exercise snapshots.
+A pointer bump is required to adopt future Plan changes. Physical-device and
+authenticated Cloud acceptance remain separate from isolated checks.

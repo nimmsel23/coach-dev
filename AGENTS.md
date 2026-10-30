@@ -7,3 +7,12 @@ Use pnpm. Commit scoped completed changes; do not push unless explicitly request
 Coach owns Hosting preview/production via `.github/workflows/deploy-coach.yml` and `bin/coach-release`. Rules are owned by VitalOS. Do not deploy Firestore rules from Coach.
 
 Coach owns the shared backend on port 9150 (`server.py`, `coach-api.service`). Domain APIs dispatch through `coach-backends.json`; preserve existing domain data ownership and legacy Fitness routes. Never configure a domain upstream to loop back to Coach. Local `klienten-dev` and `workspace` symlinks are context only, not public static roots.
+
+## Plan source ownership (2026-10-30)
+
+Plan owns training-plan/program authoring, workout-template editors and plan
+versioning/assignment code. Coach consumes the pinned `modules/plan` Git submodule; do not
+maintain a second editor or use an unpinned sibling checkout. Change Plan at
+`~/plan-dev`, commit, verify, then deliberately advance Coach's pointer. Publish
+Plan before pushing a Coach commit referencing it. Coach retains access control,
+client selection, navigation and Hosting ownership.

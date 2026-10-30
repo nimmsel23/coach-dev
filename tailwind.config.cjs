@@ -1,3 +1,4 @@
+const { sharedPlanRoot } = require('./scripts/shared-plan-root.cjs')
 const path = require("path")
 const fs = require("fs")
 
@@ -15,6 +16,8 @@ function siblingGlob(devName, appName) {
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    "./coach.html",
+    path.join(sharedPlanRoot(), "src", "**", "*.{js,jsx}"),
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
     siblingGlob("journal-dev", "journal-app"),

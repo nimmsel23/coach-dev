@@ -11,7 +11,7 @@ es beschreibt keinen bereits vollzogenen Framework-Wechsel.
 - `~/workspace/VitalOS/app` ist eine separate Vue-3-/Vite-Anwendung mit
   `@vitejs/plugin-vue`. Sie ist eine Workbench für VitalOS-Oberflächen und
   derzeit weder eine Laufzeit- noch Build-Abhängigkeit von Coach.
-- Coach besitzt seine coach-spezifische Trainingsprogramm- und Zuweisungslogik.
+- Plan besitzt den Trainingsplan-/Programmeditor und die Zuweisungslogik; Coach bindet ihn als gepinntes `modules/plan`-Submodul ein.
   Die Klienten-App bleibt eine eigene Oberfläche und liest zugewiesene Pläne
   über den bestehenden Firebase-Datenvertrag.
 
@@ -27,8 +27,9 @@ davon getrennt.
 Coach bleibt fachlicher Besitzer von Coach-Funktionen, Zugriff und
 Klientenzuweisungen. Die Vue-Oberfläche soll dafür vorhandene Coach-Funktionen
 und den bestehenden Firebase-Vertrag verwenden. Der Firebase-Vertrag ist die
-Integration zur Klienten-App; `plan-dev`-Quellcode ist keine UI- oder
-Build-Abhängigkeit.
+Integration zur Klienten-App. Der Editor und die Planlogik werden beim Build aus
+dem gepinnten Plan-Submodul bezogen. Eine künftige Vue-Oberfläche muss diesen
+Plan-eigenen Editor über eine definierte Einbettung nutzen; sie baut keinen zweiten Editor.
 
 ## Umsetzungsgrenze
 
@@ -40,4 +41,5 @@ abgelöst, wenn Coach-Login und Rollenprüfung, Klientenwahl, Programm-/Workout-
 Authoring, Zuweisung und Trainingsverlauf in der Vue-Oberfläche abgedeckt sind.
 
 Nicht Teil dieser Zielrichtung sind ein Vue-Port der Klienten-App, eine
-Laufzeitkopplung an `~/workspace` oder ein Import von Plan-Views in Coach.
+Laufzeitkopplung an `~/workspace` oder ein zweiter Coach-eigener Planeditor. Die bestehende React-Einbettung des
+Plan-Editors bleibt bis zu einer verifizierten Vue-Integration bestehen.

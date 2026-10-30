@@ -1454,3 +1454,19 @@ entfernt; isolierte Browser- und authentifizierte Cloud-Abnahmen bleiben offen.
   tatsächlichen Plan-Reader und Satzlogger sowie die Gegenrichtung geprüft.
 - Lokale Tests mit `/home/alpha/plan-dev`: 2/2 erfolgreich, keine Cloud-Daten.
 - Authentifizierte Firebase-Abnahme und Coach-Deployment bleiben separat.
+
+## 2026-10-30 — Coach consumes the pinned Plan editor
+
+- Added Plan as the `modules/plan` submodule, pinned to `4dbe020`. Its canonical
+  source remains `/home/alpha/plan-dev`; Coach no longer maintains duplicate
+  program stores, routine editors or macrocycle adapters.
+- Connected ProgramEditor for reusable programs and TrainingPlans for direct
+  client authoring. Editor surfaces are lazy-loaded; client context and access
+  remain Coach-owned. Existing program and client Firestore paths are preserved.
+- Configured source resolution, Tailwind scanning, catalog generation and CI
+  submodule initialization. No sibling-source fallback or automatic pointer update.
+- Source is under `modules/plan` to avoid the existing `/plan` dev API proxy.
+- Validated isolated Coach/Plan data contract and Plan program migration/store
+  tests, ESLint, build and 390px browser editor→preview→program-save flow.
+- Neither new Plan commits nor this Coach pointer were pushed or deployed.
+  Plan commits must be published first before pushing the parent pointer.

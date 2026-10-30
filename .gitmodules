@@ -6,3 +6,7 @@
 	path = klienten-dev
 	url = /home/alpha/klienten-dev
 	branch = main
+[submodule "plan"]
+	path = modules/plan
+	url = https://github.com/nimmsel23/plan-dev.git
+	branch = dev

@@ -103,3 +103,9 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 - [x] Tatsächlichen Coach → Plan-Reader/Logger-Vertrag isoliert prüfen.
 - [x] Übungen bei Klientenzuweisung in Subcollections schreiben; Null-Pausen erhalten.
 - [x] Veröffentlichte Snapshots, Klientengrenze und Fehlerbereinigung testen.
+
+## 2026-10-30 — Plan editor ownership
+
+- [x] Pin Plan as `plan` submodule; source editor and program logic from it.
+- [x] Connect program and individual-client editor routes; remove duplicate logic.
+- [x] Configure Vite/Tailwind/CI and document deliberate pointer updates.

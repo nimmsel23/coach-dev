@@ -8,8 +8,9 @@ const macrosUrl = new URL('../../src/lib/db/firestore/macrocycles.js', import.me
 const routinesUrl = new URL('../../src/lib/db/firestore/routines.js', import.meta.url).href;
 const barrel = `export * from ${JSON.stringify(macrosUrl)}; export {createRoutine, getRoutine, listRoutines, updateRoutine as updateWorkoutRoutine, deleteRoutine as deleteWorkoutRoutine} from ${JSON.stringify(routinesUrl)};`;
 registerHooks({ resolve(specifier, context, next) {
+  if (specifier.startsWith('@plan/')) return { url: pathToFileURL(resolve('modules/plan/src', specifier.slice(6))).href, shortCircuit: true };
   if (specifier === 'firebase/firestore' || specifier.endsWith('/offline.js')) return { url: fakeUrl, shortCircuit: true };
-  if (specifier.endsWith('/firebase.js')) return { url: 'data:text/javascript,export const db = {};', shortCircuit: true };
+  if (specifier === '@cloud/firebase.js' || specifier.endsWith('/firebase.js')) return { url: 'data:text/javascript,export const db = {};', shortCircuit: true };
   if (specifier === '@db') return { url: `data:text/javascript,${encodeURIComponent(barrel)}`, shortCircuit: true };
   if (specifier === './core.js') return { url: 'data:text/javascript,export const getUid = () => "coach";', shortCircuit: true };
   return next(specifier, context);
@@ -42,7 +43,7 @@ test('Coach assignment creates client exercises as documents and keeps published
 });
 
 // Optional real-consumer check: no production dependency or Plan checkout required for Coach's own build.
-const planRoot = process.env.PLAN_SOURCE;
+const planRoot = process.env.PLAN_SOURCE || resolve('modules/plan');
 test('Actual Plan reader/logger consumes Coach publications; Coach reads Plan composer output', { skip: !planRoot }, async () => {
   const planMacros = await import(pathToFileURL(resolve(planRoot, 'src/lib/db/firestore/macrocycles.js')));
   const logger = await import(pathToFileURL(resolve(planRoot, 'src/lib/db/firestore/workouts.js')));

@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, BookOpen, Check, ChevronRight, Plus, RefreshCw } from 'lucide-react';
 import { createRoutine, getClientRoutinesProgress, getUid } from '@db';
+const ProgramEditor = lazy(() => import('@plan/views/Plan/ProgramEditor.jsx'));
+const TrainingPlans = lazy(() => import('@plan/views/Plan/TrainingPlans.jsx'));
 import ClientWorkoutResults from './ClientWorkoutResults.jsx';
-import CoachRoutineEditor from './CoachRoutineEditor.jsx';
+const CoachRoutineEditor = lazy(() => import('./CoachRoutineEditor.jsx'));
 import {
   assignCoachProgram,
   listClientTrainingPlans,
@@ -21,9 +23,9 @@ export default function ClientTrainingWorkspace({ clientUid }) {
   const [plans, setPlans] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [workouts, setWorkouts] = useState([]);
+  const [composing, setComposing] = useState(false);
   const [program, setProgram] = useState(null);
   const [templateEditor, setTemplateEditor] = useState(null);
-  const [templateChoice, setTemplateChoice] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState('');
@@ -54,6 +56,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
 
   useEffect(() => {
     setScreen('client');
+    setComposing(false);
     setProgram(null);
     setTemplateEditor(null);
     setPlans([]);
@@ -70,6 +73,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
       await load();
       setProgram(saved);
       setScreen('editor');
+      setComposing(true);
     } catch (err) { setError(err.message); }
   }
 
@@ -112,23 +116,6 @@ export default function ClientTrainingWorkspace({ clientUid }) {
     finally { setBusy(false); }
   }
 
-  async function addWorkout() {
-    const template = templates.find((item) => item.id === templateChoice);
-    if (!template || program.workouts.some((item) => item.templateId === template.id)) return;
-    setProgram({
-      ...program,
-      workouts: [...program.workouts, {
-        templateId: template.id,
-        label: template.name,
-        targetCount: 2,
-        targetPeriodDays: 7,
-        weekdays: [],
-        restHoursAfter: 0,
-      }],
-    });
-    setTemplateChoice('');
-  }
-
   async function createTemplate() {
     try {
       const created = await createRoutine({ name: 'Neue Einheit' }, coachUid);
@@ -136,12 +123,15 @@ export default function ClientTrainingWorkspace({ clientUid }) {
     } catch (err) { setError(err.message); }
   }
 
-  if (templateEditor) return <CoachRoutineEditor
+  if (composing && program) return <Suspense fallback={<p role="status">Editor lädt…</p>}><ProgramEditor key={`${coachUid}:${program.id}`} coachUid={coachUid} program={program} templates={templates} onClose={() => setComposing(false)} onSave={(value) => saveCoachProgram(coachUid, value)} onSaved={async (saved) => { setProgram(saved); setComposing(false); setNotice('Entwurf gespeichert. Prüfe ihn und veröffentliche eine Version.'); await load(); }} /></Suspense>;
+  if (screen === 'individual') return <Suspense fallback={<p role="status">Pläne laden…</p>}><div className="space-y-4"><button className="min-h-[44px] text-sm text-fit-muted" onClick={() => { setScreen('client'); load(); }}>← Zur Klientenübersicht</button><h2 className="text-xl font-semibold">Individuelle Klientenpläne</h2><TrainingPlans clientUid={clientUid} templates={[]} workouts={workouts} onChanged={load} /></div></Suspense>;
+
+  if (templateEditor) return <Suspense fallback={<p role="status">Vorlage lädt…</p>}><CoachRoutineEditor
     key={`${coachUid}:${templateEditor}`}
     coachUid={coachUid}
     routineId={templateEditor}
     onBack={async () => { setTemplateEditor(null); await load(); }}
-  />;
+  /></Suspense>;
 
   return (
     <div className="space-y-4">
@@ -162,6 +152,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
       {notice && <div role="status" className="rounded-xl border border-green-500/30 p-3 text-sm text-green-500">{notice}</div>}
 
       {screen === 'client' && <>
+        <button disabled={busy} onClick={() => setScreen('individual')} className="min-h-[64px] w-full rounded-2xl border border-fit-accent/30 bg-fit-accent/5 p-4 text-left disabled:opacity-50"><span className="block font-semibold text-fit-accent">Individuellen Plan gestalten</span><span className="mt-1 block text-xs text-fit-muted">Trainingstage und Übungen direkt für diesen Klienten bearbeiten</span></button>
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-fit-ink">Aktuelle Pläne</h3>
@@ -197,22 +188,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
 
       {screen === 'editor' && program && <section className="space-y-4">
         <button onClick={() => { setScreen('library'); setNotice(''); }} className="flex items-center gap-2 text-sm text-fit-muted"><ArrowLeft size={15} /> Zur Programmbibliothek</button>
-        <div className="rounded-2xl border border-fit-line bg-fit-card p-4">
-          <label className="mb-3 block text-xs font-semibold text-fit-muted">PROGRAMMNAME<input className={`${field} mt-1`} value={program.name} onChange={(e) => setProgram({ ...program, name: e.target.value })} /></label>
-          <label className="mb-3 block text-xs font-semibold text-fit-muted">ZIEL<input className={`${field} mt-1`} placeholder="z. B. Kraftaufbau, Wiedereinstieg" value={program.goal || ''} onChange={(e) => setProgram({ ...program, goal: e.target.value })} /></label>
-          <label className="mb-3 block text-xs font-semibold text-fit-muted">DAUER IN WOCHEN<input type="number" min="1" max="104" className={`${field} mt-1`} value={program.durationWeeks || 1} onChange={(e) => setProgram({ ...program, durationWeeks: Number(e.target.value) })} /></label>
-          <label className="block text-xs font-semibold text-fit-muted">HINWEISE FÜR DEN KLIENTEN<textarea className={`${field} mt-1 min-h-20`} value={program.description || ''} onChange={(e) => setProgram({ ...program, description: e.target.value })} /></label>
-        </div>
-
-        <div className="rounded-2xl border border-fit-line bg-fit-card p-4">
-          <div className="mb-3 flex items-center justify-between"><h3 className="font-semibold text-fit-ink">Wochenplan</h3><span className="text-xs text-fit-muted">Einstellungen je Einheit</span></div>
-          <div className="mb-3 flex gap-2"><select aria-label="Workout auswählen" className={`${field} min-w-0`} value={templateChoice} onChange={(e) => setTemplateChoice(e.target.value)}><option value="">Einheit auswählen…</option>{templates.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select><button disabled={!templateChoice} onClick={addWorkout} className="rounded-xl bg-fit-accent px-3 text-fit-bg disabled:opacity-40"><Plus size={17} /></button></div>
-          {!program.workouts?.length && <p className="text-sm text-fit-muted">Füge eine vorbereitete Einheit hinzu. Jede Einheit wird bei der Zuweisung als eigener Klienten-Snapshot kopiert.</p>}
-          <div className="space-y-3">{program.workouts?.map((item, index) => <article key={`${item.templateId}:${index}`} className="rounded-xl bg-fit-bg p-3">
-            <div className="mb-2 flex items-center justify-between gap-2"><strong className="truncate text-sm text-fit-ink">{item.label}</strong><button aria-label={`${item.label} entfernen`} onClick={() => setProgram({ ...program, workouts: program.workouts.filter((_, i) => i !== index) })} className="text-xs text-fit-red">Entfernen</button></div>
-            <div className="grid grid-cols-2 gap-2"><label className="text-xs text-fit-muted">Zielhäufigkeit<input type="number" min="1" className={`${field} mt-1`} value={item.targetCount} onChange={(e) => setProgram({ ...program, workouts: program.workouts.map((w, i) => i === index ? { ...w, targetCount: Number(e.target.value) } : w) })} /></label><label className="text-xs text-fit-muted">pro Zeitraum (Tage)<input type="number" min="1" className={`${field} mt-1`} value={item.targetPeriodDays} onChange={(e) => setProgram({ ...program, workouts: program.workouts.map((w, i) => i === index ? { ...w, targetPeriodDays: Number(e.target.value) } : w) })} /></label></div>
-          </article>)}</div>
-        </div>
+        <div className="rounded-2xl border border-fit-line bg-fit-card p-4"><h3 className="text-lg font-semibold">{program.name}</h3><p className="mt-2 text-sm text-fit-muted">{program.durationWeeks} Wochen · {program.workouts?.length || 0} Trainingstage</p>{program.description && <p className="mt-2 whitespace-pre-wrap text-sm">{program.description}</p>}<button disabled={busy} onClick={() => setComposing(true)} className="mt-4 min-h-[48px] w-full rounded-xl bg-fit-accent p-3 font-semibold text-fit-bg">Trainingstage und Übungen bearbeiten</button></div>
 
         <div className="flex flex-wrap gap-2">
           <button disabled={busy} onClick={saveProgram} className="rounded-xl border border-fit-line px-4 py-2.5 text-sm font-semibold text-fit-ink">Entwurf speichern</button>

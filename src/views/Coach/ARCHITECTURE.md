@@ -110,3 +110,13 @@ veraltete Antworten nach einem Klientenwechsel werden verworfen.
 
 Firestore Rules und ihre Durchsetzung bleiben im VitalOS-Owner. Datenmodell und
 Bedienung: `../../../docs/COACH-PLAN-WORKFLOW.md`.
+
+## Plan source ownership — 2026-10-30
+
+`modules/plan/` is the pinned source owner for program authoring and assignment.
+`ClientTrainingWorkspace` owns client context and navigation, opens Plan's
+`ProgramEditor` for program composition and `TrainingPlans` for individual plans.
+`CoachRoutineEditor` delegates to Plan's RoutineBuilder. `trainingProgramStore`
+and the Firestore routine/macrocycle adapters are thin re-exports. Heavy editor
+surfaces load lazily. Vite and Tailwind resolve only the pinned submodule; CI
+initializes it explicitly. No runtime sibling checkout is used.
