@@ -1441,3 +1441,16 @@ CI, Vite und Tailwind beziehen keinen Quellcode mehr aus `plan-dev`. Die
 Klienten-App liest weiterhin den bestehenden Makrozyklus-Datenvertrag. Ein
 veralteter Browser-Harness, der nur den früheren Plan-Codepfad abdeckte, wurde
 entfernt; isolierte Browser- und authentifizierte Cloud-Abnahmen bleiben offen.
+
+## 2026-10-30 — Coach/Plan-Datenvertrag verifiziert
+
+- Coach bleibt seit 1754e89 unabhängig von Plan-Imports; keine Rückkopplung in
+  Build oder Laufzeit eingeführt. Der neue mobile Editor ist noch keine Coach-UI.
+- Zwei durch Vertragstests belegte Fehler behoben: `updateWorkoutRoutine` legt
+  übernommene Übungen atomar in der vom Plan-Reader erwarteten Subcollection ab;
+  explizite 0-Sekunden-Pausen werden nicht auf 90 Sekunden gesetzt.
+- `test:plan:contract` prüft Veröffentlichung/Zuweisung, Client-Scope, privaten
+  Arbeitsstand, Übungsdokumente und Fehlerbereinigung. Optional mit `PLAN_SOURCE`
+  tatsächlichen Plan-Reader und Satzlogger sowie die Gegenrichtung geprüft.
+- Lokale Tests mit `/home/alpha/plan-dev`: 2/2 erfolgreich, keine Cloud-Daten.
+- Authentifizierte Firebase-Abnahme und Coach-Deployment bleiben separat.

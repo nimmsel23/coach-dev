@@ -56,3 +56,26 @@ Der lokale Coach-Build und ESLint liefen nach der Entkopplung erneut. Eine
 isolierte Browser-Abnahme für den neuen Ablauf und eine echte Cloud-Schreib-/
 Lesekette mit Coach- und Klientenkonten sind offen. Es wurden keine echten
 Klientendaten verwendet.
+
+## Kompatibilität mit dem mobilen Planeditor (2026-10-30)
+
+Coach bleibt unabhängig vom Plan-Quellcode. Der neue Editor in `plan-dev`
+schreibt denselben Vertrag: `fitness/{clientUid}/macrocycles`, Arbeitsstand unter
+`routines`, freigegebener Snapshot unter `published`, Version unter `versions/vN`.
+Coach kann solche Pläne lesen. Der Plan-Reader und Logger können umgekehrt die
+von Coach zugewiesenen Pläne mit Satzvorgaben, Hinweisen und Quellverweisen starten.
+Das bindet den neuen Editor noch nicht als Oberfläche in Coach ein; dort bleibt
+vorerst der eigene Programm-/Workout-Editor bestehen.
+
+`pnpm run test:plan:contract` prüft Coach-Veröffentlichung, Klientenzuweisung,
+Übungs-Subcollections, Null-Pausen, Snapshot-Trennung und Fehlerbereinigung mit
+isoliertem Firestore-Testdouble. Mit `PLAN_SOURCE=/home/alpha/plan-dev` prüft
+ derselbe Befehl zusätzlich die tatsächlichen Plan-Reader-/Logger-Module sowie
+Coach-Lesen eines durch Plan erstellten Plans. Diese optionale Testverbindung
+ist keine Build- oder Laufzeitabhängigkeit. Es werden keine echten Daten gelesen
+oder geschrieben. Ohne `PLAN_SOURCE` wird nur der externe Verbrauchertest übersprungen.
+
+Bei der Zuweisung muss `updateWorkoutRoutine({ exercises })` die Übungen als
+Dokumente in der Untercollection schreiben. Ein Array am Routine-Metadokument
+reicht nicht: der Plan-Reader lädt die Übungs-Subcollection. Der Coach-Adapter
+ersetzt diese nun atomar und setzt `exerciseCount`; explizite Null-Pausen bleiben erhalten.

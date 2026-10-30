@@ -97,3 +97,9 @@ Coach-Zugang anhand der verifizierten Firebase-UID ergänzen und zentrale Rolle 
 Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 
 - [x] Offline-Cache über App-Updates erhalten: gemeinsame SW-Strategie, API-Migration, vollständiges Asset-Precache und sichere Installation.
+
+## 2026-10-30 — Plan-Kompatibilität nach Coach-Entkopplung
+
+- [x] Tatsächlichen Coach → Plan-Reader/Logger-Vertrag isoliert prüfen.
+- [x] Übungen bei Klientenzuweisung in Subcollections schreiben; Null-Pausen erhalten.
+- [x] Veröffentlichte Snapshots, Klientengrenze und Fehlerbereinigung testen.

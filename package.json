@@ -9,6 +9,7 @@
     "dev": "node scripts/dev-runner.mjs",
     "start": "python3 server.py",
     "ui:dev": "vite --mode coach --open /coach.html",
+    "test:plan:contract": "node scripts/tests/plan-contract.test.mjs",
     "lint": "eslint src/ --ext .js,.jsx",
     "prebuild": "pnpm run build:kb-data",
     "build": "pnpm run lint && pnpm run build:firebase:coach",

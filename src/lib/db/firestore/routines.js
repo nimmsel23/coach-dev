@@ -27,7 +27,7 @@ function normalizeRoutineExercise(exercise = {}, order = 0) {
     templateSets: Array.isArray(exercise.templateSets) ? exercise.templateSets : [],
     target_sets: Number.isFinite(exercise.target_sets) ? exercise.target_sets : 3,
     target_reps: exercise.target_reps ?? "8-12",
-    rest_seconds: Number(exercise.rest_seconds) || 90,
+    rest_seconds: exercise.rest_seconds == null ? 90 : Math.max(0, Number(exercise.rest_seconds) || 0),
     weight_type: exercise.weight_type || "kg",
     effort: exercise.effort || "normal",
     rir: exercise.rir ?? null,
@@ -81,7 +81,19 @@ export async function getRoutine(routineId, uidOverride) {
 
 export async function updateRoutine(routineId, patch, uidOverride) {
   const uid = uidOverride || getUid();
-  await updateDoc(routineDoc(uid, routineId), patch);
+  const { exercises, ...meta } = patch;
+  if (Array.isArray(exercises)) {
+    const current = await getDocs(exercisesCol(uid, routineId));
+    if (current.size + exercises.length + 1 > 500) throw new Error('Zu viele Übungen für eine atomare Vorlagenaktualisierung.');
+    const batch = writeBatch(db);
+    current.docs.forEach((entry) => batch.delete(entry.ref));
+    exercises.forEach((exercise, order) => {
+      const ref = doc(exercisesCol(uid, routineId));
+      batch.set(ref, normalizeRoutineExercise({ ...exercise, id: ref.id }, order));
+    });
+    batch.update(routineDoc(uid, routineId), { ...meta, exerciseCount: exercises.length });
+    await batch.commit();
+  } else await updateDoc(routineDoc(uid, routineId), meta);
   return { ok: true };
 }
 
