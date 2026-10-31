@@ -1526,3 +1526,9 @@ Visuell am tatsächlichen importierten Plan geprüft: drei Tagesblätter, zwölf
 Übungszeilen und drei offene Vorgaben; Desktop- und Handyansicht ohne Überlauf.
 PDF mit drei A4-Seiten und druckoptimierten, weißen Rändern. Prüfung rein lesend;
 Plandaten und Freigabe-/Versandstatus bleiben unverändert.
+
+## 2026-10-31 — Plan documents and catalog worker reconnect
+
+Published client plans now open the pinned PlanDocument with Plan-owned clientView snapshot selection, matching local table/mobile/PDF output. Client switching guards asynchronous reads. WorkerChip distinguishes online from failures and shows the last error. Fitness source fixes manual-source re-enrichment and restores Coach upstream 8100 using the same catalog as coach-sync. Architecture and audit notes in docs/COACH-ARCHITECTURE.md.
+
+Validation: 2 shared Plan/Coach assignment/consumer contract tests, targeted ESLint and full Coach Hosting build passed. Backend health confirms all three upstreams ready. No push or Hosting deployment; authenticated hosted navigation remains unverified.

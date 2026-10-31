@@ -44,7 +44,7 @@ function workerStatus(data, now = Date.now()) {
   return {
     state: ageMs > WORKER_STALE_MS ? "offline" : "online",
     lastSeen, ageMs,
-    queued: data.queued || 0, stale: data.stale || 0, processing: data.processing || 0,
+    queued: data.queued || 0, stale: data.stale || 0, processing: data.processing || 0, errors: data.errors_since_start || 0, lastError: data.last_error || null,
   };
 }
 

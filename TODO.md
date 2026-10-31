@@ -123,3 +123,10 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 - [x] 2026-10-31: Bestehenden Coach-Server, Klientenregister und Planeditor als lokalen Arbeitsplatz mit Speichern, Versionen, Export und explizitem Versand verbinden.
 
 - [x] 2026-10-31: Richtige Planansicht statt Textblock anbieten, mit A4-Druck und mobiler Übungsdarstellung.
+
+## 2026-10-31 — Shared plans and catalog reconnect
+
+- [x] Open published client plans with the pinned Plan document/PDF renderer.
+- [x] Show worker action failures separately from heartbeat status.
+- [x] Verify program assignment contract and Coach build; repair Fitness upstream.
+- [ ] Publish frontend changes through the explicit release workflow when requested.

@@ -24,15 +24,16 @@ export default function WorkerChip() {
 
   if (!status || status.state === 'unknown') return null
   const online = status.state === 'online'
+  const hasErrors = online && status.errors > 0
   const waiting = (status.queued || 0) + (status.stale || 0)
   const label = online
-    ? (waiting ? `Coach-Rechner online · ${waiting} wartend` : 'Coach-Rechner online')
+    ? `Coach-Worker online${waiting ? ` · ${waiting} wartend` : ''}${hasErrors ? ` · ${status.errors} fehlgeschlagen` : ''}`
     : `Coach-Rechner offline seit ${ago(status.ageMs)}`
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${online ? 'text-fit-green' : 'text-fit-red'}`}
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${hasErrors ? 'text-amber-400' : online ? 'text-fit-green' : 'text-fit-red'}`}
       style={{ border: '1px solid color-mix(in srgb, currentColor 30%, transparent)' }}
-      title={status.lastSeen ? `Letztes Lebenszeichen: ${status.lastSeen.toLocaleString('de-AT')}` : ''}
+      title={status.lastSeen ? `Letztes Lebenszeichen: ${status.lastSeen.toLocaleString('de-AT')}${status.lastError?.message ? ` · Letzter Fehler: ${status.lastError.message}` : ''}` : ''}
     >
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
       <span className="truncate">{label}</span>

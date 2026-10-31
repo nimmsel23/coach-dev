@@ -120,3 +120,10 @@ Bedienung: `../../../docs/COACH-PLAN-WORKFLOW.md`.
 and the Firestore routine/macrocycle adapters are thin re-exports. Heavy editor
 surfaces load lazily. Vite and Tailwind resolve only the pinned submodule; CI
 initializes it explicitly. No runtime sibling checkout is used.
+
+## 2026-10-31 — Shared plan documents
+
+Published client cards open Plan's lazy `PlanDocument` renderer. Plan's
+`clientView` selects the released snapshot, so later draft edits do not change
+this view. This is the same table/mobile/print renderer used by local planning;
+Coach owns the back navigation and rejects reads for a previously selected client.

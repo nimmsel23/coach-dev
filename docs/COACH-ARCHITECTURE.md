@@ -93,3 +93,22 @@ Tests: `tests/test_plan_push.py` (Umwandlung, Idempotenz, Schutz fremder Routine
 2. UI: ClientForge (Plan/Habits/Journal) und Konsole (Klientenliste/CRM) in die Coach-SPA übernehmen.
 3. `CLAUDE.md` von coach-dev neu schreiben (beschreibt noch fitness-dev); Filter für `bin` in der Klientenliste.
 4. Einseitig: Änderungen eines Plans in der App fließen nicht nach `plan.json` zurück.
+
+## Plan documents and catalog failures (2026-10-31)
+
+Coach imports `PlanDocument` and `clientView` from pinned `modules/plan` for
+"Plan ansehen" on published client plans. The same document renderer supplies
+local authoring previews and A4 printing. Published snapshots remain distinct
+from coach drafts; assigning or delivering a plan stays explicit.
+
+Catalog actions in Hosting remain Firestore commands consumed by `coach-sync`
+in Fitness. Heartbeat means worker liveness, not successful commands or HTTP
+upstream readiness. The status chip now shows failures since worker start and
+the last failure message. The Fitness domain API is separately served on 8100
+by `fitness-preview.service`, upstream of Coach 9150. Both worker and API use
+`~/dev/fitness-dev` and its catalog. No second catalog or enrichment implementation.
+
+Audit: a manual Yoga Headstand draft had no external catalog match, triggering
+`None.get` during pipeline restart. Fixed at Fitness source, with regression
+coverage. The stopped Fitness upstream was restored using the repo-owned unit;
+its existing user-data sync ownership is retained. See Fitness `docs/COACH_APP.md`.

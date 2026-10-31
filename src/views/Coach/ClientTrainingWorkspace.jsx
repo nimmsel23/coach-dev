@@ -1,9 +1,11 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, BookOpen, Check, ChevronRight, Plus, RefreshCw } from 'lucide-react';
-import { createRoutine, getClientRoutinesProgress, getUid } from '@db';
+import { createRoutine, getClientRoutinesProgress, getUid, getMacrocycle } from '@db';
+const PlanDocument = lazy(() => import('@plan/views/Plan/PlanDocument.jsx'));
 const ProgramEditor = lazy(() => import('@plan/views/Plan/ProgramEditor.jsx'));
 const TrainingPlans = lazy(() => import('@plan/views/Plan/TrainingPlans.jsx'));
 import ClientWorkoutResults from './ClientWorkoutResults.jsx';
+import { clientView } from '@plan/views/Plan/lib/planVersions.js';
 const CoachRoutineEditor = lazy(() => import('./CoachRoutineEditor.jsx'));
 import {
   assignCoachProgram,
@@ -23,6 +25,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
   const [plans, setPlans] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [workouts, setWorkouts] = useState([]);
+  const [planView, setPlanView] = useState(null);
   const [composing, setComposing] = useState(false);
   const [program, setProgram] = useState(null);
   const [templateEditor, setTemplateEditor] = useState(null);
@@ -56,6 +59,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
 
   useEffect(() => {
     setScreen('client');
+    setPlanView(null);
     setComposing(false);
     setProgram(null);
     setTemplateEditor(null);
@@ -123,6 +127,20 @@ export default function ClientTrainingWorkspace({ clientUid }) {
     } catch (err) { setError(err.message); }
   }
 
+  async function openClientPlan(id) {
+    const selected = clientUid;
+    setBusy(true); setError('');
+    try {
+      const data = await getMacrocycle(selected, id);
+      if (selectedClient.current !== selected) return;
+      const value = data?.macrocycle;
+      if (!value) throw new Error('Plan konnte nicht geladen werden.');
+      setPlanView(clientView(value));
+    } catch (err) { if (selectedClient.current === selected) setError(err.message); }
+    finally { if (selectedClient.current === selected) setBusy(false); }
+  }
+  if (planView) return <div className="space-y-4"><button className="min-h-[44px] rounded-xl border border-fit-line px-4 text-sm" onClick={() => setPlanView(null)}>← Zur Klientenübersicht</button><Suspense fallback={<p role="status">Plan lädt…</p>}><PlanDocument plan={planView} /></Suspense></div>;
+
   if (composing && program) return <Suspense fallback={<p role="status">Editor lädt…</p>}><ProgramEditor key={`${coachUid}:${program.id}`} coachUid={coachUid} program={program} templates={templates} onClose={() => setComposing(false)} onSave={(value) => saveCoachProgram(coachUid, value)} onSaved={async (saved) => { setProgram(saved); setComposing(false); setNotice('Entwurf gespeichert. Prüfe ihn und veröffentliche eine Version.'); await load(); }} /></Suspense>;
   if (screen === 'individual') return <Suspense fallback={<p role="status">Pläne laden…</p>}><div className="space-y-4"><button className="min-h-[44px] text-sm text-fit-muted" onClick={() => { setScreen('client'); load(); }}>← Zur Klientenübersicht</button><h2 className="text-xl font-semibold">Individuelle Klientenpläne</h2><TrainingPlans clientUid={clientUid} templates={[]} workouts={workouts} onChanged={load} /></div></Suspense>;
 
@@ -166,7 +184,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
               <article key={item.id} className="rounded-xl border border-fit-line bg-fit-card p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div><h4 className="font-semibold text-fit-ink">{item.name}</h4><p className="mt-1 text-xs text-fit-muted">{item.description || `${item.totalWeeks || '–'} Wochen`} · Version {item.headVersion || 1}</p></div>
-                  <Check size={17} className="text-green-500" aria-label="Veröffentlicht" />
+                  <button disabled={busy} onClick={() => openClientPlan(item.id)} className="min-h-[44px] rounded-xl border border-fit-line px-3 text-sm text-fit-accent">Plan ansehen</button>
                 </div>
               </article>
             ))}

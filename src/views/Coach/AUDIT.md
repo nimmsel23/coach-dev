@@ -159,3 +159,12 @@ submodule. Client context, permissions and routing remain Coach-owned. Existing
 programs hydrate their template references; new edits capture exercise snapshots.
 A pointer bump is required to adopt future Plan changes. Physical-device and
 authenticated Cloud acceptance remain separate from isolated checks.
+
+## 2026-10-31 — Documents and worker reconnect
+
+Published plan documents consume the pinned Plan renderer and snapshot helper;
+there is no copied Coach layout. Two shared consumer/assignment contract tests,
+targeted ESLint and the Coach build pass. Hosted authenticated navigation still
+requires release and account/device acceptance. Catalog heartbeat now exposes
+worker failures separately; Fitness's missing-source crash and stopped upstream
+8100 were repaired and actual re-enrichment completed through the worker.
