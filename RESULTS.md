@@ -1401,3 +1401,7 @@ Gemeinsame mini-app-shell erweitert bzw. aktualisiert: versionsunabhängiger öf
 ## 2026-10-31 — Dependabot
 
 Enabled Dependabot alerts and security updates. Configured weekly GitHub Actions and npm/pnpm updates; version updates target `dev`. Minor/patch updates are grouped; vendored mini-app-shell copies stay maintained at their source. Validated YAML, repository manifest paths and update targets.
+
+### 2026-10-31 — Coach Python dependencies
+
+Added weekly pip updates for `requirements-server.txt`. The initial automatic Python dependency-graph scan failed on an existing nested VitalOS submodule reference (`not our ref cae8431df1c2388d6ed943ae88aef930d9c6e5fc`); no source or submodule pins changed in this setup.

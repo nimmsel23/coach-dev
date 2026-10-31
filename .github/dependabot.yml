@@ -16,21 +16,28 @@ updates:
       patterns:
       - '*'
 - package-ecosystem: npm
-  schedule:
+  schedule: &id001
     interval: weekly
     day: monday
     time: 07:00
     timezone: Europe/Vienna
   open-pull-requests-limit: 5
-  commit-message:
+  commit-message: &id002
     prefix: deps
   directories:
   - /
   - /functions
-  cooldown:
+  cooldown: &id003
     default-days: 7
-  groups:
+  groups: &id004
     minor-and-patch:
       update-types:
       - minor
       - patch
+- package-ecosystem: pip
+  schedule: *id001
+  open-pull-requests-limit: 5
+  commit-message: *id002
+  cooldown: *id003
+  groups: *id004
+  directory: /
