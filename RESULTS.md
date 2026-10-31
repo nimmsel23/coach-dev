@@ -1538,3 +1538,5 @@ Validation: 2 shared Plan/Coach assignment/consumer contract tests, targeted ESL
 Gemeinsamer Quelleneditor für Inbox, Inspector und freigegebene Katalogeinträge: Quellen inspizieren, Rohquelle per Name/ID suchen, ersetzen oder bewusst trennen. Freigegebene Import-IDs bleiben in der Suche; Namensaliase blenden keine andere Variante mehr aus. Bestehende KI-Inhalte nach Quellenkorrektur zur Nachprüfung markiert. Backend respektiert source_selection beim Enrichment/Approval.
 
 Prüfung: 3 Suchpooltests, 28 Backendtests, mobiler Browsertest mit isolierten Daten (Trennen → Suche → richtige Variante), ESLint. Kein Push/Hosting-Release.
+
+Nachprüfung Quellenkorrektur: falscher Bench-Dips-Link lokal und in Firestore getrennt, vorhandene Inhalte zur Prüfung markiert. Echte Worker-Suche erfolgreich mit vier separaten Dips-Varianten. Vierter JS-Test verhindert Rückkehr entfernter Quellen-Badges über alte Import-IDs.

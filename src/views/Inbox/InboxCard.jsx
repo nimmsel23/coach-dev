@@ -1,19 +1,9 @@
+import { sourceIds } from '../../lib/db/shared/catalogSources.js';
 import SourceEditor from './SourceEditor.jsx';
 import { CheckCircle2, Trash2, Info, AlertTriangle, Sparkles, User, RefreshCw, MessageSquare, Brain } from 'lucide-react';
 
-function asList(value) {
-  if (Array.isArray(value)) return value.filter(Boolean).map(String);
-  if (value === null || value === undefined || value === '') return [];
-  return [String(value)];
-}
-
 function sourceRefs(data) {
-  const origin = data?.origin || {};
-  const external = data?.external_ids || {};
-  return {
-    wger: asList(origin?.wger?.wger_id || external?.wger || data?.wger_id),
-    yuhonas: asList(origin?.yuhonas?.yuhonas_id || external?.yuhonas || data?.yuhonas_id),
-  };
+  return { wger: sourceIds(data, 'wger'), yuhonas: sourceIds(data, 'yuhonas') };
 }
 
 function buildInspectPayload(ex, data) {

@@ -178,3 +178,8 @@ survives enrichment and approval. Three search-pool tests cover imported IDs,
 variant visibility and stale links; a mobile browser fixture verified unlink,
 raw-source search and choosing another variant. Backend source-selection,
 existing inbox/approval/enrichment tests: 28 passed. No cloud frontend release.
+
+Follow-up: source badges now use the same explicit source selection as search
+and editing. A legacy import-shaped exercise ID cannot recreate a removed
+source badge. Four search/reference regression tests pass. Live worker search
+returns Bench Dips, Chest Version, Triceps Version and Ring Dips separately.

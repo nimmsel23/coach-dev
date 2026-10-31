@@ -1,3 +1,4 @@
+import { sourceIds } from '../lib/db/shared/catalogSources.js'
 import SourceEditor from '../views/Inbox/SourceEditor.jsx'
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -284,23 +285,8 @@ function cleanText(value) {
   return String(value || '').trim()
 }
 
-function asList(value) {
-  if (Array.isArray(value)) return value.filter(Boolean).map(String)
-  if (value === null || value === undefined || value === '') return []
-  return [String(value)]
-}
-
 function sourceRefs(exercise) {
-  const snapshot = exercise?.source_snapshot || {}
-  const origin = exercise?.origin || {}
-  const external = exercise?.external_ids || {}
-  const exerciseId = String(exercise?.exercise_id || exercise?.id || '').trim()
-  const directWger = exerciseId.startsWith('wger_') ? exerciseId.slice(5) : null
-  const directYuhonas = exerciseId.startsWith('yuhonas_') ? exerciseId.slice(8) : null
-  return {
-    wger: asList(origin?.wger?.wger_id || snapshot?.wger?.wger_id || external?.wger || exercise?.wger_id || directWger),
-    yuhonas: asList(origin?.yuhonas?.yuhonas_id || snapshot?.yuhonas?.yuhonas_id || external?.yuhonas || exercise?.yuhonas_id || directYuhonas),
-  }
+  return { wger: sourceIds(exercise, 'wger', true), yuhonas: sourceIds(exercise, 'yuhonas', true) }
 }
 
 function hasMeaningfulLesson(lessonDraft) {

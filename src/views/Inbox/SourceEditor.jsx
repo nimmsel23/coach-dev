@@ -1,9 +1,7 @@
+import { sourceIds as ids } from '../../lib/db/shared/catalogSources.js';
 import { useState } from 'react';
 import { editExerciseSources } from '@db';
 
-function ids(ex, source) {
-  return ex?.external_ids?.[source] || ex?.origin?.source_refs?.[source] || (ex?.[`${source}_id`] ? [ex[`${source}_id`]] : []);
-}
 
 export default function SourceEditor({ id, exercise, target = 'inbox', candidates, onSaved }) {
   const [open, setOpen] = useState(false);

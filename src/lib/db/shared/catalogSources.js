@@ -28,3 +28,14 @@ export function isSupersededSource(ex, refs) {
   if (ex.merged_into || ex.superseded_by) return true;
   return ['wger', 'yuhonas'].some((source) => ex[`${source}_id`] && refs[source].has(String(ex[`${source}_id`])));
 }
+
+export function sourceIds(exercise, source, inferFromId = false) {
+  const choice = exercise?.source_selection;
+  if (choice && source in choice) return choice[source] == null ? [] : [String(choice[source])];
+  const value = exercise?.external_ids?.[source] || exercise?.origin?.source_refs?.[source]
+    || exercise?.origin?.[source]?.[`${source}_id`] || exercise?.source_snapshot?.[source]?.[`${source}_id`]
+    || exercise?.[`${source}_id`];
+  if (value != null) return (Array.isArray(value) ? value : [value]).filter((v) => v != null && v !== '').map(String);
+  const id = String(exercise?.exercise_id || exercise?.id || '');
+  return inferFromId && id.startsWith(`${source}_`) ? [id.slice(source.length + 1)] : [];
+}
