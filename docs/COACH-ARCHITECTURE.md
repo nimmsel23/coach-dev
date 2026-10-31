@@ -120,3 +120,12 @@ approved catalog. Search uses the local raw sources through the worker, not the
 curated pool which can hide imported alternatives. Explicit assignments replace
 old IDs; removed links remain disconnected until manual selection. Correcting
 sources does not silently regenerate or reapprove existing AI descriptions.
+
+## Python tool entrypoint (2026-10-31)
+
+`bin/coach` / `coach_cli.py` own the CLI namespace for Coach tools currently
+implemented in Fitness Python. Commands dispatch lazily into the sibling source
+checkout using its installed uv environment. Logging, client console/drafts,
+workout entry, catalog/inbox, data/worker sync, runtime data, notifications/push,
+mail/activity and service control remain domain-owned implementations.
+Old executable names work as aliases and standalone commands. See COACH-CLI.md.

@@ -137,3 +137,8 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 - [x] Freigegebene Einträge korrigieren und erneutes automatisches Verknüpfen verhindern.
 - [x] Sichtbarkeit freigegebener Import-IDs und Varianten in der Suche korrigieren.
 - [ ] Gehosteten Coach nach explizitem Release mit angemeldetem Konto abnehmen.
+
+## 2026-10-31 — Coach Python dispatcher
+
+- [x] Zentralen coach-Einstieg für fitness-log clients und weitere Coach-Python-Werkzeuge erstellen.
+- [x] Bestehende Implementierungen/Argumente kompatibel durchreichen; Hilfe und Fehler prüfen.

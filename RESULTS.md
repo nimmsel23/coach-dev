@@ -1540,3 +1540,11 @@ Gemeinsamer Quelleneditor für Inbox, Inspector und freigegebene Katalogeinträg
 Prüfung: 3 Suchpooltests, 28 Backendtests, mobiler Browsertest mit isolierten Daten (Trennen → Suche → richtige Variante), ESLint. Kein Push/Hosting-Release.
 
 Nachprüfung Quellenkorrektur: falscher Bench-Dips-Link lokal und in Firestore getrennt, vorhandene Inhalte zur Prüfung markiert. Echte Worker-Suche erfolgreich mit vier separaten Dips-Varianten. Vierter JS-Test verhindert Rückkehr entfernter Quellen-Badges über alte Import-IDs.
+
+## 2026-10-31 — Coach Python dispatcher
+
+Projekt-eigener bin/coach mit Python-Dispatcher für Klienten-Logs, Console/Drafts, Workout-Erfassung, Katalog/Inbox, TUIs, Coach-Worker, Daten-/Firestore-Sync, Runtime-Daten, Benachrichtigungen/Push, Mail/Aktivitäten und vorhandene Server-/Release-Befehle. Alte fitness-* Namen als Unterbefehle kompatibel. Nutzt den bestehenden Fitness-Source und dessen uv-Umgebung, ohne neue Wrapper in globalen bin-Verzeichnissen.
+
+Sechs Dispatcher-Tests bestanden (u.a. echte Argument-/Exit-Code-/Arbeitsverzeichnis-Prüfung). Dokumentation: docs/COACH-CLI.md. Keine Dienste gestartet und keine Nachrichten gesendet.
+
+Abnahme: alle 18 Python-Werkzeuggruppen mit --help erfolgreich. Besonderheiten des alten TUI-/Firestore-Einstiegs über eigene Hilfe abgefangen. Echter Aufruf coach clients matthias --days 7 aus /tmp über vorhandene Shell-PATH-Konfiguration erfolgreich; keine Symlinks oder globalen Wrapper erstellt.
