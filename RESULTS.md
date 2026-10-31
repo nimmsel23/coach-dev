@@ -1504,3 +1504,8 @@ vorgaben → lokales Speichern → Reload → lokale Freigabe → Versionsverlau
 ausdrücklich bestätigter simulierter Versand. Keine Firebase-Browseraufrufe.
 Plan-Quellstand `33bcdef` enthält zusätzliche isolierte Auslieferungsprüfungen
 und bewahrt beim ClientForge-Import Sekunden-, Minuten- und Null-Pausen.
+
+Liveprüfung nach Neu-Laden des bestehenden `coach-api.service`: Health OK,
+`/coach/local.html` HTTP 200 mit lokalem Entry-Bundle, fünf bestehende Klienten
+über die lokale API verfügbar. Keine echten Pläne angelegt oder versendet.
+Keine neuen Listener/Services und kein Cloud-Deployment.
