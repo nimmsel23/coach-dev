@@ -168,3 +168,13 @@ targeted ESLint and the Coach build pass. Hosted authenticated navigation still
 requires release and account/device acceptance. Catalog heartbeat now exposes
 worker failures separately; Fitness's missing-source crash and stopped upstream
 8100 were repaired and actual re-enrichment completed through the worker.
+
+## 2026-10-31 — Incorrect merges and missing manual alternative
+
+Dips and Bench Dips were mixed in an approved record. Inference used subset
+similarity and existing linking accumulated IDs. Source correction now works in
+inbox cards, the inspector and approved catalog entries. Deliberate rejection
+survives enrichment and approval. Three search-pool tests cover imported IDs,
+variant visibility and stale links; a mobile browser fixture verified unlink,
+raw-source search and choosing another variant. Backend source-selection,
+existing inbox/approval/enrichment tests: 28 passed. No cloud frontend release.

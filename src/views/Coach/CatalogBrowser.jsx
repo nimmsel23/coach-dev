@@ -1,3 +1,4 @@
+import SourceEditor from '../Inbox/SourceEditor.jsx';
 import { useState, useEffect } from 'react';
 import { Dumbbell, Search, Loader2, Sparkles, Brain, Save, ExternalLink, Activity, ChevronLeft } from 'lucide-react';
 import { searchExercises, getAnatomy, saveExercise } from '@db';
@@ -135,6 +136,7 @@ export default function CatalogBrowser({ onInspectExercise }) {
             <button onClick={() => setSelectedExercise(null)} className="vos-press -mb-3 inline-flex items-center gap-1 text-[13px] font-medium text-fit-accent md:hidden">
               <ChevronLeft size={16} /> Übungen
             </button>
+            {(selectedExercise.approved_at || selectedExercise.review_state?.status === 'approved' || ['approved', 'expert'].includes(selectedExercise.source)) && <SourceEditor key={selectedExercise.exercise_id || selectedExercise.id} id={selectedExercise.exercise_id || selectedExercise.id} exercise={selectedExercise} target="approved" onSaved={(value) => { setSelectedExercise(value); setResults((items) => items.map((item) => (item.exercise_id || item.id) === (value.exercise_id || value.id) ? value : item)); }} />}
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-fit-line/30 pb-4">
               <div>

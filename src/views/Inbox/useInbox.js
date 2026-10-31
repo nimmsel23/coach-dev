@@ -111,5 +111,5 @@ export function useInbox({ global = false } = {}) {
     }
   }
 
-  return { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich, linkSource };
+  return { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich, linkSource, reload: load };
 }

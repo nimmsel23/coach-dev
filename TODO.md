@@ -130,3 +130,10 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 - [x] Show worker action failures separately from heartbeat status.
 - [x] Verify program assignment contract and Coach build; repair Fitness upstream.
 - [ ] Publish frontend changes through the explicit release workflow when requested.
+
+## 2026-10-31 — Quellen korrigierbar machen
+
+- [x] Falschen Vorschlag ablehnen und alternative Rohquelle suchen/auswählen.
+- [x] Freigegebene Einträge korrigieren und erneutes automatisches Verknüpfen verhindern.
+- [x] Sichtbarkeit freigegebener Import-IDs und Varianten in der Suche korrigieren.
+- [ ] Gehosteten Coach nach explizitem Release mit angemeldetem Konto abnehmen.

@@ -112,3 +112,11 @@ Audit: a manual Yoga Headstand draft had no external catalog match, triggering
 `None.get` during pipeline restart. Fixed at Fitness source, with regression
 coverage. The stopped Fitness upstream was restored using the repo-owned unit;
 its existing user-data sync ownership is retained. See Fitness `docs/COACH_APP.md`.
+
+## Source correction (2026-10-31)
+
+SourceEditor is the shared source-assignment surface in inbox, inspector and
+approved catalog. Search uses the local raw sources through the worker, not the
+curated pool which can hide imported alternatives. Explicit assignments replace
+old IDs; removed links remain disconnected until manual selection. Correcting
+sources does not silently regenerate or reapprove existing AI descriptions.

@@ -8,7 +8,7 @@ import ClientsPanel from './ClientsPanel';
 // Inhalt der Coach-Konsole. Navigation (Sidebar/Tab-Bar) und Titel liegen in
 // der Shell (src/shell/CoachShell.jsx); `sub` kommt aus der Hash-Route.
 export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCount }) {
-  const { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich, linkSource } = useInbox({ global: true });
+  const { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich, reload } = useInbox({ global: true });
 
   useEffect(() => {
     onInboxCount?.(exercises.length);
@@ -39,7 +39,7 @@ export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCou
                 onApprove={approve}
                 onDelete={remove}
                 onReenrich={reenrich}
-                onLinkSource={linkSource}
+                onSourcesChanged={reload}
                 onInspect={onInspectExercise}
                 mergeCandidate={mergeCandidates[ex.exercises?.[0]?.exercise_id || ex.enriched?.exercise_id || ex.exercise_id]}
                 showUserId

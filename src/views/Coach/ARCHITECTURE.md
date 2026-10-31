@@ -127,3 +127,12 @@ Published client cards open Plan's lazy `PlanDocument` renderer. Plan's
 `clientView` selects the released snapshot, so later draft edits do not change
 this view. This is the same table/mobile/print renderer used by local planning;
 Coach owns the back navigation and rejects reads for a previously selected client.
+
+## 2026-10-31 — Source corrections
+
+CatalogBrowser and the exercise inspector reuse Inbox SourceEditor for approved
+single-exercise records. Inbox cards use the same component. Sources can be
+searched by name/ID, replaced or disconnected; raw alternatives remain searchable
+regardless of curated search suppression. Approved edits retain exercise IDs.
+Search keeps approved records that share an import ID, deduplicates by ID with
+curated precedence, and hides raw records only by explicit confirmed references.

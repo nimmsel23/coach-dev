@@ -1532,3 +1532,9 @@ Plandaten und Freigabe-/Versandstatus bleiben unverändert.
 Published client plans now open the pinned PlanDocument with Plan-owned clientView snapshot selection, matching local table/mobile/PDF output. Client switching guards asynchronous reads. WorkerChip distinguishes online from failures and shows the last error. Fitness source fixes manual-source re-enrichment and restores Coach upstream 8100 using the same catalog as coach-sync. Architecture and audit notes in docs/COACH-ARCHITECTURE.md.
 
 Validation: 2 shared Plan/Coach assignment/consumer contract tests, targeted ESLint and full Coach Hosting build passed. Backend health confirms all three upstreams ready. No push or Hosting deployment; authenticated hosted navigation remains unverified.
+
+## 2026-10-31 — Falsche Quellen und freie Alternativsuche
+
+Gemeinsamer Quelleneditor für Inbox, Inspector und freigegebene Katalogeinträge: Quellen inspizieren, Rohquelle per Name/ID suchen, ersetzen oder bewusst trennen. Freigegebene Import-IDs bleiben in der Suche; Namensaliase blenden keine andere Variante mehr aus. Bestehende KI-Inhalte nach Quellenkorrektur zur Nachprüfung markiert. Backend respektiert source_selection beim Enrichment/Approval.
+
+Prüfung: 3 Suchpooltests, 28 Backendtests, mobiler Browsertest mit isolierten Daten (Trennen → Suche → richtige Variante), ESLint. Kein Push/Hosting-Release.

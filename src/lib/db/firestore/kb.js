@@ -1,3 +1,4 @@
+import { isCuratedExercise as _isExpert, mergeExercisePool, supersededSourceRefs as _buildSupersededExternalRefs, isSupersededSource as _isSupersededExternalExercise } from '../shared/catalogSources.js';
 /**
  * firestore/kb.js — Exercise Knowledge Base CRUD for Firestore.
  * Favourites are localStorage-backed and mode-agnostic (→ shared/favourites.js).
@@ -46,7 +47,7 @@ async function _getCuratedExercises() {
   const snap = await getDocs(collection(db, "fitness", "kb", "exercises"));
   return snap.docs
     .map((d) => ({ id: d.id, ...d.data() }))
-    .filter((ex) => !_BULK_IDS.has(ex.exercise_id || ex.id));
+    .filter((ex) => _isExpert(ex) || !_BULK_IDS.has(ex.exercise_id || ex.id));
 }
 
 export async function saveExercise(exerciseId, data) {
@@ -63,6 +64,7 @@ export async function saveExercise(exerciseId, data) {
 // Client-side fuzzy search — Firestore has no full-text index.
 // Load once, cache in module scope, score in browser.
 let _searchCache = null;
+export function invalidateExerciseSearch() { _searchCache = null; }
 
 const DEFAULT_SESSION_SOURCES = { wger: true, yuhonas: true, coach: true };
 
@@ -84,6 +86,7 @@ function _loadSessionSources() {
 
 function _getExerciseSource(ex) {
   const tags = Array.isArray(ex?.tags) ? ex.tags : [];
+  if (_isExpert(ex)) return "coach";
   if (tags.includes("yuhonas") || ex?.yuhonas_id) return "yuhonas";
   if (tags.includes("wger") || tags.includes("unreviewed") || ex?.wger_id) return "wger";
   return "coach";
@@ -94,7 +97,7 @@ export async function searchExercises(query, limit = 12) {
   if (!q) return { ok: true, results: [], query: q, suggestions: [] };
   if (!_searchCache) {
     const curated = await _getCuratedExercises();
-    _searchCache = [...EXERCISE_BULK_DATA, ...curated];
+    _searchCache = mergeExercisePool(EXERCISE_BULK_DATA, curated);
   }
 
   const sources = _loadSessionSources();
@@ -129,33 +132,6 @@ export async function searchExercises(query, limit = 12) {
     ok: true, source: "firestore", query: q, results,
     suggestions: results.slice(0, 3).map((r) => ({ canonical_id: r.id, display_name: r.name })),
   };
-}
-
-function _isExpert(ex) {
-  const tags = ex.tags || [];
-  return ex.source === "expert" || tags.includes("expert");
-}
-
-function _buildSupersededExternalRefs(exercises) {
-  const refs = { wger: new Set(), yuhonas: new Set(), names: new Set() };
-  for (const ex of exercises || []) {
-    if (!_isExpert(ex)) continue;
-    if (ex.wger_id) refs.wger.add(String(ex.wger_id));
-    const external = ex.external_ids || {};
-    for (const id of external.wger || []) refs.wger.add(String(id));
-    for (const id of external.yuhonas || []) refs.yuhonas.add(String(id));
-    for (const name of ex.search_aliases || []) refs.names.add(_normalize(name));
-  }
-  return refs;
-}
-
-function _isSupersededExternalExercise(ex, refs) {
-  if (_isExpert(ex)) return false;
-  if (ex.merged_into || ex.superseded_by) return true;
-  if (ex.wger_id && refs.wger.has(String(ex.wger_id))) return true;
-  if (ex.yuhonas_id && refs.yuhonas.has(String(ex.yuhonas_id))) return true;
-  const hay = [ex.display_name, ex.german, ex.english, ex.name, ex.exercise_id, ex.id].map(_normalize);
-  return hay.some((item) => item && refs.names.has(item));
 }
 
 // Push/Pull/Legs-Split der expert-approved Exercises, offline verfügbar wie
