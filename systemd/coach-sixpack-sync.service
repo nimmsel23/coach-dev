@@ -3,6 +3,6 @@ Description=Coach: 6Pack-Archive aus Firestore aktualisieren und Streak-Digest m
 
 [Service]
 Type=oneshot
-WorkingDirectory=%h/coach-dev
+WorkingDirectory=%h/dev/coach-dev
 EnvironmentFile=-%h/.env/telegram.env
-ExecStart=/usr/bin/python3 %h/coach-dev/coach_sixpack.py daily --notify
+ExecStart=/usr/bin/python3 %h/dev/coach-dev/coach_sixpack.py daily --notify

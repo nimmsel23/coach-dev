@@ -5,8 +5,8 @@ Wants=coach-relax.service
 
 [Service]
 Type=simple
-WorkingDirectory=%h/coach-dev
-ExecStart=/usr/bin/python3 %h/coach-dev/server.py
+WorkingDirectory=%h/dev/coach-dev
+ExecStart=/usr/bin/python3 %h/dev/coach-dev/server.py
 Environment=COACH_HOST=127.0.0.1
 Environment=COACH_PORT=9150
 EnvironmentFile=-%h/.config/coach/backend.env

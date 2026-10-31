@@ -5,8 +5,8 @@ PartOf=coach-api.service
 
 [Service]
 Type=simple
-WorkingDirectory=%h/relax-dev
-ExecStart=/usr/bin/node %h/relax-dev/server.mjs
+WorkingDirectory=%h/dev/relax-dev
+ExecStart=/usr/bin/node %h/dev/relax-dev/server.mjs
 Environment=HOST=127.0.0.1
 Environment=PORT=9123
 Restart=on-failure

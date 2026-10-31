@@ -9,7 +9,7 @@ Muss mit dem Python des klienten-python-venvs laufen (psycopg2/sqlalchemy
 werden beim Import von klienten_manager gebraucht), z. B.:
 
     ~/klienten-python/.venv/bin/python3 -m uvicorn coach_klienten:app \
-        --app-dir ~/coach-dev --host 127.0.0.1 --port 5200
+        --app-dir ~/dev/coach-dev --host 127.0.0.1 --port 5200
 
 Reihenfolge: die Klienten-Routen stehen VOR den Coach-Catch-alls
 (`/api/<domain>`-Proxys, `/{path:path}`-Frontend), sonst würden `/api/clients`

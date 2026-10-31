@@ -1509,3 +1509,8 @@ Liveprüfung nach Neu-Laden des bestehenden `coach-api.service`: Health OK,
 `/coach/local.html` HTTP 200 mit lokalem Entry-Bundle, fünf bestehende Klienten
 über die lokale API verfügbar. Keine echten Pläne angelegt oder versendet.
 Keine neuen Listener/Services und kein Cloud-Deployment.
+
+
+## 2026-10-31 — Dev-Projekte unter ~/dev
+
+Lokale Entwicklungspfade und betroffene Verknüpfungen auf `~/dev/*-dev` umgestellt. Runtime-Daten, Branches und Release-Checkouts behalten ihre Zuständigkeit. Keine Pushes oder Releases. Gesamter Umzug und Prüfungen: `~/RESULTS.md`.
