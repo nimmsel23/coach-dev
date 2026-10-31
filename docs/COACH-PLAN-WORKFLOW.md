@@ -75,3 +75,10 @@ in Plan ist `docs/PLAN-COACH-INTEGRATION.md`. Reine Dokumentationsänderungen
 benötigen keinen Pointer-Bump. Dieser Auftrag veröffentlicht keinen der Repos.
 Ein Coach-Pointer-Update aktualisiert weder Fitness noch die VitalOS-Shell oder
 die eigenständige Plan-Website automatisch.
+
+## Lokaler Arbeitsplatz ohne Firebase-Anmeldung
+
+`http://127.0.0.1:9150/coach/local.html` verbindet bestehende Klientenordner mit
+demselben Planeditor. Entwürfe, lokale Versionen, Wiederherstellen und Export
+bleiben lokal. Nur der gesonderte Versand nutzt serverseitig Firebase.
+Bedienung und Datenwege: [Lokal planen](LOCAL-PLANNING.md).

@@ -119,3 +119,5 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 ## 2026-10-30 — Plan-/Coach-Dokumentation
 
 - [x] Plan-Eigentümerschaft, Submodulpfad, Verantwortungsmatrix und unabhängige Fitness-/Shell-/Hosting-Übernahmen in den Entwicklerdokumenten ergänzt.
+
+- [x] 2026-10-31: Bestehenden Coach-Server, Klientenregister und Planeditor als lokalen Arbeitsplatz mit Speichern, Versionen, Export und explizitem Versand verbinden.

@@ -159,6 +159,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     # Coach-eigene Routen (kein Proxy) stehen vor den Domain- und /api-Catch-alls.
     app.include_router(sixpack_router)
+    from coach_local_plans import create_router
+    app.include_router(create_router())
 
     # Explicit domains precede the compatibility /api catch-all.
     for name in backends:

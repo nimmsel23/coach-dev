@@ -41,7 +41,8 @@ export default defineConfig(async ({ mode }) => {
     base: './',
     plugins: [react()],
     resolve: {
-      preserveSymlinks: true,
+      // Resolve pnpm packages from their real directory so transitive Vue imports work.
+      preserveSymlinks: false,
       alias: {
         ...crossAppAliases,
 
@@ -115,6 +116,7 @@ export default defineConfig(async ({ mode }) => {
           ? {
               shell: resolve(__dirname, 'coach-shell.html'),
               coach: resolve(__dirname, 'coach.html'),
+              local: resolve(__dirname, 'local.html'),
             }
           : undefined,
         output: {

@@ -26,7 +26,14 @@ case "${1:-status}" in
   start|stop|restart|status)
     systemctl --user "${1:-status}" coach-api.service
     ;;
+  open)
+    if ! curl --fail --silent http://127.0.0.1:9150/health >/dev/null; then
+      echo 'Coach-Server ist nicht erreichbar. Mit coach-server start starten.' >&2
+      exit 1
+    fi
+    xdg-open http://127.0.0.1:9150/coach/local.html
+    ;;
   logs) journalctl --user -u coach-api.service -n 80 --no-pager ;;
   health) curl --fail --silent --show-error http://127.0.0.1:9150/_coach/backends ;;
-  *) echo 'Usage: bin/coach-server install|start|stop|restart|status|logs|health' >&2; exit 2 ;;
+  *) echo 'Usage: bin/coach-server install|start|stop|restart|status|logs|health|open' >&2; exit 2 ;;
 esac

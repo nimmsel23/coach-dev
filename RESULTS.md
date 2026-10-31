@@ -1485,3 +1485,22 @@ PWA-Stempelung und Service-Worker-Precache liefen lokal erfolgreich. Für die
 lokale Build-Prüfung kam Vue aus der vorhandenen Workbench-Installation, weil
 der pnpm-Store-Lock in dieser Umgebung schreibgeschützt ist; Cloud-Preview und
 saubere CI-Installation sind noch offen.
+
+## 2026-10-31 — Lokaler gemeinsamer Planarbeitsplatz
+
+`/coach/local.html` integriert Klientenregister aus klienten-python, Planeditor
+aus dem gepinnten Submodul und lokale Entwürfe/Versionen am Coach-Server 9150.
+ClientForge-Pläne können ohne Veränderung der Quelldatei übernommen werden.
+Ergänzt: Historie/Wiederherstellen, Markdown-/JSON-Export, expliziter Versand
+der freigegebenen Version und Launcher `bin/coach-server open`. Keine neue
+Dienstinstanz, kein Kopieren der Workspace-/Klienten-Quellbäume. Vue regulär
+installiert; pnpm-Paketauflösung durch echte Paketpfade im Vite-Build korrigiert.
+Lokale API- und Datenvertragstests sowie Gatewaytests erfolgreich (im Sandbox-
+Testlauf wurden Thread-Offloads synchron ausgeführt). Echte Cloud-Schreibvorgänge
+sind kein Teil der Verifikation.
+
+Browserabnahme (390px) am gebauten Frontend erfolgreich: Klient → Plan → Übungs-
+vorgaben → lokales Speichern → Reload → lokale Freigabe → Versionsverlauf →
+ausdrücklich bestätigter simulierter Versand. Keine Firebase-Browseraufrufe.
+Plan-Quellstand `33bcdef` enthält zusätzliche isolierte Auslieferungsprüfungen
+und bewahrt beim ClientForge-Import Sekunden-, Minuten- und Null-Pausen.

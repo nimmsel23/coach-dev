@@ -16,3 +16,12 @@ maintain a second editor or use an unpinned sibling checkout. Change Plan at
 `~/plan-dev`, commit, verify, then deliberately advance Coach's pointer. Publish
 Plan before pushing a Coach commit referencing it. Coach retains access control,
 client selection, navigation and Hosting ownership.
+
+## Local planning
+
+`/coach/local.html` uses the existing Coach server on 9150, the pinned Plan editor
+and Plan-owned Python runtime. Client roots come from klienten-python config;
+never create a duplicate client registry or serve workspace/klienten source trees.
+Local writes go only to native `data/training-plans`; legacy files require explicit
+import. Saving/releasing locally must never automatically publish to Firestore.
+See `docs/LOCAL-PLANNING.md`.

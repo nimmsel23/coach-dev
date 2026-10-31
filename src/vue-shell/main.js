@@ -11,6 +11,7 @@ const CoachFrame = {
           h('span', { class: 'coach-frame__eyebrow' }, 'VitalOS'),
           h('h1', 'Coach'),
         ]),
+        ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname) ? h('a', { class: 'coach-frame__open', href: new URL('./local.html', window.location.href).pathname }, 'Lokal planen') : null,
         h('a', {
           class: 'coach-frame__open',
           href: coachAppUrl,

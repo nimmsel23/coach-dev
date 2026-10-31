@@ -9,6 +9,7 @@
     "dev": "node scripts/dev-runner.mjs",
     "start": "python3 server.py",
     "ui:dev": "vite --mode coach --open /coach-shell.html",
+    "test:local:browser": "bash scripts/tests/run-local-browser.sh",
     "test:plan:browser": "bash scripts/tests/run-shared-editor-browser.sh",
     "test:plan:contract": "node scripts/tests/plan-contract.test.mjs",
     "lint": "eslint src/ --ext .js,.jsx",
