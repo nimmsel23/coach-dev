@@ -73,6 +73,17 @@ try {
   await fill('[aria-label="Versionshinweis"]','Erste lokale Version');
   await click('Lokale Version freigeben');
   await wait(has('Version 1 bereit zur Übergabe'));
+  await click('Plan ansehen');
+  await wait(`document.querySelectorAll('.plan-document .plan-sheet').length === 1`);
+  assert.equal(await evaluate(`document.querySelectorAll('.plan-document .plan-training-table tbody').length`),1);
+  await wait(`document.documentElement.scrollWidth <= 390`);
+  const print = await send('Page.printToPDF',{printBackground:true,preferCSSPageSize:true,displayHeaderFooter:false});
+  const bytes = Buffer.from(print.data,'base64');
+  assert.equal(bytes.subarray(0,5).toString(),'%PDF-');
+  await writeFile('/tmp/coach-local-plan.pdf',bytes);
+  await click('Alle Pläne');
+  assert.equal(await evaluate(`document.querySelectorAll('.plan-print-root').length`),0);
+
   await click('Versionen');
   await wait(has('Erste lokale Version'));
   assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth'),true);

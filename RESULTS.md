@@ -1514,3 +1514,15 @@ Keine neuen Listener/Services und kein Cloud-Deployment.
 ## 2026-10-31 — Dev-Projekte unter ~/dev
 
 Lokale Entwicklungspfade und betroffene Verknüpfungen auf `~/dev/*-dev` umgestellt. Runtime-Daten, Branches und Release-Checkouts behalten ihre Zuständigkeit. Keine Pushes oder Releases. Gesamter Umzug und Prüfungen: `~/RESULTS.md`.
+
+## 2026-10-31 — Lesbare Trainingsplan-Ansicht
+
+Planliste öffnet über „Plan ansehen“ das gemeinsame PlanDocument. Herkunftstext
+liegt in einer ausklappbaren Sektion; Übungen, Sätze, Wiederholungen, Gewichte
+und Pausen werden als Trainingstage dargestellt. Drucken/PDF nutzt A4-Tagesblätter.
+Importierte Daten werden für die Darstellung nicht verändert.
+
+Visuell am tatsächlichen importierten Plan geprüft: drei Tagesblätter, zwölf
+Übungszeilen und drei offene Vorgaben; Desktop- und Handyansicht ohne Überlauf.
+PDF mit drei A4-Seiten und druckoptimierten, weißen Rändern. Prüfung rein lesend;
+Plandaten und Freigabe-/Versandstatus bleiben unverändert.
