@@ -1,7 +1,6 @@
-name: inbox_iso_lateral_row_high
-description: 'Zurueck zur Review geschickt (war faelschlich als expert getaggt): Iso-Lateral
-  High Row'
-generated_at: '2026-08-22T08:49:35.772128+00:00'
+exercise_id: iso_lateral_row_high
+description: Expert details for Iso-Lateral High Row
+approved_at: '2026-11-01T17:09:17.523238+00:00'
 exercises:
 - exercise_id: iso_lateral_row_high
   wger_id: 1448
@@ -74,39 +73,27 @@ exercises:
   - Hammer Strength Iso-Lateral High Row
   - High Row Machine
   variations: []
-  source: unreviewed
+  source: expert
   search_aliases:
   - Iso-Lateral High Row
   - High Iso Lateral Row Machine
   - Hammer Strength Iso-Lateral High Row
   - High Row Machine
   - Iso-Lateral Row
+  - wger_1448
   schema_version: 2026-08-12.exercise-v1
   origin:
-    type: manual
-    source_refs: {}
-    wger:
-      exercise_id: wger_1448
-      display_name: High Row
-      german: High Row
-      category: back
-      primary_muscles:
-      - 201_latissimus_dorsi
-      secondary_muscles: []
-      equipment: []
-      coaching_notes:
-      - Kneeling down on one leg and pulling cable down while driving elbow into the
-        lats.
-      tags:
-      - unreviewed
-      - wger
-      wger_id: 1448
-      wger_muscle_ids:
-        primary:
-        - 12
-        secondary: []
+    type: external
+    source_refs:
+      wger:
+      - '1448'
   review_state:
     status: approved
+    ai_reviewed: true
+    approved_at: '2026-11-01T17:09:17.523238+00:00'
   external_ids:
     wger:
     - 1448
+  approved_at: '2026-11-01T17:09:17.523238+00:00'
+  original_description:
+  - Kneeling down on one leg and pulling cable down while driving elbow into the lats.
