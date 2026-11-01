@@ -92,6 +92,7 @@ export default defineConfig(async ({ mode }) => {
               shell: resolve(__dirname, 'coach-shell.html'),
               coach: resolve(__dirname, 'coach.html'),
               local: resolve(__dirname, 'local.html'),
+              clientforge: resolve(__dirname, 'clientforge.html'),
             }
           : undefined,
         output: {

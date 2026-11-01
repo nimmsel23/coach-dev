@@ -174,6 +174,12 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
         app.add_api_route(f"/{prefix}", endpoint, methods=METHODS)
         app.add_api_route(f"/{prefix}/{{path:path}}", endpoint, methods=METHODS)
 
+    @app.api_route("/clientforge", methods=["GET", "HEAD"])
+    @app.api_route("/clientforge/", methods=["GET", "HEAD"])
+    async def clientforge_redirect(request: Request):
+        query = request.url.query
+        return RedirectResponse("/coach/clientforge.html" + ("?" + query if query else ""))
+
     @app.api_route("/coach", methods=["GET", "HEAD"])
     async def coach_redirect():
         return RedirectResponse("/coach/")

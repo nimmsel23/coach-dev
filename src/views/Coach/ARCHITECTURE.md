@@ -160,3 +160,5 @@ ClientTrainingWorkspace lädt unter „Plan ansehen“ neben PlanDocument auch d
 ## 2026-11-01 — Durchgehender Betreuungsablauf
 
 ClientsPanel zeigt den gemeinsamen PlanDeliveryOverview je Klient; `?plan=<id>` führt direkt in die Planansicht und bleibt über Reload/Zurück erhalten. Wechsel von Klient/Detailtab löscht den Planbezug. ClientTrainingWorkspace zeigt denselben Status mit bereits geladenen Plänen, öffnet nach Programmzuweisung den erzeugten Klientenplan und bietet einen Versionsselektor für historische Snapshots samt Feedback. Fehlende Bibliothek/Vorlagen/Trainingsergebnisse blockieren vorhandene Klientenpläne nicht mehr pauschal (Teilresultate mit sichtbarer Fehlermeldung).
+
+ClientForge ist die gemeinsame Plan-Komposition: der lokale Einstieg liegt unter `/clientforge/`, der Cloud-Klientenbereich nutzt denselben erweiterten Plan-Pin mit Workout-/Übungs-Muskelansicht und Klientenvorschau.

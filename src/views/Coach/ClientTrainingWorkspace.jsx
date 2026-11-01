@@ -191,7 +191,7 @@ export default function ClientTrainingWorkspace({ clientUid, initialPlanId, onCl
       {notice && <div role="status" className="rounded-xl border border-green-500/30 p-3 text-sm text-green-500">{notice}</div>}
 
       {screen === 'client' && <>
-        <button disabled={busy} onClick={() => setScreen('individual')} className="min-h-[64px] w-full rounded-2xl border border-fit-accent/30 bg-fit-accent/5 p-4 text-left disabled:opacity-50"><span className="block font-semibold text-fit-accent">Individuellen Plan gestalten</span><span className="mt-1 block text-xs text-fit-muted">Trainingstage und Übungen direkt für diesen Klienten bearbeiten</span></button>
+        <button disabled={busy} onClick={() => setScreen('individual')} className="min-h-[64px] w-full rounded-2xl border border-fit-accent/30 bg-fit-accent/5 p-4 text-left disabled:opacity-50"><span className="block font-semibold text-fit-accent">ClientForge · Individuellen Plan gestalten</span><span className="mt-1 block text-xs text-fit-muted">Trainingstage und Übungen direkt für diesen Klienten bearbeiten</span></button>
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-fit-ink">Aktuelle Pläne</h3>

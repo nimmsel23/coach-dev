@@ -4,8 +4,8 @@ Stand: 2026-10-31.
 
 ## Ein Einstieg
 
-Öffnen: **http://127.0.0.1:9150/coach/local.html** oder
-`~/coach-dev/bin/coach-server open`. In der lokalen Vue-Shell führt **Lokal planen**
+Öffnen: **http://127.0.0.1:9150/clientforge/** oder
+`~/coach-dev/bin/coach-server open`. In der lokalen Vue-Shell führt **ClientForge**
 dorthin. Dafür ist keine Firebase-Anmeldung nötig. Es gibt keinen zusätzlichen
 Server: Die Seite und ihre API laufen im bestehenden `coach-api.service` auf 9150.
 
@@ -77,3 +77,19 @@ ist nicht Teil dieses lokalen Ablaufs.
 
 Service prüfen/starten: `bin/coach-server status|health|start`. Nach Quelländerungen
 am Python-Server den vorhandenen Dienst über `bin/coach-server restart` neu laden.
+
+## ClientForge und Muskelansicht
+
+ClientForge ist der lokale Planungsplatz. Im gemeinsamen Editor zeigt jeder
+Trainingstag Vorder- und Rückseite der betroffenen Körperregionen. Eine
+angeklickte Übung schaltet auf ihre Haupt-/Nebenmuskeln, Ausführung und
+Coaching-Hinweise um. Die Klientenvorschau und Planansicht bieten denselben
+Ablauf; der PDF-Druck bleibt ein Trainingsblatt. Fehlende Muskelmetadaten
+werden ausdrücklich angezeigt, nicht aus Übungsnamen ergänzt.
+
+Die bisherige ClientForge-SPA bindet diesen Planungsplatz im Trainingsplan-Tab
+ein. `VITE_COACH_STUDIO_URL` kann dessen URL beim Build überschreiben.
+`coach/clientforge.html?client=<slug>` öffnet einen bestimmten lokalen Klienten;
+`embed=1` blendet die doppelte Navigation aus. `local.html` bleibt kompatibel.
+Der Cloud-Coach nutzt denselben erweiterten Plan-Code für seine angemeldeten
+Klienten, aber keine lokalen Dateipfade oder Loopback-API.

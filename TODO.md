@@ -216,3 +216,9 @@ nach Klient getrennt zeigt. Ausgangslage geprüft am 2026-11-01:
 
 Historie, lokale Entwürfe, Versionsansicht und Ungelesen-Anzeigen gemeinsam
 prüfen; Index im VitalOS-Owner vorbereiten; Feature-Branch zur Übernahme pushen.
+
+## [x] ClientForge Trainingsstudio (2026-11-01)
+
+Gemeinsamen Planeditor für lokale und Cloud-Planung aufwerten; Workout- und
+Übungs-Muskelansicht samt Klientenvorschau verbinden; bestehenden ClientForge-
+Einstieg im Coach erreichbar machen.
