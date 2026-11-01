@@ -1,0 +1,146 @@
+exercise_id: back_squat
+description: Expert details for Back Squat
+approved_at: '2026-11-01T17:08:29.536858+00:00'
+exercises:
+- source: expert
+  variations: []
+  stabilizers:
+  - 206_erector_spinae
+  - 504_transverse_abdominis
+  secondary_muscles:
+  - 602_adductors
+  - 604_hamstrings
+  exercise_id: back_squat
+  id: back_squat
+  name: Langhantel-Kniebeuge
+  display_name: Back Squat
+  german: Langhantel-Kniebeuge
+  english: Barbell Back Squat
+  category: legs
+  type: compound
+  movements:
+  - squat
+  - knee_extension
+  - hip_extension
+  equipment:
+  - barbell
+  - squat_rack
+  primary_muscles:
+  - 601_quadriceps_femoris
+  - 603_gluteus_maximus
+  coaching_notes:
+  - Stange auf dem oberen Rücken ablegen (hinter dem Nacken, nicht auf den Halswirbeln),
+    Ellbogen zeigen nach unten, Brust bleibt offen.
+  - Vor dem Abwärtsgehen tief einatmen und den Rumpf fest machen; die Spannung bleibt
+    über den ganzen Satz.
+  - Knie und Hüfte beugen gleichzeitig, die Knie laufen in Richtung der Fußspitzen,
+    die Fußsohle bleibt voll am Boden.
+  - Nur so tief gehen, wie der Rücken neutral bleibt; aus der tiefsten Position drückst
+    du dich durch die ganze Fußsohle nach oben.
+  common_errors:
+  - Knie fallen nach innen, wenn es anstrengend wird.
+  - Der untere Rücken rundet sich am Boden der Bewegung (Butt Wink).
+  - Oberkörper kippt nach vorn, weil die Hüfte schneller hochkommt als die Schultern.
+  - Fersen heben ab, weil das Gewicht auf die Zehen wandert.
+  tags:
+  - legs
+  - barbell
+  - squat
+  - compound
+  - claude_draft
+  aliases:
+  - Back Squat
+  - Barbell Back Squat
+  - Langhantel-Kniebeuge
+  - Kniebeuge mit Langhantel
+  - Kniebeuge (Langhantel)
+  - Nackenkniebeuge
+  search_aliases:
+  - back_squat
+  - backsquat
+  - barbell_squat
+  - langhantelkniebeuge
+  - Back Squat
+  - Langhantel-Kniebeuge
+  - Barbell Back Squat
+  legacy_ids:
+  - inbox_back_squat
+  external_ids:
+    yuhonas:
+    - Barbell_Squat
+  yuhonas_candidates:
+  - id: Barbell_Full_Squat
+    note: tiefere Variante, nicht automatisch gleichgesetzt
+  wger_candidates:
+  - id: 1614
+    note: Tiefe Kniebeuge mit Langhantel, verwandt, nicht verlinkt (tiefe Variante)
+  source_check: 'find-source (wger+yuhonas, fuzzy) plus manuelle Suche in unreviewed_wger/unreviewed_yuhonas
+    am 2026-11-01: yuhonas Barbell_Squat = Stange auf dem hinteren Schulterbereich,
+    passt; wger hat keinen unspezifischen Back Squat'
+  draft_note: Von Claude entworfenes Beispiel (2026-11-01), fachlich NICHT von Daniel
+    geprüft. Tier bewusst 'inbox' (Entwurf), nicht 'expert'. Stabilisatoren bewusst
+    nur 2 (Rumpfstreckung und Bauchspannung tragen die Last); Adduktoren/Hamstrings
+    sekundär, Waden weggelassen.
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: external
+    source_refs:
+      yuhonas:
+      - Barbell_Squat
+  review_state:
+    status: approved
+    review_provider: claude
+    ai_reviewed: true
+    enriched_at: '2026-11-01T08:32:11.931199+00:00'
+    approved_at: '2026-11-01T17:08:29.536858+00:00'
+  enriched_at: '2026-11-01T08:32:11.931199+00:00'
+  approved_at: '2026-11-01T17:08:29.536858+00:00'
+  yuhonas_id: Barbell_Squat
+  original_description:
+  - This exercise is best performed inside a squat rack for safety purposes. To begin,
+    first set the bar on a rack to just below shoulder level. Once the correct height
+    is chosen and the bar is loaded, step under the bar and place the back of your
+    shoulders (slightly below the neck) across it.
+  - Hold on to the bar using both arms at each side and lift it off the rack by first
+    pushing with your legs and at the same time straightening your torso.
+  - 'Step away from the rack and position your legs using a shoulder width medium
+    stance with the toes slightly pointed out. Keep your head up at all times and
+    also maintain a straight back. This will be your starting position. (Note: For
+    the purposes of this discussion we will use the medium stance described above
+    which targets overall development; however you can choose any of the three stances
+    discussed in the foot stances section).'
+  - 'Begin to slowly lower the bar by bending the knees and hips as you maintain a
+    straight posture with the head up. Continue down until the angle between the upper
+    leg and the calves becomes slightly less than 90-degrees. Inhale as you perform
+    this portion of the movement. Tip: If you performed the exercise correctly, the
+    front of the knees should make an imaginary straight line with the toes that is
+    perpendicular to the front. If your knees are past that imaginary line (if they
+    are past your toes) then you are placing undue stress on the knee and the exercise
+    has been performed incorrectly.'
+  - Begin to raise the bar as you exhale by pushing the floor with the heel of your
+    foot as you straighten the legs again and go back to the starting position.
+  - Repeat for the recommended amount of repetitions.
+  instructions:
+  - This exercise is best performed inside a squat rack for safety purposes. To begin,
+    first set the bar on a rack to just below shoulder level. Once the correct height
+    is chosen and the bar is loaded, step under the bar and place the back of your
+    shoulders (slightly below the neck) across it.
+  - Hold on to the bar using both arms at each side and lift it off the rack by first
+    pushing with your legs and at the same time straightening your torso.
+  - 'Step away from the rack and position your legs using a shoulder width medium
+    stance with the toes slightly pointed out. Keep your head up at all times and
+    also maintain a straight back. This will be your starting position. (Note: For
+    the purposes of this discussion we will use the medium stance described above
+    which targets overall development; however you can choose any of the three stances
+    discussed in the foot stances section).'
+  - 'Begin to slowly lower the bar by bending the knees and hips as you maintain a
+    straight posture with the head up. Continue down until the angle between the upper
+    leg and the calves becomes slightly less than 90-degrees. Inhale as you perform
+    this portion of the movement. Tip: If you performed the exercise correctly, the
+    front of the knees should make an imaginary straight line with the toes that is
+    perpendicular to the front. If your knees are past that imaginary line (if they
+    are past your toes) then you are placing undue stress on the knee and the exercise
+    has been performed incorrectly.'
+  - Begin to raise the bar as you exhale by pushing the floor with the heel of your
+    foot as you straighten the legs again and go back to the starting position.
+  - Repeat for the recommended amount of repetitions.
