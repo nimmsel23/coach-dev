@@ -382,8 +382,9 @@ gibt den deutschen Anzeigenamen zurück (`"Rücken"`).
   Fitness hat keine Gitlinks oder Workspace-Importer für diese Apps mehr.
   `dev` bleibt der App-Entwicklungsbranch, `fitness` der Fitness-Integrations-
   branch. Vite/Firebase baut die Fitness-App direkt aus diesem Checkout.
-  `@vos/cross-app-aliases` nutzt weiterhin `link:` für seine pfadbasierte
-  Auflösung.
+  `@vos/cross-app-aliases` ist seit 2026-11-01 **entfernt** (nur `@relax`/`@learn`
+  gebraucht, Auflösung über `siblingDir()` in `vite.config.js`; der pfadabhängige
+  `link:` ließ den Lockfile je nach Installationsort kippen).
 - ⏳ Coach-Tab-Gesamtaufräumung (`views/Coach/`, 5 Sub-Tabs, ~1000 Zeilen) —
   noch nicht begonnen, Details + Zielbild in `../src/CLAUDE.md`
 

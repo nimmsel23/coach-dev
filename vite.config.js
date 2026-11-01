@@ -24,20 +24,15 @@ function siblingDir(devName, appName) {
 }
 
 
-// SSOT für Cross-App-Aliase (@relax, @learn + interne Cross-DB-Exports)
-// ist @vos/cross-app-aliases (~/vitalos/packages/cross-app-aliases) —
-// nur erreichbar, wenn dieses Repo als vitalos-Submodule genestet ist (npm
-// Workspace-Symlink). Standalone-Checkout (~/dev/fitness-dev ohne vitalos-Parent)
-// fällt auf die alte siblingDir()-Auflösung zurück.
-async function resolveCrossAppAliases() {
-  try {
-    const { crossAppAliases } = await import('@vos/cross-app-aliases')
-    return crossAppAliases()
-  } catch {
-    return {
-      '@relax':      resolve(siblingDir('relax-dev', 'relax-app'), 'src'),
-      '@learn':      resolve(siblingDir('learn-dev', 'learn-app'), 'src'),
-    }
+// Cross-App-Aliase: fitness braucht genau zwei (@relax, @learn) und löst sie über
+// die Nachbar-Checkouts auf (siblingDir) — in jedem Kontext gleich: ~/dev/<x>-dev,
+// ~/vitalos/<x>-app (Meta-Checkout, CI) oder daneben. Das frühere Paket
+// @vos/cross-app-aliases wurde entfernt: es lieferte 17 Aliase, genutzt wurden zwei,
+// und sein pfadabhängiger link: ließ den Lockfile je nach Installationsort kippen.
+function resolveCrossAppAliases() {
+  return {
+    '@relax': resolve(siblingDir('relax-dev', 'relax-app'), 'src'),
+    '@learn': resolve(siblingDir('learn-dev', 'learn-app'), 'src'),
   }
 }
 
@@ -75,8 +70,7 @@ export default defineConfig(async ({ mode }) => {
   const isCoach = mode === 'coach'
   const isPlan = mode === 'plan'
   const isSolo = mode === 'training' || mode === 'atlas'
-  const crossAppAliases = await resolveCrossAppAliases()
-  delete crossAppAliases['@fuel']
+  const crossAppAliases = resolveCrossAppAliases()
 
   return {
     // Relativ statt absolut — sonst lösen Assets unter einem Funnel-Pfad-
