@@ -1605,3 +1605,11 @@ Der historische ClientForge-Trainingsplan-Tab verwendet denselben Planungsplatz.
 Gemeinsamer Plan-Code liefert Workout-Highlighter und Übungsdetails auch in
 Vorschau und Dokumentansicht. Keine neuen Dienste und keine Klientendaten
 verändert; alte lokale Pläne bleiben ausdrückliche Importquellen.
+
+Abschlussprüfung: Plan-Lint und Produktionsbuild, Plan-Firebase-Build,
+Coach-Lint und vollständiger Coach-Build sowie ClientForge-SPA-Build bestanden.
+Zehn bestehende Server-Vertragstests grün. Mobiler 390px-Ablauf mit isolierter
+Klientenablage: Plan erstellen, Übung samt Muskelkarte/Details auswählen,
+Vorgaben sichern, neu laden, Version freigeben, PDF und Historie sowie
+ausdrücklichen simulierten Versand prüfen. Keine echten Klienten-Schreibtests
+oder Firebase-Aufrufe aus dem lokalen Browser.
