@@ -66,6 +66,27 @@ class LocalPlanHTTPTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(released.status_code,200)
             self.assertEqual(released.json()['headVersion'],1)
 
+    @patch('coach_local_plans.asyncio.to_thread', new=inline_thread)
+    async def test_client_id_routes_share_state_and_guards(self):
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(self.app),base_url='http://localhost') as client:
+            self.assertEqual((await client.get('/api/clients')).json()['clients'][0]['id'],'test-client')
+            self.assertNotIn('firebase_uid',(await client.get('/api/client/test-client')).json())
+            canonical='/api/client/test-client/plans'
+            plan=(await client.post(canonical,json={'name':'Client-ID Plan','routines':[{'id':'a','label':'A','exercises':[{'id':'bench','name':'Bench'}]}]})).json()
+            plan_id=plan['id']
+            for prefix in [canonical,'/k/test-client/plans',self.prefix]:
+                self.assertEqual((await client.get(f'{prefix}/{plan_id}')).json(),plan)
+            released=await client.post(f'/k/test-client/plans/{plan_id}/versions',json={'expectedUpdatedAt':plan['updatedAt']})
+            self.assertEqual(released.status_code,200)
+            self.assertEqual((await client.get(f'{canonical}/{plan_id}/versions')).json()['versions'][0]['number'],1)
+            self.assertEqual((await client.post(f'{canonical}/{plan_id}/deliver',json={'version':1})).status_code,200)
+            self.assertEqual(len(self.sent),1)
+            self.assertEqual((await client.get('/api/client/missing/plans')).status_code,404)
+            self.assertEqual((await client.post(canonical,json={'name':'Foreign'},headers={'Origin':'https://foreign.example'})).status_code,403)
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(self.app,client=('100.64.1.2',123)),base_url='http://localhost') as client:
+            self.assertEqual((await client.get(canonical)).status_code,403)
+            self.assertEqual((await client.get('/k/test-client/plans')).status_code,403)
+
     async def test_loopback_and_origin_guards(self):
         async with httpx.AsyncClient(transport=httpx.ASGITransport(self.app,client=('100.64.1.2',123)),base_url='http://localhost') as client:
             self.assertEqual((await client.get('/api/coach/local/clients')).status_code,403)

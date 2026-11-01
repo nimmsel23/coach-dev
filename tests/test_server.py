@@ -1,6 +1,8 @@
 """Isolated Coach gateway checks; never use a live catalog backend or user data."""
 from contextlib import asynccontextmanager
 import gzip
+import json
+from unittest.mock import patch
 import tempfile
 import unittest
 from pathlib import Path
@@ -116,6 +118,30 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
         async with self.client(backend_urls={"skills": "http://skills.test:9300"}) as client:
             self.assertEqual((await client.get("/api/skills/health")).status_code, 200)
             self.assertEqual(str(self.requests[-1].url), "http://skills.test:9300/health")
+
+    async def test_client_entry_and_api_precede_gateway(self):
+        clients=self.root/'clients'
+        (clients/'fixture').mkdir(parents=True)
+        (clients/'fixture/client.json').write_text(json.dumps({'name':'Fixture'}))
+        ui=self.root/'legacy-ui'/'dist-klienten'
+        ui.mkdir(parents=True)
+        (ui/'klienten.html').write_text('<html><head></head><body>Legacy ClientForge</body></html>')
+        with patch.dict('os.environ',{'CLIENTS_ROOT':str(clients),'KLIENTEN_UI_ROOT':str(ui.parent)}):
+            async with self.client() as client:
+                for path in ['/fixture','/fixture/','/k/fixture','/k/fixture/']:
+                    response=await client.get('http://localhost'+path+'?embed=1&client=wrong',follow_redirects=False)
+                    self.assertEqual(response.status_code,200)
+                    self.assertIn('Legacy ClientForge',response.text)
+                    self.assertIn('<base href="/_klienten/">',response.text)
+                response=await client.get('http://localhost/api/client/fixture/plans')
+                self.assertEqual(response.json(),{'plans':[]})
+                self.assertEqual(response.headers['cache-control'],'no-store')
+                self.assertEqual((await client.get('http://localhost/missing')).status_code,404)
+                legacy=await client.get('http://localhost/k/fixture/plan')
+                self.assertEqual(legacy.status_code,200)
+                self.assertIn('data',legacy.json())
+                self.assertEqual((await client.get('http://localhost/k/unknown/plan')).status_code,404)
+        self.assertFalse(self.requests)
 
     async def test_self_proxy_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "points back to Coach"):

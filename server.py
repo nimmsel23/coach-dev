@@ -12,7 +12,7 @@ from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse, HTMLResponse
 from starlette.background import BackgroundTask
 
 from coach_sixpack import router as sixpack_router
@@ -114,7 +114,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     @app.middleware("http")
     async def local_plan_cache_control(request: Request, call_next):
         response = await call_next(request)
-        if request.url.path.startswith("/api/coach/local/"):
+        if request.url.path.startswith(("/api/coach/local/", "/api/client/", "/k/")) or request.url.path == "/api/clients":
             response.headers["Cache-Control"] = "no-store"
         return response
 
@@ -174,6 +174,15 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     from coach_local_plans import create_router
     app.include_router(create_router())
 
+    from coach_legacy_clients import include_legacy_clients, legacy_ui
+    include_legacy_clients(app)
+
+    @app.api_route("/_klienten/{path:path}", methods=["GET", "HEAD"])
+    async def legacy_client_assets(path: str, request: Request):
+        from coach_local_plans import local_only
+        local_only(request)
+        return frontend(legacy_ui(), path)
+
     # Explicit domains precede the compatibility /api catch-all.
     for name in backends:
         for prefix in (f"/api/{name}", f"/{name}-api"):
@@ -207,6 +216,27 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     @app.api_route("/catalog-ui/{path:path}", methods=["GET", "HEAD"])
     async def catalog_ui(path: str):
         return frontend(catalog, path)
+
+    # Register after reserved routes; never turn unknown slugs into catalog HTML.
+    @app.api_route("/k/{client_id}", methods=["GET", "HEAD"])
+    @app.api_route("/k/{client_id}/", methods=["GET", "HEAD"])
+    @app.api_route("/{client_id}", methods=["GET", "HEAD"])
+    @app.api_route("/{client_id}/", methods=["GET", "HEAD"])
+    async def client_entry(client_id: str, request: Request):
+        # Asset names belong to the static server, not to client identity lookup.
+        if "." in client_id:
+            return frontend(catalog, client_id)
+        from coach_local_plans import local_only, clients_root, plans_module
+        local_only(request)
+        try:
+            plans_module.LocalPlans(clients_root()).client(client_id)
+        except plans_module.PlanError as error:
+            return JSONResponse({"detail": str(error)}, status_code=error.status)
+        document = legacy_ui() / 'klienten.html'
+        if not document.is_file():
+            return JSONResponse({"detail": "Klientenoberfläche fehlt. klienten-dev UI bauen."}, status_code=503)
+        html = document.read_text(encoding='utf-8').replace('<head>', '<head><base href="/_klienten/">', 1)
+        return HTMLResponse(html, headers={"Cache-Control": "no-store"})
 
     @app.api_route("/{path:path}", methods=["GET", "HEAD"])
     async def index(path: str):
