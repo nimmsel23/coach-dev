@@ -44,7 +44,7 @@ function workerStatus(data, now = Date.now()) {
   return {
     state: ageMs > WORKER_STALE_MS ? "offline" : "online",
     lastSeen, ageMs,
-    queued: data.queued || 0, stale: data.stale || 0, processing: data.processing || 0,
+    queued: data.queued || 0, stale: data.stale || 0, processing: data.processing || 0, errors: data.errors_since_start || 0, lastError: data.last_error || null,
   };
 }
 
@@ -344,4 +344,22 @@ export async function mergeInboxDuplicates(id, userId) {
   });
   if (!res.ok) return { ok: false, merged: false, plan: null };
   return await res.json();
+}
+
+// Source correction/search use the existing authorized worker command transport.
+export async function editExerciseSources(id, payload) {
+  let result;
+  if (FIREBASE_COACH) result = await coachCommand('link-source', id, getUid(), payload);
+  else {
+    const response = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${encodeURIComponent(id)}/link-source`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error(`Quellenaktion fehlgeschlagen (${response.status})`);
+    result = await response.json();
+  }
+  if (result?.ok && payload.operation === 'set') {
+    const { invalidateExerciseSearch } = await import('./kb.js');
+    invalidateExerciseSearch();
+  }
+  return result;
 }

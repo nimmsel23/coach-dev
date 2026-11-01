@@ -16,14 +16,14 @@ ws.addEventListener('message', (event) => {
   if (msg.method === 'Page.javascriptDialogOpening') { console.log('Dialog:', msg.params.message); send('Page.handleJavaScriptDialog', { accept: true, promptText: prompts.shift() || '' }).catch(console.error); }
 });
 await send('Runtime.enable'); await send('Page.enable');
-await send('Browser.setPermission', { permission: { name: 'notifications' }, setting: 'denied', origin: 'http://127.0.0.1:15903' });
+await send('Browser.setPermission', { permission: { name: 'notifications' }, setting: 'denied', origin: 'http://127.0.0.1:15904' });
 async function evaluate(expression) {
   const result = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
   if (result.exceptionDetails) throw new Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
   return result.result.value;
 }
 async function wait(expression, label = expression) {
-  for (let i = 0; i < 150; i++) { if (await evaluate(expression)) return; await new Promise((r) => setTimeout(r, 100)); }
+  for (let i = 0; i < 450; i++) { if (await evaluate(expression)) return; await new Promise((r) => setTimeout(r, 100)); }
   throw new Error(`Timed out: ${label}\n${await evaluate('document.body?.innerText')}`);
 }
 const has = (text) => `document.body?.innerText?.toLowerCase().includes(${JSON.stringify(text.toLowerCase())})`;
@@ -42,47 +42,58 @@ async function labelFill(label, value) {
   await fill(selector,value);
   await evaluate(`document.querySelector('#smoke-field').removeAttribute('id')`);
 }
+const cloudRequests = [];
+await send('Network.enable');
+ws.addEventListener('message', (event) => { const m = JSON.parse(event.data); if (m.method === 'Network.requestWillBeSent' && /firestore.googleapis.com|identitytoolkit.googleapis.com|securetoken.googleapis.com/.test(m.params.request.url)) cloudRequests.push(m.params.request.url); });
 try {
-  await send('Page.navigate', { url: 'http://127.0.0.1:15903/scripts/tests/coach-browser.html#/clients/client/templates' });
-  await wait(has('Workouts vorbereiten'));
-  await fill('[aria-label="Neue Workout-Vorlage"]', 'Coach Push');
-  await click('Erstellen');
-  await wait(`!!document.querySelector('[aria-label="Name der Vorlage"]')`);
-  await fill('[aria-label="Übung suchen und hinzufügen"]', 'Barbell Bench Press');
-  await click('Barbell Bench Press', false);
+  await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
+  await send('Page.navigate', { url: 'http://127.0.0.1:15904/coach/local.html' });
+  await wait(has('Ein gemeinsamer Arbeitsplatz'));
+  await click('Fixture Client', false);
+  await click('Neuer Trainingsplan', false);
+  await fill('[aria-label="Neuer Planname"]','Laptop Plan');
+  await click('Plan gestalten');
+  await click('+ Trainingstag');
+  await labelFill('Name des Trainingstags','Ganzkörper A');
+  await fill('[aria-label="Übung suchen und hinzufügen"]','Barbell Bench Press');
+  await click('Barbell Bench Press',false);
   await wait(`!!document.querySelector('[aria-label$="Satzvorgaben bearbeiten"]')`);
   await evaluate(`document.querySelector('[aria-label$="Satzvorgaben bearbeiten"]').click()`);
-  await labelFill('Ziel-Sätze', '2');
-  await labelFill('Ziel-Wdh', '10');
-  await labelFill('Notiz', 'Coach shared editor cue');
-  await click('Speichern');
-  await wait(`!document.querySelector('fieldset')?.disabled`);
-  await evaluate(`document.querySelector('[aria-label="Zurück zu den Vorlagen"]').click()`);
-  await wait(has('Weiter zum Trainingsplan'));
-  await click('Weiter zum Trainingsplan', false);
-  await wait(has('Trainingsplan bereitstellen'));
-  prompts.push('Coach PPL'); await click('Neuer Trainingsplan');
-  await wait(has('Coach PPL'));
-  await click('Workout-Vorlage hinzufügen');
-  prompts.push('2', '7'); await click('Coach Push');
-  await wait(has('1 Übungen'));
-  await click('Trainingsplan für Klienten bereitstellen');
-  await wait(has('Für diesen Klienten bereitgestellt'));
-  const clients = await evaluate(`fetch('/api/routines?uid=client').then(r=>r.json())`);
-  const coach = await evaluate(`fetch('/api/routines?uid=coach').then(r=>r.json())`);
-  assert.equal(clients.routines.length, 1);
-  assert.equal(coach.routines.length, 0);
-  const full = await evaluate(`fetch('/api/routines/${clients.routines[0].id}?uid=client').then(r=>r.json())`);
-  assert.equal(full.routine.exercises[0].templateSets.length, 2);
-  assert.equal(full.routine.exercises[0].notes, 'Coach shared editor cue');
-  console.log('PASS: Coach app uses shared Yuhonas editor, keeps selected client scope, and publishes the client plan.');
-  await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
-  await wait('document.documentElement.scrollWidth <= 390');
-  console.log('PASS: Mobile viewport has no horizontal page overflow.');
-  assert.deepEqual(errors, []);
-  console.log('PASS: No uncaught browser exceptions.');
-} catch (err) {
-  console.error(err);
-  console.error('Browser errors:', errors);
-  process.exitCode = 1;
-} finally { ws.close(); }
+  await labelFill('Ziel-Sätze','2');
+  await labelFill('Ziel-Wdh','10');
+  await labelFill('Notiz','Lokal ohne Cloud');
+  await click('Klientenvorschau');
+  await wait(has('Lokal ohne Cloud'));
+  await click('Entwurf sichern');
+  await wait(has('Entwurf lokal gesichert'));
+  await evaluate('location.reload()');
+  await click('Fixture Client',false);
+  await wait(has('Laptop Plan'));
+  await click('Version freigeben');
+  await fill('[aria-label="Versionshinweis"]','Erste lokale Version');
+  await click('Lokale Version freigeben');
+  await wait(has('Version 1 bereit zur Übergabe'));
+  await click('Plan ansehen');
+  await wait(`document.querySelectorAll('.plan-document .plan-sheet').length === 1`);
+  assert.equal(await evaluate(`document.querySelectorAll('.plan-document .plan-training-table tbody').length`),1);
+  await wait(`document.documentElement.scrollWidth <= 390`);
+  const print = await send('Page.printToPDF',{printBackground:true,preferCSSPageSize:true,displayHeaderFooter:false});
+  const bytes = Buffer.from(print.data,'base64');
+  assert.equal(bytes.subarray(0,5).toString(),'%PDF-');
+  await writeFile('/tmp/coach-local-plan.pdf',bytes);
+  await click('Alle Pläne');
+  assert.equal(await evaluate(`document.querySelectorAll('.plan-print-root').length`),0);
+
+  await click('Versionen');
+  await wait(has('Erste lokale Version'));
+  assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth'),true);
+  const shot = await send('Page.captureScreenshot',{format:'png'});
+  await writeFile('/tmp/coach-local-mobile.png',Buffer.from(shot.data,'base64'));
+  assert.deepEqual(cloudRequests,[], 'Editing and local release must not access Firebase');
+  await click('An Klienten senden');
+  await wait(has('Plan an die Klienten-App übergeben'));
+  assert.deepEqual(cloudRequests,[], 'Only the test server handles fake delivery');
+  assert.deepEqual(errors,[]);
+  console.log('PASS: Local client → plan → exercise prescriptions → disk save → reload → local version → history → explicit fake delivery, without Firebase browser calls.');
+} catch (err) { console.error(err); console.error('Browser errors:',errors); process.exitCode=1; }
+finally { ws.close(); }

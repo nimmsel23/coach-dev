@@ -115,9 +115,61 @@ class ArchiveTests(unittest.TestCase):
             if uid == "bad": raise RuntimeError("boom")
             return [{"type": "program", "uid": uid, "date": "2026-10-21", "ts": "", "data": {}}]
         with patch.object(sp, "fetch_client", flaky):
-            out = sp.sync_clients(["bad", "good"], get_db=lambda: None)
+            out = sp.sync_clients(["bad", "good"], get_db=lambda: FakeDb())
         self.assertFalse(out["ok"])
         self.assertEqual((len(out["synced"]), len(out["errors"])), (1, 1))
+
+
+class DigestTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
+        kl = Path(self.tmp.name) / "Klienten"
+        for slug, uid in [("anna", "uA"), ("ben", "uB"), ("cleo", "uC")]:
+            (kl / slug).mkdir(parents=True)
+            (kl / slug / "client.json").write_text(json.dumps({"name": slug.title(), "firebase_uid": uid}))
+        env = patch.dict(os.environ, {"COACH_SIXPACK_ARCHIVE_DIR": self.tmp.name + "/clients", "COACH_KLIENTEN_DIR": str(kl)})
+        env.start(); self.addCleanup(env.stop)
+        def archive(uid, days):
+            sp.write_archive(uid, [{"type": "day_completed", "uid": uid, "date": x, "ts": "", "day": i + 1} for i, x in enumerate(days)])
+        archive("uA", ["2026-10-21", "2026-10-22", "2026-10-23"])   # heute aktiv
+        archive("uB", ["2026-10-14", "2026-10-15", "2026-10-16"])   # seit 7 Tagen weg, Streak war 3
+        # uC ohne Archiv
+        for uid, status in [("uA", "client"), ("uB", "client")]:
+            sp.meta_path(uid).write_text(json.dumps({"clientStatus": status}))
+
+    def test_status_und_alerts(self):
+        digest = sp.build_digest(d("2026-10-23"))
+        self.assertEqual([(c["name"], c["status"]) for c in digest["clients"]], [("Anna", "active"), ("Ben", "lapsed")])
+        self.assertEqual([c["name"] for c in digest["alerts"]], ["Ben"])
+        self.assertEqual(digest["alerts"][0]["streaks"]["lastRun"], 3)
+
+    def test_freund_wird_angezeigt_aber_nicht_gemeldet(self):
+        sp.meta_path("uB").write_text(json.dumps({"clientStatus": "friend"}))
+        digest = sp.build_digest(d("2026-10-23"))
+        self.assertEqual(digest["alerts"], [])
+        self.assertIn("Ben (Freund): seit 7 Tagen nichts geloggt", sp.render_digest(digest))
+
+    def test_fehlender_status_gilt_als_freund(self):
+        sp.meta_path("uB").unlink()
+        self.assertEqual(sp.build_digest(d("2026-10-23"))["alerts"], [])
+
+    def test_status_aus_firestore_profil(self):
+        db = type("D", (), {"collection": lambda _, n: type("C", (), {"document": lambda _, u: type("X", (), {"collection": lambda _, c: type("P", (), {"document": lambda _, m: FakeDoc({"clientStatus": "client"})})()})()})()})()
+        self.assertEqual(sp.fetch_client_status(db, "uA"), "client")
+        db2 = type("D", (), {"collection": lambda _, n: type("C", (), {"document": lambda _, u: type("X", (), {"collection": lambda _, c: type("P", (), {"document": lambda _, m: FakeDoc(None)})()})()})()})()
+        self.assertEqual(sp.fetch_client_status(db2, "uA"), "friend")
+
+    def test_kein_alert_an_nicht_meldetagen(self):
+        self.assertEqual(sp.build_digest(d("2026-10-21"))["alerts"], [])  # Ben: 5 Tage -> still
+
+    def test_offen_bevor_heute_gemacht(self):
+        digest = sp.build_digest(d("2026-10-24"))
+        self.assertEqual(digest["clients"][0]["status"], "open")
+
+    def test_text(self):
+        text = sp.render_digest(sp.build_digest(d("2026-10-23")), only_alerts=True)
+        self.assertIn("Ben: seit 7 Tagen nichts geloggt (letzte Streak 3 Tage)", text)
+        self.assertNotIn("Anna", text)
 
 
 if __name__ == "__main__":

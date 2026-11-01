@@ -1,11 +1,8 @@
 const { existsSync } = require('node:fs');
 const { resolve } = require('node:path');
-
 function sharedPlanRoot() {
-  const root = resolve(__dirname, '..');
-  const candidates = ['.shared/plan', 'vitalos/plan-app', '../plan-dev', '../plan-app'].map((path) => resolve(root, path));
-  const found = candidates.find((path) => existsSync(resolve(path, 'src/views/Plan/CoachWorkspace.jsx')));
-  if (!found) throw new Error('Shared Plan workflow missing. Initialize the vitalos/plan-app submodule or check out plan-dev at .shared/plan (see docs/COACH-PLAN-WORKFLOW.md).');
-  return found;
+  const root = resolve(__dirname, '../modules/plan');
+  if (!existsSync(resolve(root, 'src/views/Plan/ProgramEditor.jsx'))) throw new Error('Pinned Plan source missing. Run git submodule update --init modules/plan.');
+  return root;
 }
 module.exports = { sharedPlanRoot };

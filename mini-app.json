@@ -15,6 +15,7 @@
         "precacheAssets": true,
         "shell": [
           "./index.html",
+          "./coach.html",
           "./coach-manifest.webmanifest",
           "./coach-icon.svg",
           "./coach-icon-180.png",

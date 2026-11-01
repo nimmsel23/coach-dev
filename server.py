@@ -81,8 +81,8 @@ def configured_backends(overrides: dict[str, str] | None = None) -> dict[str, ht
         if not re.fullmatch(r"[a-z][a-z0-9-]*", name):
             raise ValueError(f"Invalid Coach backend name: {name}")
         url = httpx.URL(origin)
-        if url.scheme not in ("http", "https") or not url.host or url.path != "/" or url.query or url.fragment or url.username or url.password:
-            raise ValueError(f"Backend {name} must be an HTTP(S) origin without credentials")
+        if url.scheme not in ("http", "https") or not url.host or url.query or url.fragment or url.username or url.password:
+            raise ValueError(f"Backend {name} must be an HTTP(S) URL without credentials or query")
         if url.host in ("localhost", "127.0.0.1", "::1", "0.0.0.0") and url.port == int(os.environ.get("COACH_PORT", "9150")):
             raise ValueError(f"Backend {name} points back to Coach; choose a separate domain worker port")
         urls[name] = url
@@ -123,7 +123,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def backend_health(request: Request):
         async def check(name, origin):
             try:
-                response = await request.app.state.api_client.get(origin.copy_with(path="/health"), timeout=3)
+                health_path = f"{origin.path.rstrip('/')}/health"
+                response = await request.app.state.api_client.get(origin.copy_with(path=health_path), timeout=3)
                 ready = response.is_success
                 return name, {"ready": ready, "status": response.status_code}
             except httpx.RequestError:
@@ -137,8 +138,9 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
         if strip_segments:
             parts = raw_path.split(b"/", strip_segments + 1)
             raw_path = b"/" + (parts[-1] if len(parts) > strip_segments + 1 else b"")
-        # Keep the fixed domain origin, encoded suffix, query, body and method.
-        url = upstream.copy_with(raw_path=raw_path + (b"?" + request.scope["query_string"] if request.scope["query_string"] else b""))
+        # Keep a configured API base path plus the encoded suffix, query, body and method.
+        base_path = upstream.path.rstrip("/").encode("ascii")
+        url = upstream.copy_with(raw_path=base_path + raw_path + (b"?" + request.scope["query_string"] if request.scope["query_string"] else b""))
         headers = [(k, v) for k, v in end_to_end_headers(request.headers) if k.lower() != "host"]
         outgoing = request.app.state.api_client.build_request(request.method, url, headers=headers, content=await request.body())
         try:
@@ -157,6 +159,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     # Coach-eigene Routen (kein Proxy) stehen vor den Domain- und /api-Catch-alls.
     app.include_router(sixpack_router)
+    from coach_local_plans import create_router
+    app.include_router(create_router())
 
     # Explicit domains precede the compatibility /api catch-all.
     for name in backends:

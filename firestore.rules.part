@@ -1,0 +1,35 @@
+    // Coach/client conversation: isolated from the broad legacy fitness owner rule.
+    match /coachConversations/{uid} {
+      function participant() { return owner(uid) || isCoach(); }
+      function validPlan(plan) {
+        return plan == null || (plan is map
+          && plan.keys().hasAll(['id', 'name', 'version'])
+          && plan.keys().hasOnly(['id', 'name', 'version'])
+          && plan.id is string && plan.id.size() > 0 && plan.id.size() <= 128
+          && plan.name is string && plan.name.size() > 0 && plan.name.size() <= 200
+          && plan.version is int && plan.version > 0);
+      }
+      match /messages/{messageId} {
+        allow read: if participant();
+        allow create: if participant()
+          && messageId.matches('[A-Za-z0-9_-]{1,128}')
+          && request.resource.data.keys().hasAll(['body', 'senderUid', 'senderRole', 'createdAt', 'plan'])
+          && request.resource.data.keys().hasOnly(['body', 'senderUid', 'senderRole', 'createdAt', 'plan'])
+          && request.resource.data.body is string
+          && request.resource.data.body.size() > 0 && request.resource.data.body.size() <= 4000
+          && request.resource.data.senderUid == request.auth.uid
+          && ((request.resource.data.senderRole == 'coach' && isCoach())
+            || (request.resource.data.senderRole == 'client' && owner(uid)))
+          && request.resource.data.createdAt == request.time
+          && validPlan(request.resource.data.plan);
+        allow update, delete: if false;
+      }
+      match /readStates/{readerUid} {
+        allow read: if participant();
+        allow create, update: if participant() && readerUid == request.auth.uid
+          && request.resource.data.keys().hasOnly(['lastReadAt'])
+          && request.resource.data.keys().hasAll(['lastReadAt'])
+          && request.resource.data.lastReadAt == request.time;
+        allow delete: if false;
+      }
+    }

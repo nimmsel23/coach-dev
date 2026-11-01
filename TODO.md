@@ -15,6 +15,17 @@
 - [x] Make Coach the parent product; pin VitalOS on branch `coach`, remove the reverse direct submodule and migrate Coach release ownership.
 
 
+# 2026-10-30 — Coach-Trainingsprogramme
+
+- [x] Wiederverwendbare Coach-Programmbibliothek, versionierte Veröffentlichung
+  und explizite Klientenzuweisung mit eingefrorenen Übungssnapshots.
+- [x] Klientenansicht auf Planstatus + Programmwahl konzentriert; Workout-Logs
+  bleiben als separate Historie erhalten.
+- [x] Coach-Lint und Firebase-Mode-Vite-Build verifizieren.
+- [ ] Authentifizierten Cloud-Ablauf mit isoliertem Coach-/Klientenkonto prüfen.
+- [ ] Isolierte Browser-Abnahme für Coach-Editor, Veröffentlichung und Zuweisung
+  aufsetzen; der frühere Harness prüfte die inzwischen entfernte Plan-Codekopplung.
+
 # [NEW] Coach Office 
 Beispielfeature: Trainingsplanbesprechung zwischen Klient und Coach. Social Media Style. Comment-feed per Exercise
 
@@ -86,3 +97,85 @@ Coach-Zugang anhand der verifizierten Firebase-UID ergänzen und zentrale Rolle 
 Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 
 - [x] Offline-Cache über App-Updates erhalten: gemeinsame SW-Strategie, API-Migration, vollständiges Asset-Precache und sichere Installation.
+
+## 2026-10-30 — Plan-Kompatibilität nach Coach-Entkopplung
+
+- [x] Tatsächlichen Coach → Plan-Reader/Logger-Vertrag isoliert prüfen.
+- [x] Übungen bei Klientenzuweisung in Subcollections schreiben; Null-Pausen erhalten.
+- [x] Veröffentlichte Snapshots, Klientengrenze und Fehlerbereinigung testen.
+
+## 2026-10-30 — Vue-Shell über Coach-Hosting
+
+- [x] Vue-Shell aus dem Workbench-Muster als Hosting-Startseite einbinden;
+  React-Coach unter `/coach.html` same-origin weiterverwenden.
+- [ ] Preview und installierte PWA visuell sowie mit Coach-Login prüfen.
+
+## 2026-10-30 — Plan editor ownership
+
+- [x] Pin Plan as `plan` submodule; source editor and program logic from it.
+- [x] Connect program and individual-client editor routes; remove duplicate logic.
+- [x] Configure Vite/Tailwind/CI and document deliberate pointer updates.
+
+## 2026-10-30 — Plan-/Coach-Dokumentation
+
+- [x] Plan-Eigentümerschaft, Submodulpfad, Verantwortungsmatrix und unabhängige Fitness-/Shell-/Hosting-Übernahmen in den Entwicklerdokumenten ergänzt.
+
+- [x] 2026-10-31: Bestehenden Coach-Server, Klientenregister und Planeditor als lokalen Arbeitsplatz mit Speichern, Versionen, Export und explizitem Versand verbinden.
+
+- [x] 2026-10-31: Richtige Planansicht statt Textblock anbieten, mit A4-Druck und mobiler Übungsdarstellung.
+
+## 2026-10-31 — Shared plans and catalog reconnect
+
+- [x] Open published client plans with the pinned Plan document/PDF renderer.
+- [x] Show worker action failures separately from heartbeat status.
+- [x] Verify program assignment contract and Coach build; repair Fitness upstream.
+- [ ] Publish frontend changes through the explicit release workflow when requested.
+
+## 2026-10-31 — Quellen korrigierbar machen
+
+- [x] Falschen Vorschlag ablehnen und alternative Rohquelle suchen/auswählen.
+- [x] Freigegebene Einträge korrigieren und erneutes automatisches Verknüpfen verhindern.
+- [x] Sichtbarkeit freigegebener Import-IDs und Varianten in der Suche korrigieren.
+- [ ] Gehosteten Coach nach explizitem Release mit angemeldetem Konto abnehmen.
+
+## 2026-10-31 — Coach Python dispatcher
+
+- [x] Zentralen coach-Einstieg für fitness-log clients und weitere Coach-Python-Werkzeuge erstellen.
+- [x] Bestehende Implementierungen/Argumente kompatibel durchreichen; Hilfe und Fehler prüfen.
+
+## 2026-11-01 — Coach ↔ Klienten-Kommunikation
+
+Nachrichten-Tab pro Klient ergänzt, Gesprächsbereich in der Fitness-Inbox angebunden: Textaustausch mit veröffentlichtem Planbezug, bestätigte Speicherung und sichtbarkeitsabhängige Lesestände. Client-/Klientenwechsel isolieren Verlauf und Entwürfe. Bestehende Kommentar-Meldung behauptet keinen Push mehr. Firestore-Protokoll und Freigabereihenfolge dokumentiert.
+
+Abnahme: mobile 390px-Browser-Fixture mit echten Adaptern gegen isolierten Emulator bestanden (Plan-Nachricht → Klienten-Antwort → Lesestände → Klientenwechsel); fünf Rules-Tests, Routing- und zwei Plan-Vertragstests bestanden. Coach- und Fitness-Firebase-Build bestanden. Rules separat im VitalOS-Feature-Worktree vorbereitet; kein Push/Deployment und keine echten Nachrichten.
+
+## 2026-11-01 — Kommunikation vollständig dokumentiert
+
+Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatrix, Cache-/Entwurfs-/Lesestand-Semantik, Limits und Ausbaupunkte gegen Implementierung abgeglichen. Eigenes Runbook für reproduzierbare Tests, Port-/Abhängigkeitsvoraussetzungen, manuelle Release-Reihenfolge, Geräteabnahme, Fehlerbilder und Rücknahme. In AGENTS, Hauptarchitektur und View-Dokumenten verlinkt. Nur Dokumentation; keine neuen Builds/Deployments oder echten Nachrichten.
+
+## Nächste Umsetzung: Kommunikationsausbau (2026-11-01)
+
+- [ ] Historie mit Cursor nachladen; neue Live-Nachrichten dürfen ältere geladene Seiten nicht verdrängen.
+- [ ] Entwürfe pro Konto/Klient dauerhaft auf diesem Gerät sichern und nach Versand löschen.
+- [ ] Ungelesen-Zähler außerhalb des geöffneten Gesprächs in Coach und Fitness anzeigen.
+- [ ] Exakt die referenzierte Planversion aus einer Nachricht öffnen.
+- [ ] Neue Nachrichten per Push ankündigen; fehlende Tokens/Opt-out behandeln.
+- [ ] Sichere Anhänge mit Uploadstatus, Größen-/Typgrenzen und Storage-Regeln.
+- [ ] Trainer-/Klientenzuordnung statt nur projektweiter Coach-Rolle.
+- [ ] Suche und kontrollierte Bearbeitungs-/Lösch-/Aufbewahrungsabläufe ergänzen.
+- [ ] Nach autorisiertem Release echte Konten/Geräte, Netzwechsel und Plan-Head-Wechsel abnehmen.
+
+## 2026-11-01 — Priorität: Planbereitstellung und planbezogenes Feedback
+
+- [x] In „Plan ansehen“ gemeinsamen Plan-Feedbackbereich einschließlich Empfangsbestätigung und Coach-Antwort integrieren.
+- [ ] Veröffentlichung über Plan → Coach-Pin → zentrale Rules → Apps abschließen, sobald Push/Release beauftragt ist.
+- [x] Offene Plan-Rückmeldungen in der Klientenübersicht zusammenfassen.
+- [x] Frühere Versionen einschließlich ihrer Rückmeldungen direkt im Planverlauf öffnen.
+- Freier Chat-Ausbau (Push, Anhänge, weitere Komfortfunktionen) ist zugunsten dieses Ablaufs zurückgestellt.
+
+## 2026-11-01 — Standalone Coach shipping
+
+- [x] VitalOS workspace aliases and sibling Tailwind scans removed from Coach build.
+- [x] Coach-owned CI release and live commit verification exposed through vos-ship coach.
+- [x] Coach rules fragment prepared for central VitalOS import.
+- [ ] Publish integrated Coach source and verify live Hosting release.

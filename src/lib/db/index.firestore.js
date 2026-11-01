@@ -9,6 +9,17 @@ export * from "./firestore/inbox.js";
 export * from "./firestore/coach.js";
 export * from "./firestore/assignedPlans.js";
 export * from "./firestore/macrocycles.js";
+export {
+  listRoutines,
+  createRoutine,
+  getRoutine,
+  updateRoutine as updateWorkoutRoutine,
+  deleteRoutine as deleteWorkoutRoutine,
+  addRoutineExercise,
+  updateRoutineExercise,
+  deleteRoutineExercise,
+  reorderRoutineExercises,
+} from "./firestore/routines.js";
 export * from "./firestore/analysis.js";
 export * from "./firestore/user.js";
 export * from "./firestore/slotTemplates.js";
@@ -24,3 +35,4 @@ export * from "./shared/favourites.js";
 // Kein Fuel-Proxy: Fitness importiert Fuel bewusst nicht direkt. Alte
 // Nutrition-History-Namen bleiben in index.firestore.app.js als leere Stubs,
 // damit historische Import-Verträge keinen Cross-App-Build erzwingen.
+export * from './firestore/communication.js';

@@ -5,7 +5,7 @@ import {
   DAYS_PER_WEEK, PROGRAM_WEEKS, computeStreaks, dayInWeek, dayStatus, pickSixpackSessions, sessionMinutes, summarizeProgram, weekOf,
 } from './sixpackProgress.js';
 
-// Schreibgeschützter Spiegel der 6Pack-App (~/6pack-dev, TrackScreen): gleiche
+// Schreibgeschützter Spiegel der 6Pack-App (~/dev/6pack-dev, TrackScreen): gleiche
 // Farben und Tag-Zeilen, damit der Coach sieht, was der Klient sieht.
 const RED = '#e2001a';
 

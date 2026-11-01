@@ -1,3 +1,5 @@
+import { sourceIds } from '../lib/db/shared/catalogSources.js'
+import SourceEditor from '../views/Inbox/SourceEditor.jsx'
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import {
@@ -21,7 +23,6 @@ import {
   downloadText,
   exportFitnessData,
   getAnatomy,
-  linkInboxSource,
   reenrichInbox,
   saveAnatomy,
   saveExercise,
@@ -284,23 +285,8 @@ function cleanText(value) {
   return String(value || '').trim()
 }
 
-function asList(value) {
-  if (Array.isArray(value)) return value.filter(Boolean).map(String)
-  if (value === null || value === undefined || value === '') return []
-  return [String(value)]
-}
-
 function sourceRefs(exercise) {
-  const snapshot = exercise?.source_snapshot || {}
-  const origin = exercise?.origin || {}
-  const external = exercise?.external_ids || {}
-  const exerciseId = String(exercise?.exercise_id || exercise?.id || '').trim()
-  const directWger = exerciseId.startsWith('wger_') ? exerciseId.slice(5) : null
-  const directYuhonas = exerciseId.startsWith('yuhonas_') ? exerciseId.slice(8) : null
-  return {
-    wger: asList(origin?.wger?.wger_id || snapshot?.wger?.wger_id || external?.wger || exercise?.wger_id || directWger),
-    yuhonas: asList(origin?.yuhonas?.yuhonas_id || snapshot?.yuhonas?.yuhonas_id || external?.yuhonas || exercise?.yuhonas_id || directYuhonas),
-  }
+  return { wger: sourceIds(exercise, 'wger', true), yuhonas: sourceIds(exercise, 'yuhonas', true) }
 }
 
 function hasMeaningfulLesson(lessonDraft) {
@@ -553,38 +539,11 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
     }
   }
 
-  async function handleLinkSource(sourceKey, candidate) {
-    if (!inboxFileId || reviewAction || !candidate?.id) return
-    setReviewAction(`link:${sourceKey}`)
-    try {
-      const payload = {
-        ...localExercise,
-        coachFeedback: reviewFeedback,
-        feedback: reviewFeedback,
-      }
-      const result = await linkInboxSource(inboxFileId, sourceKey, candidate.id, inboxUserId, payload)
-      if (!result?.ok || !result.exercise) {
-        setNotice('Quelle konnte nicht verlinkt werden')
-        return
-      }
-      const next = {
-        ...localExercise,
-        ...result.exercise,
-        enriched: result.exercise,
-        coachFeedback: reviewFeedback,
-        feedback: reviewFeedback,
-        inbox_status: 'source_linked',
-        status: 'source_linked',
-      }
-      setLocalExercise(next)
-      onExerciseChange?.(next)
-      publishInboxUpdate('source_linked')
-      setNotice(`${sourceKey} verlinkt`)
-    } catch (err) {
-      setNotice(describeCoachError(err, 'Quelle konnte nicht verlinkt werden'))
-    } finally {
-      setReviewAction('')
-    }
+  function handleSourceSaved(value) {
+    const next = { ...value, file_id: inboxFileId, userId: inboxUserId, enriched: value }
+    setLocalExercise(next)
+    onExerciseChange?.(next)
+    if (inboxFileId) publishInboxUpdate('source_linked')
   }
 
   async function handleRejectInbox() {
@@ -751,25 +710,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
 	                          empty="Kein source_snapshot vorhanden."
 	                        />
 	                      </div>
-	                      {mergeCandidate && (
-	                        <div className="space-y-2">
-	                          <div className="text-[10px] font-black uppercase tracking-[0.22em]" style={{ color: 'var(--muted)' }}>Kandidaten verbinden</div>
-	                          {Object.entries(mergeCandidate).map(([sourceKey, candidate]) => (
-	                            <button
-	                              key={sourceKey}
-	                              onClick={() => handleLinkSource(sourceKey, candidate)}
-	                              disabled={Boolean(reviewAction)}
-	                              className="w-full rounded-2xl px-3 py-2.5 text-left text-xs font-semibold"
-	                              style={{ background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.22)', color: '#fbbf24' }}
-	                            >
-	                              <span className="inline-flex items-center gap-2">
-	                                {reviewAction === `link:${sourceKey}` ? <Loader2 size={13} className="animate-spin" /> : <FileSearch size={13} />}
-	                                {sourceKey}: {candidate.display_name || candidate.id} · Score {Math.round(candidate.score || 0)}
-	                              </span>
-	                            </button>
-	                          ))}
-	                        </div>
-	                      )}
+                      {(inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && <SourceEditor key={inboxFileId || exerciseId} id={inboxFileId || exerciseId} target={inboxFileId ? 'inbox' : 'approved'} exercise={localExercise} candidates={mergeCandidate} onSaved={handleSourceSaved} />}
+
 	                    </div>
 	                  </ShellCard>
 

@@ -1,2 +1,2 @@
-// Shared training-plan storage contract; Plan owns publication and snapshots.
-export * from "@plan/lib/db/firestore/macrocycles.js";
+// Plan is the source owner; the Git submodule pins this implementation.
+export * from '@plan/lib/db/firestore/macrocycles.js';

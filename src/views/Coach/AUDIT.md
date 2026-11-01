@@ -151,3 +151,53 @@ Vorlagenänderungen. Die Snapshot-Grenzen des Plan-Owners gelten auch in Coach.
 Tailwind scannt dieselbe aufgelöste Plan-Quelle wie Vite. Der zentrale Resolver
 ist für ESM und CommonJS verfügbar. Damit bleiben nur in Plan verwendete
 Editor-/Dialogklassen (z. B. 88dvh-Dialoghöhe) im Coach-Release erhalten.
+
+## 2026-10-30 — Pinned Plan authoring
+
+Replaced duplicate Coach editors/plan stores with adapters to the `plan`
+submodule. Client context, permissions and routing remain Coach-owned. Existing
+programs hydrate their template references; new edits capture exercise snapshots.
+A pointer bump is required to adopt future Plan changes. Physical-device and
+authenticated Cloud acceptance remain separate from isolated checks.
+
+## 2026-10-31 — Documents and worker reconnect
+
+Published plan documents consume the pinned Plan renderer and snapshot helper;
+there is no copied Coach layout. Two shared consumer/assignment contract tests,
+targeted ESLint and the Coach build pass. Hosted authenticated navigation still
+requires release and account/device acceptance. Catalog heartbeat now exposes
+worker failures separately; Fitness's missing-source crash and stopped upstream
+8100 were repaired and actual re-enrichment completed through the worker.
+
+## 2026-10-31 — Incorrect merges and missing manual alternative
+
+Dips and Bench Dips were mixed in an approved record. Inference used subset
+similarity and existing linking accumulated IDs. Source correction now works in
+inbox cards, the inspector and approved catalog entries. Deliberate rejection
+survives enrichment and approval. Three search-pool tests cover imported IDs,
+variant visibility and stale links; a mobile browser fixture verified unlink,
+raw-source search and choosing another variant. Backend source-selection,
+existing inbox/approval/enrichment tests: 28 passed. No cloud frontend release.
+
+Follow-up: source badges now use the same explicit source selection as search
+and editing. A legacy import-shaped exercise ID cannot recreate a removed
+source badge. Four search/reference regression tests pass. Live worker search
+returns Bench Dips, Chest Version, Triceps Version and Ring Dips separately.
+
+## 2026-11-01 — Durchgängiger Rückkanal
+
+Nachrichten-Tab pro Klient, Antwortmöglichkeit in der bisherigen Fitness-Inbox,
+Planversion als Bezug und serverseitige Lesestände. Bestehende Kommentar-Erfolge
+behaupten keinen nicht überprüften Push mehr. Regeln im separaten VitalOS-
+Feature-Worktree; keine Produktivregeln geändert oder echten Nachrichten gesendet.
+Mobiler Emulator-Browserablauf samt Klienten-/Entwurfsisolation bestanden, fünf
+Rules-Tests und Plan-/Routing-Verträge bestanden. Beide App-Builds bestanden.
+Cloud-Abnahme/Release, globale Unread-Zähler, ältere Nachrichten und Push offen.
+
+### Dokumentationsabnahme 2026-11-01
+
+Vertrag, Cache/Pending-Verhalten, flüchtige Entwürfe, Mehrcoach-Lesestände und
+projektweite Coach-Berechtigung gegen Code und Regeln abgeglichen. Vollständige
+Test-/Freigabe-/Fehlerbild-Anleitung im Runbook. Dokumentation kennzeichnet
+Geräte-/Login-Abnahme, Negativfälle bei Plan-Head-Wechsel und Netzwechsel als
+noch separat zu prüfen; frühere lokale Tests sind kein Live-Deploy-Nachweis.

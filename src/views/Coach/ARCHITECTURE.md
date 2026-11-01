@@ -1,6 +1,6 @@
 # View Architecture: Coach
 
-Command Center für Coach-seitige Exercise-Freigabe, Klienten-Betreuung und Katalog-Enhancer. Läuft als eigenständige App (`coach.html` → `vos-coach.web.app`) in der Coach-Shell (`src/shell/`, siehe unten); Zugang nur für Coach-Accounts (`isCoachUser()` in `CoachShell.jsx`).
+Command Center für Coach-seitige Exercise-Freigabe, Klienten-Betreuung und Katalog-Enhancer. Läuft als eigenständige App (`coach.html` → `vos-coach.web.app`) in der Coach-Shell (`src/shell/`, siehe unten); Zugriff prüft Coach-eigene Auth-Logik (`useCoachAccess.js`).
 
 ## Shell & Design (seit 2026-10-15)
 
@@ -36,7 +36,8 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   links eine Liste aller User aus `getAllUserProfiles()` (Klick wählt einen
   Klienten), rechts ein Detail-Bereich mit zwei Sub-Tabs für den gewählten
   Klienten: `Workouts` (rendert `ClientWorkoutsFeed` mit `clientUid`-Prop)
-  und `Trainingsplan` (rendert `AssignPlan` mit `clientUid`+`clientName`-Prop).
+  und `Trainingsplan` (rendert `ClientTrainingWorkspace` mit `clientUid` und
+  `clientName`). Ältere Plan-Ansichten bleiben für bestehende Deep-Links.
   Der `client`/`friend`-Status-Toggle (vorher `ClientManagement.jsx`, jetzt
   gelöscht) sitzt im Detail-Header. Löst den vorher dokumentierten
   "kein gemeinsamer State zwischen Tabs"-Punkt: Klientenauswahl passiert
@@ -45,13 +46,21 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   Typ-Filter, `getGlobalJournalFeed()`) **oder** eingebettet mit
   `clientUid`-Prop (kein eigener Dropdown, nutzt stattdessen
   `getClientJournalFeed(clientUid)` — siehe Datenfluss unten).
-- **`AssignPlan.jsx`**: eigenständig nutzbar (Klienten-Dropdown aus
+- **`AssignPlan.jsx`** (Legacy-Ansicht): eigenständig nutzbar (Klienten-Dropdown aus
   `getAllUserProfiles()`) **oder** eingebettet mit `clientUid`+`clientName`-
   Props (`embedded`-Flag intern, blendet den Dropdown aus, lädt den Klienten
   per `useEffect` sofort). Baut einen Plan (`getPlanSuggestion()`,
   Template-Auswahl) und pusht ihn direkt an den Klienten
   (`assignPlanToClient()`). Zeigt bereits zugewiesene Pläne dieses Coaches an
   diesen Klienten inkl. Tages-Fortschritt (`getClientPlanProgress()`).
+- **`ClientTrainingWorkspace.jsx`**: Klientenansicht plus Coach-eigene
+  Programmbibliothek. `CoachRoutineEditor.jsx` bearbeitet Vorlagen im Coach-
+  Datenraum. `trainingProgramStore.js` veröffentlicht immutable Programm-
+ Snapshots und erstellt bei Zuweisung den bestehenden Klienten-Makrozyklus.
+- **Firestore-Integration**: `firestore/routines.js` und `firestore/macrocycles.js`
+  gehören zum Coach-Repo. Die Makrozyklus-Dokumente halten den von der
+  Klienten-Plan-App konsumierten Vertrag ein; Coach importiert keine
+  Laufzeitkomponenten oder Adapter aus `plan-dev`.
 
 ## Datenfluss (Firebase / Firestore)
 
@@ -69,6 +78,7 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
 - **Feedback**: `saveCoachFeedback()` speichert Kommentare direkt in der entsprechenden Klienten-Dokument-Referenz.
 - **Katalog**: `searchExercises()`, `getAnatomy()`, `saveExercise()` arbeiten direkt mit `fitness/kb/exercises` und `fitness/kb/anatomy`.
 - **Plan-Zuweisung**: `assignPlanToClient(coachUid, clientUid, plan)` — Firestore schreibt per `setDoc` (merge) auf `fitness/{clientUid}/wf_workouts/{planId}` (neue ID via `doc(collection(...)).id` falls `plan.id` fehlt); Local-Build ruft `POST /fitness/coach/plans/:clientUid` (`server.mjs`) auf, das nach `~/.aos/fitness/users/<clientUid>/plans/<planId>.json` schreibt. Beide Backends teilen sich dieselbe Funktionssignatur (`src/lib/db/{firestore,local}/assignedPlans.js`). Klienten-seitiges Abarbeiten des zugewiesenen Plans läuft außerhalb dieses View-Ordners in `src/views/Plan/AssignedPlans.jsx` (Training-Tab, kein eigener Coach-Unterpunkt).
+- **Trainingsprogramme**: `fitness/{coachUid}/coachTrainingPrograms` enthält Coach-Bibliothek und Versions-Snapshots. Zuweisungen kopieren Routine-Snapshots plus veröffentlichte Makrozyklen nach `fitness/{clientUid}`. Das Modell wird direkt im Coach-Code geschrieben.
 
 ## Hash-Routing (seit 2026-10-15)
 
@@ -83,25 +93,70 @@ Zurück-Taste und Reload bleiben an derselben Stelle. Die Push-Links der Cloud F
 noch nicht hervorgehoben. Test: `node --test src/views/Coach/coachRoute.test.mjs`.
 
 
-## 2026-10-16: Gemeinsamer Trainingsplan-Workflow mit Plan
+## 2026-10-30: Coach-owned Trainingsprogramme
 
-`ClientsPanel` startet einen ausgewählten Klienten im Trainingsplan-Bereich.
-Drei Hauptbereiche bilden den Weg ab: Trainingsplan, Workout-Vorlagen und
-Verlauf/Feedback. KI-Insights, Habits und alte Rotation bleiben hinter
-„Weitere Bereiche“ sowie über bestehende Deep-Links erreichbar.
+Die Klientenansicht bündelt Planstatus, Programmauswahl und Verlauf. Coach
+erstellt wiederverwendbare Workout-Vorlagen und Programme im eigenen Firebase-
+Datenraum. Ein Programm wird als Version veröffentlicht und erst auf explizite
+Zuweisung in den Datenraum des gewählten Klienten kopiert. Die Version enthält
+Übungssnapshots, damit spätere Änderungen an Coach-Vorlagen bestehende
+Zuweisungen nicht verändern.
 
-`ClientPlan` und `ClientTrainingPlans` sind dünne Aufrufer von
-`ClientTrainingWorkspace`. Dieser hält Klienten-UID, Listenladezustand und
-Vorlageneditor-Route, ignoriert veraltete Antworten nach einem Klientenwechsel
-und übergibt eine feste UID an `createPlanApi`. Editor und `TrainingPlans` werden
-direkt aus Plan über `@plan` eingebunden. `ClientWorkoutResults` zeigt tatsächliche
-abgeschlossene Workouts und deren Event-Log-Sätze. Kein weiterer Trainingslogger.
+Die Zuweisung erstellt Klienten-Routinen plus einen veröffentlichten
+`macrocycles`-Datensatz, den die bestehende Plan-App lesen kann. Trainingslogs
+bleiben unabhängig davon in den normalen Klienten-Workouts. Autor, Editoren und
+Plan-/Routine-CRUD nutzen Coach-UID bzw. die fest ausgewählte Klienten-UID;
+veraltete Antworten nach einem Klientenwechsel werden verworfen.
 
-`@db` bleibt die vollständige Coach-Firebase-Schnittstelle, auch beim Dev-Server.
-Der Makrozyklus-Adapter reexportiert Plan als SSOT. `@plan` wird vom Build über
-`scripts/shared-plan.mjs` aufgelöst. Die CI checkt die geprüfte Plan-Revision in
-`.shared/plan` aus; vor dem Build wird Plan-eigener Bulk-Katalog-Generator
-aufgerufen. Quelle/Bedienung/Tests: `../../../docs/COACH-PLAN-WORKFLOW.md`.
+Firestore Rules und ihre Durchsetzung bleiben im VitalOS-Owner. Datenmodell und
+Bedienung: `../../../docs/COACH-PLAN-WORKFLOW.md`.
 
-CoachShell verwendet die mit Plan gemeinsame rollenbasierte Zugangsprüfung.
-Firestore Rules und ihre Durchsetzung bleiben im VitalOS-Owner.
+## Plan source ownership — 2026-10-30
+
+`modules/plan/` is the pinned source owner for program authoring and assignment.
+`ClientTrainingWorkspace` owns client context and navigation, opens Plan's
+`ProgramEditor` for program composition and `TrainingPlans` for individual plans.
+`CoachRoutineEditor` delegates to Plan's RoutineBuilder. `trainingProgramStore`
+and the Firestore routine/macrocycle adapters are thin re-exports. Heavy editor
+surfaces load lazily. Vite and Tailwind resolve only the pinned submodule; CI
+initializes it explicitly. No runtime sibling checkout is used.
+
+## 2026-10-31 — Shared plan documents
+
+Published client cards open Plan's lazy `PlanDocument` renderer. Plan's
+`clientView` selects the released snapshot, so later draft edits do not change
+this view. This is the same table/mobile/print renderer used by local planning;
+Coach owns the back navigation and rejects reads for a previously selected client.
+
+## 2026-10-31 — Source corrections
+
+CatalogBrowser and the exercise inspector reuse Inbox SourceEditor for approved
+single-exercise records. Inbox cards use the same component. Sources can be
+searched by name/ID, replaced or disconnected; raw alternatives remain searchable
+regardless of curated search suppression. Approved edits retain exercise IDs.
+Search keeps approved records that share an import ID, deduplicates by ID with
+curated precedence, and hides raw records only by explicit confirmed references.
+
+## 2026-11-01 — Coach/Klienten-Nachrichten
+
+`ClientMessages` ist ein eigener, pro Klient gekeyter Detail-Tab (`messages`).
+Er nutzt `firestore/communication.js` für Live-Nachrichten und Lesestände in
+`coachConversations/{uid}`. Optionaler Bezug auf die veröffentlichte Planversion;
+vor dem Senden wird deren Stand geprüft. Gespeichert/Gesehen/Pending sind getrennt.
+Der Laptop-Worker wird dafür nicht verwendet. Protokoll und Release-Reihenfolge:
+`docs/COACH-COMMUNICATION.md`. Die zugehörige Client-UI liegt in Fitness Inbox.
+
+### Nachrichten: ausführliche Dokumentation
+
+[Protokoll und Zuständigkeiten](../../../docs/COACH-COMMUNICATION.md),
+[Test-/Release-/Diagnose-Runbook](../../../docs/COACH-COMMUNICATION-RUNBOOK.md).
+Lesestände sind zeitbasierte UI-Signale, nicht Push-Zustellung. Alle qualifizierten
+Coaches haben derzeit projektweiten Zugriff; keine zugewiesene-Coach-ACL annehmen.
+
+## 2026-11-01 — Planbereitstellung und Rückmeldungen
+
+ClientTrainingWorkspace lädt unter „Plan ansehen“ neben PlanDocument auch den gemeinsamen PlanFeedback-Baustein aus dem gepinnten Plan-Modul. Klient, Plan-ID und freigegebene Versionsnummer bilden den Schlüssel. Empfangsbestätigung und Antworten kommen aus `planResponses`, unabhängig vom freien Nachrichtenbereich. Der individuelle Planeditor bindet denselben Plan-Baustein ein. Vertrag: `modules/plan/docs/PLAN-FEEDBACK.md`. Keine Änderung an Gateway, lokaler Registry oder Katalog-Enrichment.
+
+## 2026-11-01 — Durchgehender Betreuungsablauf
+
+ClientsPanel zeigt den gemeinsamen PlanDeliveryOverview je Klient; `?plan=<id>` führt direkt in die Planansicht und bleibt über Reload/Zurück erhalten. Wechsel von Klient/Detailtab löscht den Planbezug. ClientTrainingWorkspace zeigt denselben Status mit bereits geladenen Plänen, öffnet nach Programmzuweisung den erzeugten Klientenplan und bietet einen Versionsselektor für historische Snapshots samt Feedback. Fehlende Bibliothek/Vorlagen/Trainingsergebnisse blockieren vorhandene Klientenpläne nicht mehr pauschal (Teilresultate mit sichtbarer Fehlermeldung).

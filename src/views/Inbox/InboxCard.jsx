@@ -1,18 +1,9 @@
-import { CheckCircle2, Trash2, Info, AlertTriangle, Sparkles, User, RefreshCw, MessageSquare, Brain, GitMerge } from 'lucide-react';
-
-function asList(value) {
-  if (Array.isArray(value)) return value.filter(Boolean).map(String);
-  if (value === null || value === undefined || value === '') return [];
-  return [String(value)];
-}
+import { sourceIds } from '../../lib/db/shared/catalogSources.js';
+import SourceEditor from './SourceEditor.jsx';
+import { CheckCircle2, Trash2, Info, AlertTriangle, Sparkles, User, RefreshCw, MessageSquare, Brain } from 'lucide-react';
 
 function sourceRefs(data) {
-  const origin = data?.origin || {};
-  const external = data?.external_ids || {};
-  return {
-    wger: asList(origin?.wger?.wger_id || external?.wger || data?.wger_id),
-    yuhonas: asList(origin?.yuhonas?.yuhonas_id || external?.yuhonas || data?.yuhonas_id),
-  };
+  return { wger: sourceIds(data, 'wger'), yuhonas: sourceIds(data, 'yuhonas') };
 }
 
 function buildInspectPayload(ex, data) {
@@ -29,7 +20,7 @@ function buildInspectPayload(ex, data) {
   };
 }
 
-export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenrich, onLinkSource, onInspect, mergeCandidate, showUserId = false, asMessage = false }) {
+export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenrich, onSourcesChanged, onInspect, mergeCandidate, showUserId = false, asMessage = false }) {
   // Unterstützt beide Backend-Shapes: { exercises: [data] } und { enriched: data } und flach
   const data     = ex.exercises?.[0] || ex.enriched || ex;
   const fileId   = ex.file_id;
@@ -179,30 +170,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
         </div>
       )}
 
-      {mergeCandidate && (
-        <div className="mb-2.5 p-3 bg-fit-orange/5 border border-fit-orange/15 rounded-xl space-y-2">
-          {Object.entries(mergeCandidate).map(([sourceKey, cand]) => (
-            <div key={sourceKey} className="flex items-start justify-between gap-2 text-fit-orange text-[10px] font-bold leading-tight">
-              <div className="flex items-start gap-2 min-w-0">
-                <GitMerge size={12} className="shrink-0 mt-0.5" />
-                <span className="uppercase tracking-tight">
-                  {sourceKey}: {cand.display_name || cand.id} · Score {Math.round(cand.score)}
-                </span>
-              </div>
-              {onLinkSource && (
-                <button
-                  onClick={() => onLinkSource(fileId, sourceKey, cand.id)}
-                  disabled={busy || actioning === `${fileId}:${sourceKey}`}
-                  className="shrink-0 px-2 py-1 rounded-md border border-fit-orange/20 bg-fit-orange/10 hover:bg-fit-orange/20 text-fit-orange uppercase tracking-tight disabled:opacity-50"
-                  title={`${sourceKey}-Quelle verlinken`}
-                >
-                  {actioning === `${fileId}:${sourceKey}` ? '...' : 'Verbinden'}
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+      <SourceEditor id={fileId} exercise={data} candidates={mergeCandidate} onSaved={onSourcesChanged} />
 
       {warnings.length > 0 && (
         <div className="mb-2.5 p-3 bg-fit-red/5 border border-fit-red/10 rounded-xl space-y-1">

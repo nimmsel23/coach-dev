@@ -1,3 +1,35 @@
+# 2026-10-30 — Trainingspläne als Coach-Programme
+
+Die Klientenansicht wurde auf den tatsächlichen Coach-Ablauf umgestellt:
+wiederverwendbare Einheiten/Programme gehören zur Coach-UID; veröffentlichte
+Versionen frieren Übungen als Snapshot ein; explizite Zuweisung kopiert den
+Plan und Klienten-Routinen in den bestehenden Firebase-Planbereich des
+ausgewählten Klienten. Workout-Protokolle bleiben getrennt. Die doppelte
+Workout-Vorlagen-Klientennavigation wurde aus den Haupttabs entfernt.
+
+Änderungen: `ClientTrainingWorkspace.jsx`, `trainingProgramStore.js`,
+`ClientsPanel.jsx`, Coach-Architektur und Workflow-Doku. ESLint für die
+geänderten UI-Dateien sowie der Vite-Coach-Build liefen erfolgreich. pnpm war
+wegen des schreibgeschützten Store-Locks nicht nutzbar; die vorhandenen
+Projekt-Binaries wurden direkt ausgeführt. Kein authentifizierter Cloud-
+Durchlauf und kein Release.
+
+## 2026-10-24 — Klienten-Integration: klienten-dev geht in coach-dev auf (Branch `integrate-klienten`)
+
+`klienten-dev` (ClientForge/Konsole) und der Coach-Gateway laufen jetzt in einer App; Klienten-Pläne (`plan.json`) werden als Routinen nach Firestore gepusht. Entscheidung: Klientendaten bleiben unter `~/.aos` (per Symlink), ein Coach-Server. `klienten-dev` und `klienten-python` blieben bis auf eine Doku-Ergänzung unangetastet.
+
+- **`coach_klienten.py`** (neu, Commit `d221d57`): Einstiegspunkt auf :5200. Nimmt `server.create_app()` (Domain-Proxies, Coach-UI, 6Pack) und setzt die Routen von `klienten-python` davor (`/k/*`, `/api/clients`, `/konsole/*`, `/clientforge/*`). Läuft im venv von `klienten-python`.
+- **`systemd/coach-klienten.service`** (neu): Unit-Vorlage, nicht installiert, nichts gestartet oder neu gestartet.
+- **`coach_plan_push.py`** (neu, Commit `9547667`): `plan.json` (`{einheiten:[…]}`) → `fitness/<uid>/routines/plan-<slug>` samt Übungen; deterministische IDs, nur `source: "klienten-plan"` wird geändert/entfernt, Gewichte nur bei Zahlenwert. Läuft im System-Python (`firebase_admin`). CLI mit `--dry-run`.
+- **`coach_klienten.py`**: Endpoint `POST /k/<id>/plan/push` und Auto-Push (fire-and-forget) nach erfolgreichem Speichern eines Plans.
+- **`tests/test_plan_push.py`** (neu): Umwandlung, Idempotenz, Schutz fremder Routinen gegen Fake-DB; Suite grün.
+- **Real ausgeführt:** Jakobs Push-Routine `plan-push-rpe-5-7` (5 Maschinen-Übungen, 3 Sätze, Gewichte leer) nach Firestore geschrieben und per Rücklesen verifiziert. Plan-Quelle: `~/.local/Klienten/jakob-stadler/data/plan.json`.
+- **`docs/COACH-ARCHITECTURE.md`** (Commit `3b19fb8`): Abschnitt „Klienten-Integration (2026-10-24)" mit Routen-Reihenfolge, Plan-Push-Regeln, Auslösern und offenen Punkten.
+
+Validation: nur `TestClient`-GETs gegen echte Daten für die kombinierte App; Auto-Push noch nicht im laufenden Dienst erprobt; nichts gepusht. Ob Jakob die Routine in seiner App sieht, ist nicht geprüft.
+
+---
+
 ## 2026-10-21 — Port 9150 belongs to Coach
 
 `server.py` is now the shared Coach backend on `127.0.0.1:9150`. `coach-backends.json` dispatches Fitness/Fuel/Relax and permits further domain entries without server-code changes. Canonical `/api/<domain>` and `<domain>-api` paths preserve encoded suffixes, requests, and responses; legacy Fitness paths remain available. Liveness and domain readiness are separate; self-proxy loops are rejected.
@@ -17,6 +49,10 @@ Corrected Coach commit-hook triggers, dev/preview entrypoints, build/deploy runn
 ## 2026-10-20 — Coach owns VitalOS client Shell
 
 Added `vitalos` gitlink tracking VitalOS branch `coach`; removed the reverse direct relationship in VitalOS. Coach owns preview CI and explicit manual production CI. Added `bin/coach-release` for a clean committed local build/deploy. Retired parent dependency-repair hooks and implicit Hosting deploy in pre-push. Shared Plan resolution supports the nested Shell. Migration remains local, with no push or deploy.
+
+# 2026-10-29 — Fuel über VitalOS-API
+
+Coach routet `/api/fuel/*` und `/fuel-api/*` an die unter `/api/fuel` konfigurierte VitalOS-API auf `127.0.0.1:8000`. Der Gateway unterstützt dafür API-Basis-Pfade bei Forwarding und Readiness-Healthchecks. `coach-api.service` wurde neu gestartet; `/api/fuel/health` und die konfigurierte Upstream-Adresse wurden live mit 200 bestätigt. Fuel-Domain- und Datenverantwortung bleiben bei Fuel.
 
 # Coach: Splash, coach-sw.js und SW-Register aus @vos/mini-app-shell (2026-10-16)
 
@@ -1405,3 +1441,140 @@ Enabled Dependabot alerts and security updates. Configured weekly GitHub Actions
 ### 2026-10-31 — Coach Python dependencies
 
 Added weekly pip updates for `requirements-server.txt`. The initial automatic Python dependency-graph scan failed on an existing nested VitalOS submodule reference (`not our ref cae8431df1c2388d6ed943ae88aef930d9c6e5fc`); no source or submodule pins changed in this setup.
+## 2026-10-30 — Coach-Trainingsprogramme von plan-dev entkoppelt
+
+Coach besitzt jetzt die benötigten Routine- und Makrozyklus-Firestore-Adapter,
+den Coach-Routine-Editor, die Coach-Zugriffsprüfung und die Ergebnisformatierung.
+CI, Vite und Tailwind beziehen keinen Quellcode mehr aus `plan-dev`. Die
+Klienten-App liest weiterhin den bestehenden Makrozyklus-Datenvertrag. Ein
+veralteter Browser-Harness, der nur den früheren Plan-Codepfad abdeckte, wurde
+entfernt; isolierte Browser- und authentifizierte Cloud-Abnahmen bleiben offen.
+
+## 2026-10-30 — Coach/Plan-Datenvertrag verifiziert
+
+- Coach bleibt seit 1754e89 unabhängig von Plan-Imports; keine Rückkopplung in
+  Build oder Laufzeit eingeführt. Der neue mobile Editor ist noch keine Coach-UI.
+- Zwei durch Vertragstests belegte Fehler behoben: `updateWorkoutRoutine` legt
+  übernommene Übungen atomar in der vom Plan-Reader erwarteten Subcollection ab;
+  explizite 0-Sekunden-Pausen werden nicht auf 90 Sekunden gesetzt.
+- `test:plan:contract` prüft Veröffentlichung/Zuweisung, Client-Scope, privaten
+  Arbeitsstand, Übungsdokumente und Fehlerbereinigung. Optional mit `PLAN_SOURCE`
+  tatsächlichen Plan-Reader und Satzlogger sowie die Gegenrichtung geprüft.
+- Lokale Tests mit `/home/alpha/plan-dev`: 2/2 erfolgreich, keine Cloud-Daten.
+- Authentifizierte Firebase-Abnahme und Coach-Deployment bleiben separat.
+
+## 2026-10-30 — Coach consumes the pinned Plan editor
+
+- Added Plan as the `modules/plan` submodule, pinned to `4dbe020`. Its canonical
+  source remains `/home/alpha/plan-dev`; Coach no longer maintains duplicate
+  program stores, routine editors or macrocycle adapters.
+- Connected ProgramEditor for reusable programs and TrainingPlans for direct
+  client authoring. Editor surfaces are lazy-loaded; client context and access
+  remain Coach-owned. Existing program and client Firestore paths are preserved.
+- Configured source resolution, Tailwind scanning, catalog generation and CI
+  submodule initialization. No sibling-source fallback or automatic pointer update.
+- Source is under `modules/plan` to avoid the existing `/plan` dev API proxy.
+- Validated isolated Coach/Plan data contract and Plan program migration/store
+  tests, ESLint, build and 390px browser editor→preview→program-save flow.
+- Neither new Plan commits nor this Coach pointer were pushed or deployed.
+  Plan commits must be published first before pushing the parent pointer.
+
+## 2026-10-30 — Plan-/Coach-Dokumentation
+
+Plan-Eigentümerschaft, Submodulpfad, Verantwortungsmatrix und unabhängige Fitness-/Shell-/Hosting-Übernahmen in den Entwicklerdokumenten ergänzt.
+Nur Dokumentation; keine Quell-/Daten-/Pointer-Änderung und kein Deployment.
+## 2026-10-30 — Vue-Shell für Coach-Hosting
+
+Die Hosting-Startseite wird als Vue-Shell gebaut und bettet die unveränderte
+React-Anwendung same-origin unter `/coach.html` ein. Shell und React-Einstieg
+liegen im selben Build und Firebase-Hosting-Target. Authentifizierung und
+Coach-Fachlogik bleiben in der React-Anwendung. ESLint, Dual-Entry-Vite-Build,
+PWA-Stempelung und Service-Worker-Precache liefen lokal erfolgreich. Für die
+lokale Build-Prüfung kam Vue aus der vorhandenen Workbench-Installation, weil
+der pnpm-Store-Lock in dieser Umgebung schreibgeschützt ist; Cloud-Preview und
+saubere CI-Installation sind noch offen.
+
+## 2026-10-31 — Lokaler gemeinsamer Planarbeitsplatz
+
+`/coach/local.html` integriert Klientenregister aus klienten-python, Planeditor
+aus dem gepinnten Submodul und lokale Entwürfe/Versionen am Coach-Server 9150.
+ClientForge-Pläne können ohne Veränderung der Quelldatei übernommen werden.
+Ergänzt: Historie/Wiederherstellen, Markdown-/JSON-Export, expliziter Versand
+der freigegebenen Version und Launcher `bin/coach-server open`. Keine neue
+Dienstinstanz, kein Kopieren der Workspace-/Klienten-Quellbäume. Vue regulär
+installiert; pnpm-Paketauflösung durch echte Paketpfade im Vite-Build korrigiert.
+Lokale API- und Datenvertragstests sowie Gatewaytests erfolgreich (im Sandbox-
+Testlauf wurden Thread-Offloads synchron ausgeführt). Echte Cloud-Schreibvorgänge
+sind kein Teil der Verifikation.
+
+Browserabnahme (390px) am gebauten Frontend erfolgreich: Klient → Plan → Übungs-
+vorgaben → lokales Speichern → Reload → lokale Freigabe → Versionsverlauf →
+ausdrücklich bestätigter simulierter Versand. Keine Firebase-Browseraufrufe.
+Plan-Quellstand `33bcdef` enthält zusätzliche isolierte Auslieferungsprüfungen
+und bewahrt beim ClientForge-Import Sekunden-, Minuten- und Null-Pausen.
+
+Liveprüfung nach Neu-Laden des bestehenden `coach-api.service`: Health OK,
+`/coach/local.html` HTTP 200 mit lokalem Entry-Bundle, fünf bestehende Klienten
+über die lokale API verfügbar. Keine echten Pläne angelegt oder versendet.
+Keine neuen Listener/Services und kein Cloud-Deployment.
+
+
+## 2026-10-31 — Dev-Projekte unter ~/dev
+
+Lokale Entwicklungspfade und betroffene Verknüpfungen auf `~/dev/*-dev` umgestellt. Runtime-Daten, Branches und Release-Checkouts behalten ihre Zuständigkeit. Keine Pushes oder Releases. Gesamter Umzug und Prüfungen: `~/RESULTS.md`.
+
+## 2026-10-31 — Lesbare Trainingsplan-Ansicht
+
+Planliste öffnet über „Plan ansehen“ das gemeinsame PlanDocument. Herkunftstext
+liegt in einer ausklappbaren Sektion; Übungen, Sätze, Wiederholungen, Gewichte
+und Pausen werden als Trainingstage dargestellt. Drucken/PDF nutzt A4-Tagesblätter.
+Importierte Daten werden für die Darstellung nicht verändert.
+
+Visuell am tatsächlichen importierten Plan geprüft: drei Tagesblätter, zwölf
+Übungszeilen und drei offene Vorgaben; Desktop- und Handyansicht ohne Überlauf.
+PDF mit drei A4-Seiten und druckoptimierten, weißen Rändern. Prüfung rein lesend;
+Plandaten und Freigabe-/Versandstatus bleiben unverändert.
+
+## 2026-10-31 — Plan documents and catalog worker reconnect
+
+Published client plans now open the pinned PlanDocument with Plan-owned clientView snapshot selection, matching local table/mobile/PDF output. Client switching guards asynchronous reads. WorkerChip distinguishes online from failures and shows the last error. Fitness source fixes manual-source re-enrichment and restores Coach upstream 8100 using the same catalog as coach-sync. Architecture and audit notes in docs/COACH-ARCHITECTURE.md.
+
+Validation: 2 shared Plan/Coach assignment/consumer contract tests, targeted ESLint and full Coach Hosting build passed. Backend health confirms all three upstreams ready. No push or Hosting deployment; authenticated hosted navigation remains unverified.
+
+## 2026-10-31 — Falsche Quellen und freie Alternativsuche
+
+Gemeinsamer Quelleneditor für Inbox, Inspector und freigegebene Katalogeinträge: Quellen inspizieren, Rohquelle per Name/ID suchen, ersetzen oder bewusst trennen. Freigegebene Import-IDs bleiben in der Suche; Namensaliase blenden keine andere Variante mehr aus. Bestehende KI-Inhalte nach Quellenkorrektur zur Nachprüfung markiert. Backend respektiert source_selection beim Enrichment/Approval.
+
+Prüfung: 3 Suchpooltests, 28 Backendtests, mobiler Browsertest mit isolierten Daten (Trennen → Suche → richtige Variante), ESLint. Kein Push/Hosting-Release.
+
+Nachprüfung Quellenkorrektur: falscher Bench-Dips-Link lokal und in Firestore getrennt, vorhandene Inhalte zur Prüfung markiert. Echte Worker-Suche erfolgreich mit vier separaten Dips-Varianten. Vierter JS-Test verhindert Rückkehr entfernter Quellen-Badges über alte Import-IDs.
+
+## 2026-10-31 — Coach Python dispatcher
+
+Projekt-eigener bin/coach mit Python-Dispatcher für Klienten-Logs, Console/Drafts, Workout-Erfassung, Katalog/Inbox, TUIs, Coach-Worker, Daten-/Firestore-Sync, Runtime-Daten, Benachrichtigungen/Push, Mail/Aktivitäten und vorhandene Server-/Release-Befehle. Alte fitness-* Namen als Unterbefehle kompatibel. Nutzt den bestehenden Fitness-Source und dessen uv-Umgebung, ohne neue Wrapper in globalen bin-Verzeichnissen.
+
+Sechs Dispatcher-Tests bestanden (u.a. echte Argument-/Exit-Code-/Arbeitsverzeichnis-Prüfung). Dokumentation: docs/COACH-CLI.md. Keine Dienste gestartet und keine Nachrichten gesendet.
+
+Abnahme: alle 18 Python-Werkzeuggruppen mit --help erfolgreich. Besonderheiten des alten TUI-/Firestore-Einstiegs über eigene Hilfe abgefangen. Echter Aufruf coach clients matthias --days 7 aus /tmp über vorhandene Shell-PATH-Konfiguration erfolgreich; keine Symlinks oder globalen Wrapper erstellt.
+
+## 2026-11-01 — Coach ↔ Klienten-Kommunikation
+
+Nachrichten-Tab pro Klient ergänzt, Gesprächsbereich in der Fitness-Inbox angebunden: Textaustausch mit veröffentlichtem Planbezug, bestätigte Speicherung und sichtbarkeitsabhängige Lesestände. Client-/Klientenwechsel isolieren Verlauf und Entwürfe. Bestehende Kommentar-Meldung behauptet keinen Push mehr. Firestore-Protokoll und Freigabereihenfolge dokumentiert.
+
+Abnahme: mobile 390px-Browser-Fixture mit echten Adaptern gegen isolierten Emulator bestanden (Plan-Nachricht → Klienten-Antwort → Lesestände → Klientenwechsel); fünf Rules-Tests, Routing- und zwei Plan-Vertragstests bestanden. Coach- und Fitness-Firebase-Build bestanden. Rules separat im VitalOS-Feature-Worktree vorbereitet; kein Push/Deployment und keine echten Nachrichten.
+
+## 2026-11-01 — Kommunikation vollständig dokumentiert
+
+Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatrix, Cache-/Entwurfs-/Lesestand-Semantik, Limits und Ausbaupunkte gegen Implementierung abgeglichen. Eigenes Runbook für reproduzierbare Tests, Port-/Abhängigkeitsvoraussetzungen, manuelle Release-Reihenfolge, Geräteabnahme, Fehlerbilder und Rücknahme. In AGENTS, Hauptarchitektur und View-Dokumenten verlinkt. Nur Dokumentation; keine neuen Builds/Deployments oder echten Nachrichten.
+
+## 2026-11-01 — Planbezogenen Ablauf statt freien Chat priorisiert
+
+„Trainingspläne → Plan ansehen“ verwendet den gemeinsamen PlanFeedback-Baustein aus dem Plan-Pin: ausdrückliche Empfangsbestätigung des Klienten und versiongebundene Frage/Antwort direkt unter dem Plan. Keine zweite Coach-Implementierung; keine echten Klientennachrichten. Reproduzierbare mobile Fixture im Repo ergänzt, Browser-Runner gibt bei Fehlern die tatsächliche Ursache aus. Temporäre Bash-Starter werden nicht benötigt. Freier Chat-Ausbau zurückgestellt; dessen bereits vorhandene, noch uncommittete Erweiterungen bleiben getrennt erhalten.
+
+## 2026-11-01 — Übersicht, Direkteinstieg und historische Plan-Rückmeldungen
+
+Klientenliste und Trainingsplanbereich zeigen gemeinsamen Plan-Status (bereitgestellt/Entwürfe, Empfang, offener Antwortbedarf) mit direktem Planeinstieg per URL. Frühere Planversionen samt Feedback auswählbar; Zuweisung öffnet erzeugten Klientenplan. Unabhängige Laderesultate verhindern, dass eine fehlerhafte Bibliothek den gesamten Planbereich blockiert. Freier Chat bleibt zurückgestellt, Produktionsstand unverändert.
+
+## 2026-11-01 — Standalone shipping and central rules ownership
+
+Removed optional VitalOS alias dependency, sibling aliases and Tailwind scans. Historical dirty vitalos checkout preserved; Plan remains the explicit source dependency. coach-release dispatches Coach CI for published origin/dev and verifies the resulting live SHA; vos-ship coach delegates without a Shell build. CI records release.json. Coach rules now have their own source fragment for central import/deployment in VitalOS.

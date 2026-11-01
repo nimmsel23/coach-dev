@@ -2,3 +2,11 @@
 	path = vitalos
 	url = git@github.com:nimmsel23/vitalos.git
 	branch = coach
+[submodule "klienten-dev"]
+	path = klienten-dev
+	url = /home/alpha/dev/klienten-dev
+	branch = main
+[submodule "plan"]
+	path = modules/plan
+	url = https://github.com/nimmsel23/plan-dev.git
+	branch = dev

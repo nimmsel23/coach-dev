@@ -1,0 +1,15 @@
+[Unit]
+Description=Coach + Klienten (ein Prozess, Port 5200)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/coach-dev
+Environment=COACH_HOST=127.0.0.1
+Environment=COACH_PORT=5200
+EnvironmentFile=-%h/.config/coach/backend.env
+ExecStart=%h/klienten-python/.venv/bin/python3 -m uvicorn coach_klienten:app --app-dir %h/dev/coach-dev --host 127.0.0.1 --port 5200
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

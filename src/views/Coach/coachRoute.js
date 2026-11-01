@@ -9,7 +9,7 @@
 // Der Hash ist das, was functions/clientWorkout.js in die Push-Links schreibt.
 
 export const SUB_TAB_IDS = ['exercises', 'catalog', 'clients']
-export const DETAIL_TAB_IDS = ['workouts', 'sixpack', 'insights', 'habits', 'templates', 'trainingplan', 'plan']
+export const DETAIL_TAB_IDS = ['messages', 'workouts', 'sixpack', 'insights', 'habits', 'templates', 'trainingplan', 'plan']
 
 const DEFAULT_ROUTE = { sub: 'exercises', client: '', detail: 'workouts', date: '' }
 
@@ -33,6 +33,7 @@ export function parseCoachHash(hash = '') {
       client: second || '',
       detail: DETAIL_TAB_IDS.includes(third) ? third : DEFAULT_ROUTE.detail,
       date,
+      ...(params.get('plan') && !params.get('plan').includes('/') ? { planId: params.get('plan') } : {}),
     }
   }
   if (SUB_TAB_IDS.includes(first)) return { ...DEFAULT_ROUTE, sub: first }
@@ -44,7 +45,7 @@ export function parseCoachHash(hash = '') {
   return { ...DEFAULT_ROUTE }
 }
 
-export function buildCoachHash({ sub, client, detail, date } = {}) {
+export function buildCoachHash({ sub, client, detail, date, planId } = {}) {
   const route = { ...DEFAULT_ROUTE, sub, client, detail, date }
   if (!SUB_TAB_IDS.includes(route.sub)) return '#/exercises'
   if (route.sub !== 'clients') return `#/${route.sub}`
@@ -53,5 +54,8 @@ export function buildCoachHash({ sub, client, detail, date } = {}) {
   const withDetail = route.detail !== DEFAULT_ROUTE.detail && DETAIL_TAB_IDS.includes(route.detail)
     ? `${base}/${route.detail}`
     : base
-  return isIsoDate(route.date) ? `${withDetail}?date=${route.date}` : withDetail
+  const params = new URLSearchParams()
+  if (isIsoDate(route.date)) params.set('date', route.date)
+  if (route.detail === 'trainingplan' && typeof planId === 'string' && planId && !planId.includes('/')) params.set('plan', planId)
+  return params.size ? `${withDetail}?${params}` : withDetail
 }

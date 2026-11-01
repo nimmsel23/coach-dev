@@ -1,4 +1,4 @@
-// Spiegel des 6Pack-Programms (~/6pack-dev/SixPackApp.jsx): 8 Wochen à 7 Tage,
+// Spiegel des 6Pack-Programms (~/dev/6pack-dev/SixPackApp.jsx): 8 Wochen à 7 Tage,
 // Tag 3 und 7 jeder Woche sind Ruhetage. Reine Funktionen ohne React/Firebase,
 // damit sie mit `node --test` prüfbar sind.
 

@@ -1,0 +1,73 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0b0e14;
+  color: #e8e9ee;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #coach-shell {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body { overflow: hidden; }
+
+.coach-frame {
+  display: flex;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  flex-direction: column;
+  background: #0b0e14;
+}
+
+.coach-frame__header {
+  z-index: 1;
+  display: flex;
+  min-height: 56px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #252a35;
+  background: rgb(17 21 30 / 94%);
+  padding: max(0.55rem, env(safe-area-inset-top)) max(0.85rem, env(safe-area-inset-right)) 0.55rem max(0.85rem, env(safe-area-inset-left));
+}
+
+.coach-frame__identity { display: flex; align-items: baseline; gap: 0.65rem; }
+.coach-frame__eyebrow { color: #a78bfa; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+.coach-frame h1 { margin: 0; font-size: 1rem; font-weight: 750; letter-spacing: -0.025em; }
+
+.coach-frame__open {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid #343a49;
+  border-radius: 0.7rem;
+  padding: 0.4rem 0.7rem;
+  color: #c5c8d2;
+  font-size: 0.73rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.coach-frame__open:hover, .coach-frame__open:focus-visible { border-color: #a78bfa; color: #e8e9ee; }
+.coach-frame__open svg { width: 14px; height: 14px; }
+
+.coach-frame__content { display: flex; min-height: 0; flex: 1; padding: 0.35rem; }
+.coach-frame iframe { width: 100%; height: 100%; min-height: 0; flex: 1; border: 1px solid #252a35; border-radius: 0.8rem; background: #0b0e14; }
+
+@media (max-width: 480px) {
+  .coach-frame__header { min-height: 50px; }
+  .coach-frame__content { padding: 0; }
+  .coach-frame iframe { border: 0; border-radius: 0; }
+}
