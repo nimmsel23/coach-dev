@@ -194,12 +194,20 @@ nach Klient getrennt zeigt. Ausgangslage geprüft am 2026-11-01:
 - Bisher einseitig und lokal (Stufe 1, siehe `modules/plan/src/views/Plan/ARCHITECTURE.md`): Plan-Vorkommen →
   Tasks, kein Rückweg, kein Firebase.
 
-- [ ] Task-Sync pro Klient nach Firestore einbauen (Schlüssel `firebase_uid`, kein Vermischen der Klienten).
-- [ ] Rückweg klären: `task done` am Handy → lokale Klienten-DB (Konfliktregel, `occkey` bleibt der Schlüssel).
+- [x] Task-Sync pro Klient nach Firestore: `modules/plan/fitness/task_sync.py` (`python -m fitness.task_sync push <uid>`, Ziel
+      `fitness/<uid>/tasks/<uuid>`, Schlüssel `firebase_uid`). Probelauf ohne `--yes`; **erster echter Push steht noch aus**.
+- [x] Rückweg: `task_sync pull <uid> --yes` schließt lokal nur ab, was am Handy erledigt wurde (`status == completed`); alles andere
+      gewinnt lokal. Die Firestore-Regeln (`fitness/{uid}/**`) erlauben Besitzer und Coach, keine Regeländerung nötig.
 - [ ] Handy-Ansicht: Tasks nach Klient getrennt, auf der bestehenden Klientenliste aufsetzen.
-- [ ] Mit dem aos-Framework für Klienten abstimmen: Das Map-CLI (`frame|freedom|focus|fire --client <id>`)
+- [x] Mit dem aos-Framework für Klienten abgestimmt: Das Map-CLI (`frame|freedom|focus|fire --client <id>`)
       nutzt dieselbe Klienten-DB für Fire; Pfad nicht doppelt festlegen.
-- [ ] **Pfad umstellen:** `~/.aos/fitness` wird nach Firestore gepusht. Entscheidung 2026-11-01: Die Klienten-Task-DB
+- [x] **Pfad umgestellt (2026-11-01):** `~/.aos/fitness` wird nach Firestore gepusht. Entscheidung 2026-11-01: Die Klienten-Task-DB
       liegt in `~/.local/Klienten/<client-id>/tw-data/` (so nutzt sie das Map-CLI mit `--client`, siehe
       `~/aos/game/CLAUDE.md`). `plan_tasks.py` (`_taskwarrior`, bisher `<runtime>/users/<uid>/taskwarrior/`) auf diesen
       Pfad umstellen, die Klienten-ID aus der `firebase_uid` über `client.json` auflösen, bestehende DBs per `mv` übernehmen.
+
+- [ ] Handy-Ansicht: Tasks nach Klient getrennt aus `fitness/<uid>/tasks` anzeigen (Frontend, noch nicht begonnen).
+- [ ] Sync automatisieren (Timer/Daemon) und den ersten Push mit `--yes` bewusst auslösen; Konfliktfall prüfen, wenn Handy und lokal
+      denselben Task unterschiedlich ändern (heute: lokal gewinnt, vom Handy zählt nur Erledigt).
+- [ ] UUID-Kollision zwischen Klienten bei Map-Tasks: Die UUID aus `tw_maps.identity` enthält den Klienten nicht; in `fitness/<uid>/tasks`
+      ist das unkritisch (pro uid getrennt), nur ein gemeinsamer Pfad wäre ein Problem.
