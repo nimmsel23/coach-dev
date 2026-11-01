@@ -21,3 +21,8 @@ Push-Benachrichtigungen und globale Unread-Zähler. Bestehende Kommentare auf
 Sessions/Journale bleiben kontextbezogene Felder; sie sind keine automatisch
 in den neuen Verlauf übernommenen Nachrichten. Authentifizierte Cloud-Abnahme
 und Rules-/App-Releases erfolgen separat.
+
+Dokumentationsprüfung 2026-11-01: Auth-/Pfadisolation, Cache/Pending, flüchtige
+Entwürfe, tatsächliche Lesestand-Semantik, globale Coach-Rolle und Abgrenzung zu
+alten Kommentaren gegen Quellcode geprüft. Benutzerablauf, Release-Grenze und
+Fehlerbilder in docs/COACH-COMMUNICATION.md; keine neue Geräteabnahme behauptet.

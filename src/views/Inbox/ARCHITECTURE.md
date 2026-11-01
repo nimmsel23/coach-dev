@@ -29,3 +29,9 @@ Lesestand. Kein Laptop-Worker oder lokaler HTTP-Server ist für Nachrichten nöt
 Legacy-`InboxCard`/`useInbox` behandeln weiterhin Übungsanfragen; die Katalogreview
 ist davon getrennt. Neue Nachrichten werden nicht in die Enrichment-Pipeline
 oder den Katalog-Worker eingereiht.
+
+Ausführlicher Klientenvertrag und Fehlersuche:
+[docs/COACH-COMMUNICATION.md](../../../docs/COACH-COMMUNICATION.md).
+Gemeinsames Schema/Runbook liegen im Coach-Owner; Adapter bleiben rollenbezogen.
+Der Textentwurf ist flüchtig, Lesestände sind zeitbasierte UI-Signale. Aktuelle
+projektweite Coach-Berechtigung nicht als zugewiesenen-Trainer-Filter interpretieren.

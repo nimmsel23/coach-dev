@@ -47,3 +47,13 @@ Stand 2026-10-29. Ausführlich: `~/vitalos/docs/DEPLOYMENT.md` (GitHub: nimmsel2
   (`git worktree add .worktrees/<name> <branch>`).
 - Default-Branch des Repos ist `master`; die `.github/workflows/*.yml` auf `master` bestimmen das Live-Verhalten.
 <!-- release-weg:end -->
+
+## Coach ↔ Klienten-Kommunikation (2026-11-01)
+
+Details: [docs/COACH-COMMUNICATION.md](docs/COACH-COMMUNICATION.md). Fitness besitzt
+die Klienten-Inbox und bindet deren Gesprächspfad an die tatsächliche Firebase-
+Auth-UID. Coach besitzt seine Klientenauswahl; VitalOS besitzt die Regeln.
+`coachConversations` nicht mit Katalog-Inbox/Enrichment oder Session-Kommentaren
+vermischen. Neue Rules müssen vor App-Veröffentlichung im VitalOS-Owner freigegeben
+sein. Keine offenen Fallback-Regeln, automatische realen Testnachrichten oder
+zweite Klienten-Registry. Aktuelle Limits/Release-Nachweise im gemeinsamen Runbook.
