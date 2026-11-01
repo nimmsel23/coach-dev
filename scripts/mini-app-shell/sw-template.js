@@ -2,11 +2,14 @@
 // Nicht von Hand editieren: Konfiguration steht in mini-app.json (Block "sw"), Neubau via stamp.
 //
 // Strategien:
-//  - Navigation:        Netz zuerst (kurzes Timeout) → immer die neueste index.html, Cache nur als Rückfall.
+//  - Navigation:        Cache zuerst (Offline-first, Standard "navStrategy":"cache"): die vorab gecachte App-Shell erscheint sofort,
+//                       auch im Lie-Fi (WLAN ohne Internet). Aktualisiert wird die Shell atomar mit dem neuen SW (Install lädt Shell + Assets);
+//                       die Seite bekommt 'sw-update-available' und lädt NICHT von selbst neu. Nur ohne Cache-Treffer geht es übers Netz (navTimeoutMs).
+//                       "navStrategy":"network" = altes Verhalten (Netz zuerst, Timeout, Cache als Rückfall).
 //  - Assets (gehasht):  Cache zuerst, bei Fehlen übers Netz nachladen (Laufzeit-Cache); schlägt das offline fehl,
 //                       kommt index.html (SPA-Rückfall) — assetFallback:'none' liefert stattdessen einen Netzwerkfehler.
-//  - API swr:           stale-while-revalidate, offline → {ok:false, offline:true}.
-//  - API networkFirst:  Netz zuerst, Cache als Rückfall.
+//  - API swr:           stale-while-revalidate, offline/Timeout (apiTimeoutMs) → {ok:false, offline:true}.
+//  - API networkFirst:  Netz zuerst (Timeout apiTimeoutMs, Standard 5 s), Cache als Rückfall.
 //  - Bilder-Hosts:      eigener, versionsunabhängiger Cache (überlebt App-Updates).
 //  - neverCache:        Pfade, die der SW gar nicht anfasst (z. B. /api/sync/*).
 //  - Background Sync:   optional, flusht eine IndexedDB-Queue (offline-queue.js-Kontrakt);
@@ -28,7 +31,9 @@ const rel = (pathname) => (BASE && pathname.startsWith(BASE + '/') ? pathname.sl
 const hit = (list, path) => (list || []).some((p) => path === p || path.startsWith(p.endsWith('/') ? p : p + '/') || path.startsWith(p + '?'))
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()))
+  // cache:'reload' → Shell + Assets kommen garantiert frisch vom Server (nicht aus dem HTTP-Cache), sonst passen index.html und Chunks nicht zusammen
+  const fresh = (u) => (typeof Request === 'function' ? new Request(u, { cache: 'reload' }) : u)
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL.map(fresh))).then(() => self.skipWaiting()))
 })
 
 self.addEventListener('activate', (e) => {
@@ -91,10 +96,41 @@ function networkFirstNav(req, timeoutMs) {
   })
 }
 
+
+// fetch mit hartem Timeout — im Lie-Fi (WLAN ohne Internet) hängen Requests, statt zu scheitern.
+function fetchT(req, ms) {
+  if (!ms) return fetch(req)
+  return new Promise((resolve, reject) => {
+    const ac = typeof AbortController === 'function' ? new AbortController() : null
+    const timer = setTimeout(() => { if (ac) ac.abort(); reject(new Error('timeout')) }, ms)
+    fetch(ac ? new Request(req, { signal: ac.signal }) : req).then(
+      (r) => { clearTimeout(timer); resolve(r) },
+      (err) => { clearTimeout(timer); reject(err) }
+    )
+  })
+}
+const ASSET_TIMEOUT = CFG.assetTimeoutMs === undefined ? 15000 : CFG.assetTimeoutMs
+const API_TIMEOUT = CFG.apiTimeoutMs === undefined ? 5000 : CFG.apiTimeoutMs
+
+// Offline-first-Navigation: vorab gecachte Shell sofort ausliefern. Die Shell wird nur durch einen neuen SW
+// (Install: Shell + gehashte Assets zusammen) ersetzt — so passen index.html und Chunks immer zusammen.
+async function cacheFirstNav(req) {
+  const cached = (await caches.match(req)) || (await caches.match(req, { ignoreSearch: true }))
+  if (cached) return cached
+  const u = new URL(req.url)
+  const p = rel(u.pathname)
+  // Wurzel-/index-Aufrufe (auch mit Query/Hash-Parametern): immer die gecachte Shell, nie aufs Netz warten
+  if (p === '/' || p === '/index.html') {
+    const shell = await caches.match(INDEX)
+    if (shell) return shell
+  }
+  return networkFirstNav(req, CFG.navTimeoutMs || 4000)
+}
+
 async function swr(req) {
   const cache = await caches.open(DATA_CACHE)
   const cached = await cache.match(req)
-  const net = fetch(req)
+  const net = fetchT(req, API_TIMEOUT)
     .then((fresh) => { if (fresh && fresh.ok) cache.put(req, fresh.clone()); return fresh })
     .catch(() => null)
   if (cached) return cached
@@ -125,17 +161,20 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return
   const path = rel(url.pathname)
 
-  if (req.mode === 'navigate') { e.respondWith(networkFirstNav(req, CFG.navTimeoutMs === undefined ? 4000 : CFG.navTimeoutMs)); return }
+  if (req.mode === 'navigate') {
+    e.respondWith(CFG.navStrategy === 'network' ? networkFirstNav(req, CFG.navTimeoutMs === undefined ? 4000 : CFG.navTimeoutMs) : cacheFirstNav(req))
+    return
+  }
   if (hit(CFG.neverCache, path)) return
   if (hit(CFG.api && CFG.api.swr, path)) { e.respondWith(swr(req)); return }
   if (hit(CFG.api && CFG.api.networkFirst, path)) {
-    e.respondWith(fetch(req).then((res) => put(req, res, DATA_CACHE)).catch(() => caches.open(DATA_CACHE).then((c) => c.match(req))))
+    e.respondWith(fetchT(req, API_TIMEOUT).then((res) => put(req, res, DATA_CACHE)).catch(() => caches.open(DATA_CACHE).then((c) => c.match(req))))
     return
   }
   // Pfade, die nie gecacht werden (z. B. Sync-/Health-Endpunkte der API): direkt ans Netz, SW antwortet nicht
   if (hit(CFG.neverCache, path)) return
   if (path.includes(CFG.assetsPath || '/assets/') || CFG.cacheAllSameOrigin) {
-    e.respondWith(caches.match(req).then((h) => h || fetch(req).then((res) => put(req, res)).catch(() => (CFG.assetFallback === 'none' ? Response.error() : caches.match(INDEX)))))
+    e.respondWith(caches.match(req).then((h) => h || fetchT(req, ASSET_TIMEOUT).then((res) => put(req, res)).catch(() => (CFG.assetFallback === 'none' ? Response.error() : caches.match(INDEX)))))
   }
 })
 
@@ -184,7 +223,7 @@ async function flushQueue() {
   for (const item of await idb(db, 'queue', 'readonly', (s) => s.getAll())) {
     if (CFG.sync.conflicts && item.conflict) continue // wartet auf manuelle Auflösung (offline-queue.js)
     try {
-      const res = await fetch(item.url, { method: item.method, headers: item.headers || { 'Content-Type': 'application/json' }, body: item.body })
+      const res = await fetchT(item.url, { method: item.method, headers: { ...(item.headers || { 'Content-Type': 'application/json' }), ...(item.key ? { 'X-Idempotency-Key': item.key } : {}) }, body: item.body }, 10000)
       if (CFG.sync.conflicts && res.status === 409) {
         // Konflikt: Offline-Stand nicht verwerfen, als conflict markieren und alle Seiten informieren
         const body = await res.clone().json().catch(() => ({}))

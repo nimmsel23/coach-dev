@@ -1578,3 +1578,7 @@ Klientenliste und Trainingsplanbereich zeigen gemeinsamen Plan-Status (bereitges
 ## 2026-11-01 — Standalone shipping and central rules ownership
 
 Removed optional VitalOS alias dependency, sibling aliases and Tailwind scans. Historical dirty vitalos checkout preserved; Plan remains the explicit source dependency. coach-release dispatches Coach CI for published origin/dev and verifies the resulting live SHA; vos-ship coach delegates without a Shell build. CI records release.json. Coach rules now have their own source fragment for central import/deployment in VitalOS.
+
+## 2026-11-01 — Splash blockiert nicht mehr auf Service-Worker-Update
+
+Die vendorte Mini-App-Shell mit der aktuellen VitalOS-Quelle synchronisiert. Ein langsamer Netzwerk-/Service-Worker-Updatecheck hält den Splash nicht mehr offen; er verschwindet nach dem App-Start (mindestens 200 ms, maximal 12 s nur falls der App-Root gar nicht bereit wird).
