@@ -64,3 +64,12 @@ python3 -m unittest discover -s tests -p test_server.py -v
 ```
 
 Tests use temporary UI fixtures and an in-memory API transport. They cover domain/legacy routing, extension through the registry, self-proxy rejection, worker availability, request payload/query/status/cookies/compression, UI mounts, missing assets and traversal.
+
+## Client-ID-Routen
+
+`/<id>/` und `/k/<id>/` liefern die bestehende ClientForge-Klientenoberfläche.
+`/api/client/<id>/plans` und `/k/<id>/plans` verwenden Plan-Runtime und dieselben
+Daten wie die kompatible `/api/coach/local/clients/<id>/plans`-API. Legacy-APIs
+werden aus klienten-python importiert, ohne weiteren Dienst auf 5200.
+Lokaler Zugriff und gültiger vorhandener Klient bleiben Voraussetzung.
+Details: [LOCAL-PLANNING.md](LOCAL-PLANNING.md).

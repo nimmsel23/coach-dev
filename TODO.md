@@ -224,3 +224,7 @@ Gemeinsamen Planeditor für lokale und Cloud-Planung aufwerten; Workout- und
 Einstieg im Coach erreichbar machen.
 
 - [x] Lokale Freigabe: alte GET-Caches umgehen, Konflikte aktualisieren und offene Übungen namentlich nennen.
+
+## 2026-11-01 — Client-ID-Endpunkte
+
+- [x] ClientForge nutzt `/api/clients` und `/api/client/{id}/plans`. Direkte `/{id}/`-Einstiege und `/k/{id}/…` mit gleicher Planablage; bisherige lokale API bleibt Alias.

@@ -6,7 +6,7 @@ import { filterCatalog, mergeCatalog } from '@plan/views/Plan/lib/catalog.js';
 import { planReleaseIssues } from '@plan/views/Plan/lib/planReadiness.js';
 import { importClientForge } from '@plan/views/Plan/lib/legacyPlan.js';
 
-const base = new URL('../api/coach/local/', window.location.href);
+const base = new URL('../api/', window.location.href);
 const path = (suffix) => new URL(suffix, base).href;
 const catalog = mergeCatalog([]);
 const searchCatalog = async (q) => ({ results: filterCatalog(catalog, { q }).slice(0, 80) });
@@ -42,7 +42,7 @@ export default function LocalCoachApp() {
   const [message, setMessage] = useState('');
   const sequence = useRef(0);
   const client = clients.find((item) => item.id === clientId);
-  const clientPath = `clients/${encodeURIComponent(clientId)}`;
+  const clientPath = `client/${encodeURIComponent(clientId)}`;
   const planPath = (id) => `${clientPath}/plans/${encodeURIComponent(id)}`;
 
   async function loadClients() {

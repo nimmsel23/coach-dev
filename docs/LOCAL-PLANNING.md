@@ -103,3 +103,38 @@ nicht neu geladen. Nur alte lokale Plan-API-Cacheeinträge werden entfernt.
 Vor Freigabe wird der Plan frisch gelesen; abweichende Revisionen verlangen
 eine erneute Prüfung. Offene Übungen erscheinen namentlich auf der Plankarte
 mit direktem Zugang zu „Vorgaben ergänzen“. Freigeben bleibt vom Versand getrennt.
+
+## Client-ID-Endpunkte (2026-11-01)
+
+ClientForge verwendet die reguläre Client-ID-API. ID ist der bestehende
+Ordner-Slug aus klienten-python. Beispiel: `http://127.0.0.1:9150/matthias-mayer/`.
+
+| Endpoint | Funktion |
+| --- | --- |
+| `GET /<id>/` oder `/k/<id>/` | Alte Klientenoberfläche mit geprüftem Zielklienten öffnen |
+| `GET /api/clients` | Vorhandene Klienten auflisten |
+| `GET /api/client/<id>` | Reduzierte Klientenmetadaten |
+| `GET/POST /api/client/<id>/plans` | Pläne auflisten / erstellen |
+| `GET/PUT /api/client/<id>/plans/<plan>` | Lesen / mit `expectedUpdatedAt` sichern |
+| `GET/POST …/<plan>/versions` | Historie / mit `expectedUpdatedAt` freigeben |
+| `GET …/<plan>/export/json` oder `/md` | Exportieren |
+| `POST …/<plan>/deliver` | Expliziter Versand, Body `{"version": 1}` |
+| `GET /api/client/<id>/legacy` | Altplan für ausdrückliche Übernahme lesen |
+
+Klientenbezogene APIs sind auch unter `/k/<id>/…` erreichbar; die bisherigen
+`/api/coach/local/clients/…` bleiben Aliase derselben Handler und Daten.
+Unbekannte Klienten ergeben 404. Konfliktprüfung, Versionssnapshots und expliziter
+Versand bleiben erhalten. Die singulären `/plan`-Routen der früheren 5200-App
+haben einen anderen Legacy-Vertrag und werden nicht still umgedeutet.
+
+Die Python-API bleibt auf Loopback und gleiche Schreib-Origin beschränkt.
+Firebase Hosting führt keinen Python-Server aus; Cloud-Coach verwendet weiterhin
+seine authentifizierten Firestore-Adapter. Eine Client-ID ist keine Zugangsberechtigung.
+
+Die Client-ID-Einstiege liefern die alte ClientForge-Oberfläche mit ihren Tabs;
+der Trainingsplan-Tab bettet das gemeinsame Studio ein. Statische Dateien liegen
+isoliert unter `/_klienten/`. `KLIENTEN_UI_ROOT` bestimmt den vorhandenen UI-Build.
+Coach bindet die bestehenden klienten-python-Handler für `/k/<id>/…` und
+`/api/client/<id>/…` hinter denselben lokalen Zugriffsprüfungen ein. Habits,
+Journal, Sessions und Ernährung behalten somit ihren bisherigen Daten-Owner.
+Native `/plans`-Routen stehen vor den alten `/plan`-Routen. Kein neuer 5200-Dienst.

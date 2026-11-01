@@ -1,4 +1,4 @@
-"""Local Coach HTTP boundary; Plan owns storage, klienten-python owns the registry."""
+"""Client-ID Coach HTTP boundary; Plan owns storage, klienten-python owns the registry."""
 from __future__ import annotations
 import asyncio
 import logging
@@ -47,7 +47,7 @@ def local_only(request):
 
 
 def create_router(root=None, deliver=None):
-    router = APIRouter(prefix='/api/coach/local')
+    router = APIRouter()
     store = plans_module.LocalPlans(root or clients_root())
 
     async def handle(request, fn, *args):
@@ -62,39 +62,46 @@ def create_router(root=None, deliver=None):
         try: return fn(*args)
         except plans_module.PlanError as err: raise HTTPException(err.status, str(err))
 
-    @router.get('/clients')
+    @router.get('/api/clients')
     async def clients(request: Request):
         return {'clients': await handle(request, store.clients)}
 
-    @router.get('/clients/{client}/legacy')
+    @router.get('/api/client/{client}')
+    async def profile(client: str, request: Request):
+        await handle(request, store.client, client)
+        profile = next((item for item in await handle(request, store.clients) if item['id'] == client), None)
+        if profile is None: raise HTTPException(404, 'Klientenprofil nicht verfügbar.')
+        return profile
+
+    @router.get('/api/client/{client}/legacy')
     async def legacy(client: str, request: Request):
         return await handle(request, store.legacy, client)
 
-    @router.get('/clients/{client}/plans')
+    @router.get('/api/client/{client}/plans')
     async def listing(client: str, request: Request):
         return {'plans': await handle(request, store.list, client)}
 
-    @router.post('/clients/{client}/plans')
+    @router.post('/api/client/{client}/plans')
     async def create(client: str, request: Request):
         return await handle(request, store.create, client)
 
-    @router.get('/clients/{client}/plans/{plan}')
+    @router.get('/api/client/{client}/plans/{plan}')
     async def get(client: str, plan: str, request: Request):
         return await handle(request, store.get, client, plan)
 
-    @router.put('/clients/{client}/plans/{plan}')
+    @router.put('/api/client/{client}/plans/{plan}')
     async def save(client: str, plan: str, request: Request):
         return await handle(request, store.save, client, plan)
 
-    @router.get('/clients/{client}/plans/{plan}/versions')
+    @router.get('/api/client/{client}/plans/{plan}/versions')
     async def versions(client: str, plan: str, request: Request):
         return {'versions': await handle(request, store.versions, client, plan)}
 
-    @router.post('/clients/{client}/plans/{plan}/versions')
+    @router.post('/api/client/{client}/plans/{plan}/versions')
     async def release(client: str, plan: str, request: Request):
         return await handle(request, store.release, client, plan)
 
-    @router.get('/clients/{client}/plans/{plan}/export/{kind}')
+    @router.get('/api/client/{client}/plans/{plan}/export/{kind}')
     async def export(client: str, plan: str, kind: str, request: Request):
         record = await handle(request, store.get, client, plan)
         if kind == 'json': content, media = json.dumps(record, ensure_ascii=False, indent=2), 'application/json'
@@ -102,7 +109,7 @@ def create_router(root=None, deliver=None):
         else: raise HTTPException(404, 'Exportformat unbekannt.')
         return Response(content, media_type=media, headers={'Content-Disposition': f'attachment; filename="training-{plan}.{kind}"'})
 
-    @router.post('/clients/{client}/plans/{plan}/deliver')
+    @router.post('/api/client/{client}/plans/{plan}/deliver')
     async def send(client: str, plan: str, request: Request):
         local_only(request)
         try:
@@ -122,4 +129,14 @@ def create_router(root=None, deliver=None):
             logging.exception('Local plan delivery failed')
             # Do not leak credential paths or transport details into the browser.
             raise HTTPException(502, 'Versand fehlgeschlagen. Lokaler Plan bleibt gespeichert. Serverprotokoll prüfen.')
+    # Compatibility aliases share handlers, store and access checks with the canonical API.
+    for route in list(router.routes):
+        if route.path == '/api/clients':
+            aliases = ['/api/coach/local/clients']
+        else:
+            suffix = route.path.removeprefix('/api/client/')
+            aliases = [f'/api/coach/local/clients/{suffix}']
+            if suffix != '{client}': aliases.append(f'/k/{suffix}')
+        for alias in aliases:
+            router.add_api_route(alias, route.endpoint, methods=route.methods, include_in_schema=False)
     return router

@@ -6,7 +6,8 @@ self.addEventListener('activate', (event) => {
     for (const name of await caches.keys()) {
       const cache = await caches.open(name);
       for (const request of await cache.keys()) {
-        if (new URL(request.url).pathname.startsWith('/api/coach/local/')) await cache.delete(request);
+        const path = new URL(request.url).pathname;
+        if (path.startsWith('/api/coach/local/') || path.startsWith('/api/client/') || path === '/api/clients' || path.startsWith('/k/')) await cache.delete(request);
       }
     }
     await self.registration.unregister();
