@@ -57,6 +57,9 @@ export function buildKbMap(kbExercises) {
     add(ex.name, ex);
     add(ex.german, ex);
     add(ex.english, ex);
+    // Frühere IDs (z.B. "inbox_back_squat" aus alten Sessions): Sessions werden
+    // nie umgeschrieben, die alte ID löst hier auf die Kanon-ID auf.
+    for (const legacy of ex.legacy_ids || []) add(legacy, ex);
   }
   for (const ex of list) {
     for (const alias of [...(ex.aliases || []), ...(ex.search_aliases || [])]) add(alias, ex);

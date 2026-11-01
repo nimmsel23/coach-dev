@@ -65,6 +65,9 @@ class ExerciseRecord:
     common_errors: list[str] | None = None
     tags: list[str] | None = None
     search_aliases: list[str] | None = None
+    # Frühere IDs derselben Übung (z.B. "inbox_back_squat" aus alten Sessions).
+    # Sessions werden nie umgeschrieben; die alte ID löst stattdessen hier auf.
+    legacy_ids: list[str] | None = None
     external_ids: dict[str, Any] | None = None
     gif_url: str | None = None
     image_url: str | None = None
@@ -202,7 +205,7 @@ def build_exercise_index() -> list[ExerciseRecord]:
                     if val: setattr(rec, f, val)
                 
                 # Listen-Felder
-                for lf in ["equipment", "aliases", "search_aliases", "movements", "primary_muscles", "secondary_muscles", "stabilizers", "variations", "coaching_notes", "common_errors", "tags"]:
+                for lf in ["equipment", "aliases", "search_aliases", "legacy_ids", "movements", "primary_muscles", "secondary_muscles", "stabilizers", "variations", "coaching_notes", "common_errors", "tags"]:
                     val = list_of_text(entry.get(lf)) if isinstance(entry, dict) else None
                     if val:
                         existing = getattr(rec, lf) or []
@@ -210,6 +213,13 @@ def build_exercise_index() -> list[ExerciseRecord]:
                 
                 if isinstance(entry, dict) and entry.get("wger_muscle_ids"):
                     rec.wger_muscle_ids = entry["wger_muscle_ids"]
+
+                # legacy_ids wirken wie Such-Aliase (Namensauflösung, JS-kbLookup,
+                # Duplikat-Merge von Bulk-Einträgen gleicher ID).
+                if rec.legacy_ids:
+                    rec.search_aliases = sorted(set(rec.search_aliases or []) | set(rec.legacy_ids))
+                    for legacy in rec.legacy_ids:
+                        by_name[normalize_text(legacy, smart=True)] = ex_id
 
                 # origin.wger/origin.yuhonas: rohe Einzeltreffer, die
                 # `attach_source_snapshot()` (inbox_actions.py) unter dem
@@ -466,12 +476,18 @@ def find_exact_id(query: str, records: list[ExerciseRecord]) -> ExerciseRecord |
     for record in records:
         if record.exercise_id == query_text:
             return record
+    for record in records:
+        if query_text in (record.legacy_ids or []):
+            return record
     return None
 
 
 def find_by_id(exercise_id: str, records: list[ExerciseRecord]) -> ExerciseRecord | None:
     for record in records:
         if record.exercise_id == exercise_id:
+            return record
+    for record in records:
+        if exercise_id in (record.legacy_ids or []):
             return record
 
     # Alias-Auflösung: Nach einem Bulk-Merge in build_exercise_index() (Durchlauf

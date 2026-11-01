@@ -245,6 +245,31 @@ construction fail", bewusst noch nicht angefasst). Konkrete Befunde:
   Exercises, nicht mehrere Repos mit potenziell abdriftenden Teilkopien.
   Noch nicht umgesetzt, nur festgehalten.
 
+**Nicht-Übungen (Aktivitäten) — `kb/registry/non_exercises.yml` (2026-11-01):**
+HIIT, Laufen, Radfahren usw. sind Aktivitäten (Session-Feld `activityAddons`,
+`src/constants/activities`), keine Exercises. Einträge aus wger/yuhonas, die
+das sind (aktuell `wger_529` HIIT), stehen in dieser Sperrliste (Matching nur
+über IDs) und werden gefiltert in `build_exercise_index()`,
+`find_source_entries()`, Importer, `sync_exercises()` (Firestore-Push; ein echter
+Push räumt das Doc als Waise ab) und im Bulk-Bundle
+(`scripts/build-exercise-bulk-data.mjs` → `nonExercises.generated.js`, von
+`firestore/kb.js` genutzt). Roh-Import (`unreviewed_wger.yml`) bleibt
+unverändert, damit ein Reimport nichts zurückbringt. Weitere Kandidaten
+(Cardio/Stretching) sind nur gelistet, nicht gesperrt — Entscheidung bei Daniel.
+
+**`legacy_ids` (2026-11-01):** frühere IDs derselben Übung, z.B.
+`inbox_back_squat` aus alten Sessions. Der Resolver behandelt sie wie
+Such-Aliase (`find_by_id`/`find_exact_id`, `search_aliases`), `kbLookup.js`
+ebenso. Sessions werden nie umgeschrieben. Eine ID, die in Sessions an
+verschiedenen Übungen hängt (`inbox_brustmaschine`), gehört NICHT in
+`legacy_ids`; dort muss der Name entscheiden.
+
+**Claude-Beispieleinträge:** `kb/inbox/inbox_{back_squat,machine_chest_press,
+incline_chest_press_machine,samurai_extension}.yml` — Tier bewusst `inbox`
+(Entwurf, `review_state: draft`, Tag `claude_draft`), weil der Tier an `inbox_`
+im Dateinamen hängt und Daniel sie fachlich noch nicht geprüft hat. Nach der
+Prüfung: Datei nach `kb/exercises/` verschieben (dann `expert`).
+
 ---
 
 ## Coaching Notes Pipeline ("WhatsApp Wisdom Drops")
