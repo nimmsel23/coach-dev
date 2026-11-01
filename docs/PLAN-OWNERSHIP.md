@@ -21,3 +21,7 @@ Stand: 2026-10-30.
 Details: `plan-dev/docs/PLAN-COACH-INTEGRATION.md` und
 `coach-dev/docs/COACH-PLAN-WORKFLOW.md`. Dieser Dokumentationsstand ändert keine
 Fitness-Integration, Daten, Gitlinks oder Deployments.
+
+## Planbezogenes Feedback (2026-11-01)
+
+Die über den Mini-App-Resolver eingebundene PlanCard zeigt in Cloud-Modi den gemeinsamen PlanFeedback-Bereich aus Plan. Klient bestätigt explizit den Empfang und gibt Rückmeldung zur angezeigten freigegebenen Version; Coach antwortet am selben Plan. Es entsteht keine zusätzliche Fitness-Kopie. `planResponses/{uid}/plans/{id}/versions/vN` ist unabhängig von Katalog-Inbox und freiem Chat; die neuen zentralen Regeln müssen vor Veröffentlichung freigegeben sein. Bedienung, Daten und aktuelle Grenzen: `../plan-dev/docs/PLAN-FEEDBACK.md`. Noch kein Deployment.

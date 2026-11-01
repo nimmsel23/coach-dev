@@ -1,17 +1,17 @@
 name: inbox_bent_over_barbell_row
-description: 'Neuer Inbox-Draft für: Vorgebeugtes Langhantelrudern (stehend)'
-generated_at: '2026-09-08T21:37:23.002778+00:00'
+description: 'Proactively generated expert draft for: Vorgebeugtes Langhantelrudern
+  (stehend)'
+generated_at: '2026-11-01T17:09:11.274547+00:00'
+enriched_at: '2026-11-01T17:09:11.274547+00:00'
 exercises:
 - exercise_id: bent_over_barbell_row
-  display_name: Vorgebeugtes Langhantelrudern (stehend)
   wger_id: 1489
-  yuhonas_id: Bent_Over_Barbell_Row
   external_ids:
     wger:
     - 1489
     yuhonas:
     - Bent_Over_Barbell_Row
-  schema_version: 2026-08-12.exercise-v1
+  display_name: Langhantelrudern (Obergriff)
   origin:
     type: merged_external
     source_refs:
@@ -19,7 +19,109 @@ exercises:
       - '1489'
       yuhonas:
       - Bent_Over_Barbell_Row
+  yuhonas_id: Bent_Over_Barbell_Row
+  id: bent_over_barbell_row
+  german: Langhantelrudern (Obergriff)
+  english: Bent Over Barbell Row
+  category: pull
+  equipment:
+  - barbell
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 205_rhomboids
+  - 202b_trapezius_middle
+  secondary_muscles:
+  - 402_biceps_brachii
+  - 303_posterior_deltoid
+  - 202a_trapezius_upper
+  - 404_brachioradialis
+  stabilizers:
+  - 206_erector_spinae
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 603_gluteus_maximus
+  - 604_hamstrings
+  - 702_soleus
+  movements:
+  - shoulder_extension
+  - scapular_retraction
+  - elbow_flexion
+  - hip_hinge
+  - core_bracing
+  - horizontal_pull
+  instructions:
+  - 'Holding a barbell with a pronated grip (palms facing down), bend your knees slightly
+    and bring your torso forward, by bending at the waist, while keeping the back
+    straight until it is almost parallel to the floor. Tip: Make sure that you keep
+    the head up. The barbell should hang directly in front of you as your arms hang
+    perpendicular to the floor and your torso. This is your starting position.'
+  - Now, while keeping the torso stationary, breathe out and lift the barbell to you.
+    Keep the elbows close to the body and only use the forearms to hold the weight.
+    At the top contracted position, squeeze the back muscles and hold for a brief
+    pause.
+  - Then inhale and slowly lower the barbell back to the starting position.
+  - Repeat for the recommended amount of repetitions.
+  coaching_notes:
+  - '**Startposition und Haltung:** Stelle dich schulterbreit hin, greife die Langhantel
+    im Obergriff etwas breiter als schulterbreit. Beuge die Knie leicht und lehn dich
+    aus der Hüfte nach vorne, bis dein Oberkörper fast parallel zum Boden ist. Halte
+    deinen Rücken gerade und den Kopf in Verlängerung der Wirbelsäule (Blick leicht
+    nach vorne/unten).'
+  - '**Rumpfspannung:** Aktiviere deine Rumpfmuskulatur (Bauch und unterer Rücken)
+    während der gesamten Bewegung, um den Oberkörper stabil zu halten und einen Rundrücken
+    zu vermeiden.'
+  - '**Zugbewegung:** Leite die Bewegung aus deinem oberen Rücken ein, indem du die
+    Schulterblätter aktiv zusammenziehst. Ziehe die Hantel kontrolliert zur unteren
+    Brust oder zum Bauchnabel. Die Ellenbogen bleiben dabei nah am Körper.'
+  - '**Fokus auf den Rücken:** Konzentriere dich darauf, die Bewegung mit dem Latissimus
+    und den Rhomboiden auszuführen. Die Arme dienen primär als Haken, um die Stange
+    zu halten und die Ellenbogen zu beugen, sollten aber nicht der Haupttreiber sein.'
+  - '**Voller Bewegungsradius:** Senke die Hantel kontrolliert ab, bis deine Arme
+    fast vollständig gestreckt sind und du eine Dehnung im oberen Rücken spürst, bevor
+    du die nächste Wiederholung einleitest.'
+  common_errors:
+  - '**Rundrücken:** Dies ist die häufigste und gefährlichste Fehlhaltung. Ein runder
+    Rücken im Lendenbereich oder der Brustwirbelsäule erhöht das Verletzungsrisiko
+    erheblich. Achte auf eine neutrale Wirbelsäulenposition während der gesamten Übung.'
+  - '**Zu starkes Aufrichten des Oberkörpers:** Wenn du den Oberkörper aufrichtest
+    und Schwung verwendest, um die Hantel zu heben, deutet dies auf zu viel Gewicht
+    hin. Reduziere das Gewicht und konzentriere dich auf eine strikte Form, um die
+    Zielmuskulatur effektiv zu trainieren.'
+  - '**Nur Armeinsatz (Bizeps-Rudern):** Oft wird die Bewegung primär aus dem Bizeps
+    initiiert, anstatt aus den Rückenmuskeln. Achte darauf, die Schulterblätter aktiv
+    zusammenzuziehen und die Bewegung aus dem Rücken zu führen.'
+  - '**Unkontrolliertes Ablassen:** Die Hantel nach dem Hochziehen einfach fallen
+    lassen. Die exzentrische Phase (Absenken) ist wichtig für den Muskelaufbau. Senke
+    die Hantel immer kontrolliert ab.'
+  - '**Überstrecken des Nackens:** Den Kopf zu stark in den Nacken legen oder nach
+    unten senken. Der Kopf sollte eine natürliche Verlängerung der Wirbelsäule bilden.'
+  original_description:
+  - 'Ausführung
+
+
+
+    Startposition:
+
+
+    Halte die Langhantel mit vollständig zum Boden gestreckten Armen.
+
+    Halte die Spannung im Latissimus und in der Rückenmuskulatur.'
+  wger_muscle_ids:
+    primary:
+    - 12
+    secondary: []
+  tags:
+  - unreviewed
+  - wger
+  - yuhonas
+  - merged_external
+  name: Vorgebeugtes Langhantelrudern (stehend)
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-01T17:09:11.274547+00:00'
+  schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
-    review_provider: manual
     ai_reviewed: false
+    enriched_at: '2026-11-01T17:09:11.274547+00:00'

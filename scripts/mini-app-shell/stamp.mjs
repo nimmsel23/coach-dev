@@ -11,7 +11,7 @@ const ICONS = ["icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-51
 
 // app: { id, name, short, accent, description?, start?, scope?, themeColor?, bg?, iconDir?,
 //        html? (Default index.html), manifest? (Dateiname, Default manifest.json|manifest.webmanifest),
-//        splash?: false | {...}, register?: boolean | { expose: true }, titleSuffix?,
+//        splash?: false | {...}, register?: boolean | { expose: true, reloadWindowMs? (0 = nie automatisch neu laden) }, titleSuffix?,
 //        sw?: false | { mode:"generate"|"keep", file? (Default sw.js), extras?: [...], extraFile?,
 //                       precacheAssets?: bool, ...swConfig } }
 export function stampApp({ outDir, app, root = process.cwd(), log = console.log }) {
@@ -78,7 +78,7 @@ export function stampApp({ outDir, app, root = process.cwd(), log = console.log 
       done.push("Splash");
     }
     if (app.register) {
-      html = injectRegister(html, { swUrl: `./${(sw && sw.file) || "sw.js"}`, exposeRegistration: !!(app.register && app.register.expose) });
+      html = injectRegister(html, { swUrl: `./${(sw && sw.file) || "sw.js"}`, exposeRegistration: !!(app.register && app.register.expose), ...(app.register && app.register.reloadWindowMs !== undefined ? { reloadWindowMs: app.register.reloadWindowMs } : {}) });
       done.push("SW-Register");
     }
     writeFileSync(htmlPath, html);
@@ -139,7 +139,7 @@ export function stampSplash({ outDir, app, log = console.log }) {
   const opts = { name: app.short, accent: app.accent, icon: "./icon-192.png", ...(app.bg && { bg: app.bg }), ...(typeof app.splash === "object" && app.splash) };
   let html = injectSplash(readFileSync(htmlPath, "utf8"), opts);
   // optional auch die SW-Registrierung (wenn die App sie nicht selbst im Quell-HTML/JS macht): app.register
-  if (app.register) html = injectRegister(html, { swUrl: `./${(app.sw && app.sw.file) || "sw.js"}`, exposeRegistration: !!app.register.expose });
+  if (app.register) html = injectRegister(html, { swUrl: `./${(app.sw && app.sw.file) || "sw.js"}`, exposeRegistration: !!app.register.expose, ...(app.register.reloadWindowMs !== undefined ? { reloadWindowMs: app.register.reloadWindowMs } : {}) });
   writeFileSync(htmlPath, html);
   log(`✨ ${htmlPath}: Splash "${opts.name}" (${opts.icon})${app.register ? " + SW-Register" : ""}`);
   return { done: true };

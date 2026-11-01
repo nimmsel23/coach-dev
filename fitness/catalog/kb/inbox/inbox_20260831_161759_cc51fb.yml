@@ -1,19 +1,23 @@
 name: inbox_20260831_161759_cc51fb
-description: 'Proactively generated expert draft for: Yoga Headstand'
-generated_at: '2026-10-31T15:34:37.219549+00:00'
-enriched_at: '2026-10-31T15:34:37.219549+00:00'
+description: 'Proactively generated expert draft for: Handstand'
+generated_at: '2026-11-01T20:49:29.872838+00:00'
+enriched_at: '2026-11-01T20:49:29.872838+00:00'
 exercises:
-- origin:
+- name: Yoga Headstand
+  wger_id: 1472
+  external_ids:
+    wger:
+    - 1472
+  exercise_id: inbox_yoga_headstand
+  display_name: Handstand
+  english: Handstand
+  german: Handstand
+  id: inbox_yoga_headstand
+  origin:
     type: external
     source_refs:
       wger:
       - '1472'
-  name: Yoga Headstand
-  exercise_id: inbox_yoga_headstand
-  display_name: Handstand
-  id: inbox_yoga_headstand
-  german: Handstand
-  english: Handstand
   category: push
   primary_muscles:
   - 301_anterior_deltoid
@@ -27,81 +31,88 @@ exercises:
   - 502_obliquus_externus
   - 504_transverse_abdominis
   - 603_gluteus_maximus
+  - 601_quadriceps_femoris
   - 206_erector_spinae
+  - 304_rotator_cuff
   - 405_forearm_flexors
   - 406_forearm_extensors
-  - 601_quadriceps_femoris
-  - 604_hamstrings
-  - 304_rotator_cuff
+  - 701_gastrocnemius
+  - 702_soleus
   coaching_notes:
-  - Beginnen Sie in einer stabilen Ausgangsposition, z.B. von der Wand wegdrehend
-    oder mit einem kontrollierten Kick-up.
-  - Drücken Sie aktiv mit den Händen in den Boden, als wollten Sie den Boden wegschieben.
-    Die Finger sind gespreizt und greifen leicht.
-  - Halten Sie die Arme vollständig gestreckt und die Ellenbogen durchgedrückt, um
-    eine stabile Basis zu gewährleisten.
-  - Ziehen Sie die Schultern aktiv zu den Ohren (Schulterelevation) und drücken Sie
-    die Schulterblätter nach vorne (Scapula-Protraktion), um eine stabile Schulterachse
-    zu bilden.
-  - 'Spannen Sie den gesamten Rumpf fest an: Bauchnabel zur Wirbelsäule ziehen, Rippen
-    nach unten. Vermeiden Sie ein Hohlkreuz.'
-  - Spannen Sie Gesäß und Oberschenkel aktiv an, um die Beine gestreckt und zusammenzuhalten.
-    Zehen sind gespitzt.
-  - Blicken Sie leicht nach vorne zwischen die Hände oder auf einen Punkt auf dem
-    Boden, um die Halswirbelsäule neutral zu halten.
-  - Atmen Sie ruhig und kontrolliert, versuchen Sie, die Spannung im Körper während
-    des Atems beizubehalten.
-  - Halten Sie eine gerade Linie von den Handgelenken bis zu den Fersen.
+  - '**Vorbereitung:** Wärmen Sie Handgelenke, Schultern und den Core gründlich auf.
+    Beginnen Sie mit der Wand als Unterstützung, um das Gleichgewicht zu finden und
+    Vertrauen aufzubauen.'
+  - '**Hand- und Armposition:** Pressen Sie die gesamten Handflächen, insbesondere
+    die Fingergrundgelenke und Fingerspitzen, aktiv in den Boden. Die Finger sind
+    leicht gespreizt. Die Arme sind vollständig gestreckt und die Ellenbogen arretiert,
+    die Schultern direkt über den Handgelenken gestapelt.'
+  - '**Schultergürtel-Stabilität:** Schieben Sie die Schultern aktiv von den Ohren
+    weg und nach oben (Protaktion und Elevation der Scapula), um eine maximale Schulterblattstabilität
+    zu erreichen. Die Ohren sollten sich zwischen den Oberarmen befinden.'
+  - '**Core- und Gesäßspannung:** Spannen Sie Bauchmuskeln (insbesondere den Transversus
+    abdominis) und Gesäß fest an, um den Körper in einer geraden, neutralen Linie
+    zu halten und ein Hohlkreuz zu vermeiden. Stellen Sie sich vor, Sie ziehen den
+    Bauchnabel zur Wirbelsäule.'
+  - '**Beine und Füße:** Halten Sie die Beine gestreckt und zusammen. Strecken Sie
+    die Fußspitzen aktiv nach oben (Plantarflexion), als wollten Sie den Himmel berühren,
+    um die Ganzkörperspannung zu maximieren.'
+  - '**Blickrichtung:** Fixieren Sie einen Punkt zwischen oder leicht vor den Händen
+    auf dem Boden, um den Nacken in einer neutralen, verlängerten Position zu halten
+    und die Körperlinie zu unterstützen.'
+  - '**Atmung:** Halten Sie eine ruhige, kontrollierte Atmung aufrecht. Ein leichtes
+    Pressen beim Einatmen kann helfen, die Core-Spannung zu halten, vermeiden Sie
+    jedoch den Valsalva-Effekt über längere Zeiträume.'
+  - '**Progression:** Beginnen Sie mit dem Üben an der Wand (Bauch zur Wand, dann
+    Rücken zur Wand), um Kraft und Balance aufzubauen. Steigern Sie die Haltezeit
+    und versuchen Sie kurze Momente des Loslösens von der Wand, bevor Sie sich an
+    den freien Handstand wagen.'
   common_errors:
-  - '**Hohlkreuz:** Das Becken kippt nach vorne, der Rücken wird überstreckt. Dies
-    führt zu Instabilität und erhöhtem Druck auf die Lendenwirbelsäule. Ursache ist
-    oft mangelnde Rumpfspannung.'
-  - '**Ellenbogen gebeugt:** Die Arme sind nicht vollständig durchgestreckt, was die
-    Belastung auf die Ellenbogengelenke erhöht und die Effizienz des Stützdrucks verringert.'
-  - '**Schultern kollabiert:** Die Schultern sind nicht aktiv hochgedrückt oder die
-    Schulterblätter nicht ausreichend protrudiert, was zu einer instabilen Schulterbasis
-    führt und die Nackenmuskulatur überlastet.'
-  - '**Pike-Position (gebeugte Hüfte):** Die Hüfte ist zu stark gebeugt und die Beine
-    sind nicht vollständig über dem Körper, wodurch die gerade Linie verloren geht
-    und der Schwerpunkt verschoben wird. Mangelnde Gesäß- und Bauchspannung.'
-  - '**Beine gespreizt oder gebeugt:** Die Beine sind nicht zusammen und gestreckt,
-    was die Körperspannung reduziert und die Balance erschwert.'
-  - '**Falscher Blick:** Der Blick ist zu weit nach vorne oder zur Seite gerichtet,
-    was die Kopfposition verändert und die Balance negativ beeinflussen kann. Der
-    Blick sollte zwischen die Hände oder leicht nach vorne gerichtet sein.'
-  - '**Unzureichende Handposition:** Die Finger sind nicht gespreizt oder greifen
-    nicht aktiv, wodurch die Basis der Unterstützung verringert wird und die Stabilisierung
-    erschwert ist.'
+  - '**Hohlkreuz (Überstreckung des unteren Rückens):** Dies ist der häufigste Fehler
+    und resultiert aus mangelnder Core- und Gesäßspannung. Führt zu Instabilität und
+    erhöht das Verletzungsrisiko im unteren Rücken.'
+  - '**Eingesunkene Schultern (fehlende Schultergürtel-Protaktion):** Die Schultern
+    werden nicht aktiv vom Boden weggeschoben, wodurch die Stabilität des Schultergürtels
+    fehlt und die Gelenke unter unnötigem Stress stehen.'
+  - '**Geknickte Ellenbogen:** Die Arme sind nicht vollständig gestreckt, was die
+    Stützbasis schwächt und die Belastung ungleichmäßig verteilt. Dies kann zu einem
+    Kollaps der Form führen.'
+  - '**Blick nach vorne/oben (Überstreckung des Nackens):** Den Kopf anzuheben, um
+    nach vorne zu schauen, stört die Ausrichtung der Wirbelsäule, belastet den Nacken
+    und erschwert das Halten einer geraden Linie.'
+  - '**Entspannte Beine und Füße:** Lockere, ungespannte Beine und nicht gestreckte
+    Fußspitzen reduzieren die Ganzkörperspannung erheblich, was das Gleichgewicht
+    erschwert und die Kontrolle verringert.'
+  - '**Kollabierende Handgelenke:** Ungenügende Handgelenkskraft, -mobilität oder
+    falsche Handposition (z.B. zu wenig Druck auf die Finger) führen zu Schmerzen
+    und Instabilität an den Handgelenken.'
+  - '**Zu schneller Fortschritt:** Der Versuch, einen freien Handstand zu früh zu
+    erzwingen, ohne die notwendige Kraft, Stabilität und Technik an der Wand aufgebaut
+    zu haben, führt zu Frustration und potenziellen Verletzungen.'
   movements:
+  - push
+  - vertical_push
   - shoulder_flexion
   - elbow_extension
-  - scapular_upward_rotation
-  - core_stability
+  - scapular_protraction
+  - core_bracing
   - balance_control
-  - isometric_hold
-  - vertical_push
-  - hip_extension
-  - knee_extension
-  - ankle_plantarflexion
+  - bodyweight_exercise
+  - isometric
   original_description:
   - Handstand free standing by pressing arms into the ground and contracting core
     and glutes
-  wger_id: 1472
+  tags:
+  - unreviewed
+  - wger
   wger_muscle_ids:
     primary:
     - 2
     secondary: []
-  external_ids:
-    wger:
-    - 1472
-  tags:
-  - unreviewed
-  - wger
   variations: []
   source: unreviewed
-  enriched_at: '2026-10-31T15:34:37.219549+00:00'
+  enriched_at: '2026-11-01T20:49:29.872838+00:00'
   schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
     ai_reviewed: false
-    enriched_at: '2026-10-31T15:34:37.219549+00:00'
+    enriched_at: '2026-11-01T20:49:29.872838+00:00'

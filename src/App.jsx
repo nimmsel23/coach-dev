@@ -1,3 +1,4 @@
+import { useCoachUnread } from './hooks/useCoachUnread.js'
 import { lazy, Suspense, useState, useEffect, useRef } from 'react'
 import { RefreshCw } from 'lucide-react'
 import Session from './views/Session/index.jsx'
@@ -194,6 +195,7 @@ export default function App() {
     hasCompleteHit(hit3Fact, hit3Obstacle, hit3Strike, hit3Responsibility) ||
     hasCompleteHit(hit4Fact, hit4Obstacle, hit4Strike, hit4Responsibility)
   );
+  const inboxUnread = useCoachUnread();
   const navItems = getNavItems({ focusReady, devBypass: devBypassFlow });
   const resolveFlowTab = (id) => {
     if (devBypassFlow) return id;
@@ -506,6 +508,7 @@ export default function App() {
           setPinned={setSidebarPinned}
           user={user}
           navItems={navItems}
+          inboxUnread={inboxUnread}
         >
           <UserProfile user={user} subtitle={isLocalMode() ? `${user?.email || 'localhost'} · localhost` : (user?.email || 'Demo-Modus · lokal gespeichert')} />
           {!isLocalMode() && user && (
@@ -580,7 +583,7 @@ export default function App() {
               </div>
             </main>
 
-            {navMode === 'tabs' && !IS_SOLO && <MobileNav tab={tab} subTab={subTab} navigate={navigate} navigateSub={navigateSub} swipeHint={swipeHint} navItems={navItems} />}
+            {navMode === 'tabs' && !IS_SOLO && <MobileNav tab={tab} subTab={subTab} navigate={navigate} navigateSub={navigateSub} swipeHint={swipeHint} navItems={navItems} inboxUnread={inboxUnread} />}
           </div>
         </div>
       </ErrorBoundary>

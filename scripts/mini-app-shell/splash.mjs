@@ -20,7 +20,7 @@ export const SPLASH_DEFAULTS = {
   fg: "#e8e9ee",
   icon: "./icon-192.png",
   rootId: "root",
-  minMs: 700, // Mindestanzeigedauer, damit der Effekt sichtbar ist
+  minMs: 200, // Nur kurz anzeigen, damit ein schneller Start nicht künstlich verzögert wird
   failsafeMs: 12000, // spätestens dann weg, egal ob #root gemountet ist
   updateWindowMs: 10000, // Update-Loader nur in dieser Frist nach dem Start
   updateText: "Update wird geladen …",
@@ -34,17 +34,16 @@ export function splashSnippets(opts) {
   if (!name || !accent) throw new Error("splashSnippets: name und accent sind Pflicht");
   const head = `${START}
     <style>
-      #vos-splash{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:${bg};color:${fg};transition:opacity .35s ease;font-family:system-ui,-apple-system,sans-serif}
+      #vos-splash{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(ellipse at 50% 38%,color-mix(in srgb,${accent} 8%,${bg}),${bg} 65%);color:${fg};transition:opacity .18s ease;font-family:system-ui,-apple-system,sans-serif}
       #vos-splash.hide{opacity:0;pointer-events:none}
-      #vos-splash img{width:96px;height:96px;border-radius:22%;animation:vos-pop .6s cubic-bezier(.2,.8,.2,1) both,vos-pulse 1.8s ease-in-out .6s infinite}
-      #vos-splash .n{font-size:15px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:${accent}}
+      #vos-splash img{width:80px;height:80px;border-radius:24%;box-shadow:0 12px 48px color-mix(in srgb,${accent} 10%,transparent);animation:vos-pop .25s ease-out both}
+      #vos-splash .n{font-size:18px;font-weight:650;letter-spacing:-.02em;color:${fg}}
       #vos-splash .bar{width:120px;height:3px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
       #vos-splash .bar::after{content:"";display:block;width:40%;height:100%;background:${accent};animation:vos-slide 1.1s ease-in-out infinite}
       #vos-splash .s{height:16px;font-size:12px;opacity:.65}
       @keyframes vos-pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
-      @keyframes vos-pulse{50%{transform:scale(1.05)}}
       @keyframes vos-slide{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
-      @media (prefers-reduced-motion:reduce){#vos-splash img,#vos-splash .bar::after{animation:none}}
+      @media (prefers-reduced-motion:reduce){#vos-splash{transition:none}#vos-splash img,#vos-splash .bar::after{animation:none}}
     </style>
     ${END}`;
   const body = `${START}
@@ -52,37 +51,47 @@ export function splashSnippets(opts) {
       <img src="${esc(icon)}" alt="" />
       <div class="n">${esc(name)}</div>
       <div class="bar"></div>
-      <div class="s"></div>
+      <div class="s" aria-live="polite">Wird gestartet …</div>
     </div>
     <script>
       (function () {
         var el = document.getElementById('vos-splash');
         if (!el) return;
-        var t0 = Date.now(), hidden = false, updating = false;
+        var t0 = Date.now(), hidden = false, ready = false, mo, failsafe;
         var status = el.querySelector('.s');
         function hide() {
-          if (hidden || updating) return;
+          if (hidden || !ready) return;
           hidden = true;
+          if (mo) mo.disconnect();
+          clearTimeout(failsafe);
           setTimeout(function () {
             el.classList.add('hide');
-            setTimeout(function () { el.style.display = 'none'; }, 400);
+            setTimeout(function () {
+              el.remove();
+              document.dispatchEvent(new Event('vos-splash-hidden'));
+            }, 180);
           }, Math.max(0, ${Number(minMs)} - (Date.now() - t0)));
         }
-        // Update nur in der Startfrist als Ladevorgang zeigen — nie mitten in einer Sitzung abdecken.
+        // Das Update-Label informiert während des Starts, hält den Splash aber nicht offen.
         function showUpdating() {
-          if (Date.now() - t0 > ${Number(updateWindowMs)}) return;
-          updating = true; hidden = false;
-          el.style.display = ''; el.classList.remove('hide');
+          if (hidden || Date.now() - t0 > ${Number(updateWindowMs)}) return;
           status.textContent = ${JSON.stringify(updateText)};
-          setTimeout(function () { updating = false; hide(); }, ${Number(updateWindowMs)});
         }
-        var root = document.getElementById(${JSON.stringify(rootId)});
-        function ready() { if (root && root.childElementCount > 0) { hide(); return true; } return false; }
-        if (root && !ready()) {
-          var mo = new MutationObserver(function () { if (ready()) mo.disconnect(); });
-          mo.observe(root, { childList: true });
+        function checkReady() {
+          var root = document.getElementById(${JSON.stringify(rootId)});
+          if (root && root.childElementCount > 0) {
+            ready = true;
+            hide();
+            return true;
+          }
+          return false;
         }
-        setTimeout(function () { updating = false; hide(); }, ${Number(failsafeMs)});
+        // This script is injected before #root. Watch parsing AND React mounting.
+        if (!checkReady()) {
+          mo = new MutationObserver(checkReady);
+          mo.observe(document.body, { childList: true, subtree: true });
+          failsafe = setTimeout(function () { ready = true; hide(); }, ${Number(failsafeMs)});
+        }
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.addEventListener('controllerchange', showUpdating);
           navigator.serviceWorker.getRegistration().then(function (reg) {
