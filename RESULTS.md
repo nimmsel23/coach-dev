@@ -1621,3 +1621,10 @@ Speichern. Alter Root-Service-Worker cachete lokale GETs ohne Netzprüfung.
 Frische lokale Lese-URLs, no-store-Antworten, gezielte Worker-Stilllegung ohne
 Editor-Reload, frische Revisionsprüfung und namentliche Freigabe-Checkliste
 ergänzt. Keine echten Pläne freigegeben oder Vorgaben automatisch erfunden.
+
+Abschluss: drei lokale API-Vertragstests bestanden, einschließlich leerer
+Satzliste ohne Datenverlust. Mobiler Browserlauf mit absichtlich altem
+Cache-first-Worker und externer Planänderung bestanden: frischen Stand
+prüfen, danach Version erfolgreich freigeben. Plan-/Coach-Builds und Lint
+grün. Echter lokaler Dienst liefert /sw.js 200 und Plan-API mit no-store;
+keine echten Klientenpläne freigegeben oder versendet.
