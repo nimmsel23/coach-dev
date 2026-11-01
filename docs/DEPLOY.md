@@ -44,11 +44,14 @@ Einzelschritte: `vos-release-pr fitness`, danach `fitness-release`. Nie von Hand
 
 Es gibt **zwei** Lockfiles mit verschiedenen Aufgaben:
 
-- `fitness-dev/pnpm-lock.yaml`: Wahrheit für den Standalone-Weg.
-- `~/vitalos/pnpm-lock.yaml` (Root des Meta-Workspaces): Wahrheit für die Shell **und** (heute noch) für
-  den alten Live-Deploy `deploy-master.yml`.
+- `fitness-dev/pnpm-lock.yaml`: Wahrheit für den Fitness-Live-Deploy (seit der Umschaltung, siehe 4).
+- `~/vitalos/pnpm-lock.yaml` (Root des Meta-Workspaces): Wahrheit für die Shell und für die Module, deren
+  Live-Deploys noch aus dem Meta-Repo laufen.
 
-Der alte Live-Deploy checkt das Meta-Repo aus und installiert dort mit `--frozen-lockfile`. Der PR-Merge
+**Für Fitness gilt der folgende Absatz seit der Umschaltung nicht mehr** (der Live-Deploy nutzt nur noch den
+eigenen Lockfile). Er bleibt als Hintergrund für die Shell und die übrigen Module stehen.
+
+Der frühere Fitness-Live-Deploy checkte das Meta-Repo aus und installierte dort mit `--frozen-lockfile`. Der PR-Merge
 nach `master` löst ihn sofort aus, der Root-Lockfile wird aber erst im zweiten Schritt (`vos-release`)
 nachgezogen. Folge: **Bei geänderten Dependencies ist der erste Live-Deploy-Run rot**
 (`ERR_PNPM_OUTDATED_LOCKFILE` bei „Install (Workspaces)"), `vos-ship` startet ihn nach dem Sync neu.
@@ -60,14 +63,15 @@ Manuell, falls nötig: `cd ~/vitalos && pnpm install --lockfile-only --no-frozen
 `git commit -m "fix(lock): …" -- pnpm-lock.yaml`, `vos-release` wiederholen, Live-Deploy neu starten
 (`gh workflow run "Live Deploy (Fitness master)" -R nimmsel23/fitness-dev --ref master`).
 
-**Lösung auf Dauer: der Standalone-Weg (4).** Er braucht den Root-Lockfile nicht.
+**Lösung auf Dauer: der Standalone-Weg (4).** Er braucht den Root-Lockfile nicht. Der Root-Lockfile wird bei
+`vos-release` weiterhin für die Shell nachgezogen, das ist aber unabhängig vom Fitness-Live-Deploy.
 
-## 4. Standalone-Deploy ohne Meta-Repo (Zielbild, in Arbeit)
+## 4. Standalone-Deploy ohne Meta-Repo (umgeschaltet 2026-11-01)
 
 Entscheidung: **alle Standalone-Deploys laufen aus den `master`-Checkouts der eigenen Repos, nicht aus
 dem Meta-Repo.** Das Meta-Repo gehört der Shell.
 
-`deploy-standalone.yml` (neu, parallel zu `deploy-master.yml`):
+`deploy-master.yml` (Name: „Live Deploy (Fitness master)“; `automerge.yml` startet ihn weiter per Dispatch):
 
 - Checkout `fitness-dev` plus `plan-dev`, `6pack-dev`, `skills-dev`, `learn-dev`, `relax-dev` als
   Geschwister (der Fitness-Build kompiliert sie mit: `vite-miniapp-submodules.mjs`, `siblingDir()`).
@@ -75,18 +79,20 @@ dem Meta-Repo.** Das Meta-Repo gehört der Shell.
   Ein gemeinsamer `node_modules`-Symlink scheiterte: die Nachbarn brauchen teils andere Versionen
   (`6pack-dev` `js-yaml` 4 mit Default-Export, Fitness `js-yaml` 5).
 - `firebase.config.js` aus dem Secret `FIREBASE_CONFIG`.
-- Deploy nur auf `master` und nur bei `push` oder `workflow_dispatch` mit `deploy=true`. Auf `dev` läuft
-  er bei Änderung der Datei als reiner Build-Test (Nachbarn von `dev`).
+- Deploy nur auf `master` bei `push` oder `workflow_dispatch` (Eingabe `deploy`, Standard `true`).
+- Build-Test ohne Deploy: Änderung an der Datei auf einen Branch `ci-test/<name>` pushen
+  (`git push origin <branch>:ci-test/<name>`); dort holen die Nachbarn `dev` statt `master`.
 
-**Status:** Build-Test auf `dev` läuft. **`deploy-master.yml` ist noch nicht ersetzt** — die Umschaltung
-ändert die Prod-Pipeline und braucht eine ausdrückliche Freigabe.
+**Status:** `deploy-master.yml` ist umgestellt (der frühere Meta-Repo-Weg steht in der Git-Historie, Rückfall =
+Commit zurücknehmen). Die Datei war vorher als `deploy-standalone.yml` auf `dev` im Build-Test grün. **Der erste
+Live-Lauf auf `master` ist der echte Beweis** — nach dem ersten Release `gh run view` prüfen (Install, Build, Deploy).
 
 **Voraussetzung:** Jedes Nachbar-Repo muss auf `master` mit `pnpm install --frozen-lockfile` standalone
 installierbar sein. Stand der Prüfung (frische Klone von `master`): `6pack-dev`, `skills-dev`,
-`learn-dev`, `relax-dev` ok; `plan-dev` war defekt (`workspace:*` ohne Lockfile-Eintrag) und ist auf
-`plan-dev/dev` behoben (Commit `8097ef5`), `master` folgt mit dem nächsten Plan-Release.
-Ähnliches Muster, aber mit echter Alias-Nutzung (also kein bloßes Entfernen): `coach-dev` (Paket nicht
-im Lockfile, 19 Dateien nutzen Aliase), `habits-dev` (14 Dateien).
+`learn-dev`, `relax-dev` ok; `plan-dev` war defekt (`workspace:*` ohne Lockfile-Eintrag), behoben und seit 2026-11-01 auf
+`plan-dev/master` (PR #3, Live-Deploy Plan grün). `coach-dev` baut schon standalone (eigenes Workspace-File im
+Workflow, kein Meta-Repo) und ist nicht Nachbar dieses Builds; `habits-dev` ebenfalls nicht (nur in `dev`
+repariert, soll laut Daniel einzig in journalv1 integriert sein).
 
 ## 5. Shell-Kopplung
 
