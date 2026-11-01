@@ -142,3 +142,9 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 
 - [x] Zentralen coach-Einstieg für fitness-log clients und weitere Coach-Python-Werkzeuge erstellen.
 - [x] Bestehende Implementierungen/Argumente kompatibel durchreichen; Hilfe und Fehler prüfen.
+
+## 2026-11-01 — Coach ↔ Klienten-Kommunikation
+
+Nachrichten-Tab pro Klient ergänzt, Gesprächsbereich in der Fitness-Inbox angebunden: Textaustausch mit veröffentlichtem Planbezug, bestätigte Speicherung und sichtbarkeitsabhängige Lesestände. Client-/Klientenwechsel isolieren Verlauf und Entwürfe. Bestehende Kommentar-Meldung behauptet keinen Push mehr. Firestore-Protokoll und Freigabereihenfolge dokumentiert.
+
+Abnahme: mobile 390px-Browser-Fixture mit echten Adaptern gegen isolierten Emulator bestanden (Plan-Nachricht → Klienten-Antwort → Lesestände → Klientenwechsel); fünf Rules-Tests, Routing- und zwei Plan-Vertragstests bestanden. Coach- und Fitness-Firebase-Build bestanden. Rules separat im VitalOS-Feature-Worktree vorbereitet; kein Push/Deployment und keine echten Nachrichten.

@@ -183,3 +183,13 @@ Follow-up: source badges now use the same explicit source selection as search
 and editing. A legacy import-shaped exercise ID cannot recreate a removed
 source badge. Four search/reference regression tests pass. Live worker search
 returns Bench Dips, Chest Version, Triceps Version and Ring Dips separately.
+
+## 2026-11-01 — Durchgängiger Rückkanal
+
+Nachrichten-Tab pro Klient, Antwortmöglichkeit in der bisherigen Fitness-Inbox,
+Planversion als Bezug und serverseitige Lesestände. Bestehende Kommentar-Erfolge
+behaupten keinen nicht überprüften Push mehr. Regeln im separaten VitalOS-
+Feature-Worktree; keine Produktivregeln geändert oder echten Nachrichten gesendet.
+Mobiler Emulator-Browserablauf samt Klienten-/Entwurfsisolation bestanden, fünf
+Rules-Tests und Plan-/Routing-Verträge bestanden. Beide App-Builds bestanden.
+Cloud-Abnahme/Release, globale Unread-Zähler, ältere Nachrichten und Push offen.

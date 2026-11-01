@@ -136,3 +136,12 @@ searched by name/ID, replaced or disconnected; raw alternatives remain searchabl
 regardless of curated search suppression. Approved edits retain exercise IDs.
 Search keeps approved records that share an import ID, deduplicates by ID with
 curated precedence, and hides raw records only by explicit confirmed references.
+
+## 2026-11-01 — Coach/Klienten-Nachrichten
+
+`ClientMessages` ist ein eigener, pro Klient gekeyter Detail-Tab (`messages`).
+Er nutzt `firestore/communication.js` für Live-Nachrichten und Lesestände in
+`coachConversations/{uid}`. Optionaler Bezug auf die veröffentlichte Planversion;
+vor dem Senden wird deren Stand geprüft. Gespeichert/Gesehen/Pending sind getrennt.
+Der Laptop-Worker wird dafür nicht verwendet. Protokoll und Release-Reihenfolge:
+`docs/COACH-COMMUNICATION.md`. Die zugehörige Client-UI liegt in Fitness Inbox.

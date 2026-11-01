@@ -53,7 +53,7 @@ export default function ClientWorkoutsFeed({ clientUid }) {
     try {
       await saveCoachFeedback(item.userId, item.id, item.type, text, item.habitId || null, item.date || null);
       setJournals(prev => prev.map(j => j.id === item.id ? { ...j, coachFeedback: text } : j));
-      triggerToast('Kommentar gespeichert und Push gesendet! ✓');
+      triggerToast('Kommentar gespeichert ✓');
     } catch (e) {
       console.error(e);
       triggerToast('Fehler beim Speichern des Kommentars');

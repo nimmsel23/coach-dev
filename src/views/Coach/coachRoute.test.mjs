@@ -47,3 +47,9 @@ test('Standard-Detail und Nicht-Klienten-Tabs bleiben kurz', () => {
   assert.equal(buildCoachHash({ sub: 'catalog', client: UID, date: '2026-10-15' }), '#/catalog')
   assert.equal(buildCoachHash({ sub: 'nix' }), '#/exercises')
 })
+
+test('Nachrichten sind pro Klient direkt verlinkbar', () => {
+  const route = { sub: 'clients', client: UID, detail: 'messages', date: '' };
+  assert.equal(buildCoachHash(route), `#/clients/${UID}/messages`);
+  assert.deepEqual(parseCoachHash(buildCoachHash(route)), route);
+});

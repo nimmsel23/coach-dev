@@ -35,3 +35,4 @@ export * from "./shared/favourites.js";
 // Kein Fuel-Proxy: Fitness importiert Fuel bewusst nicht direkt. Alte
 // Nutrition-History-Namen bleiben in index.firestore.app.js als leere Stubs,
 // damit historische Import-Verträge keinen Cross-App-Build erzwingen.
+export * from './firestore/communication.js';

@@ -9,7 +9,7 @@
 // Der Hash ist das, was functions/clientWorkout.js in die Push-Links schreibt.
 
 export const SUB_TAB_IDS = ['exercises', 'catalog', 'clients']
-export const DETAIL_TAB_IDS = ['workouts', 'sixpack', 'insights', 'habits', 'templates', 'trainingplan', 'plan']
+export const DETAIL_TAB_IDS = ['messages', 'workouts', 'sixpack', 'insights', 'habits', 'templates', 'trainingplan', 'plan']
 
 const DEFAULT_ROUTE = { sub: 'exercises', client: '', detail: 'workouts', date: '' }
 

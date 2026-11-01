@@ -1,5 +1,6 @@
+import ClientMessages from './ClientMessages';
 import { useState, useEffect } from 'react';
-import { Users, Star, UserCheck, Dumbbell, Layers, RotateCw, Sparkles, Flame } from 'lucide-react';
+import { MessageSquare, Users, Star, UserCheck, Dumbbell, Layers, RotateCw, Sparkles, Flame } from 'lucide-react';
 import { getAllUserProfiles, getUserProfile, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
 import AssignPlan from './AssignPlan';
@@ -15,6 +16,7 @@ const STATUS_OPTIONS = [
 ];
 
 const DETAIL_TABS = [
+  { id: 'messages', label: 'Nachrichten', icon: MessageSquare },
   { id: 'trainingplan', label: 'Trainingsplan', icon: Layers },
   { id: 'workouts', label: 'Verlauf & Feedback', icon: Dumbbell },
   { id: 'sixpack', label: '6Pack', icon: Flame },
@@ -198,6 +200,7 @@ export default function ClientsPanel() {
             <div className="px-4 pt-2"><button onClick={() => setExtras(!extras)} className="text-xs text-fit-muted">{extras ? 'Weniger Bereiche' : 'Weitere Bereiche'}</button></div>
             {error && <p role="alert" className="px-4 pt-2 text-sm text-fit-red">{error}</p>}
             <div className="flex-1 overflow-y-auto p-4">
+              {detailTab === 'messages' && <ClientMessages key={selectedUid} clientUid={selectedUid} />}
               {detailTab === 'workouts' && <ClientWorkoutsFeed clientUid={selectedUid} />}
               {detailTab === 'sixpack' && <ClientSixPack key={selectedUid} clientUid={selectedUid} />}
               {detailTab === 'insights' && <ClientInsights clientUid={selectedUid} />}

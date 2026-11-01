@@ -1548,3 +1548,9 @@ Projekt-eigener bin/coach mit Python-Dispatcher für Klienten-Logs, Console/Draf
 Sechs Dispatcher-Tests bestanden (u.a. echte Argument-/Exit-Code-/Arbeitsverzeichnis-Prüfung). Dokumentation: docs/COACH-CLI.md. Keine Dienste gestartet und keine Nachrichten gesendet.
 
 Abnahme: alle 18 Python-Werkzeuggruppen mit --help erfolgreich. Besonderheiten des alten TUI-/Firestore-Einstiegs über eigene Hilfe abgefangen. Echter Aufruf coach clients matthias --days 7 aus /tmp über vorhandene Shell-PATH-Konfiguration erfolgreich; keine Symlinks oder globalen Wrapper erstellt.
+
+## 2026-11-01 — Coach ↔ Klienten-Kommunikation
+
+Nachrichten-Tab pro Klient ergänzt, Gesprächsbereich in der Fitness-Inbox angebunden: Textaustausch mit veröffentlichtem Planbezug, bestätigte Speicherung und sichtbarkeitsabhängige Lesestände. Client-/Klientenwechsel isolieren Verlauf und Entwürfe. Bestehende Kommentar-Meldung behauptet keinen Push mehr. Firestore-Protokoll und Freigabereihenfolge dokumentiert.
+
+Abnahme: mobile 390px-Browser-Fixture mit echten Adaptern gegen isolierten Emulator bestanden (Plan-Nachricht → Klienten-Antwort → Lesestände → Klientenwechsel); fünf Rules-Tests, Routing- und zwei Plan-Vertragstests bestanden. Coach- und Fitness-Firebase-Build bestanden. Rules separat im VitalOS-Feature-Worktree vorbereitet; kein Push/Deployment und keine echten Nachrichten.
