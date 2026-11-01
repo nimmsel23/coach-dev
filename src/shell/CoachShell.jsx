@@ -36,6 +36,7 @@ export default function CoachShell() {
   const [taxonomy] = useState(() => getStaticMuscleTaxonomy())
 
   const reportExerciseCount = useCallback((n) => setCounts((prev) => (prev.exercises === n ? prev : { ...prev, exercises: n })), [])
+  const reportUnreadCount = useCallback((n) => setCounts((prev) => (prev.clients === n ? prev : { ...prev, clients: n })), [])
   const goTo = (sub) => navigateRoute({ sub, client: '', date: '' })
   const refresh = () => window.location.reload()
 
@@ -100,7 +101,7 @@ export default function CoachShell() {
                 className="mx-auto max-w-[1600px] pb-[calc(var(--mobile-nav-height)+12px)] lg:pb-6"
                 style={{ paddingLeft: 'var(--safe-left)', paddingRight: 'var(--safe-right)' }}
               >
-                <Coach sub={route.sub} onInspectExercise={inspectExercise} onInboxCount={reportExerciseCount} />
+                <Coach sub={route.sub} onInspectExercise={inspectExercise} onInboxCount={reportExerciseCount} onUnreadCount={reportUnreadCount} />
               </main>
             </div>
             <CoachTabBar

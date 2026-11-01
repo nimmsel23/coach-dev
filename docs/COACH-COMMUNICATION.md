@@ -183,11 +183,10 @@ die gewählte UID; Fitness remountet sie bei einem Auth-Kontowechsel.
 | `Lokaler Stand · Verbindung wird abgeglichen` | Snapshot stammt aus Cache; das allein beweist keinen Offline-Zustand |
 | Fehler | Text bleibt im aktuellen Composer erhalten; Fehler prüfen |
 
-Entwürfe sind React-State: während eines Fehlers erhalten, aber nicht dauerhaft
-auf Festplatte gespeichert. Klientenwechsel, Kontowechsel, Unmount oder Reload
-verwerfen sie. Genau diese Trennung verhindert Entwurfsübernahme zum falschen
-Klienten. Keine garantierte Offline-Warteschlange über App-Neustarts behaupten;
-Cache-/Pending-Verhalten hängt auch von der vorhandenen Firebase-Initialisierung ab.
+Entwürfe werden im lokalen Browser-Speicher nach angemeldetem Konto und
+Klienten-UID getrennt gesichert. Reload und Klientenwechsel erhalten Text und
+Planbezug. Speicherfehler werden sichtbar gemeldet; Entwürfe synchronisieren
+nicht zwischen Geräten und sind keine garantierte Versandwarteschlange.
 Ein erneuter Sendeaufruf erhält eine neue Dokument-ID; bei unklarem Ausgang erst
 den Verlauf prüfen, statt eine exakt-einmalige Zustellung vorauszusetzen.
 
@@ -221,20 +220,30 @@ Push auf einem iPhone. Die Dokumentation ersetzt keine Cloud-/Geräteabnahme.
 
 | Ausbaustufe | Aktueller Umfang / nächster Schritt |
 | --- | --- |
-| Historie | Letzte 100; Pagination/ältere Nachrichten fehlen |
-| Entwürfe | Nur lokaler Komponenten-State; sichere persistente Entwürfe fehlen |
-| Unread | Lesestände vorhanden; globale Zähler/Badges fehlen |
+| Historie | Live-Fenster mit 100 Nachrichten; ältere seitenweise nachladen |
+| Entwürfe | Gerätespeicher, nach Konto und Klient getrennt; keine Gerätesynchronisierung |
+| Unread | Klientenliste und Navigation; je Gespräch bei 99+ begrenzt |
 | Push | Kein neuer Nachrichten-Trigger implementiert |
 | Anhänge | Kein Upload oder Medienvertrag |
-| Plan-Navigation | Referenz wird angezeigt; direkter Plan-Link fehlt |
+| Plan-Navigation | Zugehörigen unveränderlichen Versions-Snapshot direkt öffnen |
 | Mehrtrainer | Projektweite Coach-Rolle; keine Klientenzuweisungs-ACL |
 | Bearbeiten/Löschen | Durch Client-Regeln gesperrt; kein eigener Produktablauf |
 | Echte Geräte | Nach autorisiertem Rules- und App-Release abzunehmen |
 
 ## Aktuelle Priorität: Rückmeldung direkt am Trainingsplan
 
-Der gemeinsame PlanFeedback-Bereich erscheint unter „Trainingspläne → Plan ansehen“ sowie im individuellen Plan. Er bestätigt den Empfang einer festen Version und sammelt Fragen und Coach-Antworten genau dazu. Vertrag und Bedienung: [Plan-Feedback](../modules/plan/docs/PLAN-FEEDBACK.md). Freier Chat-Ausbau ist zurückgestellt. Die bisherigen Gesprächsfunktionen sind nicht der Versandmechanismus für Trainingspläne. Neue Plan-Regeln sind noch nicht deployed.
+Der gemeinsame PlanFeedback-Bereich erscheint unter „Trainingspläne → Plan ansehen“ sowie im individuellen Plan. Er bestätigt den Empfang einer festen Version und sammelt Fragen und Coach-Antworten genau dazu. Vertrag und Bedienung: [Plan-Feedback](../modules/plan/docs/PLAN-FEEDBACK.md). Freier Chat-Ausbau ist zurückgestellt. Die bisherigen Gesprächsfunktionen sind nicht der Versandmechanismus für Trainingspläne. Die Plan-Regeln wurden zentral über VitalOS deployed.
 
 ## Planbetreuung aus der Klientenübersicht
 
 Direkt in der Klientenliste stehen die bereitgestellten Pläne mit Empfangsstatus und offenem Antwortbedarf. Ein Klick führt via `#/clients/<uid>/trainingplan?plan=<id>` direkt zum Plan. In dessen Ansicht wählt „Bereitgestellte Version“ frühere Snapshots einschließlich zugehöriger Rückmeldungen. Der Trainingsplan-Tab steht vor dem freien Nachrichtenbereich. Nach einer Programmzuweisung öffnet sich der tatsächliche Klientenplan zur Kontrolle. „Klient wartet auf Antwort“ ist letzter Sender = Klient; kein behaupteter Unread-Zähler. Die bestehenden Regeln für planResponses reichen dafür aus.
+
+## Ungelesen-Index und Release
+
+Die Ungelesen-Abfrage benötigt einen zentral über VitalOS verwalteten Index:
+Collection `messages`, Scope `COLLECTION`, `senderRole ASCENDING`,
+`createdAt DESCENDING`. Den Index vor Übernahme der Erweiterungen in den
+Live-Stand deployen und dessen Bereitschaft abwarten. Indexfehler erscheinen
+als nicht verfügbarer Ungelesen-Status; sie dürfen nicht als null Nachrichten
+interpretiert werden. Empfang und Rückmeldung direkt am Plan bleiben der
+primäre Ablauf; Nachrichten erweitern diesen um optionalen Austausch.

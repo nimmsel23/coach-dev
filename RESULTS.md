@@ -1582,3 +1582,11 @@ Removed optional VitalOS alias dependency, sibling aliases and Tailwind scans. H
 ## 2026-11-01 — Splash blockiert nicht mehr auf Service-Worker-Update
 
 Die vendorte Mini-App-Shell mit der aktuellen VitalOS-Quelle synchronisiert. Ein langsamer Netzwerk-/Service-Worker-Updatecheck hält den Splash nicht mehr offen; er verschwindet nach dem App-Start (mindestens 200 ms, maximal 12 s nur falls der App-Root gar nicht bereit wird).
+
+## 2026-11-01 — Ausstehende Gesprächserweiterungen für die Übernahme vorbereiten
+
+Nachrichtenhistorie seitenweise laden, ältere Einträge bei Live-Updates erhalten,
+Entwürfe pro angemeldetem Konto/Klient sichern, feste Planversionen öffnen und
+Ungelesen-Zähler in Klientenliste und Navigation anzeigen. Zentraler Firestore-
+Index wird separat in VitalOS bereitgestellt; vor Live-Übernahme erforderlich.
+Der lokale Plan-Pointer und historische VitalOS-Checkout bleiben unangetastet.
