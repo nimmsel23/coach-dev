@@ -1,11 +1,11 @@
 # Coach and its client Shell
 
-Coach is the coach-facing product, developed on `coach-dev/dev`. Its client Shell is the VitalOS repository at `vitalos/`, tracking the VitalOS `coach` branch. A gitlink pins the exact Shell commit. VitalOS no longer contains a direct Coach submodule, workspace package, or Coach deployment job.
+Coach is the standalone coach-facing product, developed on `coach-dev/dev`. The historical `vitalos/` gitlink remains available as optional integration context; Coach neither builds nor ships that checkout. Its local changes are preserved. VitalOS no longer contains a direct Coach submodule, workspace package, or Coach deployment job.
 
 ```text
 coach-dev/                  Coach product (dev)
   modules/plan/             Pinned Plan editor and plan logic
-  vitalos/                  VitalOS client Shell (coach)
+  vitalos/                  Optional historical integration (excluded from Coach build)
     fitness-app/, plan-app/, ...
 ```
 
@@ -29,13 +29,13 @@ Plan ownership and update procedure: [Plan editor integration](COACH-PLAN-WORKFL
 
 - Pushes on `dev` build the Coach preview (24-hour `dev` channel).
 - Manually run Coach's `Deploy Coach` workflow on `dev` with `production=true` to publish `https://vos-coach.web.app`.
-- Locally, `bin/coach-release --yes` builds and deploys the committed, clean `dev` checkout. `--dry-run` prints the command. This command does not push or merge Git branches.
+- `vos-ship coach --yes` delegates to `bin/coach-release --yes`: deploy the published Coach `dev` SHA through Coach CI, wait for success, then verify `release.json` on Hosting. `--dry-run` prints the flow. Local dirty files are never deployed by this command. It does not push source, merge branches, bump VitalOS or deploy rules.
 - `npm run firebase` also builds and deploys the current checkout directly.
 - `~/vitalos/bin/coach-release` is a compatibility entrypoint to Coach's command. Coach is excluded from `vos-release --all`.
 - Firestore rules remain owned by VitalOS. Coach only deploys `hosting:coach`.
 - VitalOS Shell production remains on `master`; the `coach` branch has no automatic Shell production deploy.
 
-Publish VitalOS `coach` before publishing an updated Coach parent pointer. The initial migration branches have been published; the Coach push passed preview CI. The old clean `~/vitalos/coach-app` checkout, including ignored local files, is retained at `~/coach-dev/.worktrees/legacy-vitalos-coach`.
+No VitalOS-pointer update is required for Coach Hosting. Publish the pinned Plan commit before Coach. The initial migration branches have been published; the Coach push passed preview CI. The old clean `~/vitalos/coach-app` checkout, including ignored local files, is retained at `~/coach-dev/.worktrees/legacy-vitalos-coach`.
 
 ## Local commands and inherited tooling audit (2026-10-20)
 
@@ -138,3 +138,7 @@ direkt und führt keinen neuen Dienst oder Gateway-Umbau ein. Coach-UI,
 Fitness-Client und zentrale VitalOS-Regeln sind getrennte Release-Bestandteile.
 Historische lokale Dienst-Umbaupläne dieses Dokuments sind keine Voraussetzung
 für die Nachrichten. Ein grüner Worker-Heartbeat sagt nichts über diesen Kanal.
+
+## Central rules import (2026-11-01)
+
+Coach owns `firestore.rules.part` for `coachConversations`; Plan owns `planResponses` in its fragment. VitalOS imports the committed Coach fragment into `firestore/coach.rules.part` with source provenance, then `node scripts/build-rules.mjs` composes all app fragments. Only the central VitalOS rules workflow deploys them. This does not require the VitalOS application source in Coach.

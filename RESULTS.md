@@ -1566,3 +1566,7 @@ Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatr
 ## 2026-11-01 — Übersicht, Direkteinstieg und historische Plan-Rückmeldungen
 
 Klientenliste und Trainingsplanbereich zeigen gemeinsamen Plan-Status (bereitgestellt/Entwürfe, Empfang, offener Antwortbedarf) mit direktem Planeinstieg per URL. Frühere Planversionen samt Feedback auswählbar; Zuweisung öffnet erzeugten Klientenplan. Unabhängige Laderesultate verhindern, dass eine fehlerhafte Bibliothek den gesamten Planbereich blockiert. Freier Chat bleibt zurückgestellt, Produktionsstand unverändert.
+
+## 2026-11-01 — Standalone shipping and central rules ownership
+
+Removed optional VitalOS alias dependency, sibling aliases and Tailwind scans. Historical dirty vitalos checkout preserved; Plan remains the explicit source dependency. coach-release dispatches Coach CI for published origin/dev and verifies the resulting live SHA; vos-ship coach delegates without a Shell build. CI records release.json. Coach rules now have their own source fragment for central import/deployment in VitalOS.

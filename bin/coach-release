@@ -1,24 +1,52 @@
 #!/usr/bin/env bash
-# Build and deploy the current committed Coach dev checkout, without Git pushes.
+# Release the published Coach dev commit through Coach-owned CI.
 set -euo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-dry_run=false
+repo=nimmsel23/coach-dev
+ref=dev
+yes=0
+dry=0
 for arg in "$@"; do
   case "$arg" in
-    --yes) ;; # Compatibility with the former vos-release wrapper.
-    --dry-run) dry_run=true ;;
+    --yes) yes=1 ;;
+    --dry-run) dry=1 ;;
     -h|--help)
       echo 'Usage: coach-release [--yes] [--dry-run]'
-      echo 'Build committed Coach dev and deploy hosting:coach. Does not push or merge Git branches.'
+      echo 'Release published origin/dev through Coach CI; verify its live commit.'
+      echo 'Does not push local changes, deploy rules, or build the VitalOS shell.'
       exit 0 ;;
     *) echo "Unknown option: $arg" >&2; exit 2 ;;
   esac
 done
-cd "$ROOT"
-[ "$(git branch --show-current)" = dev ] || { echo 'Release from the Coach dev branch.' >&2; exit 1; }
-[ -z "$(git status --porcelain)" ] || { echo 'Commit or stash pending changes before releasing Coach.' >&2; exit 1; }
-if "$dry_run"; then
-  echo "cd $ROOT && npm run firebase"
+if (( dry )); then
+  echo "Coach: published $repo/$ref -> Deploy Coach (production=true) -> https://vos-coach.web.app"
+  echo 'Rules remain a separate central VitalOS deployment. No VitalOS app build or pointer bump.'
   exit 0
 fi
-npm run firebase
+for tool in gh jq curl; do command -v "$tool" >/dev/null || { echo "$tool fehlt" >&2; exit 1; }; done
+sha=$(gh api "repos/$repo/git/ref/heads/$ref" --jq .object.sha)
+echo "Coach production: $repo/$ref @ $sha"
+if (( ! yes )); then
+  read -r -p 'Diesen veröffentlichten Commit live ausliefern? [j/N] ' answer
+  [[ "$answer" =~ ^[jJyY]$ ]] || exit 1
+fi
+started=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+gh workflow run deploy-coach.yml -R "$repo" --ref "$ref" -f production=true
+run=''
+for ((attempt=0; attempt<30; attempt++)); do
+  run=$(gh run list -R "$repo" --workflow deploy-coach.yml --branch "$ref" --event workflow_dispatch --limit 20 --json databaseId,headSha,createdAt --jq "[.[] | select(.headSha == \"$sha\" and .createdAt >= \"$started\")] | sort_by(.databaseId) | last | .databaseId // empty")
+  [[ -z "$run" ]] || break
+  sleep 2
+done
+[[ -n "$run" ]] || { echo 'Kein passender Deploy-Run gefunden; gh run list -R nimmsel23/coach-dev prüfen.' >&2; exit 1; }
+echo "https://github.com/$repo/actions/runs/$run"
+gh run watch "$run" -R "$repo" --exit-status --interval 10
+for ((attempt=0; attempt<12; attempt++)); do
+  live=$(curl -fsS "https://vos-coach.web.app/release.json?expected=$sha" | jq -r .commit) || live=''
+  if [[ "$live" == "$sha" ]]; then
+    echo "Coach live verifiziert: https://vos-coach.web.app @ $sha"
+    exit 0
+  fi
+  sleep 5
+done
+echo "Deploy erfolgreich, Live-Commit noch nicht bestätigt (erwartet $sha)." >&2
+exit 1

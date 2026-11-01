@@ -2,36 +2,12 @@ import { sharedPlanRoot } from './scripts/shared-plan.mjs'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
-import { existsSync } from 'fs'
 
 const BACKEND = 'http://localhost:9150'
-
-// Prefer the pinned VitalOS client apps, then standalone sibling checkouts.
-function siblingDir(devName, appName) {
-  const nestedPath = resolve(__dirname, 'vitalos', appName)
-  if (existsSync(resolve(nestedPath, 'src'))) return nestedPath
-  const appPath = resolve(__dirname, '..', appName)
-  return existsSync(appPath) ? appPath : resolve(__dirname, '..', devName)
-}
-
-// The optional workspace alias package has a standalone fallback for Coach.
-async function resolveCrossAppAliases() {
-  try {
-    const { crossAppAliases } = await import('@vos/cross-app-aliases')
-    return crossAppAliases()
-  } catch {
-    return {
-      '@relax':      resolve(siblingDir('relax-dev', 'relax-app'), 'src'),
-      '@learn':      resolve(siblingDir('learn-dev', 'learn-app'), 'src'),
-    }
-  }
-}
 
 export default defineConfig(async ({ mode }) => {
   const isFirebase = mode === 'firebase' || mode === 'coach'
   const isCoach = mode === 'coach'
-  const crossAppAliases = await resolveCrossAppAliases()
-  delete crossAppAliases['@fuel']
 
   return {
     publicDir: isCoach ? resolve(__dirname, 'public-coach') : resolve(__dirname, 'public'),
@@ -44,7 +20,6 @@ export default defineConfig(async ({ mode }) => {
       // Resolve pnpm packages from their real directory so transitive Vue imports work.
       preserveSymlinks: false,
       alias: {
-        ...crossAppAliases,
 
         '@plan':               resolve(sharedPlanRoot(), 'src'),
         '@src':                resolve(__dirname, './src'),

@@ -172,3 +172,10 @@ Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatr
 - [x] Offene Plan-Rückmeldungen in der Klientenübersicht zusammenfassen.
 - [x] Frühere Versionen einschließlich ihrer Rückmeldungen direkt im Planverlauf öffnen.
 - Freier Chat-Ausbau (Push, Anhänge, weitere Komfortfunktionen) ist zugunsten dieses Ablaufs zurückgestellt.
+
+## 2026-11-01 — Standalone Coach shipping
+
+- [x] VitalOS workspace aliases and sibling Tailwind scans removed from Coach build.
+- [x] Coach-owned CI release and live commit verification exposed through vos-ship coach.
+- [x] Coach rules fragment prepared for central VitalOS import.
+- [ ] Publish integrated Coach source and verify live Hosting release.

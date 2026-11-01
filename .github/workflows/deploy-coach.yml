@@ -14,7 +14,6 @@ on:
     branches: [dev]
     paths:
       - '.gitmodules'
-      - 'vitalos'
       - 'modules/plan'
       - 'src/**'
       - 'coach.html'
@@ -61,12 +60,9 @@ jobs:
           node-version: 22
 
       - name: Install
-        # The optional alias package exists only in the VitalOS workspace.
-        # Standalone Vite already provides its own fallback aliases.
         run: |
-          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));delete p.optionalDependencies?.['@vos/cross-app-aliases'];fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
           printf 'packages: ["."]\nnodeLinker: hoisted\nverifyDepsBeforeRun: false\nignoreScripts: true\n' > pnpm-workspace.yaml
-          pnpm install --no-frozen-lockfile --ignore-scripts
+          pnpm install --frozen-lockfile --ignore-scripts
 
       # *.generated.js sind gitignored; build:firebase:coach erzeugt sie nicht selbst
       - name: KB-Daten generieren
@@ -74,6 +70,9 @@ jobs:
 
       - name: Build (Coach)
         run: pnpm run build:firebase:coach
+
+      - name: Record deployed source
+        run: node -e "require('fs').writeFileSync('dist-coach/release.json',JSON.stringify({app:'coach',commit:process.env.GITHUB_SHA,builtAt:new Date().toISOString()})+'\n')"
 
       - name: Deploy hosting:coach
         env:
