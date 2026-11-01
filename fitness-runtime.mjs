@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 
 // fitness_agent/server.py (aiohttp, :9120/:9130) ist archiviert (siehe archive/fitness_agent_server.py).
 // Katalog-Daten kommen direkt von der Platte, dynamische Endpunkte (plan/weekly/export/inbox)

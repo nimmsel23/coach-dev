@@ -11,7 +11,7 @@
  * zeigen, damit die Muskel-Utilities an einem Ort auffindbar sind.
  */
 
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { useEffect, useState } from "react";
 
 import { setKBMuscles } from "../db/shared/muscle.js";
