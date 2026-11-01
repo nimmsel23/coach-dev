@@ -1,5 +1,6 @@
+import UnreadBadge from '../UnreadBadge.jsx';
 import { useState } from 'react';
-import { MoreHorizontal, ChevronLeft } from 'lucide-react';
+import { MessageSquare, MoreHorizontal, ChevronLeft } from 'lucide-react';
 
 // Training (session) ist der mit Abstand meistgenutzte Tab und startet
 // standardmäßig offen — deshalb erscheinen seine Subtabs (Heute/Timer/
@@ -14,7 +15,7 @@ import { MoreHorizontal, ChevronLeft } from 'lucide-react';
 const HIDDEN_SUBS = ['timer', 'skills'];
 const PRIMARY_TABS = ['atlas'];
 
-export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHint, navItems }) {
+export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHint, navItems, inboxUnread }) {
   const [showMore, setShowMore] = useState(false);
 
   const sessionItem = navItems.find((i) => i.id === 'session');
@@ -56,6 +57,7 @@ export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHin
         ...navItems
           .filter((i) => i.id !== 'session' && !PRIMARY_TABS.includes(i.id))
           .map(tabEntry),
+        tabEntry({ id: 'inbox', label: 'Nachrichten', Icon: MessageSquare }),
       ]
     : [
         ...sessionSubs.filter((i) => !HIDDEN_SUBS.includes(i.id)).map(subEntry),
@@ -92,7 +94,7 @@ export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHin
               <span className={`text-[10px] font-bold leading-tight transition-all duration-300 ${
                 isActive ? 'text-fit-accent' : 'text-fit-dim'
               }`}>
-                {label}
+                {label}{id === 'inbox' && <UnreadBadge value={inboxUnread} />}
               </span>
             </button>
           ))}
@@ -113,7 +115,7 @@ export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHin
             <span className={`text-[10px] font-bold leading-tight transition-all duration-300 ${
               showMore || isOnOtherTab ? 'text-fit-accent' : 'text-fit-dim'
             }`}>
-              {showMore ? 'Zurück' : 'Mehr'}
+              {showMore ? 'Zurück' : <>Mehr <UnreadBadge value={inboxUnread} /></>}
             </span>
           </button>
         </div>
