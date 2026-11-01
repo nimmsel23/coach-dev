@@ -11,3 +11,13 @@ Statische Inbox-Roadmap durch Auth-gebundenen Nachrichtenverlauf ersetzt: echte 
 ## 2026-11-01 — Kommunikationsdokumentation vervollständigt
 
 Klienten-Handbuch für Auth, Planantwort, Datenpfade, Speicher-/Lesestände, Cache-/Entwurfsgrenzen, Release und Diagnose ergänzt. AGENTS und Inbox-Architektur/Audit verlinken zum gemeinsamen Vertrag/Runbook. Projektweite Coach-Rolle und fehlende Cloud-/Geräteabnahme ausdrücklich beschrieben. Nur Dokumentation; keine Dienste, Deployments oder echten Nachrichten.
+
+## 2026-11-01 — Coach-Worker wiederhergestellt
+
+`coach-sync.service` um 18:01 CET mit `systemctl --user enable --now`
+wieder aktiviert. Firestore bestätigt Worker `Alpha:2344779` mit einem
+eine Sekunde alten Heartbeat; queued/processing/stale jeweils 0, keine
+Neustarts. Beim beobachteten Start keine neuen Katalog-Commits oder
+Katalog-Rebuilds; semantischer Replay-Schutz ist in der geladenen Quelle
+vorhanden. Bestehende neun historische Command-Fehler unverändert, keine
+Aufträge erneut ausgeführt. Keine App-/Rules-Änderung und kein Deployment.
