@@ -1,87 +1,232 @@
-# Coach ↔ Klient: Gesprächsbereich
+# Coach ↔ Klient: Kommunikation
 
-Stand: 2026-11-01. Coach besitzt die Klientenauswahl und seine Oberfläche;
-Fitness besitzt die Klienten-Mitteilungen. Beide sprechen ein gemeinsames
-Firestore-Protokoll. Regeln gehören VitalOS. Kein zweiter Python-Dienst,
-Cloud-Command-Worker oder zusätzlicher Port wird eingeführt.
+Stand: 2026-11-01. Technischer und fachlicher Einstieg für den Gesprächsbereich.
+Betrieb, Testbefehle, Freigabe und Fehlerbilder stehen im
+[Runbook](COACH-COMMUNICATION-RUNBOOK.md).
+
+## Implementierungs- und Veröffentlichungsstand
+
+| Bestandteil | Nachgewiesener Stand |
+| --- | --- |
+| Coach: Nachrichten-Tab, Composer, Planbezug | Implementiert, lokal gebaut und im Emulator-Browser geprüft |
+| Fitness: persönlicher Gesprächsbereich | Implementiert; ersetzt die statische Inbox-Roadmap |
+| Firestore-Zugriffsregeln | Auf separatem VitalOS-Feature-Branch vorbereitet und im Emulator geprüft |
+| Authentifizierung auf echten Geräten | Noch separat abzunehmen |
+| Produktive Rules/Hosting-Veröffentlichung dieses Features | In dieser Arbeit nicht ausgeführt |
+| Push, Anhänge, globale Unread-Zähler | Noch nicht implementiert |
+
+Implementierungsstände: Coach `d9a005e`, Fitness `4544698`, VitalOS-Regeln
+`2421611` auf `codex/coach-communication`. Diese Referenzen bezeichnen die
+Implementierung; spätere Dokumentationscommits ändern den Nachweis nicht.
+Ein lokaler Build oder Commit belegt keinen veröffentlichten App-/Regelstand.
+
+## Zuständigkeiten und Grenzen
+
+| Owner | Verantwortung / Einstieg |
+| --- | --- |
+| Coach (`~/dev/coach-dev`) | Klientenauswahl, Coach-Oberfläche, expliziter Zielklient, Coach-Adapter |
+| Fitness (`~/dev/fitness-dev`) | Klienten-Inbox, Cloud-Auth, eigener UID-Pfad, Klienten-Adapter |
+| VitalOS | Projektweite Firestore-Regeln, Regeltests und deren Veröffentlichung |
+| Plan (`~/dev/plan-dev`) | Planeditor, veröffentlichte Versionen und Zuweisung; Coach nutzt seinen Pin |
+| Firestore | Gemeinsamer Nachrichtenverlauf und Lesestände |
+
+Die Regeln werden im Worktree `~/dev/.worktrees/vitalos-coach-communication`
+vorbereitet. Der stabile Checkout `~/vitalos` bleibt Produktions-/Integrationsstand.
+Coach ist kein VitalOS-App-Submodul. Sein eigener `vitalos/`-Pin wird durch diese
+Nachrichtenimplementierung nicht angehoben. Plan benötigt dafür keinen Pointer-Bump.
+
+Nachrichten benutzen weder `coach-sync.service` noch `coachCommands`, den lokalen
+Gateway auf 9150 oder den Fitness-Upstream auf 8100. Der Laptop muss für diesen
+Austausch nicht eingeschaltet sein. Klienten-Registry, lokale Trainingspläne,
+Session-Logs und Katalog-YAMLs werden nicht als weiterer Nachrichtenspeicher benutzt.
 
 ## Bedienung
 
-Coach: Klient auswählen → **Nachrichten**. Optional einen bereits veröffentlichten
-Trainingsplan auswählen, Text eingeben und senden. Vor dem Versand wird dessen
-veröffentlichte Version erneut geprüft; ein geänderter Versionsstand wird nicht
-still als der zuvor ausgewählte Stand versendet.
+### Coach
 
-Fitness-Klient: **Inbox/Nachrichten** öffnen. Coach-Nachrichten lesen und antworten.
-**Zu diesem Plan antworten** übernimmt den Planbezug. **Bezug entfernen** wechselt
-zu einer allgemeinen Nachricht. Die ehemalige Inbox-Roadmap ist ersetzt.
+1. Klienten in Coach auswählen und den Detail-Tab **Nachrichten** öffnen.
+   Der direkte Hash ist `#/clients/<clientUid>/messages` innerhalb `coach.html`.
+2. Unter **Bezug** eine allgemeine Nachricht oder einen veröffentlichten Plan wählen.
+3. Nachricht schreiben und **Nachricht senden** betätigen.
+4. Auf bestätigte Speicherung bzw. sichtbare Fehlermeldung achten.
 
-Beide Seiten zeigen die letzten 100 Nachrichten live. `Gespeichert` bedeutet
-serverseitig bestätigt, `Wird gesendet…` einen ausstehenden Write. `Gesehen`
-beruht auf dem Lesestand der Gegenseite beim sichtbaren Öffnen neuer Nachrichten.
-Ein Push wird nicht behauptet und ist für den Gesprächsverlauf nicht erforderlich.
-Ein Textentwurf wird nach bestätigtem Versand geleert; Fehler bleiben sichtbar.
-Nach Klienten-/Kontowechsel werden Abos und UI-Zustand getrennt.
+Ein Planbezug ist nur für gelistete Pläne mit `headVersion > 0` wählbar. Direkt
+vor dem Versand lädt Coach den Plan erneut: `published` muss vorhanden sein und
+die ausgewählte Versionsnummer muss noch `headVersion` entsprechen. Sonst bleibt
+der Text erhalten und die Oberfläche fordert zum erneuten Öffnen/Prüfen auf.
+Der gespeicherte Name stammt aus dem veröffentlichten Snapshot.
 
-## Datenprotokoll
+### Klient
 
-- `coachConversations/{clientUid}/messages/{messageId}`:
-  `{body,senderUid,senderRole,createdAt,plan}`.
-- `senderRole` ist `coach` oder `client`, `createdAt` ein Server-Timestamp.
-- `body`: 1–4000 Zeichen; UI trimmt Rand-Leerzeichen.
-- `plan`: null oder `{id,name,version}` mit einer veröffentlichten Version als
-  Bezug. Das ist eine Referenz, keine Kopie des Plans und keine neue Freigabe.
-- `coachConversations/{clientUid}/readStates/{readerUid}`: `{lastReadAt}`.
+1. Mit dem eigenen Cloud-Konto in Fitness anmelden; **Inbox/Nachrichten** öffnen.
+2. Coach-Nachricht und gegebenenfalls Planname/Versionsnummer lesen.
+3. **Zu diesem Plan antworten** übernimmt den Bezug in den Composer.
+4. **Bezug entfernen** wechselt zur allgemeinen Nachricht. Antwort senden.
 
-Coach-Adapter: `src/lib/db/firestore/communication.js`. Client-Adapter:
-`fitness-dev/src/lib/coachConversation.js`. Die Adapter übernehmen verschiedene
-Rollen-/Auth-Kontexte; der Client kann keinen fremden Zielklienten übergeben.
-Keine alternativen Speicherpfade oder lokalen Kopien der Nachrichten anlegen.
+Der Klient übergibt keine frei wählbare Ziel-UID. Der Adapter ermittelt sie aus
+Firebase Auth. Ein nicht angemeldeter Nutzer sieht einen Anmeldehinweis.
 
-## Zugriffsregeln und Release
+### Zusammenhang mit der Planbereitstellung
 
-Die neue Collection liegt außerhalb der alten breiten `fitness/{uid}`-Regeln.
-Coach und der jeweilige Klient lesen. Nachrichten dürfen nur vom authentifizierten
-Absender mit passender Rolle erstellt werden. Sie sind nicht nachträglich
-veränderbar/löschbar. Jeder Teilnehmer schreibt ausschließlich seinen Lesestand.
-Fremde Klienten und anonyme Nutzer haben keinen Zugriff.
-
-Regel-Implementierung und Tests sind separat im VitalOS-Feature-Worktree
-`~/dev/.worktrees/vitalos-coach-communication`, Branch `codex/coach-communication`,
-vorbereitet. Der stabile `~/vitalos`-Checkout bleibt unberührt.
-
-Freigabereihenfolge:
-
-1. Rules-Änderung im VitalOS-Owner reviewen und über dessen autorisierten Weg
-   veröffentlichen. Keine Rules aus Coach oder Fitness deployen.
-2. Coach und Fitness über ihre jeweiligen PR-/Release-Wege veröffentlichen.
-3. Mit echtem Coach- und Klientenkonto auf zwei Geräten abnehmen.
-
-In dieser Implementierung gab es kein Hosting-/Rules-Deployment, keinen Push
-und keinen Versand an echte Klienten. Alte Kommentare auf Sessions/Journale
-bleiben eigenständige, kontextgebundene Rückmeldungen. Ihre Coach-Erfolgsmeldung
-behauptet keinen Push-Versand mehr.
-
-## Verifikation
-
-Rules: fünf Tests im lokalen Firestore-Emulator (Demo-Projekt), einschließlich
-Fremdzugriff, Rollenfälschung, Schema/Länge, unveränderlichen Nachrichten und
-Leseständen. Testdatei und `test:coach-communication:rules` liegen im Rules-Worktree.
-
-Mobiler Browsertest im Coach-Repo:
-
-```sh
-# Zuerst isolierten Firestore-Emulator auf 127.0.0.1:18080 mit den neuen Rules
-# und Projekt demo-coach-communication starten; dann über Kitty:
-aos-kitty-launch 'cd /home/alpha/dev/coach-dev && bash scripts/tests/run-communication-browser.sh'
+```mermaid
+sequenceDiagram
+    participant C as Coach
+    participant P as Plan / Zuweisung
+    participant D as Firestore
+    participant K as Fitness-Klient
+    C->>P: Plan erstellen, Version veröffentlichen und zuweisen
+    C->>P: Veröffentlichte Version vor Nachrichtenversand prüfen
+    C->>D: Nachricht mit Plan-ID, Name und Version speichern
+    D-->>K: Nachricht im Gesprächsbereich anzeigen
+    K->>D: Antwort, optional mit demselben Planbezug
+    D-->>C: Antwort im Klienten-Tab anzeigen
+    C->>D: Lesestand beim sichtbaren Lesen aktualisieren
 ```
 
-Fixture bindet die echten neuen Datenadapter und Komponenten beider Repos an
-zwei ausschließlich lokal gemockte Auth-Identitäten. `FITNESS_SOURCE` überschreibt
-nur für diesen Test den Standard-Nachbarpfad. Ablauf: Coach sendet Planbezug →
-Klient antwortet mit Bezug → Coach liest Antwort → beide Lesestände sichtbar.
-Zusätzlich: Klient wechseln, kein fremder Verlauf oder Entwurf; kein horizontaler
-Überlauf bei 390px. Rules und Browser-Fixture verwenden keine Produktivkonten.
+Die Nachricht ist keine Planfreigabe oder Zustellung einer Plankopie. Der Plan
+muss über den bestehenden Plan-Workflow bereitgestellt werden. Ein älterer
+Nachrichtenbezug bleibt historisch auf seine Version bezogen und folgt keiner
+späteren Planbearbeitung. Es gibt aktuell keinen direkten Plan-Öffnen-Link in
+der Nachricht. Die Klienten-Antwort übernimmt einen bestehenden Bezug; sie
+veröffentlicht keine neue Version und prüft nicht erneut den aktuellen Plan-Head.
 
-Offen: ältere Nachrichten nachladen, globale Unread-Zähler, Anhänge und optionale
-Push-Benachrichtigungen. Diese Punkte sind nicht Voraussetzung für Textaustausch.
+## Datenvertrag
+
+Die Collection liegt außerhalb der älteren breiten `fitness/{uid}`-Owner-Regeln:
+
+```text
+coachConversations/{clientUid}/
+  messages/{messageId}
+  readStates/{readerUid}
+```
+
+Der übergeordnete Conversation-Datensatz wird nicht zusätzlich angelegt.
+Abos laufen direkt auf den beiden Subcollections.
+
+### Nachricht
+
+| Feld | Typ / Vorgabe | Herkunft |
+| --- | --- | --- |
+| `body` | String, 1–4000 Zeichen | UI/Adapter trimmt Rand-Leerzeichen |
+| `senderUid` | String, muss Auth-UID entsprechen | Auth-Kontext des jeweiligen Adapters |
+| `senderRole` | `coach` oder `client` | Adapter setzt Rolle; Regeln prüfen Berechtigung |
+| `createdAt` | Firestore Timestamp, beim Erstellen gleich `request.time` | `serverTimestamp()` |
+| `plan` | `null` oder exakt `{id,name,version}` | Allgemein bzw. ausgewählter/historischer Bezug |
+
+Alle fünf Felder sind erforderlich; weitere Felder lehnen die Regeln ab.
+Nachrichten-IDs sind automatisch erzeugte Dokument-IDs. Die Regel erlaubt
+`[A-Za-z0-9_-]` mit 1–128 Zeichen. `plan.id` hat 1–128 Zeichen, `plan.name`
+1–200 Zeichen, `plan.version` ist eine positive Ganzzahl.
+
+Beispielinhalt; Zeitstempel sind echte Firestore-Werte, keine ISO-Strings:
+
+```js
+{
+  body: 'Bitte prüfe die Pausen im neuen Plan.',
+  senderUid: '<angemeldeter-coach>',
+  senderRole: 'coach',
+  createdAt: serverTimestamp(),
+  plan: { id: '<plan-id>', name: '3er-Split', version: 2 }
+}
+```
+
+Die Regeln prüfen beim Planbezug die Struktur, **nicht** die Existenz oder
+Freigabe des referenzierten Plans. Die Coach-UI übernimmt die Versionsprüfung.
+Ein Nachrichtenbezug ist deshalb kein serverseitiger Nachweis der Planfreigabe.
+
+### Lesestand
+
+`readStates/{readerUid}` enthält ausschließlich `{lastReadAt: serverTimestamp()}`.
+Nur der angemeldete Leser schreibt sein eigenes Dokument. Andere Teilnehmer
+dürfen es lesen. Das Feld wird beim sichtbaren Gespräch aktualisiert, wenn die
+neueste fremde Nachricht über `IntersectionObserver` im Sichtbereich liegt und
+das Dokument sichtbar ist. Es ist ein zeitbasierter Lesestand, keine einzelne
+Empfangsbestätigung pro Nachricht.
+
+Coach vergleicht eigene Nachrichten mit dem Lesestand genau dieses Klienten.
+Die Klienten-Ansicht verwendet den neuesten Lesestand eines anderen Teilnehmers:
+**Vom Coach gesehen** bedeutet damit bei mehreren Coaches mindestens ein Coach,
+nicht zwingend ein bestimmter zugewiesener Coach. Es ist kein Nachweis, dass ein
+Text vollständig gelesen oder eine Push-Benachrichtigung empfangen wurde.
+
+## Rollen und Zugriffsmodell
+
+| Akteur | Lesen | Nachricht erstellen | Lesestand schreiben |
+| --- | --- | --- | --- |
+| Klient mit eigener Auth-UID | Eigener Gesprächspfad | Eigene UID, Rolle `client` | Eigene Leser-ID |
+| Coach gemäß zentraler `isCoach()`-Regel | Alle Klientengespräche im Projekt | Eigene UID, Rolle `coach` | Eigene Leser-ID im geöffneten Gespräch |
+| Anderer Klient | Kein fremder Pfad | Nicht in fremden Pfaden | Kein fremder Lesestand |
+| Nicht angemeldet | Nein | Nein | Nein |
+
+`isCoach()` ist die vorhandene zentrale Rollenprüfung (Coach-Claim, Rollen-Dokument
+oder bestehender Legacy-UID-Fallback). Es gibt aktuell keine Zuordnung, die einen
+Coach ausschließlich auf seine eigenen Klienten beschränkt. Eine spätere
+Mehrtrainer-/Mandantenlösung benötigt ein eigenes Berechtigungskonzept.
+
+Browser-Clients dürfen bestehende Nachrichten weder ändern noch löschen. Die
+Regeln schützen nicht gegen privilegierte Admin-SDK-Zugriffe: Wartung und Exporte
+bleiben deren eigener Verantwortungsbereich. Die UI bietet keine Bearbeitung,
+Löschung, automatische Aufbewahrungsfrist oder Suchfunktion für Nachrichten.
+
+## Live-Abos, Entwürfe und Netzverhalten
+
+Beide Adapter abonnieren `createdAt desc`, `limit(100)` und stellen die Ergebnisse
+in der Oberfläche chronologisch dar. Lesestände haben ein separates Live-Abo.
+Beim Verlassen werden beide Abos beendet. Coach bindet die Komponente per Key an
+die gewählte UID; Fitness remountet sie bei einem Auth-Kontowechsel.
+
+| Anzeige/Zustand | Bedeutung und Grenze |
+| --- | --- |
+| `Wird gesendet…` | Write steht aus; noch keine bestätigte Speicherung |
+| `Gespeichert` | Firestore hat den Write bestätigt; keine Push-Garantie |
+| `Vom Klienten/Coach gesehen` | Lesestand der Gegenseite liegt zeitlich nach der Nachricht |
+| `Lokaler Stand · Verbindung wird abgeglichen` | Snapshot stammt aus Cache; das allein beweist keinen Offline-Zustand |
+| Fehler | Text bleibt im aktuellen Composer erhalten; Fehler prüfen |
+
+Entwürfe sind React-State: während eines Fehlers erhalten, aber nicht dauerhaft
+auf Festplatte gespeichert. Klientenwechsel, Kontowechsel, Unmount oder Reload
+verwerfen sie. Genau diese Trennung verhindert Entwurfsübernahme zum falschen
+Klienten. Keine garantierte Offline-Warteschlange über App-Neustarts behaupten;
+Cache-/Pending-Verhalten hängt auch von der vorhandenen Firebase-Initialisierung ab.
+Ein erneuter Sendeaufruf erhält eine neue Dokument-ID; bei unklarem Ausgang erst
+den Verlauf prüfen, statt eine exakt-einmalige Zustellung vorauszusetzen.
+
+## Quellcode und Abgrenzung zu bestehenden Werkzeugen
+
+| Datei | Verantwortung |
+| --- | --- |
+| `src/views/Coach/ClientMessages.jsx` | Coach-Verlauf, Composer, Planprüfung, Lesestand |
+| `src/lib/db/firestore/communication.js` | Coach-Adapter mit expliziter Klienten-UID |
+| `src/views/Coach/ClientsPanel.jsx` | Klientenauswahl und gekeyter Nachrichten-Tab |
+| `src/views/Coach/coachRoute.js` | Persistenter Hash `messages` |
+| `fitness-dev/src/views/Inbox/Inbox.jsx` | Auth-Gate der Klienten-Inbox |
+| `fitness-dev/src/views/Inbox/CoachConversation.jsx` | Klienten-Verlauf/Antworten/Lesestand |
+| `fitness-dev/src/lib/coachConversation.js` | Auf eigene Auth-UID begrenzter Adapter |
+| VitalOS `firestore.rules` | Zugriffs- und Schema-Regeln |
+
+Bestehende Session-, Workout- oder Journal-Kommentare (`coachFeedback`) bleiben
+kontextbezogene Felder. Sie werden nicht automatisch in den Gesprächsverlauf
+migriert. Die Coach-Kommentar-Erfolgsmeldung behauptet keinen ungeprüften
+Push-Versand mehr. Katalog-Inbox, Enrichment und `coach notifications` sind andere
+Funktionen; neue Nachrichten gehören nicht in deren Queues oder Katalog-YAMLs.
+
+## Nachweise und nächste Ausbaustufen
+
+Geprüft wurden fünf Rules-Testfälle, Coach-Hash-Routing, zwei Plan-Vertragstests,
+ESLint, beide Firebase-App-Builds und ein mobiler Browserablauf mit echten Adaptern
+gegen den lokalen Emulator. Details, Befehle und Abnahmeprotokoll im
+[Runbook](COACH-COMMUNICATION-RUNBOOK.md). Die Browser-Fixture testet UI/Protokoll
+mit Emulator-Identitäten, nicht den echten Login, Claims-Provisionierung oder
+Push auf einem iPhone. Die Dokumentation ersetzt keine Cloud-/Geräteabnahme.
+
+| Ausbaustufe | Aktueller Umfang / nächster Schritt |
+| --- | --- |
+| Historie | Letzte 100; Pagination/ältere Nachrichten fehlen |
+| Entwürfe | Nur lokaler Komponenten-State; sichere persistente Entwürfe fehlen |
+| Unread | Lesestände vorhanden; globale Zähler/Badges fehlen |
+| Push | Kein neuer Nachrichten-Trigger implementiert |
+| Anhänge | Kein Upload oder Medienvertrag |
+| Plan-Navigation | Referenz wird angezeigt; direkter Plan-Link fehlt |
+| Mehrtrainer | Projektweite Coach-Rolle; keine Klientenzuweisungs-ACL |
+| Bearbeiten/Löschen | Durch Client-Regeln gesperrt; kein eigener Produktablauf |
+| Echte Geräte | Nach autorisiertem Rules- und App-Release abzunehmen |

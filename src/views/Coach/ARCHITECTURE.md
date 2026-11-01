@@ -145,3 +145,10 @@ Er nutzt `firestore/communication.js` für Live-Nachrichten und Lesestände in
 vor dem Senden wird deren Stand geprüft. Gespeichert/Gesehen/Pending sind getrennt.
 Der Laptop-Worker wird dafür nicht verwendet. Protokoll und Release-Reihenfolge:
 `docs/COACH-COMMUNICATION.md`. Die zugehörige Client-UI liegt in Fitness Inbox.
+
+### Nachrichten: ausführliche Dokumentation
+
+[Protokoll und Zuständigkeiten](../../../docs/COACH-COMMUNICATION.md),
+[Test-/Release-/Diagnose-Runbook](../../../docs/COACH-COMMUNICATION-RUNBOOK.md).
+Lesestände sind zeitbasierte UI-Signale, nicht Push-Zustellung. Alle qualifizierten
+Coaches haben derzeit projektweiten Zugriff; keine zugewiesene-Coach-ACL annehmen.

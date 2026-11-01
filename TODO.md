@@ -148,3 +148,19 @@ Dokumentation: `docs/COACH-PLAN-WORKFLOW.md`.
 Nachrichten-Tab pro Klient ergänzt, Gesprächsbereich in der Fitness-Inbox angebunden: Textaustausch mit veröffentlichtem Planbezug, bestätigte Speicherung und sichtbarkeitsabhängige Lesestände. Client-/Klientenwechsel isolieren Verlauf und Entwürfe. Bestehende Kommentar-Meldung behauptet keinen Push mehr. Firestore-Protokoll und Freigabereihenfolge dokumentiert.
 
 Abnahme: mobile 390px-Browser-Fixture mit echten Adaptern gegen isolierten Emulator bestanden (Plan-Nachricht → Klienten-Antwort → Lesestände → Klientenwechsel); fünf Rules-Tests, Routing- und zwei Plan-Vertragstests bestanden. Coach- und Fitness-Firebase-Build bestanden. Rules separat im VitalOS-Feature-Worktree vorbereitet; kein Push/Deployment und keine echten Nachrichten.
+
+## 2026-11-01 — Kommunikation vollständig dokumentiert
+
+Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatrix, Cache-/Entwurfs-/Lesestand-Semantik, Limits und Ausbaupunkte gegen Implementierung abgeglichen. Eigenes Runbook für reproduzierbare Tests, Port-/Abhängigkeitsvoraussetzungen, manuelle Release-Reihenfolge, Geräteabnahme, Fehlerbilder und Rücknahme. In AGENTS, Hauptarchitektur und View-Dokumenten verlinkt. Nur Dokumentation; keine neuen Builds/Deployments oder echten Nachrichten.
+
+## Nächste Umsetzung: Kommunikationsausbau (2026-11-01)
+
+- [ ] Historie mit Cursor nachladen; neue Live-Nachrichten dürfen ältere geladene Seiten nicht verdrängen.
+- [ ] Entwürfe pro Konto/Klient dauerhaft auf diesem Gerät sichern und nach Versand löschen.
+- [ ] Ungelesen-Zähler außerhalb des geöffneten Gesprächs in Coach und Fitness anzeigen.
+- [ ] Exakt die referenzierte Planversion aus einer Nachricht öffnen.
+- [ ] Neue Nachrichten per Push ankündigen; fehlende Tokens/Opt-out behandeln.
+- [ ] Sichere Anhänge mit Uploadstatus, Größen-/Typgrenzen und Storage-Regeln.
+- [ ] Trainer-/Klientenzuordnung statt nur projektweiter Coach-Rolle.
+- [ ] Suche und kontrollierte Bearbeitungs-/Lösch-/Aufbewahrungsabläufe ergänzen.
+- [ ] Nach autorisiertem Release echte Konten/Geräte, Netzwechsel und Plan-Head-Wechsel abnehmen.

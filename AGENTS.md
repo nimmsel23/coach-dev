@@ -25,3 +25,14 @@ never create a duplicate client registry or serve workspace/klienten source tree
 Local writes go only to native `data/training-plans`; legacy files require explicit
 import. Saving/releasing locally must never automatically publish to Firestore.
 See `docs/LOCAL-PLANNING.md`.
+
+## Coach ↔ Klienten-Kommunikation (2026-11-01)
+
+Vor Änderungen [docs/COACH-COMMUNICATION.md](docs/COACH-COMMUNICATION.md) und
+[Runbook](docs/COACH-COMMUNICATION-RUNBOOK.md) lesen. Coach besitzt die explizite
+Klientenauswahl; Fitness bindet seine Seite an die eigene Cloud-Auth-UID.
+Nachrichten/Lesestände liegen in `coachConversations`, außerhalb der alten
+Fitness-Owner-Regel. Regeln gehören VitalOS; App-Veröffentlichung setzt deren
+autorisierten Release voraus. Kein Versand an reale Konten als Entwicklungstest.
+Planbezug ist eine Referenz, keine Planfreigabe. Keine Nachrichten durch
+`coach-sync`, Enrichment oder eine zusätzliche Klienten-Registry leiten.

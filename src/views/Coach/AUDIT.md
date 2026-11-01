@@ -193,3 +193,11 @@ Feature-Worktree; keine Produktivregeln geändert oder echten Nachrichten gesend
 Mobiler Emulator-Browserablauf samt Klienten-/Entwurfsisolation bestanden, fünf
 Rules-Tests und Plan-/Routing-Verträge bestanden. Beide App-Builds bestanden.
 Cloud-Abnahme/Release, globale Unread-Zähler, ältere Nachrichten und Push offen.
+
+### Dokumentationsabnahme 2026-11-01
+
+Vertrag, Cache/Pending-Verhalten, flüchtige Entwürfe, Mehrcoach-Lesestände und
+projektweite Coach-Berechtigung gegen Code und Regeln abgeglichen. Vollständige
+Test-/Freigabe-/Fehlerbild-Anleitung im Runbook. Dokumentation kennzeichnet
+Geräte-/Login-Abnahme, Negativfälle bei Plan-Head-Wechsel und Netzwechsel als
+noch separat zu prüfen; frühere lokale Tests sind kein Live-Deploy-Nachweis.

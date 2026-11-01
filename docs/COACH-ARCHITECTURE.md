@@ -129,3 +129,12 @@ checkout using its installed uv environment. Logging, client console/drafts,
 workout entry, catalog/inbox, data/worker sync, runtime data, notifications/push,
 mail/activity and service control remain domain-owned implementations.
 Old executable names work as aliases and standalone commands. See COACH-CLI.md.
+
+## Coach/Klienten-Kommunikation (2026-11-01)
+
+Aktueller Einstieg: [Kommunikationsvertrag](COACH-COMMUNICATION.md) und
+[Runbook](COACH-COMMUNICATION-RUNBOOK.md). Der Nachrichten-Tab verwendet Firestore
+direkt und führt keinen neuen Dienst oder Gateway-Umbau ein. Coach-UI,
+Fitness-Client und zentrale VitalOS-Regeln sind getrennte Release-Bestandteile.
+Historische lokale Dienst-Umbaupläne dieses Dokuments sind keine Voraussetzung
+für die Nachrichten. Ein grüner Worker-Heartbeat sagt nichts über diesen Kanal.
