@@ -222,3 +222,5 @@ prüfen; Index im VitalOS-Owner vorbereiten; Feature-Branch zur Übernahme pushe
 Gemeinsamen Planeditor für lokale und Cloud-Planung aufwerten; Workout- und
 Übungs-Muskelansicht samt Klientenvorschau verbinden; bestehenden ClientForge-
 Einstieg im Coach erreichbar machen.
+
+- [x] Lokale Freigabe: alte GET-Caches umgehen, Konflikte aktualisieren und offene Übungen namentlich nennen.

@@ -49,6 +49,8 @@ try {
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await send('Page.navigate', { url: 'http://127.0.0.1:15904/coach/local.html' });
   await wait(has('Willkommen in ClientForge'));
+  await evaluate(`navigator.serviceWorker.register('/legacy-plan-worker.js', {scope:'/'}).then(()=>navigator.serviceWorker.ready)`);
+  await wait('!!navigator.serviceWorker.controller');
   await click('Fixture Client', false);
   await click('Neuen Plan schmieden', false);
   await fill('[aria-label="Neuer Planname"]','Laptop Plan');
@@ -75,6 +77,9 @@ try {
   await wait(has('Laptop Plan'));
   await click('Version freigeben');
   await fill('[aria-label="Versionshinweis"]','Erste lokale Version');
+  await evaluate(`(async()=>{const base='/api/coach/local/clients/fixture-client/plans';const data=await(await fetch(base+'?_test='+Date.now())).json();const plan=data.plans[0];await fetch(base+'/'+plan.id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...plan,description:'Externe Änderung',expectedUpdatedAt:plan.updatedAt})})})()`);
+  await click('Lokale Version freigeben');
+  await wait(has('Ein neuerer Planstand wurde geladen'));
   await click('Lokale Version freigeben');
   await wait(has('Version 1 bereit zur Übergabe'));
   await click('Plan ansehen');

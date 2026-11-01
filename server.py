@@ -111,6 +111,18 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     app.state.backends = backends
 
+    @app.middleware("http")
+    async def local_plan_cache_control(request: Request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/api/coach/local/"):
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
+    @app.get("/sw.js")
+    async def retire_root_worker():
+        return FileResponse(ROOT / "public-coach/retire-root-sw.js", media_type="application/javascript",
+                            headers={"Cache-Control": "no-store", "Service-Worker-Allowed": "/"})
+
     @app.get("/health")
     @app.get("/_coach/health")
     async def health():
