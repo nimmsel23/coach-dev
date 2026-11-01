@@ -199,3 +199,7 @@ nach Klient getrennt zeigt. Ausgangslage geprüft am 2026-11-01:
 - [ ] Handy-Ansicht: Tasks nach Klient getrennt, auf der bestehenden Klientenliste aufsetzen.
 - [ ] Mit dem aos-Framework für Klienten abstimmen: Das Map-CLI (`frame|freedom|focus|fire --client <id>`)
       nutzt dieselbe Klienten-DB für Fire; Pfad nicht doppelt festlegen.
+- [ ] **Pfad umstellen:** `~/.aos/fitness` wird nach Firestore gepusht. Entscheidung 2026-11-01: Die Klienten-Task-DB
+      liegt in `~/.local/Klienten/<client-id>/tw-data/` (so nutzt sie das Map-CLI mit `--client`, siehe
+      `~/aos/game/CLAUDE.md`). `plan_tasks.py` (`_taskwarrior`, bisher `<runtime>/users/<uid>/taskwarrior/`) auf diesen
+      Pfad umstellen, die Klienten-ID aus der `firebase_uid` über `client.json` auflösen, bestehende DBs per `mv` übernehmen.
