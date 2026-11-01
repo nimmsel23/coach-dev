@@ -179,3 +179,23 @@ Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatr
 - [x] Coach-owned CI release and live commit verification exposed through vos-ship coach.
 - [x] Coach rules fragment prepared for central VitalOS import.
 - [ ] Publish integrated Coach source and verify live Hosting release.
+
+
+# 2026-11-01 — Task-Sync pro Klient (Taskwarrior → Firebase → Handy)
+
+Ziel: Die Tasks jedes Klienten landen getrennt pro Klient in Firebase, damit das Handy sie sauber
+nach Klient getrennt zeigt. Ausgangslage geprüft am 2026-11-01:
+
+- Es gibt eine Taskwarrior-DB je Klient, aber **nicht** im Klienten-Workspace (`~/.local/Klienten/<id>/`),
+  sondern von `modules/plan/fitness/plan_tasks.py` angelegt: `~/.aos/fitness/users/<firebase_uid>/taskwarrior/`
+  (`data/` + eigenes `taskrc`, UDAs `occkey`/`planid`/`routineid`/`workoutid`). Der Ordner entsteht erst beim
+  ersten `python -m fitness.plan_tasks sync <uid>`; für Jakob (`fxohGl4Zn5ZUqXzTHjBsye5MmFu1`) gibt es den
+  Nutzerordner, aber noch keinen `taskwarrior`-Unterordner.
+- Bisher einseitig und lokal (Stufe 1, siehe `modules/plan/src/views/Plan/ARCHITECTURE.md`): Plan-Vorkommen →
+  Tasks, kein Rückweg, kein Firebase.
+
+- [ ] Task-Sync pro Klient nach Firestore einbauen (Schlüssel `firebase_uid`, kein Vermischen der Klienten).
+- [ ] Rückweg klären: `task done` am Handy → lokale Klienten-DB (Konfliktregel, `occkey` bleibt der Schlüssel).
+- [ ] Handy-Ansicht: Tasks nach Klient getrennt, auf der bestehenden Klientenliste aufsetzen.
+- [ ] Mit dem aos-Framework für Klienten abstimmen: Das Map-CLI (`frame|freedom|focus|fire --client <id>`)
+      nutzt dieselbe Klienten-DB für Fire; Pfad nicht doppelt festlegen.
