@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `../fitness/catalog/CLAUDE.md` — Katalog-/KB-Tool-Set (Sub-Package von `fitness/`: KB-Struktur, Coverage-Formel, Gemini-Enrichment)
 - `../src/CLAUDE.md` — React-Frontend (Tabs/Views, DB-Layer, Body-Highlighter, PWA/Offline, Session-JSON-Format)
 - `../anatomy-kb/CLAUDE.md` — Muskel-Anatomie-KB (Git Subtree, :9200)
+- `DEPLOY.md` — Release-Weg (`fitness-ship`), Lockfile-Stolpersteine, Standalone-Deploy ohne Meta-Repo, Shell-Kopplung, Fehlerbild→Ursache
 - `BACKEND.md` — server.mjs API-Autodoc (Swagger/OpenAPI) + Zod-Validierung, Node↔Python-Routen-Parität
 
 ---

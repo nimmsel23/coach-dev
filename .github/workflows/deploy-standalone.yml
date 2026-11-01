@@ -48,6 +48,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
+      # Auf master: Nachbarn von master (Prod-Stand). Auf dev (reiner Build-Test): von dev, damit der
+      # Mechanismus prüfbar ist, ohne unfertige Nachbar-Releases abzuwarten.
+      NEIGHBOR_REF: ${{ github.ref == 'refs/heads/master' && 'master' || 'dev' }}
       DO_DEPLOY: ${{ github.ref == 'refs/heads/master' && (github.event_name == 'push' || inputs.deploy == true) }}
     steps:
       - name: Checkout fitness-dev
@@ -55,11 +58,11 @@ jobs:
         with:
           path: fitness-dev
 
-      - name: Checkout Nachbarn (master)
+      - name: Checkout Nachbarn ($NEIGHBOR_REF)
         run: |
           set -euo pipefail
           for repo in plan-dev 6pack-dev skills-dev learn-dev relax-dev; do
-            git clone --depth 1 --branch master "https://github.com/nimmsel23/${repo}.git" "$repo"
+            git clone --depth 1 --branch "$NEIGHBOR_REF" "https://github.com/nimmsel23/${repo}.git" "$repo"
             echo "$repo @ $(git -C "$repo" rev-parse --short HEAD)"
           done
 

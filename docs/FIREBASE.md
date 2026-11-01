@@ -1,5 +1,7 @@
 # Firebase - AlphaOS Fitness
 
+> Release-/Deploy-Ablauf, Lockfile-Regeln und das Standalone-Zielbild (ohne Meta-Repo): siehe `docs/DEPLOY.md`.
+
 Stand: 2026-09-06
 
 Firebase-Projekt: **fitness-aos**
