@@ -48,9 +48,9 @@ ws.addEventListener('message', (event) => { const m = JSON.parse(event.data); if
 try {
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await send('Page.navigate', { url: 'http://127.0.0.1:15904/coach/local.html' });
-  await wait(has('Ein gemeinsamer Arbeitsplatz'));
+  await wait(has('Willkommen in ClientForge'));
   await click('Fixture Client', false);
-  await click('Neuer Trainingsplan', false);
+  await click('Neuen Plan schmieden', false);
   await fill('[aria-label="Neuer Planname"]','Laptop Plan');
   await click('Plan gestalten');
   await click('+ Trainingstag');
@@ -59,6 +59,10 @@ try {
   await click('Barbell Bench Press',false);
   await wait(`!!document.querySelector('[aria-label$="Satzvorgaben bearbeiten"]')`);
   await evaluate(`document.querySelector('[aria-label$="Satzvorgaben bearbeiten"]').click()`);
+  await evaluate(`document.querySelector('.training-muscles__exercises button:last-child').click()`);
+  await wait(`document.querySelector('.training-muscles__header h3')?.textContent.includes('Bench Press')`);
+  assert.equal(await evaluate(`document.querySelectorAll('.training-muscles__bodies svg').length`),2);
+  assert.ok(await evaluate(`document.querySelectorAll('.training-muscles__chips--primary span').length`) > 0);
   await labelFill('Ziel-Sätze','2');
   await labelFill('Ziel-Wdh','10');
   await labelFill('Notiz','Lokal ohne Cloud');

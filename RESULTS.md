@@ -1596,3 +1596,12 @@ bestanden. Mobiler 390px-Emulatorablauf bestanden: beidseitige Antworten,
 Versionsansicht, Entwurferhalt nach Reload/Klientenwechsel, Ungelesen-Zähler,
 205 historische Einträge über zwei zusätzliche Seiten und anschließendes
 Live-Update ohne Verlust der geladenen Historie. Keine echten Nachrichten.
+
+## 2026-11-01 — ClientForge als gemeinsames Trainingsstudio
+
+Eigenen ClientForge-Einstieg im bestehenden Coach auf 9150 ergänzt, lokale
+Planoberfläche gestaltet und Klientenauswahl/Einbettung über URL angebunden.
+Der historische ClientForge-Trainingsplan-Tab verwendet denselben Planungsplatz.
+Gemeinsamer Plan-Code liefert Workout-Highlighter und Übungsdetails auch in
+Vorschau und Dokumentansicht. Keine neuen Dienste und keine Klientendaten
+verändert; alte lokale Pläne bleiben ausdrückliche Importquellen.

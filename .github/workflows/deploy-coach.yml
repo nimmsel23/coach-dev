@@ -18,6 +18,8 @@ on:
       - 'src/**'
       - 'coach.html'
       - 'coach-shell.html'
+      - 'local.html'
+      - 'clientforge.html'
       - 'public-coach/**'
       - 'fitness/catalog/kb/**'
       - 'scripts/**'
