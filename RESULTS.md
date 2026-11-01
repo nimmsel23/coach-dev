@@ -1562,3 +1562,7 @@ Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatr
 ## 2026-11-01 — Planbezogenen Ablauf statt freien Chat priorisiert
 
 „Trainingspläne → Plan ansehen“ verwendet den gemeinsamen PlanFeedback-Baustein aus dem Plan-Pin: ausdrückliche Empfangsbestätigung des Klienten und versiongebundene Frage/Antwort direkt unter dem Plan. Keine zweite Coach-Implementierung; keine echten Klientennachrichten. Reproduzierbare mobile Fixture im Repo ergänzt, Browser-Runner gibt bei Fehlern die tatsächliche Ursache aus. Temporäre Bash-Starter werden nicht benötigt. Freier Chat-Ausbau zurückgestellt; dessen bereits vorhandene, noch uncommittete Erweiterungen bleiben getrennt erhalten.
+
+## 2026-11-01 — Übersicht, Direkteinstieg und historische Plan-Rückmeldungen
+
+Klientenliste und Trainingsplanbereich zeigen gemeinsamen Plan-Status (bereitgestellt/Entwürfe, Empfang, offener Antwortbedarf) mit direktem Planeinstieg per URL. Frühere Planversionen samt Feedback auswählbar; Zuweisung öffnet erzeugten Klientenplan. Unabhängige Laderesultate verhindern, dass eine fehlerhafte Bibliothek den gesamten Planbereich blockiert. Freier Chat bleibt zurückgestellt, Produktionsstand unverändert.

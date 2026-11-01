@@ -1,5 +1,5 @@
 import ClientMessages from './ClientMessages';
-import { useState, useEffect } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import { MessageSquare, Users, Star, UserCheck, Dumbbell, Layers, RotateCw, Sparkles, Flame } from 'lucide-react';
 import { getAllUserProfiles, getUserProfile, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
@@ -9,6 +9,7 @@ import ClientHabitCycle from './ClientHabitCycle';
 import ClientInsights from './ClientInsights';
 import ClientSixPack from './ClientSixPack';
 import { useCoachRoute } from './useCoachRoute.js';
+const PlanDeliveryOverview = lazy(() => import('@plan/views/Plan/components/PlanDeliveryOverview.jsx'));
 
 const STATUS_OPTIONS = [
   { id: 'client', label: 'Klient', hint: 'Zahlend & committed — volle Coach-Aufmerksamkeit', icon: Star, color: 'text-fit-accent' },
@@ -16,8 +17,8 @@ const STATUS_OPTIONS = [
 ];
 
 const DETAIL_TABS = [
-  { id: 'messages', label: 'Nachrichten', icon: MessageSquare },
   { id: 'trainingplan', label: 'Trainingsplan', icon: Layers },
+  { id: 'messages', label: 'Nachrichten', icon: MessageSquare },
   { id: 'workouts', label: 'Verlauf & Feedback', icon: Dumbbell },
   { id: 'sixpack', label: '6Pack', icon: Flame },
 ];
@@ -32,7 +33,7 @@ const EXTRA_TABS = [
 // zwischen Tabs"-Punkt: vorher waren Klienten-Workouts, Trainingspläne und
 // Klienten-Verwaltung drei unabhängige Tabs, jeder mit eigener
 // Klientenauswahl bzw. gar keiner.
-export default function ClientsPanel() {
+export default function ClientsPanel({ unreadCounts = {} }) {
   const [profiles, setProfiles] = useState({});
   const [statuses, setStatuses] = useState({});
   const [loading, setLoading] = useState(true);
@@ -42,8 +43,9 @@ export default function ClientsPanel() {
   const [route, navigate] = useCoachRoute();
   const selectedUid = route.client;
   const detailTab = route.detail;
-  const setSelectedUid = (uid) => navigate({ sub: 'clients', client: uid, detail: 'trainingplan', date: '' });
-  const setDetailTab = (detail) => navigate({ sub: 'clients', detail, date: '' });
+  const setSelectedUid = (uid) => navigate({ sub: 'clients', client: uid, detail: 'trainingplan', date: '', planId: '' });
+  const setDetailTab = (detail) => navigate({ sub: 'clients', detail, date: '', planId: '' });
+  const openPlan = (uid, planId) => navigate({ sub: 'clients', client: uid, detail: 'trainingplan', planId, date: '' });
 
   useEffect(() => {
     load();
@@ -127,12 +129,14 @@ export default function ClientsPanel() {
                 <span className={`vos-led ${status} mt-1.5`} />
                 <div className="min-w-0">
                   <div className={`text-sm font-semibold truncate ${isSelected ? 'text-fit-accent' : 'text-fit-ink'}`}>{name}</div>
+                  {unreadCounts[uid] > 0 && <span className="text-xs font-semibold text-fit-accent" aria-label={`${unreadCounts[uid] >= 100 ? '99+' : unreadCounts[uid]} ungelesene Nachrichten`}>{unreadCounts[uid] >= 100 ? '99+' : unreadCounts[uid]} neu</span>}
                   {statusOpt && (
                     <div className="flex items-center gap-1.5 mt-1">
                       <StatusIcon size={11} className={statusOpt.color} />
                       <span className="text-xs" style={{ color: 'var(--dim)', opacity: 0.6 }}>{statusOpt.label}</span>
                     </div>
                   )}
+                  <Suspense fallback={<p className="text-xs text-fit-muted">Planstatus lädt…</p>}><PlanDeliveryOverview clientUid={uid} compact onOpen={(planId) => openPlan(uid, planId)} /></Suspense>
                 </div>
               </li>
             );
@@ -206,7 +210,7 @@ export default function ClientsPanel() {
               {detailTab === 'insights' && <ClientInsights clientUid={selectedUid} />}
               {detailTab === 'habits' && <ClientHabitCycle clientUid={selectedUid} />}
               {detailTab === 'templates' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
-              {detailTab === 'trainingplan' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
+              {detailTab === 'trainingplan' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} initialPlanId={route.planId} onClosePlan={() => navigate({ planId: '' })} onNavigate={setDetailTab} />}
               {detailTab === 'plan' && <AssignPlan clientUid={selectedUid} clientName={selectedName} />}
             </div>
           </>

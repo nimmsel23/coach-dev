@@ -156,3 +156,7 @@ Coaches haben derzeit projektweiten Zugriff; keine zugewiesene-Coach-ACL annehme
 ## 2026-11-01 — Planbereitstellung und Rückmeldungen
 
 ClientTrainingWorkspace lädt unter „Plan ansehen“ neben PlanDocument auch den gemeinsamen PlanFeedback-Baustein aus dem gepinnten Plan-Modul. Klient, Plan-ID und freigegebene Versionsnummer bilden den Schlüssel. Empfangsbestätigung und Antworten kommen aus `planResponses`, unabhängig vom freien Nachrichtenbereich. Der individuelle Planeditor bindet denselben Plan-Baustein ein. Vertrag: `modules/plan/docs/PLAN-FEEDBACK.md`. Keine Änderung an Gateway, lokaler Registry oder Katalog-Enrichment.
+
+## 2026-11-01 — Durchgehender Betreuungsablauf
+
+ClientsPanel zeigt den gemeinsamen PlanDeliveryOverview je Klient; `?plan=<id>` führt direkt in die Planansicht und bleibt über Reload/Zurück erhalten. Wechsel von Klient/Detailtab löscht den Planbezug. ClientTrainingWorkspace zeigt denselben Status mit bereits geladenen Plänen, öffnet nach Programmzuweisung den erzeugten Klientenplan und bietet einen Versionsselektor für historische Snapshots samt Feedback. Fehlende Bibliothek/Vorlagen/Trainingsergebnisse blockieren vorhandene Klientenpläne nicht mehr pauschal (Teilresultate mit sichtbarer Fehlermeldung).

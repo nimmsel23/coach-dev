@@ -48,11 +48,13 @@ try {
  await wait(has('Rückmeldung zum Plan gespeichert.'));
  await click('Coach-Seite');
  await wait(has('Vom Klienten bestätigt'));
+ await wait(has('Klient wartet auf Antwort'));
  await wait(has('Welche Alternative gibt es für Klimmzüge?'));
  assert.equal(await evaluate("[...document.querySelectorAll('button')].some(b => b.textContent.includes('Empfang bestätigen'))"), false);
  await fill('textarea','Bitte verwende den Latzug mit denselben Vorgaben.');
  await click('Antwort speichern');
  await wait(has('Rückmeldung zum Plan gespeichert.'));
+ await wait(has('Coach hat geantwortet'));
  await click('Klienten-Seite');
  await wait(has('Bitte verwende den Latzug'));
  await click('Version wechseln');

@@ -4,6 +4,7 @@ const clientRoot = process.env.FITNESS_SOURCE || resolve('../fitness-dev');
 const server = await createServer({
   configFile: resolve('vite.config.js'), mode: 'development',
   plugins: [{ name: 'communication-fixtures', enforce: 'pre', resolveId(id, importer = '') {
+    if (id === '/@plan-overview') return resolve(process.env.PLAN_SOURCE || '../plan-dev', 'src/views/Plan/components/PlanDeliveryOverview.jsx');
     if (id === '/@plan-feedback') return resolve(process.env.PLAN_SOURCE || '../plan-dev', 'src/views/Plan/components/PlanFeedback.jsx');
     if (id === '/@plan-response-store') return resolve(process.env.PLAN_SOURCE || '../plan-dev', 'src/views/Plan/lib/planResponseStore.js');
     if (id === '@cloud/firebase.js' && importer.endsWith('/lib/planResponses.js')) return resolve('scripts/tests/plan-feedback-fixture-cloud.js');

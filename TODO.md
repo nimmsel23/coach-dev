@@ -169,6 +169,6 @@ Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatr
 
 - [x] In „Plan ansehen“ gemeinsamen Plan-Feedbackbereich einschließlich Empfangsbestätigung und Coach-Antwort integrieren.
 - [ ] Veröffentlichung über Plan → Coach-Pin → zentrale Rules → Apps abschließen, sobald Push/Release beauftragt ist.
-- [ ] Offene Plan-Rückmeldungen in der Klientenübersicht zusammenfassen.
-- [ ] Frühere Versionen einschließlich ihrer Rückmeldungen direkt im Planverlauf öffnen.
+- [x] Offene Plan-Rückmeldungen in der Klientenübersicht zusammenfassen.
+- [x] Frühere Versionen einschließlich ihrer Rückmeldungen direkt im Planverlauf öffnen.
 - Freier Chat-Ausbau (Push, Anhänge, weitere Komfortfunktionen) ist zugunsten dieses Ablaufs zurückgestellt.

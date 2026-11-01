@@ -234,3 +234,7 @@ Push auf einem iPhone. Die Dokumentation ersetzt keine Cloud-/Geräteabnahme.
 ## Aktuelle Priorität: Rückmeldung direkt am Trainingsplan
 
 Der gemeinsame PlanFeedback-Bereich erscheint unter „Trainingspläne → Plan ansehen“ sowie im individuellen Plan. Er bestätigt den Empfang einer festen Version und sammelt Fragen und Coach-Antworten genau dazu. Vertrag und Bedienung: [Plan-Feedback](../modules/plan/docs/PLAN-FEEDBACK.md). Freier Chat-Ausbau ist zurückgestellt. Die bisherigen Gesprächsfunktionen sind nicht der Versandmechanismus für Trainingspläne. Neue Plan-Regeln sind noch nicht deployed.
+
+## Planbetreuung aus der Klientenübersicht
+
+Direkt in der Klientenliste stehen die bereitgestellten Pläne mit Empfangsstatus und offenem Antwortbedarf. Ein Klick führt via `#/clients/<uid>/trainingplan?plan=<id>` direkt zum Plan. In dessen Ansicht wählt „Bereitgestellte Version“ frühere Snapshots einschließlich zugehöriger Rückmeldungen. Der Trainingsplan-Tab steht vor dem freien Nachrichtenbereich. Nach einer Programmzuweisung öffnet sich der tatsächliche Klientenplan zur Kontrolle. „Klient wartet auf Antwort“ ist letzter Sender = Klient; kein behaupteter Unread-Zähler. Die bestehenden Regeln für planResponses reichen dafür aus.

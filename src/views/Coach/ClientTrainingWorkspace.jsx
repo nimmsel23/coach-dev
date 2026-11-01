@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, BookOpen, Check, ChevronRight, Plus, RefreshCw } from 'lucide-react';
-import { createRoutine, getClientRoutinesProgress, getUid, getMacrocycle } from '@db';
+import { createRoutine, getClientRoutinesProgress, getUid, getMacrocycle, listPlanVersions } from '@db';
+const PlanDeliveryOverview = lazy(() => import('@plan/views/Plan/components/PlanDeliveryOverview.jsx'));
 const PlanFeedback = lazy(() => import('@plan/views/Plan/components/PlanFeedback.jsx'));
 const PlanDocument = lazy(() => import('@plan/views/Plan/PlanDocument.jsx'));
 const ProgramEditor = lazy(() => import('@plan/views/Plan/ProgramEditor.jsx'));
@@ -19,7 +20,7 @@ import {
 
 const field = 'w-full rounded-xl border border-fit-line bg-fit-bg px-3 py-2.5 text-sm text-fit-ink';
 
-export default function ClientTrainingWorkspace({ clientUid }) {
+export default function ClientTrainingWorkspace({ clientUid, initialPlanId, onClosePlan }) {
   const coachUid = getUid();
   const [screen, setScreen] = useState('client');
   const [programs, setPrograms] = useState([]);
@@ -27,6 +28,8 @@ export default function ClientTrainingWorkspace({ clientUid }) {
   const [templates, setTemplates] = useState([]);
   const [workouts, setWorkouts] = useState([]);
   const [planView, setPlanView] = useState(null);
+  const [planVersions, setPlanVersions] = useState([]);
+  const [latestPlan, setLatestPlan] = useState(null);
   const [composing, setComposing] = useState(false);
   const [program, setProgram] = useState(null);
   const [templateEditor, setTemplateEditor] = useState(null);
@@ -34,23 +37,26 @@ export default function ClientTrainingWorkspace({ clientUid }) {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState('');
   const selectedClient = useRef(clientUid);
+  const planRequest = useRef(0);
   selectedClient.current = clientUid;
 
   const load = useCallback(async () => {
     setBusy(true);
     setError('');
     try {
-      const [nextPrograms, nextPlans, nextTemplates, clientProgress] = await Promise.all([
+      const [nextPrograms, nextPlans, nextTemplates, clientProgress] = await Promise.allSettled([
         listCoachPrograms(coachUid),
         listClientTrainingPlans(clientUid),
         listCoachWorkoutTemplates(coachUid),
         getClientRoutinesProgress(clientUid),
       ]);
       if (selectedClient.current !== clientUid) return;
-      setPrograms(nextPrograms);
-      setPlans(nextPlans || []);
-      setTemplates(nextTemplates);
-      setWorkouts(clientProgress.workouts || []);
+      setPrograms(nextPrograms.status === 'fulfilled' ? nextPrograms.value : []);
+      setPlans(nextPlans.status === 'fulfilled' ? nextPlans.value || [] : []);
+      setTemplates(nextTemplates.status === 'fulfilled' ? nextTemplates.value : []);
+      setWorkouts(clientProgress.status === 'fulfilled' ? clientProgress.value.workouts || [] : []);
+      const failed = [[nextPrograms, 'Programmbibliothek'], [nextPlans, 'Klientenpläne'], [nextTemplates, 'Workout-Vorlagen'], [clientProgress, 'Trainingsergebnisse']].filter(([result]) => result.status === 'rejected').map(([, label]) => label);
+      if (failed.length) setError(`${failed.join(', ')} konnten nicht geladen werden. Die übrigen Bereiche sind verfügbar.`);
     } catch (err) {
       if (selectedClient.current === clientUid) setError(err.message || 'Trainingspläne konnten nicht geladen werden.');
     } finally {
@@ -59,8 +65,10 @@ export default function ClientTrainingWorkspace({ clientUid }) {
   }, [clientUid, coachUid]);
 
   useEffect(() => {
+    planRequest.current++;
     setScreen('client');
     setPlanView(null);
+    setPlanVersions([]); setLatestPlan(null);
     setComposing(false);
     setProgram(null);
     setTemplateEditor(null);
@@ -69,6 +77,8 @@ export default function ClientTrainingWorkspace({ clientUid }) {
     setNotice('');
     load();
   }, [clientUid, load]);
+
+  useEffect(() => { if (initialPlanId) openClientPlan(initialPlanId); }, [clientUid, initialPlanId]);
 
   async function createProgram() {
     try {
@@ -113,10 +123,11 @@ export default function ClientTrainingWorkspace({ clientUid }) {
     setBusy(true);
     setError('');
     try {
-      await assignCoachProgram({ coachUid, clientUid, program });
+      const assignedId = await assignCoachProgram({ coachUid, clientUid, program });
       await load();
       setScreen('client');
       setNotice('Trainingsplan wurde für den Klienten bereitgestellt.');
+      await openClientPlan(assignedId);
     } catch (err) { setError(err.message || 'Zuweisung fehlgeschlagen.'); }
     finally { setBusy(false); }
   }
@@ -130,17 +141,26 @@ export default function ClientTrainingWorkspace({ clientUid }) {
 
   async function openClientPlan(id) {
     const selected = clientUid;
+    const request = ++planRequest.current;
     setBusy(true); setError('');
     try {
-      const data = await getMacrocycle(selected, id);
-      if (selectedClient.current !== selected) return;
+      const [data, versions] = await Promise.all([getMacrocycle(selected, id), listPlanVersions(selected, id)]);
+      if (selectedClient.current !== selected || request !== planRequest.current) return;
       const value = data?.macrocycle;
       if (!value) throw new Error('Plan konnte nicht geladen werden.');
+      setLatestPlan(clientView(value)); setPlanVersions(versions);
       setPlanView(clientView(value));
-    } catch (err) { if (selectedClient.current === selected) setError(err.message); }
-    finally { if (selectedClient.current === selected) setBusy(false); }
+    } catch (err) { if (selectedClient.current === selected && request === planRequest.current) setError(err.message); }
+    finally { if (selectedClient.current === selected && request === planRequest.current) setBusy(false); }
   }
-  if (planView) return <div className="space-y-4"><button className="min-h-[44px] rounded-xl border border-fit-line px-4 text-sm" onClick={() => setPlanView(null)}>← Zur Klientenübersicht</button><Suspense fallback={<p role="status">Plan lädt…</p>}><PlanDocument plan={planView} />{planView.headVersion > 0 && <PlanFeedback key={`${clientUid}:${planView.id}:${planView.headVersion}`} clientUid={clientUid} plan={planView} coach />}</Suspense></div>;
+  if (planView) return <div className="space-y-4"><button className="min-h-[44px] rounded-xl border border-fit-line px-4 text-sm" onClick={() => { setPlanView(null); onClosePlan?.(); }}>← Zur Klientenübersicht</button>
+    {planVersions.length > 0 && <label className="block text-sm">Bereitgestellte Version<select aria-label="Bereitgestellte Version" value={planView.headVersion} className={`${field} mt-1 min-h-[44px]`} onChange={(event) => {
+      const number = Number(event.target.value);
+      if (number === latestPlan.headVersion) setPlanView(latestPlan);
+      else { const version = planVersions.find((item) => item.number === number); if (version?.snapshot) setPlanView({ ...version.snapshot, id: latestPlan.id, headVersion: number }); }
+    }}>{planVersions.map((version) => <option key={version.number} value={version.number}>Version {version.number}{version.number === latestPlan.headVersion ? ' · aktuell' : ''}{version.message ? ` · ${version.message}` : ''}</option>)}</select></label>}
+    {planView.headVersion !== latestPlan?.headVersion && <p role="status" className="rounded-xl border border-fit-line p-3 text-sm text-fit-muted">Frühere Planversion · Rückmeldungen gehören zu diesem damaligen Stand.</p>}
+    <Suspense fallback={<p role="status">Plan lädt…</p>}><PlanDocument plan={planView} />{planView.headVersion > 0 && <PlanFeedback key={`${clientUid}:${planView.id}:${planView.headVersion}`} clientUid={clientUid} plan={planView} coach />}</Suspense></div>;
 
   if (composing && program) return <Suspense fallback={<p role="status">Editor lädt…</p>}><ProgramEditor key={`${coachUid}:${program.id}`} coachUid={coachUid} program={program} templates={templates} onClose={() => setComposing(false)} onSave={(value) => saveCoachProgram(coachUid, value)} onSaved={async (saved) => { setProgram(saved); setComposing(false); setNotice('Entwurf gespeichert. Prüfe ihn und veröffentliche eine Version.'); await load(); }} /></Suspense>;
   if (screen === 'individual') return <Suspense fallback={<p role="status">Pläne laden…</p>}><div className="space-y-4"><button className="min-h-[44px] text-sm text-fit-muted" onClick={() => { setScreen('client'); load(); }}>← Zur Klientenübersicht</button><h2 className="text-xl font-semibold">Individuelle Klientenpläne</h2><TrainingPlans clientUid={clientUid} templates={[]} workouts={workouts} onChanged={load} /></div></Suspense>;
@@ -179,16 +199,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
               <BookOpen size={15} /> Programm auswählen
             </button>
           </div>
-          {plans.filter((item) => item.status === 'published').length === 0
-            ? <p className="rounded-xl border border-dashed border-fit-line p-4 text-sm text-fit-muted">Für diesen Klienten ist noch kein Trainingsplan bereitgestellt.</p>
-            : plans.filter((item) => item.status === 'published').map((item) => (
-              <article key={item.id} className="rounded-xl border border-fit-line bg-fit-card p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div><h4 className="font-semibold text-fit-ink">{item.name}</h4><p className="mt-1 text-xs text-fit-muted">{item.description || `${item.totalWeeks || '–'} Wochen`} · Version {item.headVersion || 1}</p></div>
-                  <button disabled={busy} onClick={() => openClientPlan(item.id)} className="min-h-[44px] rounded-xl border border-fit-line px-3 text-sm text-fit-accent">Plan ansehen</button>
-                </div>
-              </article>
-            ))}
+          <Suspense fallback={<p role="status">Planstatus lädt…</p>}><PlanDeliveryOverview clientUid={clientUid} plans={plans} onOpen={openClientPlan} onManage={() => setScreen('individual')} /></Suspense>
         </section>
         <ClientWorkoutResults workouts={workouts} />
       </>}
