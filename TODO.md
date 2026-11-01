@@ -211,3 +211,8 @@ nach Klient getrennt zeigt. Ausgangslage geprüft am 2026-11-01:
       denselben Task unterschiedlich ändern (heute: lokal gewinnt, vom Handy zählt nur Erledigt).
 - [ ] UUID-Kollision zwischen Klienten bei Map-Tasks: Die UUID aus `tw_maps.identity` enthält den Klienten nicht; in `fitness/<uid>/tasks`
       ist das unkritisch (pro uid getrennt), nur ein gemeinsamer Pfad wäre ein Problem.
+
+## [x] Ausstehende Coach-Gesprächserweiterungen sichern und pushen (2026-11-01)
+
+Historie, lokale Entwürfe, Versionsansicht und Ungelesen-Anzeigen gemeinsam
+prüfen; Index im VitalOS-Owner vorbereiten; Feature-Branch zur Übernahme pushen.
