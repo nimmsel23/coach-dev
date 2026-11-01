@@ -100,7 +100,7 @@
     "ieee754": "1.2.1",
     "immer": "^10.2.0",
     "internmap": "^2.0.3",
-    "js-yaml": "^4.1.1",
+    "js-yaml": "^5.5.0",
     "lucide-react": "^0.453.0",
     "pino": "^10.4.0",
     "pino-pretty": "^13.2.0",
