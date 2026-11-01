@@ -4,7 +4,7 @@
 const START = "<!-- vos-sw-register:start -->";
 const END = "<!-- vos-sw-register:end -->";
 
-export function registerSnippet({ swUrl = "./sw.js", exposeRegistration = false, reloadWindowMs = 10000 } = {}) {
+export function registerSnippet({ swUrl = "./sw.js", exposeRegistration = false, reloadWindowMs = 0 } = {}) {
   const expose = exposeRegistration
     ? `.then(function (reg) {
             window.__swRegistration = reg

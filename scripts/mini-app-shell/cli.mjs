@@ -11,30 +11,34 @@ import { stampApp, stampSw, stampSplash } from "./stamp.mjs";
 import { runParity } from "./parity.mjs";
 
 // Consumer-Repos bauen standalone (GitHub Actions, ohne vitalos) → das Paket wird in sie kopiert.
+// vendor-changelog <zielordner> kopiert nur die drei Changelog-Module
 // vendor <zielordner>          kopiert die Paketdateien (Ziel z. B. scripts/mini-app-shell)
 // vendor <zielordner> --check  Exit 1, wenn die Kopie vom Paket abweicht (Drift)
-const VENDOR_FILES = ["package.json", "index.mjs", "splash.mjs", "register.mjs", "sw.mjs", "sw-template.js", "stamp.mjs", "parity.mjs", "cli.mjs", "extras/workout-notifications.js"];
+const CHANGELOG_FILES = ["vos-changelog-screen.mjs", "vos-release-info.mjs", "vos-changelog-vite.mjs"];
+const VENDOR_FILES = [...CHANGELOG_FILES, "package.json", "index.mjs", "splash.mjs", "register.mjs", "sw.mjs", "sw-template.js", "stamp.mjs", "parity.mjs", "cli.mjs", "extras/workout-notifications.js"];
 
-function vendor(target, check) {
+function vendor(target, check, files = VENDOR_FILES, command = "vendor") {
   const here = dirname(fileURLToPath(import.meta.url));
   const dst = resolve(target);
   const drift = [];
-  for (const f of VENDOR_FILES) {
+  for (const f of files) {
     const a = readFileSync(resolve(here, f), "utf8");
     const b = existsSync(resolve(dst, f)) ? readFileSync(resolve(dst, f), "utf8") : null;
     if (a !== b) drift.push(f);
     if (!check && a !== b) { mkdirSync(dirname(resolve(dst, f)), { recursive: true }); copyFileSync(resolve(here, f), resolve(dst, f)); }
   }
   if (check) {
-    if (drift.length) { console.error(`❌ ${dst} weicht vom Paket ab: ${drift.join(", ")} — "vendor ${target}" neu ausführen`); process.exit(1); }
+    if (drift.length) { console.error(`❌ ${dst} weicht vom Paket ab: ${drift.join(", ")} — "${command} ${target}" neu ausführen`); process.exit(1); }
     console.log(`✅ ${dst} entspricht dem Paket`);
     return;
   }
-  writeFileSync(resolve(dst, "VENDORED.md"), "GENERIERT aus ~/vitalos/packages/mini-app-shell (@vos/mini-app-shell) — nicht hier editieren.\nAktualisieren: node ~/vitalos/packages/mini-app-shell/cli.mjs vendor <dieser-ordner>\nDrift prüfen:  ... vendor <dieser-ordner> --check\n");
+  writeFileSync(resolve(dst, "VENDORED.md"), `GENERIERT aus ~/vitalos/packages/mini-app-shell (@vos/mini-app-shell) — nicht hier editieren.\nAktualisieren: node ~/vitalos/packages/mini-app-shell/cli.mjs ${command} <dieser-ordner>\nDrift prüfen:  ... ${command} <dieser-ordner> --check\n`);
   console.log(`📦 ${drift.length ? `${drift.length} Datei(en) aktualisiert` : "bereits aktuell"}: ${dst}`);
 }
 
 async function main(argv) {
+  if (argv[0] === "vendor-ui" && argv[1]) return vendor(argv[1], argv.includes("--check"), ["react/ContextMenuButton.jsx", "react/contextMenu.css", "react/navigation.js", "react/appDestinations.js"], "vendor-ui");
+  if (argv[0] === "vendor-changelog" && argv[1]) return vendor(argv[1], argv.includes("--check"), CHANGELOG_FILES, "vendor-changelog");
   if (argv[0] === "vendor" && argv[1]) return vendor(argv[1], argv.includes("--check"));
   if (argv[0] === "parity") {
     const a = (k) => (argv.includes(`--${k}`) ? argv[argv.indexOf(`--${k}`) + 1] : undefined);

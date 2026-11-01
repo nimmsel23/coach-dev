@@ -21,3 +21,7 @@ Neustarts. Beim beobachteten Start keine neuen Katalog-Commits oder
 Katalog-Rebuilds; semantischer Replay-Schutz ist in der geladenen Quelle
 vorhanden. Bestehende neun historische Command-Fehler unverändert, keine
 Aufträge erneut ausgeführt. Keine App-/Rules-Änderung und kein Deployment.
+
+## 2026-11-01 — Splash blockiert nicht mehr auf Service-Worker-Update
+
+Die vendorte Mini-App-Shell mit der aktuellen VitalOS-Quelle synchronisiert. Ein langsamer Netzwerk-/Service-Worker-Updatecheck hält den Splash nicht mehr offen; er verschwindet nach dem App-Start (mindestens 200 ms, maximal 12 s nur falls der App-Root gar nicht bereit wird).
