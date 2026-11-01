@@ -9,9 +9,12 @@
 #   fitness-dev/   dieser Checkout (Commit, der den Lauf ausgelöst hat)
 #   plan-dev/ 6pack-dev/ skills-dev/ learn-dev/ relax-dev/   jeweils `master`
 # Der Fitness-Build kompiliert diese fünf Nachbarn mit (vite-miniapp-submodules.mjs: Plan/6Pack/
-# Skills; vite.config.js: @relax/@learn per siblingDir()). Deren Bare-Imports (react, firebase, …)
-# lösen über einen Symlink node_modules -> fitness-dev/node_modules auf eine einzige Kopie auf
-# (resolve.dedupe in vite.config.js deckt zusätzlich react/firebase ab).
+# Skills; vite.config.js: @relax/@learn per siblingDir()). Jedes Repo bekommt seine EIGENEN
+# Abhängigkeiten aus seinem eigenen Lockfile (ein gemeinsamer node_modules-Symlink scheiterte:
+# die Nachbarn brauchen teils andere Versionen, z. B. js-yaml 4 mit Default-Export gegen
+# js-yaml 5 in fitness-dev). Doppelte react-/firebase-Kopien verhindert resolve.dedupe in
+# vite.config.js. --ignore-scripts: keine nativen Builds (z. B. better-sqlite3 in relax-dev) —
+# der Firebase-Build braucht sie nicht.
 #
 # Sicherheit: Deployt wird NUR auf master UND nur bei bewusster Freigabe
 #   - push auf master            -> Live (sobald dieser Workflow deploy-master.yml ablöst)
@@ -75,9 +78,19 @@ jobs:
         working-directory: fitness-dev
         run: pnpm install --frozen-lockfile
 
-      # Nachbar-Quellen finden ihre Bare-Imports über node_modules im Eltern-Ordner.
-      - name: node_modules für Nachbar-Quellen verlinken
-        run: ln -s "$PWD/fitness-dev/node_modules" node_modules
+      - name: Install Nachbarn (je eigener Lockfile)
+        run: |
+          set -euo pipefail
+          for repo in plan-dev 6pack-dev skills-dev learn-dev relax-dev; do
+            echo "::group::$repo"
+            if [ -f "$repo/pnpm-lock.yaml" ]; then
+              (cd "$repo" && pnpm install --frozen-lockfile --ignore-scripts)
+            elif [ -f "$repo/package.json" ]; then
+              echo "::warning::$repo hat keinen pnpm-lock.yaml — Install ohne Lockfile"
+              (cd "$repo" && pnpm install --no-frozen-lockfile --ignore-scripts)
+            fi
+            echo "::endgroup::"
+          done
 
       - name: Firebase config bereitstellen (Secret)
         working-directory: fitness-dev
