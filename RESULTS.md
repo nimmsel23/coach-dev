@@ -1613,3 +1613,11 @@ Klientenablage: Plan erstellen, Übung samt Muskelkarte/Details auswählen,
 Vorgaben sichern, neu laden, Version freigeben, PDF und Historie sowie
 ausdrücklichen simulierten Versand prüfen. Keine echten Klienten-Schreibtests
 oder Firebase-Aufrufe aus dem lokalen Browser.
+
+## 2026-11-01 — Lokale Freigabe gegen alte Service-Worker-Caches reparieren
+
+Live-Journal zeigte 400 bei offenen Matthias-Vorgaben und 409 nach erfolgreichem
+Speichern. Alter Root-Service-Worker cachete lokale GETs ohne Netzprüfung.
+Frische lokale Lese-URLs, no-store-Antworten, gezielte Worker-Stilllegung ohne
+Editor-Reload, frische Revisionsprüfung und namentliche Freigabe-Checkliste
+ergänzt. Keine echten Pläne freigegeben oder Vorgaben automatisch erfunden.

@@ -50,6 +50,22 @@ class LocalPlanHTTPTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(len((await client.get(url+'/versions')).json()['versions']),1)
             self.assertFalse((self.root/'test-client/data/plan.json').exists())
 
+    async def test_incomplete_prescription_names_exercise_and_keeps_draft(self):
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(self.app),base_url='http://localhost') as client:
+            body={'name':'Imported','routines':[{'id':'pull','label':'Pull','exercises':[{'id':'face','name':'Face Pulls','templateSets':[]}]}]}
+            plan=(await client.post(self.prefix,json=body)).json()
+            url=f"{self.prefix}/{plan['id']}"
+            rejected=await client.post(url+'/versions',json={'expectedUpdatedAt':plan['updatedAt']})
+            self.assertEqual(rejected.status_code,400)
+            self.assertIn('Face Pulls',rejected.json()['detail'])
+            self.assertEqual((await client.get(url)).json()['headVersion'],0)
+            self.assertEqual((await client.get(url+'/versions')).json()['versions'],[])
+            body['routines'][0]['exercises'][0]['templateSets']=[{'targetReps':'12'}]
+            saved=(await client.put(url,json={**body,'expectedUpdatedAt':plan['updatedAt']})).json()
+            released=await client.post(url+'/versions',json={'expectedUpdatedAt':saved['updatedAt']})
+            self.assertEqual(released.status_code,200)
+            self.assertEqual(released.json()['headVersion'],1)
+
     async def test_loopback_and_origin_guards(self):
         async with httpx.AsyncClient(transport=httpx.ASGITransport(self.app,client=('100.64.1.2',123)),base_url='http://localhost') as client:
             self.assertEqual((await client.get('/api/coach/local/clients')).status_code,403)

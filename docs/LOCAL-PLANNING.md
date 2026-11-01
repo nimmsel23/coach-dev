@@ -93,3 +93,13 @@ ein. `VITE_COACH_STUDIO_URL` kann dessen URL beim Build überschreiben.
 `embed=1` blendet die doppelte Navigation aus. `local.html` bleibt kompatibel.
 Der Cloud-Coach nutzt denselben erweiterten Plan-Code für seine angemeldeten
 Klienten, aber keine lokalen Dateipfade oder Loopback-API.
+
+## Lokale Freigabe und veraltete Browser-Caches
+
+Lokale GET-Aufrufe sind mit individuellen URLs und `no-store` gegen alte
+Cache-first-Service-Worker geschützt. Der obsolete Root-Worker `/sw.js` wird
+gezielt durch einen stillgelegten Worker ersetzt; offene Editorfenster werden
+nicht neu geladen. Nur alte lokale Plan-API-Cacheeinträge werden entfernt.
+Vor Freigabe wird der Plan frisch gelesen; abweichende Revisionen verlangen
+eine erneute Prüfung. Offene Übungen erscheinen namentlich auf der Plankarte
+mit direktem Zugang zu „Vorgaben ergänzen“. Freigeben bleibt vom Versand getrennt.

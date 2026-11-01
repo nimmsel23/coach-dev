@@ -18,3 +18,13 @@ Planungsplatz ohne zweite Registry-Navigation im ClientForge-Tab ein.
 PlanEditor und PlanDocument kommen weiter ausschließlich aus dem geprüften
 Plan-Pin; Workout- und Übungs-Muskelansichten lesen dessen Katalogmetadaten.
 Lokale Entwürfe/Freigabe/Versand bleiben getrennte Aktionen.
+
+## Lokale Freigabe und veraltete Browser-Caches
+
+Lokale GET-Aufrufe sind mit individuellen URLs und `no-store` gegen alte
+Cache-first-Service-Worker geschützt. Der obsolete Root-Worker `/sw.js` wird
+gezielt durch einen stillgelegten Worker ersetzt; offene Editorfenster werden
+nicht neu geladen. Nur alte lokale Plan-API-Cacheeinträge werden entfernt.
+Vor Freigabe wird der Plan frisch gelesen; abweichende Revisionen verlangen
+eine erneute Prüfung. Offene Übungen erscheinen namentlich auf der Plankarte
+mit direktem Zugang zu „Vorgaben ergänzen“. Freigeben bleibt vom Versand getrennt.
