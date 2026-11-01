@@ -1,14 +1,57 @@
 name: inbox_20261012_124332_deee63
-description: 'Inbox queued for: Klimmzug an Leiste'
-queued_at: '2026-10-12T12:43:32.420398'
+description: 'Proactively generated expert draft for: Klimmzug an Leiste'
+generated_at: '2026-11-01T20:49:59.854268+00:00'
+enriched_at: '2026-11-01T20:49:59.854268+00:00'
 exercises:
-- exercise_id: '020'
-  id: '020'
-  name: Klimmzug im Obergriff
+- name: Klimmzug an Leiste
+  wger_id: 821
+  external_ids:
+    wger:
+    - 821
+    yuhonas:
+    - Pullups
+  exercise_id: '020'
   display_name: Klimmzug an Leiste
+  english: Fingerboard Pull-up
+  yuhonas_id: Pullups
   german: Klimmzug an Leiste
-  english: Pullups
-  category: arms
+  search_aliases:
+  - Klimmzug an Leiste
+  - Klimmzug im Obergriff
+  - Pull-Up
+  - Pullups
+  - wger_821
+  - yuhonas_pullups
+  - Fingerboard Pullup
+  - Hangboard Pullup
+  aliases:
+  - Klimmzug
+  - Klimmzug Obergriff
+  - Klimmzug im Obergriff
+  - Klimmzüge
+  - Obergriff Klimmzug
+  - Pronated Pull-up
+  - Pull Up
+  - Pull Ups
+  - Pull-Up
+  - Pull-Ups
+  - Pull-up
+  - Pull-up (Overhand Grip)
+  - Standard Pull-up
+  - Fingerboard Pull-up
+  - Hangboard Pull-up
+  id: '020'
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '821'
+      yuhonas:
+      - Pullups
+  wger_muscle_ids:
+    primary: []
+    secondary: []
+  category: pull
   movements:
   - elbow_flexion
   - scapular_depression
@@ -17,10 +60,12 @@ exercises:
   - shoulder_extension
   - vertical
   equipment:
-  - bodyweight
-  - pull_up_bar
-  - none (bodyweight exercise)
   - body only
+  - bodyweight
+  - none (bodyweight exercise)
+  - pull_up_bar
+  - fingerboard
+  - hangboard
   primary_muscles:
   - 201_latissimus_dorsi
   - 207_teres_major
@@ -58,56 +103,56 @@ exercises:
     lats are fully stretched.
   - Repeat this motion for the prescribed amount of repetitions.
   coaching_notes:
-  - 'Arbeite über die volle kontrollierte ROM: unten sauber strecken, oben den Brustkorb
-    zur Stange bringen, ohne die Spannung im Rumpf zu verlieren.'
-  - Denke daran, die Ellenbogen Richtung Flanken oder Hüfte zu ziehen. So bleibt der
-    Zug aus Latissimus und oberem Rücken statt nur aus den Armen.
-  - Der Obergriff verlagert die Belastung etwas stärker auf Latissimus, Teres major
-    und oberen Rücken und etwas weniger auf den Bizeps als beim Chin-Up.
-  - Führe den Obergriff mit stabilem Handgelenk und festem Griff aus. Die Stange soll
-    tief in der Hand liegen, damit du die Zuglinie sauber halten kannst.
-  - Halte den Körper als ruhige Linie von Kopf bis Fuß. Gesäß und Bauch leicht anspannen,
-    damit kein Hohlkreuz oder Beinschwung entsteht.
-  - Lass die Schulterblätter während des Hochziehens nach unten und leicht nach hinten
-    arbeiten, ohne die Schultern zu den Ohren hochzuziehen.
-  - 'Starte aus einem aktiven Hang: Hals lang, Rippen unten, Schulterblätter zuerst
-    sanft nach unten setzen statt passiv in den Schultern zu hängen.'
-  - Steuere auch die Exzentrik bewusst. Ein langsames, sauberes Absenken verbessert
-    Schulterkontrolle, Kraftaufbau und Positionsgefühl im Hang.
-  - Klimmzüge an einer gewählten Leiste eines Fingerboards / Hangboards
-  - 'Grab the pull-up bar with the palms facing forward using the prescribed grip.
-    Note on grips: For a wide grip, your hands need to be spaced out at a distance
-    wider than your shoulder width. For a medium grip, your hands need to be spaced
-    out at a distance equal to your shoulder width and for a close grip at a distance
-    smaller than your shoulder width.'
-  - As you have both arms extended in front of you holding the bar at the chosen grip
-    width, bring your torso back around 30 degrees or so while creating a curvature
-    on your lower back and sticking your chest out. This is your starting position.
-  - 'Pull your torso up until the bar touches your upper chest by drawing the shoulders
-    and the upper arms down and back. Exhale as you perform this portion of the movement.
-    Tip: Concentrate on squeezing the back muscles once you reach the full contracted
-    position. The upper torso should remain stationary as it moves through space and
-    only the arms should move. The forearms should do no other work other than hold
-    the bar.'
-  - After a second on the contracted position, start to inhale and slowly lower your
-    torso back to the starting position when your arms are fully extended and the
-    lats are fully stretched.
-  - Repeat this motion for the prescribed amount of repetitions.
+  - 'Starte jede Wiederholung aus einem aktiven Hang: Hals lang, Schultern bewusst
+    nach unten ziehen und vom Kopf weghalten (Scapula-Depression), Rippen unten, Bauch
+    und Gesäß leicht anspannen, um einen stabilen Rumpf zu gewährleisten.'
+  - Fokussiere den Zug auf deinen oberen Rücken und Latissimus. Denke daran, deine
+    Ellenbogen in Richtung deiner Hüften oder Flanken zu ziehen, nicht nur die Arme
+    zu beugen. Visualisiere, wie du die Leiste zu deinem Körper ziehst.
+  - Die Exzentrik (das Absenken) ist genauso wichtig wie die konzentrische Phase.
+    Senke dich langsam und kontrolliert ab, um die Zeit unter Spannung zu maximieren
+    und die Sehnenfestigkeit zu verbessern.
+  - 'Arbeite über die volle kontrollierte Bewegungsfreiheit (ROM): unten sauber strecken
+    (aktiver Hang), oben den Brustkorb zur Leiste bringen, ohne die Rumpfspannung
+    zu verlieren oder die Schultern nach vorne fallen zu lassen.'
+  - Wähle die Leistengröße sorgfältig. Anfänger sollten mit größeren, fingerfreundlicheren
+    Leisten beginnen. Fortgeschrittene können kleinere Leisten oder spezifischere
+    Griffarten (z.B. Half-Crimp, Open-Hand) wählen.
+  - Achte auf eine saubere Fingerpositionierung. Die Gelenke sollten stabil sein,
+    und der Druck gleichmäßig auf die Finger verteilt werden, um übermäßige Belastung
+    einzelner Sehnen und Gelenke zu vermeiden.
+  - Die Handgelenke sollten während der gesamten Bewegung stabil und leicht gestreckt
+    bleiben, um eine effiziente Kraftübertragung und die Gesundheit der Handgelenke
+    zu gewährleisten.
+  - Ein spezifisches Aufwärmen für Finger, Handgelenke und Unterarme ist vor dem Training
+    an der Leiste unerlässlich, um das Verletzungsrisiko zu minimieren.
+  - Vermeide Schwingen (Kipping) oder das Einsetzen von Beinschwung. Jede Wiederholung
+    sollte kontrolliert aus der Kraft des Oberkörpers erfolgen, um den beabsichtigten
+    Trainingsreiz zu setzen und Verletzungen vorzubeugen.
   common_errors:
-  - Aus einem passiven Hang hart anziehen, ohne zuerst Spannung im Schultergürtel
-    aufzubauen.
-  - Den Kopf nach vorne zur Stange schieben statt den Körper zur Stange zu ziehen.
-  - Die Schultern zu den Ohren ziehen und damit Scapula-Depression und stabile Schultermechanik
-    zu verlieren.
-  - 'Halbe Wiederholungen machen: unten nicht ausstrecken oder oben zu früh abbrechen.'
-  - Ins Hohlkreuz fallen oder die Rippen aufklappen lassen, wodurch der Rumpf instabil
-    wird und die Kraftübertragung leidet.
-  - Mit Kipping, Beinschwung oder Hüftschwung arbeiten statt jede Wiederholung aus
-    dem Hang kontrolliert einzuleiten.
-  - Nur das Kinn irgendwie über die Stange bringen, während Brustkorb, Schulterposition
-    und Zuglinie kollabieren.
-  - Zu breit greifen und dadurch ROM, Schultermechanik und saubere Ellbogenführung
-    unnötig verschlechtern.
+  - 'Beginn aus einem passiven Hang: Das Anziehen aus entspannten Schultern kann zu
+    übermäßiger Belastung der Gelenke und einer ineffektiven Aktivierung der Rückenmuskulatur
+    führen.'
+  - 'Kipping oder Beinschwung: Die Nutzung von Schwung anstelle von Muskelkraft reduziert
+    den Trainingseffekt erheblich und erhöht das Verletzungsrisiko, insbesondere an
+    den Fingersehnen und Schultern.'
+  - 'Unvollständige Bewegungsfreiheit: Nicht vollständiges Strecken der Arme am unteren
+    Punkt oder nicht vollständiges Hochziehen bis zur Leiste reduziert den Trainingsreiz
+    und die Entwicklung der Kraft.'
+  - 'Verlust der Rumpfspannung (Hohlkreuz / Rippen aufklappen): Eine instabile Körpermitte
+    führt zu Energieverlust und kann die Wirbelsäule unnötig belasten.'
+  - 'Schultern zu den Ohren ziehen: Dies signalisiert eine Überlastung der oberen
+    Nackenmuskulatur und einen Verlust der optimalen Schulterblattposition für den
+    Zug.'
+  - 'Kopf nach vorne schieben: Anstatt den Brustkorb zur Leiste zu bringen, wird oft
+    versucht, nur das Kinn über die Leiste zu bekommen, was die Haltung beeinträchtigt.'
+  - 'Wahl einer zu kleinen oder ungeeigneten Leiste: Dies kann zu einer gefährlichen
+    Überlastung der Fingersehnen und Gelenke führen, insbesondere ohne ausreichende
+    Vorbereitung und Kraft.'
+  - 'Krampfartiger Griff: Zu starkes Krallen oder Verkrampfen der Finger und Unterarme
+    führt zu schneller Ermüdung und kann die Technik negativ beeinflussen.'
+  - 'Mangelndes Aufwärmen: Das Ignorieren eines spezifischen Aufwärmprogramms für
+    Finger und Unterarme erhöht das Risiko von Sehnen- und Gelenkverletzungen erheblich.'
   original_description:
   - Klimmzüge an einer gewählten Leiste eines Fingerboards / Hangboards
   tags:
@@ -116,51 +161,19 @@ exercises:
   - calisthenics
   - expert
   - grip_strength
+  - merged_external
   - pull
-  - vertical_pull
   - unreviewed
+  - vertical_pull
   - wger
   - yuhonas
-  - merged_external
-  aliases:
-  - Klimmzug
-  - Klimmzug Obergriff
-  - Klimmzug im Obergriff
-  - Klimmzüge
-  - Obergriff Klimmzug
-  - Pronated Pull-up
-  - Pull Up
-  - Pull Ups
-  - Pull-Up
-  - Pull-Ups
-  - Pull-up
-  - Pull-up (Overhand Grip)
-  - Standard Pull-up
-  search_aliases:
-  - Klimmzug an Leiste
-  - Klimmzug im Obergriff
-  - Pull-Up
-  - Pullups
-  - wger_821
-  - yuhonas_pullups
-  wger_id: 821
-  wger_muscle_ids:
-    secondary: []
-    primary: []
-  yuhonas_id: Pullups
-  external_ids:
-    wger:
-    - 821
-    yuhonas:
-    - Pullups
+  - fingerboard
+  - climbing
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-01T20:49:59.854268+00:00'
   schema_version: 2026-08-12.exercise-v1
-  origin:
-    type: merged_external
-    source_refs:
-      wger:
-      - '821'
-      yuhonas:
-      - Pullups
   review_state:
     status: draft
     ai_reviewed: false
+    enriched_at: '2026-11-01T20:49:59.854268+00:00'
