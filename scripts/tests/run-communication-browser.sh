@@ -11,7 +11,11 @@ coach_communication_browser=$!
 trap 'kill "$coach_communication_vite" "$coach_communication_browser" 2>/dev/null || true' EXIT
 for attempt in {1..30}; do
  if curl -fsS http://127.0.0.1:19224/json/version >/dev/null 2>&1 && curl -fsS http://127.0.0.1:15905/scripts/tests/communication-browser.html >/dev/null 2>&1; then
-  node scripts/tests/communication-browser.mjs > "$coach_communication_logs/results.log" 2>&1
+  if ! node "${COACH_BROWSER_TEST:-scripts/tests/communication-browser.mjs}" > "$coach_communication_logs/results.log" 2>&1; then
+    cat "$coach_communication_logs/results.log" >&2
+    printf 'Browser-Test fehlgeschlagen. Weitere Logs: %s\n' "$coach_communication_logs" >&2
+    exit 1
+  fi
   cat "$coach_communication_logs/results.log"
   exit 0
  fi

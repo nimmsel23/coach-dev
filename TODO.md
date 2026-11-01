@@ -164,3 +164,11 @@ Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatr
 - [ ] Trainer-/Klientenzuordnung statt nur projektweiter Coach-Rolle.
 - [ ] Suche und kontrollierte Bearbeitungs-/Lösch-/Aufbewahrungsabläufe ergänzen.
 - [ ] Nach autorisiertem Release echte Konten/Geräte, Netzwechsel und Plan-Head-Wechsel abnehmen.
+
+## 2026-11-01 — Priorität: Planbereitstellung und planbezogenes Feedback
+
+- [x] In „Plan ansehen“ gemeinsamen Plan-Feedbackbereich einschließlich Empfangsbestätigung und Coach-Antwort integrieren.
+- [ ] Veröffentlichung über Plan → Coach-Pin → zentrale Rules → Apps abschließen, sobald Push/Release beauftragt ist.
+- [ ] Offene Plan-Rückmeldungen in der Klientenübersicht zusammenfassen.
+- [ ] Frühere Versionen einschließlich ihrer Rückmeldungen direkt im Planverlauf öffnen.
+- Freier Chat-Ausbau (Push, Anhänge, weitere Komfortfunktionen) ist zugunsten dieses Ablaufs zurückgestellt.

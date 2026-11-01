@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, BookOpen, Check, ChevronRight, Plus, RefreshCw } from 'lucide-react';
 import { createRoutine, getClientRoutinesProgress, getUid, getMacrocycle } from '@db';
+const PlanFeedback = lazy(() => import('@plan/views/Plan/components/PlanFeedback.jsx'));
 const PlanDocument = lazy(() => import('@plan/views/Plan/PlanDocument.jsx'));
 const ProgramEditor = lazy(() => import('@plan/views/Plan/ProgramEditor.jsx'));
 const TrainingPlans = lazy(() => import('@plan/views/Plan/TrainingPlans.jsx'));
@@ -139,7 +140,7 @@ export default function ClientTrainingWorkspace({ clientUid }) {
     } catch (err) { if (selectedClient.current === selected) setError(err.message); }
     finally { if (selectedClient.current === selected) setBusy(false); }
   }
-  if (planView) return <div className="space-y-4"><button className="min-h-[44px] rounded-xl border border-fit-line px-4 text-sm" onClick={() => setPlanView(null)}>← Zur Klientenübersicht</button><Suspense fallback={<p role="status">Plan lädt…</p>}><PlanDocument plan={planView} /></Suspense></div>;
+  if (planView) return <div className="space-y-4"><button className="min-h-[44px] rounded-xl border border-fit-line px-4 text-sm" onClick={() => setPlanView(null)}>← Zur Klientenübersicht</button><Suspense fallback={<p role="status">Plan lädt…</p>}><PlanDocument plan={planView} />{planView.headVersion > 0 && <PlanFeedback key={`${clientUid}:${planView.id}:${planView.headVersion}`} clientUid={clientUid} plan={planView} coach />}</Suspense></div>;
 
   if (composing && program) return <Suspense fallback={<p role="status">Editor lädt…</p>}><ProgramEditor key={`${coachUid}:${program.id}`} coachUid={coachUid} program={program} templates={templates} onClose={() => setComposing(false)} onSave={(value) => saveCoachProgram(coachUid, value)} onSaved={async (saved) => { setProgram(saved); setComposing(false); setNotice('Entwurf gespeichert. Prüfe ihn und veröffentliche eine Version.'); await load(); }} /></Suspense>;
   if (screen === 'individual') return <Suspense fallback={<p role="status">Pläne laden…</p>}><div className="space-y-4"><button className="min-h-[44px] text-sm text-fit-muted" onClick={() => { setScreen('client'); load(); }}>← Zur Klientenübersicht</button><h2 className="text-xl font-semibold">Individuelle Klientenpläne</h2><TrainingPlans clientUid={clientUid} templates={[]} workouts={workouts} onChanged={load} /></div></Suspense>;

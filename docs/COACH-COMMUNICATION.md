@@ -230,3 +230,7 @@ Push auf einem iPhone. Die Dokumentation ersetzt keine Cloud-/Geräteabnahme.
 | Mehrtrainer | Projektweite Coach-Rolle; keine Klientenzuweisungs-ACL |
 | Bearbeiten/Löschen | Durch Client-Regeln gesperrt; kein eigener Produktablauf |
 | Echte Geräte | Nach autorisiertem Rules- und App-Release abzunehmen |
+
+## Aktuelle Priorität: Rückmeldung direkt am Trainingsplan
+
+Der gemeinsame PlanFeedback-Bereich erscheint unter „Trainingspläne → Plan ansehen“ sowie im individuellen Plan. Er bestätigt den Empfang einer festen Version und sammelt Fragen und Coach-Antworten genau dazu. Vertrag und Bedienung: [Plan-Feedback](../modules/plan/docs/PLAN-FEEDBACK.md). Freier Chat-Ausbau ist zurückgestellt. Die bisherigen Gesprächsfunktionen sind nicht der Versandmechanismus für Trainingspläne. Neue Plan-Regeln sind noch nicht deployed.

@@ -152,3 +152,7 @@ Der Laptop-Worker wird dafür nicht verwendet. Protokoll und Release-Reihenfolge
 [Test-/Release-/Diagnose-Runbook](../../../docs/COACH-COMMUNICATION-RUNBOOK.md).
 Lesestände sind zeitbasierte UI-Signale, nicht Push-Zustellung. Alle qualifizierten
 Coaches haben derzeit projektweiten Zugriff; keine zugewiesene-Coach-ACL annehmen.
+
+## 2026-11-01 — Planbereitstellung und Rückmeldungen
+
+ClientTrainingWorkspace lädt unter „Plan ansehen“ neben PlanDocument auch den gemeinsamen PlanFeedback-Baustein aus dem gepinnten Plan-Modul. Klient, Plan-ID und freigegebene Versionsnummer bilden den Schlüssel. Empfangsbestätigung und Antworten kommen aus `planResponses`, unabhängig vom freien Nachrichtenbereich. Der individuelle Planeditor bindet denselben Plan-Baustein ein. Vertrag: `modules/plan/docs/PLAN-FEEDBACK.md`. Keine Änderung an Gateway, lokaler Registry oder Katalog-Enrichment.

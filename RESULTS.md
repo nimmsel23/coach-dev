@@ -1558,3 +1558,7 @@ Abnahme: mobile 390px-Browser-Fixture mit echten Adaptern gegen isolierten Emula
 ## 2026-11-01 — Kommunikation vollständig dokumentiert
 
 Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatrix, Cache-/Entwurfs-/Lesestand-Semantik, Limits und Ausbaupunkte gegen Implementierung abgeglichen. Eigenes Runbook für reproduzierbare Tests, Port-/Abhängigkeitsvoraussetzungen, manuelle Release-Reihenfolge, Geräteabnahme, Fehlerbilder und Rücknahme. In AGENTS, Hauptarchitektur und View-Dokumenten verlinkt. Nur Dokumentation; keine neuen Builds/Deployments oder echten Nachrichten.
+
+## 2026-11-01 — Planbezogenen Ablauf statt freien Chat priorisiert
+
+„Trainingspläne → Plan ansehen“ verwendet den gemeinsamen PlanFeedback-Baustein aus dem Plan-Pin: ausdrückliche Empfangsbestätigung des Klienten und versiongebundene Frage/Antwort direkt unter dem Plan. Keine zweite Coach-Implementierung; keine echten Klientennachrichten. Reproduzierbare mobile Fixture im Repo ergänzt, Browser-Runner gibt bei Fehlern die tatsächliche Ursache aus. Temporäre Bash-Starter werden nicht benötigt. Freier Chat-Ausbau zurückgestellt; dessen bereits vorhandene, noch uncommittete Erweiterungen bleiben getrennt erhalten.
