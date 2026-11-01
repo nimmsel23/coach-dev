@@ -1,5 +1,7 @@
 # Firebase - AlphaOS Fitness
 
+> Release-/Deploy-Ablauf, Lockfile-Regeln und das Standalone-Zielbild (ohne Meta-Repo): siehe `docs/DEPLOY.md`.
+
 Stand: 2026-09-06
 
 Firebase-Projekt: **fitness-aos**
@@ -422,6 +424,6 @@ tailscale funnel status
 - `fitness-dev` = Dev/localhost und `vitalos/fitness-app` = Firebase-Live-Release
 - lokale Kette `~/fitness-dev -> ~/.local/fitness -> /opt/fitness`
 - `fitness-release` als Top-Level-Release-Wrapper
-- `@vos/cross-app-aliases` als SSOT fuer Cross-Repo-Aliase
+- Cross-Repo-Aliase `@relax`/`@learn` über `siblingDir()` in `vite.config.js` (das Paket `@vos/cross-app-aliases` wurde 2026-11-01 entfernt)
 - `build:kb-data` als feste Vorbedingung der Build-Pfade
 - fuer Coach-Inbox-Aktionen nicht wieder `BRIDGE_API_BASE` einfuehren

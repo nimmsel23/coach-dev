@@ -1,0 +1,62 @@
+name: inbox_samurai_extension
+description: 'Claude-Beispieleintrag (nicht von Daniel geprüft): Samurai Extension'
+generated_at: '2026-11-01T08:32:11.931199+00:00'
+enriched_at: '2026-11-01T08:32:11.931199+00:00'
+exercises:
+- source: unreviewed
+  variations: []
+  stabilizers: []
+  secondary_muscles: []
+  exercise_id: samurai_extension
+  id: samurai_extension
+  name: Samurai Extension
+  display_name: Samurai Extension
+  german: Samurai Extension
+  english: Samurai Extension
+  category: arms
+  type: isolation
+  movements:
+  - elbow_extension
+  - cable
+  equipment:
+  - cable
+  primary_muscles:
+  - 401_triceps_brachii
+  coaching_notes:
+  - Oberarm bleibt während des Satzes fixiert, nur der Ellbogen bewegt sich (gilt für jede Trizeps-Strecker-Variante
+    am Kabelzug).
+  - 'Ausführung (Griff, Körperhaltung, Zugrichtung) fehlt noch: bitte von Daniel ergänzen, sie ist in
+    keiner Quelle belegt.'
+  common_errors: []
+  tags:
+  - arms
+  - triceps
+  - cable
+  - isolation
+  - claude_draft
+  aliases:
+  - Samurai Extension
+  - Samurai Extensions
+  - Samurai-Extension
+  search_aliases:
+  - samurai_extension
+  - samurai_extensions
+  legacy_ids:
+  - manual_samurai_extension
+  external_ids: {}
+  source_check: 'find-source (wger+yuhonas, fuzzy) plus manuelle Suche in unreviewed_wger/unreviewed_yuhonas
+    am 2026-11-01: in KEINER der beiden Quellen gefunden (keine Treffer für ''samurai''); bewusst als
+    eigene Übung ohne Fremdquelle angelegt'
+  draft_note: 'Von Claude entworfenes Beispiel (2026-11-01), fachlich NICHT von Daniel geprüft. Tier bewusst
+    ''inbox'' (Entwurf), nicht ''expert''. Einzige gesicherte Information aus der Session: ''Trizeps am
+    Kabelzug''. Alles Weitere ist offen; Muskelrolle nur 401_triceps_brachii (keine Kopfzuordnung).'
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs: {}
+  review_state:
+    status: draft
+    review_provider: claude
+    ai_reviewed: true
+    enriched_at: '2026-11-01T08:32:11.931199+00:00'
+  enriched_at: '2026-11-01T08:32:11.931199+00:00'

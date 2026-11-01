@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `../fitness/catalog/CLAUDE.md` — Katalog-/KB-Tool-Set (Sub-Package von `fitness/`: KB-Struktur, Coverage-Formel, Gemini-Enrichment)
 - `../src/CLAUDE.md` — React-Frontend (Tabs/Views, DB-Layer, Body-Highlighter, PWA/Offline, Session-JSON-Format)
 - `../anatomy-kb/CLAUDE.md` — Muskel-Anatomie-KB (Git Subtree, :9200)
+- `DEPLOY.md` — Release-Weg (`fitness-ship`), Lockfile-Stolpersteine, Standalone-Deploy ohne Meta-Repo, Shell-Kopplung, Fehlerbild→Ursache
 - `BACKEND.md` — server.mjs API-Autodoc (Swagger/OpenAPI) + Zod-Validierung, Node↔Python-Routen-Parität
 
 ---
@@ -382,8 +383,9 @@ gibt den deutschen Anzeigenamen zurück (`"Rücken"`).
   Fitness hat keine Gitlinks oder Workspace-Importer für diese Apps mehr.
   `dev` bleibt der App-Entwicklungsbranch, `fitness` der Fitness-Integrations-
   branch. Vite/Firebase baut die Fitness-App direkt aus diesem Checkout.
-  `@vos/cross-app-aliases` nutzt weiterhin `link:` für seine pfadbasierte
-  Auflösung.
+  `@vos/cross-app-aliases` ist seit 2026-11-01 **entfernt** (nur `@relax`/`@learn`
+  gebraucht, Auflösung über `siblingDir()` in `vite.config.js`; der pfadabhängige
+  `link:` ließ den Lockfile je nach Installationsort kippen).
 - ⏳ Coach-Tab-Gesamtaufräumung (`views/Coach/`, 5 Sub-Tabs, ~1000 Zeilen) —
   noch nicht begonnen, Details + Zielbild in `../src/CLAUDE.md`
 

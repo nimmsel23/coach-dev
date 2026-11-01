@@ -30,15 +30,10 @@ function siblingDir(devName, appName) {
   return resolve(__dirname, '..', '..', devName)
 }
 
-async function resolveCrossAppAliases() {
-  try {
-    const { crossAppAliases } = await import('@vos/cross-app-aliases')
-    return crossAppAliases()
-  } catch {
-    return {
-      '@relax': resolve(siblingDir('relax-dev', 'relax-app'), 'src'),
-      '@learn': resolve(siblingDir('learn-dev', 'learn-app'), 'src'),
-    }
+function resolveCrossAppAliases() {
+  return {
+    '@relax': resolve(siblingDir('relax-dev', 'relax-app'), 'src'),
+    '@learn': resolve(siblingDir('learn-dev', 'learn-app'), 'src'),
   }
 }
 
@@ -75,8 +70,7 @@ export default defineConfig(async ({ mode }) => {
   const isFirebase = mode === 'firebase' || mode === 'coach' || mode === 'training' || mode === 'atlas'
   const isCoach = mode === 'coach'
   const isSolo = mode === 'training' || mode === 'atlas'
-  const crossAppAliases = await resolveCrossAppAliases()
-  delete crossAppAliases['@fuel']
+  const crossAppAliases = resolveCrossAppAliases()
 
   return {
     base: './',

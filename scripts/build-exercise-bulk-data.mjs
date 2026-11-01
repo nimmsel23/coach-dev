@@ -20,6 +20,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as yaml from 'js-yaml';
+import { isNonExercise } from '../src/lib/db/shared/nonExercises.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
@@ -27,6 +28,18 @@ const EXERCISES_DIR = join(REPO_ROOT, 'fitness/catalog/kb/exercises');
 const OUT_FILE = join(REPO_ROOT, 'src/lib/db/firestore/exerciseBulkData.generated.js');
 
 const SOURCE_FILES = ['unreviewed_wger.yml', 'unreviewed_yuhonas.yml'];
+
+// Nicht-Übungen (Aktivitäten wie HIIT): kb/registry/non_exercises.yml. Sie kommen
+// weder ins Bulk-Bundle noch (als eigene kleine Datei) durch den Firestore-Fetch
+// in kb.js — das Firestore-Doc existiert bis zu einem echten Push-Cleanup weiter.
+const NON_EXERCISES_FILE = join(REPO_ROOT, 'fitness/catalog/kb/registry/non_exercises.yml');
+const NON_EXERCISES_OUT = join(REPO_ROOT, 'src/lib/db/shared/nonExercises.generated.js');
+const nonExercises = (loadYaml(NON_EXERCISES_FILE)?.entries || []).filter(Boolean);
+const nonExerciseBlock = {
+  ids: nonExercises.map((e) => e.exercise_id).filter(Boolean).map(String),
+  wger: nonExercises.map((e) => e.wger_id).filter((v) => v != null).map(String),
+  yuhonas: nonExercises.map((e) => e.yuhonas_id).filter(Boolean).map((v) => String(v).toLowerCase()),
+};
 
 function loadYaml(path) {
   return yaml.load(readFileSync(path, 'utf-8'));
@@ -50,6 +63,7 @@ for (const file of SOURCE_FILES) {
   const doc = loadYaml(join(EXERCISES_DIR, file));
   for (const ex of doc?.exercises || []) {
     if (!ex || (!ex.exercise_id && !ex.id)) continue;
+    if (isNonExercise(ex, nonExerciseBlock)) continue;
     exercises.push(normalizeBulkExercise(ex));
   }
 }
@@ -66,4 +80,8 @@ export default EXERCISE_BULK_DATA;
 `;
 
 writeFileSync(OUT_FILE, out);
+writeFileSync(NON_EXERCISES_OUT, `// AUTO-GENERATED — nicht manuell editieren.
+// Quelle: fitness/catalog/kb/registry/non_exercises.yml (SSOT).
+export const NON_EXERCISE_BLOCK = ${JSON.stringify(nonExerciseBlock, null, 2)};
+`);
 console.log(`exerciseBulkData.generated.js geschrieben: ${exercises.length} Bulk-Übungen.`);

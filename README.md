@@ -96,8 +96,10 @@ bin/firestore-sync pull                     # Firestore → ~/.aos/fitness/
 Kurz zu den Invarianten:
 - localhost/Desktop kommt aus `~/fitness-dev`
 - Firebase-Live-Release kommt aus `vitalos/fitness-app`
-- `@vos/cross-app-aliases` und die lokale `.local -> /opt`-Kette sind Teil des
-  funktionierenden Setups und kein austauschbares Detail
+- Die lokale `.local -> /opt`-Kette ist Teil des funktionierenden Setups und kein
+  austauschbares Detail. `@vos/cross-app-aliases` wurde entfernt (2026-11-01):
+  Fitness nutzt nur `@relax` und `@learn`, aufgelöst über die Nachbar-Checkouts
+  (`siblingDir()` in `vite.config.js`).
 
 ---
 

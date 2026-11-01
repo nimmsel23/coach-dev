@@ -40,6 +40,7 @@ serviceAccountKey.json
 
 # Build-time aus der KB generiert (scripts/build-sixpack-data.mjs), KB ist SSOT
 src/lib/db/firestore/exerciseBulkData.generated.js
+src/lib/db/shared/nonExercises.generated.js
 src/lib/db/firestore/push.generated.js
 src/lib/db/firestore/pull.generated.js
 src/lib/db/firestore/legs.generated.js

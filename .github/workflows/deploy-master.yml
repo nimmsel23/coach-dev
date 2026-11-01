@@ -1,77 +1,144 @@
-# Standalone-Prod Fitness: Push auf master deployt live (nur CI).
+# Standalone-Prod Fitness: Push auf master deployt live (nur CI) — aus den MASTER-Checkouts der
+# eigenen Repos, OHNE das Meta-Repo vitalos.
+#
+# Warum: Der frühere Live-Deploy checkte das Meta-Repo vitalos aus und installierte gegen DESSEN
+# pnpm-lock.yaml (--frozen-lockfile). Das Meta-Repo gehört der Shell; Standalone-Apps deployen aus ihren
+# eigenen Repos. Jede Dependency-Änderung in fitness-dev ließ den ersten Live-Deploy am fremden Lockfile
+# scheitern (ERR_PNPM_OUTDATED_LOCKFILE), weil der Lockfile dort erst im zweiten Release-Schritt
+# nachgezogen wird. Entscheidung Daniel 2026-11-01: Standalone-Deploys laufen aus den master-Checkouts.
+#
+# Layout (Geschwister nebeneinander, wie lokal unter ~/dev):
+#   fitness-dev/   dieser Checkout (der Commit, der den Lauf ausgelöst hat)
+#   plan-dev/ 6pack-dev/ skills-dev/ learn-dev/ relax-dev/   jeweils `master`
+# Der Fitness-Build kompiliert diese fünf Nachbarn mit (vite-miniapp-submodules.mjs: Plan/6Pack/Skills;
+# vite.config.js: @relax/@learn per siblingDir()). Jedes Repo bekommt seine EIGENEN Abhängigkeiten aus
+# seinem eigenen Lockfile (ein gemeinsamer node_modules-Symlink scheiterte: die Nachbarn brauchen teils
+# andere Versionen, z. B. js-yaml 4 mit Default-Export gegen js-yaml 5 in fitness-dev). Doppelte
+# react-/firebase-Kopien verhindert resolve.dedupe in vite.config.js. --ignore-scripts: keine nativen
+# Builds (z. B. better-sqlite3 in relax-dev) — der Firebase-Build braucht sie nicht.
+#
+# Voraussetzung: jedes Nachbar-Repo ist auf master mit `pnpm install --frozen-lockfile` standalone
+# installierbar (siehe docs/DEPLOY.md).
+#
+# Auslöser und Sicherheit:
+#   - push auf master                      -> baut und deployt live
+#   - workflow_dispatch (automerge.yml)    -> baut und deployt live, nur auf master (deploy=false = nur bauen)
+#   - push auf einen Branch `ci-test/**`  -> reiner Build-Test (Nachbarn von dev), KEIN Deploy
+#     (so lässt sich eine Änderung an dieser Datei vor dem Merge prüfen: git push origin <branch>:ci-test/<name>)
+# Deployt wird ausschließlich auf refs/heads/master.
+#
+# Rückfall bei Problemen: diesen Commit zurücknehmen (der alte Meta-Repo-Weg steht in der Git-Historie)
+# oder den Hosting-Stand über `fitness-release` (Shell-Weg) nachziehen.
 
 name: Live Deploy (Fitness master)
+
 'on':
-  workflow_dispatch: null
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Live deployen? (nur auf master wirksam; false = nur bauen)"
+        type: boolean
+        default: true
   push:
     branches:
-    - master
+      - master
+      - 'ci-test/**'
+
+concurrency:
+  group: live-deploy-fitness-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   deploy_live:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # Auf master: Nachbarn von master (Prod-Stand). Auf ci-test/** (Build-Test): von dev.
+      NEIGHBOR_REF: ${{ github.ref == 'refs/heads/master' && 'master' || 'dev' }}
+      DO_DEPLOY: ${{ github.ref == 'refs/heads/master' && (github.event_name == 'push' || inputs.deploy) }}
     steps:
-    - name: Checkout vitalos (Meta-Repo, liefert Nachbar-Repos)
-      uses: actions/checkout@v4
-      with:
-        repository: nimmsel23/vitalos
-        ref: master
-    - name: Private Skills submodule access
-      uses: ./.github/actions/skills-submodule-auth
-      with:
-        deploy-key: ${{ secrets.SKILLS_DEPLOY_KEY }}
-    - name: Submodules via HTTPS + Token
-      run: |
-        git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "git@github.com:"
-        git submodule sync
-        git submodule update --init --recursive
-    - name: fitness-app auf den ausgelösten Commit setzen
-      run: |
-        cd fitness-app
-        SHA="${{ github.sha }}"
-        git fetch origin "$SHA"
-        git checkout "$SHA"
-        git submodule sync --recursive
-        git submodule update --init --recursive
-    - uses: pnpm/action-setup@v4
-      with:
-        version: 11.3.0
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 22
-        cache: pnpm
-    - name: Install (Workspaces)
-      run: pnpm install --frozen-lockfile
-    - name: Firebase config bereitstellen
-      run: |
-        if [ -n "$FIREBASE_CONFIG" ]; then
-          echo "$FIREBASE_CONFIG" > fitness-app/firebase.config.js
-        elif [ ! -f fitness-app/firebase.config.js ]; then
-          cp firebase.config.js fitness-app/firebase.config.js
-        fi
-      env:
-        FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
-    - name: Build Fitness (Live)
-      run: pnpm --filter ./fitness-app run build:firebase
-    - name: Deploy Live
-      id: firebase_deploy
-      uses: FirebaseExtended/action-hosting-deploy@v0
-      with:
-        repoToken: ${{ secrets.GITHUB_TOKEN }}
-        firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS || secrets.FIREBASE_SERVICE_ACCOUNT }}
-        projectId: fitness-aos
-        entryPoint: fitness-app
-        target: client
-        channelId: live
-    - name: Telegram-Benachrichtigung senden
-      if: success()
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_TO }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: |
-          🚀 Fitness ist LIVE deployed (vitalos)!
+      - name: Checkout fitness-dev
+        uses: actions/checkout@v4
+        with:
+          path: fitness-dev
 
-          🔗 Live-URL: https://fitness-aos.web.app
-          (oder eine verknüpfte Domain)
+      - name: Checkout Nachbarn (${{ env.NEIGHBOR_REF }})
+        run: |
+          set -euo pipefail
+          for repo in plan-dev 6pack-dev skills-dev learn-dev relax-dev; do
+            git clone --depth 1 --branch "$NEIGHBOR_REF" "https://github.com/nimmsel23/${repo}.git" "$repo"
+            echo "$repo @ $(git -C "$repo" rev-parse --short HEAD)"
+          done
 
-          Commit: ${{ github.event.head_commit.message }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: fitness-dev/pnpm-lock.yaml
+
+      # Eigener Lockfile von fitness-dev, frozen: was lokal/im PR-Check getestet wurde, ist, was gebaut wird.
+      - name: Install (fitness-dev, eigener Lockfile)
+        working-directory: fitness-dev
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Nachbarn (je eigener Lockfile)
+        run: |
+          set -euo pipefail
+          for repo in plan-dev 6pack-dev skills-dev learn-dev relax-dev; do
+            echo "::group::$repo"
+            if [ -f "$repo/pnpm-lock.yaml" ]; then
+              (cd "$repo" && pnpm install --frozen-lockfile --ignore-scripts)
+            elif [ -f "$repo/package.json" ]; then
+              echo "::warning::$repo hat keinen pnpm-lock.yaml — Install ohne Lockfile"
+              (cd "$repo" && pnpm install --no-frozen-lockfile --ignore-scripts)
+            fi
+            echo "::endgroup::"
+          done
+
+      - name: Firebase config bereitstellen (Secret)
+        working-directory: fitness-dev
+        env:
+          FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+        run: |
+          test -n "$FIREBASE_CONFIG" || { echo "::error::Secret FIREBASE_CONFIG fehlt"; exit 1; }
+          printf '%s\n' "$FIREBASE_CONFIG" > firebase.config.js
+
+      - name: Build Fitness (Firebase)
+        working-directory: fitness-dev
+        run: pnpm run build:firebase
+
+      - name: Bau-Ergebnis
+        working-directory: fitness-dev
+        run: |
+          du -sh dist-firebase
+          ls dist-firebase | head -20
+          echo "DO_DEPLOY=$DO_DEPLOY"
+
+      - name: Deploy Live
+        if: env.DO_DEPLOY == 'true'
+        id: firebase_deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS || secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: fitness-aos
+          entryPoint: fitness-dev
+          target: client
+          channelId: live
+
+      - name: Telegram-Benachrichtigung senden
+        if: env.DO_DEPLOY == 'true' && success()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🚀 Fitness ist LIVE deployed (standalone, master-Checkouts)!
+
+            🔗 Live-URL: https://fitness-aos.web.app
+
+            Commit: ${{ github.sha }}

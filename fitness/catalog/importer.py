@@ -13,6 +13,7 @@ from tqdm import tqdm
 from loguru import logger
 from fitness.catalog.core.rich_utils import console
 from fitness.catalog.core.loader import DATA_DIR, load_catalog_yaml
+from fitness.catalog.core.non_exercises import is_non_exercise
 from fitness.catalog.core.resolver import build_exercise_index, resolve_query, normalize_text
 from fitness.catalog.coverage import normalize_muscle_id, load_muscle_taxonomy
 
@@ -208,6 +209,9 @@ def import_external_exercises():
                         continue
 
                     safe_id = f"wger_{item.get('id')}"
+                    # Aktivitäten (HIIT, ...) sind keine Übungen, siehe kb/registry/non_exercises.yml
+                    if is_non_exercise({"exercise_id": safe_id, "wger_id": item.get("id")}):
+                        continue
 
                     res = resolve_query(display_name)
                     if res.matched and res.confidence == "high":
@@ -327,6 +331,8 @@ def import_external_exercises():
                         "secondary": sorted(list(set(wger_secondary)))
                     }
                 }
+                if is_non_exercise(ex):
+                    continue
                 unreviewed_yuhonas.append(ex)
             logger.info(f"Prepared {len(unreviewed_yuhonas)} unreviewed exercises from yuhonas.")
         except Exception as e:
