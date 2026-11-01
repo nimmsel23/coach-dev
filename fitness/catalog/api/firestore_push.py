@@ -18,6 +18,7 @@ from tqdm import tqdm
 
 from fitness.firestore.kb import get_db, fetch_hashes, batch_write
 from fitness.catalog.core.loader import catalog_path, load_catalog_directory_yaml, load_catalog_yaml
+from fitness.catalog.core.non_exercises import is_non_exercise, load_non_exercise_ids
 from fitness.catalog.core.muscles import iter_muscle_documents
 from fitness.catalog.core.yaml_utils import load_yaml
 
@@ -37,10 +38,16 @@ def sync_exercises(db: Any, dry_run: bool = False) -> dict[str, int]:
 
     # Alle exercises aggregieren + mergen (Expert gewinnt bei Konflikt)
     all_exercises: dict[str, dict[str, Any]] = {}
+    # Nicht-Übungen (kb/registry/non_exercises.yml) werden nicht gepusht; ein
+    # bereits vorhandenes Firestore-Doc fällt dadurch unter "verwaiste Exercises"
+    # und wird beim nächsten echten (nicht dry-run) Push gelöscht.
+    blocked = load_non_exercise_ids()
     for path, doc in exercise_docs:
         if not isinstance(doc, dict):
             continue
         for exercise in doc.get("exercises", []):
+            if is_non_exercise(exercise, blocked):
+                continue
             if path.name.startswith("unreviewed_") and _is_superseded_external_exercise(exercise, reviewed_refs):
                 continue
             ex_id = str(exercise.get("exercise_id") or exercise.get("id") or "")

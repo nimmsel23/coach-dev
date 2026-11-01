@@ -15,6 +15,7 @@ except ImportError:
 
 import json
 from fitness.catalog.core.loader import load_catalog_directory_yaml, load_catalog_yaml, catalog_path
+from fitness.catalog.core.non_exercises import is_non_exercise, load_non_exercise_ids
 
 GYM_VOCAB = {
     "kh": "kurzhantel dumbbell",
@@ -102,6 +103,10 @@ def build_exercise_index() -> list[ExerciseRecord]:
     # sollen aus exercises/ raus, sonst verschwinden sie hier aus dem Index
     # (Suche/Demand-Audit sehen sie sonst nie).
     all_docs = load_catalog_directory_yaml("exercises") + load_catalog_directory_yaml("inbox")
+    # Nicht-Übungen (Aktivitäten wie HIIT, kb/registry/non_exercises.yml) komplett
+    # aus dem Index halten: weder als Expert/Inbox noch als Bulk, damit sie weder
+    # in der Suche auftauchen noch von resolve_query() gematcht werden.
+    blocked = load_non_exercise_ids()
     expert_docs = []
     bulk_docs = []
     
@@ -122,6 +127,7 @@ def build_exercise_index() -> list[ExerciseRecord]:
         
         exercises = document.get("exercises", [])
         if not isinstance(exercises, list): continue
+        exercises = [e for e in exercises if not is_non_exercise(e, blocked)]
         # Datei-Name als Netzwerk-Kategorie ergibt nur bei echten Gruppen-Dateien
         # Sinn (chest.yml/back.yml mit mehreren Exercises) - Einzelexercise-Dateien
         # (brustpresse.yml, body_rows.yml, alle inbox_*.yml) tragen ihre Kategorie
@@ -228,6 +234,7 @@ def build_exercise_index() -> list[ExerciseRecord]:
         exercises = document.get("exercises", [])
         for entry in exercises:
             if not isinstance(entry, dict): continue
+            if is_non_exercise(entry, blocked): continue
             
             w_id = entry.get("wger_id")
             name = first_text(entry, "display_name", "name")

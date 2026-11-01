@@ -4,6 +4,7 @@ from copy import deepcopy
 from typing import Any
 
 from fitness.catalog.core.loader import load_catalog_yaml
+from fitness.catalog.core.non_exercises import is_non_exercise, load_non_exercise_ids
 from fitness.catalog.core.muscle_normalization import normalize_exercise_muscle_list
 from fitness.catalog.core.resolver import normalize_text, GENERIC_FUZZY_TOKENS, fuzzy_candidate_allowed
 from fitness.catalog.core.resolver import build_exercise_index, find_by_id, resolve_query
@@ -27,7 +28,11 @@ def _entries_from_file(filename: str) -> list[dict[str, Any]]:
     # wger_entries/yuhonas_entries-Parameter durchreichen.
     doc = load_catalog_yaml(f"exercises/{filename}") or {}
     entries = doc.get("exercises") or []
-    return [entry for entry in entries if isinstance(entry, dict)]
+    blocked = load_non_exercise_ids()
+    return [
+        entry for entry in entries
+        if isinstance(entry, dict) and not is_non_exercise(entry, blocked)
+    ]
 
 
 def _find_wger_entry(entries: list[dict[str, Any]], wger_id: Any) -> dict[str, Any] | None:

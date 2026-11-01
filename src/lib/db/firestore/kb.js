@@ -13,6 +13,8 @@ import { setDoc, getDoc, getDocs } from "./offline.js";
 import { db } from "../../../firebase.js";
 import { getStaticMuscle, getStaticMuscleDocs } from "../../kb/muscles.js";
 import { normalizeExerciseRecord } from "../shared/exercise.js";
+import { withoutNonExercises } from "../shared/nonExercises.js";
+import { NON_EXERCISE_BLOCK } from "../shared/nonExercises.generated.js";
 import {
   getMirrorExercise, isLegacyYuhonasId, mergeRanked, searchMirrors,
 } from "../../exerciseDbs/search.js";
@@ -60,7 +62,9 @@ export async function getExercise(exerciseId) {
 
 export async function getAllExercises() {
   const snap = await getDocs(collection(db, "fitness", "kb", "exercises"));
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  // Nicht-Übungen (Aktivitäten wie HIIT, kb/registry/non_exercises.yml) bleiben
+  // draußen, solange ihr Firestore-Doc noch existiert.
+  return withoutNonExercises(snap.docs.map((d) => ({ id: d.id, ...d.data() })), NON_EXERCISE_BLOCK);
 }
 
 // Wie getAllExercises(), aber ohne die Bulk-Übungen, die bereits statisch im
@@ -69,9 +73,12 @@ export async function getAllExercises() {
 async function _getCuratedExercises() {
   const { ids } = await _loadBulk();
   const snap = await getDocs(collection(db, "fitness", "kb", "exercises"));
-  return snap.docs
-    .map((d) => ({ id: d.id, ...d.data() }))
-    .filter((ex) => !ids.has(ex.exercise_id || ex.id));
+  return withoutNonExercises(
+    snap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .filter((ex) => !ids.has(ex.exercise_id || ex.id)),
+    NON_EXERCISE_BLOCK,
+  );
 }
 
 export async function saveExercise(exerciseId, data) {
