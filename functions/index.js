@@ -1,5 +1,8 @@
 const functions = require("firebase-functions/v1");
-const admin = require("firebase-admin");
+const { initializeApp } = require("firebase-admin/app");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
+const { getMessaging } = require("firebase-admin/messaging");
+const { getAuth } = require("firebase-admin/auth");
 const fs = require("fs");
 const path = require("path");
 const strava = require("./strava.js");
@@ -8,7 +11,7 @@ const pushPrefs = require("./pushPrefs.js");
 const { coverageScoresFromDashboard } = require("./coverageWindow.js");
 const { NOTIFICATIONS, renderTemplate } = require("./texts.js");
 
-admin.initializeApp();
+initializeApp();
 
 const TIME_ZONE = "Europe/Berlin";
 const REMINDER_WINDOW_MINUTES = 5;
@@ -264,7 +267,7 @@ async function sendReminder(uid, tokens, title, body, link, tag = "fitness-remin
       },
       tokens,
     };
-    const response = await admin.messaging().sendEachForMulticast(message);
+    const response = await getMessaging().sendEachForMulticast(message);
     return {
       sentCount: response.successCount,
       failureCount: response.failureCount,
@@ -281,7 +284,7 @@ exports.scheduledFitnessPushReminders = functions
   .timeZone(TIME_ZONE)
   .onRun(async () => {
     const { date, minutes } = getLocalDateParts();
-    const db = admin.firestore();
+    const db = getFirestore();
     let sentCount = 0;
     let failureCount = 0;
 
@@ -420,7 +423,7 @@ exports.onCoachFeedback = functions
       return null;
     }
 
-    const db = admin.firestore();
+    const db = getFirestore();
     const pushDoc = await db.collection("fitness").doc(uid).collection("settings").doc("push").get();
     const stored = pushDoc.data() || {};
     const pushData = stored.apps?.fitness || {};
@@ -441,7 +444,7 @@ exports.onCoachFeedback = functions
 // Entscheidungslogik + Nachrichtenaufbau: clientWorkout.js (mit Tests).
 async function clientDisplayName(uid) {
   try {
-    const user = await admin.auth().getUser(uid);
+    const user = await getAuth().getUser(uid);
     if (user.displayName) return user.displayName;
   } catch (error) {
     console.warn(`clientDisplayName(${uid}):`, error.code || error.message);
@@ -460,7 +463,7 @@ exports.onClientWorkout = functions
     const decision = clientWorkout.shouldNotify({ uid, before, after });
     if (!decision.notify) return null;
 
-    const db = admin.firestore();
+    const db = getFirestore();
     const clientName = await clientDisplayName(uid);
     const results = [];
 
@@ -482,12 +485,12 @@ exports.onClientWorkout = functions
         const message = clientWorkout.buildMessage({
           uid, sid, session: after, clientName, tokens, reason: decision.reason, texts: NOTIFICATIONS.clientWorkout,
         });
-        const response = await admin.messaging().sendEachForMulticast(message);
+        const response = await getMessaging().sendEachForMulticast(message);
         const dead = clientWorkout.deadTokens(tokens, response.responses);
         if (dead.length > 0) {
           // Abgemeldete Geräte aufräumen, sonst wächst die Token-Liste ewig.
-          const cleanup = { apps: { fitness: { tokens: admin.firestore.FieldValue.arrayRemove(...dead) } } };
-          if (dead.includes(pushData.token)) cleanup.apps.fitness.token = admin.firestore.FieldValue.delete();
+          const cleanup = { apps: { fitness: { tokens: FieldValue.arrayRemove(...dead) } } };
+          if (dead.includes(pushData.token)) cleanup.apps.fitness.token = FieldValue.delete();
           await pushRef.set(cleanup, { merge: true });
         }
         results.push({ coachUid, sent: response.successCount, failed: response.failureCount, removed: dead.length });
@@ -513,7 +516,7 @@ exports.sendTestPush = functions
   .https.onCall(async (data, context) => {
     const uid = requireAuth(context);
     const kind = pushPrefs.TEST_KINDS.includes(data?.kind) ? data.kind : "reminder";
-    const pushRef = admin.firestore().collection("fitness").doc(uid).collection("settings").doc("push");
+    const pushRef = getFirestore().collection("fitness").doc(uid).collection("settings").doc("push");
     const stored = (await pushRef.get()).data() || {};
     const pushData = stored.apps?.fitness || {};
 
@@ -532,12 +535,12 @@ exports.sendTestPush = functions
       throw new functions.https.HttpsError("failed-precondition", "Kein registriertes Gerät.");
     }
 
-    await pushRef.set({ apps: { fitness: { lastTestAt: admin.firestore.FieldValue.serverTimestamp() } } }, { merge: true });
-    const response = await admin.messaging().sendEachForMulticast(pushPrefs.buildTestMessage(kind, tokens, NOTIFICATIONS));
+    await pushRef.set({ apps: { fitness: { lastTestAt: FieldValue.serverTimestamp() } } }, { merge: true });
+    const response = await getMessaging().sendEachForMulticast(pushPrefs.buildTestMessage(kind, tokens, NOTIFICATIONS));
     const dead = clientWorkout.deadTokens(tokens, response.responses);
     if (dead.length > 0) {
-      const cleanup = { apps: { fitness: { tokens: admin.firestore.FieldValue.arrayRemove(...dead) } } };
-      if (dead.includes(pushData.token)) cleanup.apps.fitness.token = admin.firestore.FieldValue.delete();
+      const cleanup = { apps: { fitness: { tokens: FieldValue.arrayRemove(...dead) } } };
+      if (dead.includes(pushData.token)) cleanup.apps.fitness.token = FieldValue.delete();
       if (Array.isArray(pushData.devices)) {
         cleanup.apps.fitness.devices = pushData.devices.filter((d) => !dead.includes(d.token));
       }
@@ -551,7 +554,7 @@ exports.stravaAuthorizeUrl = functions
   .region(strava.REGION)
   .https.onCall(async (_data, context) => {
     const uid = requireAuth(context);
-    const url = await strava.buildAuthorizeUrl(admin.firestore(), uid);
+    const url = await strava.buildAuthorizeUrl(getFirestore(), uid);
     return { url };
   });
 
@@ -562,7 +565,7 @@ exports.stravaCallback = functions
     if (error) return res.redirect(`${strava.APP_URL}/#tours?strava_error=${encodeURIComponent(String(error))}`);
     if (!code || !state) return res.status(400).send("Strava: code/state fehlt im Callback.");
     try {
-      await strava.exchangeCodeForTokens(admin.firestore(), { code: String(code), state: String(state) });
+      await strava.exchangeCodeForTokens(getFirestore(), { code: String(code), state: String(state) });
       return res.redirect(`${strava.APP_URL}/#tours?strava_connected=1`);
     } catch (err) {
       console.error("[stravaCallback]", err);
@@ -574,14 +577,14 @@ exports.stravaStatus = functions
   .region(strava.REGION)
   .https.onCall(async (_data, context) => {
     const uid = requireAuth(context);
-    return strava.status(admin.firestore(), uid);
+    return strava.status(getFirestore(), uid);
   });
 
 exports.stravaActivities = functions
   .region(strava.REGION)
   .https.onCall(async (data, context) => {
     const uid = requireAuth(context);
-    const tours = await strava.fetchActivities(admin.firestore(), uid, { perPage: data?.perPage || 30 });
+    const tours = await strava.fetchActivities(getFirestore(), uid, { perPage: data?.perPage || 30 });
     return { tours };
   });
 
@@ -589,6 +592,6 @@ exports.stravaDisconnect = functions
   .region(strava.REGION)
   .https.onCall(async (_data, context) => {
     const uid = requireAuth(context);
-    await strava.disconnect(admin.firestore(), uid);
+    await strava.disconnect(getFirestore(), uid);
     return { ok: true };
   });
