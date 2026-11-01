@@ -18,6 +18,8 @@
 ## Fitness-Release
 
 - Für Fitness-Prod läuft der Weg `dev` → `master` (PR, `vos-release-pr fitness`) → `vitalos` (`fitness-release`, mergt `origin/master` in `~/vitalos/fitness-app` auf `vitalos`). Danach wird der `fitness-app`-Commit als Gitlink in `~/vitalos` aktualisiert; ein Push von `~/vitalos/master` deployed die Shell samt gepinnten Quellen. Details im Block `release-weg` unten.
+- **⚠️ Lockfile ist wahrscheinlich ein Problem (nicht überraschen lassen):** `Live Deploy (Fitness master)` checkt das Meta-Repo `vitalos` (master) aus und läuft dort mit `pnpm install --frozen-lockfile` gegen dessen `pnpm-lock.yaml`. Der PR-Merge `dev → master` startet diesen Deploy sofort, der Lockfile im Meta-Repo wird aber erst im zweiten Schritt (`fitness-release` → `pre-commit`-Hook `vos-sync-submodule-pointers`, `pnpm install --lockfile-only`) nachgezogen. Sobald sich `package.json` ändert (neue/gebumpte Dependencies, Dependabot), scheitert der erste Live-Deploy deshalb mit `ERR_PNPM_OUTDATED_LOCKFILE` bei „Install (Workspaces)". Das ist ein Reihenfolge-, kein Code-Problem. Vorgehen: `fitness-release` laufen lassen (zieht den Lockfile nach) und danach den Live-Deploy neu starten (`gh workflow run "Live Deploy (Fitness master)" -R nimmsel23/fitness-dev --ref master`). Vor dem Release mit `git diff origin/master origin/dev -- package.json` prüfen, ob das droht.
+- **Hinweis `vos-release-pr`:** Bei mehr als 30 Commits zwischen `dev` und `master` bricht das Skript mit Exit 141 (SIGPIPE durch `git log … | head -30` unter `pipefail`) ab, ohne PR. Dann PR von Hand mit `gh pr create` anlegen (Konfliktcheck: `git merge-tree --write-tree --name-only origin/master origin/dev`).
 
 <!-- release-weg:start -->
 ## Release-Weg und Branches (Fitness)
