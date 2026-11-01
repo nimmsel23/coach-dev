@@ -5,6 +5,7 @@ const path = require("path");
 const strava = require("./strava.js");
 const clientWorkout = require("./clientWorkout.js");
 const pushPrefs = require("./pushPrefs.js");
+const { coverageScoresFromDashboard } = require("./coverageWindow.js");
 const { NOTIFICATIONS, renderTemplate } = require("./texts.js");
 
 admin.initializeApp();
@@ -230,11 +231,12 @@ function getLowPplBuckets(scores = {}, threshold = PPL_RATIO_ALERT_THRESHOLD) {
     }));
 }
 
-async function getCoverageScores(userRef) {
+// 7-Tage-Coverage bezogen auf HEUTE (nicht auf den Zeitpunkt des letzten
+// Speicherns). `null` = nichts Verlässliches bekannt → kein Hinweis senden.
+async function getCoverageScores(userRef, todayDate) {
   const snap = await userRef.collection("analytics").doc("dashboard").get();
-  if (!snap.exists) return {};
-  const data = snap.data() || {};
-  return data.rolling_7_days?.body_region_scores || {};
+  if (!snap.exists) return null;
+  return coverageScoresFromDashboard(snap.data() || {}, todayDate, { days: 7, timeZone: TIME_ZONE });
 }
 
 async function getOpenHabitsToday(userRef, date) {
@@ -340,8 +342,8 @@ exports.scheduledFitnessPushReminders = functions
         }
 
         if (types.coverage) {
-          coverageScores = coverageScores || await getCoverageScores(userRef);
-          const gaps = getCoverageGaps(coverageScores);
+          coverageScores = coverageScores || await getCoverageScores(userRef, date);
+          const gaps = coverageScores ? getCoverageGaps(coverageScores) : [];
           if (gaps.length > 0) {
             const regions = gaps.map((id) => MUSCLE_GROUP_LABELS[id] || id).join(", ");
             notifications.push(notificationText("coverage", { regions }));
@@ -349,8 +351,8 @@ exports.scheduledFitnessPushReminders = functions
         }
 
         if (types.pplRatio) {
-          coverageScores = coverageScores || await getCoverageScores(userRef);
-          const lowBuckets = getLowPplBuckets(coverageScores);
+          coverageScores = coverageScores || await getCoverageScores(userRef, date);
+          const lowBuckets = coverageScores ? getLowPplBuckets(coverageScores) : [];
           if (lowBuckets.length > 0) {
             const buckets = lowBuckets.map(({ label, percent }) => `${label} ${percent}%`).join(", ");
             notifications.push(notificationText("pplRatio", { buckets }));

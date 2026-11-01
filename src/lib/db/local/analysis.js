@@ -3,6 +3,9 @@ import { ACTIVITY_MUSCLE_GROUPS } from "../../../constants/ActivityConstants";
 import { muscleToGroupIds, getMuscleGroupsForGaps, buildMuscleBalanceInsights, muscleToRegion } from "../shared/muscle";
 import { computeMuscleScores } from "../../superkompensation.js";
 import { ACTIVITY_WEIGHT, GAP_THRESHOLD, effortFactor, blockComplexMuscles } from "../shared/scoring.js";
+import { todayISO } from "../shared/utils.js";
+import { addDaysISO, mondayOfISO, weekDatesFromMonday, rollingDatesISO, isoWeekDatesForSelector } from "../shared/dates.js";
+import { buildKbMap, findKbExercise, augmentKbMapWithMirror } from "../shared/kbLookup.js";
 
 const ROLE_W = { primary: 1, secondary: 0.5, stabilizer: 0.2 };
 
@@ -15,7 +18,7 @@ function sessionHits(sess, kbMap) {
   const eff = effortFactor(sess);
   for (const ex of (sess.exercises || [])) {
     const exName = ex.name || ex.exercise_id || "";
-    const kbEx = kbMap.get(exName.toLowerCase());
+    const kbEx = findKbExercise(kbMap, ex);
     const primary = (ex.primaryMuscles?.length ? ex.primaryMuscles : null) || kbEx?.primary_muscles || kbEx?.primaryMuscles || [];
     const secondary = (ex.secondaryMuscles?.length ? ex.secondaryMuscles : null) || kbEx?.secondary_muscles || kbEx?.secondaryMuscles || [];
     const stabilizers = (ex.stabilizers?.length ? ex.stabilizers : null) || kbEx?.stabilizers || [];
@@ -68,35 +71,17 @@ export async function getDashboardAnalytics(days = 28) {
   };
 }
 
+// "current" = Kalenderwoche Mo–So (lokales Verhalten); "YYYY-Www" = ISO-Woche.
 function getWeekBounds(selector = "current") {
-  let d = new Date();
-  if (selector !== "current") {
-    const [year, week] = selector.split("-W");
-    d = new Date(year, 0, 1 + (parseInt(week) - 1) * 7);
-  }
-  const off = (d.getDay() + 6) % 7;
-  const start = new Date(d);
-  start.setDate(d.getDate() - off);
-  const dates = [];
-  for (let i = 0; i < 7; i++) {
-    const x = new Date(start);
-    x.setDate(start.getDate() + i);
-    dates.push(x.toISOString().slice(0, 10));
-  }
-  return dates;
+  if (selector === "current") return weekDatesFromMonday(mondayOfISO(todayISO()));
+  return isoWeekDatesForSelector(selector);
 }
 
-// Letzte `days` Kalendertage (heute inklusive, absteigend zu älter) — rollendes
+// Letzte `days` Kalendertage (heute inklusive, älteste zuerst) — rollendes
 // Fenster statt Kalenderwoche/-monat, damit "monatlich" nicht an Monatsgrenzen
 // hängt (z.B. am 1. eines Monats sonst nur 1 Tag Daten).
 function getRollingDates(days) {
-  const dates = [];
-  for (let i = days - 1; i >= 0; i--) {
-    const x = new Date();
-    x.setDate(x.getDate() - i);
-    dates.push(x.toISOString().slice(0, 10));
-  }
-  return dates;
+  return rollingDatesISO(days);
 }
 
 // Baut den eigentlichen Report (Sessions/Scores/Gaps/Top-Exercises) für eine
@@ -118,7 +103,7 @@ function computeReport(dates, { history, kbMap, historyWithMuscles, topExMap }) 
       if (!exName) continue;
       // Snapshot-First: inline-Werte aus dem Log gewinnen. KB nur Fallback,
       // damit gelöschte/umbenannte Katalog-Einträge keine alten Sessions kaputtmachen.
-      const kbEx = kbMap.get(exName.toLowerCase());
+      const kbEx = findKbExercise(kbMap, ex);
       const primary = (ex.primaryMuscles?.length ? ex.primaryMuscles : null) || kbEx?.primary_muscles || kbEx?.primaryMuscles || [];
       allExercises.push({ name: exName, primaryMuscles: primary });
       // muscleScores bleibt eine reine Übungs-Häufigkeit (wie oft dieser Muskel
@@ -190,8 +175,8 @@ async function loadReportContext() {
 
   const kbExercises = exRes.exercises || [];
   const history = histRes.sessions || [];
-  const kbMap = new Map();
-  kbExercises.forEach(ex => kbMap.set((ex.display_name || ex.name || ex.exercise_id || "").toLowerCase(), ex));
+  const kbMap = buildKbMap(kbExercises);
+  await augmentKbMapWithMirror(kbMap, history);
 
   // Pre-build muscle group index over full history for recovery calculation
   const historyWithMuscles = history.map(s => {
@@ -257,7 +242,9 @@ export async function getMonthlyReport(days = 28) {
 }
 
 export async function getMuscleCoverage(days = 7) {
-  const cutoffDate = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
+  // `days` Kalendertage inklusive heute (wie firestore/analysis.js) — vorher
+  // days+1 Tage und nach UTC statt lokalem Datum.
+  const cutoffDate = addDaysISO(todayISO(), -(days - 1));
   const [exRes, histRes] = await Promise.all([
     api.get('/fitness/exercises/all').catch(() => ({ exercises: [] })),
     api.get('/session/history?limit=120').catch(() => ({ sessions: [] }))
@@ -265,8 +252,8 @@ export async function getMuscleCoverage(days = 7) {
 
   const kbExercises = exRes.exercises || [];
   const history = histRes.sessions || [];
-  const kbMap = new Map();
-  kbExercises.forEach(ex => kbMap.set((ex.display_name || ex.name || ex.exercise_id || "").toLowerCase(), ex));
+  const kbMap = buildKbMap(kbExercises);
+  await augmentKbMapWithMirror(kbMap, history);
 
   const bodyRegionScores = {};
   const sessionsInWindow = history.filter(s => s.date && s.date >= cutoffDate);
@@ -328,14 +315,10 @@ export async function getRecoveryAnalytics(days = 28) {
       exercises: Array.isArray(session.exercises) ? session.exercises : [],
     }))
     : [];
-  const kbMap = new Map();
-  kbExercises.forEach((exercise) => {
-    kbMap.set((exercise.display_name || exercise.name || exercise.exercise_id || '').toLowerCase(), exercise);
-  });
+  const kbMap = buildKbMap(kbExercises);
+  await augmentKbMapWithMirror(kbMap, safeSessions);
 
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - days);
-  const cutoffStr = cutoff.toISOString().slice(0, 10);
+  const cutoffStr = addDaysISO(todayISO(), -days);
   const sessionsInRange = safeSessions.filter((session) => session.date && session.date >= cutoffStr);
   return {
     ok: true,

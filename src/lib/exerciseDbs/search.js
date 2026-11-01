@@ -1,5 +1,6 @@
 import { EXERCISE_DB_SOURCES } from './sources.js'
 import { getMirrorStatus, loadMirrorItems } from './mirror.js'
+import { foldName } from '../db/shared/kbLookup.js'
 
 // Suche/Lookup im Geräte-Mirror für Session & Plan. Ersetzt dort den Zugriff
 // auf die alten Katalog-Bulk-Records (`unreviewed_yuhonas.yml`): deren
@@ -78,6 +79,26 @@ export async function getMirrorExercise(exerciseId) {
   const { items } = await loadAll({})
   const hit = items.find((ex) => ex.exerciseId === exerciseId)
   return hit ? toRecord(hit) : null
+}
+
+// Muskel-Index für die Coverage: Name/Exercise-ID (klein + gefaltet) → Record mit
+// primary_muscles/secondary_muscles im Quellvokabular (Yuhonas: "lower back",
+// "abdominals", "lats" … — von muscleToRegion() per Freitext-Alias aufgelöst).
+// Letzter Fallback hinter dem Katalog; leer, wenn kein Mirror geladen ist.
+export async function getMirrorMuscleIndex() {
+  const { items } = await loadAll({})
+  const index = new Map()
+  for (const ex of items) {
+    if (!ex.primary?.length && !ex.secondary?.length) continue
+    const record = toRecord(ex)
+    for (const raw of [ex.exerciseId, ex.name]) {
+      if (!raw) continue
+      for (const key of [String(raw).toLowerCase(), foldName(raw)]) {
+        if (key && !index.has(key)) index.set(key, record)
+      }
+    }
+  }
+  return index
 }
 
 // Katalog-Zeilen ohne alte yuhonas-Bulk-Records. curatedIds = IDs kuratierter
