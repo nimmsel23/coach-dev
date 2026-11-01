@@ -1634,3 +1634,5 @@ keine echten Klientenpläne freigegeben oder versendet.
 - [x] ClientForge nutzt `/api/clients` und `/api/client/{id}/plans`. Direkte `/{id}/`-Einstiege und `/k/{id}/…` mit gleicher Planablage; bisherige lokale API bleibt Alias.
 
 Alte ClientForge-Oberfläche an den ID-Routen eingebunden; Assets isoliert, bestehende klienten-python-Handler wiederverwendet und auf lokale, gültige Klienten begrenzt. API- und Gateway-Abschlussprüfung: 15 Tests bestanden; alter UI-Build erfolgreich.
+
+Live-Abnahme: `/<id>/` und `/k/<id>/` HTTP 200, UI-Assets 200, native Plan- und alte Habit-/Fuel-APIs 200. Echter Browser öffnet Matthias Mayer direkt und lädt das eingebettete Planstudio. Keine realen Pläne verändert oder versendet.
