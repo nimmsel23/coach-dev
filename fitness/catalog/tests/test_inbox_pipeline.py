@@ -51,6 +51,23 @@ class InboxPipelineTest(unittest.TestCase):
         self.assertEqual(seed["primary_muscles"], ["501_rectus_abdominis"])
         self.assertNotIn("coaching_notes", seed)
 
+    def test_manual_draft_without_external_match_can_restart(self) -> None:
+        payload = {"exercise_id": "inbox_yoga_headstand", "display_name": "Yoga Headstand",
+                   "origin": {"type": "manual", "source_refs": {}}, "coaching_notes": ["Stale AI text"]}
+        with mock.patch("fitness.catalog.core.inbox_pipeline.build_external_seed", return_value=None), \
+             mock.patch("fitness.catalog.core.inbox_pipeline._canonical_record_seed", return_value={}):
+            seed = build_inbox_draft_seed("Yoga Headstand", "inbox_yoga_headstand", payload, restart=True)
+        self.assertEqual(seed["exercise_id"], "inbox_yoga_headstand")
+        self.assertEqual(seed["origin"], payload["origin"])
+        self.assertNotIn("coaching_notes", seed)
+
+    def test_canonical_provenance_survives_missing_external_match(self) -> None:
+        canonical = {"external_ids": {"wger": [17]}, "wger_id": 17}
+        with mock.patch("fitness.catalog.core.inbox_pipeline.build_external_seed", return_value=None), \
+             mock.patch("fitness.catalog.core.inbox_pipeline._canonical_record_seed", return_value=canonical):
+            seed = build_inbox_draft_seed("Manual", "manual", {}, restart=True)
+        self.assertEqual(seed["external_ids"], {"wger": [17]})
+
     def test_queue_overlay_can_keep_explicit_payload_fields(self) -> None:
         external_seed = {
             "exercise_id": "plank",

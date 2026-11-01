@@ -25,8 +25,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `CLAUDE.md` ist Symlink → `docs/CLAUDE.md`. Direktes Schreiben scheitert
   ("Refusing to write through symlink") — immer `docs/CLAUDE.md` editieren.
+- **Release-Weg seit 2026-10-29: `dev` → `master` → `vitalos`.** Erst
+  `vos-release-pr fitness` (PR `dev` → `master`; `Check` grün → Auto-Merge →
+  Standalone-Live-Deploy per CI), dann `fitness-release` für `master` →
+  `vitalos`. Nie von Hand auf `master` pushen (außer Hotfix); `master` wird
+  lokal nie ausgecheckt. Die Beschreibung des Skripts direkt darunter stammt
+  teils noch aus der Zeit vor dem PR-Schritt: es mergt jetzt `origin/master`
+  (nicht `dev`) nach `vitalos`, mergt vor dem Parent-Push `origin/master` ein
+  und gleicht Submodul-Checkouts an die Pointer an.
 - **`~/vitalos/bin/fitness-release` ist der bevorzugte Weg für den
-  `dev`→`vitalos`-Merge + Deploy** (dünner Wrapper um
+  `master`→`vitalos`-Merge + Deploy** (dünner Wrapper um
   `~/vitalos/bin/vos-release fitness`, verifiziert + branch-Fix
   2026-08-22). Er pusht `~/fitness-dev`s `dev`-Branch, mergt ihn in den
   `~/vitalos/fitness-app`-Worktree, pusht dort — was den Post-Push-Hook

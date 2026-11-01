@@ -42,6 +42,15 @@ on:
       - '!**/*.bak*'
       - '!docs/**'
 
+# Repo-Default fürs GITHUB_TOKEN ist "read". Die Firebase-Hosting-Action legt einen Check-Run an
+# (POST /check-runs → checks: write) und kommentiert den PR-Channel-Link (pull-requests: write);
+# ohne beides scheitert der Schritt "Deploy Preview Channel" nach dem Upload mit 403
+# "Resource not accessible by integration" (Run 40889156257, 2026-10-29).
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
   preview:
     runs-on: ubuntu-latest

@@ -9,7 +9,7 @@ Skills und 6Pack sind aus der Fitness-Session herausgelöst. Die Session bietet 
 ## Komponenten
 | Datei | Zweck |
 |-------|-------|
-| `index.jsx` | Thin Sub-Tab-Router: editor (default) / plan / history |
+| `index.jsx` | Thin Sub-Tab-Router: editor (default) / plan / history / logbuch (→ `views/Logbuch/`) |
 | `useSession.js` | State-Owner, alle Handler, Autosave/Flush, Datenfluss |
 | `SessionEditor.jsx` | Editor-Assembly: SessionHeader + ExerciseList + ActivityAddon (Basis-Abschnitt) + SessionSlots (zusätzliche Abschnitte) / ActivitySection (Cardio-Mode) |
 | `SessionSlots.jsx` | Zusätzliche, frei benannte Abschnitte einer Strength-Session (seit 2026-08-25) — additiv zum Basis-Abschnitt, kein Ersatz. Jeder Slot kombiniert frei Übungen + Activity + Notiz, Slot-Inhalt 1:1 als "Baustein" pro Trainingsblock speicherbar (`slotTemplates.js`) |

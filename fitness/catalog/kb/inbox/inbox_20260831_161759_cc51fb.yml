@@ -1,15 +1,107 @@
 name: inbox_20260831_161759_cc51fb
-description: 'Inbox queued for: Yoga Headstand'
-queued_at: '2026-08-31T16:17:59.988928'
+description: 'Proactively generated expert draft for: Yoga Headstand'
+generated_at: '2026-10-31T15:34:37.219549+00:00'
+enriched_at: '2026-10-31T15:34:37.219549+00:00'
 exercises:
-- exercise_id: inbox_yoga_headstand
+- origin:
+    type: external
+    source_refs:
+      wger:
+      - '1472'
   name: Yoga Headstand
+  exercise_id: inbox_yoga_headstand
+  display_name: Handstand
   id: inbox_yoga_headstand
-  display_name: Yoga Headstand
+  german: Handstand
+  english: Handstand
+  category: push
+  primary_muscles:
+  - 301_anterior_deltoid
+  - 302_lateral_deltoid
+  - 401_triceps_brachii
+  secondary_muscles:
+  - 105_serratus_anterior
+  - 202a_trapezius_upper
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 504_transverse_abdominis
+  - 603_gluteus_maximus
+  - 206_erector_spinae
+  - 405_forearm_flexors
+  - 406_forearm_extensors
+  - 601_quadriceps_femoris
+  - 604_hamstrings
+  - 304_rotator_cuff
+  coaching_notes:
+  - Beginnen Sie in einer stabilen Ausgangsposition, z.B. von der Wand wegdrehend
+    oder mit einem kontrollierten Kick-up.
+  - Drücken Sie aktiv mit den Händen in den Boden, als wollten Sie den Boden wegschieben.
+    Die Finger sind gespreizt und greifen leicht.
+  - Halten Sie die Arme vollständig gestreckt und die Ellenbogen durchgedrückt, um
+    eine stabile Basis zu gewährleisten.
+  - Ziehen Sie die Schultern aktiv zu den Ohren (Schulterelevation) und drücken Sie
+    die Schulterblätter nach vorne (Scapula-Protraktion), um eine stabile Schulterachse
+    zu bilden.
+  - 'Spannen Sie den gesamten Rumpf fest an: Bauchnabel zur Wirbelsäule ziehen, Rippen
+    nach unten. Vermeiden Sie ein Hohlkreuz.'
+  - Spannen Sie Gesäß und Oberschenkel aktiv an, um die Beine gestreckt und zusammenzuhalten.
+    Zehen sind gespitzt.
+  - Blicken Sie leicht nach vorne zwischen die Hände oder auf einen Punkt auf dem
+    Boden, um die Halswirbelsäule neutral zu halten.
+  - Atmen Sie ruhig und kontrolliert, versuchen Sie, die Spannung im Körper während
+    des Atems beizubehalten.
+  - Halten Sie eine gerade Linie von den Handgelenken bis zu den Fersen.
+  common_errors:
+  - '**Hohlkreuz:** Das Becken kippt nach vorne, der Rücken wird überstreckt. Dies
+    führt zu Instabilität und erhöhtem Druck auf die Lendenwirbelsäule. Ursache ist
+    oft mangelnde Rumpfspannung.'
+  - '**Ellenbogen gebeugt:** Die Arme sind nicht vollständig durchgestreckt, was die
+    Belastung auf die Ellenbogengelenke erhöht und die Effizienz des Stützdrucks verringert.'
+  - '**Schultern kollabiert:** Die Schultern sind nicht aktiv hochgedrückt oder die
+    Schulterblätter nicht ausreichend protrudiert, was zu einer instabilen Schulterbasis
+    führt und die Nackenmuskulatur überlastet.'
+  - '**Pike-Position (gebeugte Hüfte):** Die Hüfte ist zu stark gebeugt und die Beine
+    sind nicht vollständig über dem Körper, wodurch die gerade Linie verloren geht
+    und der Schwerpunkt verschoben wird. Mangelnde Gesäß- und Bauchspannung.'
+  - '**Beine gespreizt oder gebeugt:** Die Beine sind nicht zusammen und gestreckt,
+    was die Körperspannung reduziert und die Balance erschwert.'
+  - '**Falscher Blick:** Der Blick ist zu weit nach vorne oder zur Seite gerichtet,
+    was die Kopfposition verändert und die Balance negativ beeinflussen kann. Der
+    Blick sollte zwischen die Hände oder leicht nach vorne gerichtet sein.'
+  - '**Unzureichende Handposition:** Die Finger sind nicht gespreizt oder greifen
+    nicht aktiv, wodurch die Basis der Unterstützung verringert wird und die Stabilisierung
+    erschwert ist.'
+  movements:
+  - shoulder_flexion
+  - elbow_extension
+  - scapular_upward_rotation
+  - core_stability
+  - balance_control
+  - isometric_hold
+  - vertical_push
+  - hip_extension
+  - knee_extension
+  - ankle_plantarflexion
+  original_description:
+  - Handstand free standing by pressing arms into the ground and contracting core
+    and glutes
+  wger_id: 1472
+  wger_muscle_ids:
+    primary:
+    - 2
+    secondary: []
+  external_ids:
+    wger:
+    - 1472
+  tags:
+  - unreviewed
+  - wger
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-10-31T15:34:37.219549+00:00'
   schema_version: 2026-08-12.exercise-v1
-  origin:
-    type: manual
-    source_refs: {}
   review_state:
     status: draft
     ai_reviewed: false
+    enriched_at: '2026-10-31T15:34:37.219549+00:00'

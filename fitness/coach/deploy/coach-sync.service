@@ -9,7 +9,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=%h/fitness-dev
+WorkingDirectory=%h/dev/fitness-dev
 Environment=PYTHONUNBUFFERED=1
 ExecStart=%h/.local/share/uv/tools/fitness-agent/bin/python3 -m fitness.coach.sync run
 Restart=on-failure

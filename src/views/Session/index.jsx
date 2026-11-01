@@ -12,6 +12,7 @@ import { useSession } from './useSession';
 import SessionEditor from './SessionEditor';
 import SessionHistory from './SessionHistory';
 const PlanView = lazy(() => import('../Plan/index.jsx'));
+const Logbuch = lazy(() => import('../Logbuch/index.jsx'));
 import TodayPlan, { useTodayPlan } from './TodayPlan.jsx';
 import { isSessionGateActive } from '../../lib/sessionGate.js';
 import { useSessionGateLifecycle } from './useSessionGateLifecycle.js';
@@ -93,6 +94,15 @@ export default function Session({
   // Solo-Build: Plan lebt dort auf vos-plan.web.app (Link im Header-Menü).
   if (subTab === 'plan' && !IS_SOLO) {
     return <Suspense fallback={null}><PlanView routeView={planView} routeId={planId} onRouteChange={onPlanRouteChange} /></Suspense>;
+  }
+
+  // Logbuch = Makro-Gegenstück zum Einzelsession-Tab; lädt seine Historie selbst.
+  if (subTab === 'logbuch') {
+    return (
+      <Suspense fallback={null}>
+        <Logbuch onOpenSession={onOpenSession} onInspectExercise={onInspectExercise} onSubNav={onSubNav} />
+      </Suspense>
+    );
   }
 
   if (subTab === 'history') {

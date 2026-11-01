@@ -1,85 +1,29 @@
 name: approved_from_firebase
 description: Coach-approved via Firebase Inbox
 exercises:
-- aliases:
-  - Klimmzug
-  - Klimmzüge
-  - Klimmzug Obergriff
-  - Klimmzug im Obergriff
-  - Obergriff Klimmzug
-  - Pull-up
-  - Pull-up (Overhand Grip)
-  - Pull Up
-  - Pull Ups
-  - Pull-Up
-  - Pull-Ups
-  - Standard Pull-up
-  - Pronated Pull-up
-  source: approved
-  variations:
-  - assisted_pull_up
-  - band_assisted_pull_up
-  - weighted_pull_up
-  - wide_grip_pull_up
-  - neutral_grip_pull_up
-  - scapular_pull_up
-  common_errors:
-  - Mit Kipping, Beinschwung oder Hüftschwung arbeiten statt jede Wiederholung aus
-    dem Hang kontrolliert einzuleiten.
-  - Aus einem passiven Hang hart anziehen, ohne zuerst Spannung im Schultergürtel
-    aufzubauen.
-  - Die Schultern zu den Ohren ziehen und damit Scapula-Depression und stabile Schultermechanik
-    zu verlieren.
-  - Nur das Kinn irgendwie über die Stange bringen, während Brustkorb, Schulterposition
-    und Zuglinie kollabieren.
-  - 'Halbe Wiederholungen machen: unten nicht ausstrecken oder oben zu früh abbrechen.'
-  - Den Kopf nach vorne zur Stange schieben statt den Körper zur Stange zu ziehen.
-  - Ins Hohlkreuz fallen oder die Rippen aufklappen lassen, wodurch der Rumpf instabil
-    wird und die Kraftübertragung leidet.
-  - Zu breit greifen und dadurch ROM, Schultermechanik und saubere Ellbogenführung
-    unnötig verschlechtern.
-  id: '020'
-  tags:
-  - expert
-  - back
-  - pull
-  - bodyweight
-  - calisthenics
-  - vertical_pull
-  - grip_strength
-  primary_muscles:
-  - 201_latissimus_dorsi
-  - 207_teres_major
-  name: Klimmzug im Obergriff
-  stabilizers:
-  - 304_rotator_cuff
-  - 405_forearm_flexors
-  - 504_transverse_abdominis
-  - 501_rectus_abdominis
-  - 206_erector_spinae
-  - 507_multifidus
-  equipment:
-  - bodyweight
-  - pull_up_bar
+- secondary_muscles:
+  - 202c_trapezius_lower
+  - 202b_trapezius_middle
+  - 205_rhomboids
+  - 402_biceps_brachii
+  - 403_brachialis
+  - 404_brachioradialis
   origin:
-    type: merged_external
+    wger:
+      wger_id: 821
+      wger_muscle_ids:
+        secondary: []
+        primary: []
     yuhonas:
       secondary_muscles:
       - biceps
       - middle_back
       wger_muscle_ids:
-        primary: []
         secondary: []
-      display_name: Pullups
-      exercise_id: yuhonas_pullups
-      primary_muscles:
-      - lats
-      yuhonas_id: Pullups
+        primary: []
       tags:
       - unreviewed
       - yuhonas
-      equipment:
-      - body only
       coaching_notes:
       - 'Grab the pull-up bar with the palms facing forward using the prescribed grip.
         Note on grips: For a wide grip, your hands need to be spaced out at a distance
@@ -100,17 +44,29 @@ exercises:
         your torso back to the starting position when your arms are fully extended
         and the lats are fully stretched.
       - Repeat this motion for the prescribed amount of repetitions.
+      yuhonas_id: Pullups
       category: strength
+      display_name: Pullups
+      exercise_id: yuhonas_pullups
+      equipment:
+      - body only
+      primary_muscles:
+      - lats
     source_refs:
-      yuhonas:
-      - Pullups
       wger:
       - '821'
+      yuhonas:
+      - Pullups
+    type: merged_external
+  external_ids:
     wger:
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      wger_id: 821
+    - 821
+    yuhonas:
+    - Pullups
+  english: Pull-Up
+  display_name: Klimmzug im Obergriff
+  wger_id: 821
+  german: Klimmzug im Obergriff
   coaching_notes:
   - 'Starte aus einem aktiven Hang: Hals lang, Rippen unten, Schulterblätter zuerst
     sanft nach unten setzen statt passiv in den Schultern zu hängen.'
@@ -128,21 +84,62 @@ exercises:
     Schulterkontrolle, Kraftaufbau und Positionsgefühl im Hang.
   - Der Obergriff verlagert die Belastung etwas stärker auf Latissimus, Teres major
     und oberen Rücken und etwas weniger auf den Bizeps als beim Chin-Up.
+  category: pull
+  name: Klimmzug im Obergriff
+  aliases:
+  - Klimmzug
+  - Klimmzüge
+  - Klimmzug Obergriff
+  - Klimmzug im Obergriff
+  - Obergriff Klimmzug
+  - Pull-up
+  - Pull-up (Overhand Grip)
+  - Pull Up
+  - Pull Ups
+  - Pull-Up
+  - Pull-Ups
+  - Standard Pull-up
+  - Pronated Pull-up
+  search_aliases:
+  - Pullups
+  - yuhonas_pullups
+  - Klimmzug an Leiste
+  - wger_821
+  - Klimmzug im Obergriff
+  - Pull-Up
   schema_version: 2026-08-12.exercise-v1
-  _hash: ca0502729ca8a8da6745ff2289218fa2
-  secondary_muscles:
-  - 202c_trapezius_lower
-  - 202b_trapezius_middle
-  - 205_rhomboids
-  - 402_biceps_brachii
-  - 403_brachialis
-  - 404_brachioradialis
-  wger_muscle_ids:
-    primary: []
-    secondary: []
-  german: Klimmzug im Obergriff
-  display_name: Klimmzug im Obergriff
+  equipment:
+  - bodyweight
+  - pull_up_bar
   exercise_id: '020'
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 207_teres_major
+  stabilizers:
+  - 304_rotator_cuff
+  - 405_forearm_flexors
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  - 206_erector_spinae
+  - 507_multifidus
+  _hash: ca0502729ca8a8da6745ff2289218fa2
+  source: approved
+  variations:
+  - assisted_pull_up
+  - band_assisted_pull_up
+  - weighted_pull_up
+  - wide_grip_pull_up
+  - neutral_grip_pull_up
+  - scapular_pull_up
+  tags:
+  - expert
+  - back
+  - pull
+  - bodyweight
+  - calisthenics
+  - vertical_pull
+  - grip_strength
+  id: '020'
   review_state:
     status: approved
   movements:
@@ -152,160 +149,37 @@ exercises:
   - elbow_flexion
   - scapular_depression
   - scapular_downward_rotation
-  type: compound
-  external_ids:
-    yuhonas:
-    - Pullups
-    wger:
-    - 821
-  search_aliases:
-  - Pullups
-  - yuhonas_pullups
-  - Klimmzug an Leiste
-  - wger_821
-  - Klimmzug im Obergriff
-  - Pull-Up
-  wger_id: 821
-  english: Pull-Up
-  category: pull
-- aliases:
-  - Cable Rotator Cuff
-  - Shoulder External Rotation
-  - Cable Shoulder External Rotation
-  - Kabelzug-Außenrotation
-  - Außenrotation Schulter am Kabelzug
-  german: Außenrotation am Kabelzug
-  variations:
-  - Cable External Rotation with Towel Support
-  - Half-Kneeling Cable External Rotation
-  - Standing Single-Arm Cable External Rotation
-  id: cable_external_rotation
   common_errors:
-  - Zu hohes Gewicht, sodass die Bewegung über Schwung statt über die Außenrotatoren
-    erzeugt wird.
-  - Der Ellenbogen löst sich vom Oberkörper oder wandert nach hinten, wodurch die
-    Übung ihre Zielmuskulatur verfehlt.
-  - Der Oberkörper rotiert mit, um zusätzliche Bewegungsamplitude vorzutäuschen.
-  - Die Schulter zieht nach oben Richtung Ohr, anstatt in einer stabilen, tiefen Position
-    zu bleiben.
-  - Die exzentrische Phase wird fallengelassen, statt den Griff kontrolliert zurückzuführen.
-  - Das Handgelenk knickt ab oder der Griff wird verkrampft festgehalten, obwohl die
-    Bewegung aus der Schulter kommen soll.
-  - Zu weit in die Endposition zu drehen, obwohl die Spannung nur noch über Kompensation
-    gehalten werden kann.
-  - Den Oberarm nach vorn schieben oder das Schulterblatt nach vorn kippen lassen,
-    statt den Humeruskopf zentriert zu kontrollieren.
-  exercise_id: cable_external_rotation
-  review_state:
-    status: approved
-  name: External Cable Rotations
-  stabilizers:
-  - 305_supraspinatus
-  - 308_subscapularis
-  - 202b_trapezius_middle
-  - 202c_trapezius_lower
-  - 205_rhomboids
-  - 502_obliquus_externus
-  - 503_obliquus_internus
-  - 504_transverse_abdominis
-  equipment:
-  - cable
-  coaching_notes:
-  - Stellen Sie sich seitlich zum Kabelzug, sodass der arbeitende Arm weiter vom Turm
-    entfernt ist, und positionieren Sie den Griff etwa auf Ellenbogenhöhe.
-  - Ziehen Sie die Schulter sanft nach hinten unten und halten Sie das Schulterblatt
-    ruhig, ohne es während der Bewegung nach vorn kippen zu lassen.
-  - Klemmen Sie den Oberarm eng an den Körper und halten Sie den Ellenbogen konstant
-    bei ungefähr 90 Grad Beugung.
-  - Starten Sie aus der Innenrotation und drehen Sie den Unterarm kontrolliert nach
-    außen, während Oberarm, Schulter und Rumpf stabil bleiben.
-  - Bewegen Sie nur im Schultergelenk; denken Sie daran, den Oberarmkopf zentriert
-    in der Pfanne zu halten statt Reichweite über Ausweichbewegungen zu erzwingen.
-  - Arbeiten Sie mit leichtem bis moderatem Widerstand und einer sauberen Exzentrik,
-    damit die Rotatorenmanschette die gesamte Bewegung kontrollieren kann.
-  - Atmen Sie ruhig aus, wenn Sie nach außen rotieren, und spannen Sie Bauch und Rumpf
-    leicht an, um ein Mitdrehen des Oberkörpers zu verhindern.
-  - Beenden Sie die Wiederholung dort, wo Sie die Außenrotation noch ohne Schulterhochziehen,
-    Hohlkreuz oder Ellbogenverlust sauber kontrollieren können.
-  source: approved
-  schema_version: 2026-08-12.exercise-v1
-  _hash: da9f6916ef56a9099e40d3d117ddd078
-  secondary_muscles:
+  - Mit Kipping, Beinschwung oder Hüftschwung arbeiten statt jede Wiederholung aus
+    dem Hang kontrolliert einzuleiten.
+  - Aus einem passiven Hang hart anziehen, ohne zuerst Spannung im Schultergürtel
+    aufzubauen.
+  - Die Schultern zu den Ohren ziehen und damit Scapula-Depression und stabile Schultermechanik
+    zu verlieren.
+  - Nur das Kinn irgendwie über die Stange bringen, während Brustkorb, Schulterposition
+    und Zuglinie kollabieren.
+  - 'Halbe Wiederholungen machen: unten nicht ausstrecken oder oben zu früh abbrechen.'
+  - Den Kopf nach vorne zur Stange schieben statt den Körper zur Stange zu ziehen.
+  - Ins Hohlkreuz fallen oder die Rippen aufklappen lassen, wodurch der Rumpf instabil
+    wird und die Kraftübertragung leidet.
+  - Zu breit greifen und dadurch ROM, Schultermechanik und saubere Ellbogenführung
+    unnötig verschlechtern.
+  type: compound
+  wger_muscle_ids:
+    secondary: []
+    primary: []
+- secondary_muscles:
   - 303_posterior_deltoid
-  tags:
-  - rotator_cuff
-  - shoulder_health
-  - rehabilitation
-  - prehab
-  - athletic_performance
-  - shoulders
-  - shoulder_external_rotation
-  - infraspinatus
-  - teres_minor
-  - unreviewed
-  movements:
-  - shoulder_external_rotation
-  - glenohumeral_external_rotation
-  - scapular_stability
-  - anti_trunk_rotation
-  - elbow_isometric_flexion
-  - unilateral_control
-  - rotator_cuff
-  display_name: Außenrotation am Kabelzug
   origin:
-    type: manual
-    yuhonas:
-      secondary_muscles: []
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: External Rotation
-      yuhonas_id: External_Rotation
-      primary_muscles:
-      - shoulders
-      exercise_id: yuhonas_external_rotation
-      tags:
-      - unreviewed
-      - yuhonas
-      equipment:
-      - dumbbell
-      coaching_notes:
-      - Lie sideways on a flat bench with one arm holding a dumbbell and the other
-        hand on top of the bench folded so that you can rest your head on it.
-      - 'Bend the elbows of the arm holding the dumbbell so that it creates a 90-degree
-        angle between the upper arm and the forearm. Tip: Keep the arm parallel to
-        your torso.'
-      - 'Now bend the elbow while keeping the upper arm stationary. In this manner,
-        the forearm will be parallel to the floor and perpendicular to your torso
-        (Tip: So the forearm will be directly in front of you). The upper arm will
-        be stationary by your torso and should be parallel to the floor (aligned with
-        your torso at all times). This will be your starting position.'
-      - As you breathe out, externally rotate your forearm so that the dumbbell is
-        lifted up in a semicircle motion as you maintain the 90 degree angle bend
-        between the upper arms and the forearm. You will continue this external rotation
-        until the forearm is perpendicular to the floor and the torso pointing towards
-        the ceiling. At this point you will hold the contraction for a second.
-      - As you breathe in, slowly go back to the starting position.
-      - Repeat for the recommended amount of repetitions and then switch to the other
-        arm.
-      category: strength
-    source_refs: {}
     wger:
       secondary_muscles: []
-      wger_muscle_ids:
-        primary:
-        - 2
-        secondary: []
-      display_name: Außenrotation am Kabelzug
-      german: Außenrotation am Kabelzug
-      exercise_id: wger_142
       primary_muscles:
       - 304_rotator_cuff
+      exercise_id: wger_142
       tags:
       - unreviewed
       - wger
-      wger_id: 142
-      equipment: []
+      category: shoulders
       coaching_notes:
       - 'Schritte:
 
@@ -325,11 +199,82 @@ exercises:
         zurück.
 
         Wiederhole dies für so viele Wiederholungen und Sätze wie gewünscht.'
-      category: shoulders
-  primary_muscles:
-  - 306_infraspinatus
-  - 307_teres_minor
-  type: isolation
+      display_name: Außenrotation am Kabelzug
+      wger_id: 142
+      equipment: []
+      german: Außenrotation am Kabelzug
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 2
+    source_refs: {}
+    yuhonas:
+      secondary_muscles: []
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+      tags:
+      - unreviewed
+      - yuhonas
+      coaching_notes:
+      - Lie sideways on a flat bench with one arm holding a dumbbell and the other
+        hand on top of the bench folded so that you can rest your head on it.
+      - 'Bend the elbows of the arm holding the dumbbell so that it creates a 90-degree
+        angle between the upper arm and the forearm. Tip: Keep the arm parallel to
+        your torso.'
+      - 'Now bend the elbow while keeping the upper arm stationary. In this manner,
+        the forearm will be parallel to the floor and perpendicular to your torso
+        (Tip: So the forearm will be directly in front of you). The upper arm will
+        be stationary by your torso and should be parallel to the floor (aligned with
+        your torso at all times). This will be your starting position.'
+      - As you breathe out, externally rotate your forearm so that the dumbbell is
+        lifted up in a semicircle motion as you maintain the 90 degree angle bend
+        between the upper arms and the forearm. You will continue this external rotation
+        until the forearm is perpendicular to the floor and the torso pointing towards
+        the ceiling. At this point you will hold the contraction for a second.
+      - As you breathe in, slowly go back to the starting position.
+      - Repeat for the recommended amount of repetitions and then switch to the other
+        arm.
+      yuhonas_id: External_Rotation
+      category: strength
+      display_name: External Rotation
+      exercise_id: yuhonas_external_rotation
+      equipment:
+      - dumbbell
+      primary_muscles:
+      - shoulders
+    type: manual
+  review_state:
+    status: approved
+  english: Cable External Rotation
+  _hash: da9f6916ef56a9099e40d3d117ddd078
+  german: Außenrotation am Kabelzug
+  category: pull
+  coaching_notes:
+  - Stellen Sie sich seitlich zum Kabelzug, sodass der arbeitende Arm weiter vom Turm
+    entfernt ist, und positionieren Sie den Griff etwa auf Ellenbogenhöhe.
+  - Ziehen Sie die Schulter sanft nach hinten unten und halten Sie das Schulterblatt
+    ruhig, ohne es während der Bewegung nach vorn kippen zu lassen.
+  - Klemmen Sie den Oberarm eng an den Körper und halten Sie den Ellenbogen konstant
+    bei ungefähr 90 Grad Beugung.
+  - Starten Sie aus der Innenrotation und drehen Sie den Unterarm kontrolliert nach
+    außen, während Oberarm, Schulter und Rumpf stabil bleiben.
+  - Bewegen Sie nur im Schultergelenk; denken Sie daran, den Oberarmkopf zentriert
+    in der Pfanne zu halten statt Reichweite über Ausweichbewegungen zu erzwingen.
+  - Arbeiten Sie mit leichtem bis moderatem Widerstand und einer sauberen Exzentrik,
+    damit die Rotatorenmanschette die gesamte Bewegung kontrollieren kann.
+  - Atmen Sie ruhig aus, wenn Sie nach außen rotieren, und spannen Sie Bauch und Rumpf
+    leicht an, um ein Mitdrehen des Oberkörpers zu verhindern.
+  - Beenden Sie die Wiederholung dort, wo Sie die Außenrotation noch ohne Schulterhochziehen,
+    Hohlkreuz oder Ellbogenverlust sauber kontrollieren können.
+  name: External Cable Rotations
+  aliases:
+  - Cable Rotator Cuff
+  - Shoulder External Rotation
+  - Cable Shoulder External Rotation
+  - Kabelzug-Außenrotation
+  - Außenrotation Schulter am Kabelzug
+  exercise_id: cable_external_rotation
   search_aliases:
   - Außenrotation am Kabelzug
   - Cable External Rotation
@@ -337,91 +282,65 @@ exercises:
   - Shoulder External Rotation
   - Cable Shoulder External Rotation
   - Kabelzug-Außenrotation
-  wger_id: null
-  english: Cable External Rotation
-  category: pull
-- aliases:
-  - Olympic Snatch
-  - Full Snatch
-  - Squat Snatch
-  - Reissen
-  common_errors:
-  - Die Hüfte schießt direkt vom Boden nach oben, während die Schultern zurückbleiben.
-    Dadurch verlierst du den Beindruck im ersten Zug und die Stange driftet früh nach
-    vorn.
-  - Zu frühes Armziehen vor der vollständigen Beinstreckung nimmt der Bewegung Explosivität.
-    Der Snatch wird dann ein Armzug statt einer kraftvollen Ganzkörperstreckung.
-  - Die Stange wird im zweiten Zug vom Körper weggeschlagen. Das verlängert den Hebel,
-    verschlechtert den Lockout über Kopf und macht den Catch instabil.
-  - Es wird nach oben gesprungen, aber nicht aktiv unter die Hantel gezogen. Das Resultat
-    ist ein zu hoher Catch, fehlende Tiefe und häufig ein Nachdrücken oder Verlieren
-    nach vorn.
-  - 'Im Catch fehlt aktiver Schultergürtel-Einsatz: Ellbogen bleiben weich, die Schulterblätter
-    rotieren nicht sauber nach oben und die Hantel sinkt hinter oder vor die stabile
-    Linie.'
-  - Das Gewicht verlagert sich im Empfang auf die Zehen oder Fersen statt über den
-    Mittelfuß. Dadurch wird die Überkopfkniebeuge wackelig und die Hantelbahn schwer
-    kontrollierbar.
-  - Der Blick geht zu früh hoch oder der Brustkorb kollabiert in der tiefen Position.
-    Beides verschlechtert die Rumpfspannung und destabilisiert die Hantel über Kopf.
-  variations: []
-  german: Reißen
-  source: approved
-  exercise_id: clean_snatch
+  equipment:
+  - cable
+  schema_version: 2026-08-12.exercise-v1
   primary_muscles:
-  - 601_quadriceps_femoris
-  - 603_gluteus_maximus
-  - 202a_trapezius_upper
-  - 701_gastrocnemius
-  name: Snatch
+  - 306_infraspinatus
+  - 307_teres_minor
   stabilizers:
-  - 304_rotator_cuff
-  - 105_serratus_anterior
-  - 501_rectus_abdominis
+  - 305_supraspinatus
+  - 308_subscapularis
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 205_rhomboids
   - 502_obliquus_externus
   - 503_obliquus_internus
   - 504_transverse_abdominis
-  - 507_multifidus
-  - 608_gluteus_medius
-  - 609_gluteus_minimus
-  equipment:
-  - barbell
-  coaching_notes:
-  - 'Starte mit dem ganzen Fuß im Druck und halte den Oberkörper über dem ersten Zug
-    ruhig: Die Hüfte und Schultern steigen zunächst gemeinsam, damit der Rückenwinkel
-    bis knapp über das Knie stabil bleibt.'
-  - Führe die Stange im ersten und zweiten Zug eng am Körper nach oben. Aktive Lat-Spannung
-    hält die Bahn vertikal und verhindert, dass die Hantel nach vorn wegschwingt.
-  - Beschleunige nicht zu früh mit den Armen. Erst wenn Hüfte, Knie und Sprunggelenk
-    explosiv gestreckt sind, folgt der aktive Zug nach oben und unmittelbar danach
-    das schnelle Untertauchen unter die Stange.
-  - Denke beim Umsetzen unter die Hantel nicht an 'hochziehen', sondern an 'schnell
-    nach unten'. Der erfolgreiche Snatch wird vor allem durch präzises Timing und
-    aggressives Unterziehen entschieden, nicht durch Armkraft.
-  - Fange die Hantel mit aktivem Lockout, nach oben rotierenden Schulterblättern und
-    stabilem Rumpf. Die Achseln zeigen leicht nach vorn, damit Schultergürtel und
-    Rotatorenmanschette die Überkopfposition sicher verriegeln.
-  - Im Catch sofort Spannung in Rumpf und Hüfte halten und die Tiefe kontrolliert
-    annehmen. Eine stabile tiefe Überkopfkniebeuge ist Teil der Zielposition, nicht
-    nur das Ende des Abfangens.
-  - Stehe aus der tiefen Position erst auf, wenn die Hantel vollständig kontrolliert
-    über dem Mittelfuß balanciert ist. Priorität hat Stabilität über der Körpermitte,
-    nicht das übereilte Aufrichten.
+  source: approved
+  variations:
+  - Cable External Rotation with Towel Support
+  - Half-Kneeling Cable External Rotation
+  - Standing Single-Arm Cable External Rotation
+  tags:
+  - rotator_cuff
+  - shoulder_health
+  - rehabilitation
+  - prehab
+  - athletic_performance
+  - shoulders
+  - shoulder_external_rotation
+  - infraspinatus
+  - teres_minor
+  - unreviewed
+  id: cable_external_rotation
+  wger_id: null
   movements:
-  - olympic_pull
-  - triple_extension
-  - hip_extension
-  - knee_extension
-  - ankle_plantarflexion
-  - rapid_pull_under
-  - overhead_catch
-  - deep_squat
-  - shoulder_abduction
-  - scapular_upward_rotation
-  - overhead_stability
-  schema_version: 2026-08-12.exercise-v1
-  _hash: 3b9e96dc59b29bd6af23e0b4d515d695
-  secondary_muscles:
+  - shoulder_external_rotation
+  - glenohumeral_external_rotation
+  - scapular_stability
+  - anti_trunk_rotation
+  - elbow_isometric_flexion
+  - unilateral_control
+  - rotator_cuff
+  common_errors:
+  - Zu hohes Gewicht, sodass die Bewegung über Schwung statt über die Außenrotatoren
+    erzeugt wird.
+  - Der Ellenbogen löst sich vom Oberkörper oder wandert nach hinten, wodurch die
+    Übung ihre Zielmuskulatur verfehlt.
+  - Der Oberkörper rotiert mit, um zusätzliche Bewegungsamplitude vorzutäuschen.
+  - Die Schulter zieht nach oben Richtung Ohr, anstatt in einer stabilen, tiefen Position
+    zu bleiben.
+  - Die exzentrische Phase wird fallengelassen, statt den Griff kontrolliert zurückzuführen.
+  - Das Handgelenk knickt ab oder der Griff wird verkrampft festgehalten, obwohl die
+    Bewegung aus der Schulter kommen soll.
+  - Zu weit in die Endposition zu drehen, obwohl die Spannung nur noch über Kompensation
+    gehalten werden kann.
+  - Den Oberarm nach vorn schieben oder das Schulterblatt nach vorn kippen lassen,
+    statt den Humeruskopf zentriert zu kontrollieren.
+  type: isolation
+  display_name: Außenrotation am Kabelzug
+- secondary_muscles:
   - 604a_biceps_femoris
   - 604b_semitendinosus
   - 604c_semimembranosus
@@ -431,23 +350,32 @@ exercises:
   - 302_lateral_deltoid
   - 202b_trapezius_middle
   - 202c_trapezius_lower
-  tags:
-  - olympic_lift
-  - explosive
-  - power
-  - full_body
-  - strength
-  - weightlifting
-  - posterior_chain
-  - legs
-  - olympic_pull
-  - unreviewed
-  id: clean_snatch
-  display_name: Reißen
-  review_state:
-    status: approved
   origin:
-    type: manual
+    wger:
+      secondary_muscles: []
+      primary_muscles:
+      - 301_anterior_deltoid
+      exercise_id: wger_599
+      tags:
+      - unreviewed
+      - wger
+      coaching_notes:
+      - Stelle dich mit hüftbreitem Stand und den Schienbeinen an der Stange auf.
+        Greife die Stange im doppelten Schulterbreiten-Abstand und drücke, während
+        du den unteren Rücken gerade hältst, die Fersen in den Boden, um die Stange
+        anzuheben. Wenn sie über deinen Knien ist, streckst du explosiv die Hüfte
+        und ziehst die Schultern hoch. Lass den Schwung das Gewicht über den Kopf
+        tragen.
+      category: shoulders
+      german: Reißen (Snatch)
+      wger_id: 599
+      equipment:
+      - barbell
+      display_name: Reißen (Snatch)
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 2
     yuhonas:
       secondary_muscles:
       - biceps
@@ -458,18 +386,13 @@ exercises:
       - traps
       - triceps
       wger_muscle_ids:
-        primary: []
         secondary: []
-      display_name: Snatch
+        primary: []
       tags:
       - unreviewed
       - yuhonas
-      primary_muscles:
-      - quadriceps
+      category: olympic weightlifting
       yuhonas_id: Snatch
-      exercise_id: yuhonas_snatch
-      equipment:
-      - barbell
       coaching_notes:
       - Place your feet at a shoulder width stance with the barbell resting right
         above the connection between the toes and the rest of the foot.
@@ -491,34 +414,53 @@ exercises:
       - Finalize the movement by rising up out of the squat position to finish the
         lift. At the end of the lift both feet should be on line and the arms fully
         extended holding the barbell overhead.
-      category: olympic weightlifting
-    source_refs: {}
-    wger:
-      secondary_muscles: []
-      wger_muscle_ids:
-        primary:
-        - 2
-        secondary: []
-      display_name: Reißen (Snatch)
-      german: Reißen (Snatch)
-      tags:
-      - unreviewed
-      - wger
-      primary_muscles:
-      - 301_anterior_deltoid
-      exercise_id: wger_599
-      wger_id: 599
+      display_name: Snatch
+      exercise_id: yuhonas_snatch
       equipment:
       - barbell
-      coaching_notes:
-      - Stelle dich mit hüftbreitem Stand und den Schienbeinen an der Stange auf.
-        Greife die Stange im doppelten Schulterbreiten-Abstand und drücke, während
-        du den unteren Rücken gerade hältst, die Fersen in den Boden, um die Stange
-        anzuheben. Wenn sie über deinen Knien ist, streckst du explosiv die Hüfte
-        und ziehst die Schultern hoch. Lass den Schwung das Gewicht über den Kopf
-        tragen.
-      category: shoulders
+      primary_muscles:
+      - quadriceps
+    source_refs: {}
+    type: manual
   type: compound
+  english: Snatch
+  display_name: Reißen
+  review_state:
+    status: approved
+  category: pull
+  coaching_notes:
+  - 'Starte mit dem ganzen Fuß im Druck und halte den Oberkörper über dem ersten Zug
+    ruhig: Die Hüfte und Schultern steigen zunächst gemeinsam, damit der Rückenwinkel
+    bis knapp über das Knie stabil bleibt.'
+  - Führe die Stange im ersten und zweiten Zug eng am Körper nach oben. Aktive Lat-Spannung
+    hält die Bahn vertikal und verhindert, dass die Hantel nach vorn wegschwingt.
+  - Beschleunige nicht zu früh mit den Armen. Erst wenn Hüfte, Knie und Sprunggelenk
+    explosiv gestreckt sind, folgt der aktive Zug nach oben und unmittelbar danach
+    das schnelle Untertauchen unter die Stange.
+  - Denke beim Umsetzen unter die Hantel nicht an 'hochziehen', sondern an 'schnell
+    nach unten'. Der erfolgreiche Snatch wird vor allem durch präzises Timing und
+    aggressives Unterziehen entschieden, nicht durch Armkraft.
+  - Fange die Hantel mit aktivem Lockout, nach oben rotierenden Schulterblättern und
+    stabilem Rumpf. Die Achseln zeigen leicht nach vorn, damit Schultergürtel und
+    Rotatorenmanschette die Überkopfposition sicher verriegeln.
+  - Im Catch sofort Spannung in Rumpf und Hüfte halten und die Tiefe kontrolliert
+    annehmen. Eine stabile tiefe Überkopfkniebeuge ist Teil der Zielposition, nicht
+    nur das Ende des Abfangens.
+  - Stehe aus der tiefen Position erst auf, wenn die Hantel vollständig kontrolliert
+    über dem Mittelfuß balanciert ist. Priorität hat Stabilität über der Körpermitte,
+    nicht das übereilte Aufrichten.
+  schema_version: 2026-08-12.exercise-v1
+  stabilizers:
+  - 304_rotator_cuff
+  - 105_serratus_anterior
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 504_transverse_abdominis
+  - 507_multifidus
+  - 608_gluteus_medius
+  - 609_gluteus_minimus
+  exercise_id: clean_snatch
   search_aliases:
   - Reißen
   - Reissen
@@ -527,49 +469,132 @@ exercises:
   - Full Snatch
   - Squat Snatch
   - Clean Snatch
-  wger_id: null
-  english: Snatch
-  category: pull
-- aliases:
-  - kabel face pull
-  - face pull kabelzug
-  - seilzug zum gesicht
-  - rope face pull
-  - cable face pull
-  id: face_pull
+  equipment:
+  - barbell
+  name: Snatch
+  primary_muscles:
+  - 601_quadriceps_femoris
+  - 603_gluteus_maximus
+  - 202a_trapezius_upper
+  - 701_gastrocnemius
+  aliases:
+  - Olympic Snatch
+  - Full Snatch
+  - Squat Snatch
+  - Reissen
+  source: approved
+  tags:
+  - olympic_lift
+  - explosive
+  - power
+  - full_body
+  - strength
+  - weightlifting
+  - posterior_chain
+  - legs
+  - olympic_pull
+  - unreviewed
   variations: []
-  german: Face Pull am Kabel
+  id: clean_snatch
+  german: Reißen
+  movements:
+  - olympic_pull
+  - triple_extension
+  - hip_extension
+  - knee_extension
+  - ankle_plantarflexion
+  - rapid_pull_under
+  - overhead_catch
+  - deep_squat
+  - shoulder_abduction
+  - scapular_upward_rotation
+  - overhead_stability
   common_errors:
-  - Zu viel Gewicht zu wählen und den Satz mit Schwung aus dem Oberkörper oder mit
-    einem Rücklehnen abzuschließen, statt die Zugbewegung muskulär zu kontrollieren.
-  - Die Ellbogen absinken zu lassen, wodurch die Bewegung mehr zu einem normalen Rudern
-    wird und der Reiz auf hintere Schulter und Außenrotatoren deutlich sinkt.
-  - Das Seil nur zur Nase zu ziehen, ohne die Hände in der Endposition auseinanderzuführen;
-    dadurch geht ein wesentlicher Teil der Außenrotation verloren.
-  - Die Schultern zu den Ohren hochzuziehen, statt den Nacken lang zu halten und die
-    Schulterblätter kontrolliert nach hinten-unten arbeiten zu lassen.
-  - Den unteren Rücken zu überstrecken oder die Rippen aufzufächern, um mehr Bewegungsweg
-    vorzutäuschen; halten Sie Rumpf und Becken stabil.
-  - Die exzentrische Phase fallen zu lassen und die Spannung zwischen den Wiederholungen
-    komplett zu verlieren, anstatt die Rückführung bewusst zu bremsen.
-  - Den Kabelzug zu tief einzustellen, sodass der Bewegungswinkel nicht mehr zur Zielmuskulatur
-    passt und die Übung biomechanisch eher zu einem tiefen Ruderzug wird.
-  exercise_id: face_pull
+  - Die Hüfte schießt direkt vom Boden nach oben, während die Schultern zurückbleiben.
+    Dadurch verlierst du den Beindruck im ersten Zug und die Stange driftet früh nach
+    vorn.
+  - Zu frühes Armziehen vor der vollständigen Beinstreckung nimmt der Bewegung Explosivität.
+    Der Snatch wird dann ein Armzug statt einer kraftvollen Ganzkörperstreckung.
+  - Die Stange wird im zweiten Zug vom Körper weggeschlagen. Das verlängert den Hebel,
+    verschlechtert den Lockout über Kopf und macht den Catch instabil.
+  - Es wird nach oben gesprungen, aber nicht aktiv unter die Hantel gezogen. Das Resultat
+    ist ein zu hoher Catch, fehlende Tiefe und häufig ein Nachdrücken oder Verlieren
+    nach vorn.
+  - 'Im Catch fehlt aktiver Schultergürtel-Einsatz: Ellbogen bleiben weich, die Schulterblätter
+    rotieren nicht sauber nach oben und die Hantel sinkt hinter oder vor die stabile
+    Linie.'
+  - Das Gewicht verlagert sich im Empfang auf die Zehen oder Fersen statt über den
+    Mittelfuß. Dadurch wird die Überkopfkniebeuge wackelig und die Hantelbahn schwer
+    kontrollierbar.
+  - Der Blick geht zu früh hoch oder der Brustkorb kollabiert in der tiefen Position.
+    Beides verschlechtert die Rumpfspannung und destabilisiert die Hantel über Kopf.
+  _hash: 3b9e96dc59b29bd6af23e0b4d515d695
+  wger_id: null
+- displayName: Face Pull am Kabel
+  origin:
+    wger:
+      secondary_muscles: []
+      wger_id: 222
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 9
+      tags:
+      - unreviewed
+      - wger
+      coaching_notes:
+      - 'Die Übung trainiert die Rückseite der Schulter.
+
+        Die Ausführung erfolgt mit dem Seil am Kabelzug. Beide Enden des Seils in
+        jeweils einer Hand halten, dabei die Schultern maximal vorwärts strecken und
+        das Kabel leicht gespannt halten (Ruheposition).
+
+        Dann das Seil auf das Gesicht zuziehen. Die Hände bewegen sich dabei so weit
+        wie möglich seitlicht am Kopf vorbei, die Schulter rotiert also nach hinten/außen.'
+      category: shoulders
+      display_name: Face Pulls
+      german: Face Pulls
+      equipment: []
+      exercise_id: wger_222
+      primary_muscles:
+      - 202a_trapezius_upper
+      - 202b_trapezius_middle
+      - 202c_trapezius_lower
+      - 303_posterior_deltoid
+    source_refs: {}
+    yuhonas:
+      secondary_muscles:
+      - middle_back
+      primary_muscles:
+      - shoulders
+      tags:
+      - unreviewed
+      - yuhonas
+      coaching_notes:
+      - Facing a high pulley with a rope or dual handles attached, pull the weight
+        directly towards your face, separating your hands as you do so. Keep your
+        upper arms parallel to the ground.
+      yuhonas_id: Face_Pull
+      category: strength
+      exercise_id: yuhonas_face_pull
+      display_name: Face Pull
+      equipment:
+      - cable
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+    type: manual
+  type: compound
+  secondaryMuscles:
+  - 306_infraspinatus
+  - 307_teres_minor
+  - 202c_trapezius_lower
+  - 403_brachialis
+  - 404_brachioradialis
+  english: Face Pull
   review_state:
     status: approved
-  name: Face Pull
-  stabilizers:
-  - 504_transverse_abdominis
-  - 206_erector_spinae
-  - 507_multifidus
-  equipment:
-  - cable
-  movements:
-  - horizontal
-  - shoulder_external_rotation
-  - shoulder_horizontal_abduction
-  - scapular_retraction
-  - elbow_flexion
+  german: Face Pull am Kabel
   coaching_notes:
   - Stellen Sie den Kabelzug ungefähr auf Augen- bis Stirnhöhe ein und verwenden Sie
     idealerweise ein Seil, damit sich die Hände am Ende der Zugphase frei nach außen
@@ -590,14 +615,41 @@ exercises:
   - Wählen Sie ein Gewicht, bei dem Sie die Ellbogenposition, die Außenrotation und
     die Schulterblattkontrolle sauber halten können; beim Face Pull ist Ausführung
     wichtiger als Last.
+  category: pull
   schema_version: 2026-08-12.exercise-v1
-  _hash: 92c3f8582258be5bba167caa93268a95
+  stabilizers:
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  - 507_multifidus
+  search_aliases:
+  - Face Pull
+  - Face Pulls
+  - Face Pull am Kabel
+  - Kabel Face Pull
+  - Rope Face Pull
+  - Cable Face Pull
+  aliases:
+  - kabel face pull
+  - face pull kabelzug
+  - seilzug zum gesicht
+  - rope face pull
+  - cable face pull
+  equipment:
+  - cable
+  name: Face Pull
+  primary_muscles:
+  - 303_posterior_deltoid
+  - 202b_trapezius_middle
+  - 205_rhomboids
+  exercise_id: face_pull
   secondary_muscles:
   - 306_infraspinatus
   - 307_teres_minor
   - 202c_trapezius_lower
   - 403_brachialis
   - 404_brachioradialis
+  source: approved
+  variations: []
   tags:
   - schultern
   - oberer_ruecken
@@ -608,139 +660,122 @@ exercises:
   - cable
   - horizontal_pull
   - unreviewed
-  secondaryMuscles:
-  - 306_infraspinatus
-  - 307_teres_minor
-  - 202c_trapezius_lower
-  - 403_brachialis
-  - 404_brachioradialis
+  id: face_pull
   display_name: Face Pull am Kabel
-  origin:
-    type: manual
-    yuhonas:
-      secondary_muscles:
-      - middle_back
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Face Pull
-      tags:
-      - unreviewed
-      - yuhonas
-      primary_muscles:
-      - shoulders
-      exercise_id: yuhonas_face_pull
-      yuhonas_id: Face_Pull
-      equipment:
-      - cable
-      coaching_notes:
-      - Facing a high pulley with a rope or dual handles attached, pull the weight
-        directly towards your face, separating your hands as you do so. Keep your
-        upper arms parallel to the ground.
-      category: strength
-    source_refs: {}
-    wger:
-      secondary_muscles: []
-      wger_muscle_ids:
-        primary:
-        - 9
-        secondary: []
-      display_name: Face Pulls
-      german: Face Pulls
-      tags:
-      - unreviewed
-      - wger
-      primary_muscles:
-      - 202a_trapezius_upper
-      - 202b_trapezius_middle
-      - 202c_trapezius_lower
-      - 303_posterior_deltoid
-      exercise_id: wger_222
-      wger_id: 222
-      equipment: []
-      coaching_notes:
-      - 'Die Übung trainiert die Rückseite der Schulter.
-
-        Die Ausführung erfolgt mit dem Seil am Kabelzug. Beide Enden des Seils in
-        jeweils einer Hand halten, dabei die Schultern maximal vorwärts strecken und
-        das Kabel leicht gespannt halten (Ruheposition).
-
-        Dann das Seil auf das Gesicht zuziehen. Die Hände bewegen sich dabei so weit
-        wie möglich seitlicht am Kopf vorbei, die Schulter rotiert also nach hinten/außen.'
-      category: shoulders
-  displayName: Face Pull am Kabel
-  source: approved
-  type: compound
-  primary_muscles:
-  - 303_posterior_deltoid
-  - 202b_trapezius_middle
-  - 205_rhomboids
-  search_aliases:
-  - Face Pull
-  - Face Pulls
-  - Face Pull am Kabel
-  - Kabel Face Pull
-  - Rope Face Pull
-  - Cable Face Pull
+  movements:
+  - horizontal
+  - shoulder_external_rotation
+  - shoulder_horizontal_abduction
+  - scapular_retraction
+  - elbow_flexion
+  common_errors:
+  - Zu viel Gewicht zu wählen und den Satz mit Schwung aus dem Oberkörper oder mit
+    einem Rücklehnen abzuschließen, statt die Zugbewegung muskulär zu kontrollieren.
+  - Die Ellbogen absinken zu lassen, wodurch die Bewegung mehr zu einem normalen Rudern
+    wird und der Reiz auf hintere Schulter und Außenrotatoren deutlich sinkt.
+  - Das Seil nur zur Nase zu ziehen, ohne die Hände in der Endposition auseinanderzuführen;
+    dadurch geht ein wesentlicher Teil der Außenrotation verloren.
+  - Die Schultern zu den Ohren hochzuziehen, statt den Nacken lang zu halten und die
+    Schulterblätter kontrolliert nach hinten-unten arbeiten zu lassen.
+  - Den unteren Rücken zu überstrecken oder die Rippen aufzufächern, um mehr Bewegungsweg
+    vorzutäuschen; halten Sie Rumpf und Becken stabil.
+  - Die exzentrische Phase fallen zu lassen und die Spannung zwischen den Wiederholungen
+    komplett zu verlieren, anstatt die Rückführung bewusst zu bremsen.
+  - Den Kabelzug zu tief einzustellen, sodass der Bewegungswinkel nicht mehr zur Zielmuskulatur
+    passt und die Übung biomechanisch eher zu einem tiefen Ruderzug wird.
+  _hash: 92c3f8582258be5bba167caa93268a95
   primaryMuscles:
   - 303_posterior_deltoid
   - 202b_trapezius_middle
   - 205_rhomboids
-  english: Face Pull
-  category: pull
-- aliases:
-  - Leg Press Machine
-  - Machine Leg Press
-  - Plate-Loaded Leg Press
-  - 45 Degree Leg Press
-  - Schlitten-Beinpresse
-  id: leg_press
-  variations: []
-  german: Beinpresse
-  common_errors:
-  - Das Becken kippt im unteren Punkt nach hinten und der untere Rücken löst sich
-    von der Lehne, wodurch unnötiger Stress auf die Lendenwirbelsäule entsteht.
-  - Die Knie fallen nach innen oder weichen unkontrolliert nach außen aus, anstatt
-    sauber in Linie mit dem Fuß zu laufen.
-  - Der Bewegungsumfang wird künstlich verkürzt, obwohl mehr saubere Tiefe möglich
-    wäre, sodass Trainingsreiz und Gelenkkontrolle verschenkt werden.
-  - Oben werden die Knie hart durchgedrückt und die Spannung geht aus Quadrizeps und
-    Gesäß in eine passive Gelenkposition über.
-  - Der Schlitten wird in der unteren Position abgefedert oder mit Schwung umgekehrt,
-    statt die exzentrische Phase aktiv zu kontrollieren.
-  - Die Füße stehen zu hoch, zu tief oder asymmetrisch auf der Plattform, sodass Druckverteilung,
-    Kniepfad und Zielmuskulatur unnötig verfälscht werden.
-  - Das Gewicht ist zu schwer gewählt, sodass nur noch halbe Wiederholungen, Hüftverschiebungen
-    oder ein Verlust der Rumpfspannung möglich sind.
-  - Die Last wird einseitig über Vorfuß oder Fersen verschoben, wodurch Stabilität
-    verloren geht und die Kraftübertragung auf die Plattform schlechter wird.
-  tags:
-  - machine
-  - compound
-  - quad-dominant
-  - lower-body
-  - strength
-  - hypertrophy
-  - legs
-  - leg_press
-  - unreviewed
+- secondary_muscles:
+  - 603_gluteus_maximus
+  - 602_adductors
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
+  origin:
+    wger:
+      secondary_muscles:
+      - 603_gluteus_maximus
+      - 701_gastrocnemius
+      primary_muscles:
+      - 601_quadriceps_femoris
+      - 603_gluteus_maximus
+      - 604a_biceps_femoris
+      - 604b_semitendinosus
+      - 604c_semimembranosus
+      - 701_gastrocnemius
+      german: Beinpresse
+      tags:
+      - unreviewed
+      - wger
+      coaching_notes:
+      - 'In die Maschine setzten und die Füße auf die Auflage stellen, der Abstand,
+        etwas mehr als schulterbreit. Die Füße sind etwas nach außen gedreht.
+
+        Das Gewicht wird so weit abgesenkt, dass die Knie einen rechten Winkel machen.
+        Sofort wird das Gewicht nach oben gedrückt. Die Knie zeigen etwas nach außen
+        und werden nie ganz ausgestreckt, die Bewegung bleibt immer flüssig, also
+        weder oben noch unten irgendwelche Pausen einlegen!'
+      category: legs
+      display_name: Beinpresse
+      exercise_id: wger_371
+      equipment: []
+      wger_id: 371
+      wger_muscle_ids:
+        secondary:
+        - 7
+        - 8
+        primary:
+        - 11
+        - 7
+        - 8
+        - 10
+    source_refs: {}
+    yuhonas:
+      secondary_muscles:
+      - calves
+      - glutes
+      - hamstrings
+      primary_muscles:
+      - quadriceps
+      tags:
+      - unreviewed
+      - yuhonas
+      category: strength
+      yuhonas_id: Leg_Press
+      coaching_notes:
+      - 'Using a leg press machine, sit down on the machine and place your legs on
+        the platform directly in front of you at a medium (shoulder width) foot stance.
+        (Note: For the purposes of this discussion we will use the medium stance described
+        above which targets overall development; however you can choose any of the
+        three stances described in the foot positioning section).'
+      - 'Lower the safety bars holding the weighted platform in place and press the
+        platform all the way up until your legs are fully extended in front of you.
+        Tip: Make sure that you do not lock your knees. Your torso and the legs should
+        make a perfect 90-degree angle. This will be your starting position.'
+      - As you inhale, slowly lower the platform until your upper and lower legs make
+        a 90-degree angle.
+      - Pushing mainly with the heels of your feet and using the quadriceps go back
+        to the starting position as you exhale.
+      - Repeat for the recommended amount of repetitions and ensure to lock the safety
+        pins properly once you are done. You do not want that platform falling on
+        you fully loaded.
+      exercise_id: yuhonas_leg_press
+      display_name: Leg Press
+      equipment:
+      - machine
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+    type: manual
   review_state:
     status: approved
-  name: Beinpresse
-  stabilizers:
-  - 504_transverse_abdominis
-  - 206_erector_spinae
-  - 507_multifidus
-  equipment:
-  - machine
-  movements:
-  - knee_extension
-  - knee_flexion
-  - hip_extension
-  - hip_flexion
-  - bilateral
-  - closed_chain
-  - machine_guided
+  english: Leg Press
+  type: compound
+  display_name: Beinpresse
+  category: squat
   coaching_notes:
   - Setze Becken und gesamten unteren Rücken stabil an die Lehne und halte diese Position
     über den kompletten Satz, damit die Kraft sauber über Hüfte und Knie auf die Plattform
@@ -761,144 +796,131 @@ exercises:
   - Wähle die Tiefe und Fußposition so, dass du den Quadrizeps belastest, ohne im
     unteren Umkehrpunkt die Position der Lendenwirbelsäule oder der Kniekontrolle
     zu verlieren.
-  schema_version: 2026-08-12.exercise-v1
-  _hash: 40c7052b3937634d244ac1c7c2c40c36
-  secondary_muscles:
-  - 603_gluteus_maximus
-  - 602_adductors
-  - 604a_biceps_femoris
-  - 604b_semitendinosus
-  - 604c_semimembranosus
-  source: approved
-  exercise_id: leg_press
-  display_name: Beinpresse
-  primary_muscles:
-  - 601_quadriceps_femoris
-  origin:
-    type: manual
-    yuhonas:
-      secondary_muscles:
-      - calves
-      - glutes
-      - hamstrings
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Leg Press
-      tags:
-      - unreviewed
-      - yuhonas
-      primary_muscles:
-      - quadriceps
-      exercise_id: yuhonas_leg_press
-      yuhonas_id: Leg_Press
-      equipment:
-      - machine
-      coaching_notes:
-      - 'Using a leg press machine, sit down on the machine and place your legs on
-        the platform directly in front of you at a medium (shoulder width) foot stance.
-        (Note: For the purposes of this discussion we will use the medium stance described
-        above which targets overall development; however you can choose any of the
-        three stances described in the foot positioning section).'
-      - 'Lower the safety bars holding the weighted platform in place and press the
-        platform all the way up until your legs are fully extended in front of you.
-        Tip: Make sure that you do not lock your knees. Your torso and the legs should
-        make a perfect 90-degree angle. This will be your starting position.'
-      - As you inhale, slowly lower the platform until your upper and lower legs make
-        a 90-degree angle.
-      - Pushing mainly with the heels of your feet and using the quadriceps go back
-        to the starting position as you exhale.
-      - Repeat for the recommended amount of repetitions and ensure to lock the safety
-        pins properly once you are done. You do not want that platform falling on
-        you fully loaded.
-      category: strength
-    source_refs: {}
-    wger:
-      secondary_muscles:
-      - 603_gluteus_maximus
-      - 701_gastrocnemius
-      wger_muscle_ids:
-        primary:
-        - 11
-        - 7
-        - 8
-        - 10
-        secondary:
-        - 7
-        - 8
-      display_name: Beinpresse
-      german: Beinpresse
-      exercise_id: wger_371
-      primary_muscles:
-      - 601_quadriceps_femoris
-      - 603_gluteus_maximus
-      - 604a_biceps_femoris
-      - 604b_semitendinosus
-      - 604c_semimembranosus
-      - 701_gastrocnemius
-      tags:
-      - unreviewed
-      - wger
-      wger_id: 371
-      equipment: []
-      coaching_notes:
-      - 'In die Maschine setzten und die Füße auf die Auflage stellen, der Abstand,
-        etwas mehr als schulterbreit. Die Füße sind etwas nach außen gedreht.
-
-        Das Gewicht wird so weit abgesenkt, dass die Knie einen rechten Winkel machen.
-        Sofort wird das Gewicht nach oben gedrückt. Die Knie zeigen etwas nach außen
-        und werden nie ganz ausgestreckt, die Bewegung bleibt immer flüssig, also
-        weder oben noch unten irgendwelche Pausen einlegen!'
-      category: legs
-  type: compound
+  name: Beinpresse
+  aliases:
+  - Leg Press Machine
+  - Machine Leg Press
+  - Plate-Loaded Leg Press
+  - 45 Degree Leg Press
+  - Schlitten-Beinpresse
   search_aliases:
   - Beinpresse
   - Schlitten-Beinpresse
   - Leg Press
   - Leg Press Machine
-  wger_id: null
-  english: Leg Press
-  category: squat
-- aliases:
-  - Plank
-  - Front Plank
-  - Unterarmstütz
-  - Forearm Plank
-  common_errors:
-  - Das Becken sinkt ab und der untere Rücken fällt ins Hohlkreuz, wodurch die Belastung
-    von der Rumpfmuskulatur auf passive Strukturen verlagert wird.
-  - Das Gesäß wird zu hoch geschoben, sodass die Position eher zu einer Pike als zu
-    einer geraden Plank-Linie wird.
-  - Die Schultern kollabieren zwischen den Oberarmen, weil nicht aktiv in den Boden
-    gedrückt und die Schulterblattspannung verloren wird.
-  - Der Kopf wird angehoben oder fallen gelassen, statt die Halswirbelsäule neutral
-    in Verlängerung der Wirbelsäule zu halten.
-  - Es wird die Luft angehalten, bis die Rumpfspannung zusammenbricht, anstatt unter
-    Spannung kontrolliert weiterzuatmen.
-  - Die Haltedauer wird über Technik priorisiert, obwohl die Übung biomechanisch nur
-    mit sauberer Anti-Extensionskontrolle sinnvoll ist.
-  variations: []
-  source: approved
-  id: plank
-  exercise_id: plank
-  review_state:
-    status: approved
-  name: Plank
   stabilizers:
-  - 105_serratus_anterior
-  - 301_anterior_deltoid
-  - 304_rotator_cuff
+  - 504_transverse_abdominis
   - 206_erector_spinae
   - 507_multifidus
   equipment:
-  - bodyweight
+  - machine
+  schema_version: 2026-08-12.exercise-v1
+  primary_muscles:
+  - 601_quadriceps_femoris
+  exercise_id: leg_press
+  source: approved
+  variations: []
+  tags:
+  - machine
+  - compound
+  - quad-dominant
+  - lower-body
+  - strength
+  - hypertrophy
+  - legs
+  - leg_press
+  - unreviewed
+  id: leg_press
+  german: Beinpresse
   movements:
-  - anti_extension
-  - bracing
-  - isometric
-  - scapular_protraction
-  - shoulder_flexion
-  - posterior_pelvic_tilt
+  - knee_extension
+  - knee_flexion
+  - hip_extension
+  - hip_flexion
+  - bilateral
+  - closed_chain
+  - machine_guided
+  common_errors:
+  - Das Becken kippt im unteren Punkt nach hinten und der untere Rücken löst sich
+    von der Lehne, wodurch unnötiger Stress auf die Lendenwirbelsäule entsteht.
+  - Die Knie fallen nach innen oder weichen unkontrolliert nach außen aus, anstatt
+    sauber in Linie mit dem Fuß zu laufen.
+  - Der Bewegungsumfang wird künstlich verkürzt, obwohl mehr saubere Tiefe möglich
+    wäre, sodass Trainingsreiz und Gelenkkontrolle verschenkt werden.
+  - Oben werden die Knie hart durchgedrückt und die Spannung geht aus Quadrizeps und
+    Gesäß in eine passive Gelenkposition über.
+  - Der Schlitten wird in der unteren Position abgefedert oder mit Schwung umgekehrt,
+    statt die exzentrische Phase aktiv zu kontrollieren.
+  - Die Füße stehen zu hoch, zu tief oder asymmetrisch auf der Plattform, sodass Druckverteilung,
+    Kniepfad und Zielmuskulatur unnötig verfälscht werden.
+  - Das Gewicht ist zu schwer gewählt, sodass nur noch halbe Wiederholungen, Hüftverschiebungen
+    oder ein Verlust der Rumpfspannung möglich sind.
+  - Die Last wird einseitig über Vorfuß oder Fersen verschoben, wodurch Stabilität
+    verloren geht und die Kraftübertragung auf die Plattform schlechter wird.
+  _hash: 40c7052b3937634d244ac1c7c2c40c36
+  wger_id: null
+- secondary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 603_gluteus_maximus
+  origin:
+    wger:
+      secondary_muscles:
+      - 401_triceps_brachii
+      - 402_biceps_brachii
+      - 601_quadriceps_femoris
+      wger_muscle_ids:
+        secondary:
+        - 1
+        - 10
+        - 5
+        primary:
+        - 14
+        - 6
+      exercise_id: wger_458
+      tags:
+      - unreviewed
+      - wger
+      category: core
+      coaching_notes:
+      - Mit dem Bauch auf den Boden legen und den Körper mit Unterarmen und Zehen
+        abstützen. Beine, Rücken und Kopf sollten eine gerade Linie bilden.
+      display_name: Plank
+      wger_id: 458
+      equipment:
+      - none (bodyweight exercise)
+      german: Plank
+      primary_muscles:
+      - 501_rectus_abdominis
+      - 502_obliquus_externus
+      - 503_obliquus_internus
+    source_refs: {}
+    yuhonas:
+      secondary_muscles: []
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+      tags:
+      - unreviewed
+      - yuhonas
+      category: strength
+      yuhonas_id: Plank
+      coaching_notes:
+      - Get into a prone position on the floor, supporting your weight on your toes
+        and your forearms. Your arms are bent and directly below the shoulder.
+      - Keep your body straight at all times, and hold this position as long as possible.
+        To increase difficulty, an arm or leg can be raised.
+      exercise_id: yuhonas_plank
+      display_name: Plank
+      equipment:
+      - body only
+      primary_muscles:
+      - abdominals
+    type: manual
+  review_state:
+    status: approved
+  english: Plank
+  type: isolation
   coaching_notes:
   - Spannen Sie Bauch, Gesäß und Oberschenkel gleichzeitig an, als wollten Sie den
     Boden mit den Unterarmen nach hinten ziehen und die Füße nach vorne schieben.
@@ -912,68 +934,32 @@ exercises:
     im Rumpf zu verlieren.
   - Beenden Sie den Satz, sobald die Beckenposition oder Rumpfspannung nicht mehr
     sauber gehalten werden kann.
+  category: carry
+  name: Plank
+  stabilizers:
+  - 105_serratus_anterior
+  - 301_anterior_deltoid
+  - 304_rotator_cuff
+  - 206_erector_spinae
+  - 507_multifidus
+  exercise_id: plank
+  search_aliases:
+  - Plank
+  - Front Plank
+  - Forearm Plank
+  - Unterarmstütz
+  equipment:
+  - bodyweight
   schema_version: 2026-08-12.exercise-v1
-  _hash: c1f9e5ef15c6663bd7858cebaceb04ba
-  secondary_muscles:
-  - 502_obliquus_externus
-  - 503_obliquus_internus
-  - 603_gluteus_maximus
-  origin:
-    type: manual
-    yuhonas:
-      secondary_muscles: []
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Plank
-      yuhonas_id: Plank
-      primary_muscles:
-      - abdominals
-      exercise_id: yuhonas_plank
-      tags:
-      - unreviewed
-      - yuhonas
-      equipment:
-      - body only
-      coaching_notes:
-      - Get into a prone position on the floor, supporting your weight on your toes
-        and your forearms. Your arms are bent and directly below the shoulder.
-      - Keep your body straight at all times, and hold this position as long as possible.
-        To increase difficulty, an arm or leg can be raised.
-      category: strength
-    source_refs: {}
-    wger:
-      secondary_muscles:
-      - 401_triceps_brachii
-      - 402_biceps_brachii
-      - 601_quadriceps_femoris
-      wger_muscle_ids:
-        primary:
-        - 14
-        - 6
-        secondary:
-        - 1
-        - 10
-        - 5
-      german: Plank
-      display_name: Plank
-      tags:
-      - unreviewed
-      - wger
-      primary_muscles:
-      - 501_rectus_abdominis
-      - 502_obliquus_externus
-      - 503_obliquus_internus
-      exercise_id: wger_458
-      wger_id: 458
-      equipment:
-      - none (bodyweight exercise)
-      coaching_notes:
-      - Mit dem Bauch auf den Boden legen und den Körper mit Unterarmen und Zehen
-        abstützen. Beine, Rücken und Kopf sollten eine gerade Linie bilden.
-      category: core
-  german: Unterarmstütz
-  display_name: Unterarmstütz
+  primary_muscles:
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  aliases:
+  - Plank
+  - Front Plank
+  - Unterarmstütz
+  - Forearm Plank
+  source: approved
   tags:
   - core
   - abs
@@ -982,82 +968,32 @@ exercises:
   - trunk
   - anti_extension
   - isometric
-  primary_muscles:
-  - 504_transverse_abdominis
-  - 501_rectus_abdominis
-  type: isolation
-  search_aliases:
-  - Plank
-  - Front Plank
-  - Forearm Plank
-  - Unterarmstütz
-  english: Plank
-  category: carry
-- aliases:
-  - clean_and_jerk
-  - C&J
-  - umsetzen_und_stossen
-  id: reissen_und_umsetzen
   variations: []
-  german: Umsetzen und Stoßen
-  common_errors:
-  - Die Hantel zu früh mit den Armen reißen, wodurch der Beinschub verloren geht und
-    der Zugweg unruhig oder bogenförmig wird.
-  - Im ersten Zug die Hüfte zu schnell hochschieben, sodass der Oberkörper nach vorn
-    kippt und die Hantel vom Körper wegdriftet.
-  - Im Clean die Ellenbogen zu langsam nach vorn bringen; dadurch crasht die Hantel
-    auf die Schultern oder wird unsauber mit den Händen gefangen.
-  - Im Jerk nach vorn oder nach hinten dippen statt senkrecht, was den Kraftvektor
-    verschiebt und die Hantel aus der idealen Überkopf-Linie bringt.
-  - Den Stoß mit den Armen ausdrücken zu wollen, anstatt aktiv unter die Hantel zu
-    gehen; das limitiert die Last und macht die Fixierung instabil.
-  - Überkopf in ein Hohlkreuz fallen oder den Rumpf nicht verspannen, wodurch die
-    Lendenwirbelsäule ausweicht und die Schulterposition unsicher wird.
-  exercise_id: reissen_und_umsetzen
-  review_state:
-    status: approved
-  name: Umsetzen und Stoßen
-  stabilizers:
-  - 504_transverse_abdominis
-  - 507_multifidus
-  - 304_rotator_cuff
-  - 608_gluteus_medius
-  - 505_quadratus_lumborum
-  equipment:
-  - barbell
+  id: plank
+  german: Unterarmstütz
   movements:
-  - olympic_pull
-  - triple_extension
-  - hip_extension
-  - knee_extension
-  - ankle_plantarflexion
-  - shrug
-  - front_rack_catch
-  - dip_drive
-  - overhead_press
-  - overhead_lockout
-  - split_stance
-  coaching_notes:
-  - 'Starte mit engem Kontakt zur Hantel: Mittelfuß unter der Stange, Brust angehoben,
-    Latissimus angespannt und der Oberkörperwinkel im ersten Zug möglichst konstant.'
-  - Beschleunige die Hantel aus den Beinen und der Hüfte, nicht aus den Armen. Die
-    Arme bleiben im Zug lang, bis die Streckung in Sprunggelenk, Knie und Hüfte abgeschlossen
-    ist.
-  - Im Umsetzen die Ellenbogen schnell und aggressiv nach vorn bringen, damit die
-    Hantel sauber auf den Schultern im Front Rack landet und nicht in den Händen hängen
-    bleibt.
-  - Für den Stoß zuerst einen kontrollierten, geraden Dip ausführen, dann explosiv
-    vertikal treiben. Der Impuls kommt aus den Beinen; die Arme vollenden nur die
-    Fixierung über Kopf.
-  - 'Überkopf eine stabile Linie herstellen: Stange über Mittelfuß, Rippen unten,
-    Gesäß angespannt und Schultergürtel aktiv nach oben rotiert. Erst vollständig
-    kontrollieren, dann die Füße wieder zusammenführen.'
-  - Die Bewegung ist hochtechnisch und ermüdungssensibel. Last nur steigern, wenn
-    Startposition, Rack-Position und Overhead-Fixierung unter Geschwindigkeit reproduzierbar
-    sauber bleiben.
-  schema_version: 2026-08-12.exercise-v1
-  _hash: 47f6f4b7585c79bd516b29f3ab6c79a7
-  secondary_muscles:
+  - anti_extension
+  - bracing
+  - isometric
+  - scapular_protraction
+  - shoulder_flexion
+  - posterior_pelvic_tilt
+  common_errors:
+  - Das Becken sinkt ab und der untere Rücken fällt ins Hohlkreuz, wodurch die Belastung
+    von der Rumpfmuskulatur auf passive Strukturen verlagert wird.
+  - Das Gesäß wird zu hoch geschoben, sodass die Position eher zu einer Pike als zu
+    einer geraden Plank-Linie wird.
+  - Die Schultern kollabieren zwischen den Oberarmen, weil nicht aktiv in den Boden
+    gedrückt und die Schulterblattspannung verloren wird.
+  - Der Kopf wird angehoben oder fallen gelassen, statt die Halswirbelsäule neutral
+    in Verlängerung der Wirbelsäule zu halten.
+  - Es wird die Luft angehalten, bis die Rumpfspannung zusammenbricht, anstatt unter
+    Spannung kontrolliert weiterzuatmen.
+  - Die Haltedauer wird über Technik priorisiert, obwohl die Übung biomechanisch nur
+    mit sauberer Anti-Extensionskontrolle sinnvoll ist.
+  _hash: c1f9e5ef15c6663bd7858cebaceb04ba
+  display_name: Unterarmstütz
+- secondary_muscles:
   - 604a_biceps_femoris
   - 604b_semitendinosus
   - 604c_semimembranosus
@@ -1066,13 +1002,43 @@ exercises:
   - 202b_trapezius_middle
   - 701_gastrocnemius
   - 702_soleus
-  primary_muscles:
-  - 601_quadriceps_femoris
-  - 603_gluteus_maximus
-  - 202a_trapezius_upper
-  - 401_triceps_brachii
   origin:
-    type: manual
+    wger:
+      secondary_muscles:
+      - 601_quadriceps_femoris
+      primary_muscles:
+      - 301_anterior_deltoid
+      exercise_id: wger_1686
+      tags:
+      - unreviewed
+      - wger
+      category: shoulders
+      coaching_notes:
+      - 'Der erste Zug: Hebe die Stange vom Boden bis auf Kniehöhe, indem du aus den
+        Beinen arbeitest und den Winkel deines Rückens konstant hältst.
+
+        Die "Power"-Position: Sobald die Stange die Mitte der Oberschenkel erreicht,
+        ziehe explosiv die Schultern hoch und strecke die Hüfte, um vertikalen Schwung
+        zu erzeugen.
+
+        Das schnelle Umsetzen der Ellbogen: In der Fangphase drehst du die Ellbogen
+        rasch unter die Stange, um ein "Ablagebrett" auf deinen vorderen Deltamuskeln
+        zu schaffen.
+
+        Das senkrechte Drücken: Drücke die Stange in einer geraden Linie nach oben;
+        dein Kopf sollte sich leicht nach vorne schieben, sobald die Stange deine
+        Stirn passiert, um die volle Streckung zu erreichen.'
+      wger_id: 1686
+      german: Umsetzen und Stoßen
+      equipment:
+      - barbell
+      display_name: Umsetzen und Stoßen
+      wger_muscle_ids:
+        secondary:
+        - 10
+        primary:
+        - 2
+    source_refs: {}
     yuhonas:
       secondary_muscles:
       - abdominals
@@ -1083,18 +1049,13 @@ exercises:
       - traps
       - triceps
       wger_muscle_ids:
-        primary: []
         secondary: []
-      display_name: Clean and Jerk
+        primary: []
       tags:
       - unreviewed
       - yuhonas
-      primary_muscles:
-      - shoulders
+      category: olympic weightlifting
       yuhonas_id: Clean_and_Jerk
-      exercise_id: yuhonas_clean_and_jerk
-      equipment:
-      - barbell
       coaching_notes:
       - With a barbell on the floor close to the shins, take an overhand or hook grip
         just outside the legs. Lower your hips with the weight focused on the heels,
@@ -1132,44 +1093,62 @@ exercises:
         bar up will drive them down. The feet should be split, with one foot forward,
         and one foot back. Receive the bar with the arms locked out overhead. Return
         to a standing position.
-      category: olympic weightlifting
-    source_refs: {}
-    wger:
-      secondary_muscles:
-      - 601_quadriceps_femoris
-      wger_muscle_ids:
-        primary:
-        - 2
-        secondary:
-        - 10
-      display_name: Umsetzen und Stoßen
-      german: Umsetzen und Stoßen
-      tags:
-      - unreviewed
-      - wger
-      primary_muscles:
-      - 301_anterior_deltoid
-      exercise_id: wger_1686
-      wger_id: 1686
+      display_name: Clean and Jerk
+      exercise_id: yuhonas_clean_and_jerk
       equipment:
       - barbell
-      coaching_notes:
-      - 'Der erste Zug: Hebe die Stange vom Boden bis auf Kniehöhe, indem du aus den
-        Beinen arbeitest und den Winkel deines Rückens konstant hältst.
-
-        Die "Power"-Position: Sobald die Stange die Mitte der Oberschenkel erreicht,
-        ziehe explosiv die Schultern hoch und strecke die Hüfte, um vertikalen Schwung
-        zu erzeugen.
-
-        Das schnelle Umsetzen der Ellbogen: In der Fangphase drehst du die Ellbogen
-        rasch unter die Stange, um ein "Ablagebrett" auf deinen vorderen Deltamuskeln
-        zu schaffen.
-
-        Das senkrechte Drücken: Drücke die Stange in einer geraden Linie nach oben;
-        dein Kopf sollte sich leicht nach vorne schieben, sobald die Stange deine
-        Stirn passiert, um die volle Streckung zu erreichen.'
-      category: shoulders
-  display_name: Umsetzen und Stoßen
+      primary_muscles:
+      - shoulders
+    type: manual
+  review_state:
+    status: approved
+  english: Clean and Jerk
+  wger_id: null
+  _hash: 47f6f4b7585c79bd516b29f3ab6c79a7
+  category: pull
+  coaching_notes:
+  - 'Starte mit engem Kontakt zur Hantel: Mittelfuß unter der Stange, Brust angehoben,
+    Latissimus angespannt und der Oberkörperwinkel im ersten Zug möglichst konstant.'
+  - Beschleunige die Hantel aus den Beinen und der Hüfte, nicht aus den Armen. Die
+    Arme bleiben im Zug lang, bis die Streckung in Sprunggelenk, Knie und Hüfte abgeschlossen
+    ist.
+  - Im Umsetzen die Ellenbogen schnell und aggressiv nach vorn bringen, damit die
+    Hantel sauber auf den Schultern im Front Rack landet und nicht in den Händen hängen
+    bleibt.
+  - Für den Stoß zuerst einen kontrollierten, geraden Dip ausführen, dann explosiv
+    vertikal treiben. Der Impuls kommt aus den Beinen; die Arme vollenden nur die
+    Fixierung über Kopf.
+  - 'Überkopf eine stabile Linie herstellen: Stange über Mittelfuß, Rippen unten,
+    Gesäß angespannt und Schultergürtel aktiv nach oben rotiert. Erst vollständig
+    kontrollieren, dann die Füße wieder zusammenführen.'
+  - Die Bewegung ist hochtechnisch und ermüdungssensibel. Last nur steigern, wenn
+    Startposition, Rack-Position und Overhead-Fixierung unter Geschwindigkeit reproduzierbar
+    sauber bleiben.
+  schema_version: 2026-08-12.exercise-v1
+  aliases:
+  - clean_and_jerk
+  - C&J
+  - umsetzen_und_stossen
+  exercise_id: reissen_und_umsetzen
+  search_aliases:
+  - Umsetzen und Stoßen
+  - Umsetzen und Stossen
+  - Clean and Jerk
+  - C&J
+  equipment:
+  - barbell
+  stabilizers:
+  - 504_transverse_abdominis
+  - 507_multifidus
+  - 304_rotator_cuff
+  - 608_gluteus_medius
+  - 505_quadratus_lumborum
+  primary_muscles:
+  - 601_quadriceps_femoris
+  - 603_gluteus_maximus
+  - 202a_trapezius_upper
+  - 401_triceps_brachii
+  name: Umsetzen und Stoßen
   source: approved
   tags:
   - olympic_lifting
@@ -1179,83 +1158,61 @@ exercises:
   - power
   - coordination
   - technical
-  type: compound
-  search_aliases:
-  - Umsetzen und Stoßen
-  - Umsetzen und Stossen
-  - Clean and Jerk
-  - C&J
-  wger_id: null
-  english: Clean and Jerk
-  category: pull
-- aliases:
-  - Romanian Deadlift
-  - RDL
-  - Romanian DL
-  - Rumänisches Kreuzheben
-  - Kurzhantel RDL
-  - Langhantel RDL
-  source: approved
-  variations:
-  - dumbbell_rdl
-  - single_leg_rdl
-  - barbell_rdl
-  german: Rumänisches Kreuzheben
-  id: 081
-  tags:
-  - expert
-  - legs
-  - hip_hinge
-  - posterior_chain
-  - hamstrings
-  - glutes
-  primary_muscles:
-  - 604a_biceps_femoris
-  - 604b_semitendinosus
-  - 604c_semimembranosus
-  - 603_gluteus_maximus
-  name: Rumänisches Kreuzheben
-  stabilizers:
-  - 504_transverse_abdominis
-  - 502_obliquus_externus
-  - 503_obliquus_internus
-  - 507_multifidus
-  - 201_latissimus_dorsi
-  - 202b_trapezius_middle
-  - 202c_trapezius_lower
-  - 405_forearm_flexors
-  - 608_gluteus_medius
-  - 609_gluteus_minimus
-  equipment:
-  - barbell
-  - dumbbell
+  variations: []
+  id: reissen_und_umsetzen
+  german: Umsetzen und Stoßen
   movements:
-  - hip_hinge
+  - olympic_pull
+  - triple_extension
   - hip_extension
-  - hamstring_lengthening
-  - spinal_anti_flexion
-  - isometric_knee_flexion
-  - scapular_depression
+  - knee_extension
+  - ankle_plantarflexion
+  - shrug
+  - front_rack_catch
+  - dip_drive
+  - overhead_press
+  - overhead_lockout
+  - split_stance
+  common_errors:
+  - Die Hantel zu früh mit den Armen reißen, wodurch der Beinschub verloren geht und
+    der Zugweg unruhig oder bogenförmig wird.
+  - Im ersten Zug die Hüfte zu schnell hochschieben, sodass der Oberkörper nach vorn
+    kippt und die Hantel vom Körper wegdriftet.
+  - Im Clean die Ellenbogen zu langsam nach vorn bringen; dadurch crasht die Hantel
+    auf die Schultern oder wird unsauber mit den Händen gefangen.
+  - Im Jerk nach vorn oder nach hinten dippen statt senkrecht, was den Kraftvektor
+    verschiebt und die Hantel aus der idealen Überkopf-Linie bringt.
+  - Den Stoß mit den Armen ausdrücken zu wollen, anstatt aktiv unter die Hantel zu
+    gehen; das limitiert die Last und macht die Fixierung instabil.
+  - Überkopf in ein Hohlkreuz fallen oder den Rumpf nicht verspannen, wodurch die
+    Lendenwirbelsäule ausweicht und die Schulterposition unsicher wird.
+  type: compound
+  display_name: Umsetzen und Stoßen
+- secondary_muscles:
+  - 206_erector_spinae
+  - 602a_adductor_magnus
   origin:
-    type: external
+    wger:
+      wger_id: 507
+      wger_muscle_ids:
+        secondary:
+        - 16
+        primary:
+        - 11
+        - 8
+    source_refs:
+      wger:
+      - '507'
     yuhonas:
       secondary_muscles:
       - calves
       - glutes
       - lower_back
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Romanian Deadlift
-      exercise_id: yuhonas_romanian_deadlift
       primary_muscles:
       - hamstrings
-      yuhonas_id: Romanian_Deadlift
       tags:
       - unreviewed
       - yuhonas
-      equipment:
-      - barbell
       coaching_notes:
       - 'Put a barbell in front of you on the ground and grab it using a pronated
         (palms facing down) grip that a little wider than shoulder width. Tip: Depending
@@ -1271,29 +1228,25 @@ exercises:
         a deep breath at the start of the movement and keep your chest up. Hold your
         breath as you lower and exhale as you complete the movement.'
       - Repeat for the recommended amount of repetitions.
+      yuhonas_id: Romanian_Deadlift
       category: strength
-    source_refs:
-      wger:
-      - '507'
-    wger:
+      display_name: Romanian Deadlift
+      exercise_id: yuhonas_romanian_deadlift
+      equipment:
+      - barbell
       wger_muscle_ids:
-        primary:
-        - 11
-        - 8
-        secondary:
-        - 16
-      wger_id: 507
-  schema_version: 2026-08-12.exercise-v1
-  _hash: a8fea66f53e46ebc7f941d93178c8ef1
-  secondary_muscles:
-  - 206_erector_spinae
-  - 602a_adductor_magnus
-  wger_muscle_ids:
-    primary:
-    - 11
-    - 8
-    secondary:
-    - 16
+        secondary: []
+        primary: []
+    type: external
+  external_ids:
+    wger:
+    - 507
+  english: Romanian Deadlift
+  review_state:
+    status: approved
+  type: compound
+  display_name: Rumänisches Kreuzheben
+  category: pull
   coaching_notes:
   - 'Starte aus dem aufrechten Stand und breche die Bewegung zuerst über die Hüfte
     ein: Gesäß aktiv nach hinten schieben, statt die Hantel über Kniebeugung abzusenken.'
@@ -1312,9 +1265,65 @@ exercises:
   - Den exzentrischen Teil bewusst kontrollieren, damit die Hamstrings unter Länge
     arbeiten; der Trainingsreiz entsteht hier stark über saubere Bremsarbeit, nicht
     nur über das Aufrichten.
-  display_name: Rumänisches Kreuzheben
-  review_state:
-    status: approved
+  name: Rumänisches Kreuzheben
+  stabilizers:
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 507_multifidus
+  - 201_latissimus_dorsi
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 405_forearm_flexors
+  - 608_gluteus_medius
+  - 609_gluteus_minimus
+  search_aliases:
+  - rdl
+  - romanian deadlift
+  - rumaenisches kreuzheben
+  - rumänisches kreuzheben
+  - wger_507
+  - Rumänisches Kreuzheben
+  - Romanian Deadlift
+  exercise_id: 081
+  equipment:
+  - barbell
+  - dumbbell
+  schema_version: 2026-08-12.exercise-v1
+  primary_muscles:
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
+  - 603_gluteus_maximus
+  aliases:
+  - Romanian Deadlift
+  - RDL
+  - Romanian DL
+  - Rumänisches Kreuzheben
+  - Kurzhantel RDL
+  - Langhantel RDL
+  german: Rumänisches Kreuzheben
+  source: approved
+  tags:
+  - expert
+  - legs
+  - hip_hinge
+  - posterior_chain
+  - hamstrings
+  - glutes
+  variations:
+  - dumbbell_rdl
+  - single_leg_rdl
+  - barbell_rdl
+  id: 081
+  wger_id: 507
+  movements:
+  - hip_hinge
+  - hip_extension
+  - hamstring_lengthening
+  - spinal_anti_flexion
+  - isometric_knee_flexion
+  - scapular_depression
   common_errors:
   - Zu starkes Beugen der Knie, wodurch die Übung biomechanisch in Richtung konventionelles
     Kreuzheben oder Kniebeuge kippt.
@@ -1330,23 +1339,63 @@ exercises:
     Technik verlieren.
   - Das Gewicht zu weit nach vorn auf die Zehen verlagern, wodurch Balance, Hüftmechanik
     und Kraftübertragung schlechter werden.
-  exercise_id: 081
-  type: compound
+  _hash: a8fea66f53e46ebc7f941d93178c8ef1
+  wger_muscle_ids:
+    secondary:
+    - 16
+    primary:
+    - 11
+    - 8
+- secondary_muscles:
+  - 301_anterior_deltoid
+  - 401_triceps_brachii
+  - 105_serratus_anterior
+  origin:
+    wger:
+      original_description:
+      - Setze dich auf die Bank, die Füße sind fest auf dem Boden und geben Halt,
+        der Kopf liegt auf der Bank. Nehme die Hanteln in die Hand und drücke sie
+        nach oben. Bringe die Hanteln nach unten, bis sie neben der Brust sind. Drücke
+        das Gewicht wieder nach oben.
+      wger_id: 537
+      wger_muscle_ids:
+        secondary:
+        - 2
+        - 5
+        primary:
+        - 4
+    source_refs:
+      wger:
+      - '537'
+      yuhonas:
+      - Incline_Dumbbell_Press
+    yuhonas:
+      yuhonas_id: Incline_Dumbbell_Press
+      instructions:
+      - Lie back on an incline bench with a dumbbell in each hand atop your thighs.
+        The palms of your hands will be facing each other.
+      - Then, using your thighs to help push the dumbbells up, lift the dumbbells
+        one at a time so that you can hold them at shoulder width.
+      - Once you have the dumbbells raised to shoulder width, rotate your wrists forward
+        so that the palms of your hands are facing away from you. This will be your
+        starting position.
+      - Be sure to keep full control of the dumbbells at all times. Then breathe out
+        and push the dumbbells up with your chest.
+      - Lock your arms at the top, hold for a second, and then start slowly lowering
+        the weight. Tip Ideally, lowering the weights should take about twice as long
+        as raising them.
+      - Repeat the movement for the prescribed amount of repetitions.
+      - When you are done, place the dumbbells back on your thighs and then on the
+        floor. This is the safest manner to release the dumbbells.
+    type: merged_external
   external_ids:
     wger:
-    - 507
-  search_aliases:
-  - rdl
-  - romanian deadlift
-  - rumaenisches kreuzheben
-  - rumänisches kreuzheben
-  - wger_507
-  - Rumänisches Kreuzheben
-  - Romanian Deadlift
-  wger_id: 507
-  english: Romanian Deadlift
-  category: pull
-- aliases:
+    - 537
+    yuhonas:
+    - Incline_Dumbbell_Press
+  category: push
+  schema_version: 2026-08-12.exercise-v1
+  aliases:
   - Schrägbankdrücken (KH)
   - Schrägbankdrücken (Kurzhantel)
   - Schrägbankdrücken Kurzhantel
@@ -1356,47 +1405,40 @@ exercises:
   - Incline DB Press
   - Dumbbell Incline Press
   - Incline Dumbbell Chest Press
-  german: Schrägbankdrücken mit Kurzhanteln
-  variations:
-  - low_incline_dumbbell_press
-  - incline_barbell_press
-  - incline_machine_press
-  - neutral_grip_incline_dumbbell_press
-  common_errors:
-  - Die Bank zu steil einstellen, sodass die vordere Schulter die Hauptarbeit übernimmt
-    und der Reiz auf der oberen Brust deutlich sinkt.
-  - Die Schulterblätter beim Ablassen nach vorne kippen oder die Schultern hochziehen,
-    was die vordere Schulter unnötig belastet.
-  - Die Hanteln unten zu tief neben den Körper fallen lassen und dabei die passive
-    Schulterbeweglichkeit statt aktive Kontrolle zu nutzen.
-  - Die Ellenbogen starr im 90-Grad-Winkel abspreizen, wodurch die Schulter im unteren
-    Abschnitt oft unnötig gestresst wird.
-  - Die Hanteln oben gegeneinander schlagen oder Schwung aus dem Richtungswechsel
-    holen, statt die exzentrische Phase kontrolliert zu führen.
-  - Die Handgelenke nach hinten abknicken, sodass die Kraftlinie nicht mehr sauber
-    über Unterarm und Hantel verläuft.
-  - Mit den Füßen herumrutschen oder das Gesäß von der Bank lösen, um Wiederholungen
-    künstlich leichter zu machen.
-  - Zu kurz ablassen und dadurch den gedehnten unteren Arbeitsbereich der Brust fast
-    vollständig verschenken.
+  name: Schrägbankdrücken mit Kurzhanteln
+  source: approved
   original_description:
   - Setze dich auf die Bank, die Füße sind fest auf dem Boden und geben Halt, der
     Kopf liegt auf der Bank. Nehme die Hanteln in die Hand und drücke sie nach oben.
     Bringe die Hanteln nach unten, bis sie neben der Brust sind. Drücke das Gewicht
     wieder nach oben.
-  primary_muscles:
-  - 102_pectoralis_major_clavicular
-  - 101_pectoralis_major
-  exercise_id: '041'
-  stabilizers:
-  - 304_rotator_cuff
-  - 202b_trapezius_middle
-  - 202c_trapezius_lower
-  - 504_transverse_abdominis
-  - 507_multifidus
-  equipment:
-  - dumbbell
-  - incline_bench
+  id: '041'
+  german: Schrägbankdrücken mit Kurzhanteln
+  instructions:
+  - Lie back on an incline bench with a dumbbell in each hand atop your thighs. The
+    palms of your hands will be facing each other.
+  - Then, using your thighs to help push the dumbbells up, lift the dumbbells one
+    at a time so that you can hold them at shoulder width.
+  - Once you have the dumbbells raised to shoulder width, rotate your wrists forward
+    so that the palms of your hands are facing away from you. This will be your starting
+    position.
+  - Be sure to keep full control of the dumbbells at all times. Then breathe out and
+    push the dumbbells up with your chest.
+  - Lock your arms at the top, hold for a second, and then start slowly lowering the
+    weight. Tip Ideally, lowering the weights should take about twice as long as raising
+    them.
+  - Repeat the movement for the prescribed amount of repetitions.
+  - When you are done, place the dumbbells back on your thighs and then on the floor.
+    This is the safest manner to release the dumbbells.
+  type: compound
+  wger_muscle_ids:
+    secondary:
+    - 2
+    - 5
+    primary:
+    - 4
+  _hash: bbbc4315bb6111b3441fb2abcd66899a
+  english: Incline Dumbbell Press
   coaching_notes:
   - Wähle in der Regel eine Bankneigung von etwa 30 bis 45 Grad; damit triffst du
     die obere Brust deutlich, ohne die Übung unnötig in Richtung Schulterdrücken zu
@@ -1420,100 +1462,12 @@ exercises:
   - 'Nutze den vollen kontrollierbaren Bewegungsumfang: tief genug für eine deutliche
     Brustdehnung, aber nur so tief, wie du Schulterposition, Ellbogenpfad und Handgelenke
     sauber stabil halten kannst.'
-  schema_version: 2026-08-12.exercise-v1
-  secondary_muscles:
-  - 301_anterior_deltoid
-  - 401_triceps_brachii
-  - 105_serratus_anterior
-  instructions:
-  - Lie back on an incline bench with a dumbbell in each hand atop your thighs. The
-    palms of your hands will be facing each other.
-  - Then, using your thighs to help push the dumbbells up, lift the dumbbells one
-    at a time so that you can hold them at shoulder width.
-  - Once you have the dumbbells raised to shoulder width, rotate your wrists forward
-    so that the palms of your hands are facing away from you. This will be your starting
-    position.
-  - Be sure to keep full control of the dumbbells at all times. Then breathe out and
-    push the dumbbells up with your chest.
-  - Lock your arms at the top, hold for a second, and then start slowly lowering the
-    weight. Tip Ideally, lowering the weights should take about twice as long as raising
-    them.
-  - Repeat the movement for the prescribed amount of repetitions.
-  - When you are done, place the dumbbells back on your thighs and then on the floor.
-    This is the safest manner to release the dumbbells.
-  external_ids:
-    yuhonas:
-    - Incline_Dumbbell_Press
-    wger:
-    - 537
-  english: Incline Dumbbell Press
-  category: push
-  id: '041'
-  source: approved
-  tags:
-  - expert
-  - chest
-  - dumbbell
-  - incline_press
-  - compound
-  - upper_chest
-  review_state:
-    status: approved
-  name: Schrägbankdrücken mit Kurzhanteln
-  yuhonas_id: Incline_Dumbbell_Press
-  movements:
-  - incline
-  - horizontal_press
-  - shoulder_horizontal_adduction
-  - shoulder_flexion
-  - elbow_extension
-  origin:
-    type: merged_external
-    yuhonas:
-      yuhonas_id: Incline_Dumbbell_Press
-      instructions:
-      - Lie back on an incline bench with a dumbbell in each hand atop your thighs.
-        The palms of your hands will be facing each other.
-      - Then, using your thighs to help push the dumbbells up, lift the dumbbells
-        one at a time so that you can hold them at shoulder width.
-      - Once you have the dumbbells raised to shoulder width, rotate your wrists forward
-        so that the palms of your hands are facing away from you. This will be your
-        starting position.
-      - Be sure to keep full control of the dumbbells at all times. Then breathe out
-        and push the dumbbells up with your chest.
-      - Lock your arms at the top, hold for a second, and then start slowly lowering
-        the weight. Tip Ideally, lowering the weights should take about twice as long
-        as raising them.
-      - Repeat the movement for the prescribed amount of repetitions.
-      - When you are done, place the dumbbells back on your thighs and then on the
-        floor. This is the safest manner to release the dumbbells.
-    source_refs:
-      yuhonas:
-      - Incline_Dumbbell_Press
-      wger:
-      - '537'
-    wger:
-      original_description:
-      - Setze dich auf die Bank, die Füße sind fest auf dem Boden und geben Halt,
-        der Kopf liegt auf der Bank. Nehme die Hanteln in die Hand und drücke sie
-        nach oben. Bringe die Hanteln nach unten, bis sie neben der Brust sind. Drücke
-        das Gewicht wieder nach oben.
-      wger_muscle_ids:
-        primary:
-        - 4
-        secondary:
-        - 2
-        - 5
-      wger_id: 537
-  _hash: bbbc4315bb6111b3441fb2abcd66899a
-  wger_muscle_ids:
-    primary:
-    - 4
-    secondary:
-    - 2
-    - 5
-  display_name: Schrägbankdrücken mit Kurzhanteln
-  type: compound
+  stabilizers:
+  - 304_rotator_cuff
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 504_transverse_abdominis
+  - 507_multifidus
   search_aliases:
   - incline_dumbbell_press
   - incline_db_press
@@ -1526,124 +1480,72 @@ exercises:
   - Incline_Dumbbell_Press
   - Schrägbankdrücken mit Kurzhanteln
   - Incline Dumbbell Press
-  wger_id: 537
-- aliases:
-  - Klimmzug im Untergriff
-  - Untergriff Klimmzug
-  - Klimmzug Untergriff
-  - Klimmzüge im Untergriff
-  - enger Untergriff-Klimmzug
-  - Chin-Up
-  - Chin Up
-  - Chin-Ups
-  - Underhand Pull-Up
-  - Underhand Grip Pull-Up
-  - Supinated Grip Pull-Up
-  - Reverse Grip Pull-Up
-  common_errors:
-  - Aus einem passiven Hang mit hochgezogenen Schultern anziehen, wodurch die Schulterblattkontrolle
-    und ein sauberer Kraftaufbau verloren gehen.
-  - Schwung aus Hüfte, Knien oder Kipping nutzen, statt jede Wiederholung aus ruhiger
-    Rumpfspannung und kontrolliertem Zug zu erzeugen.
-  - Das Kinn nur nach vorne schieben, um die Wiederholung künstlich zu beenden, obwohl
-    Brustkorb und Ellenbogen nicht sauber nach oben beziehungsweise unten geführt
-    wurden.
-  - Zu weit oder zu eng greifen, sodass Handgelenke einknicken und Ellenbogen unnötig
-    gereizt werden.
-  - Unten nicht vollständig strecken oder oben die Endposition abkürzen, wodurch Bewegungsumfang
-    und Trainingsreiz deutlich sinken.
-  - Beim Hochziehen die Rippen aufreißen und ins Hohlkreuz kippen, statt Becken und
-    Rumpf stabil zu halten.
-  variations:
-  - assisted_chin_up
-  - weighted_chin_up
-  - close_grip_chin_up
-  - negative_chin_up
-  german: Untergriff-Klimmzug
-  original_description:
-  - Wie normale Klimmzüge, aber im Untergriff.
-  primary_muscles:
-  - 201_latissimus_dorsi
-  - 402_biceps_brachii
-  - 403_brachialis
-  exercise_id: '021'
-  stabilizers:
-  - 304_rotator_cuff
-  - 501_rectus_abdominis
-  - 504_transverse_abdominis
-  - 206_erector_spinae
-  - 405_forearm_flexors
+  exercise_id: '041'
   equipment:
-  - bodyweight
-  - pull_up_bar
-  coaching_notes:
-  - Greife etwa schulterbreit oder leicht enger im Untergriff, sodass die Handgelenke
-    gerade bleiben und die Ellenbogen sauber unter der Stange arbeiten können.
-  - 'Beginne im aktiven Hang: Schulterblätter leicht nach unten setzen, Rumpf anspannen
-    und die Beine ruhig halten, bevor die erste Zugphase startet.'
-  - Denke daran, die Ellenbogen nach unten Richtung Rippen zu ziehen, statt nur das
-    Kinn zur Stange vorzuschieben; so kommt der Zug aus Latissimus und Armbeugern.
-  - Halte Brustbein stolz und Rippen kontrolliert, damit du weder ins Hohlkreuz fällst
-    noch dich in eine lose Bananenform schwingst.
-  - Ziehe bis das Kinn klar über der Stange ist oder die obere Brust die Stange annähert,
-    ohne die Spannung in Schultergürtel und Rumpf zu verlieren.
-  - Senke dich kontrolliert in die volle Ellbogenstreckung zurück und nutze die exzentrische
-    Phase bewusst, statt unten einfach in die passive Schulterposition zu fallen.
-  schema_version: 2026-08-12.exercise-v1
-  secondary_muscles:
+  - dumbbell
+  - incline_bench
+  primary_muscles:
+  - 102_pectoralis_major_clavicular
+  - 101_pectoralis_major
+  variations:
+  - low_incline_dumbbell_press
+  - incline_barbell_press
+  - incline_machine_press
+  - neutral_grip_incline_dumbbell_press
+  tags:
+  - expert
+  - chest
+  - dumbbell
+  - incline_press
+  - compound
+  - upper_chest
+  yuhonas_id: Incline_Dumbbell_Press
+  wger_id: 537
+  movements:
+  - incline
+  - horizontal_press
+  - shoulder_horizontal_adduction
+  - shoulder_flexion
+  - elbow_extension
+  common_errors:
+  - Die Bank zu steil einstellen, sodass die vordere Schulter die Hauptarbeit übernimmt
+    und der Reiz auf der oberen Brust deutlich sinkt.
+  - Die Schulterblätter beim Ablassen nach vorne kippen oder die Schultern hochziehen,
+    was die vordere Schulter unnötig belastet.
+  - Die Hanteln unten zu tief neben den Körper fallen lassen und dabei die passive
+    Schulterbeweglichkeit statt aktive Kontrolle zu nutzen.
+  - Die Ellenbogen starr im 90-Grad-Winkel abspreizen, wodurch die Schulter im unteren
+    Abschnitt oft unnötig gestresst wird.
+  - Die Hanteln oben gegeneinander schlagen oder Schwung aus dem Richtungswechsel
+    holen, statt die exzentrische Phase kontrolliert zu führen.
+  - Die Handgelenke nach hinten abknicken, sodass die Kraftlinie nicht mehr sauber
+    über Unterarm und Hantel verläuft.
+  - Mit den Füßen herumrutschen oder das Gesäß von der Bank lösen, um Wiederholungen
+    künstlich leichter zu machen.
+  - Zu kurz ablassen und dadurch den gedehnten unteren Arbeitsbereich der Brust fast
+    vollständig verschenken.
+  display_name: Schrägbankdrücken mit Kurzhanteln
+  review_state:
+    status: approved
+- secondary_muscles:
   - 207_teres_major
   - 202b_trapezius_middle
   - 202c_trapezius_lower
   - 205_rhomboids
   - 404_brachioradialis
-  instructions:
-  - Grab the pull-up bar with the palms facing your torso and a grip closer than the
-    shoulder width.
-  - 'As you have both arms extended in front of you holding the bar at the chosen
-    grip width, keep your torso as straight as possible while creating a curvature
-    on your lower back and sticking your chest out. This is your starting position.
-    Tip: Keeping the torso as straight as possible maximizes biceps stimulation while
-    minimizing back involvement.'
-  - 'As you breathe out, pull your torso up until your head is around the level of
-    the pull-up bar. Concentrate on using the biceps muscles in order to perform the
-    movement. Keep the elbows close to your body. Tip: The upper torso should remain
-    stationary as it moves through space and only the arms should move. The forearms
-    should do no other work other than hold the bar.'
-  - After a second of squeezing the biceps in the contracted position, slowly lower
-    your torso back to the starting position; when your arms are fully extended. Breathe
-    in as you perform this portion of the movement.
-  - Repeat this motion for the prescribed amount of repetitions.
-  external_ids:
-    yuhonas:
-    - Chin-Up
-    wger:
-    - 152
-  english: Chin-Up
-  category: pull
-  source: approved
-  id: '021'
-  yuhonas_id: Chin-Up
-  review_state:
-    status: approved
-  name: Untergriff-Klimmzug
-  tags:
-  - expert
-  - back
-  - arms
-  - biceps
-  - bodyweight
-  - vertical_pull
-  - compound
-  movements:
-  - vertical
-  - shoulder_adduction
-  - shoulder_extension
-  - elbow_flexion
-  - scapular_depression
-  - scapular_retraction
-  - supinated_grip
   origin:
-    type: merged_external
+    wger:
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+      wger_id: 152
+      original_description:
+      - Wie normale Klimmzüge, aber im Untergriff.
+    source_refs:
+      wger:
+      - '152'
+      yuhonas:
+      - Chin-Up
     yuhonas:
       yuhonas_id: Chin-Up
       instructions:
@@ -1663,24 +1565,75 @@ exercises:
         lower your torso back to the starting position; when your arms are fully extended.
         Breathe in as you perform this portion of the movement.
       - Repeat this motion for the prescribed amount of repetitions.
-    source_refs:
-      yuhonas:
-      - Chin-Up
-      wger:
-      - '152'
+    type: merged_external
+  external_ids:
     wger:
-      original_description:
-      - Wie normale Klimmzüge, aber im Untergriff.
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      wger_id: 152
+    - 152
+    yuhonas:
+    - Chin-Up
+  category: pull
+  schema_version: 2026-08-12.exercise-v1
+  aliases:
+  - Klimmzug im Untergriff
+  - Untergriff Klimmzug
+  - Klimmzug Untergriff
+  - Klimmzüge im Untergriff
+  - enger Untergriff-Klimmzug
+  - Chin-Up
+  - Chin Up
+  - Chin-Ups
+  - Underhand Pull-Up
+  - Underhand Grip Pull-Up
+  - Supinated Grip Pull-Up
+  - Reverse Grip Pull-Up
+  name: Untergriff-Klimmzug
+  source: approved
+  original_description:
+  - Wie normale Klimmzüge, aber im Untergriff.
+  id: '021'
+  german: Untergriff-Klimmzug
+  instructions:
+  - Grab the pull-up bar with the palms facing your torso and a grip closer than the
+    shoulder width.
+  - 'As you have both arms extended in front of you holding the bar at the chosen
+    grip width, keep your torso as straight as possible while creating a curvature
+    on your lower back and sticking your chest out. This is your starting position.
+    Tip: Keeping the torso as straight as possible maximizes biceps stimulation while
+    minimizing back involvement.'
+  - 'As you breathe out, pull your torso up until your head is around the level of
+    the pull-up bar. Concentrate on using the biceps muscles in order to perform the
+    movement. Keep the elbows close to your body. Tip: The upper torso should remain
+    stationary as it moves through space and only the arms should move. The forearms
+    should do no other work other than hold the bar.'
+  - After a second of squeezing the biceps in the contracted position, slowly lower
+    your torso back to the starting position; when your arms are fully extended. Breathe
+    in as you perform this portion of the movement.
+  - Repeat this motion for the prescribed amount of repetitions.
   _hash: 78e5dfacb6c10ce473004b97e9748993
   wger_muscle_ids:
-    primary: []
     secondary: []
-  display_name: Untergriff-Klimmzug
+    primary: []
   type: compound
+  english: Chin-Up
+  coaching_notes:
+  - Greife etwa schulterbreit oder leicht enger im Untergriff, sodass die Handgelenke
+    gerade bleiben und die Ellenbogen sauber unter der Stange arbeiten können.
+  - 'Beginne im aktiven Hang: Schulterblätter leicht nach unten setzen, Rumpf anspannen
+    und die Beine ruhig halten, bevor die erste Zugphase startet.'
+  - Denke daran, die Ellenbogen nach unten Richtung Rippen zu ziehen, statt nur das
+    Kinn zur Stange vorzuschieben; so kommt der Zug aus Latissimus und Armbeugern.
+  - Halte Brustbein stolz und Rippen kontrolliert, damit du weder ins Hohlkreuz fällst
+    noch dich in eine lose Bananenform schwingst.
+  - Ziehe bis das Kinn klar über der Stange ist oder die obere Brust die Stange annähert,
+    ohne die Spannung in Schultergürtel und Rumpf zu verlieren.
+  - Senke dich kontrolliert in die volle Ellbogenstreckung zurück und nutze die exzentrische
+    Phase bewusst, statt unten einfach in die passive Schulterposition zu fallen.
+  stabilizers:
+  - 304_rotator_cuff
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  - 405_forearm_flexors
   search_aliases:
   - chin_up
   - chin-up
@@ -1690,127 +1643,80 @@ exercises:
   - wger_152
   - Chin-Up
   - Untergriff-Klimmzug
-  wger_id: 152
-- aliases:
-  - Front Squat
-  - Barbell Front Squat
-  - Frontbeuge
-  - Frontbeugen
-  - Front-Kniebeuge
-  - Vordere Kniebeuge
-  german: Frontkniebeuge
-  variations:
-  - goblet_squat
-  - cross_grip_front_squat
-  - dumbbell_front_squat
-  - double_kettlebell_front_squat
-  common_errors:
-  - Ellbogen sinken ab, wodurch die Stange nach vorne kippt und die Bewegung in eine
-    Good-Morning-Mechanik abrutscht.
-  - Die Hüfte schießt aus dem Loch zuerst hoch, sodass der Oberkörper stark nach vorne
-    fällt.
-  - Knie kollabieren nach innen, statt aktiv über dem zweiten bis dritten Zeh geführt
-    zu werden.
-  - Fersen heben ab oder der Druck wandert nur auf den Vorfuß, meist durch fehlende
-    Dorsalflexion oder verlorene Rumpfspannung.
-  - Die Stange wird mit den Händen getragen, statt auf den Schultern abgelegt zu sein,
-    was Handgelenke unnötig überlastet.
-  - Tiefe wird erzwungen, obwohl Becken, LWS oder Oberkörperposition dabei sichtbar
-    die Spannung verlieren.
-  - Im unteren Umkehrpunkt wird passiv gebounced, ohne Spannung in Rumpf, Fuß und
-    Knielinie zu halten.
-  - Zu frühes Ausatmen in der Aufwärtsphase führt zum Kollaps im Rumpf und zu instabiler
-    Stangenbahn.
-  id: '061'
+  exercise_id: '021'
+  equipment:
+  - bodyweight
+  - pull_up_bar
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 402_biceps_brachii
+  - 403_brachialis
   tags:
   - expert
-  - legs
-  - squat
+  - back
+  - arms
+  - biceps
+  - bodyweight
+  - vertical_pull
   - compound
-  - quad_dominant
-  - strength
-  - front_rack
+  variations:
+  - assisted_chin_up
+  - weighted_chin_up
+  - close_grip_chin_up
+  - negative_chin_up
+  yuhonas_id: Chin-Up
   review_state:
     status: approved
-  name: Frontkniebeuge
-  stabilizers:
-  - 504_transverse_abdominis
-  - 501_rectus_abdominis
-  - 507_multifidus
-  - 505_quadratus_lumborum
-  - 206_erector_spinae
-  - 202a_trapezius_upper
-  - 202b_trapezius_middle
-  - 202c_trapezius_lower
-  - 205_rhomboids
-  - 301_anterior_deltoid
-  - 304_rotator_cuff
-  - 608_gluteus_medius
-  - 609_gluteus_minimus
-  - 702_soleus
-  - 701_gastrocnemius
-  equipment:
-  - barbell
-  - squat_rack
   movements:
-  - knee_flexion_extension
-  - hip_flexion_extension
-  - ankle_dorsiflexion
-  - front_rack_bracing
-  - thoracic_extension
-  - spinal_anti_flexion
-  coaching_notes:
-  - 'Baue zuerst ein sauberes Front-Rack: Stange liegt auf den vorderen Schultern,
-    nicht in den Händen; Ellbogen aktiv nach vorne-oben führen.'
-  - Atme tief in Bauch und Flanken ein und spanne den Rumpf vor jeder Wiederholung
-    hart an, damit der Oberkörper aufrecht bleibt.
-  - Setze dich zwischen die Hüften, während die Knie kontrolliert nach vorne über
-    die Zehen reisen; so bleibt die Last mittig über dem Fuß.
-  - Halte den Druck über Mittelfuß bis Ferse, ohne die Zehen zu verlieren; der ganze
-    Fuß bleibt belastet.
-  - Denke an Brustbein hoch und oberen Rücken lang, damit die Stange nicht nach vorne
-    abrollt.
-  - Gehe nur so tief, wie du Spannung, neutrale Wirbelsäule und stabile Fußposition
-    halten kannst.
-  - Drücke aus dem tiefsten Punkt gleichzeitig Boden weg und Ellbogen hoch, statt
-    die Hüfte zuerst nach hinten schießen zu lassen.
-  - Wenn Mobilität limitiert ist, priorisiere eine stabile Front-Rack- und Sprunggelenksposition
-    vor zusätzlicher Last.
-  schema_version: 2026-08-12.exercise-v1
-  _hash: 68e1b750dd9061083639ff3b8a63144d
-  secondary_muscles:
+  - vertical
+  - shoulder_adduction
+  - shoulder_extension
+  - elbow_flexion
+  - scapular_depression
+  - scapular_retraction
+  - supinated_grip
+  common_errors:
+  - Aus einem passiven Hang mit hochgezogenen Schultern anziehen, wodurch die Schulterblattkontrolle
+    und ein sauberer Kraftaufbau verloren gehen.
+  - Schwung aus Hüfte, Knien oder Kipping nutzen, statt jede Wiederholung aus ruhiger
+    Rumpfspannung und kontrolliertem Zug zu erzeugen.
+  - Das Kinn nur nach vorne schieben, um die Wiederholung künstlich zu beenden, obwohl
+    Brustkorb und Ellenbogen nicht sauber nach oben beziehungsweise unten geführt
+    wurden.
+  - Zu weit oder zu eng greifen, sodass Handgelenke einknicken und Ellenbogen unnötig
+    gereizt werden.
+  - Unten nicht vollständig strecken oder oben die Endposition abkürzen, wodurch Bewegungsumfang
+    und Trainingsreiz deutlich sinken.
+  - Beim Hochziehen die Rippen aufreißen und ins Hohlkreuz kippen, statt Becken und
+    Rumpf stabil zu halten.
+  display_name: Untergriff-Klimmzug
+  wger_id: 152
+- secondary_muscles:
   - 603_gluteus_maximus
   - 602_adductors
-  wger_muscle_ids:
-    primary:
-    - 10
-    secondary:
-    - 8
-    - 6
-  primary_muscles:
-  - 601_quadriceps_femoris
-  display_name: Frontkniebeuge
-  exercise_id: '061'
   origin:
-    type: external
+    wger:
+      wger_id: 257
+      wger_muscle_ids:
+        secondary:
+        - 8
+        - 6
+        primary:
+        - 10
+    source_refs:
+      wger:
+      - '257'
     yuhonas:
       secondary_muscles:
       - calves
       - glutes
       - hamstrings
       wger_muscle_ids:
-        primary: []
         secondary: []
-      display_name: Front Barbell Squat
+        primary: []
       tags:
       - unreviewed
       - yuhonas
-      primary_muscles:
-      - quadriceps
-      exercise_id: yuhonas_front_barbell_squat
-      yuhonas_id: Front_Barbell_Squat
-      equipment:
-      - barbell
       coaching_notes:
       - This exercise is best performed inside a squat rack for safety purposes. To
         begin, first set the bar on a rack that best matches your height. Once the
@@ -1840,23 +1746,58 @@ exercises:
         middle of your foot as you straighten the legs again and go back to the starting
         position.
       - Repeat for the recommended amount of repetitions.
+      yuhonas_id: Front_Barbell_Squat
       category: strength
-    source_refs:
-      wger:
-      - '257'
-    wger:
-      wger_muscle_ids:
-        primary:
-        - 10
-        secondary:
-        - 8
-        - 6
-      wger_id: 257
-  source: approved
-  type: compound
+      display_name: Front Barbell Squat
+      exercise_id: yuhonas_front_barbell_squat
+      equipment:
+      - barbell
+      primary_muscles:
+      - quadriceps
+    type: external
   external_ids:
     wger:
     - 257
+  english: Front Squat
+  display_name: Frontkniebeuge
+  wger_id: 257
+  review_state:
+    status: approved
+  coaching_notes:
+  - 'Baue zuerst ein sauberes Front-Rack: Stange liegt auf den vorderen Schultern,
+    nicht in den Händen; Ellbogen aktiv nach vorne-oben führen.'
+  - Atme tief in Bauch und Flanken ein und spanne den Rumpf vor jeder Wiederholung
+    hart an, damit der Oberkörper aufrecht bleibt.
+  - Setze dich zwischen die Hüften, während die Knie kontrolliert nach vorne über
+    die Zehen reisen; so bleibt die Last mittig über dem Fuß.
+  - Halte den Druck über Mittelfuß bis Ferse, ohne die Zehen zu verlieren; der ganze
+    Fuß bleibt belastet.
+  - Denke an Brustbein hoch und oberen Rücken lang, damit die Stange nicht nach vorne
+    abrollt.
+  - Gehe nur so tief, wie du Spannung, neutrale Wirbelsäule und stabile Fußposition
+    halten kannst.
+  - Drücke aus dem tiefsten Punkt gleichzeitig Boden weg und Ellbogen hoch, statt
+    die Hüfte zuerst nach hinten schießen zu lassen.
+  - Wenn Mobilität limitiert ist, priorisiere eine stabile Front-Rack- und Sprunggelenksposition
+    vor zusätzlicher Last.
+  category: squat
+  schema_version: 2026-08-12.exercise-v1
+  stabilizers:
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  - 507_multifidus
+  - 505_quadratus_lumborum
+  - 206_erector_spinae
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 205_rhomboids
+  - 301_anterior_deltoid
+  - 304_rotator_cuff
+  - 608_gluteus_medius
+  - 609_gluteus_minimus
+  - 702_soleus
+  - 701_gastrocnemius
   search_aliases:
   - front_squat
   - barbell_front_squat
@@ -1866,74 +1807,84 @@ exercises:
   - wger_257
   - Frontkniebeuge
   - Front Squat
-  wger_id: 257
-  english: Front Squat
-  category: squat
-- aliases:
-  - Beinstrecker
-  - Kniestrecker
-  - Leg Extension
-  - Leg Extension Machine
-  - Quadriceps Extension
-  id: '401'
-  variations:
-  - single_leg_extension
-  - unilateral_leg_extension
+  name: Frontkniebeuge
+  equipment:
+  - barbell
+  - squat_rack
+  aliases:
+  - Front Squat
+  - Barbell Front Squat
+  - Frontbeuge
+  - Frontbeugen
+  - Front-Kniebeuge
+  - Vordere Kniebeuge
+  primary_muscles:
+  - 601_quadriceps_femoris
+  exercise_id: '061'
+  type: compound
   source: approved
-  common_errors:
-  - Zu hohes Trainingsgewicht, sodass die Wiederholung mit Schwung eingeleitet wird
-    statt mit sauberer Muskelspannung.
-  - Das Gewicht in der Abwärtsphase einfach fallen lassen und dadurch Spannung sowie
-    Gelenkkontrolle verlieren.
-  - Die Knie nicht korrekt zur Maschinenachse ausrichten, was unnötigen Druck auf
-    das Gelenk erzeugen kann.
-  - Am oberen Punkt hart ins Kniegelenk hineinschnappen, statt die Endstreckung muskulär
-    zu kontrollieren.
-  - Hüfte oder Gesäß vom Sitz abheben und mit dem Oberkörper ausweichen, um die letzten
-    Grade der Bewegung zu erzwingen.
+  variations:
+  - goblet_squat
+  - cross_grip_front_squat
+  - dumbbell_front_squat
+  - double_kettlebell_front_squat
   tags:
   - expert
   - legs
-  - quadriceps
-  - isolation
-  - machine
-  - knee_extension
-  primary_muscles:
-  - 601_quadriceps_femoris
-  name: Beinstrecken
-  stabilizers:
-  - 504_transverse_abdominis
-  - 507_multifidus
-  equipment:
-  - machine
-  coaching_notes:
-  - Stelle die Maschine so ein, dass die Kniegelenkachse exakt mit der Drehachse der
-    Maschine fluchtet und das Polster knapp oberhalb des Sprunggelenks sitzt.
-  - Spanne den Quadrizeps aktiv an und strecke das Knie kontrolliert, bis kurz vor
-    die harte Endstellung, ohne das Gelenk aggressiv zu verriegeln.
-  - Senke das Gewicht langsam und geführt ab, damit der Quadrizeps auch in der exzentrischen
-    Phase unter Spannung bleibt.
-  - Halte Gesäß, unteren Rücken und Oberschenkel stabil am Sitz; die Bewegung soll
-    sauber aus der Knieextension kommen, nicht aus Schwung oder Ausweichen im Oberkörper.
-  - Wähle eine ROM, in der du schmerzfrei arbeiten kannst, und halte Knie, Fuß und
-    Oberschenkel in einer sauberen Linie über die gesamte Wiederholung.
+  - squat
+  - compound
+  - quad_dominant
+  - strength
+  - front_rack
+  id: '061'
+  german: Frontkniebeuge
+  movements:
+  - knee_flexion_extension
+  - hip_flexion_extension
+  - ankle_dorsiflexion
+  - front_rack_bracing
+  - thoracic_extension
+  - spinal_anti_flexion
+  common_errors:
+  - Ellbogen sinken ab, wodurch die Stange nach vorne kippt und die Bewegung in eine
+    Good-Morning-Mechanik abrutscht.
+  - Die Hüfte schießt aus dem Loch zuerst hoch, sodass der Oberkörper stark nach vorne
+    fällt.
+  - Knie kollabieren nach innen, statt aktiv über dem zweiten bis dritten Zeh geführt
+    zu werden.
+  - Fersen heben ab oder der Druck wandert nur auf den Vorfuß, meist durch fehlende
+    Dorsalflexion oder verlorene Rumpfspannung.
+  - Die Stange wird mit den Händen getragen, statt auf den Schultern abgelegt zu sein,
+    was Handgelenke unnötig überlastet.
+  - Tiefe wird erzwungen, obwohl Becken, LWS oder Oberkörperposition dabei sichtbar
+    die Spannung verlieren.
+  - Im unteren Umkehrpunkt wird passiv gebounced, ohne Spannung in Rumpf, Fuß und
+    Knielinie zu halten.
+  - Zu frühes Ausatmen in der Aufwärtsphase führt zum Kollaps im Rumpf und zu instabiler
+    Stangenbahn.
+  _hash: 68e1b750dd9061083639ff3b8a63144d
+  wger_muscle_ids:
+    secondary:
+    - 8
+    - 6
+    primary:
+    - 10
+- secondary_muscles: []
   origin:
-    type: merged_external
+    wger:
+      wger_id: 851
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 10
     yuhonas:
       secondary_muscles: []
       wger_muscle_ids:
-        primary: []
         secondary: []
-      display_name: Leg Extensions
+        primary: []
       tags:
       - unreviewed
       - yuhonas
-      primary_muscles:
-      - quadriceps
-      exercise_id: yuhonas_leg_extensions
-      yuhonas_id: Leg_Extensions
-      equipment:
-      - machine
       coaching_notes:
       - 'For this exercise you will need to use a leg extension machine. First choose
         your weight and sit on the machine with your legs under the pad (feet pointed
@@ -1951,41 +1902,39 @@ exercises:
       - Slowly lower the weight back to the original position as you inhale, ensuring
         that you do not go past the 90-degree angle limit.
       - Repeat for the recommended amount of times.
+      yuhonas_id: Leg_Extensions
       category: strength
+      exercise_id: yuhonas_leg_extensions
+      display_name: Leg Extensions
+      equipment:
+      - machine
+      primary_muscles:
+      - quadriceps
     source_refs:
-      yuhonas:
-      - Leg_Extensions
       wger:
       - '851'
-    wger:
-      wger_muscle_ids:
-        primary:
-        - 10
-        secondary: []
-      wger_id: 851
-  schema_version: 2026-08-12.exercise-v1
-  _hash: 3188e868e57cedad689328d5dc012c18
-  secondary_muscles: []
-  wger_muscle_ids:
-    primary:
-    - 10
-    secondary: []
-  review_state:
-    status: approved
-  display_name: Beinstrecken
-  movements:
-  - knee_extension
-  - open_chain
-  - seated
-  - single_joint
-  exercise_id: '401'
-  emphasis_muscles: []
-  type: isolation
+      yuhonas:
+      - Leg_Extensions
+    type: merged_external
   external_ids:
-    yuhonas:
-    - Leg_Extensions
     wger:
     - 851
+    yuhonas:
+    - Leg_Extensions
+  emphasis_muscles: []
+  english: Leg Extension
+  wger_id: 851
+  _hash: 3188e868e57cedad689328d5dc012c18
+  category: squat
+  display_name: Beinstrecken
+  schema_version: 2026-08-12.exercise-v1
+  aliases:
+  - Beinstrecker
+  - Kniestrecker
+  - Leg Extension
+  - Leg Extension Machine
+  - Quadriceps Extension
+  exercise_id: '401'
   search_aliases:
   - leg_extension
   - leg_extension_machine
@@ -1996,114 +1945,73 @@ exercises:
   - Leg_Extensions
   - Beinstrecken
   - Leg Extension
-  wger_id: 851
-  german: Beinstrecken
-  english: Leg Extension
-  category: squat
-- aliases:
-  - Kabelzug-Überkreuzung
-  - Kabel Crossover
-  - Cable Fly
-  - Standing Cable Fly
-  - Überkreuzung am Kabelzug
-  source: approved
-  variations: []
-  id: cable_crossover
-  german: Kabel-Crossover
-  exercise_id: cable_crossover
-  primary_muscles:
-  - 101_pectoralis_major
-  name: Cable Crossover
+  equipment:
+  - machine
   stabilizers:
   - 504_transverse_abdominis
-  - 502_obliquus_externus
-  - 503_obliquus_internus
   - 507_multifidus
-  equipment:
-  - cable
-  movements:
-  - shoulder_horizontal_adduction
-  - horizontal_adduction
-  - scapular_protraction
-  - isometric_elbow_flexion
-  - isometric_trunk_stabilization
-  - cable
+  primary_muscles:
+  - 601_quadriceps_femoris
+  coaching_notes:
+  - Stelle die Maschine so ein, dass die Kniegelenkachse exakt mit der Drehachse der
+    Maschine fluchtet und das Polster knapp oberhalb des Sprunggelenks sitzt.
+  - Spanne den Quadrizeps aktiv an und strecke das Knie kontrolliert, bis kurz vor
+    die harte Endstellung, ohne das Gelenk aggressiv zu verriegeln.
+  - Senke das Gewicht langsam und geführt ab, damit der Quadrizeps auch in der exzentrischen
+    Phase unter Spannung bleibt.
+  - Halte Gesäß, unteren Rücken und Oberschenkel stabil am Sitz; die Bewegung soll
+    sauber aus der Knieextension kommen, nicht aus Schwung oder Ausweichen im Oberkörper.
+  - Wähle eine ROM, in der du schmerzfrei arbeiten kannst, und halte Knie, Fuß und
+    Oberschenkel in einer sauberen Linie über die gesamte Wiederholung.
   review_state:
     status: approved
-  schema_version: 2026-08-12.exercise-v1
-  _hash: 089ccd544ebded5ec0e8d711e0e91401
-  secondary_muscles:
+  source: approved
+  name: Beinstrecken
+  tags:
+  - expert
+  - legs
+  - quadriceps
+  - isolation
+  - machine
+  - knee_extension
+  variations:
+  - single_leg_extension
+  - unilateral_leg_extension
+  id: '401'
+  german: Beinstrecken
+  movements:
+  - knee_extension
+  - open_chain
+  - seated
+  - single_joint
+  common_errors:
+  - Zu hohes Trainingsgewicht, sodass die Wiederholung mit Schwung eingeleitet wird
+    statt mit sauberer Muskelspannung.
+  - Das Gewicht in der Abwärtsphase einfach fallen lassen und dadurch Spannung sowie
+    Gelenkkontrolle verlieren.
+  - Die Knie nicht korrekt zur Maschinenachse ausrichten, was unnötigen Druck auf
+    das Gelenk erzeugen kann.
+  - Am oberen Punkt hart ins Kniegelenk hineinschnappen, statt die Endstreckung muskulär
+    zu kontrollieren.
+  - Hüfte oder Gesäß vom Sitz abheben und mit dem Oberkörper ausweichen, um die letzten
+    Grade der Bewegung zu erzwingen.
+  type: isolation
+  wger_muscle_ids:
+    secondary: []
+    primary:
+    - 10
+- secondary_muscles:
   - 301_anterior_deltoid
   - 105_serratus_anterior
-  common_errors:
-  - Die Griffe mit Schwung zusammenwerfen, statt die Brust kontrolliert durch den
-    gesamten Bewegungsbogen arbeiten zu lassen.
-  - Die Ellbogen während der Wiederholung stark beugen oder strecken und die Bewegung
-    dadurch in eine Druckübung verwandeln.
-  - In der Dehnung zu weit nach hinten gehen und dabei die Schulter nach vorne ziehen
-    oder das vordere Schultergelenk reizen.
-  - Die Schultern hochziehen und Spannung in Nacken und oberem Trapez übernehmen lassen.
-  - Den Oberkörper nach vorne werfen oder rotieren, um die letzten Zentimeter zu erzwingen.
-  - Zu schwer laden und dadurch den Kontakt zur Brust verlieren, sodass vor allem
-    vordere Schulter und Arme übernehmen.
-  - Die Hände nur vor dem Körper zusammenführen, ohne die Oberarme wirklich horizontal
-    zu adduzieren.
-  - Den Zugwinkel zufällig wählen und dann eine andere Brustregion erwarten, als die
-    eingestellte Seilbahn tatsächlich belastet.
   origin:
-    type: manual
-    yuhonas:
-      secondary_muscles:
-      - shoulders
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Cable Crossover
-      yuhonas_id: Cable_Crossover
-      primary_muscles:
-      - chest
-      exercise_id: yuhonas_cable_crossover
-      tags:
-      - unreviewed
-      - yuhonas
-      equipment:
-      - cable
-      coaching_notes:
-      - To get yourself into the starting position, place the pulleys on a high position
-        (above your head), select the resistance to be used and hold the pulleys in
-        each hand.
-      - Step forward in front of an imaginary straight line between both pulleys while
-        pulling your arms together in front of you. Your torso should have a small
-        forward bend from the waist. This will be your starting position.
-      - 'With a slight bend on your elbows in order to prevent stress at the biceps
-        tendon, extend your arms to the side (straight out at both sides) in a wide
-        arc until you feel a stretch on your chest. Breathe in as you perform this
-        portion of the movement. Tip: Keep in mind that throughout the movement, the
-        arms and torso should remain stationary; the movement should only occur at
-        the shoulder joint.'
-      - Return your arms back to the starting position as you breathe out. Make sure
-        to use the same arc of motion used to lower the weights.
-      - Hold for a second at the starting position and repeat the movement for the
-        prescribed amount of repetitions.
-      category: strength
-    source_refs: {}
     wger:
       secondary_muscles: []
-      wger_muscle_ids:
-        primary:
-        - 4
-        secondary: []
       display_name: Omni Cable Crossover
-      german: Omni Cable Crossover
-      exercise_id: wger_1440
       primary_muscles:
       - 101_pectoralis_major
       tags:
       - unreviewed
       - wger
-      wger_id: 1440
-      equipment:
-      - sz-bar
       coaching_notes:
       - 'Passe die Gewichte je nach
 
@@ -2148,7 +2056,54 @@ exercises:
 
         beide Brustbereiche effektiv ansprichst.'
       category: chest
-  display_name: Kabel-Crossover
+      wger_id: 1440
+      german: Omni Cable Crossover
+      equipment:
+      - sz-bar
+      exercise_id: wger_1440
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 4
+    yuhonas:
+      secondary_muscles:
+      - shoulders
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+      tags:
+      - unreviewed
+      - yuhonas
+      category: strength
+      yuhonas_id: Cable_Crossover
+      coaching_notes:
+      - To get yourself into the starting position, place the pulleys on a high position
+        (above your head), select the resistance to be used and hold the pulleys in
+        each hand.
+      - Step forward in front of an imaginary straight line between both pulleys while
+        pulling your arms together in front of you. Your torso should have a small
+        forward bend from the waist. This will be your starting position.
+      - 'With a slight bend on your elbows in order to prevent stress at the biceps
+        tendon, extend your arms to the side (straight out at both sides) in a wide
+        arc until you feel a stretch on your chest. Breathe in as you perform this
+        portion of the movement. Tip: Keep in mind that throughout the movement, the
+        arms and torso should remain stationary; the movement should only occur at
+        the shoulder joint.'
+      - Return your arms back to the starting position as you breathe out. Make sure
+        to use the same arc of motion used to lower the weights.
+      - Hold for a second at the starting position and repeat the movement for the
+        prescribed amount of repetitions.
+      exercise_id: yuhonas_cable_crossover
+      display_name: Cable Crossover
+      equipment:
+      - cable
+      primary_muscles:
+      - chest
+    source_refs: {}
+    type: manual
+  german: Kabel-Crossover
+  english: Cable Crossover
+  _hash: 089ccd544ebded5ec0e8d711e0e91401
   coaching_notes:
   - 'Stelle die Kabel so ein, dass der Zugwinkel zu der Brustregion passt, die du
     betonen willst: hoch nach tief eher sternal, mittig eher gesamter Brustkorb, tief
@@ -2168,14 +2123,15 @@ exercises:
     Bahn und gleicher Geschwindigkeit arbeiten.
   - Wähle ein Gewicht, bei dem du den Zielmuskel klar spürst und die exzentrische
     Phase sauber abbremsen kannst.
-  tags:
-  - chest_isolation
-  - fly_pattern
-  - cable_exercise
-  - horizontal_adduction
-  - pec_contraction
-  - chest
-  type: isolation
+  category: push
+  name: Cable Crossover
+  aliases:
+  - Kabelzug-Überkreuzung
+  - Kabel Crossover
+  - Cable Fly
+  - Standing Cable Fly
+  - Überkreuzung am Kabelzug
+  exercise_id: cable_crossover
   search_aliases:
   - Kabel-Crossover
   - Kabel Crossover
@@ -2183,88 +2139,62 @@ exercises:
   - Cable Crossover
   - Cable Fly
   - Standing Cable Fly
-  english: Cable Crossover
-  category: push
-- aliases:
-  - Cable Crossover
-  - Cross Cable Fly
-  - Kabel-Fly über Kreuz
-  - Überkreuztes Cable Crossover
-  source: approved
-  variations: []
-  id: cable_crossover_inner_x
-  german: Kabel-Crossover über Kreuz
-  displayName: Kabel-Crossover über Kreuz
+  equipment:
+  - cable
+  schema_version: 2026-08-12.exercise-v1
   primary_muscles:
   - 101_pectoralis_major
-  name: Inner-X-Cable-Cross
   stabilizers:
-  - 304_rotator_cuff
   - 504_transverse_abdominis
   - 502_obliquus_externus
   - 503_obliquus_internus
-  equipment:
-  - cable
+  - 507_multifidus
+  source: approved
+  tags:
+  - chest_isolation
+  - fly_pattern
+  - cable_exercise
+  - horizontal_adduction
+  - pec_contraction
+  - chest
+  variations: []
+  id: cable_crossover
+  display_name: Kabel-Crossover
   movements:
+  - shoulder_horizontal_adduction
   - horizontal_adduction
   - scapular_protraction
-  - isometric_core_stability
+  - isometric_elbow_flexion
+  - isometric_trunk_stabilization
   - cable
-  - peak_contraction
+  common_errors:
+  - Die Griffe mit Schwung zusammenwerfen, statt die Brust kontrolliert durch den
+    gesamten Bewegungsbogen arbeiten zu lassen.
+  - Die Ellbogen während der Wiederholung stark beugen oder strecken und die Bewegung
+    dadurch in eine Druckübung verwandeln.
+  - In der Dehnung zu weit nach hinten gehen und dabei die Schulter nach vorne ziehen
+    oder das vordere Schultergelenk reizen.
+  - Die Schultern hochziehen und Spannung in Nacken und oberem Trapez übernehmen lassen.
+  - Den Oberkörper nach vorne werfen oder rotieren, um die letzten Zentimeter zu erzwingen.
+  - Zu schwer laden und dadurch den Kontakt zur Brust verlieren, sodass vor allem
+    vordere Schulter und Arme übernehmen.
+  - Die Hände nur vor dem Körper zusammenführen, ohne die Oberarme wirklich horizontal
+    zu adduzieren.
+  - Den Zugwinkel zufällig wählen und dann eine andere Brustregion erwarten, als die
+    eingestellte Seilbahn tatsächlich belastet.
+  type: isolation
+  review_state:
+    status: approved
+- displayName: Kabel-Crossover über Kreuz
   origin:
-    type: manual
-    yuhonas:
-      secondary_muscles:
-      - shoulders
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Cable Crossover
-      yuhonas_id: Cable_Crossover
-      primary_muscles:
-      - chest
-      exercise_id: yuhonas_cable_crossover
-      tags:
-      - unreviewed
-      - yuhonas
-      equipment:
-      - cable
-      coaching_notes:
-      - To get yourself into the starting position, place the pulleys on a high position
-        (above your head), select the resistance to be used and hold the pulleys in
-        each hand.
-      - Step forward in front of an imaginary straight line between both pulleys while
-        pulling your arms together in front of you. Your torso should have a small
-        forward bend from the waist. This will be your starting position.
-      - 'With a slight bend on your elbows in order to prevent stress at the biceps
-        tendon, extend your arms to the side (straight out at both sides) in a wide
-        arc until you feel a stretch on your chest. Breathe in as you perform this
-        portion of the movement. Tip: Keep in mind that throughout the movement, the
-        arms and torso should remain stationary; the movement should only occur at
-        the shoulder joint.'
-      - Return your arms back to the starting position as you breathe out. Make sure
-        to use the same arc of motion used to lower the weights.
-      - Hold for a second at the starting position and repeat the movement for the
-        prescribed amount of repetitions.
-      category: strength
-    source_refs: {}
     wger:
       secondary_muscles: []
-      wger_muscle_ids:
-        primary:
-        - 4
-        secondary: []
-      german: Omni Cable Crossover
-      display_name: Omni Cable Crossover
-      exercise_id: wger_1440
       primary_muscles:
       - 101_pectoralis_major
+      german: Omni Cable Crossover
       tags:
       - unreviewed
       - wger
-      wger_id: 1440
-      equipment:
-      - sz-bar
       coaching_notes:
       - 'Passe die Gewichte je nach
 
@@ -2309,132 +2239,26 @@ exercises:
 
         beide Brustbereiche effektiv ansprichst.'
       category: chest
-  schema_version: 2026-08-12.exercise-v1
-  _hash: 7a7dc68e51143901b658b7d2fc3fa846
-  secondary_muscles:
-  - 301_anterior_deltoid
-  review_state:
-    status: approved
-  exercise_id: cable_crossover_inner_x
-  display_name: Kabel-Crossover über Kreuz
-  secondaryMuscles:
-  - 301_anterior_deltoid
-  coaching_notes:
-  - Stelle die Kabelrollen etwa auf Schulterhöhe ein, gehe mittig zwischen die Türme
-    und nimm einen versetzten, stabilen Stand ein.
-  - Hebe den Brustkorb an, halte die Schultern tief und hinten organisiert und bewahre
-    während der gesamten Wiederholung eine leichte Ellbogenbeugung.
-  - Führe die Arme in einer weiten Bogenbahn vor dem Körper zusammen, bis sich die
-    Hände leicht überkreuzen und die Brust aktiv maximal verkürzt.
-  - Die Bewegung kommt aus der horizontalen Adduktion im Schultergelenk, nicht aus
-    einem nachdrückenden Strecken der Ellbogen.
-  - Halte die Endposition für einen kurzen Moment, ohne die Schultern nach vorn hochzuziehen,
-    und spanne die Brust bewusst an.
-  - Lass die Griffe kontrolliert und unter Spannung in die gedehnte Position zurückkehren,
-    ohne dass die Gewichte absetzen oder dich nach hinten ziehen.
-  - Wähle ein Gewicht, bei dem du die Zugbahn sauber halten kannst und die Spannung
-    durchgehend in der Brust statt im vorderen Schulterbereich spürst.
-  tags:
-  - chest_isolation
-  - cable_workout
-  - muscle_building
-  - chest
-  - horizontal_adduction
-  - peak_contraction
-  - cross_body
-  type: isolation
-  common_errors:
-  - Zu hohes Gewicht, wodurch die Ellbogen zunehmend strecken und die Übung eher zu
-    einem Trizepsdrücken als zu einer Brustisolation wird.
-  - Die Schultern wandern nach oben oder nach vorn, was die Belastung aus der Brust
-    in den Nacken und die vordere Schulter verschiebt.
-  - Zu kurze Bewegungsamplitude, bei der weder eine saubere Dehnung in der Startposition
-    noch eine volle Kontraktion in der Endposition erreicht wird.
-  - Schwung aus Oberkörper oder Hüfte, statt die Wiederholung kontrolliert aus dem
-    Schultergelenk zu führen.
-  - Zu starkes Beugen oder Verändern des Ellbogenwinkels während der Wiederholung,
-    wodurch die Belastung unnötig auf Arme und Gelenke verlagert wird.
-  - Die exzentrische Phase wird fallen gelassen, sodass Spannung, Kontrolle und Dehnungsreiz
-    in der Brust verloren gehen.
-  - Der Kopf schiebt nach vorn oder der untere Rücken wird überstreckt, weil die Rumpfspannung
-    und Standstabilität fehlen.
-  search_aliases:
-  - Kabel-Crossover über Kreuz
-  - Cross-Body Cable Crossover
-  - Cable Crossover
-  - Kabel-Fly über Kreuz
-  - Inner-X-Cable-Cross
-  primaryMuscles:
-  - 101_pectoralis_major
-  english: Cross-Body Cable Crossover
-  category: push
-- aliases:
-  - Cable Fly Low to High
-  - Low Cable Fly
-  - Incline Cable Fly
-  - Low-to-High Cable Fly
-  - Kabel-Flys von unten nach oben
-  - Kabelzug obere Brust
-  - Unterer Kabel-Crossover
-  common_errors:
-  - Zu viel Gewicht, wodurch aus der geführten Fly-Bewegung ein unsauberes Ziehen
-    oder Drücken mit Schwung wird.
-  - Die Ellbogen während der Wiederholung stark beugen oder strecken, wodurch Bizeps
-    und Trizeps unnötig viel Arbeit übernehmen.
-  - Die Schultern zu den Ohren hochziehen, statt die Schulterblätter kontrolliert
-    und ruhig zu halten.
-  - Ins Hohlkreuz ausweichen, um die Griffe höher zu bekommen, anstatt die Spannung
-    in der oberen Brust sauber zu erzeugen.
-  - Die Hände aktiv übereinander schlagen lassen und dadurch vorne die Spannung zu
-    verlieren.
-  - Die exzentrische Phase abkürzen und die Gewichte einfach zurückziehen lassen,
-    statt die Dehnung kontrolliert zu nutzen.
-  - Zu tief oder zu weit hinter den Körper öffnen, obwohl die Schulterposition dabei
-    instabil oder unangenehm wird.
-  - Die Bewegung aus den Händen zu denken, statt die Oberarme diagonal nach innen
-    oben zu führen.
-  - Den Kopf nach vorn schieben oder den Oberkörper stark mitdrehen, wodurch die Übung
-    an Isolation verliert.
-  - Eine zu hohe Kabelposition wählen, wodurch der Zugwinkel eher zu einer normalen
-    Fly-Variante als zur oberen-Brust-Betonung passt.
-  variations: []
-  source: approved
-  id: cable_crossover_low_to_high
-  displayName: Kabel-Crossover von unten nach oben
-  review_state:
-    status: approved
-  name: Low-to-High Cable Crossover
-  stabilizers:
-  - 304_rotator_cuff
-  - 504_transverse_abdominis
-  - 502_obliquus_externus
-  - 503_obliquus_internus
-  equipment:
-  - cable
-  movements:
-  - horizontal_adduction
-  - shoulder_flexion
-  - incline
-  - scapular_protraction
-  - anti_extension
-  origin:
-    type: manual
+      wger_id: 1440
+      exercise_id: wger_1440
+      equipment:
+      - sz-bar
+      display_name: Omni Cable Crossover
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 4
+    source_refs: {}
     yuhonas:
       secondary_muscles:
       - shoulders
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Cable Crossover
+      primary_muscles:
+      - chest
       tags:
       - unreviewed
       - yuhonas
-      primary_muscles:
-      - chest
+      category: strength
       yuhonas_id: Cable_Crossover
-      exercise_id: yuhonas_cable_crossover
-      equipment:
-      - cable
       coaching_notes:
       - To get yourself into the starting position, place the pulleys on a high position
         (above your head), select the resistance to be used and hold the pulleys in
@@ -2452,17 +2276,173 @@ exercises:
         to use the same arc of motion used to lower the weights.
       - Hold for a second at the starting position and repeat the movement for the
         prescribed amount of repetitions.
-      category: strength
-    source_refs: {}
+      exercise_id: yuhonas_cable_crossover
+      display_name: Cable Crossover
+      equipment:
+      - cable
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+    type: manual
+  secondary_muscles:
+  - 301_anterior_deltoid
+  secondaryMuscles:
+  - 301_anterior_deltoid
+  english: Cross-Body Cable Crossover
+  german: Kabel-Crossover über Kreuz
+  display_name: Kabel-Crossover über Kreuz
+  category: push
+  coaching_notes:
+  - Stelle die Kabelrollen etwa auf Schulterhöhe ein, gehe mittig zwischen die Türme
+    und nimm einen versetzten, stabilen Stand ein.
+  - Hebe den Brustkorb an, halte die Schultern tief und hinten organisiert und bewahre
+    während der gesamten Wiederholung eine leichte Ellbogenbeugung.
+  - Führe die Arme in einer weiten Bogenbahn vor dem Körper zusammen, bis sich die
+    Hände leicht überkreuzen und die Brust aktiv maximal verkürzt.
+  - Die Bewegung kommt aus der horizontalen Adduktion im Schultergelenk, nicht aus
+    einem nachdrückenden Strecken der Ellbogen.
+  - Halte die Endposition für einen kurzen Moment, ohne die Schultern nach vorn hochzuziehen,
+    und spanne die Brust bewusst an.
+  - Lass die Griffe kontrolliert und unter Spannung in die gedehnte Position zurückkehren,
+    ohne dass die Gewichte absetzen oder dich nach hinten ziehen.
+  - Wähle ein Gewicht, bei dem du die Zugbahn sauber halten kannst und die Spannung
+    durchgehend in der Brust statt im vorderen Schulterbereich spürst.
+  name: Inner-X-Cable-Cross
+  aliases:
+  - Cable Crossover
+  - Cross Cable Fly
+  - Kabel-Fly über Kreuz
+  - Überkreuztes Cable Crossover
+  exercise_id: cable_crossover_inner_x
   schema_version: 2026-08-12.exercise-v1
-  _hash: efad7f694087aea0fcde3332aa84a63a
+  equipment:
+  - cable
+  search_aliases:
+  - Kabel-Crossover über Kreuz
+  - Cross-Body Cable Crossover
+  - Cable Crossover
+  - Kabel-Fly über Kreuz
+  - Inner-X-Cable-Cross
+  primary_muscles:
+  - 101_pectoralis_major
+  stabilizers:
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  type: isolation
+  source: approved
+  variations: []
+  tags:
+  - chest_isolation
+  - cable_workout
+  - muscle_building
+  - chest
+  - horizontal_adduction
+  - peak_contraction
+  - cross_body
+  id: cable_crossover_inner_x
+  review_state:
+    status: approved
+  movements:
+  - horizontal_adduction
+  - scapular_protraction
+  - isometric_core_stability
+  - cable
+  - peak_contraction
+  common_errors:
+  - Zu hohes Gewicht, wodurch die Ellbogen zunehmend strecken und die Übung eher zu
+    einem Trizepsdrücken als zu einer Brustisolation wird.
+  - Die Schultern wandern nach oben oder nach vorn, was die Belastung aus der Brust
+    in den Nacken und die vordere Schulter verschiebt.
+  - Zu kurze Bewegungsamplitude, bei der weder eine saubere Dehnung in der Startposition
+    noch eine volle Kontraktion in der Endposition erreicht wird.
+  - Schwung aus Oberkörper oder Hüfte, statt die Wiederholung kontrolliert aus dem
+    Schultergelenk zu führen.
+  - Zu starkes Beugen oder Verändern des Ellbogenwinkels während der Wiederholung,
+    wodurch die Belastung unnötig auf Arme und Gelenke verlagert wird.
+  - Die exzentrische Phase wird fallen gelassen, sodass Spannung, Kontrolle und Dehnungsreiz
+    in der Brust verloren gehen.
+  - Der Kopf schiebt nach vorn oder der untere Rücken wird überstreckt, weil die Rumpfspannung
+    und Standstabilität fehlen.
+  _hash: 7a7dc68e51143901b658b7d2fc3fa846
+  primaryMuscles:
+  - 101_pectoralis_major
+- displayName: Kabel-Crossover von unten nach oben
+  origin:
+    source_refs: {}
+    yuhonas:
+      secondary_muscles:
+      - shoulders
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+      tags:
+      - unreviewed
+      - yuhonas
+      category: strength
+      yuhonas_id: Cable_Crossover
+      coaching_notes:
+      - To get yourself into the starting position, place the pulleys on a high position
+        (above your head), select the resistance to be used and hold the pulleys in
+        each hand.
+      - Step forward in front of an imaginary straight line between both pulleys while
+        pulling your arms together in front of you. Your torso should have a small
+        forward bend from the waist. This will be your starting position.
+      - 'With a slight bend on your elbows in order to prevent stress at the biceps
+        tendon, extend your arms to the side (straight out at both sides) in a wide
+        arc until you feel a stretch on your chest. Breathe in as you perform this
+        portion of the movement. Tip: Keep in mind that throughout the movement, the
+        arms and torso should remain stationary; the movement should only occur at
+        the shoulder joint.'
+      - Return your arms back to the starting position as you breathe out. Make sure
+        to use the same arc of motion used to lower the weights.
+      - Hold for a second at the starting position and repeat the movement for the
+        prescribed amount of repetitions.
+      exercise_id: yuhonas_cable_crossover
+      display_name: Cable Crossover
+      equipment:
+      - cable
+      primary_muscles:
+      - chest
+    type: manual
   secondary_muscles:
   - 301_anterior_deltoid
   - 105_serratus_anterior
+  english: Low-to-High Cable Crossover
+  secondaryMuscles:
+  - 301_anterior_deltoid
+  - 105_serratus_anterior
+  display_name: Kabel-Crossover von unten nach oben
+  _hash: efad7f694087aea0fcde3332aa84a63a
+  category: push
+  german: Kabel-Crossover von unten nach oben
+  name: Low-to-High Cable Crossover
+  aliases:
+  - Cable Fly Low to High
+  - Low Cable Fly
+  - Incline Cable Fly
+  - Low-to-High Cable Fly
+  - Kabel-Flys von unten nach oben
+  - Kabelzug obere Brust
+  - Unterer Kabel-Crossover
+  search_aliases:
+  - Kabel-Crossover von unten nach oben
+  - Kabel-Flys von unten nach oben
+  - Low-to-High Cable Crossover
+  - Low-to-High Cable Fly
+  - Incline Cable Fly
+  - Low Cable Fly
   exercise_id: cable_crossover_low_to_high
+  equipment:
+  - cable
+  stabilizers:
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
   primary_muscles:
   - 102_pectoralis_major_clavicular
-  display_name: Kabel-Crossover von unten nach oben
   coaching_notes:
   - Stelle beide Kabel auf die unterste Position und wähle ein Gewicht, das dir eine
     saubere Bogenbewegung ohne Schwung erlaubt.
@@ -2485,11 +2465,10 @@ exercises:
     zusätzlicher Brustspannung erzeugst.
   - Atme beim Zusammenführen aus und beim kontrollierten Zurückführen ein, um Rumpfspannung
     und Bewegungsrhythmus sauber zu halten.
-  german: Kabel-Crossover von unten nach oben
-  secondaryMuscles:
-  - 301_anterior_deltoid
-  - 105_serratus_anterior
-  type: isolation
+  schema_version: 2026-08-12.exercise-v1
+  source: approved
+  review_state:
+    status: approved
   tags:
   - push
   - isolation
@@ -2498,75 +2477,83 @@ exercises:
   - fly
   - clavicular_pec
   - standing
-  search_aliases:
-  - Kabel-Crossover von unten nach oben
-  - Kabel-Flys von unten nach oben
-  - Low-to-High Cable Crossover
-  - Low-to-High Cable Fly
-  - Incline Cable Fly
-  - Low Cable Fly
+  variations: []
+  id: cable_crossover_low_to_high
   wger_id: null
+  movements:
+  - horizontal_adduction
+  - shoulder_flexion
+  - incline
+  - scapular_protraction
+  - anti_extension
+  common_errors:
+  - Zu viel Gewicht, wodurch aus der geführten Fly-Bewegung ein unsauberes Ziehen
+    oder Drücken mit Schwung wird.
+  - Die Ellbogen während der Wiederholung stark beugen oder strecken, wodurch Bizeps
+    und Trizeps unnötig viel Arbeit übernehmen.
+  - Die Schultern zu den Ohren hochziehen, statt die Schulterblätter kontrolliert
+    und ruhig zu halten.
+  - Ins Hohlkreuz ausweichen, um die Griffe höher zu bekommen, anstatt die Spannung
+    in der oberen Brust sauber zu erzeugen.
+  - Die Hände aktiv übereinander schlagen lassen und dadurch vorne die Spannung zu
+    verlieren.
+  - Die exzentrische Phase abkürzen und die Gewichte einfach zurückziehen lassen,
+    statt die Dehnung kontrolliert zu nutzen.
+  - Zu tief oder zu weit hinter den Körper öffnen, obwohl die Schulterposition dabei
+    instabil oder unangenehm wird.
+  - Die Bewegung aus den Händen zu denken, statt die Oberarme diagonal nach innen
+    oben zu führen.
+  - Den Kopf nach vorn schieben oder den Oberkörper stark mitdrehen, wodurch die Übung
+    an Isolation verliert.
+  - Eine zu hohe Kabelposition wählen, wodurch der Zugwinkel eher zu einer normalen
+    Fly-Variante als zur oberen-Brust-Betonung passt.
+  type: isolation
   primaryMuscles:
   - 102_pectoralis_major_clavicular
-  english: Low-to-High Cable Crossover
-  category: push
-- aliases:
-  - high-low cable fly
-  - cable cross-over high to low
-  - cable pec crossover
-  - high to low cable fly
-  - kabel fly von oben nach unten
-  - kabel crossover oben unten
-  source: approved
-  variations: []
-  german: Kabel-Crossover von oben nach unten
-  common_errors:
-  - Zu schweres Gewicht, sodass die Bewegung zu einem ganzen Oberkörperzug wird und
-    der Fokus von der Brust auf Schwung und Schultern kippt.
-  - Die Ellbogen während der Bewegung stark beugen oder strecken, wodurch aus dem
-    Fly eher ein unsauberer Press- oder Curl-Mix wird.
-  - Die Arme in der Rückführung zu weit öffnen und die Schultern nach vorn ziehen
-    lassen, was die vordere Schulter unnötig belastet.
-  - Die Hände nur nach unten statt nach unten und vor dem Körper zusammenzuführen,
-    wodurch der eigentliche Adduktionsanteil der Brust verloren geht.
-  - Den Oberkörper stark nach vorn beugen oder ins Hohlkreuz ausweichen, um die Last
-    zu bewegen, statt den Rumpf stabil zu halten.
-  - Am tiefsten Punkt die Spannung zu verlieren und die Gewichte zurückschnappen zu
-    lassen, wodurch die exzentrische Kontrolle und der Muskelreiz sinken.
-  - Die Schultern hochzuziehen und den Nacken anzuspannen, anstatt die Bewegung aus
-    Brust und kontrollierter Schulterführung zu organisieren.
-  tags:
-  - pec-focus
-  - chest-isolation
-  - cable-work
-  - horizontal-adduction
-  - finisher
-  - chest
-  - decline_horizontal_adduction
-  - lower-chest-bias
-  - unreviewed
-  review_state:
-    status: approved
-  name: High-to-Low Cable Crossover
-  stabilizers:
-  - 304_rotator_cuff
-  - 504_transverse_abdominis
-  - 502_obliquus_externus
-  equipment:
-  - cable
-  movements:
-  - decline
-  - horizontal_adduction
-  - shoulder_adduction
-  - shoulder_extension
-  - scapular_protraction
-  exercise_id: cable_crossover_high_to_low
-  schema_version: 2026-08-12.exercise-v1
-  _hash: a2d6a45dd921331f73049bdad7765dfd
-  secondary_muscles:
+- secondary_muscles:
   - 101_pectoralis_major
   - 301_anterior_deltoid
   - 105_serratus_anterior
+  origin:
+    yuhonas:
+      secondary_muscles:
+      - shoulders
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+      tags:
+      - unreviewed
+      - yuhonas
+      category: strength
+      yuhonas_id: Cable_Crossover
+      coaching_notes:
+      - To get yourself into the starting position, place the pulleys on a high position
+        (above your head), select the resistance to be used and hold the pulleys in
+        each hand.
+      - Step forward in front of an imaginary straight line between both pulleys while
+        pulling your arms together in front of you. Your torso should have a small
+        forward bend from the waist. This will be your starting position.
+      - 'With a slight bend on your elbows in order to prevent stress at the biceps
+        tendon, extend your arms to the side (straight out at both sides) in a wide
+        arc until you feel a stretch on your chest. Breathe in as you perform this
+        portion of the movement. Tip: Keep in mind that throughout the movement, the
+        arms and torso should remain stationary; the movement should only occur at
+        the shoulder joint.'
+      - Return your arms back to the starting position as you breathe out. Make sure
+        to use the same arc of motion used to lower the weights.
+      - Hold for a second at the starting position and repeat the movement for the
+        prescribed amount of repetitions.
+      exercise_id: yuhonas_cable_crossover
+      display_name: Cable Crossover
+      equipment:
+      - cable
+      primary_muscles:
+      - chest
+    source_refs: {}
+    type: manual
+  display_name: Kabel-Crossover von oben nach unten
+  english: High-to-Low Cable Crossover
+  _hash: a2d6a45dd921331f73049bdad7765dfd
   coaching_notes:
   - Stelle die Kabelrollen oberhalb der Schulterhöhe ein und nimm einen kleinen Ausfallschritt,
     damit du stabil stehst und die Seile dich nicht nach hinten ziehen.
@@ -2585,108 +2572,130 @@ exercises:
     wird.
   - Halte die Endposition kurz mit bewusstem Brust-Squeeze, ohne die Griffe gegeneinander
     zu schlagen oder durch Schwung über die eigentliche Kontraktion hinauszuziehen.
-  origin:
-    type: manual
-    yuhonas:
-      secondary_muscles:
-      - shoulders
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Cable Crossover
-      exercise_id: yuhonas_cable_crossover
-      primary_muscles:
-      - chest
-      tags:
-      - unreviewed
-      - yuhonas
-      yuhonas_id: Cable_Crossover
-      equipment:
-      - cable
-      coaching_notes:
-      - To get yourself into the starting position, place the pulleys on a high position
-        (above your head), select the resistance to be used and hold the pulleys in
-        each hand.
-      - Step forward in front of an imaginary straight line between both pulleys while
-        pulling your arms together in front of you. Your torso should have a small
-        forward bend from the waist. This will be your starting position.
-      - 'With a slight bend on your elbows in order to prevent stress at the biceps
-        tendon, extend your arms to the side (straight out at both sides) in a wide
-        arc until you feel a stretch on your chest. Breathe in as you perform this
-        portion of the movement. Tip: Keep in mind that throughout the movement, the
-        arms and torso should remain stationary; the movement should only occur at
-        the shoulder joint.'
-      - Return your arms back to the starting position as you breathe out. Make sure
-        to use the same arc of motion used to lower the weights.
-      - Hold for a second at the starting position and repeat the movement for the
-        prescribed amount of repetitions.
-      category: strength
-    source_refs: {}
-  display_name: Kabel-Crossover von oben nach unten
+  category: push
+  name: High-to-Low Cable Crossover
+  aliases:
+  - high-low cable fly
+  - cable cross-over high to low
+  - cable pec crossover
+  - high to low cable fly
+  - kabel fly von oben nach unten
+  - kabel crossover oben unten
+  exercise_id: cable_crossover_high_to_low
+  schema_version: 2026-08-12.exercise-v1
+  equipment:
+  - cable
+  stabilizers:
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
   primary_muscles:
   - 103_pectoralis_major_sternal
-  id: cable_crossover_high_to_low
-  type: isolation
   search_aliases:
   - Kabel-Crossover von oben nach unten
   - Kabelzug Flys von oben nach unten
   - High-to-Low Cable Crossover
   - High-to-Low Cable Fly
   - High-To-Low Cable Cross
-  english: High-to-Low Cable Crossover
-  category: push
-- aliases:
-  - Kabel-Seitheben
-  - Einarmiges Seitheben am Kabelzug
-  - Seitheben am Seilzug
-  - Cable Side Raise
-  - Single-Arm Cable Lateral Raise
-  - One-Arm Cable Lateral Raise
-  id: cable_lateral_raise
+  source: approved
+  tags:
+  - pec-focus
+  - chest-isolation
+  - cable-work
+  - horizontal-adduction
+  - finisher
+  - chest
+  - decline_horizontal_adduction
+  - lower-chest-bias
+  - unreviewed
   variations: []
+  id: cable_crossover_high_to_low
+  german: Kabel-Crossover von oben nach unten
+  movements:
+  - decline
+  - horizontal_adduction
+  - shoulder_adduction
+  - shoulder_extension
+  - scapular_protraction
   common_errors:
-  - Zu viel Gewicht zu wählen und die Hantel mit Schwung, Beinimpuls oder Seitneigung
-    des Oberkörpers nach oben zu beschleunigen.
-  - Die Schulter während der Hebebewegung hochzuziehen, sodass der obere Trapezius
-    die Arbeit übernimmt und der Zielreiz auf dem seitlichen Deltoid sinkt.
-  - Den Arm durch deutliche Innenrotation anzuheben oder die Hand nach unten zu kippen,
-    statt das Schultergelenk neutral und stabil zu führen.
-  - Den Ellbogenwinkel ständig zu verändern und die Bewegung damit eher in eine Mischung
-    aus Seitheben und Zugbewegung zu verwandeln.
-  - Zu hoch zu heben, obwohl dabei die Spannung verloren geht oder die Schulterposition
-    unsauber wird. Mehr Höhe ist hier nicht automatisch besser.
-  - Das Gewicht unten einfach fallen zu lassen und dadurch die exzentrische Kontrolle
-    und den Vorteil der konstanten Kabelspannung zu verschenken.
-  - Den Arm zu weit hinter dem Körper oder in einer unnatürlichen Linie zu führen,
-    was die Schultermechanik häufig verschlechtert.
-  - Den Rumpf nicht zu stabilisieren, sodass du zur Gegenseite ausweichst oder ins
-    Hohlkreuz gehst, um die Wiederholung zu erleichtern.
-  - Mit dem Handgelenk oder Unterarm zu arbeiten, anstatt die Last über den Oberarm
-    und den seitlichen Deltoid zu bewegen.
-  - Die Bewegung hektisch auszuführen und jede Wiederholung anders zu starten, statt
-    eine konstante Zuglinie und reproduzierbare Technik beizubehalten.
-  german: Seitheben am Kabelzug
-  exercise_id: cable_lateral_raise
+  - Zu schweres Gewicht, sodass die Bewegung zu einem ganzen Oberkörperzug wird und
+    der Fokus von der Brust auf Schwung und Schultern kippt.
+  - Die Ellbogen während der Bewegung stark beugen oder strecken, wodurch aus dem
+    Fly eher ein unsauberer Press- oder Curl-Mix wird.
+  - Die Arme in der Rückführung zu weit öffnen und die Schultern nach vorn ziehen
+    lassen, was die vordere Schulter unnötig belastet.
+  - Die Hände nur nach unten statt nach unten und vor dem Körper zusammenzuführen,
+    wodurch der eigentliche Adduktionsanteil der Brust verloren geht.
+  - Den Oberkörper stark nach vorn beugen oder ins Hohlkreuz ausweichen, um die Last
+    zu bewegen, statt den Rumpf stabil zu halten.
+  - Am tiefsten Punkt die Spannung zu verlieren und die Gewichte zurückschnappen zu
+    lassen, wodurch die exzentrische Kontrolle und der Muskelreiz sinken.
+  - Die Schultern hochzuziehen und den Nacken anzuspannen, anstatt die Bewegung aus
+    Brust und kontrollierter Schulterführung zu organisieren.
+  type: isolation
   review_state:
     status: approved
-  name: Seitheben am Kabelzug
-  stabilizers:
-  - 304_rotator_cuff
-  - 202a_trapezius_upper
-  - 202c_trapezius_lower
-  - 105_serratus_anterior
-  - 504_transverse_abdominis
-  - 502_obliquus_externus
-  - 503_obliquus_internus
-  - 608_gluteus_medius
-  equipment:
-  - cable
-  movements:
-  - shoulder_abduction
-  - scapular_upward_rotation
-  - scapular_control
-  - glenohumeral_stability
-  - anti_lateral_flexion
+- secondary_muscles:
+  - 305_supraspinatus
+  - 301_anterior_deltoid
+  origin:
+    wger:
+      wger_id: 1556
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 2
+    source_refs:
+      wger:
+      - '1556'
+      - '349'
+    yuhonas:
+      secondary_muscles:
+      - middle_back
+      - traps
+      primary_muscles:
+      - shoulders
+      tags:
+      - unreviewed
+      - yuhonas
+      category: strength
+      yuhonas_id: Cable_Seated_Lateral_Raise
+      coaching_notes:
+      - Stand in the middle of two low pulleys that are opposite to each other and
+        place a flat bench right behind you (in perpendicular fashion to you; the
+        narrow edge of the bench should be the one behind you). Select the weight
+        to be used on each pulley.
+      - Now sit at the edge of the flat bench behind you with your feet placed in
+        front of your knees.
+      - Bend forward while keeping your back flat and rest your torso on the thighs.
+      - Have someone give you the single handles attached to the pulleys. Grasp the
+        left pulley with the right hand and the right pulley with the left after you
+        select your weight. The pulleys should run under your knees and your arms
+        will be extended with palms facing each other and a slight bend at the elbows.
+        This will be the starting position.
+      - While keeping the arms stationary, raise the upper arms to the sides until
+        they are parallel to the floor and at shoulder height. Exhale during the execution
+        of this movement and hold the contraction for a second.
+      - Slowly lower your arms to the starting position as you inhale.
+      - 'Repeat for the recommended amount of repetitions. Tip: Maintain upper arms
+        perpendicular to torso and a fixed elbow position (10 degree to 30 degree
+        angle) throughout exercise.'
+      exercise_id: yuhonas_cable_seated_lateral_raise
+      display_name: Cable Seated Lateral Raise
+      equipment:
+      - cable
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+    type: external
+  external_ids:
+    wger:
+    - 1556
+    - 349
+  english: Cable Lateral Raise
+  german: Seitheben am Kabelzug
+  wger_id: 1556
+  display_name: Seitheben am Kabelzug
   coaching_notes:
   - Stelle dich seitlich zum Kabelzug und positioniere den Griff so, dass der Zug
     bereits in der unteren Position Spannung aufbaut. Das verbessert die Belastungskurve
@@ -2713,15 +2722,38 @@ exercises:
   - Wenn du einarmig arbeitest, kannst du dich mit der freien Hand leicht am Turm
     stabilisieren, um Kompensation zu reduzieren und den seitlichen Deltoid präziser
     zu treffen.
+  type: isolation
   schema_version: 2026-08-12.exercise-v1
-  _hash: 2424d510bc87c296109a8baddaaf669c
-  secondary_muscles:
-  - 305_supraspinatus
-  - 301_anterior_deltoid
-  wger_muscle_ids:
-    primary:
-    - 2
-    secondary: []
+  stabilizers:
+  - 304_rotator_cuff
+  - 202a_trapezius_upper
+  - 202c_trapezius_lower
+  - 105_serratus_anterior
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 608_gluteus_medius
+  search_aliases:
+  - wger_1556
+  - wger_349
+  - Seitheben am Kabelzug
+  - Cable Lateral Raise
+  name: Seitheben am Kabelzug
+  equipment:
+  - cable
+  aliases:
+  - Kabel-Seitheben
+  - Einarmiges Seitheben am Kabelzug
+  - Seitheben am Seilzug
+  - Cable Side Raise
+  - Single-Arm Cable Lateral Raise
+  - One-Arm Cable Lateral Raise
+  primary_muscles:
+  - 302_lateral_deltoid
+  category: push
+  exercise_id: cable_lateral_raise
+  source: approved
+  variations: []
   tags:
   - isolation
   - cable_machine
@@ -2729,198 +2761,56 @@ exercises:
   - shoulders
   - shoulder_abduction
   - unilateral
-  display_name: Seitheben am Kabelzug
-  source: approved
-  origin:
-    type: external
-    yuhonas:
-      secondary_muscles:
-      - middle_back
-      - traps
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Cable Seated Lateral Raise
-      yuhonas_id: Cable_Seated_Lateral_Raise
-      primary_muscles:
-      - shoulders
-      tags:
-      - unreviewed
-      - yuhonas
-      exercise_id: yuhonas_cable_seated_lateral_raise
-      equipment:
-      - cable
-      coaching_notes:
-      - Stand in the middle of two low pulleys that are opposite to each other and
-        place a flat bench right behind you (in perpendicular fashion to you; the
-        narrow edge of the bench should be the one behind you). Select the weight
-        to be used on each pulley.
-      - Now sit at the edge of the flat bench behind you with your feet placed in
-        front of your knees.
-      - Bend forward while keeping your back flat and rest your torso on the thighs.
-      - Have someone give you the single handles attached to the pulleys. Grasp the
-        left pulley with the right hand and the right pulley with the left after you
-        select your weight. The pulleys should run under your knees and your arms
-        will be extended with palms facing each other and a slight bend at the elbows.
-        This will be the starting position.
-      - While keeping the arms stationary, raise the upper arms to the sides until
-        they are parallel to the floor and at shoulder height. Exhale during the execution
-        of this movement and hold the contraction for a second.
-      - Slowly lower your arms to the starting position as you inhale.
-      - 'Repeat for the recommended amount of repetitions. Tip: Maintain upper arms
-        perpendicular to torso and a fixed elbow position (10 degree to 30 degree
-        angle) throughout exercise.'
-      category: strength
-    source_refs:
-      wger:
-      - '1556'
-      - '349'
-    wger:
-      wger_muscle_ids:
-        primary:
-        - 2
-        secondary: []
-      wger_id: 1556
-  primary_muscles:
-  - 302_lateral_deltoid
-  external_ids:
-    wger:
-    - 1556
-    - 349
-  type: isolation
-  search_aliases:
-  - wger_1556
-  - wger_349
-  - Seitheben am Kabelzug
-  - Cable Lateral Raise
-  wger_id: 1556
-  english: Cable Lateral Raise
-  category: push
-- aliases:
-  - Rudern am Kabelzug
-  - Kabelrudern
-  - Sitzendes Kabelrudern
-  - Cable Row
-  - Seated Cable Row
-  - Seated Cable Row Machine
-  id: cable_row
-  variations: []
-  german: Sitzendes Kabelrudern
-  common_errors:
-  - Den Oberkoerper stark nach hinten lehnen und die Wiederholung mit Schwung statt
-    mit Rueckenmuskulatur einleiten.
-  - Die Schultern am Endpunkt nach oben ziehen statt die Schulterblaetter nach hinten
-    unten zu kontrollieren.
-  - Den Griff zu hoch zur Brust ziehen, wodurch die Ellbogen auffaechern und der Zug
-    unsauber wird.
-  - In der exzentrischen Phase die Spannung verlieren und die Gewichte nach vorn ziehen
-    lassen.
-  - Mit rundem unteren Ruecken sitzen oder aus der Lendenwirbelsaeule in Flexion und
-    Extension arbeiten.
-  - Zu viel Gewicht waehlen, sodass der Bewegungsumfang verkuerzt wird und die Schulterblaetter
-    kaum noch arbeiten.
-  tags:
-  - back
-  - compound
-  - horizontal_pull
-  - cable
-  - strength
+  id: cable_lateral_raise
   review_state:
     status: approved
-  name: Sitzendes Kabelrudern
-  stabilizers:
-  - 304_rotator_cuff
-  - 504_transverse_abdominis
-  - 206_erector_spinae
-  - 507_multifidus
-  equipment:
-  - cable
   movements:
-  - horizontal
-  - shoulder_extension
-  - scapular_retraction
-  - elbow_flexion
-  primary_muscles:
-  - 201_latissimus_dorsi
-  - 202b_trapezius_middle
-  - 205_rhomboids
-  schema_version: 2026-08-12.exercise-v1
-  _hash: eccfe6511799a46a52a8d077423ea13a
-  secondary_muscles:
+  - shoulder_abduction
+  - scapular_upward_rotation
+  - scapular_control
+  - glenohumeral_stability
+  - anti_lateral_flexion
+  common_errors:
+  - Zu viel Gewicht zu wählen und die Hantel mit Schwung, Beinimpuls oder Seitneigung
+    des Oberkörpers nach oben zu beschleunigen.
+  - Die Schulter während der Hebebewegung hochzuziehen, sodass der obere Trapezius
+    die Arbeit übernimmt und der Zielreiz auf dem seitlichen Deltoid sinkt.
+  - Den Arm durch deutliche Innenrotation anzuheben oder die Hand nach unten zu kippen,
+    statt das Schultergelenk neutral und stabil zu führen.
+  - Den Ellbogenwinkel ständig zu verändern und die Bewegung damit eher in eine Mischung
+    aus Seitheben und Zugbewegung zu verwandeln.
+  - Zu hoch zu heben, obwohl dabei die Spannung verloren geht oder die Schulterposition
+    unsauber wird. Mehr Höhe ist hier nicht automatisch besser.
+  - Das Gewicht unten einfach fallen zu lassen und dadurch die exzentrische Kontrolle
+    und den Vorteil der konstanten Kabelspannung zu verschenken.
+  - Den Arm zu weit hinter dem Körper oder in einer unnatürlichen Linie zu führen,
+    was die Schultermechanik häufig verschlechtert.
+  - Den Rumpf nicht zu stabilisieren, sodass du zur Gegenseite ausweichst oder ins
+    Hohlkreuz gehst, um die Wiederholung zu erleichtern.
+  - Mit dem Handgelenk oder Unterarm zu arbeiten, anstatt die Last über den Oberarm
+    und den seitlichen Deltoid zu bewegen.
+  - Die Bewegung hektisch auszuführen und jede Wiederholung anders zu starten, statt
+    eine konstante Zuglinie und reproduzierbare Technik beizubehalten.
+  _hash: 2424d510bc87c296109a8baddaaf669c
+  wger_muscle_ids:
+    secondary: []
+    primary:
+    - 2
+- secondary_muscles:
   - 207_teres_major
   - 303_posterior_deltoid
   - 402_biceps_brachii
   - 403_brachialis
   - 404_brachioradialis
-  coaching_notes:
-  - Aufrecht sitzen und den Brustkorb anheben, sodass die Wirbelsaeule waehrend der
-    ganzen Wiederholung neutral bleibt.
-  - 'Ziehe den Griff zuerst ueber die Schulterbewegung ein: Schulterblaetter nach
-    hinten unten fuehren, dann die Ellbogen dicht am Koerper nach hinten ziehen.'
-  - Fuehre den Zug zur unteren Rippenkante oder knapp zum Bauchnabel, ohne die Schultern
-    nach vorn kippen zu lassen.
-  - Halte am Endpunkt kurz Spannung im oberen Ruecken, ohne ins Hohlkreuz zu fallen
-    oder den Brustkorb uebertrieben herauszuschieben.
-  - Lasse das Gewicht kontrolliert nach vorn zurueck, bis die Schulterblaetter sauber
-    protruieren, ohne die Spannung komplett zu verlieren.
-  - Waehle ein Gewicht, bei dem du den Griff mit konstantem Tempo bewegen kannst statt
-    den Oberkoerper nach hinten zu reissen.
   origin:
-    type: manual
-    yuhonas:
-      secondary_muscles:
-      - biceps
-      - lats
-      - shoulders
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Seated Cable Rows
-      exercise_id: yuhonas_seated_cable_rows
-      primary_muscles:
-      - middle_back
-      yuhonas_id: Seated_Cable_Rows
-      tags:
-      - unreviewed
-      - yuhonas
-      equipment:
-      - cable
-      coaching_notes:
-      - 'For this exercise you will need access to a low pulley row machine with a
-        V-bar. Note: The V-bar will enable you to have a neutral grip where the palms
-        of your hands face each other. To get into the starting position, first sit
-        down on the machine and place your feet on the front platform or crossbar
-        provided making sure that your knees are slightly bent and not locked.'
-      - Lean over as you keep the natural alignment of your back and grab the V-bar
-        handles.
-      - With your arms extended pull back until your torso is at a 90-degree angle
-        from your legs. Your back should be slightly arched and your chest should
-        be sticking out. You should be feeling a nice stretch on your lats as you
-        hold the bar in front of you. This is the starting position of the exercise.
-      - Keeping the torso stationary, pull the handles back towards your torso while
-        keeping the arms close to it until you touch the abdominals. Breathe out as
-        you perform that movement. At that point you should be squeezing your back
-        muscles hard. Hold that contraction for a second and slowly go back to the
-        original position while breathing in.
-      - Repeat for the recommended amount of repetitions.
-      category: strength
-    source_refs: {}
     wger:
       secondary_muscles: []
-      wger_muscle_ids:
-        primary:
-        - 12
-        secondary: []
       german: Abwechselndes hohes Kabelrudern
-      display_name: Abwechselndes hohes Kabelrudern
-      exercise_id: wger_1442
       primary_muscles:
       - 201_latissimus_dorsi
       tags:
       - unreviewed
       - wger
-      wger_id: 1442
-      equipment: []
       coaching_notes:
       - 'Beginne,
 
@@ -2945,64 +2835,143 @@ exercises:
         rechten Hand. Wiederhole diese Bewegung auf der gegenüberliegenden Seite,
         mit dem rechten Fuß nach hinten gestellt.'
       category: back
-  display_name: Sitzendes Kabelrudern
-  exercise_id: cable_row
-  source: approved
-  type: compound
+      exercise_id: wger_1442
+      wger_id: 1442
+      equipment: []
+      display_name: Abwechselndes hohes Kabelrudern
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 12
+    yuhonas:
+      secondary_muscles:
+      - biceps
+      - lats
+      - shoulders
+      primary_muscles:
+      - middle_back
+      tags:
+      - unreviewed
+      - yuhonas
+      coaching_notes:
+      - 'For this exercise you will need access to a low pulley row machine with a
+        V-bar. Note: The V-bar will enable you to have a neutral grip where the palms
+        of your hands face each other. To get into the starting position, first sit
+        down on the machine and place your feet on the front platform or crossbar
+        provided making sure that your knees are slightly bent and not locked.'
+      - Lean over as you keep the natural alignment of your back and grab the V-bar
+        handles.
+      - With your arms extended pull back until your torso is at a 90-degree angle
+        from your legs. Your back should be slightly arched and your chest should
+        be sticking out. You should be feeling a nice stretch on your lats as you
+        hold the bar in front of you. This is the starting position of the exercise.
+      - Keeping the torso stationary, pull the handles back towards your torso while
+        keeping the arms close to it until you touch the abdominals. Breathe out as
+        you perform that movement. At that point you should be squeezing your back
+        muscles hard. Hold that contraction for a second and slowly go back to the
+        original position while breathing in.
+      - Repeat for the recommended amount of repetitions.
+      yuhonas_id: Seated_Cable_Rows
+      category: strength
+      display_name: Seated Cable Rows
+      exercise_id: yuhonas_seated_cable_rows
+      equipment:
+      - cable
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+    source_refs: {}
+    type: manual
+  review_state:
+    status: approved
+  english: Seated Cable Row
+  german: Sitzendes Kabelrudern
+  wger_id: null
+  coaching_notes:
+  - Aufrecht sitzen und den Brustkorb anheben, sodass die Wirbelsaeule waehrend der
+    ganzen Wiederholung neutral bleibt.
+  - 'Ziehe den Griff zuerst ueber die Schulterbewegung ein: Schulterblaetter nach
+    hinten unten fuehren, dann die Ellbogen dicht am Koerper nach hinten ziehen.'
+  - Fuehre den Zug zur unteren Rippenkante oder knapp zum Bauchnabel, ohne die Schultern
+    nach vorn kippen zu lassen.
+  - Halte am Endpunkt kurz Spannung im oberen Ruecken, ohne ins Hohlkreuz zu fallen
+    oder den Brustkorb uebertrieben herauszuschieben.
+  - Lasse das Gewicht kontrolliert nach vorn zurueck, bis die Schulterblaetter sauber
+    protruieren, ohne die Spannung komplett zu verlieren.
+  - Waehle ein Gewicht, bei dem du den Griff mit konstantem Tempo bewegen kannst statt
+    den Oberkoerper nach hinten zu reissen.
+  category: pull
+  schema_version: 2026-08-12.exercise-v1
+  aliases:
+  - Rudern am Kabelzug
+  - Kabelrudern
+  - Sitzendes Kabelrudern
+  - Cable Row
+  - Seated Cable Row
+  - Seated Cable Row Machine
   search_aliases:
   - Sitzendes Kabelrudern
   - Rudern am Kabelzug
   - Kabelrudern
   - Seated Cable Row
   - Cable Row
-  wger_id: null
-  english: Seated Cable Row
-  category: pull
-- aliases:
-  - Sitzendes enges Kabelrudern
-  - Enges sitzendes Kabelrudern
-  - Narrow-Grip Seated Cable Row
-  - Close-Grip Cable Row
-  - Close-Neutral Seated Cable Row
-  common_errors:
-  - Den Oberkoerper nach hinten werfen, um das Gewicht mit Schwung statt mit Rueckenmuskulatur
-    zu bewegen.
-  - Die Ellbogen nach aussen auffaechern, wodurch aus dem engen Rudern eher eine breit
-    gefuehrte Zugvariante wird.
-  - Die Schultern nach oben ziehen und Spannung im Nacken aufbauen statt die Schulterblaetter
-    kontrolliert nach hinten zu bewegen.
-  - Nur mit den Armen ziehen und die Schulterblattbewegung fast komplett weglassen.
-  - Am Endpunkt zu kurz bleiben und weder Ellbogen noch Schulterblaetter voll nach
-    hinten fuehren.
-  - In der Rueckfuehrung das Gewicht fallen lassen und dadurch Spannung, Position
-    und Bewegungsqualitaet verlieren.
-  - Mit gebeugten Handgelenken oder abgeknicktem Unterarm ziehen statt den Griff neutral
-    und stabil zu fuehren.
-  variations: []
-  german: Sitzendes Kabelrudern enger Griff
-  source: approved
-  tags:
-  - rowing
-  - horizontal_pull
-  - back
-  - latissimus
-  - scapular_retraction
-  - seated
+  exercise_id: cable_row
+  equipment:
   - cable
-  - close_grip
-  - unreviewed
+  name: Sitzendes Kabelrudern
   primary_muscles:
   - 201_latissimus_dorsi
   - 202b_trapezius_middle
   - 205_rhomboids
-  name: Sitzendes Kabelrudern enger Griff
   stabilizers:
   - 304_rotator_cuff
-  - 206_erector_spinae
   - 504_transverse_abdominis
+  - 206_erector_spinae
   - 507_multifidus
-  equipment:
+  source: approved
+  tags:
+  - back
+  - compound
+  - horizontal_pull
   - cable
+  - strength
+  variations: []
+  id: cable_row
+  display_name: Sitzendes Kabelrudern
+  movements:
+  - horizontal
+  - shoulder_extension
+  - scapular_retraction
+  - elbow_flexion
+  common_errors:
+  - Den Oberkoerper stark nach hinten lehnen und die Wiederholung mit Schwung statt
+    mit Rueckenmuskulatur einleiten.
+  - Die Schultern am Endpunkt nach oben ziehen statt die Schulterblaetter nach hinten
+    unten zu kontrollieren.
+  - Den Griff zu hoch zur Brust ziehen, wodurch die Ellbogen auffaechern und der Zug
+    unsauber wird.
+  - In der exzentrischen Phase die Spannung verlieren und die Gewichte nach vorn ziehen
+    lassen.
+  - Mit rundem unteren Ruecken sitzen oder aus der Lendenwirbelsaeule in Flexion und
+    Extension arbeiten.
+  - Zu viel Gewicht waehlen, sodass der Bewegungsumfang verkuerzt wird und die Schulterblaetter
+    kaum noch arbeiten.
+  _hash: eccfe6511799a46a52a8d077423ea13a
+  type: compound
+- secondary_muscles:
+  - 207_teres_major
+  - 303_posterior_deltoid
+  - 402_biceps_brachii
+  - 403_brachialis
+  - 404_brachioradialis
+  origin:
+    source_refs: {}
+    type: manual
+  review_state:
+    status: approved
+  english: Close-Grip Seated Cable Row
+  display_name: Sitzendes Kabelrudern enger Griff
+  category: pull
   coaching_notes:
   - Setz dich aufrecht hin, heb das Brustbein leicht an und halte die Wirbelsaeule
     waehrend der ganzen Wiederholung neutral.
@@ -3018,22 +2987,45 @@ exercises:
     Schulterblatt-Protraktion, ohne die Lendenwirbelsaeule einzurunden.
   - Nutze einen Griff und eine Sitzposition, bei denen Unterarme und Kabel in der
     Zugphase moeglichst in einer geraden Linie bleiben.
+  name: Sitzendes Kabelrudern enger Griff
+  stabilizers:
+  - 304_rotator_cuff
+  - 206_erector_spinae
+  - 504_transverse_abdominis
+  - 507_multifidus
   exercise_id: cable_row_close_grip
+  search_aliases:
+  - Sitzendes Kabelrudern enger Griff
+  - Sitzendes enges Kabelrudern
+  - Close-Grip Seated Cable Row
+  - Narrow-Grip Seated Cable Row
+  equipment:
+  - cable
+  aliases:
+  - Sitzendes enges Kabelrudern
+  - Enges sitzendes Kabelrudern
+  - Narrow-Grip Seated Cable Row
+  - Close-Grip Cable Row
+  - Close-Neutral Seated Cable Row
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 202b_trapezius_middle
+  - 205_rhomboids
   schema_version: 2026-08-12.exercise-v1
-  _hash: e9521d560a330200e187ce3133d3373b
-  secondary_muscles:
-  - 207_teres_major
-  - 303_posterior_deltoid
-  - 402_biceps_brachii
-  - 403_brachialis
-  - 404_brachioradialis
-  review_state:
-    status: approved
+  source: approved
+  tags:
+  - rowing
+  - horizontal_pull
+  - back
+  - latissimus
+  - scapular_retraction
+  - seated
+  - cable
+  - close_grip
+  - unreviewed
+  variations: []
   id: cable_row_close_grip
-  display_name: Sitzendes Kabelrudern enger Griff
-  origin:
-    type: manual
-    source_refs: {}
+  german: Sitzendes Kabelrudern enger Griff
   movements:
   - horizontal
   - shoulder_extension
@@ -3041,102 +3033,33 @@ exercises:
   - elbow_flexion
   - close_grip
   - neutral_grip
-  type: compound
-  search_aliases:
-  - Sitzendes Kabelrudern enger Griff
-  - Sitzendes enges Kabelrudern
-  - Close-Grip Seated Cable Row
-  - Narrow-Grip Seated Cable Row
-  english: Close-Grip Seated Cable Row
-  category: pull
-- aliases:
-  - Skull Crushers
-  - French Press
-  - Trizepsstrecken liegend
-  - SZ-Trizepsdrücken
-  - Lying Triceps Extension
   common_errors:
-  - Die Oberarme wandern während der Wiederholungen nach hinten oder nach vorn, sodass
-    die Übung mehr zur Schulterbewegung wird.
-  - Die Ellbogen spreizen stark nach außen, was Spannung vom Trizeps nimmt und die
-    Gelenkbelastung erhöht.
-  - Das Gewicht wird zu schnell abgesenkt und unten nicht kontrolliert, wodurch die
-    exzentrische Arbeit verloren geht.
-  - Die Handgelenke knicken ab statt neutral zu bleiben, was die Kraftübertragung
-    verschlechtert.
-  - Mit Schwung aus Schulter oder Rumpf arbeiten, um den schwierigsten Bereich zu
-    überbrücken.
-  - Zu weit Richtung Gesicht oder Stirn führen, obwohl die gewählte Variante eine
-    sichere, reproduzierbare Hantelbahn neben oder leicht hinter den Kopf braucht.
-  - Oben aggressiv in die Ellbogen einrasten statt die Endposition muskulär zu kontrollieren.
-  - Zu schwer trainieren und dadurch Bewegungsradius, Ellbogenkontrolle und konstante
-    Spannung deutlich verlieren.
-  variations: []
-  source: approved
-  german: French Press
-  exercise_id: french_press
-  primary_muscles:
-  - 401_triceps_brachii
-  name: French Press
-  stabilizers:
-  - 301_anterior_deltoid
-  - 304_rotator_cuff
-  - 405_forearm_flexors
-  - 406_forearm_extensors
-  equipment:
-  - dumbbell
-  - barbell
-  - cable
+  - Den Oberkoerper nach hinten werfen, um das Gewicht mit Schwung statt mit Rueckenmuskulatur
+    zu bewegen.
+  - Die Ellbogen nach aussen auffaechern, wodurch aus dem engen Rudern eher eine breit
+    gefuehrte Zugvariante wird.
+  - Die Schultern nach oben ziehen und Spannung im Nacken aufbauen statt die Schulterblaetter
+    kontrolliert nach hinten zu bewegen.
+  - Nur mit den Armen ziehen und die Schulterblattbewegung fast komplett weglassen.
+  - Am Endpunkt zu kurz bleiben und weder Ellbogen noch Schulterblaetter voll nach
+    hinten fuehren.
+  - In der Rueckfuehrung das Gewicht fallen lassen und dadurch Spannung, Position
+    und Bewegungsqualitaet verlieren.
+  - Mit gebeugten Handgelenken oder abgeknicktem Unterarm ziehen statt den Griff neutral
+    und stabil zu fuehren.
+  _hash: e9521d560a330200e187ce3133d3373b
+  type: compound
+- secondary_muscles:
+  - 407_anconeus
   origin:
-    type: manual
-    yuhonas:
-      secondary_muscles: []
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Cable Lying Triceps Extension
-      exercise_id: yuhonas_cable_lying_triceps_extension
-      primary_muscles:
-      - triceps
-      yuhonas_id: Cable_Lying_Triceps_Extension
-      tags:
-      - unreviewed
-      - yuhonas
-      equipment:
-      - cable
-      coaching_notes:
-      - 'Lie on a flat bench and grasp the straight bar attachment of a low pulley
-        with a narrow overhand grip. Tip: The easiest way to do this is to have someone
-        hand you the bar as you lay down.'
-      - With your arms extended, position the bar over your torso. Your arms and your
-        torso should create a 90-degree angle. This will be your starting position.
-      - Lower the bar by bending at the elbow while keeping the upper arms stationary
-        and elbows in. Go down until the bar lightly touches your forehead. Breathe
-        in as you perform this portion of the movement.
-      - Flex the triceps as you lift the bar back to its starting position. Exhale
-        as you perform this portion of the movement.
-      - Hold for a second at the contracted position and repeat for the recommended
-        amount of repetitions.
-      category: strength
-    source_refs: {}
     wger:
       secondary_muscles: []
-      wger_muscle_ids:
-        primary:
-        - 5
-        secondary: []
-      german: Liegendes Trizepsstrecken
-      display_name: Liegendes Trizepsstrecken
+      exercise_id: wger_1436
+      primary_muscles:
+      - 401_triceps_brachii
       tags:
       - unreviewed
       - wger
-      primary_muscles:
-      - 401_triceps_brachii
-      exercise_id: wger_1436
-      wger_id: 1436
-      equipment:
-      - barbell
-      - dumbbell
       coaching_notes:
       - 'Die Ausgangsposition für diese
 
@@ -3165,28 +3088,50 @@ exercises:
 
         der gesamten Bewegung aktiv.'
       category: arms
-  movements:
-  - elbow_extension
-  - elbow_flexion
-  - shoulder_flexion
-  - shoulder_stability
-  schema_version: 2026-08-12.exercise-v1
-  _hash: a2f70b0afc23e5b0b24444cccad081e7
-  secondary_muscles:
-  - 407_anconeus
-  review_state:
-    status: approved
-  id: french_press
+      german: Liegendes Trizepsstrecken
+      wger_id: 1436
+      equipment:
+      - barbell
+      - dumbbell
+      display_name: Liegendes Trizepsstrecken
+      wger_muscle_ids:
+        secondary: []
+        primary:
+        - 5
+    yuhonas:
+      secondary_muscles: []
+      primary_muscles:
+      - triceps
+      tags:
+      - unreviewed
+      - yuhonas
+      category: strength
+      yuhonas_id: Cable_Lying_Triceps_Extension
+      coaching_notes:
+      - 'Lie on a flat bench and grasp the straight bar attachment of a low pulley
+        with a narrow overhand grip. Tip: The easiest way to do this is to have someone
+        hand you the bar as you lay down.'
+      - With your arms extended, position the bar over your torso. Your arms and your
+        torso should create a 90-degree angle. This will be your starting position.
+      - Lower the bar by bending at the elbow while keeping the upper arms stationary
+        and elbows in. Go down until the bar lightly touches your forehead. Breathe
+        in as you perform this portion of the movement.
+      - Flex the triceps as you lift the bar back to its starting position. Exhale
+        as you perform this portion of the movement.
+      - Hold for a second at the contracted position and repeat for the recommended
+        amount of repetitions.
+      display_name: Cable Lying Triceps Extension
+      exercise_id: yuhonas_cable_lying_triceps_extension
+      equipment:
+      - cable
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+    source_refs: {}
+    type: manual
+  german: French Press
+  english: Lying Triceps Extension
   display_name: French Press
-  tags:
-  - triceps
-  - isolation
-  - arms
-  - elbow_extension
-  - free_weight
-  - dumbbell
-  - lying
-  - unreviewed
   coaching_notes:
   - Oberarme von Beginn bis Ende ruhig halten und die Bewegung fast ausschließlich
     aus dem Ellbogengelenk ausführen.
@@ -3203,7 +3148,13 @@ exercises:
   - Brustkorb stabil halten, Nacken lang lassen und den Kopf ruhig auf der Bank positionieren.
   - Ein moderates Gewicht wählen, das eine saubere exzentrische Phase und eine präzise
     Ellbogenführung über alle Wiederholungen erlaubt.
-  type: isolation
+  category: push
+  name: French Press
+  stabilizers:
+  - 301_anterior_deltoid
+  - 304_rotator_cuff
+  - 405_forearm_flexors
+  - 406_forearm_extensors
   search_aliases:
   - French Press
   - Franzoesisches Druecken
@@ -3212,106 +3163,75 @@ exercises:
   - Skull Crusher
   - Skull Crushers
   - Trizepsstrecken liegend
-  english: Lying Triceps Extension
-  category: push
-- aliases:
-  - Stoßdrücken
-  - Schulterdrücken mit Beinschwung
-  - Schulterdrücken mit Hüftschwung
-  - Power Press
-  id: schulterdruecken_mit_hueftschwung
-  variations:
-  - Langhantel Push Press
-  - Kurzhantel Push Press
-  - Einarmiger Kurzhantel Push Press
-  german: Push Press
-  common_errors:
-  - Zu tiefer Dip, der die Bewegung eher zu einer Frontkniebeuge mit anschließendem
-    Pressen macht und den Rebound verschlechtert.
-  - Dip nach vorn statt senkrecht, wodurch die Last vor den Mittelfuß gerät und die
-    Hantelbahn unnötig nach vorn ausweicht.
-  - Zu frühes Drücken mit den Armen, bevor der Beinantrieb abgeschlossen ist, sodass
-    die Kraft aus Unterkörper und Hüfte verloren geht.
-  - Ausweichen ins Hohlkreuz statt die Rippen unten und den Rumpf gespannt zu halten.
-  - Fersen heben im Dip oder Drive zu früh ab, wodurch Stabilität und Kraftübertragung
-    verloren gehen.
-  - 'Kein aktiver Lockout über Kopf: weiche Ellbogen, fehlende Schulteraktivität oder
-    die Last bleibt vor dem Körper.'
-  - Kopf wird nur nach hinten gelegt, aber danach nicht wieder unter die Hantel gebracht,
-    sodass keine stabile Überkopfposition entsteht.
-  tags:
-  - power
-  - functional
-  - compound
-  - hip_drive
-  - vertical_press
-  - overhead
-  - explosive
-  review_state:
-    status: approved
-  name: Push Press
-  stabilizers:
-  - 105_serratus_anterior
-  - 304_rotator_cuff
-  - 504_transverse_abdominis
-  - 206_erector_spinae
-  - 507_multifidus
+  exercise_id: french_press
   equipment:
   - dumbbell
   - barbell
-  movements:
-  - vertical
-  - overhead_press
+  - cable
+  aliases:
+  - Skull Crushers
+  - French Press
+  - Trizepsstrecken liegend
+  - SZ-Trizepsdrücken
+  - Lying Triceps Extension
+  primary_muscles:
+  - 401_triceps_brachii
+  schema_version: 2026-08-12.exercise-v1
+  source: approved
+  tags:
+  - triceps
+  - isolation
+  - arms
   - elbow_extension
+  - free_weight
+  - dumbbell
+  - lying
+  - unreviewed
+  variations: []
+  id: french_press
+  review_state:
+    status: approved
+  movements:
+  - elbow_extension
+  - elbow_flexion
   - shoulder_flexion
-  - scapular_upward_rotation
-  - hip_extension
-  - knee_extension
-  - ankle_plantarflexion
-  - triple_extension
+  - shoulder_stability
+  common_errors:
+  - Die Oberarme wandern während der Wiederholungen nach hinten oder nach vorn, sodass
+    die Übung mehr zur Schulterbewegung wird.
+  - Die Ellbogen spreizen stark nach außen, was Spannung vom Trizeps nimmt und die
+    Gelenkbelastung erhöht.
+  - Das Gewicht wird zu schnell abgesenkt und unten nicht kontrolliert, wodurch die
+    exzentrische Arbeit verloren geht.
+  - Die Handgelenke knicken ab statt neutral zu bleiben, was die Kraftübertragung
+    verschlechtert.
+  - Mit Schwung aus Schulter oder Rumpf arbeiten, um den schwierigsten Bereich zu
+    überbrücken.
+  - Zu weit Richtung Gesicht oder Stirn führen, obwohl die gewählte Variante eine
+    sichere, reproduzierbare Hantelbahn neben oder leicht hinter den Kopf braucht.
+  - Oben aggressiv in die Ellbogen einrasten statt die Endposition muskulär zu kontrollieren.
+  - Zu schwer trainieren und dadurch Bewegungsradius, Ellbogenkontrolle und konstante
+    Spannung deutlich verlieren.
+  type: isolation
+  _hash: a2f70b0afc23e5b0b24444cccad081e7
+- secondary_muscles:
+  - 302_lateral_deltoid
+  - 102_pectoralis_major_clavicular
+  - 701_gastrocnemius
+  - 702_soleus
   origin:
-    type: manual
-    yuhonas:
-      secondary_muscles:
-      - quadriceps
-      - triceps
-      wger_muscle_ids:
-        primary: []
-        secondary: []
-      display_name: Push Press
-      tags:
-      - unreviewed
-      - yuhonas
-      primary_muscles:
-      - shoulders
-      yuhonas_id: Push_Press
-      exercise_id: yuhonas_push_press
-      equipment:
-      - barbell
-      coaching_notes: []
-      category: olympic weightlifting
-    source_refs: {}
     wger:
       secondary_muscles:
       - 603_gluteus_maximus
-      wger_muscle_ids:
-        primary:
-        - 9
-        secondary:
-        - 8
-      german: Push Press
-      display_name: Push Press
-      tags:
-      - unreviewed
-      - wger
       primary_muscles:
       - 202a_trapezius_upper
       - 202b_trapezius_middle
       - 202c_trapezius_lower
       - 303_posterior_deltoid
       exercise_id: wger_478
-      wger_id: 478
-      equipment: []
+      tags:
+      - unreviewed
+      - wger
       coaching_notes:
       - Bringe deine Kurzhanteln im Cleanen auf deine Schultern, die Handflächen zeigen
         nach innen. Atme ein und spanne deinen Rumpf an. (Bild 1) Gehe in die Knie
@@ -3319,20 +3239,41 @@ exercises:
         Senke sie kontrolliert und in langsamem Tempo wieder zu deinen Schultern ab
         und wiederhole.
       category: shoulders
-  schema_version: 2026-08-12.exercise-v1
-  _hash: eaafdd0028fa66655a151e153fc978d2
-  secondary_muscles:
-  - 302_lateral_deltoid
-  - 102_pectoralis_major_clavicular
-  - 701_gastrocnemius
-  - 702_soleus
-  primary_muscles:
-  - 301_anterior_deltoid
-  - 401_triceps_brachii
-  - 601_quadriceps_femoris
-  - 603_gluteus_maximus
-  exercise_id: schulterdruecken_mit_hueftschwung
-  display_name: Push Press
+      wger_id: 478
+      display_name: Push Press
+      equipment: []
+      german: Push Press
+      wger_muscle_ids:
+        secondary:
+        - 8
+        primary:
+        - 9
+    source_refs: {}
+    yuhonas:
+      secondary_muscles:
+      - quadriceps
+      - triceps
+      wger_muscle_ids:
+        secondary: []
+        primary: []
+      tags:
+      - unreviewed
+      - yuhonas
+      category: olympic weightlifting
+      yuhonas_id: Push_Press
+      coaching_notes: []
+      display_name: Push Press
+      exercise_id: yuhonas_push_press
+      equipment:
+      - barbell
+      primary_muscles:
+      - shoulders
+    type: manual
+  review_state:
+    status: approved
+  english: Push Press
+  type: compound
+  wger_id: null
   coaching_notes:
   - Starte aus einem festen Rack mit aufgerichtetem Oberkörper, gespanntem Rumpf und
     der Last über dem Mittelfuß.
@@ -3348,14 +3289,190 @@ exercises:
     kontrolliert und sauber in die Rack-Position zurück.'
   - Bei Kurzhanteln beide Seiten synchron antreiben und verhindern, dass eine Schulter
     früher ausdreht oder höher endet als die andere.
-  source: approved
-  type: compound
+  category: push
+  schema_version: 2026-08-12.exercise-v1
+  stabilizers:
+  - 105_serratus_anterior
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  - 507_multifidus
   search_aliases:
   - Push Press
   - Stoßdrücken
   - Schulterdrücken mit Beinschwung
   - Schulterdrücken mit Hüftschwung
   - Power Press
-  wger_id: null
-  english: Push Press
+  aliases:
+  - Stoßdrücken
+  - Schulterdrücken mit Beinschwung
+  - Schulterdrücken mit Hüftschwung
+  - Power Press
+  equipment:
+  - dumbbell
+  - barbell
+  name: Push Press
+  primary_muscles:
+  - 301_anterior_deltoid
+  - 401_triceps_brachii
+  - 601_quadriceps_femoris
+  - 603_gluteus_maximus
+  exercise_id: schulterdruecken_mit_hueftschwung
+  source: approved
+  variations:
+  - Langhantel Push Press
+  - Kurzhantel Push Press
+  - Einarmiger Kurzhantel Push Press
+  tags:
+  - power
+  - functional
+  - compound
+  - hip_drive
+  - vertical_press
+  - overhead
+  - explosive
+  id: schulterdruecken_mit_hueftschwung
+  display_name: Push Press
+  movements:
+  - vertical
+  - overhead_press
+  - elbow_extension
+  - shoulder_flexion
+  - scapular_upward_rotation
+  - hip_extension
+  - knee_extension
+  - ankle_plantarflexion
+  - triple_extension
+  common_errors:
+  - Zu tiefer Dip, der die Bewegung eher zu einer Frontkniebeuge mit anschließendem
+    Pressen macht und den Rebound verschlechtert.
+  - Dip nach vorn statt senkrecht, wodurch die Last vor den Mittelfuß gerät und die
+    Hantelbahn unnötig nach vorn ausweicht.
+  - Zu frühes Drücken mit den Armen, bevor der Beinantrieb abgeschlossen ist, sodass
+    die Kraft aus Unterkörper und Hüfte verloren geht.
+  - Ausweichen ins Hohlkreuz statt die Rippen unten und den Rumpf gespannt zu halten.
+  - Fersen heben im Dip oder Drive zu früh ab, wodurch Stabilität und Kraftübertragung
+    verloren gehen.
+  - 'Kein aktiver Lockout über Kopf: weiche Ellbogen, fehlende Schulteraktivität oder
+    die Last bleibt vor dem Körper.'
+  - Kopf wird nur nach hinten gelegt, aber danach nicht wieder unter die Hantel gebracht,
+    sodass keine stabile Überkopfposition entsteht.
+  _hash: eaafdd0028fa66655a151e153fc978d2
+  german: Push Press
+- secondary_muscles:
+  - 301_anterior_deltoid
+  - 102_pectoralis_major_clavicular
+  origin:
+    source_refs:
+      wger:
+      - '194'
+    type: external
+  source_review_required: true
+  external_ids:
+    wger:
+    - 194
   category: push
+  schema_version: 2026-08-12.exercise-v1
+  approved_at: '2026-10-31T14:40:48.356973+00:00'
+  name: Dips
+  source: approved
+  original_description:
+  - Greife die Stangen an einer engen Stelle und drücke dich hoch. Strecke dabei die
+    Arme nicht ganz aus, dann bleiben während des gesamten Bewegungablaufs die Muskeln
+    immer unter Spannung. Beuge nun die Arme und gehe so tief wie möglich runter,
+    die Ellenbogen zeigen nach hinten. Du kannst an dieser Stelle einige Sekunden
+    bleiben, bevor du die Übung weitermachst.
+  id: yuhonas_bench_dips
+  german: Dips
+  instructions:
+  - For this exercise you will need to place a bench behind your back. With the bench
+    perpendicular to your body, and while looking away from it, hold on to the bench
+    on its edge with the hands fully extended, separated at shoulder width. The legs
+    will be extended forward, bent at the waist and perpendicular to your torso. This
+    will be your starting position.
+  - 'Slowly lower your body as you inhale by bending at the elbows until you lower
+    yourself far enough to where there is an angle slightly smaller than 90 degrees
+    between the upper arm and the forearm. Tip: Keep the elbows as close as possible
+    throughout the movement. Forearms should always be pointing down.'
+  - Using your triceps to bring your torso up again, lift yourself back to the starting
+    position.
+  - Repeat for the recommended amount of repetitions.
+  wger_muscle_ids:
+    secondary:
+    - 5
+    primary:
+    - 4
+    - 5
+  english: Bench Dips
+  coaching_notes:
+  - '**Vorbereitung:** Positioniere deine Hände schulterbreit am Rand der Bank, Finger
+    nach vorne oder leicht zur Seite. Strecke deine Beine nach vorne aus, die Fersen
+    bleiben am Boden oder du erhöhst die Intensität, indem du sie auf eine andere
+    Erhöhung legst.'
+  - '**Körperspannung:** Halte deinen Rumpf stabil und die Bauchmuskeln leicht angespannt,
+    um ein Hohlkreuz zu vermeiden. Die Schultern bleiben während der gesamten Bewegung
+    stabil und werden nicht hochgezogen.'
+  - '**Abwärtsbewegung:** Senke deinen Körper langsam und kontrolliert ab, indem du
+    die Ellbogen beugst. Die Ellbogen zeigen dabei nach hinten und bleiben eng am
+    Körper. Gehe so tief, bis deine Oberarme parallel zum Boden sind oder ein 90-Grad-Winkel
+    im Ellbogengelenk entsteht.'
+  - '**Aufwärtsbewegung:** Drücke dich primär über deine Trizeps- und Brustmuskulatur
+    nach oben, bis deine Arme fast vollständig gestreckt sind. Vermeide ein vollständiges
+    Durchstrecken der Ellbogen, um die Spannung auf den Muskeln zu halten.'
+  - '**Atmung:** Atme beim Absenken des Körpers ein und beim Hochdrücken aus.'
+  stabilizers:
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 205_rhomboids
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 405_forearm_flexors
+  search_aliases:
+  - wger_194
+  - Dips
+  - Bench Dips
+  exercise_id: yuhonas_bench_dips
+  equipment:
+  - bench
+  - body only
+  primary_muscles:
+  - 401_triceps_brachii
+  - 103_pectoralis_major_sternal
+  source_selection:
+    yuhonas: null
+  tags:
+  - unreviewed
+  - wger
+  - yuhonas
+  - merged_external
+  variations: []
+  enriched_at: '2026-10-31T14:24:21.478472+00:00'
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-31T14:40:48.356973+00:00'
+    enriched_at: '2026-10-31T14:24:21.478472+00:00'
+  movements:
+  - elbow_extension
+  - shoulder_extension
+  - scapular_depression
+  - scapular_retraction
+  - bodyweight_movement
+  common_errors:
+  - '**Ellbogen nach außen:** Das Abspreizen der Ellbogen nach außen belastet die
+    Schultergelenke unnötig und reduziert die Effektivität für Trizeps und Brust.
+    Halte die Ellbogen eng am Körper und lass sie nach hinten zeigen.'
+  - '**Schultern hochziehen:** Ein Hochziehen der Schultern zu den Ohren während der
+    Bewegung überlastet die Nackenmuskulatur und kann zu Schulterbeschwerden führen.
+    Halte die Schultern tief und stabil (Scapular Depression).'
+  - '**Zu tief gehen:** Ein zu weites Absenken des Körpers (unter 90 Grad im Ellbogengelenk)
+    kann die vorderen Schulterkapseln stark überdehnen und das Verletzungsrisiko erhöhen.
+    Halte die Tiefe kontrolliert.'
+  - '**Hohlkreuz:** Ein starkes Hohlkreuz während der Übung deutet auf mangelnde Rumpfspannung
+    hin. Aktiviere deine Bauchmuskeln, um den Rücken zu stabilisieren und eine neutrale
+    Wirbelsäulenposition beizubehalten.'
+  - '**Schwung nutzen:** Die Bewegung sollte kontrolliert und ohne Schwung ausgeführt
+    werden, um die Zielmuskulatur optimal zu beanspruchen und das Verletzungsrisiko
+    zu minimieren.'
+  display_name: Dips
+  wger_id: 194

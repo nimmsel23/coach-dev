@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 // view under src/views. Missing files fall back to Fitness-owned adapters.
 //
 // Quelle je Mini-App, in dieser Reihenfolge: Nachbar-Checkout neben `root`
-// (`../plan-dev` in ~/fitness-dev, `../plan-app` im vitalos-Workspace), sonst der
+// (`../plan-dev` in ~/dev/fitness-dev, `../plan-app` im vitalos-Workspace), sonst der
 // verschachtelte Submodul-Ordner unter `root` (bisheriger Weg).
 function firstExisting(root, siblings, nested) {
   for (const name of siblings) {

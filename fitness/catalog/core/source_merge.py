@@ -154,7 +154,7 @@ def _best_match_scored(query: str, entries: list[dict[str, Any]]) -> tuple[dict[
     # (nicht in GENERIC_FUZZY_TOKENS) muss zwischen Query und Kandidat
     # uebereinstimmen, sonst wird der Kandidat trotz hohem Rohscore
     # uebersprungen.
-    matches = process.extract(_match_norm(query), choices, scorer=fuzz.token_set_ratio, limit=5)
+    matches = process.extract(_match_norm(query), choices, scorer=fuzz.ratio, limit=5)  # No subset=100 shortcut for Dips/Bench Dips.
     for _, score, choice_key in matches:
         candidate_text = choice_to_text[choice_key]
         if fuzzy_candidate_allowed(_norm(query), _norm(candidate_text)):
@@ -274,6 +274,7 @@ def find_source_entries(
     exercise_id: str | None = None,
     *,
     record: Any = None,
+    source_selection: dict | None = None,
     wger_entries: list[dict[str, Any]] | None = None,
     yuhonas_entries: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
@@ -287,8 +288,8 @@ def find_source_entries(
 
     Zusaetzlich liefert die Rueckgabe `wger_candidate`/`yuhonas_candidate`
     (entry|None) + `wger_candidate_score`/`yuhonas_candidate_score`
-    (float|None): Treffer zwischen CANDIDATE_MIN_SCORE und
-    AUTO_MATCH_MIN_SCORE, die zu unsicher fuer automatisches Verlinken sind,
+    (float|None): Nicht-exakte Treffer ab CANDIDATE_MIN_SCORE, die nur
+    als Vorschlag erscheinen,
     aber fuer eine manuelle Bestaetigung (CLI/Coach-Review) taugen. Nur
     gesetzt, wenn der jeweilige `wger`/`yuhonas`-Key None ist.
 
@@ -333,16 +334,22 @@ def find_source_entries(
     for hint in yuhonas_hints:
         yuhonas_entry = yuhonas_entry or _find_yuhonas_entry(yuhonas_entries, hint)
 
+    selection = source_selection if source_selection is not None else getattr(record, "source_selection", None) or {}
+    if "wger" in selection:
+        wger_entry = _find_wger_entry(wger_entries, selection["wger"])
+    if "yuhonas" in selection:
+        yuhonas_entry = _find_yuhonas_entry(yuhonas_entries, selection["yuhonas"])
+
     for query in queries:
-        if wger_entry is None:
+        if wger_entry is None and "wger" not in selection:
             cand, score = _best_match_scored(query, wger_entries)
-            if cand is not None and score >= AUTO_MATCH_MIN_SCORE:
+            if cand is not None and score >= AUTO_MATCH_MIN_SCORE and _norm(query) in {_norm(t) for t in _candidate_texts(cand)}:
                 wger_entry = cand
             elif cand is not None and score >= CANDIDATE_MIN_SCORE and score > wger_candidate_score:
                 wger_candidate, wger_candidate_score = cand, score
-        if yuhonas_entry is None:
+        if yuhonas_entry is None and "yuhonas" not in selection:
             cand, score = _best_match_scored(query, yuhonas_entries)
-            if cand is not None and score >= AUTO_MATCH_MIN_SCORE:
+            if cand is not None and score >= AUTO_MATCH_MIN_SCORE and _norm(query) in {_norm(t) for t in _candidate_texts(cand)}:
                 yuhonas_entry = cand
             elif cand is not None and score >= CANDIDATE_MIN_SCORE and score > yuhonas_candidate_score:
                 yuhonas_candidate, yuhonas_candidate_score = cand, score
@@ -357,8 +364,8 @@ def find_source_entries(
     }
 
 
-def build_external_seed(display_name: str, exercise_id: str | None = None) -> dict[str, Any] | None:
-    found = find_source_entries(display_name, exercise_id)
+def build_external_seed(display_name: str, exercise_id: str | None = None, *, source_selection: dict | None = None) -> dict[str, Any] | None:
+    found = find_source_entries(display_name, exercise_id, source_selection=source_selection)
     wger_entry = found["wger"]
     yuhonas_entry = found["yuhonas"]
 
@@ -417,3 +424,22 @@ def build_external_seed(display_name: str, exercise_id: str | None = None) -> di
     if wger_entry and yuhonas_entry:
         merged["tags"] = _merge_list_fields(merged.get("tags"), ["merged_external", "wger", "yuhonas"])
     return {key: value for key, value in merged.items() if value not in (None, "", [], {})}
+
+
+def search_source_entries(source: str, query: str, limit: int = 30) -> list[dict]:
+    """Search raw sources even when a curated record supersedes them in normal search."""
+    query = str(query or "").strip().casefold()
+    if not query:
+        return []
+    entries = _entries_from_file(f"unreviewed_{source}.yml")
+    matches = []
+    for entry in entries:
+        sid = entry.get(f"{source}_id")
+        texts = _candidate_texts(entry) + [str(sid)]
+        if not any(query in text.casefold() for text in texts):
+            continue
+        matches.append({"id": sid, "display_name": entry.get("display_name") or entry.get("name"),
+                        "english": entry.get("english"), "equipment": entry.get("equipment") or [],
+                        "description": str(entry.get("original_description") or entry.get("instructions") or "")[:600]})
+    matches.sort(key=lambda e: (str(e['id']).casefold() != query, str(e.get('display_name') or '').casefold() != query, str(e['id'])))
+    return matches[:limit]

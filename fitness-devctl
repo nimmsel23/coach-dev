@@ -2,7 +2,7 @@
 """
 fitness-devctl — Fitness Centre Stack Control
 Controls: Node API (:9100, fitness-dev.service) + Python Backend (:9150, fitness-api.service)
-Deploy: ~/fitness-dev → /opt/fitness (fitness.service, system scope, sudo)
+Deploy: ~/dev/fitness-dev → /opt/fitness (fitness.service, system scope, sudo)
 
 Terminal-facing dispatcher: ~/fitness/bin/fitness (domain CLI, catalog, sessions, coverage etc.)
 This script handles ONLY: service control + deploy.
@@ -323,7 +323,7 @@ def deploy(
     dry_run: bool = typer.Option(False, "--dry-run", help="Show what would happen, no changes"),
     build: bool = typer.Option(False, "--build", help="Frischen Build erzwingen (deploy.sh --build-yes), sonst wird vorhandenes dist/ übernommen"),
 ):
-    """Deploy ~/fitness-dev → ~/fitness (staging) → /opt/fitness (prod), via deploy.sh.
+    """Deploy ~/dev/fitness-dev → ~/fitness (staging) → /opt/fitness (prod), via deploy.sh.
 
     Delegiert an deploy.sh statt eigener Rsync-Logik zu duplizieren — deploy.sh
     kennt die vollständigen Excludes (u.a. fitness/catalog/kb, free-exercise-db,
@@ -349,12 +349,12 @@ def deploy(
     # Confirm before destructive sudo op (deploy.sh selbst fragt nicht nach)
     import shutil
     if not shutil.which("gum"):
-        ans = input("Deploy ~/fitness-dev → ~/fitness → /opt/fitness (sudo, restarts fitness.service)? [y/N] ")
+        ans = input("Deploy ~/dev/fitness-dev → ~/fitness → /opt/fitness (sudo, restarts fitness.service)? [y/N] ")
         if ans.lower() != "y":
             msg.warn("Aborted.")
             raise typer.Exit(0)
     else:
-        r = subprocess.run(["gum", "confirm", "Deploy ~/fitness-dev → ~/fitness → /opt/fitness (sudo, restarts fitness.service)?"])
+        r = subprocess.run(["gum", "confirm", "Deploy ~/dev/fitness-dev → ~/fitness → /opt/fitness (sudo, restarts fitness.service)?"])
         if r.returncode != 0:
             msg.warn("Aborted.")
             raise typer.Exit(0)

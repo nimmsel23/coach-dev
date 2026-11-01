@@ -427,57 +427,67 @@ def _remove_inbox_draft(exercise_id: str, display_name: str) -> Path | None:
     return None
 
 
-def on_kb_exercises(col_snapshot, changes, read_time):
-    for change in changes:
-        if change.type.name not in ("ADDED", "MODIFIED"):
-            continue
-        data = change.document.to_dict()
-        if data.get("source") != "approved":
-            continue
-        ex_id = data.get("exercise_id") or data.get("id") or change.document.id
-        display_name = data.get("display_name") or data.get("name") or ex_id
+_CATALOG_MIRROR_LOCK = threading.Lock()
 
-        _APPROVED_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+def _kb_content(data):
+    """Transport hashes/timestamps and dictionary order are not catalog changes."""
+    from datetime import date, datetime
+
+    def normalize(value):
+        if isinstance(value, (datetime, date)):
+            return value.isoformat()
+        if isinstance(value, dict):
+            return {key: normalize(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [normalize(item) for item in value]
+        return value
+
+    return normalize({key: value for key, value in data.items() if key not in {"_hash", "updated_at", "synced_at"}})
+
+
+def on_kb_exercises(col_snapshot, changes, read_time):
+    # Initial/reconnected Firestore snapshots replay ADDED for all documents.
+    # Compare semantic content before writing, and batch the whole callback.
+    with _CATALOG_MIRROR_LOCK:
         doc = yaml.safe_load(_APPROVED_FILE.read_text(encoding="utf-8")) if _APPROVED_FILE.exists() else None
         if not isinstance(doc, dict):
             doc = {"name": "approved_from_firebase", "description": "Coach-approved via Firebase Inbox", "exercises": []}
         exercises = doc.setdefault("exercises", [])
-        clean = {k: v for k, v in data.items() if not hasattr(v, "isoformat")}
-        for i, existing in enumerate(exercises):
-            if (existing.get("exercise_id") or existing.get("id")) == ex_id:
-                exercises[i] = clean
-                break
-        else:
-            exercises.append(clean)
+        positions = {str(ex.get("exercise_id") or ex.get("id")): i for i, ex in enumerate(exercises)}
+        changed_ids = []
+        removed_drafts = []
+        for change in changes:
+            if change.type.name not in ("ADDED", "MODIFIED"):
+                continue
+            data = change.document.to_dict()
+            if data.get("source") != "approved":
+                continue
+            ex_id = str(data.get("exercise_id") or data.get("id") or change.document.id)
+            clean = _kb_content(data)
+            clean.setdefault("exercise_id", ex_id)
+            position = positions.get(ex_id)
+            if position is not None and _kb_content(exercises[position]) == clean:
+                continue
+            if position is None:
+                positions[ex_id] = len(exercises)
+                exercises.append(clean)
+            else:
+                exercises[position] = clean
+            changed_ids.append(ex_id)
+            display_name = data.get("display_name") or data.get("name") or ex_id
+            removed = _remove_inbox_draft(ex_id, display_name)
+            if removed:
+                removed_drafts.append(removed)
+
+        if not changed_ids:
+            return
+        _APPROVED_FILE.parent.mkdir(parents=True, exist_ok=True)
         with _APPROVED_FILE.open("w", encoding="utf-8") as fh:
             yaml.safe_dump(doc, fh, allow_unicode=True, sort_keys=False)
-
-        removed_draft = _remove_inbox_draft(ex_id, display_name)
-        # removed_draft ist der einzige verlaessliche Marker fuer einen ECHTEN
-        # Approval-Uebergang (Draft war noch da, wurde jetzt entfernt). Ohne
-        # diese Unterscheidung feuert der Listener bei JEDER weiteren Aenderung
-        # am bereits approved Dokument (z.B. neue Felder durch einen spaeteren
-        # `fitness sync kb push`-Lauf, der den Hash aendert) erneut als
-        # "approve ... via Firestore" - 24x fuer dieselbe Uebung (020,
-        # 2026-08-08 bis 2026-08-21) beobachtet, obwohl kein Mensch je wieder
-        # auf Approve gedrueckt hat. Bloss angereicherte Metadaten committen
-        # wir weiterhin (Datei bleibt Wahrheit), aber mit ehrlicher Message.
-        is_new_approval = removed_draft is not None
-        if is_new_approval:
-            logger.success(f"kb exercise ← approved: {display_name} ({ex_id})")
-            commit_message = f"chore(catalog): approve {ex_id} ({display_name}) via Firestore"
-        else:
-            logger.info(f"kb exercise ← metadata sync (bereits approved): {display_name} ({ex_id})")
-            commit_message = f"chore(catalog): sync approved exercise metadata {ex_id} ({display_name})"
-
-        # Gleiche Behandlung wie approve_inbox_entry() (lokaler CLI/TUI-Pfad,
-        # inbox_actions.py): sofort committen statt unstaged liegen zu lassen
-        # (sonst landet's frueher oder spaeter falsch attribuiert in einem
-        # unrelated Commit einer anderen Session, siehe fitness-dev/CLAUDE.md)
-        # + catalog.json neu bauen, damit die Uebung sofort in der Suche
-        # auftaucht statt erst beim naechsten manuellen Rebuild.
-        commit_paths = [_APPROVED_FILE] + ([removed_draft] if removed_draft else [])
-        _git_commit_paths(commit_paths, commit_message)
+        message = f"chore(catalog): sync {len(changed_ids)} approved exercise(s) from Firestore"
+        logger.info(f"kb sync: {len(changed_ids)} changed, {len(removed_drafts)} inbox draft(s) resolved")
+        _git_commit_paths([_APPROVED_FILE, *removed_drafts], message)
         _rebuild_runtime_catalog()
 
 

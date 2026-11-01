@@ -385,7 +385,7 @@ def sync_activities(db: Any, dry_run: bool = False) -> dict[str, int]:
 def _is_prod_context() -> bool:
     """FITNESS_ENV=prod wird ausschliesslich vom systemd-Unit fitness.service
     gesetzt (Environment=-Zeile, siehe ops/fitness.service) - eine Dev-Shell
-    unter ~/fitness-dev hat das nie gesetzt, es sei denn jemand exportiert es
+    unter ~/dev/fitness-dev hat das nie gesetzt, es sei denn jemand exportiert es
     manuell. Dient als expliziter Marker, WO ein KB-Push laeuft."""
     return os.environ.get("FITNESS_ENV") == "prod"
 

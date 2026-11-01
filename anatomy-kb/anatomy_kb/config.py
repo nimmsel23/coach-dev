@@ -1,8 +1,8 @@
 """Central path resolver for anatomy-kb.
 
 Works in two layouts:
-  Subtree:  ~/fitness-dev/anatomy-kb/   (anatomy-kb is child of fitness-dev)
-  Sibling:  ~/anatomy-kb/ next to ~/fitness-dev/   (legacy)
+  Subtree:  ~/dev/fitness-dev/anatomy-kb/   (anatomy-kb is child of fitness-dev)
+  Sibling:  ~/anatomy-kb/ next to ~/dev/fitness-dev/   (legacy)
 
 Override via env: ANATOMY_KB_FITNESS_DEV=/path/to/fitness-dev
 """
@@ -30,7 +30,7 @@ def get_fitness_dev() -> Path | None:
     if (candidate / "catalog" / "kb").exists():
         return candidate
 
-    # Legacy sibling layout: ~/anatomy-kb/ next to ~/fitness-dev/
+    # Legacy sibling layout: ~/anatomy-kb/ next to ~/dev/fitness-dev/
     candidate = ANATOMY_KB_ROOT.parent / "fitness-dev"
     if (candidate / "fitness" / "catalog" / "kb").exists():
         return candidate

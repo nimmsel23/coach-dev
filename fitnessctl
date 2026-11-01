@@ -87,7 +87,7 @@ if _prodctl and hasattr(_prodctl, "app"):
 # `fitness-firestore-daemon.service` (user-scope) spiegelt Firestore-User-Data
 # (sessions/journal/habits/habitRecords/habitJournals + Fuel nutrition/
 # supplements) per on_snapshot nach ~/.aos/users/<uid>/fitness/. Läuft aus
-# WorkingDirectory ~/fitness-dev, `python3 -m fitness.firestore.mirror` —
+# WorkingDirectory ~/dev/fitness-dev, `python3 -m fitness.firestore.mirror` —
 # nach Code-Änderungen an mirror.py / journal_store.py muss er neugestartet
 # werden, damit sie greifen.
 

@@ -243,3 +243,76 @@ Freigaben abgearbeitet (21 ok), Selbsttest-Round-Trip 2,2 s.
 **Offen (Coach-Frontend, ~/coach-dev):** `coachCommand()` blockiert bis zu 190 s. Besser: Befehl sofort quittieren
 („in Warteschlange“), Fertigstellung per Live-Listener auf das Command-Dokument anzeigen, Heartbeat-Alter als
 Statuschip. Deploy von `vos-coach.web.app` nur nach ausdrücklicher Bestätigung.
+
+## 2026-10-31: Re-enrichment fix and Coach upstream restoration
+
+A manual inbox exercise without an external source match could produce
+`AttributeError: NoneType ... get` in `build_inbox_draft_seed` before reaching
+Gemini. Treat missing external seeds as empty; preserve origin/external IDs.
+`coach-sync` propagates in-process route exceptions and logs tracebacks instead
+of hiding them behind a generic HTTP 500. Its heartbeat now includes `last_error`
+and failure counts; Coach displays these separately from online status.
+
+Coach's configured Fitness upstream remains `127.0.0.1:8100`. The existing
+`fitness-preview.service` had stopped and referenced an old deployment with a
+broken KB symlink after the dev-directory move. Repo unit:
+`fitness/coach/deploy/fitness-preview.service`. It uses the installed editable
+fitness-agent interpreter and `~/dev/fitness-dev`, matching coach-sync's catalog.
+Install the unit as a symlink under `~/.config/systemd/user`, daemon-reload, start.
+`FITNESS_SKIP_WATCHERS=1` prevents duplicate catalog workers;
+`FITNESS_SYNC_OWNER=1` retains this service's existing user-data sync ownership
+(the separate fitness-sync service is inactive). This is a source-based domain
+API for Coach; it is separate from the self-contained /opt product deploy.
+No replacement service or port, no automatic approvals or plan publication.
+
+Re-enrichment now writes into the selected inbox file ID rather than creating
+a second exercise-ID-based draft. An empty model response returns 502 even if
+an older file exists; stale content can no longer masquerade as a new result.
+
+## 2026-10-31 — Correctable source assignments
+
+Coach can inspect, search, replace and remove source links in the inbox and
+approved single-exercise files. Raw source search includes variants hidden by
+normal curated-catalog deduplication. These operations use existing `link-source`
+commands with `operation=inspect|search|set`, preserving deployed command rules.
+Search/inspect are read-only and skip the worker's inbox publication step.
+
+A set operation replaces that source's IDs instead of appending to stale IDs.
+`source_selection` stores explicit source IDs, or null for deliberate no-link.
+Selection is honored by source inference, resolver, enrichment provenance and
+schema/approval. Removing a proposal blocks automatic reconnection for that
+source until the coach chooses an alternative. Existing AI content is marked
+`source_review_required`; on pipeline restart this bypasses mixed expert content.
+Fuzzy matches use a full-name ratio and remain proposals; automatic name links
+require an exact normalized name. Explicit source IDs remain supported.
+
+Approved edits back up the file, commit only its path, update the corresponding
+Firestore KB document and rebuild the local catalog. Existing exercise IDs and
+workout references are retained. No automatic re-enrichment or approval occurs.
+Validation: source-selection/route/schema and existing enrichment/inbox tests.
+
+## 2026-10-31 — Catalog snapshot replay without Git churn
+
+`on_kb_exercises` compares semantic exercise content before touching the local
+approved mirror. Dictionary key order and transport-only `_hash`, `updated_at`
+and `synced_at` fields do not count as catalog changes. Approval timestamps and
+nested dates remain serializable catalog data. Unchanged initial/reconnected
+snapshots do not rewrite files, remove review drafts, commit or rebuild.
+Actual changes in one callback share one mirror write, one scoped commit and
+one runtime-catalog rebuild. A lock serializes callback writes.
+
+Verification: six regression tests; actual 22 approved Firestore documents
+replayed against a temporary copy four times, with zero writes/commits/rebuilds.
+The service was already stopped and disabled at 17:00:37; this change preserves
+that operational state. The next start loads the fix. No history rewriting/push.
+
+## 2026-10-31 — Coach CLI namespace
+
+Coach-owned Python dispatcher: `~/dev/coach-dev/bin/coach`. Examples:
+`coach clients matthias --days 30`, `coach fitness-log clients --help`,
+`coach console`, `coach drafts`, `coach workout --help`, `coach catalog --help`,
+`coach inbox --help`, `coach sync status`, `coach data-sync --help`.
+The dispatcher uses the existing fitness-agent uv environment and this sibling
+Fitness source; no implementation or mutable data is copied into Coach.
+Standalone fitness-* commands remain compatible. Full mapping:
+`~/dev/coach-dev/docs/COACH-CLI.md`.

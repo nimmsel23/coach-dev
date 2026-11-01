@@ -41,7 +41,7 @@ def _draft_path_for(id: str, data: dict | None = None):
         ])
     for candidate in candidates:
         text = str(candidate or "").strip()
-        if not text:
+        if not text or "/" in text or "\\" in text or text in {".", ".."}:
             continue
         stem = text if text.startswith("inbox_") else f"inbox_{text}"
         path = INBOX_DIR / f"{stem}.yml"
@@ -50,36 +50,25 @@ def _draft_path_for(id: str, data: dict | None = None):
     return None
 
 
-def _link_source(ex: dict, source: str, entry: dict) -> dict:
-    ex = dict(ex or {})
-    origin = dict(ex.get("origin") or {})
-    source_refs = dict(origin.get("source_refs") or {})
-    external_ids = dict(ex.get("external_ids") or {})
+def _link_source(ex: dict, source: str, entry: dict | None) -> dict:
+    from fitness.catalog.core.source_selection import apply_source_selection
+    selection = dict(ex.get("source_selection") or {})
+    selection[source] = entry.get(f"{source}_id") if entry else None
+    linked = apply_source_selection(ex, selection)
+    linked["source_review_required"] = True
+    if entry:
+        linked["origin"][source] = entry
+    if entry and source == "wger" and entry.get("wger_muscle_ids"):
+        linked["wger_muscle_ids"] = entry["wger_muscle_ids"]
+    return linked
 
-    if source == "wger":
-        source_id = entry.get("wger_id")
-        ex["wger_id"] = source_id
-        if entry.get("wger_muscle_ids"):
-            ex["wger_muscle_ids"] = entry.get("wger_muscle_ids")
-    else:
-        source_id = entry.get("yuhonas_id") or entry.get("exercise_id") or entry.get("id")
-        ex["yuhonas_id"] = source_id
 
-    values = list(external_ids.get(source) or [])
-    if source_id not in (None, "") and source_id not in values:
-        values.append(source_id)
-    if values:
-        external_ids[source] = values
-        ex["external_ids"] = external_ids
-
-    origin["type"] = "external"
-    origin[source] = entry
-    if values:
-        source_refs[source] = [str(value) for value in values]
-    if source_refs:
-        origin["source_refs"] = source_refs
-    ex["origin"] = origin
-    return ex
+def _publish_source_edit(exercise: dict) -> None:
+    from fitness.firestore._db import get_db
+    exercise_id = exercise.get("exercise_id") or exercise.get("id")
+    get_db().collection("fitness").document("kb").collection("exercises").document(exercise_id).set({
+        **exercise, "source": "approved",
+    })
 
 
 def _write_back_to_firestore(uid: str | None, doc_id: str | None, enriched_data: dict, status: str = "source_linked") -> None:
@@ -149,43 +138,55 @@ def inbox_merge_candidates():
 
 @router.post("/fitness/inbox/{id}/link-source")
 async def inbox_link_source(id: str, request: Request):
+    from fitness.catalog.agent.inbox_actions import _git_commit_paths, _rebuild_runtime_catalog
+    from fitness.catalog.core.source_merge import search_source_entries
+    from fitness.catalog.core.paths import DATA_DIR
+
     body = await request.json()
+    operation = body.get("operation", "set")
     source = str(body.get("source") or "").strip()
-    source_id = body.get("source_id")
-    if source not in {"wger", "yuhonas"} or source_id in (None, ""):
-        raise HTTPException(400, detail="invalid_source")
-
-    entry = _source_entry_by_id(source, str(source_id))
-    if not entry:
-        raise HTTPException(404, detail="source_not_found")
-
+    target = body.get("target", "inbox")
+    if not id or "/" in id or "\\" in id or id in {".", ".."}:
+        raise HTTPException(400, detail="invalid_exercise_id")
+    if operation == "search":
+        if source not in {"wger", "yuhonas"}:
+            raise HTTPException(400, detail="invalid_source")
+        return {"ok": True, "results": search_source_entries(source, str(body.get("query") or "")[:200])}
+    if operation not in {"set", "inspect"} or target not in {"inbox", "approved"}:
+        raise HTTPException(400, detail="invalid_source_operation")
     current_data = body.get("current_data") if isinstance(body.get("current_data"), dict) else {}
-    draft_path = _draft_path_for(id, current_data)
-    if draft_path:
-        doc = yaml.safe_load(draft_path.read_text()) or {}
-        exercises = doc.get("exercises") if isinstance(doc, dict) else None
-        ex = exercises[0] if isinstance(exercises, list) and exercises else doc
-        if not isinstance(ex, dict):
-            raise HTTPException(400, detail="invalid_inbox_entry")
-        linked = _link_source(ex, source, entry)
-        doc["exercises"] = [linked]
-        draft_path.with_suffix(".yml.bak").write_text(draft_path.read_text())
-        draft_path.write_text(yaml.dump(doc, allow_unicode=True, sort_keys=False))
+    draft_path = DATA_DIR / "exercises" / f"{id}.yml" if target == "approved" else _draft_path_for(id, current_data)
+    if not draft_path or not draft_path.exists():
+        raise HTTPException(404, detail="exercise_file_not_found")
+    doc = yaml.safe_load(draft_path.read_text()) or {}
+    exercises = doc.get("exercises") if isinstance(doc, dict) else None
+    ex = exercises[0] if isinstance(exercises, list) and exercises else doc
+    if not isinstance(ex, dict):
+        raise HTTPException(400, detail="invalid_inbox_entry")
+    if target == "approved" and (len(exercises or []) != 1 or str(ex.get("exercise_id") or ex.get("id")) != id):
+        raise HTTPException(400, detail="ambiguous_catalog_file")
+    if operation == "inspect":
+        return {"ok": True, "exercise": ex}
+    if source not in {"wger", "yuhonas"}:
+        raise HTTPException(400, detail="invalid_source")
+    if "source_id" not in body:
+        raise HTTPException(400, detail="missing_source_id")
+    source_id = body["source_id"]
+    entry = _source_entry_by_id(source, str(source_id)) if source_id is not None else None
+    if source_id is not None and not entry:
+        raise HTTPException(404, detail="source_not_found")
+    linked = _link_source(ex, source, entry)
+    doc["exercises"] = [linked]
+    draft_path.with_suffix(".yml.bak").write_text(draft_path.read_text())
+    draft_path.write_text(yaml.safe_dump(doc, allow_unicode=True, sort_keys=False))
+    _git_commit_paths([draft_path], f"fix(catalog): correct {source} source for {id}")
+    if target == "approved":
+        _publish_source_edit(linked)
+        _rebuild_runtime_catalog()
     else:
-        linked = _link_source(current_data, source, entry)
-
-    uid = body.get("uid")
-    doc_id = body.get("doc_id") or id
-    _write_back_to_firestore(uid, doc_id, linked)
-
-    return {
-        "ok": True,
-        "id": id,
-        "source": source,
-        "source_id": source_id,
-        "exercise": linked,
-        "draft_path": str(draft_path) if draft_path else None,
-    }
+        _write_back_to_firestore(body.get("uid"), body.get("doc_id") or id, linked)
+    return {"ok": True, "id": id, "source": source, "source_id": source_id,
+            "exercise": linked, "draft_path": str(draft_path)}
 
 
 @router.post("/fitness/inbox/queue")
@@ -284,7 +285,6 @@ def inbox_delete(id: str):
 async def inbox_reenrich(id: str, request: Request):
     from fitness.catalog.agent.gemini import load_gemini_key
     from fitness.catalog.api.watcher import process_inbox_file_virtual, _write_back_to_firestore_inbox
-    from fitness.catalog.core.paths import DATA_DIR
     from fitness.catalog.core.resolver import resolve_query
 
     body = await request.json()
@@ -299,8 +299,12 @@ async def inbox_reenrich(id: str, request: Request):
         resolution = resolve_query(display_name)
         exercise_id = resolution.canonical_id if resolution.matched else display_name
 
+    # Re-enrich the selected local entry, preserving its identity in coachInbox.
+    if not id or "/" in id or "\\" in id or id in {".", ".."}:
+        raise HTTPException(400, detail="invalid_inbox_id")
+    target_file = INBOX_DIR / f"{id}.yml"
     api_key = load_gemini_key()
-    process_inbox_file_virtual(
+    draft_path = process_inbox_file_virtual(
         exercise_id,
         display_name,
         api_key,
@@ -308,11 +312,10 @@ async def inbox_reenrich(id: str, request: Request):
         feedback=feedback,
         current_data=current_data if isinstance(current_data, dict) else None,
         restart_pipeline=True,
+        target_file=target_file,
     )
 
-    safe_name = str(exercise_id).lower().replace(" ", "_")
-    draft_path = DATA_DIR / "inbox" / f"inbox_{safe_name}.yml"
-    if not draft_path.exists():
+    if draft_path is None or not draft_path.exists():
         raise HTTPException(502, detail="gemini_enrichment_failed")
 
     enriched_doc = yaml.safe_load(draft_path.read_text()) or {}

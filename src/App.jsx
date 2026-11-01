@@ -31,7 +31,7 @@ import { useSettings } from './contexts/SettingsContext'
 import { useSwipeNavigation } from './hooks/useSwipeNavigation'
 import { getStaticMuscleTaxonomy } from './lib/kb/muscles.js'
 
-const SESSION_SUB_TABS = new Set(['today', 'timer', 'skills', 'plan', 'history'])
+const SESSION_SUB_TABS = new Set(['today', 'timer', 'skills', 'plan', 'history', 'logbuch'])
 const REVIEW_SUB_TABS = new Set(['report', 'muscles', 'readiness', 'verlauf', 'protokoll'])
 const LEARN_SUB_TABS = new Set(['exercises', 'anatomy', 'quiz', 'strength'])
 const FOCUS_LAYERS = new Set(['focus', 'anamnese', 'freedom'])

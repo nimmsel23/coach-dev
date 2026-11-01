@@ -100,4 +100,3 @@ export async function registerDevice(_prefs) {}
 // 6Pack-Fortschritt: im lokalen Modus liegt er nur im localStorage der 6Pack-Karte.
 export async function getSixpackProgram() { return null; }
 export async function saveSixpackProgram() { return { ok: true }; }
-export async function registerSixpackPushToken() { throw new Error("Push braucht den Firebase-Modus."); }

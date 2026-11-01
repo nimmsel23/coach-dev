@@ -8,7 +8,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=%h/fitness-dev
+WorkingDirectory=%h/dev/fitness-dev
 Environment=PYTHONUNBUFFERED=1
 Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus
 ExecStart=/usr/bin/python3 -m backend sync run --notify

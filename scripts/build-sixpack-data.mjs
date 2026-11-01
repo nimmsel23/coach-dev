@@ -8,11 +8,11 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-// 6Pack-Quelle: Nachbar-Checkout (~/6pack-dev bzw. im vitalos-Workspace 6pack-app), sonst verschachteltes ./6pack.
+// 6Pack-Quelle: Nachbar-Checkout (~/dev/6pack-dev bzw. im vitalos-Workspace 6pack-app), sonst verschachteltes ./6pack.
 const SIXPACK_SRC = ['6pack-app', '6pack-dev'].map((n) => join(REPO_ROOT, '..', n)).find(existsSync) || join(REPO_ROOT, '6pack');
 const { loadMuscles, exerciseContent } = await import(pathToFileURL(join(SIXPACK_SRC, 'catalogContent.mjs')).href);
 const SIXPACK_DIR = join(REPO_ROOT, 'fitness/catalog/kb/exercises/6pack');

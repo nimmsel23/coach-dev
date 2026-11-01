@@ -5,9 +5,9 @@ fitness-prodctl — Fitness Prod Controller (system-scope services)
 Kontrolliert die tatsächlich laufenden Prod-Services, getrennt von
 fitness-devctl (Dev-Stack, --user-scope, fitness-dev.service etc.):
   - fitness.service     :6100  system-scope, Python/FastAPI (uvicorn) aus /opt/fitness (sudo für restart/stop)
-  - fitness-api.service :9150  user-scope, WorkingDirectory ~/fitness-dev (FastAPI/uvicorn)
+  - fitness-api.service :9150  user-scope, WorkingDirectory ~/dev/fitness-dev (FastAPI/uvicorn)
 
-Deploy: ./deploy.sh (baut in ~/fitness-dev, rsynct nach /opt/fitness, restartet fitness.service)
+Deploy: ./deploy.sh (baut in ~/dev/fitness-dev, rsynct nach /opt/fitness, restartet fitness.service)
 Install: fitness-prodctl install (schreibt/aktualisiert die systemd-Unit selbst, sudo)
 """
 

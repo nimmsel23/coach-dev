@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Plan-Übungsdaten generieren: führt plan/scripts/exercise-data.mjs im Plan-Checkout aus.
-// Quelle: Nachbar-Checkout (plan-app im vitalos-Workspace, sonst ~/plan-dev), sonst verschachtelter ./plan.
+// Quelle: Nachbar-Checkout (plan-app im vitalos-Workspace, sonst ~/dev/plan-dev), sonst verschachtelter ./plan.
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';

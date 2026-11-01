@@ -4,7 +4,7 @@ Workout-Journal für Kraft- und Ausdauertraining. Zwei Session-Modi, Multi-Sessi
 
 ## Komponenten
 
-- **`index.jsx`**: Thin Sub-Tab-Router — editor (default) / plan / history. Skills und 6Pack sind eigenständige Apps, keine Session-Untertabs mehr.
+- **`index.jsx`**: Thin Sub-Tab-Router — editor (default) / plan / history / logbuch (lazy, eigener View `../Logbuch/`, siehe dort). Skills und 6Pack sind eigenständige Apps, keine Session-Untertabs mehr.
 - **`useSession.js`**: State-Owner — Session-Modi, Multi-Session, Autosave/Flush, alle Handler.
 - **`SessionEditor.jsx`**: Editor-Assembly — SessionHeader + ExerciseList + ActivityAddon (Basis-Abschnitt) + SessionSlots (zusätzliche Abschnitte) / ActivitySection (Cardio-Mode).
 - **`SessionSlots.jsx`**: zusätzliche, frei benannte Abschnitte einer Strength-Session — jeder Slot ein weiterer Übungen+Activity+Notiz-Block wie der Basis-Abschnitt, additiv, kein Ersatz für ihn. Slot-Inhalt 1:1 als wiederverwendbarer "Baustein" pro Trainingsblock speicherbar (`lib/db/local|firestore/slotTemplates.js`).

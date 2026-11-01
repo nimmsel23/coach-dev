@@ -116,7 +116,7 @@ def process_commands(db) -> None:
         ref.update({"status": "processing", "started_at": datetime.now(timezone.utc)})
         try:
             result = _execute_command(command)
-            if command.get("action") not in {"duplicates"}:
+            if command.get("action") not in {"duplicates"} and (command.get("payload") or {}).get("operation") not in {"search", "inspect"}:
                 try:
                     publish_inbox(db)
                 except Exception as exc:
