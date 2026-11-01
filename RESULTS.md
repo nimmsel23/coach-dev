@@ -1578,3 +1578,21 @@ Klientenliste und Trainingsplanbereich zeigen gemeinsamen Plan-Status (bereitges
 ## 2026-11-01 — Standalone shipping and central rules ownership
 
 Removed optional VitalOS alias dependency, sibling aliases and Tailwind scans. Historical dirty vitalos checkout preserved; Plan remains the explicit source dependency. coach-release dispatches Coach CI for published origin/dev and verifies the resulting live SHA; vos-ship coach delegates without a Shell build. CI records release.json. Coach rules now have their own source fragment for central import/deployment in VitalOS.
+
+## 2026-11-01 — Splash blockiert nicht mehr auf Service-Worker-Update
+
+Die vendorte Mini-App-Shell mit der aktuellen VitalOS-Quelle synchronisiert. Ein langsamer Netzwerk-/Service-Worker-Updatecheck hält den Splash nicht mehr offen; er verschwindet nach dem App-Start (mindestens 200 ms, maximal 12 s nur falls der App-Root gar nicht bereit wird).
+
+## 2026-11-01 — Ausstehende Gesprächserweiterungen für die Übernahme vorbereiten
+
+Nachrichtenhistorie seitenweise laden, ältere Einträge bei Live-Updates erhalten,
+Entwürfe pro angemeldetem Konto/Klient sichern, feste Planversionen öffnen und
+Ungelesen-Zähler in Klientenliste und Navigation anzeigen. Zentraler Firestore-
+Index wird separat in VitalOS bereitgestellt; vor Live-Übernahme erforderlich.
+Der lokale Plan-Pointer und historische VitalOS-Checkout bleiben unangetastet.
+
+Abschlussprüfung: zwei Entwurfstests sowie ESLint und kompletter Coach-Build
+bestanden. Mobiler 390px-Emulatorablauf bestanden: beidseitige Antworten,
+Versionsansicht, Entwurferhalt nach Reload/Klientenwechsel, Ungelesen-Zähler,
+205 historische Einträge über zwei zusätzliche Seiten und anschließendes
+Live-Update ohne Verlust der geladenen Historie. Keine echten Nachrichten.

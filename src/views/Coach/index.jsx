@@ -1,3 +1,4 @@
+import { useCoachUnreadCounts } from './useCoachUnreadCounts.js';
 import { useEffect } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { useInbox } from '../Inbox/useInbox';
@@ -7,14 +8,16 @@ import ClientsPanel from './ClientsPanel';
 
 // Inhalt der Coach-Konsole. Navigation (Sidebar/Tab-Bar) und Titel liegen in
 // der Shell (src/shell/CoachShell.jsx); `sub` kommt aus der Hash-Route.
-export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCount }) {
+export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCount, onUnreadCount }) {
+  const unread = useCoachUnreadCounts();
+  useEffect(() => { onUnreadCount?.(unread.total); }, [unread.total, onUnreadCount]);
   const { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich, reload } = useInbox({ global: true });
 
   useEffect(() => {
     onInboxCount?.(exercises.length);
   }, [exercises.length, onInboxCount]);
 
-  if (loading) return (
+  if (loading && sub === 'exercises') return (
     <div className="flex items-center justify-center py-20">
       <div className="spinner" />
     </div>
@@ -22,6 +25,7 @@ export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCou
 
   return (
     <div className="space-y-4 p-4 md:p-6">
+      {unread.error && <p role="status" className="text-sm text-fit-dim">Ungelesen-Status ist derzeit nicht verfügbar.</p>}
       {sub === 'exercises' && (
         exercises.length === 0 ? (
           <div className="card flex flex-col items-center justify-center py-16 text-center">
@@ -49,7 +53,7 @@ export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCou
         )
       )}
       {sub === 'catalog' && <CatalogBrowser onInspectExercise={onInspectExercise} />}
-      {sub === 'clients' && <ClientsPanel />}
+      {sub === 'clients' && <ClientsPanel unreadCounts={unread.byClient} />}
 
       {toast && (
         <div

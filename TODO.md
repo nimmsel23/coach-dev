@@ -179,3 +179,40 @@ Bedienung, Besitzgrenzen, Planbezug, vollständiges Firestore-Schema, Rollenmatr
 - [x] Coach-owned CI release and live commit verification exposed through vos-ship coach.
 - [x] Coach rules fragment prepared for central VitalOS import.
 - [ ] Publish integrated Coach source and verify live Hosting release.
+
+
+# 2026-11-01 — Task-Sync pro Klient (Taskwarrior → Firebase → Handy)
+
+Ziel: Die Tasks jedes Klienten landen getrennt pro Klient in Firebase, damit das Handy sie sauber
+nach Klient getrennt zeigt. Ausgangslage geprüft am 2026-11-01:
+
+- Es gibt eine Taskwarrior-DB je Klient, aber **nicht** im Klienten-Workspace (`~/.local/Klienten/<id>/`),
+  sondern von `modules/plan/fitness/plan_tasks.py` angelegt: `~/.aos/fitness/users/<firebase_uid>/taskwarrior/`
+  (`data/` + eigenes `taskrc`, UDAs `occkey`/`planid`/`routineid`/`workoutid`). Der Ordner entsteht erst beim
+  ersten `python -m fitness.plan_tasks sync <uid>`; für Jakob (`fxohGl4Zn5ZUqXzTHjBsye5MmFu1`) gibt es den
+  Nutzerordner, aber noch keinen `taskwarrior`-Unterordner.
+- Bisher einseitig und lokal (Stufe 1, siehe `modules/plan/src/views/Plan/ARCHITECTURE.md`): Plan-Vorkommen →
+  Tasks, kein Rückweg, kein Firebase.
+
+- [x] Task-Sync pro Klient nach Firestore: `modules/plan/fitness/task_sync.py` (`python -m fitness.task_sync push <uid>`, Ziel
+      `fitness/<uid>/tasks/<uuid>`, Schlüssel `firebase_uid`). Probelauf ohne `--yes`; **erster echter Push steht noch aus**.
+- [x] Rückweg: `task_sync pull <uid> --yes` schließt lokal nur ab, was am Handy erledigt wurde (`status == completed`); alles andere
+      gewinnt lokal. Die Firestore-Regeln (`fitness/{uid}/**`) erlauben Besitzer und Coach, keine Regeländerung nötig.
+- [ ] Handy-Ansicht: Tasks nach Klient getrennt, auf der bestehenden Klientenliste aufsetzen.
+- [x] Mit dem aos-Framework für Klienten abgestimmt: Das Map-CLI (`frame|freedom|focus|fire --client <id>`)
+      nutzt dieselbe Klienten-DB für Fire; Pfad nicht doppelt festlegen.
+- [x] **Pfad umgestellt (2026-11-01):** `~/.aos/fitness` wird nach Firestore gepusht. Entscheidung 2026-11-01: Die Klienten-Task-DB
+      liegt in `~/.local/Klienten/<client-id>/tw-data/` (so nutzt sie das Map-CLI mit `--client`, siehe
+      `~/aos/game/CLAUDE.md`). `plan_tasks.py` (`_taskwarrior`, bisher `<runtime>/users/<uid>/taskwarrior/`) auf diesen
+      Pfad umstellen, die Klienten-ID aus der `firebase_uid` über `client.json` auflösen, bestehende DBs per `mv` übernehmen.
+
+- [ ] Handy-Ansicht: Tasks nach Klient getrennt aus `fitness/<uid>/tasks` anzeigen (Frontend, noch nicht begonnen).
+- [ ] Sync automatisieren (Timer/Daemon) und den ersten Push mit `--yes` bewusst auslösen; Konfliktfall prüfen, wenn Handy und lokal
+      denselben Task unterschiedlich ändern (heute: lokal gewinnt, vom Handy zählt nur Erledigt).
+- [ ] UUID-Kollision zwischen Klienten bei Map-Tasks: Die UUID aus `tw_maps.identity` enthält den Klienten nicht; in `fitness/<uid>/tasks`
+      ist das unkritisch (pro uid getrennt), nur ein gemeinsamer Pfad wäre ein Problem.
+
+## [x] Ausstehende Coach-Gesprächserweiterungen sichern und pushen (2026-11-01)
+
+Historie, lokale Entwürfe, Versionsansicht und Ungelesen-Anzeigen gemeinsam
+prüfen; Index im VitalOS-Owner vorbereiten; Feature-Branch zur Übernahme pushen.

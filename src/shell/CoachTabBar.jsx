@@ -183,7 +183,7 @@ export default function CoachTabBar({ active, onNavigate, counts = {}, expanded 
                       className="absolute right-1.5 top-0 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-semibold tabular-nums"
                       style={{ background: 'var(--accent)', color: 'var(--bg)' }}
                     >
-                      {count}
+                      {count >= 100 ? '99+' : count}
                     </span>
                   ) : null}
                 </span>

@@ -40,7 +40,7 @@ export default function CoachSidebar({ active, onNavigate, counts = {}, pinned, 
               >
                 <Icon size={20} className={isActive ? 'stroke-[3]' : ''} />
                 {pinned && <span className="flex-1 truncate text-left text-sm animate-in fade-in duration-500">{label}</span>}
-                {pinned && count > 0 && <span className="vos-tag">{count}</span>}
+                {pinned && count > 0 && <span className="vos-tag">{count >= 100 ? '99+' : count}</span>}
               </button>
             )
           })}
