@@ -12,7 +12,7 @@ from anatomy_kb import firestore_handler as _fs
 def command(
     action: str = typer.Argument("sync", help="sync | status"),
     dry_run: bool = typer.Option(False, "--dry-run", "-n", help="Dry-run (keine Änderungen)"),
-    scope: str = typer.Option("all", "--scope", "-s", help="all | muscles | exercises | anatomy"),
+    scope: str = typer.Option("all", "--scope", "-s", help="all | muscles | anatomy | index"),
 ):
     """
     [bold]Firestore Sync — anatomy-kb → fitness-aos[/bold]
@@ -42,13 +42,15 @@ def command(
     if action == "sync":
         with console.status(f"[dim]Firestore Sync ({scope})...[/dim]"):
             try:
-                db = _fs._init_firebase()
+                db = _fs._get_db()
                 if scope == "all":
                     results = _fs._run_sync(dry_run=dry_run)
                 elif scope == "muscles":
                     results = {"muscles": _fs._sync_muscles(db, dry_run=dry_run)}
                 elif scope == "exercises":
-                    results = {"exercises": _fs._sync_exercises(db, dry_run=dry_run)}
+                    # Exercises-Sync liegt bewusst nicht im anatomy-kb-Handler (siehe firestore_handler.py).
+                    _gum_log("error", "Scope 'exercises' gehört zu catalog/firestore_push.py, nicht zu anatomy-kb.")
+                    raise typer.Exit(1)
                 elif scope == "anatomy":
                     results = {"anatomy": _fs._sync_anatomy(db, dry_run=dry_run)}
                 elif scope == "index":
@@ -64,7 +66,9 @@ def command(
                 table.add_column("Error", justify="right", style="red")
 
                 for coll, counts in results.items():
-                    table.add_row(coll, str(counts["ok"]), str(counts["skip"]), str(counts["error"]))
+                    # batch_write liefert "unchanged", die älteren Syncs "skip"
+                    skipped = counts.get("unchanged", counts.get("skip", 0))
+                    table.add_row(coll, str(counts.get("ok", 0)), str(skipped), str(counts.get("error", 0)))
                 
                 title = "[bold]Firestore Sync" + (" [yellow](DRY)[/yellow]" if dry_run else "") + "[/bold]"
                 console.print(Panel(table, title=title, border_style="cyan"))
@@ -72,6 +76,8 @@ def command(
                 if not dry_run:
                     _gum_log("info", "Sync erfolgreich abgeschlossen.")
                 
+            except typer.Exit:
+                raise
             except Exception as e:
                 _gum_log("error", f"Firestore-Fehler: {e}")
                 raise typer.Exit(1)

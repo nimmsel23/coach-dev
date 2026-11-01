@@ -31,10 +31,14 @@ import { useSettings } from './contexts/SettingsContext'
 import { useSwipeNavigation } from './hooks/useSwipeNavigation'
 import { getStaticMuscleTaxonomy } from './lib/kb/muscles.js'
 
-const SESSION_SUB_TABS = new Set(['today', 'timer', 'skills', 'plan', 'history'])
+const SESSION_SUB_TABS = new Set(['today', 'timer', 'skills', 'plan', 'history', 'logbuch'])
 const REVIEW_SUB_TABS = new Set(['report', 'muscles', 'readiness', 'verlauf', 'protokoll'])
 const LEARN_SUB_TABS = new Set(['exercises', 'anatomy', 'quiz', 'strength'])
 const FOCUS_LAYERS = new Set(['focus', 'anamnese', 'freedom'])
+const EXTERNAL_SESSION_APPS = {
+  timer: 'https://vos-6pack.web.app/',
+  skills: 'https://vos-skills.web.app/',
+}
 
 function isIsoDate(value) {
   return /^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))
@@ -72,6 +76,14 @@ function parseHashRoute({ resolveFlowTab, navMode }) {
     // damit ein Link direkt dorthin führt statt immer auf die Liste.
     planView: null,
     planId: null,
+  }
+
+  // Older standalone links used #timer or #skills rather than
+  // #session/<subtab>. Normalize them to the redirect path below.
+  if (EXTERNAL_SESSION_APPS[rawTab]) {
+    next.tab = 'session';
+    next.subTab = rawTab;
+    return next;
   }
 
   if (VALID_TABS.has(rawTab)) {
@@ -261,6 +273,14 @@ export default function App() {
     }
   }, [user, authGateTriggerCount, authGateDismissedAt]);
 
+  // Legacy session deep links now open the standalone apps. The embedded
+  // VitalOS Shell handles these IDs separately and routes to its local wrappers.
+  useEffect(() => {
+    if (tab !== 'session') return;
+    const target = EXTERNAL_SESSION_APPS[subTab];
+    if (target) window.location.replace(target);
+  }, [tab, subTab]);
+
   // Stoppuhr-Notification/1h-Reminder auch auf anderen Haupt-Tabs weiterlaufen lassen.
   useTodayGateWatcher(tab !== 'session')
 
@@ -289,7 +309,14 @@ export default function App() {
   };
 
   function navigate(id) { navigateToTab(id) }
-  function navigateSub(id) { setSubTab(id) }
+  function navigateSub(id) {
+    const target = EXTERNAL_SESSION_APPS[id];
+    if (target) {
+      window.location.assign(target);
+      return;
+    }
+    setSubTab(id);
+  }
   function navigateFocusLayer(id) { setFocusLayer(id) }
   // Plan ist kein eigener "tab"-Wert (bleibt technisch Session-Subtab, teilt
   // sich Route/State mit Training), soll aber von überall aus direkt

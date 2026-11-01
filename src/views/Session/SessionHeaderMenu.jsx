@@ -16,6 +16,7 @@ import { IS_SOLO } from '../../constants/NavigationItems.js';
 const SOLO_LINKS = [
   { id: 'plan', label: 'Plan ↗', href: 'https://vos-plan.web.app/' },
   { id: 'history', label: 'History' },
+  { id: 'logbuch', label: 'Logbuch' },
   { id: 'atlas', label: 'Atlas ↗', href: 'https://vos-atlas.web.app/' },
 ];
 

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 
 // fitness_agent/server.py (aiohttp, :9120/:9130) ist archiviert (siehe archive/fitness_agent_server.py).
 // Katalog-Daten kommen direkt von der Platte, dynamische Endpunkte (plan/weekly/export/inbox)
@@ -9,7 +9,7 @@ import yaml from 'js-yaml'
 const PYTHON_PORT = Number(process.env.FITNESS_PYTHON_PORT || 9150)
 const PYTHON_BASE = `http://127.0.0.1:${PYTHON_PORT}`
 
-// Relativ zu diesem File auflösen, nicht zu $HOME/fitness-dev — sonst zeigt
+// Relativ zu diesem File auflösen, nicht zu $HOME/dev/fitness-dev — sonst zeigt
 // der Pfad in /opt/fitness (Prod-Deploy) auf den dev-Checkout statt auf die
 // eigenen, mitgelieferten Dateien.
 const __dirname = path.dirname(fileURLToPath(import.meta.url))

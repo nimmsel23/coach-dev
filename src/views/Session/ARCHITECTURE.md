@@ -4,7 +4,7 @@ Workout-Journal für Kraft- und Ausdauertraining. Zwei Session-Modi, Multi-Sessi
 
 ## Komponenten
 
-- **`index.jsx`**: Thin Sub-Tab-Router — editor (default) / timer / skills / plan / history.
+- **`index.jsx`**: Thin Sub-Tab-Router — editor (default) / plan / history / logbuch (lazy, eigener View `../Logbuch/`, siehe dort). Skills und 6Pack sind eigenständige Apps, keine Session-Untertabs mehr.
 - **`useSession.js`**: State-Owner — Session-Modi, Multi-Session, Autosave/Flush, alle Handler.
 - **`SessionEditor.jsx`**: Editor-Assembly — SessionHeader + ExerciseList + ActivityAddon (Basis-Abschnitt) + SessionSlots (zusätzliche Abschnitte) / ActivitySection (Cardio-Mode).
 - **`SessionSlots.jsx`**: zusätzliche, frei benannte Abschnitte einer Strength-Session — jeder Slot ein weiterer Übungen+Activity+Notiz-Block wie der Basis-Abschnitt, additiv, kein Ersatz für ihn. Slot-Inhalt 1:1 als wiederverwendbarer "Baustein" pro Trainingsblock speicherbar (`lib/db/local|firestore/slotTemplates.js`).
@@ -19,9 +19,8 @@ Workout-Journal für Kraft- und Ausdauertraining. Zwei Session-Modi, Multi-Sessi
 - **`SidebarSheet.jsx`**: Bottom-Sheet mit SessionSidebar (Block, Ort, Dauer, Effort, Notizen, Exports).
 - **`MuscleMapModal.jsx`**: Anterior/Posterior BodyMap aller Session-Exercises + Anatomie-Detail.
 - **`SourceSettingsModal.jsx`**: Übungsquellen-Toggle (wger/yuhonas/coach) via localStorage.
-- **`WorkoutTimerCard.jsx`**: reine Stoppuhr, lebt im `skills`-SubTab, Lime-Akzent (`#c8ff00`).
-- **`SixPack/SixPackPromiseCard.jsx`**: Der `timer`-Subtab nutzt die integrierte Oberfläche aus `src/views/SixPack/`. Fitness erzeugt ihre Übungsdaten aus der eigenen YAML-KB über `scripts/build-sixpack-data.mjs`; Details in `docs/6pack-integration.md`. Der Runner sagt Übungen an, signalisiert Pausen akustisch und zeigt Video-Loops. Setzt `document.documentElement[data-theme]` auf `"sixpack"` solange gemountet und stellt den vorherigen Wert beim Verlassen wieder her.
-- **`Skills/SkillsCard.jsx`**: Der `skills`-Subtab nutzt die integrierte Oberfläche aus `src/views/Skills/`. Die Komponente verwaltet 14 Skills, Progressionen und Fortschritt in localStorage. Sie setzt `data-theme="skills"` solange gemountet; das Theme liegt in `src/views/Skills/`.
+- **`SessionModeTabs.jsx`**: Kraft/Ausdauer setzen den Session-Modus. Skills und 6Pack öffnen eigene Apps: im VitalOS-Shell-Build lokale Shell-Routen, im Fitness-Standalone die Hosting-Sites.
+- **`SessionGateCard.jsx`**: enthält ebenfalls direkte Einstiege zu den eigenständigen Skills- und 6Pack-Apps; deren Inhalte werden nicht in der Fitness-Session gerendert.
 
 ## Session-Modi
 
@@ -140,9 +139,11 @@ Kein Zeit-Debounce mehr (seit 2026-07). `scheduleAutoSave()` setzt nur das `dirt
 ```
 
 
-## 6Pack-Fotos
+## App-Übergänge
 
-Der Session-Router übergibt die aktive `@db`-UID an den Barrel-Einstieg im
-6Pack-Submodul. `SixPackApp.jsx` bindet `SelfiesScreen.jsx` mit UID-Key ein;
-ohne Auth-UID bleiben Fotos gesperrt. Kamera und Galerie-Mehrfachauswahl
-nutzen dieselbe nutzergebundene Offline-Queue und lokale Foto-API.
+Legacy-Routen `#session/timer`, `#session/skills`, `#timer` und `#skills` werden
+im Fitness-Standalone auf `vos-6pack.web.app` bzw. `vos-skills.web.app`
+weitergeleitet. VitalOS fängt dieselben IDs am Shell-Adapter ab und öffnet
+seine lokalen SixPack-/Skills-Wrapper. Das Eintragen abgeschlossener
+App-Workouts ins Fitness-Tageslog bleibt eine Funktion des VitalOS-Shell-
+Adapters.

@@ -13,10 +13,6 @@ from loguru import logger
 _HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(_HERE.parent))  # adds fitness/ to path (gives db/, firestore/, catalog/)
 
-_FUEL_DEV = Path.home() / "fuel-dev"
-if _FUEL_DEV.exists():
-    sys.path.insert(0, str(_FUEL_DEV))
-
 # ── Core Paths ────────────────────────────────────────────────────────────────
 from fitness.catalog.core.paths import runtime_root
 from fitness.runtime.session_store import validate_runtime_uid, validate_session_date, validate_session_id

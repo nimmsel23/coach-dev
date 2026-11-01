@@ -1,12 +1,13 @@
-import { Dumbbell, Brain, BarChart3, Settings2, CalendarDays, ClipboardList, History, LibraryBig, Microscope, HelpCircle, Layers, Zap, Crosshair, TimerReset, Sparkles, Bike, LayoutGrid, FileText } from "lucide-react";
+import { BookOpen, Dumbbell, Brain, BarChart3, Settings2, CalendarDays, ClipboardList, History, LibraryBig, Microscope, HelpCircle, Layers, Zap, Crosshair, TimerReset, Sparkles, Bike, LayoutGrid, FileText } from "lucide-react";
 
 const baseItems = [
   { id: 'session',  label: 'Training', Icon: Dumbbell,  sub: [
     { id: 'today',   label: 'Heute',    Icon: CalendarDays },
-    { id: 'timer',   label: 'Timer',    Icon: TimerReset },
-    { id: 'skills',  label: 'Skills',   Icon: Sparkles },
+    { id: 'timer',   label: '6Pack-App', Icon: TimerReset },
+    { id: 'skills',  label: 'Skills-App', Icon: Sparkles },
     { id: 'plan',    label: 'Plan',     Icon: ClipboardList },
     { id: 'history', label: 'History',  Icon: History },
+    { id: 'logbuch', label: 'Logbuch',  Icon: BookOpen },
   ]},
   // 'Bericht' ist bewusst KEIN eigener Sub-Eintrag: das ist der Review-Tab
   // selbst (Default-Ansicht beim Klick auf "Review"), keine gleichrangige

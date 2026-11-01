@@ -1,12 +1,10 @@
 /**
- * SessionModeTabs — Kraft / Ausdauer / Calisthenics / 6Pack als eine Reihe
- * Underline-Tabs im Training-Tab. Kraft/Ausdauer setzen den sessionMode der
- * Heute-Ansicht, Calisthenics (Skills) und 6Pack (Core-Timer) sind eigene
- * Subtabs (skills / timer) — siehe Session/index.jsx. Die Reihe steht auch
- * über diesen beiden Subtabs, damit man von dort zurück kommt.
+ * Kraft / Ausdauer bleiben Session-Modi. Skills und 6Pack sind Links zu
+ * eigenständigen Apps: VitalOS routet zu den Shell-Wrappern, Fitness Standalone
+ * leitet auf die jeweiligen Hosting-Sites weiter.
  */
 
-import { Dumbbell, Activity, Sparkles, TimerReset } from 'lucide-react';
+import { Dumbbell, Activity, ExternalLink } from 'lucide-react';
 
 export default function SessionModeTabs({ sessionMode, setSessionMode, subTab, onSubNav }) {
   const onToday = !subTab || subTab === 'today';
@@ -22,12 +20,12 @@ export default function SessionModeTabs({ sessionMode, setSessionMode, subTab, o
       go: () => { setSessionMode('cardio'); if (!onToday) onSubNav?.('today'); },
     },
     {
-      key: 'skills', label: 'Calisthenics', Icon: Sparkles, color: 'var(--accent)',
+      key: 'skills', label: 'Skills', Icon: ExternalLink, color: 'var(--accent)',
       active: subTab === 'skills',
       go: () => onSubNav?.('skills'),
     },
     {
-      key: 'timer', label: '6Pack', Icon: TimerReset, color: 'var(--accent)',
+      key: 'timer', label: '6Pack', Icon: ExternalLink, color: 'var(--accent)',
       active: subTab === 'timer',
       go: () => onSubNav?.('timer'),
     },
@@ -39,6 +37,7 @@ export default function SessionModeTabs({ sessionMode, setSessionMode, subTab, o
         <button
           key={key}
           onClick={go}
+          aria-label={key === 'skills' ? 'Skills-App öffnen' : key === 'timer' ? '6Pack-App öffnen' : label}
           aria-pressed={active}
           className="flex min-h-11 items-center gap-1 pb-0.5 whitespace-nowrap"
           style={{

@@ -73,22 +73,8 @@ async function showReminder(payload) {
   });
 }
 
-// 6Pack-Trainingserinnerung (functions/index.js → scheduledSixpackReminders). Tag ohne
-// "fitness-"-Präfix = gleicher Tag wie die lokale Erinnerung der 6Pack-Karte.
-function showSixpackReminder(data) {
-  return self.registration.showNotification(data.title || "6Pack", {
-    body: data.body || "Zeit fürs Training",
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
-    tag: data.tag || "sixpack-reminder",
-    renotify: false,
-    data: { link: data.link || "/#session/timer", tab: "session" },
-  });
-}
-
 messaging.onBackgroundMessage((payload) => {
   const data = payload?.data || {};
-  if (data.app === "sixpack") return showSixpackReminder(data);
   if (data.app !== "fitness") return;
   return data.type === "clientWorkout" ? showClientWorkout(data) : showReminder(payload);
 });

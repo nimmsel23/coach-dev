@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -34,6 +35,13 @@ _last: dict = {}
 
 
 def _get_db():
+    # Das Paket firestore/ liegt in fitness-dev/fitness/ (Nachbar von catalog/). Hinten anhängen,
+    # nicht vorne einfügen: fitness/http.py würde sonst das stdlib-Modul http überdecken.
+    from anatomy_kb.config import CATALOG_DIR
+    if CATALOG_DIR is not None:
+        fitness_pkg = str(CATALOG_DIR.parent)
+        if fitness_pkg not in sys.path:
+            sys.path.append(fitness_pkg)
     from firestore.kb import get_db
     return get_db()
 
@@ -138,7 +146,7 @@ def _sync_anatomy(db, dry_run: bool = False) -> dict:
     col = db.collection("fitness").document("kb").collection("anatomy")
 
     def _records():
-        for yml in sorted(ANATOMY_TEACHING.glob("*.yml")):
+        for yml in sorted([*ANATOMY_TEACHING.glob("*.yml"), *ANATOMY_TEACHING.glob("*.yaml")]):
             try:
                 doc = yaml.safe_load(yml.read_text(encoding="utf-8"))
             except Exception:

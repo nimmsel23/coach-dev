@@ -3,6 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
+from fitness.catalog.core.source_selection import apply_source_selection
+
 
 SCHEMA_VERSION = "2026-08-12.exercise-v1"
 
@@ -59,7 +61,7 @@ def apply_exercise_schema(
     review_provider: str | None = None,
     ai_reviewed: bool | None = None,
 ) -> dict[str, Any]:
-    ex = dict(exercise or {})
+    ex = apply_source_selection(exercise)
     external_ids = ex.get("external_ids") if isinstance(ex.get("external_ids"), dict) else {}
     source_refs = _non_empty_dict({
         "wger": _as_text_list(external_ids.get("wger")) or _as_text_list(ex.get("wger_id")),

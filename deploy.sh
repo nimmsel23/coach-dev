@@ -5,6 +5,7 @@ set -euo pipefail
 # Default to staging target
 TARGET="${1:-staging}"
 BUILD_BEFORE_DEPLOY=false
+DRY_RUN=false
 
 shift_count=0
 if [[ $# -gt 0 ]]; then
@@ -16,11 +17,14 @@ fi
 
 for arg in "$@"; do
   case "$arg" in
+    --dry-run)
+      DRY_RUN=true
+      ;;
     --build-yes)
       BUILD_BEFORE_DEPLOY=true
       ;;
     *)
-      printf '\033[1;31m%s\033[0m\n' "Invalid argument '$arg'. Supported: --build-yes" >&2
+      printf '\033[1;31m%s\033[0m\n' "Invalid argument '$arg'. Supported: --build-yes | --dry-run" >&2
       exit 1
       ;;
   esac
@@ -42,7 +46,7 @@ else
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")" && pwd)"
-DEV_SOURCE="${HOME}/fitness-dev"
+DEV_SOURCE="${HOME}/dev/fitness-dev"
 STAGING_SOURCE="${HOME}/.local/fitness"
 
 msg() { printf '\033[1;32m%s\033[0m\n' "$*"; }
@@ -116,12 +120,12 @@ if [[ "$TARGET" == "staging" ]]; then
   fi
 elif [[ "$TARGET" == "prod" ]]; then
   SOURCE="$SCRIPT_DIR"
-  if [[ "$SCRIPT_DIR" != "$STAGING_SOURCE" && -f "$STAGING_SOURCE/package.json" ]]; then
+  if [[ "$SCRIPT_DIR" != "$STAGING_SOURCE" && -f "$STAGING_SOURCE/pyproject.toml" ]]; then
     SOURCE="$STAGING_SOURCE"
   fi
 fi
 
-[[ -f "$SOURCE/package.json" ]] || die "Deployment source '$SOURCE' is not a fitness checkout"
+[[ -f "$SOURCE/pyproject.toml" ]] || die "Deployment source '$SOURCE' is not a fitness checkout"
 
 run_cmd() {
   if $USE_SUDO; then
@@ -140,7 +144,8 @@ msg "📍 Using source checkout $SOURCE"
 # kein doppelter Build nötig, nur übernehmen und weiterreichen an prod. In
 # allen anderen Fällen ohne Flag wird das vorhandene dist/ unverändert
 # übernommen (mit Warnung, damit ein veraltetes dist/ nicht unbemerkt bleibt).
-if $BUILD_BEFORE_DEPLOY; then
+if $BUILD_BEFORE_DEPLOY && ! $DRY_RUN; then
+  require_file "$SOURCE/package.json" "build checkout (build in dev, then deploy staging → prod)"
   msg "🔨 Building UI in $SOURCE"
   (
     cd "$SOURCE"
@@ -159,122 +164,89 @@ else
   fi
 fi
 
-# 1. Sync to target directory
-if [[ ! -d "$DEST" ]]; then
-  msg "📂 Creating target directory $DEST"
-  run_cmd mkdir -p "$DEST"
-  if $USE_SUDO; then
-    run_cmd chown "$(id -u):$(id -g)" "$DEST"
-  fi
-fi
-
-RSYNC_EXCLUDES=(
-  --exclude ".git"
-  --exclude ".env"
-  --exclude ".env.*"
-  --exclude "node_modules"
-  --exclude "data"
-  --exclude ".archiv"
-  --exclude "*.bak"
-  --exclude ".claude"
-  --exclude "*.log"
-  --exclude ".firebase"
-  --exclude "dist-firebase"
-  --exclude "dist-versions"
-  --exclude ".worktrees"
-  --exclude "catalog-ui"
-  --exclude "gas-coach-summary"
-  --exclude "__pycache__"
-  --exclude ".pytest_cache"
-  --exclude ".venv"
-  --exclude "fitness/catalog/state"
-  --exclude "fitness/catalog/kb"
-  # free-exercise-db liegt manuell unter $DEST (~/.local/fitness), existiert aber
-  # nicht in $SOURCE (~/fitness-dev) — ohne diesen Exclude loescht --delete
-  # bei jedem Staging-Deploy den kompletten Klon bis auf .git leer (Root
-  # Cause fuer den "yuhonas-Repo wird nach dem Import geleert"-Bug,
-  # 2026-08-15 gefunden). Siehe fitness/catalog/CLAUDE.md.
-  --exclude "free-exercise-db"
+# Runtime payload only. Build in the source checkout; never copy its toolchains.
+# Keep this allowlist explicit so new frontend/modules/media directories cannot
+# silently become part of the installed product.
+RSYNC_RUNTIME=(
+  --exclude '*.bak*' --exclude '*.map' --exclude '.claude' --exclude '.codex'
+  --filter 'P /.git/***'
+  --filter 'P /.venv/***'
+  --filter 'P /.env*'
+  --filter 'P /data/***'
+  --filter 'P /fitness/catalog/kb/***'
+  --filter 'P /fitness/catalog/state/***'
+  --exclude '__pycache__' --exclude '*.pyc' --exclude 'tests'
+  --exclude '.git' --exclude 'node_modules' --exclude '.venv'
+  --exclude '/fitness/catalog/kb' --exclude '/fitness/catalog/state'
+  --include '/dist/***'
+  --include '/fitness/catalog/dist/***'
+  --include '/fitness/catalog/config.yml'
+  --include '/fitness/catalog/data_source_priority.yml'
+  --include '/fitness/catalog/py.typed'
+  --include '/fitness/' --include '/fitness/**/' --include '/fitness/**.py'
+  --include '/backend/sync/assets/logo.png'
+  --include '/backend/' --include '/backend/**/' --include '/backend/**.py'
+  --include '/db/' --include '/db/**/' --include '/db/**.py'
+  --include '/anatomy-kb/' --include '/anatomy-kb/anatomy_kb/'
+  --include '/anatomy-kb/anatomy_kb/**/' --include '/anatomy-kb/anatomy_kb/**.py'
+  --include '/scripts/' --include '/scripts/build-catalog.py'
+  --include '/pyproject.toml' --include '/README.md'
+  --exclude '*'
 )
+require_file "$SOURCE/dist/index.html" "built frontend dist (build in dev first)"
+require_file "$SOURCE/pyproject.toml" "Python runtime manifest"
 
-msg "📦 Syncing files from $SOURCE → $DEST"
-# fitness-enricher.service/fitness-firestore-daemon.service schreiben live in
-# fitness/catalog/kb/** während der Sync läuft — rsync bricht das einzelne
-# betroffene File dann mit "vanished"/geändert ab und meldet exit code 23
-# (teilweise übertragen), obwohl der Rest sauber lief. set -e würde den
-# gesamten Deploy hier sonst stillschweigend abbrechen, bevor Service-Setup
-# + Restart passieren. Exit 23/24 daher als Warnung behandeln, alles andere
-# bleibt fatal.
-set +e
-if $USE_SUDO; then
-  sudo rsync -av --delete "${RSYNC_EXCLUDES[@]}" "$SOURCE/" "$DEST/"
-else
-  rsync -av --delete "${RSYNC_EXCLUDES[@]}" "$SOURCE/" "$DEST/"
-fi
-rsync_rc=$?
-set -e
-if [[ $rsync_rc -eq 23 || $rsync_rc -eq 24 ]]; then
-  warn "⚠️  rsync meldet Code $rsync_rc (einzelne Dateien während des Syncs live verändert/verschwunden, z.B. durch fitness-enricher.service) — nicht fatal, Deploy läuft weiter."
-elif [[ $rsync_rc -ne 0 ]]; then
-  die "rsync fehlgeschlagen mit Code $rsync_rc"
+if $DRY_RUN; then
+  msg "🧪 Runtime payload (no writes, installs or restarts)"
+  rsync -ani --delete --delete-excluded "${RSYNC_RUNTIME[@]}" "$SOURCE/" "$DEST/"
+  exit 0
 fi
 
-msg "🩺 Verifying deployed artifacts"
-require_file "$DEST/package.json" "fitness checkout manifest"
-require_file "$DEST/pyproject.toml" "python project manifest"
-require_file "$DEST/dist/index.html" "built frontend dist"
+if [[ ! -d "$DEST" ]]; then
+  run_cmd mkdir -p "$DEST"
+  run_cmd chown "$(id -u):$(id -g)" "$DEST"
+fi
+msg "📦 Syncing runtime files from $SOURCE → $DEST"
+# --delete-excluded removes old source/build-tool leftovers; P rules above
+# explicitly protect installed environments, configuration and runtime links.
+run_cmd rsync -aL --delete --delete-excluded "${RSYNC_RUNTIME[@]}" "$SOURCE/" "$DEST/"
 
-# 2b. kb/ wird NICHT kopiert (siehe Exclude oben), sondern nach dem
-# Venv-Build (Schritt 3) direkt aus dem Dev-Repo verlinkt — dieselbe
-# Datei-Basis wie fitness/catalog/state, nur fuer den Katalog selbst. Grund:
-# kb/ ist Content (Coach-Approvals, Gemini-Enrichment, Firestore-Merges),
-# keine versionierte App-Code-Aenderung — soll sofort ueberall sichtbar sein
-# statt erst beim naechsten Deploy. Nebeneffekt: behebt auch das
-# exit-23/24-Problem oben fuer kb/ endgueltig, da rsync diesen Pfad gar
-# nicht mehr anfasst.
-#
-# WICHTIG: Der Symlink darf erst NACH `uv pip install .` gesetzt werden -
-# poetry-core (Wheel-Build-Backend) läuft beim Packagen in fitness/catalog/
-# hinein und crasht hart (ValueError in relative_to_project_root()), sobald
-# es dort auf einen Symlink trifft, dessen Ziel außerhalb des Projekt-Roots
-# liegt (~/fitness-dev statt ~/.local/fitness) - das pyproject.toml-exclude greift
-# dabei zu spät, der Fehler passiert schon beim Datei-Discovery davor. Bis
-# zum pip-install-Schritt existiert kb/ hier also noch gar nicht (rsync hat
-# es ja ausgeschlossen) - kein Konflikt.
-#
-# Gleiches Problem betrifft fitness/catalog/state (Symlink -> ~/.aos/fitness/
-# agent-state, existiert seit 2026-07-11) - fiel nie auf, weil fitness.service
-# bis zur :6100-Python-Migration Node war und dieser venv-Build-Schritt fuer
-# den laufenden Prod-Service irrelevant war. Beide Symlinks brauchen dieselbe
-# "erst nach dem Build setzen"-Behandlung.
-KB_LINK="$DEST/fitness/catalog/kb"
-KB_SOURCE="$DEV_SOURCE/fitness/catalog/kb"
-STATE_LINK="$DEST/fitness/catalog/state"
+# Central laptop-owned data survives deployments and removal of source repos.
+# Seed only missing files; never overwrite local approvals/enrichment.
+KB_SOURCE="$HOME/.aos/fitness/kb"
 STATE_SOURCE="$HOME/.aos/fitness/agent-state"
-run_cmd rm -rf "$KB_LINK" "$STATE_LINK"
+KB_LINK="$DEST/fitness/catalog/kb"
+STATE_LINK="$DEST/fitness/catalog/state"
+mkdir -p "$KB_SOURCE" "$STATE_SOURCE"
+SEED_KB="$SOURCE/fitness/catalog/kb"
+[[ -d "$SEED_KB" ]] || SEED_KB="$DEV_SOURCE/fitness/catalog/kb"
+if [[ -d "$SEED_KB" && "$(realpath "$SEED_KB")" != "$(realpath "$KB_SOURCE")" ]]; then
+  rsync -aL --ignore-existing --exclude '.git' --exclude '__pycache__' "$SEED_KB/" "$KB_SOURCE/"
+fi
 
-# 3. Finalize Python Environment — Create .venv and install dependencies via uv
-msg "📦 Setting up Python virtual environment in $DEST"
+# Detach only old links before wheel packaging; refuse to erase real data.
+for link in "$KB_LINK" "$STATE_LINK"; do
+  if [[ -L "$link" ]]; then
+    run_cmd rm "$link"
+  elif [[ -e "$link" ]]; then
+    die "Existing data directory $link must be migrated to ~/.aos/fitness before deployment"
+  fi
+done
+
+msg "📦 Installing Python runtime (no Node/Vite installation)"
 (
   cd "$DEST"
   if command -v uv &> /dev/null; then
-    uv venv --clear --quiet
+    [[ -x .venv/bin/python ]] || uv venv --quiet
     uv pip install . --quiet
   else
-    python3 -m venv .venv
-    ./.venv/bin/python3 -m pip install --upgrade pip --quiet
-    ./.venv/bin/python3 -m pip install . --quiet
+    [[ -x .venv/bin/python ]] || python3 -m venv .venv
+    ./.venv/bin/python -m pip install . --quiet
   fi
 )
-
-msg "🔗 Verlinke kb/ live aus $KB_SOURCE (kein Sync-Lag mehr)"
 run_cmd ln -s "$KB_SOURCE" "$KB_LINK"
-msg "🔗 Verlinke catalog/state aus $STATE_SOURCE"
 run_cmd ln -s "$STATE_SOURCE" "$STATE_LINK"
-if [[ ! -L "$KB_LINK" || ! -L "$STATE_LINK" ]]; then
-  die "❌ Expected live symlinks for kb/state after deploy"
-fi
-msg "✅ Live symlinks for kb/ and state/ verified"
+require_file "$DEST/dist/index.html" "installed frontend"
 
 # 3b. Systemd-Unit sicherstellen (staging + prod, beide inline hier statt
 # extern getrackt — staging lag vorher via ~/.dotfiles-Symlink, prod-Inhalt
@@ -297,6 +269,7 @@ Environment=NODE_ENV=production
 Environment=FITNESS_ENV=staging
 Environment=FITNESS_PYTHON_PORT=$PORT
 Environment=FITNESS_DATA_DIR=$HOME/.aos/fitness
+Environment=FITNESS_AGENT_KB=$HOME/.aos/fitness/kb
 Environment=FITNESS_SKIP_WATCHERS=1
 Environment=FITNESS_SYNC_OWNER=1
 
@@ -318,6 +291,7 @@ Restart=on-failure
 RestartSec=2
 Environment=FITNESS_ENV=prod
 Environment=FITNESS_PYTHON_PORT=$PORT
+Environment=FITNESS_AGENT_KB=$HOME/.aos/fitness/kb
 Environment=FITNESS_SKIP_WATCHERS=1
 EnvironmentFile=-/etc/aos/fitness.env
 

@@ -5,8 +5,10 @@ from typing import Any
 
 from fitness.catalog.core.resolver import build_exercise_index, find_by_id, resolve_query
 from fitness.catalog.core.source_merge import build_external_seed
+from fitness.catalog.core.source_selection import apply_source_selection
 
 QUEUE_OVERLAY_FIELDS = {
+    "source_selection",
     "exercise_id",
     "id",
     "name",
@@ -36,6 +38,7 @@ QUEUE_OVERLAY_FIELDS = {
 }
 
 REENRICH_OVERLAY_FIELDS = {
+    "source_selection",
     "exercise_id",
     "id",
     "name",
@@ -54,6 +57,7 @@ REENRICH_OVERLAY_FIELDS = {
 }
 
 REENRICH_PROVENANCE_FIELDS = {
+    "source_selection",
     "wger_id",
     "wger_muscle_ids",
     "yuhonas_id",
@@ -171,6 +175,7 @@ def _canonical_record_seed(display_name: str, exercise_id: str | None = None) ->
         "yuhonas_id": record.yuhonas_id,
         "external_ids": record.external_ids,
         "logged_by_uid": record.logged_by_uid,
+        "source_selection": getattr(record, "source_selection", None),
     }
 
 
@@ -184,7 +189,10 @@ def build_inbox_draft_seed(
     overlay_fields = REENRICH_OVERLAY_FIELDS if restart else QUEUE_OVERLAY_FIELDS
     overlay = _pick_fields(payload, overlay_fields)
     canonical_seed = _canonical_record_seed(display_name, exercise_id)
-    external_seed = build_external_seed(display_name, exercise_id)
+    selection = (payload or {}).get("source_selection") or canonical_seed.get("source_selection")
+    if restart and (payload or {}).get("source_review_required"):
+        canonical_seed = {}  # A corrected source must not seed stale, mixed expert content.
+    external_seed = (build_external_seed(display_name, exercise_id, source_selection=selection) if selection else build_external_seed(display_name, exercise_id)) or {}
     if restart:
         merged = _merge_layers(overlay, canonical_seed, external_seed)
         if not _is_empty(external_seed.get("external_ids")):
@@ -194,6 +202,7 @@ def build_inbox_draft_seed(
     else:
         merged = _merge_layers(canonical_seed, external_seed, overlay)
 
+    merged = apply_source_selection(merged, selection)
     explicit_id = str(exercise_id or merged.get("exercise_id") or merged.get("id") or "").strip()
     explicit_name = str(
         display_name
@@ -232,4 +241,4 @@ def preserve_reenrich_provenance(enriched: dict[str, Any] | None, seed: dict[str
         value = seed.get(field)
         if not _is_empty(value):
             out[field] = deepcopy(value)
-    return out
+    return apply_source_selection(out, seed.get("source_selection"))

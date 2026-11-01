@@ -171,9 +171,10 @@ def process_inbox_file_virtual(
     feedback: str | None = None,
     current_data: dict | None = None,
     restart_pipeline: bool = False,
-):
+    target_file: Path | None = None,
+) -> Path | None:
     safe_name = ex_id.lower().replace(" ", "_")
-    target_file = DATA_DIR / "inbox" / f"inbox_{safe_name}.yml"
+    target_file = target_file or DATA_DIR / "inbox" / f"inbox_{safe_name}.yml"
 
     if target_file.exists() and not force:
         return
@@ -199,6 +200,8 @@ def process_inbox_file_virtual(
             enriched_data = preserve_reenrich_provenance(enriched_data, existing_data)
         description = f"Reenriched (Coach-Feedback) for: {display_name}" if feedback else f"Proactively generated expert draft for: {display_name}"
         save_inbox_draft(target_file, enriched_data, description)
+        return target_file
+    return None
 
 def save_inbox_draft(target_file: Path, data: dict, description: str):
     data = normalize_exercise_muscles(data)

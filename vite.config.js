@@ -27,7 +27,7 @@ function siblingDir(devName, appName) {
 // SSOT für Cross-App-Aliase (@relax, @learn + interne Cross-DB-Exports)
 // ist @vos/cross-app-aliases (~/vitalos/packages/cross-app-aliases) —
 // nur erreichbar, wenn dieses Repo als vitalos-Submodule genestet ist (npm
-// Workspace-Symlink). Standalone-Checkout (~/fitness-dev ohne vitalos-Parent)
+// Workspace-Symlink). Standalone-Checkout (~/dev/fitness-dev ohne vitalos-Parent)
 // fällt auf die alte siblingDir()-Auflösung zurück.
 async function resolveCrossAppAliases() {
   try {
@@ -143,11 +143,23 @@ export default defineConfig(async ({ mode }) => {
         '/theme':     BACKEND,
         '/health':    BACKEND,
         '/export':    BACKEND,
-        '/fitness':   BACKEND,
+        // /fitness/catalog/** sind Quell-Module (KB-YAML per ?raw/import.meta.glob in
+        // src/lib/kb/muscles.js), keine API — ohne bypass landeten sie beim Backend
+        // und kamen als HTML zurück (Whitescreen der ganzen App im Dev-Server).
+        '/fitness': {
+          target: BACKEND,
+          bypass: (req) => (req.url.startsWith('/fitness/catalog/') ? req.url : undefined),
+        },
         '/firestore': BACKEND,
         '/workouts':  BACKEND,
         '/routines':  BACKEND,
       },
+    },
+    // Dep-Scan nur über die echten Einstiegsseiten: Vite scannt sonst JEDE
+    // index.html im Projekt (dist-versions/ allein ~56 Snapshots) → esbuild lief
+    // minutenlang bei ~100 % CPU / >1 GB RAM.
+    optimizeDeps: {
+      entries: ['index.html', 'coach.html', 'plan.html'],
     },
     build: {
       outDir: isCoach ? 'dist-coach' : (isSolo || isPlan) ? `dist-${mode}` : 'dist',

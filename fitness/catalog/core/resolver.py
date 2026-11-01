@@ -76,6 +76,7 @@ class ExerciseRecord:
     original_description: str | list[str] | None = None
     logged_by_uid: str | None = None
     source_snapshot: dict[str, Any] | None = None
+    source_selection: dict[str, Any] | None = None
 
 
 @dataclass
@@ -190,7 +191,7 @@ def build_exercise_index() -> list[ExerciseRecord]:
             else:
                 if entry_name: rec.display_name = entry_name
                 # Basis-Felder
-                for f in ["category", "german", "english", "movement_pattern", "wger_id", "gif_url", "image_url", "external_ids", "yuhonas_id", "original_description", "logged_by_uid"]:
+                for f in ["category", "german", "english", "movement_pattern", "wger_id", "gif_url", "image_url", "external_ids", "yuhonas_id", "original_description", "logged_by_uid", "source_selection"]:
                     val = entry.get(f) if isinstance(entry, dict) else None
                     if val: setattr(rec, f, val)
                 
@@ -365,6 +366,18 @@ def build_exercise_index() -> list[ExerciseRecord]:
                         equipment=[raw.get("equipment")] if raw.get("equipment") else None,
                     )
                     by_name[norm] = ex_id
+
+    # Raw-source name merges must not undo a deliberate Coach unlink/replacement.
+    from fitness.catalog.core.source_selection import apply_source_selection
+    for rec in index.values():
+        if rec.source_selection:
+            corrected = apply_source_selection(vars(rec))
+            rec.wger_id = corrected.get("wger_id")
+            rec.yuhonas_id = corrected.get("yuhonas_id")
+            rec.external_ids = corrected.get("external_ids")
+            rec.wger_muscle_ids = corrected.get("wger_muscle_ids")
+            rec.search_aliases = corrected.get("search_aliases")
+            rec.aliases = corrected.get("aliases")
 
     # Expert-Vorrang: Expert > Inbox > Bulk. Stabile Sortierung bewahrt
     # die innere Reihenfolge je Tier. Alle Lookups iterieren über diese Liste,

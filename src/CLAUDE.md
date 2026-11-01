@@ -169,6 +169,43 @@ als ID-Suffix (Standardfall, nicht nur Mehrfach-Sessions), ein Direkt-Lookup auf
 die reine Datums-ID findet das Dokument deshalb nie und fällt still auf den
 leeren Stub `{ exercises: [] }` zurück.
 
+**Muscle-Coverage: Cache, Datum, KB-Lookup (2026-11-01, Firebase-Untersuchung):**
+- **`analytics/dashboard` speichert Tageswerte** (`daily_region_scores`: pro
+  Kalendertag die Region-Scores, 28 Tage), nicht nur fertige Fenster. Fenster
+  (7/14/21/28) werden beim Lesen aus den Tageswerten summiert
+  (`shared/coverageWindow.js`; Cloud Function: `functions/coverageWindow.js`,
+  gleiche Logik). Ein eingefrorenes `rolling_7_days` zeigte Tage später noch
+  längst herausgefallene Sessions (z. B. `core 4.79` statt 0.54) und fütterte
+  damit auch die Coverage-/PPL-Erinnerungs-Pushes. `rolling_*` und `recovery_*`
+  gelten nur noch, wenn sie **heute** geschrieben wurden; die Cloud Function
+  sendet ohne verlässliche Daten lieber keinen Hinweis als einen falschen.
+  Fehlt `daily_region_scores`, zieht `getMuscleCoverage()` es einmal pro Tag nach.
+- **Datum immer lokal**: `shared/dates.js` (`toISODate`, `rollingDatesISO`,
+  `isoWeek*`). Nie `toISOString().slice(0, 10)` für Kalendertage — das ist UTC
+  und liefert in Europa zwischen 00:00 und 01:00/02:00 den Vortag. ISO-Wochen
+  folgen der 4.-Januar-Regel (die alte Formel „1. Jan + 7·(w−1)" lag in Jahren,
+  die nicht an einem Donnerstag beginnen, eine Woche daneben).
+  Bewusst unterschiedlich geblieben: `"current"` ist in Firestore das rollende
+  7-Tage-Fenster, lokal die Kalenderwoche Mo–So.
+- **Muskel-Fallback einer Session-Übung** (`shared/kbLookup.js`): Session-Wert →
+  Katalog per `exercise_id`/`id` → Name (exakt, gefaltet, ohne Klammerzusatz,
+  inkl. `german`/`english`/`aliases`/`search_aliases`) → **Yuhonas-Mirror** als
+  letzter Fallback (nur geladen, wenn noch etwas ungeklärt ist). Der Mirror ist
+  die Standard-Übungs-/Muskel-DB, die den unfertigen Katalog überbrückt; sein
+  Vokabular (`lower back`, `abdominals`, `lats` …) löst `muscleToRegion()` per
+  Freitext-Alias auf. Keine Fuzzy-Raterei: ungeklärte Namen erscheinen einmalig
+  als `console.info("[coverage] Übungen ohne Muskeldaten …")` und gehören als
+  Alias/Eintrag in den Katalog.
+- `buildWeeklyReportData()` hatte `normalizedSessionHits(sess)` ohne `kbMap`
+  aufgerufen (kein KB-Fallback im Weekly-Report) — behoben. Der Weekly-Doc für
+  `"current"` wird nach Tageswechsel neu gebaut.
+- **Offen/Entscheidung:** Region-Scores addieren die Teilmuskeln einer Session
+  (ein Beinbeuger-Satz → `hamstrings` 3.0 durch 3 Köpfe; `core` dominiert).
+  Die Max-pro-Muskel-Normalisierung greift nur je Muskel-ID, nicht je Region.
+  Identisch in `server.mjs`/`coaching.py` — nur gemeinsam ändern.
+- Nach Änderungen an `functions/` ist ein `firebase deploy --only functions`
+  nötig, damit die Reminder die Tageswerte lesen (vorher: Legacy-Verhalten).
+
 **Firebase v9-modulares SDK:** `QueryDocumentSnapshot.ref`, nicht `.reference`
 (das ist die alte v8/Namespaced-API und im v9-Import immer `undefined` —
 Optional-Chaining danach rettet nichts, weil der Crash beim ersten

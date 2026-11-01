@@ -8,9 +8,9 @@ from watchdog.events import FileSystemEventHandler
 WATCH_PATHS = [
     "/home/alpha/anatomy-kb/muscles",
     "/home/alpha/anatomy-kb/exercises",
-    "/home/alpha/fitness-dev/catalog",
-    "/home/alpha/physio-dev/catalog",
-    "/home/alpha/relax-dev/knowledge"
+    "/home/alpha/dev/fitness-dev/catalog",
+    "/home/alpha/dev/physio-dev/catalog",
+    "/home/alpha/dev/relax-dev/knowledge"
 ]
 
 class AnatomyWatchHandler(FileSystemEventHandler):
@@ -25,9 +25,9 @@ class AnatomyWatchHandler(FileSystemEventHandler):
         print(f"🚀 Triggering Sync for {os.path.basename(file_path)}...")
         
         if "physio-dev" in file_path:
-            cmd = ["/usr/bin/python", "/home/alpha/physio-dev/scripts/sync.py"]
+            cmd = ["/usr/bin/python", "/home/alpha/dev/physio-dev/scripts/sync.py"]
         elif "relax-dev" in file_path:
-            cmd = ["/usr/bin/python", "/home/alpha/relax-dev/scripts/sync_kb.py"]
+            cmd = ["/usr/bin/python", "/home/alpha/dev/relax-dev/scripts/sync_kb.py"]
         else:
             # Default to anatomy-agent
             cmd = ["/home/alpha/anatomy-kb/anatomy", "firestore", "sync"]

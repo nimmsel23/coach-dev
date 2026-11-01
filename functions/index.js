@@ -5,7 +5,7 @@ const path = require("path");
 const strava = require("./strava.js");
 const clientWorkout = require("./clientWorkout.js");
 const pushPrefs = require("./pushPrefs.js");
-const { sixpackReminderDecision } = require("./sixpackReminder.js");
+const { coverageScoresFromDashboard } = require("./coverageWindow.js");
 const { NOTIFICATIONS, renderTemplate } = require("./texts.js");
 
 admin.initializeApp();
@@ -231,11 +231,12 @@ function getLowPplBuckets(scores = {}, threshold = PPL_RATIO_ALERT_THRESHOLD) {
     }));
 }
 
-async function getCoverageScores(userRef) {
+// 7-Tage-Coverage bezogen auf HEUTE (nicht auf den Zeitpunkt des letzten
+// Speicherns). `null` = nichts Verlässliches bekannt → kein Hinweis senden.
+async function getCoverageScores(userRef, todayDate) {
   const snap = await userRef.collection("analytics").doc("dashboard").get();
-  if (!snap.exists) return {};
-  const data = snap.data() || {};
-  return data.rolling_7_days?.body_region_scores || {};
+  if (!snap.exists) return null;
+  return coverageScoresFromDashboard(snap.data() || {}, todayDate, { days: 7, timeZone: TIME_ZONE });
 }
 
 async function getOpenHabitsToday(userRef, date) {
@@ -341,8 +342,8 @@ exports.scheduledFitnessPushReminders = functions
         }
 
         if (types.coverage) {
-          coverageScores = coverageScores || await getCoverageScores(userRef);
-          const gaps = getCoverageGaps(coverageScores);
+          coverageScores = coverageScores || await getCoverageScores(userRef, date);
+          const gaps = coverageScores ? getCoverageGaps(coverageScores) : [];
           if (gaps.length > 0) {
             const regions = gaps.map((id) => MUSCLE_GROUP_LABELS[id] || id).join(", ");
             notifications.push(notificationText("coverage", { regions }));
@@ -350,8 +351,8 @@ exports.scheduledFitnessPushReminders = functions
         }
 
         if (types.pplRatio) {
-          coverageScores = coverageScores || await getCoverageScores(userRef);
-          const lowBuckets = getLowPplBuckets(coverageScores);
+          coverageScores = coverageScores || await getCoverageScores(userRef, date);
+          const lowBuckets = coverageScores ? getLowPplBuckets(coverageScores) : [];
           if (lowBuckets.length > 0) {
             const buckets = lowBuckets.map(({ label, percent }) => `${label} ${percent}%`).join(", ");
             notifications.push(notificationText("pplRatio", { buckets }));
@@ -403,64 +404,6 @@ exports.scheduledFitnessPushReminders = functions
       return { sentCount, failureCount };
     } catch (error) {
       console.error("Error in scheduledPushReminders:", error);
-      return { error: error.message };
-    }
-  });
-
-// 6Pack-Erinnerung — eigenständig, unabhängig vom Fitness-Push-Panel.
-// Uhrzeit/An-Aus: users/{uid}/meta/sixpack (settings.reminder, von der 6Pack-Karte).
-// Geräte: users/{uid}/meta/sixpackPush (tokens[], von der 6Pack-Karte registriert).
-// Dedup pro Tag: lastReminderDate im sixpackPush-Dokument (das Programm-Dokument wird
-// vom Client komplett überschrieben). Tag "sixpack-reminder" = wie die lokale Erinnerung,
-// damit eine geöffnete App nicht doppelt klingelt.
-exports.scheduledSixpackReminders = functions
-  .region("europe-west1")
-  .pubsub.schedule("every 5 minutes")
-  .timeZone(TIME_ZONE)
-  .onRun(async () => {
-    const local = getLocalDateParts();
-    const db = admin.firestore();
-    let sentCount = 0;
-    let failureCount = 0;
-
-    try {
-      // Zugriff auf users/{uid}/meta/sixpack: listDocuments() findet auch Parent-Docs ohne eigene Felder.
-      const userRefs = await db.collection("users").listDocuments();
-      for (const userRef of userRefs) {
-        const metaRef = userRef.collection("meta");
-        const programSnap = await metaRef.doc("sixpack").get();
-        if (!programSnap.exists) continue;
-        const program = programSnap.data() || {};
-        if (!program.settings?.reminder?.enabled) continue;
-
-        const pushSnap = await metaRef.doc("sixpackPush").get();
-        const push = pushSnap.exists ? pushSnap.data() || {} : null;
-
-        const decision = sixpackReminderDecision({ program, push, local });
-        if (!decision.send) continue;
-
-        const text = notificationText("sixpack", decision.vars);
-        const response = await admin.messaging().sendEachForMulticast({
-          data: { app: "sixpack", title: text.title, body: text.body, link: text.link, tag: "sixpack-reminder" },
-          tokens: push.tokens,
-        });
-        sentCount += response.successCount;
-        failureCount += response.failureCount;
-
-        // Ungültige Tokens (Gerät abgemeldet/App deinstalliert) entfernen.
-        const dead = push.tokens.filter((_, i) => {
-          const code = response.responses[i]?.error?.code;
-          return code === "messaging/registration-token-not-registered" || code === "messaging/invalid-registration-token";
-        });
-        const update = {};
-        if (response.successCount > 0) update.lastReminderDate = local.date;
-        if (dead.length > 0) update.tokens = admin.firestore.FieldValue.arrayRemove(...dead);
-        if (Object.keys(update).length > 0) await pushSnap.ref.set(update, { merge: true });
-      }
-      console.log(`6Pack reminders: ${sentCount} sent, ${failureCount} failed`);
-      return { sentCount, failureCount };
-    } catch (error) {
-      console.error("Error in scheduledSixpackReminders:", error);
       return { error: error.message };
     }
   });

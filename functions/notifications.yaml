@@ -18,11 +18,6 @@ restday:
   body: "Letzte Session war vor {days} Tagen"
   link: "/?tab=session"
 
-sixpack:
-  title: "6Pack"
-  body: "Zeit fürs Training — Woche {week} · Tag {day}"
-  link: "/#session/timer"
-
 coverage:
   title: "Coverage-Alert"
   body: "{regions} seit 7 Tagen kaum trainiert"
