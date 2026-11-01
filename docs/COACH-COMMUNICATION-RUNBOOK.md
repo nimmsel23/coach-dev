@@ -202,3 +202,16 @@ das Löschen des lokalen Demo-Emulators ist keine Produktionsbereinigung.
 negativen Tests sowie beiden Benutzeroberflächen prüfen. Produktive Regeln und
 App-Builds getrennt nachweisen; danach dieses Runbook und die Rollen-Dokumente
 aktualisieren. Keine komplette Kommunikationsimplementierung in Plan duplizieren.
+
+## Abschlussprüfung der Gesprächserweiterungen (2026-11-01)
+
+Zwei Tests für konten-/klientengetrennte Entwürfe bestanden; ESLint und
+Coach-Produktionsbuild bestanden. Mobile Fixture auf 390px: Antwort in beide
+Richtungen, unveränderliche Planversion öffnen, Entwurf nach Reload und
+Klientenwechsel erhalten, Ungelesen-Zähler aktualisieren, 205 historische
+Nachrichten nachladen und danach Live-Nachricht empfangen, ohne ältere
+Einträge zu verlieren. Keine horizontalen Überläufe oder Browser-Ausnahmen.
+Emulator, Vite und Thorium wurden direkt als einzelne Befehle ausgeführt,
+ohne temporäres Bash-Starter-Skript. Der echte Login und reale Geräte sind
+damit nicht abgenommen. Zentraler Ungelesen-Index muss vor Live-Release bereit
+sein; siehe COACH-COMMUNICATION.md.

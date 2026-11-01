@@ -1590,3 +1590,9 @@ Entwürfe pro angemeldetem Konto/Klient sichern, feste Planversionen öffnen und
 Ungelesen-Zähler in Klientenliste und Navigation anzeigen. Zentraler Firestore-
 Index wird separat in VitalOS bereitgestellt; vor Live-Übernahme erforderlich.
 Der lokale Plan-Pointer und historische VitalOS-Checkout bleiben unangetastet.
+
+Abschlussprüfung: zwei Entwurfstests sowie ESLint und kompletter Coach-Build
+bestanden. Mobiler 390px-Emulatorablauf bestanden: beidseitige Antworten,
+Versionsansicht, Entwurferhalt nach Reload/Klientenwechsel, Ungelesen-Zähler,
+205 historische Einträge über zwei zusätzliche Seiten und anschließendes
+Live-Update ohne Verlust der geladenen Historie. Keine echten Nachrichten.
