@@ -307,6 +307,28 @@ export async function getAllUserProfiles() {
     });
   } catch {}
 
+  // The local Coach console can use its loopback Admin SDK to list Auth-only
+  // accounts too. Hosted Coach has no Auth list permission; it uses the
+  // profile/settings discovery above.
+  if (['localhost', '127.0.0.1', '::1'].includes(globalThis.location?.hostname)) {
+    try {
+      const response = await fetch('/api/coach/local/users', { cache: 'no-store' });
+      if (response.ok) {
+        const { users = [] } = await response.json();
+        users.forEach((user) => {
+          if (!user.uid) return;
+          profiles[user.uid] = {
+            ...profiles[user.uid],
+            displayName: profiles[user.uid]?.displayName || user.displayName || user.email || user.uid,
+            email: profiles[user.uid]?.email || user.email || '',
+            knownClient: Boolean(user.knownClient),
+            authUserOnly: !profiles[user.uid] && !user.knownClient,
+          };
+        });
+      }
+    } catch {}
+  }
+
   return profiles;
 }
 

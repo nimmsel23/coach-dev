@@ -51,6 +51,37 @@ Native Pläne liegen pro Klient unter:
 <client>/data/training-plans/<plan-id>/versions/vN.json
 ```
 
+### Workout-Tracking im Klienten-Workspace
+
+Im Tab **Premium-Tracking** kann ein freigegebener lokaler Plan in die
+Taskwarrior-Datenbank des Klienten abgeglichen werden. Pro festem Trainingstag
+entsteht ein eigener Task mit geplantem Datum und Fälligkeit. Der Abgleich nutzt
+den freigegebenen Planstand, auch wenn bereits ein neuerer Entwurf existiert.
+Ein Task wird beim Abgleich automatisch erledigt, wenn in der lokalen Fitness-
+Runtime unter `~/.aos/fitness/users/<firebase_uid>/workouts.json` eine
+abgeschlossene Session mit derselben übergebenen Plan-ID und Routine-ID liegt.
+Die Session-ID bleibt als `workoutid` am Task nachvollziehbar. Fehlt die lokale
+Logdatei oder wurde die aktuelle Planversion noch nicht übergeben, zeigt die
+Konsole das an; Tasks können weiterhin manuell als erledigt markiert werden.
+
+Tasks bleiben in `<client>/tw-data/` und werden weder in Firestore noch in die
+Fitness-Logdatei zurückgeschrieben. Der Auto-Abgleich ist standardmäßig aus und
+kann explizit pro Klient und Plan aktiviert werden. Die Auswahl liegt unter
+`<client>/coach/taskwarrior-auto-sync.json`; der lokale Coach-Server gleicht
+aktivierte Paare alle 60 Sekunden ab, auch wenn der Browser geschlossen ist.
+Mehrere aktuelle Coach-Prozesse serialisieren Taskwarrior-Zugriffe über einen
+gemeinsamen lokalen Lock. Das Abschalten eines Plans beendet dessen künftige
+Abgleiche; vorhandene Tasks bleiben bearbeitbar in `tw-data/`.
+
+Das **Trainingstagebuch** fasst sowohl Plan-Workouts aus `workouts.json` als
+auch gespeicherte Legacy-Sessions aus `sessions/*.json` zusammen. Coach erhält
+nur Datum, Trainingsart, Dauer und Zählwerte; Übungs-, Satz- und Eventdetails
+bleiben bei Fitness. Satzwerte, die in einer Legacy-Session nicht erfasst sind,
+werden nicht als null abgeschlossene Sätze ausgegeben. Eine fehlende UID-Zuordnung
+und eine fehlende lokale Fitness-Quelle werden getrennt angezeigt. Legacy-Sessions
+werden nicht als Planabschluss in Taskwarrior gewertet, da ihnen die belastbare
+Plan- und Routine-Referenz fehlt.
+
 Schreibzugriffe sind atomar und prüfen den Bearbeitungsstand. Ungesicherte
 Editoränderungen bleiben zusätzlich gerätegebunden im Browser. Die API
 `/api/coach/local/*` ist nur für Loopback-Verbindungen zugelassen, fremde Origins
@@ -115,10 +146,13 @@ Ordner-Slug aus klienten-python. Beispiel: `http://127.0.0.1:9150/matthias-mayer
 | `GET /api/clients` | Vorhandene Klienten auflisten |
 | `GET /api/client/<id>` | Reduzierte Klientenmetadaten |
 | `GET/POST /api/client/<id>/plans` | Pläne auflisten / erstellen |
+| `GET /api/client/<id>/workout/logs?days=90` | Zusammenfassung abgeschlossener lokaler Fitness-Workouts |
 | `GET/PUT /api/client/<id>/plans/<plan>` | Lesen / mit `expectedUpdatedAt` sichern |
 | `GET/POST …/<plan>/versions` | Historie / mit `expectedUpdatedAt` freigeben |
 | `GET …/<plan>/export/json` oder `/md` | Exportieren |
 | `POST …/<plan>/deliver` | Expliziter Versand, Body `{"version": 1}` |
+| `GET /api/client/<id>/taskwarrior` | Lokale Workout-Tasks lesen |
+| `POST /api/client/<id>/taskwarrior/sync` | Plan-Vorkommen mit lokalen Fitness-Logs abgleichen |
 | `GET /api/client/<id>/legacy` | Altplan für ausdrückliche Übernahme lesen |
 
 Klientenbezogene APIs sind auch unter `/k/<id>/…` erreichbar; die bisherigen

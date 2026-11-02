@@ -48,6 +48,8 @@ Environment overrides:
 - `COACH_API_URL`: compatibility override for Fitness only. Do not point it at Coach's own `9150`; self-proxy loops are rejected.
 - `COACH_HOST`, `COACH_PORT` or `--host` / `--port`: listener settings.
 - `COACH_CATALOG_DIR`: explicit directory containing the built catalog `index.html`.
+- `COACH_UI_DIR`: explicit directory containing the built Coach UI `index.html`.
+- `KLIENTEN_PYTHON_ROOT`: klienten-python source used for the canonical local workspace creator.
 
 ## UI ownership
 

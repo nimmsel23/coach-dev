@@ -31,9 +31,11 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
             return handler(request) if handler else httpx.Response(200, stream=httpx.ByteStream(b'{"ok":true}'))
         app = create_app(catalog_directory=self.catalog, coach_directory=self.coach,
                          upstream_url="http://catalog.test:9150", backend_urls=backend_urls, transport=httpx.MockTransport(backend))
-        async with app.router.lifespan_context(app):
-            async with httpx.AsyncClient(transport=httpx.ASGITransport(app), base_url="http://testserver", follow_redirects=True) as client:
-                yield client
+        # Gateway tests use synthetic workspaces and must not start the real local scheduler.
+        with patch.dict("os.environ", {"COACH_TASKWARRIOR_SCHEDULER": "0"}):
+            async with app.router.lifespan_context(app):
+                async with httpx.AsyncClient(transport=httpx.ASGITransport(app), base_url="http://testserver", follow_redirects=True) as client:
+                    yield client
 
     async def test_ui_mounts_and_missing_assets(self):
         async with self.client() as client:
@@ -113,6 +115,14 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
             self.assertTrue(response["backends"]["fitness"]["ready"])
             self.assertFalse(response["backends"]["relax"]["ready"])
             self.assertEqual((await client.get("/health")).json()["service"], "coach")
+
+    async def test_relax_is_mounted_in_process_when_no_worker_is_configured(self):
+        async with self.client(backend_urls={}) as client:
+            health = (await client.get("/health")).json()
+            self.assertEqual(health.get("relax_api"), "in-process")
+            readiness = (await client.get("/_coach/backends")).json()
+            self.assertTrue(readiness["backends"]["relax"]["ready"])
+            self.assertEqual(readiness["backends"]["relax"]["mode"], "in-process")
 
     async def test_registry_can_add_a_domain_without_server_code_changes(self):
         async with self.client(backend_urls={"skills": "http://skills.test:9300"}) as client:
