@@ -1,6 +1,6 @@
 import ClientMessages from './ClientMessages';
 import { lazy, Suspense, useState, useEffect } from 'react';
-import { MessageSquare, Users, Star, UserCheck, Dumbbell, Layers, RotateCw, Sparkles, Flame } from 'lucide-react';
+import { MessageSquare, Users, Star, UserCheck, UserX, Dumbbell, Layers, RotateCw, Sparkles, Flame } from 'lucide-react';
 import { getAllUserProfiles, getUserProfile, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
 import AssignPlan from './AssignPlan';
@@ -14,6 +14,7 @@ const PlanDeliveryOverview = lazy(() => import('@plan/views/Plan/components/Plan
 const STATUS_OPTIONS = [
   { id: 'client', label: 'Klient', hint: 'Zahlend & committed — volle Coach-Aufmerksamkeit', icon: Star, color: 'text-fit-accent' },
   { id: 'friend', label: 'Freund/Test', hint: 'Testet die App — kein aktives Coaching-Commitment', icon: UserCheck, color: 'text-fit-dim' },
+  { id: 'hidden', label: 'Ausgeblendet', hint: 'Nicht in der Klientenliste anzeigen', icon: UserX, color: 'text-fit-muted' },
 ];
 
 const DETAIL_TABS = [
@@ -40,6 +41,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
   const [saving, setSaving] = useState(null);
   const [error, setError] = useState('');
   const [extras, setExtras] = useState(false);
+  const [manageUsers, setManageUsers] = useState(false);
   const [route, navigate] = useCoachRoute();
   const selectedUid = route.client;
   const detailTab = route.detail;
@@ -71,7 +73,9 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     setSaving(uid);
     setStatuses(prev => ({ ...prev, [uid]: status }));
     try {
-      await updateUserProfile(uid, { clientStatus: status });
+      const saved = await updateUserProfile(uid, { clientStatus: status });
+      if (!saved) throw new Error('Auswahl konnte nicht gespeichert werden.');
+      if (status === 'hidden' && selectedUid === uid) navigate({ sub: 'clients', client: '', detail: 'workouts', date: '' });
     } catch (err) {
       setStatuses((prev) => ({ ...prev, [uid]: previous }));
       setError(err.message || "Status konnte nicht gespeichert werden.");
@@ -80,11 +84,12 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     }
   }
 
-  const uids = Object.keys(profiles).sort((a, b) => {
+  const allUids = Object.keys(profiles).sort((a, b) => {
     const nameA = profiles[a].displayName || profiles[a].email || a;
     const nameB = profiles[b].displayName || profiles[b].email || b;
     return nameA.localeCompare(nameB);
   });
+  const uids = allUids.filter((uid) => manageUsers || (statuses[uid] || 'friend') !== 'hidden');
 
   if (loading) return (
     <div className="flex items-center justify-center py-20">
@@ -92,9 +97,9 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     </div>
   );
 
-  if (error && uids.length === 0) return <div role="alert" className="p-6 text-fit-red">{error}<button onClick={load} className="ml-3 underline">Erneut versuchen</button></div>;
+  if (error && allUids.length === 0) return <div role="alert" className="p-6 text-fit-red">{error}<button onClick={load} className="ml-3 underline">Erneut versuchen</button></div>;
 
-  if (uids.length === 0) return (
+  if (allUids.length === 0) return (
     <div className="card py-16 flex flex-col items-center justify-center text-center">
       <Users size={40} className="mb-3 text-fit-dim" />
       <h3 className="text-base font-semibold text-fit-ink">Keine Nutzer</h3>
@@ -110,8 +115,15 @@ export default function ClientsPanel({ unreadCounts = {} }) {
       {/* Klientenliste */}
       <div className="vos-panel-side w-full md:w-72 md:border-r border-b md:border-b-0 border-fit-line/30 flex flex-col shrink-0 max-h-56 md:max-h-none overflow-y-auto">
         <div className="vos-panel-head vos-bar px-4 py-3 sticky top-0">
-          {uids.length} Klient{uids.length === 1 ? '' : 'en'}
+          <div className="flex items-center justify-between gap-2">
+            <span>{allUids.filter((uid) => (statuses[uid] || 'friend') !== 'hidden').length} in der Liste</span>
+            <button type="button" aria-pressed={manageUsers} onClick={() => setManageUsers((value) => !value)} className="text-xs text-fit-accent underline">
+              {manageUsers ? 'Fertig' : 'Nutzer verwalten'}
+            </button>
+          </div>
         </div>
+        {manageUsers && <p className="px-4 py-2 text-xs text-fit-muted border-b border-fit-line/20">Profile mit Firebase-Daten. Klient und Freund bleiben sichtbar; ausgeblendete Nutzer verschwinden aus der Liste.</p>}
+        {uids.length === 0 && <p className="px-4 py-5 text-sm text-fit-muted">Alle Nutzer sind ausgeblendet. Öffne „Nutzer verwalten“, um Profile wieder einzublenden.</p>}
         <ul className="divide-y divide-fit-line/20">
           {uids.map((uid) => {
             const profile = profiles[uid];
@@ -136,6 +148,9 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                       <span className="text-xs" style={{ color: 'var(--dim)', opacity: 0.6 }}>{statusOpt.label}</span>
                     </div>
                   )}
+                  {manageUsers && <div className="flex flex-wrap gap-1.5 mt-2" onClick={(event) => event.stopPropagation()}>
+                    {STATUS_OPTIONS.map((option) => <button key={option.id} type="button" disabled={saving === uid} aria-pressed={status === option.id} onClick={() => setStatus(uid, option.id)} className={`rounded-full border px-2 py-1 text-[10px] disabled:opacity-50 ${status === option.id ? 'border-fit-accent bg-fit-accent/10 text-fit-accent' : 'border-fit-line/40 text-fit-muted'}`}>{option.label}</button>)}
+                  </div>}
                   <Suspense fallback={<p className="text-xs text-fit-muted">Planstatus lädt…</p>}><PlanDeliveryOverview clientUid={uid} compact onOpen={(planId) => openPlan(uid, planId)} /></Suspense>
                 </div>
               </li>

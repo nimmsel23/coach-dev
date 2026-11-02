@@ -30,6 +30,7 @@
 - [x] Loopback-Einstieg mit Klientenübersicht, Plananzahl und Trainingsaktivität der letzten 28 Tage.
 - [x] Direkte Einstiege in Trainingsplanung und bestehende Klientenakte.
 - [x] Private Betreuungsnotizen im bestehenden Klienten-Datenspeicher lesen und bearbeiten.
+- [x] Coach-Nutzerliste verwalten: Profile als Klient, Freund/Test oder ausgeblendet einordnen.
 - [ ] Planbesprechung zwischen Klient und Coach mit Verlauf und Kommentaren pro Übung.
 - [ ] Betreuungsübersicht um Plan-Rückmeldungen und offene Antworten erweitern.
 
