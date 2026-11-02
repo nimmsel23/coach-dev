@@ -334,8 +334,30 @@ def create_router(root=None, deliver=None):
         except plans_module.PlanError as error:
             raise HTTPException(error.status, str(error))
         try:
-            report = await asyncio.to_thread(load_taskwarrior_module().sync_workspace_plan, workspace, plan)
-            return {'ok': True, 'report': report, 'storage': 'local-client-workspace'}
+            profile = plans_module.read(workspace / 'client.json') or {}
+            uids = list(profile.get('firebase_uids') or [])
+            if profile.get('firebase_uid') and profile['firebase_uid'] not in uids:
+                uids.insert(0, profile['firebase_uid'])
+            uid = next((value for value in uids if isinstance(value, str) and value.strip()), None)
+            workout_path = fitness_runtime_root() / 'users' / uid / 'workouts.json' if uid else None
+            workouts_available = bool(workout_path and workout_path.is_file())
+            workouts = plans_module.read(workout_path) if workouts_available else []
+            if not isinstance(workouts, list):
+                raise HTTPException(503, 'Lokale Fitness-Workoutdaten sind ungültig.')
+            report = await asyncio.to_thread(load_taskwarrior_module().sync_workspace_plan, workspace, plan, None, workouts)
+            delivery = plan.get('delivery') if isinstance(plan.get('delivery'), dict) else {}
+            delivered_current = delivery.get('localVersion') == plan.get('headVersion')
+            remote_plan_id = delivery.get('remotePlanId')
+            matched_workouts = sum(
+                1 for workout in workouts
+                if delivered_current and remote_plan_id and isinstance(workout, dict)
+                and workout.get('sourcePlanId') == remote_plan_id
+            )
+            return {
+                'ok': True, 'report': report, 'storage': 'local-client-workspace',
+                'workoutSourceAvailable': workouts_available,
+                'matchedWorkouts': matched_workouts,
+            }
         except (FileNotFoundError, ValueError) as error:
             raise HTTPException(409, str(error))
         except Exception:

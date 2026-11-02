@@ -160,13 +160,13 @@ export default function LocalCoachApp() {
     const plan = trackablePlans.find((item) => item.id === taskwarriorPlanId);
     if (!plan) throw new Error('Wähle einen lokalen Plan mit festgelegten Trainingstagen.');
     const scheduledCount = plan.routines.reduce((total, routine) => total + (routine.weekdays?.length || 0) * (Number(plan.totalWeeks) || 10), 0);
-    if (!confirm(`${scheduledCount} geplante Trainingstermine aus „${plan.name}“ in ${client.name}s lokaler Taskwarrior-Datenbank eintragen? Es werden keine Daten an Firebase gesendet.`)) return;
+    if (!confirm(`${scheduledCount} Trainingstermine aus „${plan.name}“ mit der lokalen Taskwarrior-Datenbank abgleichen? Bereits in Fitness abgeschlossene Einheiten dieses übergebenen Plans werden dabei automatisch erledigt markiert. Es werden keine Daten an Firebase gesendet.`)) return;
     await act(async () => {
       const result = await api(`${clientPath}/taskwarrior/sync`, 'POST', { planId: plan.id });
       setTaskwarriorReport(result.report);
       const data = await api(`${clientPath}/taskwarrior`);
       setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
-      setNotice('Trainingsvorkommen wurden in der lokalen Taskwarrior-Datenbank abgeglichen.');
+      setNotice(`Trainingsvorkommen abgeglichen; ${result.report?.completed || 0} durch Fitness-Logs erledigt markiert.`);
     });
   }
   async function completeTaskwarriorTask(occurrenceKey) {
