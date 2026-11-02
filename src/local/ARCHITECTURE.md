@@ -10,7 +10,10 @@ to Plan's transactional publisher using the existing Coach credential loader.
 When no client is selected, the workspace shows a local office overview. It
 loads each client's plan count from the local Plan store and reads completed
 workouts from the existing local Fitness runtime mirror by the UID in
-`client.json`. The API returns `available: false` when the UID or mirror file is
+`client.json`. It also reads existing workout Tasks from each client's
+`tw-data` database and highlights pending, overdue occurrences. A missing or
+unreadable Taskwarrior response is shown separately from zero overdue tasks.
+The API returns `available: false` when the UID or Fitness mirror file is
 missing, so the overview does not present unavailable data as zero training.
 Workout records stay in Fitness runtime and are not copied to the client
 workspace or Firestore.

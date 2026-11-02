@@ -24,6 +24,7 @@ async function api(suffix, method = 'GET', body) {
 }
 const fmt = (date) => date ? new Date(date).toLocaleString('de-AT', { dateStyle: 'short', timeStyle: 'short' }) : '';
 const todayISO = () => { const now = new Date(); return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+const isOverdueWorkoutTask = (task, today) => task.status === 'pending' && Boolean(task.due?.slice(0, 10)) && task.due.slice(0, 10) < today;
 const routinesForTracking = (plan) => (plan.published?.routines || plan.routines || []).filter((routine) => routine.weekdays?.length);
 const trackedRoutinesCount = (planId, plans) => routinesForTracking(plans.find((plan) => plan.id === planId) || {}).length;
 
@@ -88,19 +89,29 @@ export default function LocalCoachApp() {
       setSummariesLoading(true);
       const summaries = await Promise.all(list.map(async (item) => {
         const client = `client/${encodeURIComponent(item.id)}`;
-        const [plansResult, workoutsResult] = await Promise.allSettled([
+        const [plansResult, workoutsResult, taskwarriorResult] = await Promise.allSettled([
           api(`${client}/plans`),
           api(`${client}/workout/logs?days=28`),
+          api(`${client}/taskwarrior`),
         ]);
         const workouts = workoutsResult.status === 'fulfilled' && Array.isArray(workoutsResult.value.workouts)
           ? workoutsResult.value.workouts
           : [];
         const lastWorkoutAt = workouts.map((workout) => workout.finished_at || workout.date || workout.id).filter(Boolean).sort().at(-1) || '';
+        const taskwarriorTasks = taskwarriorResult.status === 'fulfilled' && Array.isArray(taskwarriorResult.value.tasks)
+          ? taskwarriorResult.value.tasks
+          : null;
+        const today = todayISO();
         return {
           id: item.id,
           plansCount: plansResult.status === 'fulfilled' ? plansResult.value.plans.length : null,
           workoutsCount: workoutsResult.status === 'fulfilled' && workoutsResult.value.available !== false ? workouts.length : null,
           lastWorkoutAt,
+          taskwarriorAvailable: taskwarriorTasks !== null,
+          taskwarriorTaskCount: taskwarriorTasks?.length ?? null,
+          taskwarriorPendingCount: taskwarriorTasks?.filter((task) => task.status === 'pending').length ?? null,
+          taskwarriorCompletedCount: taskwarriorTasks?.filter((task) => task.status === 'completed').length ?? null,
+          overdueTaskCount: taskwarriorTasks?.filter((task) => isOverdueWorkoutTask(task, today)).length ?? null,
         };
       }));
       if (request === summarySequence.current) setClientSummaries(summaries);
@@ -325,11 +336,12 @@ export default function LocalCoachApp() {
         </section>}
         {!rosterOpen && !client && <section className="space-y-5">
           <header className="rounded-2xl border border-fit-line bg-fit-card p-6 sm:p-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-fit-muted">Deine lokale Übersicht</p><h2 className="mt-1 text-2xl font-semibold">Klientenarbeitsplatz</h2><p className="mt-2 max-w-xl text-sm leading-relaxed text-fit-muted">Öffne die Trainingsplanung oder springe direkt in die bestehende Klientenakte. Die Aktivität bezieht sich auf die letzten 28 Tage.</p></div><button className={button} disabled={loading || summariesLoading} onClick={loadClients}><RefreshCw size={15} className="mr-2 inline" /> Übersicht aktualisieren</button></div>
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-5">
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Klienten</p><p className="mt-1 text-2xl font-semibold">{clients.length}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">App-Zuordnung</p><p className="mt-1 text-2xl font-semibold">{clients.filter((item) => item.canDeliver).length}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Trainingseinträge · 28 Tage</p><p className="mt-1 text-2xl font-semibold">{clientSummaries.reduce((total, item) => total + (item.workoutsCount || 0), 0)}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Ohne Eintrag · 28 Tage</p><p className="mt-1 text-2xl font-semibold">{clientSummaries.filter((item) => item.workoutsCount === 0).length}</p></div>
+              <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Überfällige Workout-Tasks</p><p className="mt-1 text-2xl font-semibold text-fit-red">{summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.overdueTaskCount || 0), 0)}</p><p className="mt-1 text-xs text-fit-muted">Taskwarrior-Antworten: {summariesLoading ? '…' : `${clientSummaries.filter((item) => item.taskwarriorAvailable).length}/${clients.length}`}</p></div>
             </div>
           </header>
           {loading && <p role="status" className="text-sm text-fit-muted">Klienten werden geladen…</p>}
@@ -338,7 +350,7 @@ export default function LocalCoachApp() {
             const summary = clientSummaries.find((candidate) => candidate.id === item.id);
             return <article key={item.id} className="rounded-2xl border border-fit-line bg-fit-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="text-lg font-semibold">{item.name}</h3><p className="mt-1 text-xs text-fit-muted">{item.status || 'Aktiver Klient'} · {item.canDeliver ? 'App zugeordnet' : 'Lokale Betreuung'}</p></div><a className={button} href={`/${encodeURIComponent(item.id)}/`}>Klientenakte öffnen</a></div>
-              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span></div>
+              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span><span className="text-fit-muted">Workout-Tasks: <strong className={summary?.overdueTaskCount > 0 ? 'text-fit-red' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.taskwarriorAvailable ? 'nicht lesbar' : summary.taskwarriorTaskCount === 0 ? 'keine Tasks' : summary.taskwarriorPendingCount === 0 ? `keine offen · ${summary.taskwarriorCompletedCount} erledigt` : `${summary.taskwarriorPendingCount} offen · ${summary.overdueTaskCount} überfällig`}</strong></span></div>
               <div className="mt-4 flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} onClick={() => selectClient(item.id)}>Trainingsplanung öffnen</button><button className={button} onClick={() => selectClient(item.id, 'notes')}>Betreuungsnotizen</button></div>
             </article>;
           })}</div>
