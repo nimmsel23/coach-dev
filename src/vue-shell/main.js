@@ -14,6 +14,7 @@ const CoachFrame = {
           h('h1', 'Coach'),
         ]),
         isLocal ? h('span', { class: 'coach-frame__open', 'aria-label': 'Lokaler Arbeitsbereich' }, 'Lokal · Klienten & Planung') : null,
+        isLocal ? h('a', { class: 'coach-frame__open', href: `${coachAppUrl}#/traction` }, 'Fitness-Nutzung') : null,
         isLocal ? h('a', { class: 'coach-frame__open', href: coachAppUrl }, 'Cloud Coach') : null,
         h('a', {
           class: 'coach-frame__open',
