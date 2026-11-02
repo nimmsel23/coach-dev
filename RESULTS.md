@@ -1733,3 +1733,11 @@ bestehende Cloud-Coach-Feedbackansicht. Die lokale Firebase-UID wird nur bei
 genau einer sichtbaren Zuordnung verwendet; fehlende oder mehrdeutige Zuordnung
 zeigt einen Fehler statt eine falsche Klientenakte zu öffnen. Lokale
 Betreuungsnotizen werden dabei nicht übertragen. Übungskommentare bleiben offen.
+
+## 2026-11-02 — Feedbackstatus in der Coach-Übersicht
+
+Die Übersicht liest für sichtbare Klienten die Zustände ihrer bereitgestellten
+Planversionen: ausstehende Empfangsbestätigungen und Nachrichten, auf die der
+Coach antworten muss. Der loopback-geschützte Server verwendet nur eindeutige
+UID-Zuordnungen und liefert Zähler statt Nachrichtentexten oder Sender-IDs.
+Firestore-Ausfälle und unklare Zuordnungen bleiben als nicht verfügbar sichtbar.

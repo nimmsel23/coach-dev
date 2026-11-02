@@ -105,10 +105,11 @@ export default function LocalCoachApp() {
       setSummariesLoading(true);
       const summaries = await Promise.all(list.map(async (item) => {
         const client = `client/${encodeURIComponent(item.id)}`;
-        const [plansResult, workoutsResult, taskwarriorResult] = await Promise.allSettled([
+        const [plansResult, workoutsResult, taskwarriorResult, feedbackResult] = await Promise.allSettled([
           api(`${client}/plans`),
           api(`${client}/workout/logs?days=28`),
           api(`${client}/taskwarrior`),
+          api(`${client}/feedback-summary`),
         ]);
         const workouts = workoutsResult.status === 'fulfilled' && Array.isArray(workoutsResult.value.workouts)
           ? workoutsResult.value.workouts
@@ -117,6 +118,7 @@ export default function LocalCoachApp() {
         const taskwarriorTasks = taskwarriorResult.status === 'fulfilled' && Array.isArray(taskwarriorResult.value.tasks)
           ? taskwarriorResult.value.tasks
           : null;
+        const planFeedback = feedbackResult.status === 'fulfilled' ? feedbackResult.value : null;
         const today = todayISO();
         return {
           id: item.id,
@@ -128,6 +130,12 @@ export default function LocalCoachApp() {
           taskwarriorPendingCount: taskwarriorTasks?.filter((task) => task.status === 'pending').length ?? null,
           taskwarriorCompletedCount: taskwarriorTasks?.filter((task) => task.status === 'completed').length ?? null,
           overdueTaskCount: taskwarriorTasks?.filter((task) => isOverdueWorkoutTask(task, today)).length ?? null,
+          feedbackAvailable: planFeedback?.available === true,
+          feedbackDeliveredPlanCount: planFeedback?.deliveredPlans ?? null,
+          feedbackAwaitingReplyCount: planFeedback?.awaitingReply ?? null,
+          feedbackAwaitingReceiptCount: planFeedback?.awaitingReceipt ?? null,
+          feedbackTruncated: planFeedback?.truncated === true,
+          feedbackReason: planFeedback?.reason || null,
         };
       }));
       if (request === summarySequence.current) setClientSummaries(summaries);
@@ -364,12 +372,13 @@ export default function LocalCoachApp() {
         </section>}
         {!rosterOpen && !client && <section className="space-y-5">
           <header className="rounded-2xl border border-fit-line bg-fit-card p-6 sm:p-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-fit-muted">Deine lokale Übersicht</p><h2 className="mt-1 text-2xl font-semibold">Klientenarbeitsplatz</h2><p className="mt-2 max-w-xl text-sm leading-relaxed text-fit-muted">Öffne die Trainingsplanung oder springe direkt in die bestehende Klientenakte. Die Aktivität bezieht sich auf die letzten 28 Tage.</p></div><div className="flex flex-wrap items-center gap-2"><label className="text-xs text-fit-muted">Sortierung<select aria-label="Klientenübersicht sortieren" value={overviewSort} onChange={(event) => setOverviewSort(event.target.value)} className="ml-2 min-h-[44px] rounded-xl border border-fit-line bg-fit-bg px-3 text-sm text-fit-ink"><option value="attention">Handlungsbedarf</option><option value="name">Name</option></select></label><button className={button} disabled={loading || summariesLoading} onClick={loadClients}><RefreshCw size={15} className="mr-2 inline" /> Übersicht aktualisieren</button></div></div>
-            <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-5">
+            <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-6">
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Klienten</p><p className="mt-1 text-2xl font-semibold">{clients.length}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">App-Zuordnung</p><p className="mt-1 text-2xl font-semibold">{clients.filter((item) => item.canDeliver).length}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Trainingseinträge · 28 Tage</p><p className="mt-1 text-2xl font-semibold">{clientSummaries.reduce((total, item) => total + (item.workoutsCount || 0), 0)}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Ohne Eintrag · 28 Tage</p><p className="mt-1 text-2xl font-semibold">{clientSummaries.filter((item) => item.workoutsCount === 0).length}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Überfällige Workout-Tasks</p><p className="mt-1 text-2xl font-semibold text-fit-red">{summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.overdueTaskCount || 0), 0)}</p><p className="mt-1 text-xs text-fit-muted">Taskwarrior-Antworten: {summariesLoading ? '…' : `${clientSummaries.filter((item) => item.taskwarriorAvailable).length}/${clients.length}`}</p></div>
+              <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Coach-Antworten offen</p><p className="mt-1 text-2xl font-semibold text-fit-accent">{summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.feedbackAwaitingReplyCount || 0), 0)}</p><p className="mt-1 text-xs text-fit-muted">Empfang offen: {summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.feedbackAwaitingReceiptCount || 0), 0)} · Cloud-Status: {summariesLoading ? '…' : `${clientSummaries.filter((item) => item.feedbackAvailable).length}/${clients.length}`}</p></div>
             </div>
           </header>
           {loading && <p role="status" className="text-sm text-fit-muted">Klienten werden geladen…</p>}
@@ -378,7 +387,7 @@ export default function LocalCoachApp() {
             const summary = clientSummaries.find((candidate) => candidate.id === item.id);
             return <article key={item.id} className="rounded-2xl border border-fit-line bg-fit-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="text-lg font-semibold">{item.name}</h3><p className="mt-1 text-xs text-fit-muted">{item.status || 'Aktiver Klient'} · {item.canDeliver ? 'App zugeordnet' : 'Lokale Betreuung'}</p></div><a className={button} href={`/${encodeURIComponent(item.id)}/`}>Klientenakte öffnen</a></div>
-              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span><span className="text-fit-muted">Workout-Tasks: <strong className={summary?.overdueTaskCount > 0 ? 'text-fit-red' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.taskwarriorAvailable ? 'nicht lesbar' : summary.taskwarriorTaskCount === 0 ? 'keine Tasks' : summary.taskwarriorPendingCount === 0 ? `keine offen · ${summary.taskwarriorCompletedCount} erledigt` : `${summary.taskwarriorPendingCount} offen · ${summary.overdueTaskCount} überfällig`}</strong></span></div>
+              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span><span className="text-fit-muted">Workout-Tasks: <strong className={summary?.overdueTaskCount > 0 ? 'text-fit-red' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.taskwarriorAvailable ? 'nicht lesbar' : summary.taskwarriorTaskCount === 0 ? 'keine Tasks' : summary.taskwarriorPendingCount === 0 ? `keine offen · ${summary.taskwarriorCompletedCount} erledigt` : `${summary.taskwarriorPendingCount} offen · ${summary.overdueTaskCount} überfällig`}</strong></span><span className="text-fit-muted">Planfeedback: <strong className={summary?.feedbackAwaitingReplyCount > 0 ? 'text-fit-accent' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.feedbackAvailable ? summary?.feedbackReason === 'no-firebase-uid' ? 'keine UID' : 'nicht lesbar' : summary.feedbackDeliveredPlanCount === 0 ? 'keine freigegebenen Pläne' : `${summary.feedbackAwaitingReplyCount} Antwort(en) offen · ${summary.feedbackAwaitingReceiptCount} Empfang(e) offen${summary.feedbackTruncated ? ' · teilweise' : ''}`}</strong></span></div>
               <div className="mt-4 flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} onClick={() => selectClient(item.id)}>Trainingsplanung öffnen</button><button className={button} onClick={() => selectClient(item.id, 'notes')}>Betreuungsnotizen</button></div>
             </article>;
           })}</div>

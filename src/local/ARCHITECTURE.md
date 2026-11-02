@@ -50,6 +50,14 @@ it does not copy private local notes or create a second feedback store. The
 route opens the plan's current feedback view and requires the coach's Firebase
 session. It does not currently provide per-exercise comments.
 
+The office overview reads a count-only feedback projection through a separate
+loopback-only route. It checks each visible workspace's unique Firebase UID,
+then reads the receipt and newest response for at most 50 delivered plan
+versions. Message bodies and sender identifiers are not returned to the
+overview. Missing or ambiguous UID mappings and Firestore errors remain
+unavailable states, not zero feedback. Firestore access uses the existing local
+Coach service credential; no feedback data is copied into the client workspace.
+
 ## ClientForge Planstudio (2026-11-01)
 
 `/clientforge/` führt zum gebauten `coach/clientforge.html`-Einstieg.
