@@ -57,6 +57,9 @@ versions. Message bodies and sender identifiers are not returned to the
 overview. Missing or ambiguous UID mappings and Firestore errors remain
 unavailable states, not zero feedback. Firestore access uses the existing local
 Coach service credential; no feedback data is copied into the client workspace.
+If an API URL falls through to the static HTML handler, the local fetch layer
+reports that protocol mismatch explicitly instead of parsing HTML as JSON and
+mislabeling it as an empty or unreadable Cloud status.
 
 ## ClientForge Planstudio (2026-11-01)
 

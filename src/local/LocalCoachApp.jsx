@@ -18,6 +18,10 @@ async function api(suffix, method = 'GET', body) {
   const url = new URL(path(suffix));
   if (method === 'GET') url.searchParams.set('_read', crypto.randomUUID());
   const response = await fetch(url, { method, cache: 'no-store', headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined });
+  if (!(response.headers.get('content-type') || '').toLowerCase().includes('application/json')) {
+    const error = new Error(`Coach-API lieferte statt JSON eine HTML- oder Textantwort (HTTP ${response.status}).`);
+    error.status = response.status; error.code = 'non_json_api_response'; throw error;
+  }
   const value = await response.json();
   if (!response.ok) { const error = new Error(value.detail || `Anfrage fehlgeschlagen (${response.status})`); error.status = response.status; throw error; }
   return value;
@@ -136,6 +140,7 @@ export default function LocalCoachApp() {
           feedbackAwaitingReceiptCount: planFeedback?.awaitingReceipt ?? null,
           feedbackTruncated: planFeedback?.truncated === true,
           feedbackReason: planFeedback?.reason || null,
+          feedbackErrorCode: feedbackResult.status === 'rejected' ? feedbackResult.reason?.code || '' : '',
         };
       }));
       if (request === summarySequence.current) setClientSummaries(summaries);
@@ -385,9 +390,15 @@ export default function LocalCoachApp() {
           {!loading && !clients.length && <div className="rounded-2xl border border-dashed border-fit-line p-8 text-sm text-fit-muted">Die bestehende Klientenverwaltung enthält noch keine Klienten.</div>}
           <div className="grid gap-3 xl:grid-cols-2">{overviewClients.map((item) => {
             const summary = clientSummaries.find((candidate) => candidate.id === item.id);
+            const feedbackStatus = summariesLoading ? 'lädt…' : summary?.feedbackAvailable
+              ? summary.feedbackDeliveredPlanCount === 0 ? 'keine freigegebenen Pläne' : `${summary.feedbackAwaitingReplyCount} Antwort(en) offen · ${summary.feedbackAwaitingReceiptCount} Empfang(e) offen${summary.feedbackTruncated ? ' · teilweise' : ''}`
+              : summary?.feedbackReason === 'no-firebase-uid' ? 'keine UID'
+                : summary?.feedbackReason === 'ambiguous-firebase-uid' || summary?.feedbackReason === 'duplicate-workspace-uid' ? 'UID-Zuordnung prüfen'
+                  : summary?.feedbackErrorCode === 'non_json_api_response' ? 'Coach-API-Route nicht geladen'
+                    : 'Cloud-Status nicht lesbar';
             return <article key={item.id} className="rounded-2xl border border-fit-line bg-fit-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="text-lg font-semibold">{item.name}</h3><p className="mt-1 text-xs text-fit-muted">{item.status || 'Aktiver Klient'} · {item.canDeliver ? 'App zugeordnet' : 'Lokale Betreuung'}</p></div><a className={button} href={`/${encodeURIComponent(item.id)}/`}>Klientenakte öffnen</a></div>
-              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span><span className="text-fit-muted">Workout-Tasks: <strong className={summary?.overdueTaskCount > 0 ? 'text-fit-red' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.taskwarriorAvailable ? 'nicht lesbar' : summary.taskwarriorTaskCount === 0 ? 'keine Tasks' : summary.taskwarriorPendingCount === 0 ? `keine offen · ${summary.taskwarriorCompletedCount} erledigt` : `${summary.taskwarriorPendingCount} offen · ${summary.overdueTaskCount} überfällig`}</strong></span><span className="text-fit-muted">Planfeedback: <strong className={summary?.feedbackAwaitingReplyCount > 0 ? 'text-fit-accent' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.feedbackAvailable ? summary?.feedbackReason === 'no-firebase-uid' ? 'keine UID' : 'nicht lesbar' : summary.feedbackDeliveredPlanCount === 0 ? 'keine freigegebenen Pläne' : `${summary.feedbackAwaitingReplyCount} Antwort(en) offen · ${summary.feedbackAwaitingReceiptCount} Empfang(e) offen${summary.feedbackTruncated ? ' · teilweise' : ''}`}</strong></span></div>
+              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span><span className="text-fit-muted">Workout-Tasks: <strong className={summary?.overdueTaskCount > 0 ? 'text-fit-red' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.taskwarriorAvailable ? 'nicht lesbar' : summary.taskwarriorTaskCount === 0 ? 'keine Tasks' : summary.taskwarriorPendingCount === 0 ? `keine offen · ${summary.taskwarriorCompletedCount} erledigt` : `${summary.taskwarriorPendingCount} offen · ${summary.overdueTaskCount} überfällig`}</strong></span><span className="text-fit-muted">Planfeedback: <strong className={summary?.feedbackAwaitingReplyCount > 0 ? 'text-fit-accent' : 'text-fit-ink'}>{feedbackStatus}</strong></span></div>
               <div className="mt-4 flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} onClick={() => selectClient(item.id)}>Trainingsplanung öffnen</button><button className={button} onClick={() => selectClient(item.id, 'notes')}>Betreuungsnotizen</button></div>
             </article>;
           })}</div>
