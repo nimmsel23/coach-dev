@@ -8,9 +8,17 @@ Released snapshots and working drafts stay separate. Explicit delivery delegates
 to Plan's transactional publisher using the existing Coach credential loader.
 
 When no client is selected, the workspace shows a local office overview. It
-loads each client's plan count and 28-day workout summary from the existing
-client-scoped Coach APIs. It stores no summary copy; opening the plan workspace
-or the existing client record continues to use the respective owner.
+loads each client's plan count from the local Plan store and reads completed
+workouts from the existing local Fitness runtime mirror by the UID in
+`client.json`. The API returns `available: false` when the UID or mirror file is
+missing, so the overview does not present unavailable data as zero training.
+Workout records stay in Fitness runtime and are not copied to the client
+workspace or Firestore.
+
+The `Premium-Tracking` tab mirrors scheduled local plan occurrences into the
+client workspace's existing `tw-data` Taskwarrior database. Completion is
+currently explicit in Coach or Taskwarrior; synchronization does not infer
+completion from Firestore or write workout data there.
 
 The client workspace also exposes private coaching notes through the existing
 client-scoped `coaching-notes` API. Notes stay in klienten-python's client

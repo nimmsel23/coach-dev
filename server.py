@@ -95,7 +95,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
                upstream_url: str | None = None, backend_urls: dict[str, str] | None = None,
                transport=None) -> FastAPI:
     catalog = (catalog_directory or catalog_dist()).resolve()
-    coach = (coach_directory or ROOT / "dist-coach").resolve()
+    coach = (coach_directory or Path(os.environ.get("COACH_UI_DIR", ROOT / "dist-coach"))).resolve()
     overrides = dict(backend_urls or {})
     if upstream_url:
         overrides["fitness"] = upstream_url

@@ -167,7 +167,7 @@ def create_router(root=None, deliver=None):
             if day >= cutoff:
                 recent.append(workout)
         recent.sort(key=lambda item: str(item.get('finished_at') or ''), reverse=True)
-        return {'workouts': recent, 'available': True, 'storage': 'local-fitness-runtime'}
+        return {'workouts': recent, 'available': path.is_file(), 'storage': 'local-fitness-runtime'}
 
     @router.get('/api/client/{client}/taskwarrior')
     async def taskwarrior_tasks(client: str, request: Request):
