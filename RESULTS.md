@@ -1671,3 +1671,19 @@ ohne Status bleiben sichtbar (Freund/Test), darunter Jakob. Lint und lokaler
 Coach-Build sind erfolgreich. Die laufende :9150-Abnahme war nicht möglich: der
 Loopback-Verbindungsversuch scheiterte; der User-Service-Status ließ sich in
 dieser Umgebung nicht auslesen.
+
+## 2026-11-02 — Lokales Workout-Tracking in Taskwarrior
+
+Der Klientenarbeitsbereich hat einen Premium-Tracking-Reiter. Ein ausdrücklich
+ausgewählter lokaler Trainingsplan erzeugt für jeden festen Trainingstag eine
+Task über die gesamte Laufzeit in der bereits vorhandenen
+`<Klienten-Workspace>/tw-data`-Datenbank. Überfälligkeit wird am lokalen Fälligkeitsdatum
+gezeigt; einzelne Tasks lassen sich in der Coach-Konsole erledigen. Die Route
+ist loopback-geschützt und schreibt weder Pläne noch Tasks nach Firestore.
+Ein Dry-Run auf einer `/tmp`-Kopie von Jakobs Taskwarrior-Datenbank erzeugte 30
+geplante Vorkommen, war beim zweiten Sync idempotent, erhielt den vorhandenen
+unabhängigen Task und behielt einen manuell erledigten Plan-Task beim Folgesync.
+Der lokale Pilot für Jakobs PPL-Entwurf hat anschließend 30 Tasks vom 2.11.2026
+bis 8.1.2027 erzeugt; der vorhandene, unabhängige Task blieb erhalten. Vorherige
+Taskwarrior-Ablage liegt unter `tw-data.pre-ppl-pilot-20261102`. Es gab keinen
+Firestore-Aufruf.

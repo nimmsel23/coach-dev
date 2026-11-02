@@ -20,6 +20,14 @@ def load_plan_module(name):
     spec.loader.exec_module(module)
     return module
 
+
+def load_taskwarrior_module():
+    source = ROOT / 'modules/plan/fitness/plan_tasks.py'
+    spec = importlib.util.spec_from_file_location('coach_plan_tasks', source)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
 # Modules are loaded from the pinned submodule, never the sibling development source.
 plans_module = load_plan_module('local_plans')
 
@@ -117,6 +125,68 @@ def create_router(root=None, deliver=None):
     @router.get('/api/client/{client}/plans')
     async def listing(client: str, request: Request):
         return {'plans': await handle(request, store.list, client)}
+
+    @router.get('/api/client/{client}/taskwarrior')
+    async def taskwarrior_tasks(client: str, request: Request):
+        workspace = await handle(request, store.client, client)
+        try:
+            tasks = await asyncio.to_thread(load_taskwarrior_module().workspace_tasks, workspace)
+            return {'tasks': tasks, 'storage': 'local-client-workspace'}
+        except Exception:
+            logging.exception('Unable to read client Taskwarrior database')
+            raise HTTPException(503, 'Taskwarrior-Datenbank des Klienten nicht lesbar.')
+
+    @router.post('/api/client/{client}/taskwarrior/sync')
+    async def taskwarrior_sync(client: str, request: Request):
+        local_only(request)
+        try:
+            workspace = store.client(client)
+        except plans_module.PlanError as error:
+            raise HTTPException(error.status, str(error))
+        try:
+            body = await request.json()
+        except ValueError:
+            raise HTTPException(400, 'Ungültiges JSON.')
+        plan_id = body.get('planId') if isinstance(body, dict) else None
+        if not isinstance(plan_id, str) or not plans_module.IDENTIFIER.fullmatch(plan_id):
+            raise HTTPException(400, 'Lokale Plan-ID fehlt.')
+        try:
+            plan = store.get(client, plan_id)
+        except plans_module.PlanError as error:
+            raise HTTPException(error.status, str(error))
+        try:
+            report = await asyncio.to_thread(load_taskwarrior_module().sync_workspace_plan, workspace, plan)
+            return {'ok': True, 'report': report, 'storage': 'local-client-workspace'}
+        except (FileNotFoundError, ValueError) as error:
+            raise HTTPException(409, str(error))
+        except Exception:
+            logging.exception('Unable to sync local plan into client Taskwarrior')
+            raise HTTPException(503, 'Taskwarrior-Synchronisierung fehlgeschlagen.')
+
+    @router.post('/api/client/{client}/taskwarrior/complete')
+    async def taskwarrior_complete(client: str, request: Request):
+        local_only(request)
+        try:
+            workspace = store.client(client)
+        except plans_module.PlanError as error:
+            raise HTTPException(error.status, str(error))
+        try:
+            body = await request.json()
+        except ValueError:
+            raise HTTPException(400, 'Ungültiges JSON.')
+        key = body.get('occurrenceKey') if isinstance(body, dict) else None
+        if not isinstance(key, str) or len(key) > 300:
+            raise HTTPException(400, 'Plan-Vorkommen fehlt.')
+        try:
+            found = await asyncio.to_thread(load_taskwarrior_module().complete_workspace_occurrence, workspace, key)
+            if not found:
+                raise HTTPException(404, 'Taskwarrior-Aufgabe nicht gefunden.')
+            return {'ok': True, 'storage': 'local-client-workspace'}
+        except HTTPException:
+            raise
+        except Exception:
+            logging.exception('Unable to complete client Taskwarrior occurrence')
+            raise HTTPException(503, 'Taskwarrior-Aufgabe konnte nicht abgeschlossen werden.')
 
     @router.post('/api/client/{client}/plans')
     async def create(client: str, request: Request):

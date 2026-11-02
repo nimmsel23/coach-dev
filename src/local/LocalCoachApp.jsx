@@ -50,12 +50,18 @@ export default function LocalCoachApp() {
   const [noteDraft, setNoteDraft] = useState('');
   const [noteDirty, setNoteDirty] = useState(false);
   const [noteEditingDate, setNoteEditingDate] = useState('');
+  const [taskwarriorTasks, setTaskwarriorTasks] = useState([]);
+  const [taskwarriorLoading, setTaskwarriorLoading] = useState(false);
+  const [taskwarriorPlanId, setTaskwarriorPlanId] = useState('');
+  const [taskwarriorReport, setTaskwarriorReport] = useState(null);
   const sequence = useRef(0);
   const summarySequence = useRef(0);
   const notesSequence = useRef(0);
+  const taskwarriorSequence = useRef(0);
   const client = clients.find((item) => item.id === clientId);
   const clientPath = `client/${encodeURIComponent(clientId)}`;
   const planPath = (id) => `${clientPath}/plans/${encodeURIComponent(id)}`;
+  const trackablePlans = plans.filter((plan) => plan.routines?.some((routine) => routine.weekdays?.length));
 
   async function loadClients() {
     setLoading(true); setError('');
@@ -92,6 +98,7 @@ export default function LocalCoachApp() {
     const mine = ++sequence.current;
     setPlans([]); setViewing(null); setHistory(null); setReleasing(null); setCreating(false); setError(''); setNotice('');
     setCoachNotes([]); setNoteDate(todayISO()); setNoteDraft(''); setNoteDirty(false); setNoteEditingDate('');
+    setTaskwarriorTasks([]); setTaskwarriorPlanId(''); setTaskwarriorReport(null);
     if (!clientId) return;
     setLoading(true);
     api(`${clientPath}/plans`).then((data) => { if (mine === sequence.current) setPlans(data.plans); }).catch((err) => { if (mine === sequence.current) setError(err.message); }).finally(() => { if (mine === sequence.current) setLoading(false); });
@@ -106,12 +113,43 @@ export default function LocalCoachApp() {
       .finally(() => { if (request === notesSequence.current) setNotesLoading(false); });
     return () => { notesSequence.current += 1; };
   }, [clientId, workspaceTab]);
+  useEffect(() => {
+    if (!clientId || workspaceTab !== 'taskwarrior') return undefined;
+    const request = ++taskwarriorSequence.current;
+    setTaskwarriorLoading(true);
+    api(`${clientPath}/taskwarrior`)
+      .then((data) => { if (request === taskwarriorSequence.current) setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); })
+      .catch((err) => { if (request === taskwarriorSequence.current) setError(err.message); })
+      .finally(() => { if (request === taskwarriorSequence.current) setTaskwarriorLoading(false); });
+    return () => { taskwarriorSequence.current += 1; };
+  }, [clientId, workspaceTab]);
   async function reload() { setPlans((await api(`${clientPath}/plans`)).plans); }
   async function act(fn) {
     if (busy) return;
     setBusy(true); setError(''); setNotice('');
     try { await fn(); } catch (err) { setError(err.message); }
     finally { setBusy(false); }
+  }
+  async function syncTaskwarrior() {
+    const plan = trackablePlans.find((item) => item.id === taskwarriorPlanId);
+    if (!plan) throw new Error('Wähle einen lokalen Plan mit festgelegten Trainingstagen.');
+    const scheduledCount = plan.routines.reduce((total, routine) => total + (routine.weekdays?.length || 0) * (Number(plan.totalWeeks) || 10), 0);
+    if (!confirm(`${scheduledCount} geplante Trainingstermine aus „${plan.name}“ in ${client.name}s lokaler Taskwarrior-Datenbank eintragen? Es werden keine Daten an Firebase gesendet.`)) return;
+    await act(async () => {
+      const result = await api(`${clientPath}/taskwarrior/sync`, 'POST', { planId: plan.id });
+      setTaskwarriorReport(result.report);
+      const data = await api(`${clientPath}/taskwarrior`);
+      setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
+      setNotice('Trainingsvorkommen wurden in der lokalen Taskwarrior-Datenbank abgeglichen.');
+    });
+  }
+  async function completeTaskwarriorTask(occurrenceKey) {
+    await act(async () => {
+      await api(`${clientPath}/taskwarrior/complete`, 'POST', { occurrenceKey });
+      const data = await api(`${clientPath}/taskwarrior`);
+      setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
+      setNotice('Workout in der lokalen Taskwarrior-Datenbank abgehakt.');
+    });
   }
   async function create(body) {
     const plan = await api(`${clientPath}/plans`, 'POST', body);
@@ -179,8 +217,8 @@ export default function LocalCoachApp() {
             </article>;
           })}</div>
         </section>}
-        {client && <><header className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-fit-accent">Vital Coach · {workspaceTab === 'plans' ? 'Trainingsplanung' : 'Betreuung'}</p><h2 className="mt-1 text-2xl font-semibold">{client.name}</h2></div><a className={button} href={`/${encodeURIComponent(clientId)}/`}>Klientenakte öffnen</a></header>
-          <nav aria-label="Klientenarbeitsbereich" className="flex flex-wrap gap-2 border-b border-fit-line pb-3"><button className={`${button} ${workspaceTab === 'plans' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'plans' ? 'page' : undefined} onClick={() => setWorkspaceTab('plans')}>Trainingspläne</button><button className={`${button} ${workspaceTab === 'notes' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'notes' ? 'page' : undefined} onClick={() => { if (workspaceTab === 'notes') return; setWorkspaceTab('notes'); }}>Betreuungsnotizen <span className="ml-1 text-xs text-fit-muted">{coachNotes.length}</span></button></nav>
+        {client && <><header className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-fit-accent">Vital Coach · {workspaceTab === 'plans' ? 'Trainingsplanung' : workspaceTab === 'notes' ? 'Betreuung' : 'Premium-Tracking'}</p><h2 className="mt-1 text-2xl font-semibold">{client.name}</h2></div><a className={button} href={`/${encodeURIComponent(clientId)}/`}>Klientenakte öffnen</a></header>
+          <nav aria-label="Klientenarbeitsbereich" className="flex flex-wrap gap-2 border-b border-fit-line pb-3"><button className={`${button} ${workspaceTab === 'plans' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'plans' ? 'page' : undefined} onClick={() => setWorkspaceTab('plans')}>Trainingspläne</button><button className={`${button} ${workspaceTab === 'notes' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'notes' ? 'page' : undefined} onClick={() => { if (workspaceTab === 'notes') return; setWorkspaceTab('notes'); }}>Betreuungsnotizen <span className="ml-1 text-xs text-fit-muted">{coachNotes.length}</span></button><button className={`${button} ${workspaceTab === 'taskwarrior' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'taskwarrior' ? 'page' : undefined} onClick={() => setWorkspaceTab('taskwarrior')}>Premium-Tracking</button></nav>
           {workspaceTab === 'notes' ? <section className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             <form className="h-fit space-y-4 rounded-2xl border border-fit-line bg-fit-card p-5" onSubmit={(event) => { event.preventDefault(); saveNote(); }}>
               <div><h3 className="text-lg font-semibold">{noteEditingDate ? 'Betreuungsnotiz bearbeiten' : 'Neue Betreuungsnotiz'}</h3><p className="mt-1 text-sm text-fit-muted">Private Notizen in der lokalen Klientenablage. Eine Notiz pro Klient und Tag.</p></div>
@@ -189,6 +227,25 @@ export default function LocalCoachApp() {
               <div className="flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} disabled={busy || !noteDraft.trim() || !noteDate}>{busy ? 'Speichert…' : noteEditingDate ? 'Änderung speichern' : 'Notiz sichern'}</button><button type="button" className={button} disabled={busy} onClick={() => { if (noteDirty && !confirm('Die ungespeicherte Änderung verwerfen?')) return; setNoteDate(todayISO()); setNoteDraft(''); setNoteEditingDate(''); setNoteDirty(false); }}>Neue Notiz</button></div>
             </form>
             <section aria-label="Gespeicherte Betreuungsnotizen" className="space-y-3"><div className="flex items-center justify-between"><h3 className="font-semibold">Gespeicherte Notizen</h3><button className={button} disabled={notesLoading} onClick={() => setWorkspaceTab('plans')}>Zur Planung</button></div>{notesLoading && <p role="status" className="text-sm text-fit-muted">Notizen werden geladen…</p>}{!notesLoading && !coachNotes.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Noch keine Betreuungsnotizen für diesen Klienten.</p>}{coachNotes.map((note) => <article key={note.date} className="rounded-xl border border-fit-line bg-fit-card p-4"><div className="flex items-start justify-between gap-3"><p className="font-semibold">{new Date(`${note.date}T12:00:00`).toLocaleDateString('de-AT')}</p><button className="min-h-10 text-sm text-fit-accent underline" disabled={busy} onClick={() => editNote(note)}>Bearbeiten</button></div><p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed">{note.note || 'Leerer Eintrag'}</p><p className="mt-3 text-xs text-fit-dim">Geändert {fmt(note.updated_at)}</p></article>)}</section>
+          </section> : workspaceTab === 'taskwarrior' ? <section className="space-y-5">
+            <header className="rounded-2xl border border-fit-line bg-fit-card p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div><h3 className="flex items-center gap-2 text-lg font-semibold"><ClipboardList size={19} /> Workout-Tracking in Taskwarrior</h3><p className="mt-2 max-w-2xl text-sm leading-relaxed text-fit-muted">Geplante Einzeltrainings werden in der vorhandenen Taskwarrior-Datenbank im privaten Klienten-Workspace geführt. Änderungen bleiben lokal; dieser Abgleich sendet keine Klientenakte und keine Tasks an Firebase.</p></div><button className={button} disabled={taskwarriorLoading || busy} onClick={() => act(async () => { const data = await api(`${clientPath}/taskwarrior`); setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); })}><RefreshCw size={15} className="mr-2 inline" /> Aktualisieren</button></div>
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4"><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Offene Workouts</p><p className="mt-1 text-xl font-semibold">{taskwarriorTasks.filter((task) => task.status === 'pending').length}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Überfällig</p><p className="mt-1 text-xl font-semibold text-fit-red">{taskwarriorTasks.filter((task) => task.status === 'pending' && task.due?.slice(0, 10) < todayISO()).length}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Heute fällig</p><p className="mt-1 text-xl font-semibold text-fit-accent">{taskwarriorTasks.filter((task) => task.status === 'pending' && task.due?.slice(0, 10) === todayISO()).length}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Erledigt</p><p className="mt-1 text-xl font-semibold">{taskwarriorTasks.filter((task) => task.status === 'completed').length}</p></div></div>
+            </header>
+            <div className="grid gap-4 xl:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.2fr)]">
+              <section className="h-fit space-y-4 rounded-2xl border border-fit-line bg-fit-card p-5"><div><h4 className="font-semibold">Lokalen Plan verfolgen</h4><p className="mt-1 text-sm text-fit-muted">Erzeugt alle Wochentermine des gewählten Plans bis zum Ende seiner Laufzeit.</p></div>
+                <label className="block text-sm">Plan<select className={`${input} mt-1`} value={taskwarriorPlanId} onChange={(event) => setTaskwarriorPlanId(event.target.value)}><option value="">Plan auswählen…</option>{trackablePlans.map((plan) => <option key={plan.id} value={plan.id}>{plan.name} · {plan.totalWeeks || 10} Wochen</option>)}</select></label>
+                {taskwarriorPlanId && <p className="text-xs text-fit-muted">{trackablePlans.find((plan) => plan.id === taskwarriorPlanId)?.routines.filter((routine) => routine.weekdays?.length).length} Trainingstage mit festem Wochenrhythmus.</p>}
+                <button className={`${button} w-full bg-fit-accent text-fit-bg`} disabled={busy || !trackablePlans.length || !taskwarriorPlanId} onClick={syncTaskwarrior}>{busy ? 'Gleicht ab…' : 'In Klienten-Taskwarrior abgleichen'}</button>
+                {!trackablePlans.length && <p className="rounded-xl border border-dashed border-fit-line p-4 text-sm text-fit-muted">Kein lokaler Trainingsplan mit festen Wochentagen. Lege im Planeditor die Trainingstage fest, um Überfälligkeiten berechnen zu können.</p>}
+                {taskwarriorReport && <p role="status" className="text-sm text-fit-muted">Neu {taskwarriorReport.created} · aktualisiert {taskwarriorReport.updated} · abgeschlossen {taskwarriorReport.completed} · entfernt {taskwarriorReport.deleted}</p>}
+                <p className="border-t border-fit-line pt-3 text-xs text-fit-muted">Speicherort: Klienten-Workspace · tw-data. Taskwarrior bleibt die bearbeitbare Datenbank.</p>
+              </section>
+              <section aria-label="Geplante Workout-Tasks" className="space-y-3"><div className="flex items-center justify-between"><h4 className="font-semibold">Einzelne Workouts</h4><button className="min-h-10 text-sm text-fit-accent underline" onClick={() => setWorkspaceTab('plans')}>Zur Planung</button></div>
+                {taskwarriorLoading && <p role="status" className="text-sm text-fit-muted">Taskwarrior-Aufgaben werden geladen…</p>}
+                {!taskwarriorLoading && !taskwarriorTasks.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Noch keine Workout-Tasks. Wähle links einen lokalen Plan und gleiche ihn ab.</p>}
+                {taskwarriorTasks.map((task) => { const day = task.due?.slice(0, 10) || ''; const overdue = Boolean(day && day < todayISO()); const dueToday = Boolean(day && day === todayISO()); const status = task.status === 'completed' ? 'Erledigt' : overdue ? 'Überfällig' : dueToday ? 'Heute fällig' : 'Geplant'; const statusClass = task.status === 'completed' || dueToday ? 'text-fit-accent' : overdue ? 'text-fit-red' : 'text-fit-muted'; return <article key={task.uuid} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-fit-line bg-fit-card p-4"><div><p className="font-semibold">{task.description}</p><p className={`mt-1 text-xs ${statusClass}`}>{status}{day ? ` · ${new Date(`${day}T12:00:00`).toLocaleDateString('de-AT')}` : ''}</p></div>{task.status === 'pending' && <button className="min-h-[44px] rounded-full border border-fit-accent/50 px-4 text-sm font-semibold text-fit-accent disabled:opacity-40" disabled={busy} onClick={() => completeTaskwarriorTask(task.occkey)}>Workout erledigt</button>}</article>; })}
+              </section>
+            </div>
           </section> : <>
           {viewing ? <section className="space-y-4"><div className="flex flex-wrap items-center gap-2"><button className={button} onClick={() => setViewing(null)}><ArrowLeft size={15} className="mr-1 inline" /> Alle Pläne</button><button className={button} onClick={() => { setEditing(viewing); setViewing(null); }}>Plan bearbeiten</button></div><PlanDocument plan={viewing} clientName={client.name} /></section> : editing ? <PlanEditor key={`${clientId}:${editing.id}`} plan={editing} clientName={client.name} uid={clientId} actorUid="local-coach" draftNamespace="laptop" catalogSearch={searchCatalog} templates={[]} saveDraft={(draft) => api(planPath(editing.id), 'PUT', draft)} onClose={returnToPlans} onSaved={async () => { setEditing(null); setNotice('Entwurf lokal gesichert. Noch nicht an den Klienten gesendet.'); await reload(); }} /> : <>
             <section className="rounded-2xl border border-fit-line bg-fit-card p-4 sm:p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="flex items-center gap-2 font-semibold"><ClipboardList size={19} /> Trainingspläne</h3><p className="mt-1 text-sm text-fit-muted">Erstellen → lokal sichern → Version freigeben → übergeben</p></div><button className={`${button} bg-fit-accent text-fit-bg`} disabled={busy} onClick={() => setCreating(!creating)}><Plus size={15} className="mr-1 inline" /> Neuen Plan schmieden</button></div>
