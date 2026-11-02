@@ -1747,3 +1747,12 @@ Route zurück, weil der laufende Python-Service den neuen Router noch nicht
 geladen hat. Das UI unterscheidet diesen Fall jetzt ausdrücklich als
 „Coach-API-Route nicht geladen“ von fehlender UID oder Firestore-Fehlern. Kein
 Service-Restart gemäß Repository-Regel; Runtime-Abnahme bleibt offen.
+
+## 2026-11-02 — Fitness-Traction in lokaler Coach-Konsole
+
+Die Local-Coach-Übersicht hat eine abrufbare 7-Tage-Traction-Ansicht erhalten.
+Die Serverabfrage liest ausschließlich `tractionDaily` der explizit sichtbaren
+Klienten-/Kontakt-UIDs und liefert Nutzungszähler ohne UID oder Workout-Inhalte.
+Build und Runtime-Aktivierung bleiben offen; der Fitness-Tracker-Commit ist
+lokal auf `fitness-dev/dev`, aber Cloud-Nutzung setzt den vorgesehenen
+Fitness-/Rules-Release voraus.

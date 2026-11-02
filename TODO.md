@@ -35,6 +35,7 @@
 - [x] Klientenübersicht nach Handlungsbedarf (überfällige Tasks, fehlende Einträge) oder alphabetisch sortieren.
 - [ ] Planbesprechung zwischen Klient und Coach mit Verlauf und Kommentaren pro Übung. Lokale Übergabe zu bestehender Cloud-Feedbackansicht ist verfügbar; Übungskommentare und authentifizierte Browserabnahme bleiben offen.
 - [ ] Betreuungsübersicht um Plan-Rückmeldungen und offene Antworten erweitern (Statussummen implementiert und gebaut; API-Runtime muss beim nächsten autorisierten Coach-Service-Start aktiviert und live geprüft werden; einzelne Rückmeldungen öffnen die Cloud-Feedbackansicht).
+- [ ] Live-Traction in der lokalen Coach-Konsole verifizieren. Roster-gefilterte 7-Tage-Ansicht und API-Quelle sind implementiert; :9150 muss den Router nach seinem nächsten regulären Start laden. Fitness-Cloud-Tracker und zugehörige Firebase-Regeln müssen separat veröffentlicht sein, bevor echte Nutzerwerte anfallen.
 
 # [ ] Coach-Tab stabilisieren / Inbox als verlässlichen Review-Workflow fertigstellen
 - Coach-Tab war wiederholt Problemfläche: Firestore-Inbox, lokale Catalog-Inbox,

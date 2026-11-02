@@ -260,6 +260,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     app.include_router(sixpack_router)
     from coach_local_plans import create_router
     app.include_router(create_router())
+    from coach_local_traction import router as local_traction_router
+    app.include_router(local_traction_router)
 
     from coach_legacy_clients import include_legacy_clients, legacy_ui
     include_legacy_clients(app)

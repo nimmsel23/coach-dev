@@ -61,6 +61,12 @@ If an API URL falls through to the static HTML handler, the local fetch layer
 reports that protocol mismatch explicitly instead of parsing HTML as JSON and
 mislabeling it as an empty or unreadable Cloud status.
 
+The `Fitness-Nutzung` panel queries the last 7 days of `tractionDaily` only at
+the explicit UIDs attached to Coach-visible local workspaces. It returns
+per-client app opens, section views, last seen, and daily active-client counts;
+unknown Firebase users, ambiguous workspace mappings, and workout contents are
+excluded. The query is on demand and does not create or sync local event data.
+
 ## ClientForge Planstudio (2026-11-01)
 
 `/clientforge/` führt zum gebauten `coach/clientforge.html`-Einstieg.

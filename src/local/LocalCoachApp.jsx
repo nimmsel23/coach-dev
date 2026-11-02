@@ -41,6 +41,10 @@ export default function LocalCoachApp() {
   const [plans, setPlans] = useState([]);
   const [clientSummaries, setClientSummaries] = useState([]);
   const [summariesLoading, setSummariesLoading] = useState(false);
+  const [tractionOpen, setTractionOpen] = useState(false);
+  const [tractionData, setTractionData] = useState(null);
+  const [tractionLoading, setTractionLoading] = useState(false);
+  const [tractionError, setTractionError] = useState('');
   const [viewing, setViewing] = useState(null);
   const [editing, setEditing] = useState(null);
   const [name, setName] = useState('');
@@ -97,6 +101,13 @@ export default function LocalCoachApp() {
       window.location.assign(url.href);
     } catch (err) { setError(err.message); }
     finally { setOpeningFeedbackPlanId(''); }
+  }
+
+  async function loadTraction() {
+    setTractionLoading(true); setTractionError('');
+    try { setTractionData(await api('coach/local/traction?days=7')); }
+    catch (err) { setTractionError(err.message); }
+    finally { setTractionLoading(false); }
   }
 
   async function loadClients() {
@@ -376,7 +387,7 @@ export default function LocalCoachApp() {
           {!firebaseUsersLoading && firebaseUsers.length > 0 && !filteredFirebaseUsers.length && <p className="text-sm text-fit-muted">Keine Nutzer passen zur Suche.</p>}
         </section>}
         {!rosterOpen && !client && <section className="space-y-5">
-          <header className="rounded-2xl border border-fit-line bg-fit-card p-6 sm:p-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-fit-muted">Deine lokale Übersicht</p><h2 className="mt-1 text-2xl font-semibold">Klientenarbeitsplatz</h2><p className="mt-2 max-w-xl text-sm leading-relaxed text-fit-muted">Öffne die Trainingsplanung oder springe direkt in die bestehende Klientenakte. Die Aktivität bezieht sich auf die letzten 28 Tage.</p></div><div className="flex flex-wrap items-center gap-2"><label className="text-xs text-fit-muted">Sortierung<select aria-label="Klientenübersicht sortieren" value={overviewSort} onChange={(event) => setOverviewSort(event.target.value)} className="ml-2 min-h-[44px] rounded-xl border border-fit-line bg-fit-bg px-3 text-sm text-fit-ink"><option value="attention">Handlungsbedarf</option><option value="name">Name</option></select></label><button className={button} disabled={loading || summariesLoading} onClick={loadClients}><RefreshCw size={15} className="mr-2 inline" /> Übersicht aktualisieren</button></div></div>
+          <header className="rounded-2xl border border-fit-line bg-fit-card p-6 sm:p-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-fit-muted">Deine lokale Übersicht</p><h2 className="mt-1 text-2xl font-semibold">Klientenarbeitsplatz</h2><p className="mt-2 max-w-xl text-sm leading-relaxed text-fit-muted">Öffne die Trainingsplanung oder springe direkt in die bestehende Klientenakte. Die Aktivität bezieht sich auf die letzten 28 Tage.</p></div><div className="flex flex-wrap items-center gap-2"><button className={`${button} ${tractionOpen ? 'border-fit-accent bg-fit-accent/10' : ''}`} onClick={() => { if (tractionOpen) setTractionOpen(false); else { setTractionOpen(true); loadTraction(); } }}>{tractionOpen ? 'Nutzung schließen' : 'Fitness-Nutzung'}</button><label className="text-xs text-fit-muted">Sortierung<select aria-label="Klientenübersicht sortieren" value={overviewSort} onChange={(event) => setOverviewSort(event.target.value)} className="ml-2 min-h-[44px] rounded-xl border border-fit-line bg-fit-bg px-3 text-sm text-fit-ink"><option value="attention">Handlungsbedarf</option><option value="name">Name</option></select></label><button className={button} disabled={loading || summariesLoading} onClick={loadClients}><RefreshCw size={15} className="mr-2 inline" /> Übersicht aktualisieren</button></div></div>
             <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-6">
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Klienten</p><p className="mt-1 text-2xl font-semibold">{clients.length}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">App-Zuordnung</p><p className="mt-1 text-2xl font-semibold">{clients.filter((item) => item.canDeliver).length}</p></div>
@@ -386,10 +397,18 @@ export default function LocalCoachApp() {
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Coach-Antworten offen</p><p className="mt-1 text-2xl font-semibold text-fit-accent">{summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.feedbackAwaitingReplyCount || 0), 0)}</p><p className="mt-1 text-xs text-fit-muted">Empfang offen: {summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.feedbackAwaitingReceiptCount || 0), 0)} · Cloud-Status: {summariesLoading ? '…' : `${clientSummaries.filter((item) => item.feedbackAvailable).length}/${clients.length}`}</p></div>
             </div>
           </header>
+          {tractionOpen && <section aria-label="Fitness-Nutzung" className="space-y-4 rounded-2xl border border-fit-accent/30 bg-fit-card p-5"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-wide text-fit-accent">Fitness · Nutzung der Coach-Liste</p><h3 className="mt-1 text-lg font-semibold">App-Traction · letzte 7 Tage</h3><p className="mt-1 text-xs text-fit-muted">Nur ausgewählte Klienten und Freunde. Seitenaufrufe und App-Öffnungen aus der Firebase-App; keine Workout-Inhalte.</p>{tractionData?.queriedAt && <p className="mt-1 text-xs text-fit-dim">Abgerufen {fmt(tractionData.queriedAt)} · {tractionData.from} bis {tractionData.to}</p>}</div><button className={`${button} inline-flex items-center gap-2`} disabled={tractionLoading} onClick={loadTraction}><RefreshCw size={15} className={tractionLoading ? 'animate-spin' : ''} />{tractionLoading ? 'Lädt…' : 'Nutzung aktualisieren'}</button></div>
+            {tractionError && <p role="alert" className="rounded-xl border border-fit-red/30 bg-fit-red/5 p-3 text-sm text-fit-red">{tractionError}</p>}
+            {tractionLoading && !tractionData && <p role="status" className="text-sm text-fit-muted">Nutzungsdaten werden geladen…</p>}
+            {tractionData?.available && <><div className="grid grid-cols-2 gap-3 xl:grid-cols-4"><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Aktiv · letzte 10 Min.</p><p className="mt-1 text-xl font-semibold">{tractionData.activeNow} / {tractionData.clientsWithEvents}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">App-Öffnungen</p><p className="mt-1 text-xl font-semibold">{tractionData.appOpens}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Seitenaufrufe</p><p className="mt-1 text-xl font-semibold">{tractionData.views}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Roster mit Aktivität</p><p className="mt-1 text-xl font-semibold">{tractionData.clientsWithEvents} / {tractionData.selectedClients}</p></div></div>
+              <div className="grid gap-4 lg:grid-cols-2"><div className="space-y-2"><h4 className="text-sm font-semibold">Klientenaktivität</h4>{!tractionData.users.length && <p className="rounded-xl border border-dashed border-fit-line p-4 text-sm text-fit-muted">Keine Traction-Events für die sichtbare Coach-Liste in diesem Zeitraum.</p>}{tractionData.users.map((user) => <div key={user.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-fit-line p-3"><div><p className="font-medium">{user.name}</p><p className="text-xs text-fit-muted">{user.status || 'Klient'}{user.lastSection ? ` · zuletzt: ${user.lastSection}` : ''}</p></div><div className="text-right text-xs text-fit-muted"><p className={user.activeNow ? 'font-semibold text-fit-green' : ''}>{user.activeNow ? 'gerade aktiv' : user.lastSeenAt ? `Zuletzt ${fmt(user.lastSeenAt)}` : 'Zeit unbekannt'}</p><p>{user.appOpens} Öffnungen · {user.views} Seiten</p></div></div>)}</div>
+                <div className="space-y-4"><div className="space-y-2"><h4 className="text-sm font-semibold">Bereiche</h4>{tractionData.sections.length ? tractionData.sections.slice(0, 8).map((section) => <div key={section.id} className="flex items-center justify-between rounded-lg bg-fit-bg px-3 py-2 text-sm"><span>{section.id}</span><strong>{section.views}</strong></div>) : <p className="text-sm text-fit-muted">Noch keine Seitenwechsel erfasst.</p>}</div><div className="space-y-2"><h4 className="text-sm font-semibold">Aktive Klienten pro Tag</h4><div className="grid grid-cols-7 gap-2">{tractionData.daily.map((day) => <div key={day.date} className="min-w-0 rounded-lg border border-fit-line p-2 text-center"><div className="mx-auto mb-2 flex h-12 items-end"><div className="w-full rounded-t bg-fit-accent" style={{ height: `${Math.max(day.clients ? 15 : 0, tractionData.selectedClients ? day.clients / tractionData.selectedClients * 100 : 0)}%` }} /></div><p className="text-[10px] text-fit-muted">{day.date.slice(5)}</p><p className="text-xs font-semibold">{day.clients}</p></div>)}</div></div></div>
+              </div></>}
+          </section>}
           {loading && <p role="status" className="text-sm text-fit-muted">Klienten werden geladen…</p>}
           {!loading && !clients.length && <div className="rounded-2xl border border-dashed border-fit-line p-8 text-sm text-fit-muted">Die bestehende Klientenverwaltung enthält noch keine Klienten.</div>}
           <div className="grid gap-3 xl:grid-cols-2">{overviewClients.map((item) => {
-            const summary = clientSummaries.find((candidate) => candidate.id === item.id);
+              const summary = clientSummaries.find((candidate) => candidate.id === item.id);
             const feedbackStatus = summariesLoading ? 'lädt…' : summary?.feedbackAvailable
               ? summary.feedbackDeliveredPlanCount === 0 ? 'keine freigegebenen Pläne' : `${summary.feedbackAwaitingReplyCount} Antwort(en) offen · ${summary.feedbackAwaitingReceiptCount} Empfang(e) offen${summary.feedbackTruncated ? ' · teilweise' : ''}`
               : summary?.feedbackReason === 'no-firebase-uid' ? 'keine UID'
