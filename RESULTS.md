@@ -1,3 +1,16 @@
+## 2026-11-02 — Coach akzeptiert Fitness-Alias für Schöffys lokale Workout-Historie
+
+Die Workout-Historie gab 503 zurück, weil Schöffys direkte Runtime-Verknüpfung
+`~/.aos/fitness/users/<uid>` auf den gleichnamigen Ordner unter `~/.aos/users/`
+zeigt. Coach löst jetzt normale Runtime-Pfade sowie genau diesen UID-identischen
+lokalen AlphaOS-Alias auf; andere Symlink-Ziele bleiben gesperrt.
+
+`coach_local_plans.py` besteht `py_compile`. Nach Restart von `coach-api.service`
+lieferte `GET /api/client/simon/workout/logs?days=3650` HTTP 200 mit
+`available: true` und einem Workout. Kein Firestore-Schreibzugriff.
+
+---
+
 # 2026-10-30 — Trainingspläne als Coach-Programme
 
 Die Klientenansicht wurde auf den tatsächlichen Coach-Ablauf umgestellt:
