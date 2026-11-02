@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import importlib.util
 import json
 import os
 import re
@@ -110,6 +111,19 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     app = FastAPI(title="Coach backend", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 
     app.state.backends = backends
+    relax_embedded = "relax" not in backends
+    relax_app = None
+    if relax_embedded:
+        loader_path = ROOT / "src" / "relax_api.py"
+        loader_spec = importlib.util.spec_from_file_location("coach_relax_loader", loader_path)
+        if loader_spec is None or loader_spec.loader is None:
+            raise RuntimeError(f"Cannot load Coach Relax route module: {loader_path}")
+        loader_module = importlib.util.module_from_spec(loader_spec)
+        loader_spec.loader.exec_module(loader_module)
+        relax_app = loader_module.load_relax_app()
+        if relax_app is not None:
+            app.mount("/api/relax", relax_app, name="relax-api")
+            app.mount("/relax-api", relax_app, name="relax-api-compat")
 
     @app.middleware("http")
     async def local_plan_cache_control(request: Request, call_next):
@@ -128,6 +142,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def health():
         return {"ok": True, "service": "coach", "port": int(os.environ.get("COACH_PORT", "9150")),
                 "backends": {name: str(url) for name, url in backends.items()},
+                "relax_api": "in-process" if relax_app is not None else ("worker" if "relax" in backends else "unavailable"),
                 "catalog_ready": (catalog / "index.html").is_file(),
                 "coach_ready": (coach / "index.html").is_file()}
 
@@ -142,6 +157,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
             except httpx.RequestError:
                 return name, {"ready": False, "status": None}
         statuses = dict(await asyncio.gather(*(check(name, origin) for name, origin in backends.items())))
+        if relax_app is not None:
+            statuses["relax"] = {"ready": True, "status": 200, "mode": "in-process"}
         return {"ok": all(value["ready"] for value in statuses.values()), "backends": statuses}
 
     async def proxy(request: Request, backend: str, strip_segments: int = 0):

@@ -18,7 +18,6 @@ case "${1:-status}" in
       mv "$units/fitness-api.service" "$archive/fitness-api.service"
     fi
     ln -sfn "$ROOT/systemd/coach-api.service" "$units/coach-api.service"
-    ln -sfn "$ROOT/systemd/coach-relax.service" "$units/coach-relax.service"
     ln -sfn coach-api.service "$units/fitness-api.service"
     systemctl --user daemon-reload
     systemctl --user enable --now coach-api.service
