@@ -62,12 +62,28 @@ def fitness_runtime_root():
     return Path(os.getenv('FITNESS_AGENT_HOME', str(Path.home() / '.aos/fitness'))).expanduser()
 
 
+def fitness_user_root_for_uid(uid):
+    """Resolve a runtime UID, including its exact local AlphaOS user-data alias."""
+    if not isinstance(uid, str) or not uid or uid in {'.', '..'} or any(char in uid for char in '/\\\x00'):
+        raise ValueError('Ungültige Fitness-UID-Zuordnung.')
+    users_root = (fitness_runtime_root() / 'users').resolve()
+    candidate = users_root / uid
+    user_root = candidate.resolve()
+    if user_root.is_relative_to(users_root):
+        return user_root
+
+    # Fitness user-data may expose a direct per-UID symlink into the canonical
+    # AlphaOS user store. Allow only that exact local target; reject other links.
+    shared_users_root = (Path.home() / '.aos' / 'users').resolve()
+    if (candidate.is_symlink() and user_root.is_dir()
+            and user_root == shared_users_root / uid and user_root.parent == shared_users_root):
+        return user_root
+    raise ValueError('Ungültige Fitness-UID-Zuordnung.')
+
+
 def fitness_workouts_for_uid(uid):
     """Merge locally authored workouts with Fitness's separate cloud metadata projection."""
-    users_root = (fitness_runtime_root() / 'users').resolve()
-    user_root = (users_root / str(uid)).resolve()
-    if not user_root.is_relative_to(users_root):
-        raise ValueError('Ungültige Fitness-UID-Zuordnung.')
+    user_root = fitness_user_root_for_uid(uid)
     local_path = user_root / 'workouts.json'
     local = plans_module.read(local_path) if local_path.is_file() else []
     if not isinstance(local, list):
@@ -98,10 +114,7 @@ def fitness_workouts_for_uid(uid):
 def fitness_workout_logs_for_uid(uid):
     """Include legacy saved Fitness sessions when creating Taskwarrior workout records."""
     workouts, available, updated_at = fitness_workouts_for_uid(uid)
-    users_root = (fitness_runtime_root() / 'users').resolve()
-    user_root = (users_root / str(uid)).resolve()
-    if not user_root.is_relative_to(users_root):
-        raise ValueError('Ungültige Fitness-UID-Zuordnung.')
+    user_root = fitness_user_root_for_uid(uid)
     sessions_root = user_root / 'sessions'
     session_files = sorted(sessions_root.glob('*.json')) if sessions_root.is_dir() else []
     known = {str(workout.get('id') or '') for workout in workouts if isinstance(workout, dict)}
@@ -389,8 +402,8 @@ def create_router(root=None, deliver=None):
             days = max(1, min(3650, int(request.query_params.get('days', '28'))))
         except ValueError:
             raise HTTPException(400, 'Ungültiger Zeitraum.')
-        user_root = fitness_runtime_root() / 'users' / uid
         try:
+            user_root = fitness_user_root_for_uid(uid)
             workouts, workout_source_available, _workout_source_updated = fitness_workouts_for_uid(uid)
         except ValueError as error:
             raise HTTPException(503, str(error))
