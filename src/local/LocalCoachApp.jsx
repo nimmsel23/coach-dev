@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, CheckCircle2, ClipboardList, Download, FolderOpen, Plus, RefreshCw, Send, Users } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ClipboardList, Download, ExternalLink, FolderOpen, Plus, RefreshCw, Send, Users } from 'lucide-react';
 import PlanDocument from '@plan/views/Plan/PlanDocument.jsx';
 import PlanEditor from '@plan/views/Plan/PlanEditor.jsx';
 import { filterCatalog, mergeCatalog } from '@plan/views/Plan/lib/catalog.js';
@@ -68,6 +68,7 @@ export default function LocalCoachApp() {
   const [firebaseUserSearch, setFirebaseUserSearch] = useState('');
   const [firebaseUserRoles, setFirebaseUserRoles] = useState({});
   const [savingFirebaseUid, setSavingFirebaseUid] = useState('');
+  const [openingFeedbackPlanId, setOpeningFeedbackPlanId] = useState('');
   const sequence = useRef(0);
   const summarySequence = useRef(0);
   const notesSequence = useRef(0);
@@ -79,6 +80,20 @@ export default function LocalCoachApp() {
   const planPath = (id) => `${clientPath}/plans/${encodeURIComponent(id)}`;
   const taskwarriorAutoSyncKey = clientId && taskwarriorPlanId ? 'coach.taskwarrior.auto.v1:' + clientId + ':' + taskwarriorPlanId : '';
   const trackablePlans = plans.filter((plan) => routinesForTracking(plan).length);
+
+  async function openCloudPlanFeedback(plan) {
+    if (!plan.delivery?.remotePlanId || !clientId) return;
+    setOpeningFeedbackPlanId(plan.id); setError('');
+    try {
+      const { users = [] } = await api('coach/local/users');
+      const matches = users.filter((user) => user.clientId === clientId && user.uid && user.coachVisible !== false);
+      if (matches.length !== 1) throw new Error(matches.length ? 'Für diesen Workspace gibt es mehrere Firebase-Zuordnungen. Bitte zuerst die Klientenverwaltung bereinigen.' : 'Für diesen Workspace ist keine eindeutige Firebase-UID zugeordnet.');
+      const url = new URL('./coach.html', window.location.href);
+      url.hash = `#/clients/${encodeURIComponent(matches[0].uid)}/trainingplan?plan=${encodeURIComponent(plan.delivery.remotePlanId)}`;
+      window.location.assign(url.href);
+    } catch (err) { setError(err.message); }
+    finally { setOpeningFeedbackPlanId(''); }
+  }
 
   async function loadClients() {
     setLoading(true); setError('');
@@ -425,7 +440,7 @@ export default function LocalCoachApp() {
             {!loading && !plans.length && <p className="rounded-xl border border-dashed border-fit-line p-6 text-sm text-fit-muted">Noch kein Trainingsplan. Starte leer oder übernimm den vorhandenen Plan.</p>}
             {plans.map((plan) => { const unpublished = !!plan.published && JSON.stringify({ name: plan.name, description: plan.description, totalWeeks: plan.totalWeeks, routines: plan.routines }) !== JSON.stringify(plan.published); const delivered = plan.delivery?.localVersion === plan.headVersion; const issues = planReleaseIssues(plan); return <article key={plan.id} className="space-y-4 rounded-2xl border border-fit-line bg-fit-card p-5"><div><p className="text-xs font-semibold text-fit-accent">{plan.headVersion ? `Freigegeben · Version ${plan.headVersion}` : 'Lokaler Entwurf'}{unpublished ? ' · neue Änderungen im Entwurf' : ''}</p><h3 className="mt-1 text-xl font-semibold">{plan.name}</h3><p className="mt-2 text-xs text-fit-muted">{plan.totalWeeks} Wochen · {plan.routines.length} Trainingstage · {plan.routines.reduce((n, d) => n + d.exercises.length, 0)} Übungen</p>{plan.description && <details className="mt-3 text-sm text-fit-muted"><summary className="min-h-[32px] cursor-pointer">Programmhinweise und Herkunft</summary><p className="mt-2 whitespace-pre-wrap">{plan.description}</p></details>}<p className="mt-3 text-xs text-fit-dim">Gesichert {fmt(plan.updatedAt)}</p></div>
               {!!issues.length && <aside className="rounded-xl border border-amber-400/40 bg-amber-400/5 p-4"><h4 className="font-semibold">Vor der Freigabe ergänzen</h4><ul className="mt-2 list-disc space-y-1 pl-5 text-sm">{issues.map((issue) => <li key={issue}>{issue}</li>)}</ul><button className={`${button} mt-3`} disabled={busy} onClick={() => act(async () => { setReleasing(null); setEditing(await api(planPath(plan.id))); })}>Vorgaben ergänzen</button></aside>}
-              <div className="flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} disabled={busy} onClick={() => act(async () => setViewing(await api(planPath(plan.id))))}>Plan ansehen</button><button className={button} disabled={busy} onClick={() => act(async () => setEditing(await api(planPath(plan.id))))}>Bearbeiten</button><button className={button} disabled={busy || !!issues.length || (!!plan.published && !unpublished)} onClick={() => { setReleasing(plan); setMessage(''); }}>Version freigeben</button><button className={button} disabled={busy} onClick={() => act(async () => setHistory({ plan, versions: (await api(`${planPath(plan.id)}/versions`)).versions }))}>Versionen</button><a className={`${button} inline-flex items-center gap-1`} href={path(`${planPath(plan.id)}/export/md`)}><Download size={14} /> Markdown</a><a className={`${button} inline-flex items-center`} href={path(`${planPath(plan.id)}/export/json`)}>JSON</a></div>
+              <div className="flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} disabled={busy} onClick={() => act(async () => setViewing(await api(planPath(plan.id))))}>Plan ansehen</button><button className={button} disabled={busy} onClick={() => act(async () => setEditing(await api(planPath(plan.id))))}>Bearbeiten</button><button className={button} disabled={busy || !!issues.length || (!!plan.published && !unpublished)} onClick={() => { setReleasing(plan); setMessage(''); }}>Version freigeben</button><button className={button} disabled={busy} onClick={() => act(async () => setHistory({ plan, versions: (await api(`${planPath(plan.id)}/versions`)).versions }))}>Versionen</button>{plan.delivery?.remotePlanId && <button className={`${button} inline-flex items-center gap-2`} disabled={busy || openingFeedbackPlanId === plan.id} onClick={() => openCloudPlanFeedback(plan)}><ExternalLink size={14} />{openingFeedbackPlanId === plan.id ? 'Öffne…' : 'Rückmeldungen im Cloud-Coach'}</button>}<a className={`${button} inline-flex items-center gap-1`} href={path(`${planPath(plan.id)}/export/md`)}><Download size={14} /> Markdown</a><a className={`${button} inline-flex items-center`} href={path(`${planPath(plan.id)}/export/json`)}>JSON</a></div>
               {!!plan.headVersion && <div className="flex flex-wrap items-center justify-between gap-3 border-t border-fit-line pt-4"><p className="text-xs text-fit-muted">{delivered ? `Version ${plan.headVersion} an die App übergeben · ${fmt(plan.delivery.at)}` : client.canDeliver ? `Version ${plan.headVersion} bereit zur Übergabe` : 'Für App-Versand fehlt noch die UID-Zuordnung in der Klientenverwaltung.'}{unpublished && ' Versand verwendet die freigegebene Version.'}</p><button className={`${button} flex items-center gap-2`} disabled={busy || !client.canDeliver || delivered} onClick={() => { if (!confirm(`Freigegebene Version ${plan.headVersion} von „${plan.published.name}“ an ${client.name} senden?`)) return; act(async () => { await api(`${planPath(plan.id)}/deliver`, 'POST', { version: plan.headVersion }); await reload(); setNotice('Plan an die Klienten-App übergeben.'); }); }}><Send size={14} /> An Klienten senden</button></div>}
               {releasing?.id === plan.id && <form className="space-y-3 border-t border-fit-line pt-4" onSubmit={(e) => { e.preventDefault(); act(() => release(plan)); }}><label className="block text-sm">Was ist neu?<input aria-label="Versionshinweis" className={`${input} mt-1`} value={message} maxLength={200} onChange={(e) => setMessage(e.target.value)} placeholder="z. B. Woche 3: mehr Volumen" /></label><button disabled={busy} className={`${button} bg-fit-accent text-fit-bg`}>Lokale Version freigeben</button><button type="button" className={button} onClick={() => setReleasing(null)}>Abbrechen</button></form>}
             </article>; })}

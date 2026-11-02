@@ -1725,3 +1725,11 @@ Trainingseintrag in den letzten 28 Tagen und zuletzt das älteste bekannte
 Training. Geprüfter Coach-Build erfolgreich; :9150 liefert das Bundle mit
 Sortierauswahl und Taskwarrior-Kennzahlen aus. Nur Lesezugriffe auf vorhandene
 Klientendaten; keine Aufgaben geändert.
+
+## 2026-11-02 — Lokale Planübergabe zu Cloud-Feedback
+
+Bereitgestellte lokale Pläne bieten jetzt einen direkten Einstieg in die
+bestehende Cloud-Coach-Feedbackansicht. Die lokale Firebase-UID wird nur bei
+genau einer sichtbaren Zuordnung verwendet; fehlende oder mehrdeutige Zuordnung
+zeigt einen Fehler statt eine falsche Klientenakte zu öffnen. Lokale
+Betreuungsnotizen werden dabei nicht übertragen. Übungskommentare bleiben offen.

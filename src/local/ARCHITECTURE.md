@@ -43,6 +43,13 @@ Plan ansehen opens the shared PlanDocument from the pinned Plan source, separate
 from form editing. It shows responsive exercise tables/cards and A4 sheets; long
 source notes are disclosures. No plan data changes when opening or printing.
 
+For a delivered plan, the local console can resolve the workspace's unique,
+visible Firebase UID from the local roster and open the matching plan in Cloud
+Coach. That reuses Cloud Coach's existing plan feedback and version history;
+it does not copy private local notes or create a second feedback store. The
+route opens the plan's current feedback view and requires the coach's Firebase
+session. It does not currently provide per-exercise comments.
+
 ## ClientForge Planstudio (2026-11-01)
 
 `/clientforge/` führt zum gebauten `coach/clientforge.html`-Einstieg.
