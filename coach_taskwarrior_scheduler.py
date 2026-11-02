@@ -8,12 +8,59 @@ import os
 from pathlib import Path
 import re
 import tempfile
+import time
+from urllib.parse import urlencode, urlsplit
+from urllib.request import Request, urlopen
 
 from coach_local_plans import clients_root, fitness_runtime_root, load_taskwarrior_module, plans_module
+from coach_local_plans import fitness_workouts_for_uid
 
 AUTO_SYNC_PATH = Path('coach/taskwarrior-auto-sync.json')
 CLIENT_ID = re.compile(r'[A-Za-z0-9][A-Za-z0-9_-]{0,127}\Z')
 _LOCK_PATH = Path.home() / '.local/state/coach/taskwarrior-sync.lock'
+_ROOT = Path(__file__).resolve().parent
+_FITNESS_PULL_INTERVAL = 300
+_FITNESS_PULL_ATTEMPTS: dict[str, float] = {}
+
+
+def _fitness_workout_pull_origin() -> str | None:
+    origin = os.environ.get('COACH_FITNESS_API_URL') or os.environ.get('COACH_API_URL')
+    if not origin:
+        config_path = Path(os.environ.get('COACH_BACKENDS_FILE', _ROOT / 'coach-backends.json'))
+        try:
+            origins = json.loads(config_path.read_text(encoding='utf-8'))
+            origin = origins.get('fitness') if isinstance(origins, dict) else None
+        except (OSError, ValueError):
+            return None
+    if not isinstance(origin, str):
+        return None
+    parsed = urlsplit(origin)
+    if parsed.scheme != 'http' or parsed.hostname not in {'127.0.0.1', 'localhost', '::1'} or parsed.username or parsed.password or parsed.query or parsed.fragment:
+        logging.warning('Skipping Fitness auto-pull: backend must be a loopback HTTP URL')
+        return None
+    return origin.rstrip('/')
+
+
+def refresh_fitness_workouts(uid: str, now: float | None = None) -> bool | None:
+    """Refresh cloud metadata only for an explicitly opted-in client UID, at most every 5m."""
+    if not isinstance(uid, str) or not uid.strip():
+        return None
+    now = time.monotonic() if now is None else now
+    if now - _FITNESS_PULL_ATTEMPTS.get(uid, float('-inf')) < _FITNESS_PULL_INTERVAL:
+        return None
+    origin = _fitness_workout_pull_origin()
+    if not origin:
+        return False
+    _FITNESS_PULL_ATTEMPTS[uid] = now
+    target = f"{origin}/firestore/pull-workout-logs?{urlencode({'uid': uid})}"
+    try:
+        request = Request(target, method='POST', headers={'Accept': 'application/json'})
+        with urlopen(request, timeout=15) as response:
+            result = json.loads(response.read().decode('utf-8'))
+        return isinstance(result, dict) and result.get('ok') is True
+    except Exception as error:
+        logging.info('Fitness cloud workout refresh unavailable for local UID: %s', error)
+        return False
 
 
 def enabled_plan_ids(workspace: Path) -> list[str]:
@@ -64,7 +111,7 @@ def with_taskwarrior_lock(function, *args, **kwargs):
 
 
 def _reconcile_opted_in(root: Path | None = None) -> dict[str, int]:
-    summary = {'clients': 0, 'plans': 0, 'created': 0, 'updated': 0, 'completed': 0, 'deleted': 0}
+    summary = {'clients': 0, 'plans': 0, 'created': 0, 'updated': 0, 'completed': 0, 'deleted': 0, 'workouts': 0, 'cloudPulls': 0}
     store = plans_module.LocalPlans(root or clients_root())
     taskwarrior = load_taskwarrior_module()
     users_root = fitness_runtime_root() / 'users'
@@ -89,11 +136,18 @@ def _reconcile_opted_in(root: Path | None = None) -> dict[str, int]:
         plan_ids = enabled_plan_ids(workspace)
         if not plan_ids:
             continue
-        workouts_path = user_root / 'workouts.json'
-        workouts = plans_module.read(workouts_path) if workouts_path.is_file() else []
-        if not isinstance(workouts, list):
+        if refresh_fitness_workouts(uid) is True:
+            summary['cloudPulls'] += 1
+        try:
+            workouts, _available, _updated = fitness_workouts_for_uid(uid)
+        except ValueError:
             logging.warning('Taskwarrior auto-sync skipped client %s: invalid Fitness log file', client_id)
             continue
+        try:
+            workout_report = taskwarrior.sync_workspace_workouts(workspace, workouts)
+            summary['workouts'] += int(workout_report.get('created', 0))
+        except Exception:
+            logging.exception('Workout Taskwarrior sync failed for local client %s', client_id)
         for plan_id in plan_ids:
             try:
                 plan = store.get(client_id, plan_id)
@@ -117,12 +171,12 @@ def reconcile_opted_in(root: Path | None = None) -> dict[str, int]:
         try:
             fcntl.flock(lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
-            return {'clients': 0, 'plans': 0, 'created': 0, 'updated': 0, 'completed': 0, 'deleted': 0}
+            return {'clients': 0, 'plans': 0, 'created': 0, 'updated': 0, 'completed': 0, 'deleted': 0, 'workouts': 0, 'cloudPulls': 0}
         return _reconcile_opted_in(root)
 
 
 async def run_scheduler(stop_event, interval_seconds: int = 60) -> None:
-    """Run a low-frequency local reconciliation; no cloud calls are made."""
+    """Reconcile opted-in local Taskwarrior workspaces and refresh Fitness via loopback."""
     import asyncio
 
     interval = max(15, min(3600, int(interval_seconds)))

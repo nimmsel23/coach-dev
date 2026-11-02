@@ -476,7 +476,14 @@ def create_router(root=None, deliver=None):
         uid = next((value for value in uids if isinstance(value, str) and value.strip()), None)
         if not uid:
             raise HTTPException(409, 'Für diesen Workspace ist keine Firebase-UID hinterlegt.')
-        return await pull_fitness_workouts(request, uid)
+        result = await pull_fitness_workouts(request, uid)
+        workouts, _available, _updated = fitness_workouts_for_uid(uid)
+        from coach_taskwarrior_scheduler import with_taskwarrior_lock
+        taskwarrior_module = load_taskwarrior_module()
+        result['taskwarrior'] = await asyncio.to_thread(
+            with_taskwarrior_lock, taskwarrior_module.sync_workspace_workouts, workspace, workouts,
+        )
+        return result
 
     @router.get('/api/client/{client}/taskwarrior')
     async def taskwarrior_tasks(client: str, request: Request):
@@ -560,6 +567,7 @@ def create_router(root=None, deliver=None):
                 raise HTTPException(503, str(error))
             from coach_taskwarrior_scheduler import with_taskwarrior_lock
             report = await asyncio.to_thread(with_taskwarrior_lock, load_taskwarrior_module().sync_workspace_plan, workspace, plan, None, workouts)
+            workout_task_report = await asyncio.to_thread(with_taskwarrior_lock, load_taskwarrior_module().sync_workspace_workouts, workspace, workouts)
             delivery = plan.get('delivery') if isinstance(plan.get('delivery'), dict) else {}
             delivered_current = delivery.get('localVersion') == plan.get('headVersion')
             remote_plan_id = delivery.get('remotePlanId')
@@ -573,6 +581,7 @@ def create_router(root=None, deliver=None):
                 'workoutSourceAvailable': workouts_available,
                 'workoutSourceUpdatedAt': workout_source_updated_at,
                 'cloudWorkoutPull': cloud_pull,
+                'workoutTasks': workout_task_report,
                 'deliveredCurrent': delivered_current,
                 'matchedWorkouts': matched_workouts,
             }
