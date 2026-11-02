@@ -66,6 +66,43 @@ def create_router(root=None, deliver=None):
     async def clients(request: Request):
         return {'clients': await handle(request, store.clients)}
 
+    @router.get('/api/coach/local/users')
+    async def firebase_users(request: Request):
+        local_only(request)
+        try:
+            import firebase_admin
+            from firebase_admin import auth
+            from coach_plan_push import get_db
+
+            await asyncio.to_thread(get_db)
+            app = firebase_admin.get_app()
+            known_uids = set()
+            for profile_path in clients_root().glob('*/client.json'):
+                try:
+                    profile = json.loads(profile_path.read_text(encoding='utf-8'))
+                    known_uids.update(uid for uid in profile.get('firebase_uids', []) if uid)
+                    if profile.get('firebase_uid'):
+                        known_uids.add(profile['firebase_uid'])
+                except (OSError, ValueError, TypeError):
+                    continue
+            users = []
+            page = await asyncio.to_thread(auth.list_users, max_results=1000, app=app)
+            while page:
+                users.extend({
+                    'uid': user.uid,
+                    'displayName': user.display_name or '',
+                    'email': user.email or '',
+                    'knownClient': user.uid in known_uids,
+                } for user in page.users)
+                token = page.next_page_token
+                if not token:
+                    break
+                page = await asyncio.to_thread(auth.list_users, max_results=1000, page_token=token, app=app)
+            return {'users': users}
+        except Exception:
+            logging.exception('Firebase Auth user listing failed')
+            raise HTTPException(503, 'Firebase-Nutzerliste lokal nicht verfügbar. Coach-Serverprotokoll prüfen.')
+
     @router.get('/api/client/{client}')
     async def profile(client: str, request: Request):
         await handle(request, store.client, client)
@@ -131,6 +168,8 @@ def create_router(root=None, deliver=None):
             raise HTTPException(502, 'Versand fehlgeschlagen. Lokaler Plan bleibt gespeichert. Serverprotokoll prüfen.')
     # Compatibility aliases share handlers, store and access checks with the canonical API.
     for route in list(router.routes):
+        if route.path == '/api/coach/local/users':
+            continue
         if route.path == '/api/clients':
             aliases = ['/api/coach/local/clients']
         else:

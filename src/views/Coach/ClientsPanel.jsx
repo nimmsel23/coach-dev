@@ -1,7 +1,7 @@
 import ClientMessages from './ClientMessages';
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { MessageSquare, Users, Star, UserCheck, UserX, Dumbbell, Layers, RotateCw, Sparkles, Flame } from 'lucide-react';
-import { getAllUserProfiles, getUserProfile, updateUserProfile } from '@db';
+import { getAllUserProfiles, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
 import AssignPlan from './AssignPlan';
 import ClientTrainingPlans from './ClientTrainingPlans';
@@ -58,9 +58,10 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     try {
       const p = await getAllUserProfiles();
       setProfiles(p);
-      const entries = await Promise.all(
-        Object.keys(p).map(async (uid) => [uid, (await getUserProfile(uid))?.clientStatus || 'friend'])
-      );
+      const entries = Object.keys(p).map((uid) => [
+        uid,
+        p[uid]?.clientStatus || (p[uid]?.authUserOnly ? 'hidden' : 'friend'),
+      ]);
       setStatuses(Object.fromEntries(entries));
     } catch (err) { setError(err.message || "Klienten konnten nicht geladen werden."); } finally {
       setLoading(false);

@@ -1661,11 +1661,13 @@ bleiben im bestehenden Klienten-Datenspeicher; es gibt keinen Firebase-Versand.
 
 ## 2026-11-02 — Coach-Nutzerliste verwalten
 
-Die Klientenansicht kann jetzt in einen Verwaltungsmodus wechseln. Vorhandene
-Firebase-Profile lassen sich als Klient, Freund/Test oder ausgeblendet markieren;
-ausgeblendete Profile bleiben über den Verwaltungsmodus erreichbar. Die Auswahl
-liegt im vorhandenen `fitness/{uid}/profile/metadata.clientStatus`-Feld.
-Bestehende Profile ohne Status bleiben sichtbar (Freund/Test), darunter Jakob.
-Lint und lokaler Coach-Build sind erfolgreich. Die laufende :9150-Abnahme war
-nicht möglich: der Loopback-Verbindungsversuch scheiterte, und der User-Service-
-Status ließ sich in dieser Umgebung nicht auslesen.
+Die Klientenansicht kann jetzt in einen Verwaltungsmodus wechseln. Lokal listet
+eine loopback-geschützte Admin-SDK-Route alle Firebase-Auth-Accounts; bestehende
+Klienten werden über ihre registrierten Firebase-UIDs erkannt. Auth-Accounts ohne
+Profil starten ausgeblendet. Vorhandene Firebase-Profile lassen sich als Klient,
+Freund/Test oder ausgeblendet markieren; die Auswahl liegt im bestehenden
+`fitness/{uid}/profile/metadata.clientStatus`-Feld. Bereits registrierte Profile
+ohne Status bleiben sichtbar (Freund/Test), darunter Jakob. Lint und lokaler
+Coach-Build sind erfolgreich. Die laufende :9150-Abnahme war nicht möglich: der
+Loopback-Verbindungsversuch scheiterte; der User-Service-Status ließ sich in
+dieser Umgebung nicht auslesen.
