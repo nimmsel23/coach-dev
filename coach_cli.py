@@ -44,13 +44,15 @@ ALIASES = {
     'fitness-inbox': 'notifications', 'fitness-push': 'push', 'fitness-mail': 'mail',
     'fitness-activity': 'activity', 'fitness-tui': 'tui',
 }
-LOCAL = {'server': 'coach-server', 'release': 'coach-release'}
+LOCAL = {'server': 'coach-server', 'api': 'coach-server', 'release': 'coach-release'}
 HELP_OVERRIDES = {
     'server': 'Usage: coach server install|start|stop|restart|status|logs|health|open',
+    'api': 'Usage: coach api install|start|stop|restart|status|logs|health|open',
     'tui': 'Usage: coach tui\nInteraktives Session-/Klienten-Dashboard. Keine weiteren Optionen.',
     'firestore': 'Usage: coach firestore pull|push|sync|watch [UID]\nBestehender Firestore-Sync für Fitness und Fuel; watch beobachtet lokale Fuel-Dateien.',
 }
-SHORTCUTS = {'status': ('server', 'status'), 'open': ('server', 'open')}
+SHORTCUTS = {'status': ('server', 'status'), 'open': ('server', 'open'),
+             'restart': ('server', 'restart')}
 
 # Import only the selected tool, in its own Python environment. No shell parsing,
 # cwd changes or unconditional domain imports; preserve relative file arguments.
@@ -65,12 +67,14 @@ getattr(importlib.import_module(module), entry)()
 def help_text() -> str:
     lines = ['Usage: coach <command> [arguments ...]', '', 'Coach-Werkzeuge:']
     lines += [f'  {name:<16} {spec.description}' for name, spec in COMMANDS.items()]
-    lines += ['  server           Coach-API: status, start, stop, restart, logs, health, open',
+    lines += ['  server / api     Coach-API: status, start, stop, restart, logs, health, open',
+              '  restart          Kurzform für server restart',
               '  status / open    Kurzformen für server status / server open',
               '  release          Bestehender Coach-Release-Befehl', '',
               'Beispiele:', '  coach clients matthias --days 30',
               '  coach fitness-log clients matthias --journal',
-              '  coach catalog --help', '  coach sync status', '',
+              '  coach catalog --help', '  coach sync status', '  coach restart',
+              '  coach api restart', '',
               'Hilfe pro Werkzeug: coach <command> --help',
               'Alte fitness-* Befehlsnamen werden ebenfalls als Unterbefehle akzeptiert.']
     return '\n'.join(lines)

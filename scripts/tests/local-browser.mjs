@@ -48,7 +48,7 @@ ws.addEventListener('message', (event) => { const m = JSON.parse(event.data); if
 try {
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await send('Page.navigate', { url: 'http://127.0.0.1:15904/coach/local.html' });
-  await wait(has('Willkommen in ClientForge'));
+  await wait(has('Klientenarbeitsplatz'));
   await evaluate(`navigator.serviceWorker.register('/legacy-plan-worker.js', {scope:'/'}).then(()=>navigator.serviceWorker.ready)`);
   await wait('!!navigator.serviceWorker.controller');
   await click('Fixture Client', false);
@@ -82,6 +82,15 @@ try {
   await wait(has('Ein neuerer Planstand wurde geladen'));
   await click('Lokale Version freigeben');
   await wait(has('Version 1 bereit zur Übergabe'));
+  await click('Bearbeiten');
+  await wait(`!!document.querySelector('[role="group"][aria-label="Geplante Wochentage"]')`);
+  await evaluate(`(() => { const labels = ['Mo','Di','Mi','Do','Fr','Sa','So']; const day = (new Date().getDay() + 6) % 7; const group = document.querySelector('[role="group"][aria-label="Geplante Wochentage"]'); const button = [...group.querySelectorAll('button')].find((item) => item.textContent.trim() === labels[day]); button.click(); })()`);
+  await click('Entwurf sichern');
+  await wait(has('Entwurf lokal gesichert'));
+  await click('Version freigeben');
+  await fill('[aria-label="Versionshinweis"]','Workout-Tracking Test');
+  await click('Lokale Version freigeben');
+  await wait(has('Version 2 bereit zur Übergabe'));
   await click('Plan ansehen');
   await wait(`document.querySelectorAll('.plan-document .plan-sheet').length === 1`);
   assert.equal(await evaluate(`document.querySelectorAll('.plan-document .plan-training-table tbody').length`),1);
@@ -99,10 +108,25 @@ try {
   const shot = await send('Page.captureScreenshot',{format:'png'});
   await writeFile('/tmp/coach-local-mobile.png',Buffer.from(shot.data,'base64'));
   assert.deepEqual(cloudRequests,[], 'Editing and local release must not access Firebase');
+  await click('Schließen');
   await click('An Klienten senden');
   await wait(has('Plan an die Klienten-App übergeben'));
+  const plan = await evaluate(`(async()=>{const data=await(await fetch('/api/client/fixture-client/plans?_fixture='+Date.now())).json();return data.plans[0]})()`);
+  const autoSyncStorageKey = `coach.taskwarrior.auto.v1:fixture-client:${plan.id}`;
+  await evaluate(`fetch('/fixture/workout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({planId:'local-'+${JSON.stringify(plan.id)},routineId:${JSON.stringify(plan.published.routines[0].id)}})}).then((response)=>response.json())`);
+  await click('Premium-Tracking');
+  await fill('select',plan.id);
+  await wait(`!![...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen'))`);
+  await evaluate(`[...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen')).querySelector('input').click()`);
+  await wait(has('Erledigt · Fitness-Log'));
+  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(autoSyncStorageKey)})`),'1');
+  await evaluate(`[...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen')).querySelector('input').click()`);
+  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(autoSyncStorageKey)})`),'0');
+  await click('Trainingstagebuch');
+  await wait(has('Fixture Training'));
+  assert.equal(await evaluate(has('1 abgeschlossene Sätze')),true);
   assert.deepEqual(cloudRequests,[], 'Only the test server handles fake delivery');
   assert.deepEqual(errors,[]);
-  console.log('PASS: Local client → plan → exercise prescriptions → disk save → reload → local version → history → explicit fake delivery, without Firebase browser calls.');
+  console.log('PASS: Local client → plan → exercise prescriptions → disk save → versioning/delivery → opt-in automatic workout reconciliation, without Firebase browser calls.');
 } catch (err) { console.error(err); console.error('Browser errors:',errors); process.exitCode=1; }
 finally { ws.close(); }

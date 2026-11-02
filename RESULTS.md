@@ -1636,3 +1636,59 @@ keine echten Klientenpläne freigegeben oder versendet.
 Alte ClientForge-Oberfläche an den ID-Routen eingebunden; Assets isoliert, bestehende klienten-python-Handler wiederverwendet und auf lokale, gültige Klienten begrenzt. API- und Gateway-Abschlussprüfung: 15 Tests bestanden; alter UI-Build erfolgreich.
 
 Live-Abnahme: `/<id>/` und `/k/<id>/` HTTP 200, UI-Assets 200, native Plan- und alte Habit-/Fuel-APIs 200. Echter Browser öffnet Matthias Mayer direkt und lädt das eingebettete Planstudio. Keine realen Pläne verändert oder versendet.
+
+# 2026-11-02 — Lokaler Coach-Einstieg als Konsole
+
+Auf Loopback öffnet die Coach-Startseite jetzt den lokalen Klienten- und
+Planungsarbeitsplatz; gehostete Ursprünge behalten den angemeldeten Cloud-Coach.
+Der lokale Kopfbereich bietet einen direkten Wechsel zum Cloud-Coach. Aus einer
+ausgewählten Klientenplanung führt ein Link in die vorhandene Klientenakte.
+Speichern und App-Übergabe behalten ihre getrennten lokalen Abläufe.
+
+## 2026-11-02 — Lokaler Klientenüberblick
+
+Die Startansicht der lokalen Planung zeigt für jeden vorhandenen Klienten
+Plananzahl und Trainingseinträge der letzten 28 Tage, dazu direkte Aktionen für
+Trainingsplanung und Klientenakte. Summen werden live über die vorhandenen
+Klienten-APIs geladen und nicht dupliziert gespeichert.
+
+## 2026-11-02 — Private Betreuungsnotizen
+
+Die lokale Klientenplanung bietet jetzt einen eigenen Notizbereich. Er lädt die
+private Notizchronik über die bestehende Klienten-API, erlaubt datierte Notizen
+und schützt vorhandene Tagesnotizen vor versehentlichem Ersetzen. Änderungen
+bleiben im bestehenden Klienten-Datenspeicher; es gibt keinen Firebase-Versand.
+
+## 2026-11-02 — Coach-Nutzerliste verwalten
+
+Die Klientenansicht kann jetzt in einen Verwaltungsmodus wechseln. Lokal listet
+eine loopback-geschützte Admin-SDK-Route alle Firebase-Auth-Accounts; bestehende
+Klienten werden über ihre registrierten Firebase-UIDs erkannt. Auth-Accounts ohne
+Profil starten ausgeblendet. Vorhandene Firebase-Profile lassen sich als Klient,
+Freund/Test oder ausgeblendet markieren; die Auswahl liegt im bestehenden
+`fitness/{uid}/profile/metadata.clientStatus`-Feld. Bereits registrierte Profile
+ohne Status bleiben sichtbar (Freund/Test), darunter Jakob. Lint und lokaler
+Coach-Build sind erfolgreich. Hostprüfung bestätigt den laufenden
+`coach-api.service` auf :9150 und `/coach/local.html` HTTP 200. Die frühere
+Sandbox konnte den Host-Loopback nicht direkt erreichen.
+
+## 2026-11-02 — Lokales Workout-Tracking in Taskwarrior
+
+Der Klientenarbeitsbereich hat einen Premium-Tracking-Reiter. Ein ausdrücklich
+ausgewählter lokaler Trainingsplan erzeugt für jeden festen Trainingstag eine
+Task über die gesamte Laufzeit in der bereits vorhandenen
+`<Klienten-Workspace>/tw-data`-Datenbank. Überfälligkeit wird am lokalen Fälligkeitsdatum
+gezeigt; einzelne Tasks lassen sich in der Coach-Konsole erledigen. Die Route
+ist loopback-geschützt und schreibt weder Pläne noch Tasks nach Firestore.
+Ein Dry-Run auf einer `/tmp`-Kopie von Jakobs Taskwarrior-Datenbank erzeugte 30
+geplante Vorkommen, war beim zweiten Sync idempotent, erhielt den vorhandenen
+unabhängigen Task und behielt einen manuell erledigten Plan-Task beim Folgesync.
+Der lokale Pilot für Jakobs PPL-Entwurf hat anschließend 30 Tasks vom 2.11.2026
+bis 8.1.2027 erzeugt; der vorhandene, unabhängige Task blieb erhalten. Vorherige
+Taskwarrior-Ablage liegt unter `tw-data.pre-ppl-pilot-20261102`. Es gab keinen
+Firestore-Aufruf. Isolierter Coach-Worktree läuft zusätzlich auf
+`http://127.0.0.1:9151/coach/local.html`; statische Seite und JS-Bundle liefern
+HTTP 200. Taskwarrior-API meldet 30 Aufgaben im Workspace; ein zweiter Sync über
+HTTP erstellte/änderte/entfernte null Aufgaben. Der bestehende Dienst auf :9150
+wurde nicht beendet oder neu gestartet. `/coach/` führt im Pilot direkt in die
+lokale Konsole; Health meldet `coach_ready: true`.

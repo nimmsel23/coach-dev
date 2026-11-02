@@ -51,6 +51,8 @@ Environment overrides:
 - `COACH_CATALOG_DIR`: explicit directory containing the built catalog `index.html`.
 - `COACH_FITNESS_FRONTEND_DIR`: explicit directory containing the built local-mode Fitness app; default `~/dev/fitness-dev/frontend/dist`.
 - `COACH_FITNESS_BACKEND_ROOT`: Fitness source checkout containing `backend/api/app.py`; default `~/dev/fitness-dev`.
+- `COACH_UI_DIR`: explicit directory containing the built Coach UI `index.html`.
+- `KLIENTEN_PYTHON_ROOT`: klienten-python source used for the canonical local workspace creator.
 
 ## UI ownership
 
