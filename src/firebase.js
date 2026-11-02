@@ -2,7 +2,7 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, browserLocalPersistence, setPersistence } from "firebase/auth";
 import { getMessaging, isSupported as isMessagingSupported } from "firebase/messaging";
-import { getAI, AgentPlatformBackend } from "firebase/ai";
+import * as firebaseAI from "firebase/ai";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { config } from "../firebase.config.js";
 
@@ -21,7 +21,11 @@ export function getVertexAI() {
   try {
     // @firebase/ai >= 3 benennt VertexAIBackend in AgentPlatformBackend um.
     // Location explizit setzen: der neue Default ist "global", der alte war us-central1.
-    vertexAIInstance = getAI(app, { backend: new AgentPlatformBackend("us-central1") });
+    // Namespace-Import: die Vitalos-Shell dedupliziert firebase auf eine Root-Kopie
+    // (11.x, dort heißt die Klasse noch VertexAIBackend) — ein Named Import von
+    // AgentPlatformBackend würde dort mit SyntaxError die ganze App lahmlegen.
+    const Backend = firebaseAI.AgentPlatformBackend ?? firebaseAI.VertexAIBackend;
+    vertexAIInstance = firebaseAI.getAI(app, { backend: new Backend("us-central1") });
   } catch (error) {
     console.warn("[firebase] Vertex AI init failed", error);
     vertexAIInstance = null;
