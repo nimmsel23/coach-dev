@@ -1733,3 +1733,11 @@ bestehende Cloud-Coach-Feedbackansicht. Die lokale Firebase-UID wird nur bei
 genau einer sichtbaren Zuordnung verwendet; fehlende oder mehrdeutige Zuordnung
 zeigt einen Fehler statt eine falsche Klientenakte zu öffnen. Lokale
 Betreuungsnotizen werden dabei nicht übertragen. Übungskommentare bleiben offen.
+
+## 2026-11-02 — Coach-Feedback-Übergabe live verifiziert
+
+Nach Commit `aeec749` lief `npm run build:firebase:coach` im aktiven Checkout
+fehlerfrei. `coach-api.service` ist aktiv; `/_coach/health` auf :9150 meldet
+`coach_ready: true`, und `/coach/local.html` liefert das neu gebaute
+`local-main-SJTX0ISB.js` aus. Das Bundle enthält den Feedback-Link und den
+Fehlertext für fehlende eindeutige UID-Zuordnung. Keine Klientendaten verändert.
