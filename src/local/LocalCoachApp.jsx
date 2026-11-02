@@ -24,6 +24,8 @@ async function api(suffix, method = 'GET', body) {
 }
 const fmt = (date) => date ? new Date(date).toLocaleString('de-AT', { dateStyle: 'short', timeStyle: 'short' }) : '';
 const todayISO = () => { const now = new Date(); return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+const routinesForTracking = (plan) => (plan.published?.routines || plan.routines || []).filter((routine) => routine.weekdays?.length);
+const trackedRoutinesCount = (planId, plans) => routinesForTracking(plans.find((plan) => plan.id === planId) || {}).length;
 
 export default function LocalCoachApp() {
   const [clients, setClients] = useState([]);
@@ -67,7 +69,7 @@ export default function LocalCoachApp() {
   const client = clients.find((item) => item.id === clientId);
   const clientPath = `client/${encodeURIComponent(clientId)}`;
   const planPath = (id) => `${clientPath}/plans/${encodeURIComponent(id)}`;
-  const trackablePlans = plans.filter((plan) => plan.routines?.some((routine) => routine.weekdays?.length));
+  const trackablePlans = plans.filter((plan) => routinesForTracking(plan).length);
 
   async function loadClients() {
     setLoading(true); setError('');
@@ -159,11 +161,19 @@ export default function LocalCoachApp() {
   async function syncTaskwarrior() {
     const plan = trackablePlans.find((item) => item.id === taskwarriorPlanId);
     if (!plan) throw new Error('Wähle einen lokalen Plan mit festgelegten Trainingstagen.');
-    const scheduledCount = plan.routines.reduce((total, routine) => total + (routine.weekdays?.length || 0) * (Number(plan.totalWeeks) || 10), 0);
+    const trackedRoutines = routinesForTracking(plan);
+    const scheduledCount = trackedRoutines.reduce((total, routine) => total + (routine.weekdays?.length || 0) * (Number(plan.published?.totalWeeks || plan.totalWeeks) || 10), 0);
     if (!confirm(`${scheduledCount} Trainingstermine aus „${plan.name}“ mit der lokalen Taskwarrior-Datenbank abgleichen? Bereits in Fitness abgeschlossene Einheiten dieses übergebenen Plans werden dabei automatisch erledigt markiert. Es werden keine Daten an Firebase gesendet.`)) return;
     await act(async () => {
       const result = await api(`${clientPath}/taskwarrior/sync`, 'POST', { planId: plan.id });
-      setTaskwarriorReport(result.report);
+      setTaskwarriorReport({
+        ...result.report,
+        planId: plan.id,
+        workoutSourceAvailable: result.workoutSourceAvailable,
+        workoutSourceUpdatedAt: result.workoutSourceUpdatedAt,
+        deliveredCurrent: result.deliveredCurrent,
+        matchedWorkouts: result.matchedWorkouts,
+      });
       const data = await api(`${clientPath}/taskwarrior`);
       setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
       setNotice(`Trainingsvorkommen abgeglichen; ${result.report?.completed || 0} durch Fitness-Logs erledigt markiert.`);
@@ -275,17 +285,17 @@ export default function LocalCoachApp() {
             </header>
             <div className="grid gap-4 xl:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.2fr)]">
               <section className="h-fit space-y-4 rounded-2xl border border-fit-line bg-fit-card p-5"><div><h4 className="font-semibold">Lokalen Plan verfolgen</h4><p className="mt-1 text-sm text-fit-muted">Erzeugt alle Wochentermine des gewählten Plans bis zum Ende seiner Laufzeit.</p></div>
-                <label className="block text-sm">Plan<select className={`${input} mt-1`} value={taskwarriorPlanId} onChange={(event) => setTaskwarriorPlanId(event.target.value)}><option value="">Plan auswählen…</option>{trackablePlans.map((plan) => <option key={plan.id} value={plan.id}>{plan.name} · {plan.totalWeeks || 10} Wochen</option>)}</select></label>
-                {taskwarriorPlanId && <p className="text-xs text-fit-muted">{trackablePlans.find((plan) => plan.id === taskwarriorPlanId)?.routines.filter((routine) => routine.weekdays?.length).length} Trainingstage mit festem Wochenrhythmus.</p>}
+                <label className="block text-sm">Plan<select className={`${input} mt-1`} value={taskwarriorPlanId} onChange={(event) => setTaskwarriorPlanId(event.target.value)}><option value="">Plan auswählen…</option>{trackablePlans.map((plan) => <option key={plan.id} value={plan.id}>{plan.published?.name || plan.name} · {plan.published?.totalWeeks || plan.totalWeeks || 10} Wochen</option>)}</select></label>
+                {taskwarriorPlanId && <p className="text-xs text-fit-muted">{trackedRoutinesCount(taskwarriorPlanId, trackablePlans)} Trainingstage mit festem Wochenrhythmus aus dem freigegebenen Planstand.</p>}
                 <button className={`${button} w-full bg-fit-accent text-fit-bg`} disabled={busy || !trackablePlans.length || !taskwarriorPlanId} onClick={syncTaskwarrior}>{busy ? 'Gleicht ab…' : 'In Klienten-Taskwarrior abgleichen'}</button>
                 {!trackablePlans.length && <p className="rounded-xl border border-dashed border-fit-line p-4 text-sm text-fit-muted">Kein lokaler Trainingsplan mit festen Wochentagen. Lege im Planeditor die Trainingstage fest, um Überfälligkeiten berechnen zu können.</p>}
-                {taskwarriorReport && <p role="status" className="text-sm text-fit-muted">Neu {taskwarriorReport.created} · aktualisiert {taskwarriorReport.updated} · abgeschlossen {taskwarriorReport.completed} · entfernt {taskwarriorReport.deleted}</p>}
+                {taskwarriorReport?.planId === taskwarriorPlanId && <div role="status" className="space-y-1 text-sm text-fit-muted"><p>Neu {taskwarriorReport.created} · aktualisiert {taskwarriorReport.updated} · abgeschlossen {taskwarriorReport.completed} · entfernt {taskwarriorReport.deleted}</p><p>Fitness-Logquelle: {taskwarriorReport.workoutSourceAvailable ? `vorhanden${taskwarriorReport.workoutSourceUpdatedAt ? ` · aktualisiert ${fmt(taskwarriorReport.workoutSourceUpdatedAt)}` : ''}` : 'lokale workouts.json fehlt'}. {taskwarriorReport.deliveredCurrent ? `${taskwarriorReport.matchedWorkouts} Sessions gehören zur aktuell übergebenen Planversion.` : 'Automatischer Workout-Abgleich wartet auf die Übergabe der aktuellen Planversion.'}</p></div>}
                 <p className="border-t border-fit-line pt-3 text-xs text-fit-muted">Speicherort: Klienten-Workspace · tw-data. Taskwarrior bleibt die bearbeitbare Datenbank.</p>
               </section>
               <section aria-label="Geplante Workout-Tasks" className="space-y-3"><div className="flex items-center justify-between"><h4 className="font-semibold">Einzelne Workouts</h4><button className="min-h-10 text-sm text-fit-accent underline" onClick={() => setWorkspaceTab('plans')}>Zur Planung</button></div>
                 {taskwarriorLoading && <p role="status" className="text-sm text-fit-muted">Taskwarrior-Aufgaben werden geladen…</p>}
                 {!taskwarriorLoading && !taskwarriorTasks.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Noch keine Workout-Tasks. Wähle links einen lokalen Plan und gleiche ihn ab.</p>}
-                {taskwarriorTasks.map((task) => { const day = task.due?.slice(0, 10) || ''; const overdue = Boolean(day && day < todayISO()); const dueToday = Boolean(day && day === todayISO()); const status = task.status === 'completed' ? 'Erledigt' : overdue ? 'Überfällig' : dueToday ? 'Heute fällig' : 'Geplant'; const statusClass = task.status === 'completed' || dueToday ? 'text-fit-accent' : overdue ? 'text-fit-red' : 'text-fit-muted'; return <article key={task.uuid} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-fit-line bg-fit-card p-4"><div><p className="font-semibold">{task.description}</p><p className={`mt-1 text-xs ${statusClass}`}>{status}{day ? ` · ${new Date(`${day}T12:00:00`).toLocaleDateString('de-AT')}` : ''}</p></div>{task.status === 'pending' && <button className="min-h-[44px] rounded-full border border-fit-accent/50 px-4 text-sm font-semibold text-fit-accent disabled:opacity-40" disabled={busy} onClick={() => completeTaskwarriorTask(task.occkey)}>Workout erledigt</button>}</article>; })}
+                {taskwarriorTasks.map((task) => { const day = task.due?.slice(0, 10) || ''; const overdue = Boolean(day && day < todayISO()); const dueToday = Boolean(day && day === todayISO()); const status = task.status === 'completed' ? 'Erledigt' : overdue ? 'Überfällig' : dueToday ? 'Heute fällig' : 'Geplant'; const statusClass = task.status === 'completed' || dueToday ? 'text-fit-accent' : overdue ? 'text-fit-red' : 'text-fit-muted'; return <article key={task.uuid} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-fit-line bg-fit-card p-4"><div><p className="font-semibold">{task.description}</p><p className={`mt-1 text-xs ${statusClass}`}>{status}{day ? ` · ${new Date(`${day}T12:00:00`).toLocaleDateString('de-AT')}` : ''}</p>{task.workoutid && <p className="mt-1 text-xs text-fit-dim">Fitness-Workout <code>{task.workoutid}</code></p>}</div>{task.status === 'pending' && <button className="min-h-[44px] rounded-full border border-fit-accent/50 px-4 text-sm font-semibold text-fit-accent disabled:opacity-40" disabled={busy} onClick={() => completeTaskwarriorTask(task.occkey)}>Workout erledigt</button>}</article>; })}
               </section>
             </div>
           </section> : <>

@@ -1,7 +1,9 @@
 """Local-only routes against temporary client workspaces; never connect to Firestore."""
 import json
+import os
 import tempfile
 import unittest
+from datetime import datetime
 from unittest.mock import patch
 from pathlib import Path
 from fastapi import FastAPI
@@ -96,5 +98,45 @@ class LocalPlanHTTPTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual((await client.get('/api/coach/local/clients/not-a-client/plans')).status_code,404)
         async with httpx.AsyncClient(transport=httpx.ASGITransport(self.app),base_url='http://foreign.example') as client:
             self.assertEqual((await client.get('/api/coach/local/clients')).status_code,403)
+
+    @patch('coach_local_plans.asyncio.to_thread', new=inline_thread)
+    async def test_taskwarrior_sync_reads_fitness_logs_and_returns_workout_link(self):
+        fitness = self.root / 'fitness'
+        profile = json.loads((self.root/'test-client/client.json').read_text())
+        today = datetime.now().astimezone()
+        routine_id = 'push-day'
+        body = {
+            'name': 'Weekday plan', 'totalWeeks': 1,
+            'routines': [{
+                'id': routine_id, 'label': 'Push', 'weekdays': [today.weekday()],
+                'exercises': [{'id': 'bench', 'name': 'Bench Press', 'templateSets': [{'targetReps': '8'}]}],
+            }],
+        }
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(self.app),base_url='http://localhost') as client:
+            plan = (await client.post('/api/client/test-client/plans',json=body)).json()
+            plan_url = f'/api/client/test-client/plans/{plan["id"]}'
+            released = await client.post(f'{plan_url}/versions',json={'expectedUpdatedAt':plan['updatedAt']})
+            self.assertEqual(released.status_code,200)
+            delivered = await client.post(f'{plan_url}/deliver',json={'version':1})
+            self.assertEqual(delivered.status_code,200)
+            runtime_user = fitness / 'users' / profile['firebase_uid']
+            runtime_user.mkdir(parents=True)
+            (runtime_user/'workouts.json').write_text(json.dumps([{
+                'id': 'logged-session', 'sourcePlanId': f'local-{plan["id"]}',
+                'sourcePlanRoutineId': routine_id, 'finished_at': today.isoformat(),
+                'sessionState': 'completed',
+            }]))
+            with patch.dict(os.environ, {'FITNESS_AGENT_HOME': str(fitness)}):
+                sync = await client.post('/api/client/test-client/taskwarrior/sync',json={'planId':plan['id']})
+                self.assertEqual(sync.status_code,200,sync.text)
+                payload = sync.json()
+                self.assertTrue(payload['workoutSourceAvailable'])
+                self.assertTrue(payload['deliveredCurrent'])
+                self.assertEqual(payload['matchedWorkouts'],1)
+                self.assertEqual(payload['report']['completed'],1)
+                tasks = await client.get('/api/client/test-client/taskwarrior')
+            self.assertEqual(tasks.status_code,200)
+            self.assertEqual(tasks.json()['tasks'][0]['status'],'completed')
+            self.assertEqual(tasks.json()['tasks'][0]['workoutid'],'logged-session')
 
 if __name__ == '__main__': unittest.main()

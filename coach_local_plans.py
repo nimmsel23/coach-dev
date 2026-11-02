@@ -344,6 +344,7 @@ def create_router(root=None, deliver=None):
             workouts = plans_module.read(workout_path) if workouts_available else []
             if not isinstance(workouts, list):
                 raise HTTPException(503, 'Lokale Fitness-Workoutdaten sind ungültig.')
+            workout_source_updated_at = datetime.fromtimestamp(workout_path.stat().st_mtime).astimezone().isoformat() if workouts_available else None
             report = await asyncio.to_thread(load_taskwarrior_module().sync_workspace_plan, workspace, plan, None, workouts)
             delivery = plan.get('delivery') if isinstance(plan.get('delivery'), dict) else {}
             delivered_current = delivery.get('localVersion') == plan.get('headVersion')
@@ -356,6 +357,8 @@ def create_router(root=None, deliver=None):
             return {
                 'ok': True, 'report': report, 'storage': 'local-client-workspace',
                 'workoutSourceAvailable': workouts_available,
+                'workoutSourceUpdatedAt': workout_source_updated_at,
+                'deliveredCurrent': delivered_current,
                 'matchedWorkouts': matched_workouts,
             }
         except (FileNotFoundError, ValueError) as error:

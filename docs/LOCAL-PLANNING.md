@@ -51,6 +51,23 @@ Native Pläne liegen pro Klient unter:
 <client>/data/training-plans/<plan-id>/versions/vN.json
 ```
 
+### Workout-Tracking im Klienten-Workspace
+
+Im Tab **Premium-Tracking** kann ein freigegebener lokaler Plan in die
+Taskwarrior-Datenbank des Klienten abgeglichen werden. Pro festem Trainingstag
+entsteht ein eigener Task mit geplantem Datum und Fälligkeit. Der Abgleich nutzt
+den freigegebenen Planstand, auch wenn bereits ein neuerer Entwurf existiert.
+Ein Task wird beim Abgleich automatisch erledigt, wenn in der lokalen Fitness-
+Runtime unter `~/.aos/fitness/users/<firebase_uid>/workouts.json` eine
+abgeschlossene Session mit derselben übergebenen Plan-ID und Routine-ID liegt.
+Die Session-ID bleibt als `workoutid` am Task nachvollziehbar. Fehlt die lokale
+Logdatei oder wurde die aktuelle Planversion noch nicht übergeben, zeigt die
+Konsole das an; Tasks können weiterhin manuell als erledigt markiert werden.
+
+Tasks bleiben in `<client>/tw-data/` und werden weder in Firestore noch in die
+Fitness-Logdatei zurückgeschrieben. Das ist eine explizite lokale Synchronisierung
+und kein Hintergrunddienst.
+
 Schreibzugriffe sind atomar und prüfen den Bearbeitungsstand. Ungesicherte
 Editoränderungen bleiben zusätzlich gerätegebunden im Browser. Die API
 `/api/coach/local/*` ist nur für Loopback-Verbindungen zugelassen, fremde Origins
