@@ -61,6 +61,39 @@ def fitness_runtime_root():
     """Return the existing local Fitness mirror without importing Fitness services."""
     return Path(os.getenv('FITNESS_AGENT_HOME', str(Path.home() / '.aos/fitness'))).expanduser()
 
+
+def fitness_workouts_for_uid(uid):
+    """Merge locally authored workouts with Fitness's separate cloud metadata projection."""
+    users_root = (fitness_runtime_root() / 'users').resolve()
+    user_root = (users_root / str(uid)).resolve()
+    if not user_root.is_relative_to(users_root):
+        raise ValueError('Ungültige Fitness-UID-Zuordnung.')
+    local_path = user_root / 'workouts.json'
+    local = plans_module.read(local_path) if local_path.is_file() else []
+    if not isinstance(local, list):
+        raise ValueError('Lokale Fitness-Workoutdaten sind ungültig.')
+    by_id = {}
+    for workout in local:
+        if isinstance(workout, dict):
+            workout_id = str(workout.get('id') or '')
+            if workout_id:
+                by_id[workout_id] = workout
+    cloud_root = user_root / 'cloud-workouts'
+    cloud_paths = sorted(cloud_root.glob('*.json')) if cloud_root.is_dir() else []
+    for cloud_path in cloud_paths:
+        workout = plans_module.read(cloud_path)
+        if not isinstance(workout, dict) or workout.get('sourceType') != 'firestore-workout':
+            continue
+        workout_id = str(workout.get('id') or cloud_path.stem)
+        if workout_id:
+            by_id[workout_id] = workout
+    newest_mtime = max(
+        [path.stat().st_mtime for path in [local_path, *cloud_paths] if path.is_file()],
+        default=None,
+    )
+    updated_at = datetime.fromtimestamp(newest_mtime).astimezone().isoformat() if newest_mtime else None
+    return list(by_id.values()), bool(local_path.is_file() or cloud_root.is_dir()), updated_at
+
 # Modules are loaded from the pinned submodule, never the sibling development source.
 plans_module = load_plan_module('local_plans')
 
@@ -102,6 +135,33 @@ def create_router(root=None, deliver=None):
             args = (*args, body)
         try: return fn(*args)
         except plans_module.PlanError as err: raise HTTPException(err.status, str(err))
+
+    async def pull_fitness_workouts(request, uid):
+        origin = getattr(request.app.state, 'backends', {}).get('fitness')
+        client = getattr(request.app.state, 'api_client', None)
+        if origin is None or client is None:
+            raise HTTPException(503, 'Fitness-Backend für den lokalen Workout-Pull nicht verfügbar.')
+        path = f"{origin.path.rstrip('/')}/firestore/pull-workout-logs"
+        url = origin.copy_with(path=path or '/firestore/pull-workout-logs', query=b'')
+        try:
+            response = await client.post(url, params={'uid': uid}, timeout=60)
+            if not response.is_success:
+                logging.warning('Fitness cloud workout pull returned HTTP %s', response.status_code)
+                raise HTTPException(502, 'Fitness konnte die lokalen Workout-Logs nicht aktualisieren.')
+            result = response.json()
+        except HTTPException:
+            raise
+        except Exception as error:
+            logging.warning('Fitness cloud workout pull failed: %s', error)
+            raise HTTPException(502, 'Fitness-Workout-Pull lokal nicht erreichbar.')
+        if not isinstance(result, dict) or result.get('ok') is not True:
+            raise HTTPException(502, 'Fitness hat keine gültige Workout-Projektion zurückgegeben.')
+        return {
+            'ok': True,
+            'workoutLogs': int(result.get('workout_logs') or 0),
+            'removed': int(result.get('workout_logs_removed') or 0),
+            'storage': result.get('storage') or 'local-fitness-runtime/cloud-workouts',
+        }
 
     @router.get('/api/clients')
     async def clients(request: Request):
@@ -292,13 +352,13 @@ def create_router(root=None, deliver=None):
         except ValueError:
             raise HTTPException(400, 'Ungültiger Zeitraum.')
         user_root = fitness_runtime_root() / 'users' / uid
-        path = user_root / 'workouts.json'
-        workouts = plans_module.read(path) if path.is_file() else []
-        if not isinstance(workouts, list):
-            raise HTTPException(503, 'Lokale Fitness-Workoutdaten sind ungültig.')
+        try:
+            workouts, workout_source_available, _workout_source_updated = fitness_workouts_for_uid(uid)
+        except ValueError as error:
+            raise HTTPException(503, str(error))
         sessions_root = user_root / 'sessions'
         session_files = sorted(sessions_root.glob('*.json'), reverse=True) if sessions_root.is_dir() else []
-        if not path.is_file() and not session_files:
+        if not workout_source_available and not session_files:
             return {'workouts': [], 'available': False, 'reason': 'mirror-missing', 'storage': 'local-fitness-runtime'}
 
         def parse_timestamp(value):
@@ -324,7 +384,9 @@ def create_router(root=None, deliver=None):
                 duration = max(0, int((finished - started).total_seconds())) if started else None
                 exercises = workout.get('exercises') if isinstance(workout.get('exercises'), list) else []
                 events = workout.get('eventLog') if isinstance(workout.get('eventLog'), list) else None
-                completed_sets = sum(1 for event in (events or []) if isinstance(event, dict) and event.get('setId'))
+                completed_sets = workout.get('completedSetCount')
+                if not isinstance(completed_sets, int) or completed_sets < 0:
+                    completed_sets = sum(1 for event in (events or []) if isinstance(event, dict) and event.get('setId'))
                 if not completed_sets:
                     completed_sets = sum(
                         1 for exercise in exercises if isinstance(exercise, dict)
@@ -333,7 +395,7 @@ def create_router(root=None, deliver=None):
                     )
                 recent.append({
                     'id': str(workout.get('id') or ''),
-                    'sourceType': 'plan-workout',
+                    'sourceType': workout.get('sourceType') or 'plan-workout',
                     'name': str(workout.get('name') or 'Trainingseinheit'),
                     'started_at': workout.get('started_at'),
                     'finished_at': workout.get('finished_at'),
@@ -399,6 +461,22 @@ def create_router(root=None, deliver=None):
             })
         recent.sort(key=lambda item: str(item.get('finished_at') or ''), reverse=True)
         return {'workouts': recent[:30], 'available': True, 'reason': None, 'storage': 'local-fitness-runtime'}
+
+    @router.post('/api/client/{client}/workout/pull')
+    async def workout_pull(client: str, request: Request):
+        local_only(request)
+        try:
+            workspace = store.client(client)
+        except plans_module.PlanError as error:
+            raise HTTPException(error.status, str(error))
+        profile = plans_module.read(workspace / 'client.json') or {}
+        uids = list(profile.get('firebase_uids') or [])
+        if profile.get('firebase_uid') and profile['firebase_uid'] not in uids:
+            uids.insert(0, profile['firebase_uid'])
+        uid = next((value for value in uids if isinstance(value, str) and value.strip()), None)
+        if not uid:
+            raise HTTPException(409, 'Für diesen Workspace ist keine Firebase-UID hinterlegt.')
+        return await pull_fitness_workouts(request, uid)
 
     @router.get('/api/client/{client}/taskwarrior')
     async def taskwarrior_tasks(client: str, request: Request):
@@ -469,12 +547,17 @@ def create_router(root=None, deliver=None):
             if profile.get('firebase_uid') and profile['firebase_uid'] not in uids:
                 uids.insert(0, profile['firebase_uid'])
             uid = next((value for value in uids if isinstance(value, str) and value.strip()), None)
-            workout_path = fitness_runtime_root() / 'users' / uid / 'workouts.json' if uid else None
-            workouts_available = bool(workout_path and workout_path.is_file())
-            workouts = plans_module.read(workout_path) if workouts_available else []
-            if not isinstance(workouts, list):
-                raise HTTPException(503, 'Lokale Fitness-Workoutdaten sind ungültig.')
-            workout_source_updated_at = datetime.fromtimestamp(workout_path.stat().st_mtime).astimezone().isoformat() if workouts_available else None
+            cloud_pull = None
+            if uid:
+                try:
+                    cloud_pull = await pull_fitness_workouts(request, uid)
+                except HTTPException as error:
+                    logging.info('Fitness cloud workout refresh unavailable for local plan sync: %s', error.detail)
+                    cloud_pull = {'ok': False, 'reason': error.detail}
+            try:
+                workouts, workouts_available, workout_source_updated_at = fitness_workouts_for_uid(uid) if uid else ([], False, None)
+            except ValueError as error:
+                raise HTTPException(503, str(error))
             from coach_taskwarrior_scheduler import with_taskwarrior_lock
             report = await asyncio.to_thread(with_taskwarrior_lock, load_taskwarrior_module().sync_workspace_plan, workspace, plan, None, workouts)
             delivery = plan.get('delivery') if isinstance(plan.get('delivery'), dict) else {}
@@ -489,6 +572,7 @@ def create_router(root=None, deliver=None):
                 'ok': True, 'report': report, 'storage': 'local-client-workspace',
                 'workoutSourceAvailable': workouts_available,
                 'workoutSourceUpdatedAt': workout_source_updated_at,
+                'cloudWorkoutPull': cloud_pull,
                 'deliveredCurrent': delivered_current,
                 'matchedWorkouts': matched_workouts,
             }

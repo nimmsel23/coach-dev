@@ -58,6 +58,7 @@ export default function LocalCoachApp() {
   const [taskwarriorReport, setTaskwarriorReport] = useState(null);
   const [workoutHistory, setWorkoutHistory] = useState({ available: null, reason: null, workouts: [] });
   const [workoutHistoryLoading, setWorkoutHistoryLoading] = useState(false);
+  const [workoutPulling, setWorkoutPulling] = useState(false);
   const [taskwarriorAutoSyncSetting, setTaskwarriorAutoSyncSetting] = useState({ key: '', enabled: false });
   const [rosterOpen, setRosterOpen] = useState(false);
   const [firebaseUsers, setFirebaseUsers] = useState([]);
@@ -247,6 +248,17 @@ export default function LocalCoachApp() {
       setNotice('Workout in der lokalen Taskwarrior-Datenbank abgehakt.');
     });
   }
+  async function refreshWorkoutHistory() {
+    if (!clientId) return;
+    setWorkoutPulling(true); setError(''); setNotice('');
+    try {
+      const pulled = await api(`${clientPath}/workout/pull`, 'POST');
+      const data = await api(`${clientPath}/workout/logs?days=90`);
+      setWorkoutHistory({ available: data.available !== false, reason: data.reason || null, workouts: Array.isArray(data.workouts) ? data.workouts : [] });
+      setNotice(`${pulled.workoutLogs} Fitness-Logs lokal aktualisiert.`);
+    } catch (err) { setError(err.message); }
+    finally { setWorkoutPulling(false); }
+  }
   async function create(body) {
     const plan = await api(`${clientPath}/plans`, 'POST', body);
     setCreating(false); setName(''); setEditing(plan); await reload();
@@ -333,7 +345,7 @@ export default function LocalCoachApp() {
         {!rosterOpen && client && <><header className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-fit-accent">Vital Coach · {workspaceTab === 'plans' ? 'Trainingsplanung' : workspaceTab === 'history' ? 'Trainingstagebuch' : workspaceTab === 'notes' ? 'Betreuung' : 'Premium-Tracking'}</p><h2 className="mt-1 text-2xl font-semibold">{client.name}</h2></div><a className={button} href={`/${encodeURIComponent(clientId)}/`}>Klientenakte öffnen</a></header>
           <nav aria-label="Klientenarbeitsbereich" className="flex flex-wrap gap-2 border-b border-fit-line pb-3"><button className={`${button} ${workspaceTab === 'plans' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'plans' ? 'page' : undefined} onClick={() => setWorkspaceTab('plans')}>Trainingspläne</button><button className={`${button} ${workspaceTab === 'history' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'history' ? 'page' : undefined} onClick={() => setWorkspaceTab('history')}>Trainingstagebuch</button><button className={`${button} ${workspaceTab === 'notes' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'notes' ? 'page' : undefined} onClick={() => { if (workspaceTab === 'notes') return; setWorkspaceTab('notes'); }}>Betreuungsnotizen <span className="ml-1 text-xs text-fit-muted">{coachNotes.length}</span></button><button className={`${button} ${workspaceTab === 'taskwarrior' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'taskwarrior' ? 'page' : undefined} onClick={() => setWorkspaceTab('taskwarrior')}>Premium-Tracking</button></nav>
           {workspaceTab === 'history' ? <section className="space-y-5">
-              <header className="rounded-2xl border border-fit-line bg-fit-card p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div><h3 className="flex items-center gap-2 text-lg font-semibold"><ClipboardList size={19} /> Trainingstagebuch</h3><p className="mt-2 max-w-2xl text-sm text-fit-muted">Gespeicherte Fitness-Sessions und abgeschlossene Plan-Workouts aus der lokalen Runtime der verknüpften UID. Übungs- und Satzdetails bleiben bei Fitness.</p></div><button className={button} disabled={workoutHistoryLoading} onClick={() => setWorkspaceTab('plans')}><ArrowLeft size={15} className="mr-2 inline" /> Zurück</button></div>
+              <header className="rounded-2xl border border-fit-line bg-fit-card p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div><h3 className="flex items-center gap-2 text-lg font-semibold"><ClipboardList size={19} /> Trainingstagebuch</h3><p className="mt-2 max-w-2xl text-sm text-fit-muted">Gespeicherte Fitness-Sessions und abgeschlossene Plan-Workouts aus der lokalen Runtime der verknüpften UID. Übungs- und Satzdetails bleiben bei Fitness.</p></div><div className="flex flex-wrap gap-2"><button className={button} disabled={workoutPulling || workoutHistoryLoading} onClick={refreshWorkoutHistory}><RefreshCw size={15} className="mr-2 inline" /> {workoutPulling ? 'Fitness wird aktualisiert…' : 'Fitness-Logs aktualisieren'}</button><button className={button} disabled={workoutHistoryLoading} onClick={() => setWorkspaceTab('plans')}><ArrowLeft size={15} className="mr-2 inline" /> Zurück</button></div></div>
               <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3"><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Einheiten · 90 Tage</p><p className="mt-1 text-xl font-semibold">{workoutHistoryLoading ? '…' : workoutHistory.available ? workoutHistory.workouts.length : '—'}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Erfasste Sätze</p><p className="mt-1 text-xl font-semibold">{workoutHistory.available ? workoutHistory.workouts.reduce((total, workout) => total + (workout.completedSetCount || 0), 0) : '—'}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Quelle</p><p className="mt-1 text-sm font-semibold">{workoutHistoryLoading ? '…' : workoutHistory.available ? 'Fitness Runtime · lokal' : workoutHistory.reason === 'no-firebase-uid' ? 'Keine UID-Zuordnung' : 'Lokaler Spiegel fehlt'}</p></div></div>
             </header>
             {workoutHistoryLoading && <p role="status" className="text-sm text-fit-muted">Trainingseinträge werden geladen…</p>}
