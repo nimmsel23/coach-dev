@@ -1748,3 +1748,8 @@ Planversionen: ausstehende Empfangsbestätigungen und Nachrichten, auf die der
 Coach antworten muss. Der loopback-geschützte Server verwendet nur eindeutige
 UID-Zuordnungen und liefert Zähler statt Nachrichtentexten oder Sender-IDs.
 Firestore-Ausfälle und unklare Zuordnungen bleiben als nicht verfügbar sichtbar.
+Der Firebase-Coach-Build war erfolgreich und :9150 liefert das neue statische
+Bundle aus. Die Live-Abfrage des API-Pfads fiel noch auf die HTML-Catch-all-
+Route zurück, weil der laufende Python-Service den neuen Router noch nicht
+geladen hat. Kein Service-Restart gemäß Repository-Regel; Runtime-Abnahme bleibt
+offen.

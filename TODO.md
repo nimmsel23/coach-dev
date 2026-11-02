@@ -34,7 +34,7 @@
 - [x] Workout-Vorkommen aus lokalen Plänen in die vorhandene Klienten-Taskwarrior-DB `tw-data` synchronisieren.
 - [x] Klientenübersicht nach Handlungsbedarf (überfällige Tasks, fehlende Einträge) oder alphabetisch sortieren.
 - [ ] Planbesprechung zwischen Klient und Coach mit Verlauf und Kommentaren pro Übung. Lokale Übergabe zu bestehender Cloud-Feedbackansicht ist verfügbar; Übungskommentare und authentifizierte Browserabnahme bleiben offen.
-- [x] Betreuungsübersicht um Plan-Rückmeldungen und offene Antworten erweitern (lokale Statussummen für ausstehende Coach-Antworten und Empfangsbestätigungen; einzelne Rückmeldungen über die Cloud-Feedbackansicht öffnen).
+- [ ] Betreuungsübersicht um Plan-Rückmeldungen und offene Antworten erweitern (Statussummen implementiert und gebaut; API-Runtime muss beim nächsten autorisierten Coach-Service-Start aktiviert und live geprüft werden; einzelne Rückmeldungen öffnen die Cloud-Feedbackansicht).
 
 # [ ] Coach-Tab stabilisieren / Inbox als verlässlichen Review-Workflow fertigstellen
 - Coach-Tab war wiederholt Problemfläche: Firestore-Inbox, lokale Catalog-Inbox,
