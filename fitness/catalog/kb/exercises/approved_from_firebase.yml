@@ -3374,7 +3374,7 @@ exercises:
   category: push
   schema_version: 2026-08-12.exercise-v1
   approved_at: '2026-10-31T14:40:48.356973+00:00'
-  name: Dips
+  name: Bank-Dips (Bench Dips)
   source: approved
   original_description:
   - Greife die Stangen an einer engen Stelle und drücke dich hoch. Strecke dabei die
@@ -3383,7 +3383,7 @@ exercises:
     die Ellenbogen zeigen nach hinten. Du kannst an dieser Stelle einige Sekunden
     bleiben, bevor du die Übung weitermachst.
   id: yuhonas_bench_dips
-  german: Dips
+  german: Bank-Dips
   instructions:
   - For this exercise you will need to place a bench behind your back. With the bench
     perpendicular to your body, and while looking away from it, hold on to the bench
@@ -3474,5 +3474,5 @@ exercises:
   - '**Schwung nutzen:** Die Bewegung sollte kontrolliert und ohne Schwung ausgeführt
     werden, um die Zielmuskulatur optimal zu beanspruchen und das Verletzungsrisiko
     zu minimieren.'
-  display_name: Dips
-  wger_id: 194
+  display_name: Bank-Dips (Bench Dips)
+  wger_id: 1324
