@@ -287,11 +287,14 @@ def create_router(root=None, deliver=None):
             days = max(1, min(3650, int(request.query_params.get('days', '28'))))
         except ValueError:
             raise HTTPException(400, 'Ungültiger Zeitraum.')
-        path = fitness_runtime_root() / 'users' / uid / 'workouts.json'
+        user_root = fitness_runtime_root() / 'users' / uid
+        path = user_root / 'workouts.json'
         workouts = plans_module.read(path) if path.is_file() else []
         if not isinstance(workouts, list):
             raise HTTPException(503, 'Lokale Fitness-Workoutdaten sind ungültig.')
-        if not path.is_file():
+        sessions_root = user_root / 'sessions'
+        session_files = sorted(sessions_root.glob('*.json'), reverse=True) if sessions_root.is_dir() else []
+        if not path.is_file() and not session_files:
             return {'workouts': [], 'available': False, 'reason': 'mirror-missing', 'storage': 'local-fitness-runtime'}
 
         def parse_timestamp(value):
@@ -326,6 +329,7 @@ def create_router(root=None, deliver=None):
                     )
                 recent.append({
                     'id': str(workout.get('id') or ''),
+                    'sourceType': 'plan-workout',
                     'name': str(workout.get('name') or 'Trainingseinheit'),
                     'started_at': workout.get('started_at'),
                     'finished_at': workout.get('finished_at'),
@@ -337,6 +341,58 @@ def create_router(root=None, deliver=None):
                     'completedSetCount': completed_sets,
                     'durationSeconds': duration,
                 })
+        for session_path in session_files:
+            session = plans_module.read(session_path)
+            if not isinstance(session, dict):
+                continue
+            exercises = session.get('exercises') if isinstance(session.get('exercises'), list) else []
+            gate = session.get('sessionGate') if isinstance(session.get('sessionGate'), dict) else {}
+            # Fitness's legacy session log uses reps-bearing setsArray entries;
+            # an empty prescription is not evidence that a set was completed.
+            completed_sets = sum(
+                1 for exercise in exercises if isinstance(exercise, dict)
+                for entry in (exercise.get('setsArray') or exercise.get('sets') or [])
+                if isinstance(entry, dict) and str(entry.get('reps') or '').strip()
+                and str(entry.get('reps')).strip() not in {'0', '0.0'}
+            )
+            has_workout = bool(exercises or str(session.get('block') or '').strip()
+                               or session.get('activity') or gate.get('endedAt'))
+            if not has_workout:
+                continue
+            day_text = str(session.get('date') or session_path.stem.split('__', 1)[0])
+            try:
+                day = datetime.fromisoformat(day_text[:10]).date()
+            except ValueError:
+                continue
+            if day < cutoff:
+                continue
+            finished = parse_timestamp(gate.get('endedAt') or session.get('saved_at'))
+            duration_seconds = None
+            if gate.get('startedAt') and gate.get('endedAt'):
+                started = parse_timestamp(gate.get('startedAt'))
+                if started and finished:
+                    duration_seconds = max(0, int((finished - started).total_seconds()))
+            if duration_seconds is None:
+                try:
+                    duration_minutes = float(session.get('duration'))
+                    if duration_minutes > 0:
+                        duration_seconds = int(duration_minutes * 60)
+                except (TypeError, ValueError):
+                    pass
+            recent.append({
+                'id': f"fitness-session:{session.get('session_id') or session_path.stem}",
+                'sourceType': 'fitness-session',
+                'name': str(session.get('trainingsart') or session.get('block') or 'Fitness-Training'),
+                'started_at': gate.get('startedAt'),
+                'finished_at': gate.get('endedAt') or session.get('saved_at') or day_text,
+                'sessionState': str(gate.get('status') or 'saved'),
+                'routine_id': None,
+                'sourcePlanId': None,
+                'sourcePlanRoutineId': None,
+                'exerciseCount': len(exercises),
+                'completedSetCount': completed_sets if completed_sets else None,
+                'durationSeconds': duration_seconds,
+            })
         recent.sort(key=lambda item: str(item.get('finished_at') or ''), reverse=True)
         return {'workouts': recent[:30], 'available': True, 'reason': None, 'storage': 'local-fitness-runtime'}
 

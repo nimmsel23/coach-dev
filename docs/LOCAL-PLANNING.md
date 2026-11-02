@@ -72,11 +72,14 @@ der Premium-Tracking-Tab offen ist. Die Einstellung liegt im Browser-LocalStorag
 und gilt nur für diesen Klienten und Plan. Tabwechsel, Klientenwechsel oder das
 Ausschalten beenden den Abgleich.
 
-Das **Trainingstagebuch** liest abgeschlossene Einheiten aus derselben Fitness-
-Runtime-Datei und zeigt Name, Datum, Dauer, Übungszahl und abgeschlossene
-Satzanzahl. Coach erhält dafür nur diese Zusammenfassung; Übungs-, Satz- und
-Eventdaten bleiben bei Fitness. Eine fehlende UID-Zuordnung und eine fehlende
-lokale Fitness-Datei werden getrennt als nicht verfügbare Quelle angezeigt.
+Das **Trainingstagebuch** fasst sowohl Plan-Workouts aus `workouts.json` als
+auch gespeicherte Legacy-Sessions aus `sessions/*.json` zusammen. Coach erhält
+nur Datum, Trainingsart, Dauer und Zählwerte; Übungs-, Satz- und Eventdetails
+bleiben bei Fitness. Satzwerte, die in einer Legacy-Session nicht erfasst sind,
+werden nicht als null abgeschlossene Sätze ausgegeben. Eine fehlende UID-Zuordnung
+und eine fehlende lokale Fitness-Quelle werden getrennt angezeigt. Legacy-Sessions
+werden nicht als Planabschluss in Taskwarrior gewertet, da ihnen die belastbare
+Plan- und Routine-Referenz fehlt.
 
 Schreibzugriffe sind atomar und prüfen den Bearbeitungsstand. Ungesicherte
 Editoränderungen bleiben zusätzlich gerätegebunden im Browser. Die API
