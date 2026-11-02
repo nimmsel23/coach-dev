@@ -70,7 +70,6 @@ export default function LocalCoachApp() {
   const notesSequence = useRef(0);
   const taskwarriorSequence = useRef(0);
   const workoutHistorySequence = useRef(0);
-  const taskwarriorAutoSyncInFlight = useRef(false);
   const busyRef = useRef(false);
   const client = clients.find((item) => item.id === clientId);
   const clientPath = `client/${encodeURIComponent(clientId)}`;
@@ -179,8 +178,25 @@ export default function LocalCoachApp() {
   }, [clientId, workspaceTab]);
   useEffect(() => {
     if (!taskwarriorAutoSyncKey) { setTaskwarriorAutoSyncSetting({ key: '', enabled: false }); return; }
-    setTaskwarriorAutoSyncSetting({ key: taskwarriorAutoSyncKey, enabled: localStorage.getItem(taskwarriorAutoSyncKey) === '1' });
-  }, [taskwarriorAutoSyncKey]);
+    let active = true;
+    setTaskwarriorAutoSyncSetting({ key: taskwarriorAutoSyncKey, enabled: false, loading: true });
+    api(`${clientPath}/taskwarrior/automation`)
+      .then((data) => { if (active) setTaskwarriorAutoSyncSetting({ key: taskwarriorAutoSyncKey, enabled: data.enabledPlanIds?.includes(taskwarriorPlanId) === true, loading: false }); })
+      .catch((err) => { if (active) { setTaskwarriorAutoSyncSetting({ key: taskwarriorAutoSyncKey, enabled: false, loading: false }); setError(err.message); } });
+    return () => { active = false; };
+  }, [taskwarriorAutoSyncKey, clientPath, taskwarriorPlanId]);
+  useEffect(() => {
+    if (!clientId || workspaceTab !== 'taskwarrior' || !taskwarriorAutoSyncSetting.enabled || taskwarriorAutoSyncSetting.key !== taskwarriorAutoSyncKey) return undefined;
+    let active = true;
+    const refresh = async () => {
+      try {
+        const data = await api(`${clientPath}/taskwarrior`);
+        if (active) setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
+      } catch (err) { if (active) setError(err.message); }
+    };
+    const timer = window.setInterval(refresh, 60_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [clientId, clientPath, workspaceTab, taskwarriorAutoSyncSetting, taskwarriorAutoSyncKey]);
   async function reload() { setPlans((await api(`${clientPath}/plans`)).plans); }
   async function act(fn) {
     if (busyRef.current) return;
@@ -189,7 +205,7 @@ export default function LocalCoachApp() {
     try { await fn(); } catch (err) { setError(err.message); }
     finally { busyRef.current = false; setBusy(false); }
   }
-  async function syncTaskwarriorPlan(plan, automatic = false) {
+  async function syncTaskwarriorPlan(plan) {
     await act(async () => {
       const result = await api(`${clientPath}/taskwarrior/sync`, 'POST', { planId: plan.id });
       setTaskwarriorReport({
@@ -202,7 +218,7 @@ export default function LocalCoachApp() {
       });
       const data = await api(`${clientPath}/taskwarrior`);
       setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
-      if (!automatic) setNotice(`Trainingsvorkommen abgeglichen; ${result.report?.completed || 0} durch Fitness-Logs erledigt markiert.`);
+      setNotice(`Trainingsvorkommen abgeglichen; ${result.report?.completed || 0} durch Fitness-Logs erledigt markiert.`);
     });
   }
   async function syncTaskwarrior() {
@@ -213,21 +229,6 @@ export default function LocalCoachApp() {
     if (!confirm(`${scheduledCount} Trainingstermine aus „${plan.name}“ mit der lokalen Taskwarrior-Datenbank abgleichen? Bereits in Fitness abgeschlossene Einheiten dieses übergebenen Plans werden dabei automatisch erledigt markiert. Es werden keine Daten an Firebase gesendet.`)) return;
     await syncTaskwarriorPlan(plan);
   }
-  useEffect(() => {
-    if (!clientId || workspaceTab !== 'taskwarrior' || !taskwarriorAutoSyncSetting.enabled || taskwarriorAutoSyncSetting.key !== taskwarriorAutoSyncKey || !taskwarriorPlanId) return undefined;
-    const plan = trackablePlans.find((item) => item.id === taskwarriorPlanId);
-    if (!plan) return undefined;
-    let stopped = false;
-    const reconcile = async () => {
-      if (stopped || taskwarriorAutoSyncInFlight.current) return;
-      taskwarriorAutoSyncInFlight.current = true;
-      try { await syncTaskwarriorPlan(plan, true); }
-      finally { taskwarriorAutoSyncInFlight.current = false; }
-    };
-    reconcile();
-    const timer = window.setInterval(reconcile, 60_000);
-    return () => { stopped = true; window.clearInterval(timer); };
-  }, [clientId, workspaceTab, taskwarriorAutoSyncSetting, taskwarriorAutoSyncKey, taskwarriorPlanId, plans]);
   async function completeTaskwarriorTask(occurrenceKey) {
     await act(async () => {
       await api(`${clientPath}/taskwarrior/complete`, 'POST', { occurrenceKey });
@@ -353,7 +354,7 @@ export default function LocalCoachApp() {
             <div className="grid gap-4 xl:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.2fr)]">
               <section className="h-fit space-y-4 rounded-2xl border border-fit-line bg-fit-card p-5"><div><h4 className="font-semibold">Lokalen Plan verfolgen</h4><p className="mt-1 text-sm text-fit-muted">Erzeugt alle Wochentermine des gewählten Plans bis zum Ende seiner Laufzeit.</p></div>
                 <label className="block text-sm">Plan<select className={`${input} mt-1`} value={taskwarriorPlanId} onChange={(event) => setTaskwarriorPlanId(event.target.value)}><option value="">Plan auswählen…</option>{trackablePlans.map((plan) => <option key={plan.id} value={plan.id}>{plan.published?.name || plan.name} · {plan.published?.totalWeeks || plan.totalWeeks || 10} Wochen</option>)}</select></label>
-                {taskwarriorPlanId && <><p className="text-xs text-fit-muted">{trackedRoutinesCount(taskwarriorPlanId, trackablePlans)} Trainingstage mit festem Wochenrhythmus aus dem freigegebenen Planstand.</p><label className="flex items-start gap-3 rounded-xl border border-fit-line p-3 text-sm"><input type="checkbox" className="mt-1 size-4 accent-fit-accent" checked={taskwarriorAutoSyncSetting.key === taskwarriorAutoSyncKey && taskwarriorAutoSyncSetting.enabled} onChange={(event) => { const enabled = event.target.checked; localStorage.setItem(taskwarriorAutoSyncKey, enabled ? '1' : '0'); setTaskwarriorAutoSyncSetting({ key: taskwarriorAutoSyncKey, enabled }); }} /><span><strong>Fitness-Logs automatisch abgleichen</strong><span className="mt-1 block text-xs text-fit-muted">Beim Öffnen und alle 60 Sekunden, solange dieses Tracking geöffnet ist. Es werden nur dieser Klient und dieser Plan synchronisiert.</span></span></label></>}
+                {taskwarriorPlanId && <><p className="text-xs text-fit-muted">{trackedRoutinesCount(taskwarriorPlanId, trackablePlans)} Trainingstage mit festem Wochenrhythmus aus dem freigegebenen Planstand.</p><label className="flex items-start gap-3 rounded-xl border border-fit-line p-3 text-sm"><input type="checkbox" className="mt-1 size-4 accent-fit-accent" disabled={busy || taskwarriorAutoSyncSetting.loading || taskwarriorAutoSyncSetting.key !== taskwarriorAutoSyncKey} checked={taskwarriorAutoSyncSetting.key === taskwarriorAutoSyncKey && taskwarriorAutoSyncSetting.enabled} onChange={(event) => { const enabled = event.target.checked; act(async () => { const data = await api(`${clientPath}/taskwarrior/automation`, 'PATCH', { planId: taskwarriorPlanId, enabled }); setTaskwarriorAutoSyncSetting({ key: taskwarriorAutoSyncKey, enabled: data.enabled, loading: false }); setNotice(enabled ? 'Lokaler Hintergrundabgleich aktiviert. Der erste Abgleich läuft spätestens in einer Minute.' : 'Lokaler Hintergrundabgleich für diesen Plan beendet.'); }); }} /><span><strong>Fitness-Logs automatisch abgleichen</strong><span className="mt-1 block text-xs text-fit-muted">Der Coach-Server gleicht diesen Klienten und Plan alle 60 Sekunden ab, auch wenn der Browser geschlossen ist. Die Auswahl wird lokal im Klienten-Workspace gespeichert.</span></span></label></>}
                 <button className={`${button} w-full bg-fit-accent text-fit-bg`} disabled={busy || !trackablePlans.length || !taskwarriorPlanId} onClick={syncTaskwarrior}>{busy ? 'Gleicht ab…' : 'In Klienten-Taskwarrior abgleichen'}</button>
                 {!trackablePlans.length && <p className="rounded-xl border border-dashed border-fit-line p-4 text-sm text-fit-muted">Kein lokaler Trainingsplan mit festen Wochentagen. Lege im Planeditor die Trainingstage fest, um Überfälligkeiten berechnen zu können.</p>}
                 {taskwarriorReport?.planId === taskwarriorPlanId && <div role="status" className="space-y-1 text-sm text-fit-muted"><p>Neu {taskwarriorReport.created} · aktualisiert {taskwarriorReport.updated} · abgeschlossen {taskwarriorReport.completed} · entfernt {taskwarriorReport.deleted}</p><p>Fitness-Logquelle: {taskwarriorReport.workoutSourceAvailable ? `vorhanden${taskwarriorReport.workoutSourceUpdatedAt ? ` · aktualisiert ${fmt(taskwarriorReport.workoutSourceUpdatedAt)}` : ''}` : 'lokale workouts.json fehlt'}. {taskwarriorReport.deliveredCurrent ? `${taskwarriorReport.matchedWorkouts} Sessions gehören zur aktuell übergebenen Planversion.` : 'Automatischer Workout-Abgleich wartet auf die Übergabe der aktuellen Planversion.'}</p></div>}

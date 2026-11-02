@@ -400,11 +400,46 @@ def create_router(root=None, deliver=None):
     async def taskwarrior_tasks(client: str, request: Request):
         workspace = await handle(request, store.client, client)
         try:
-            tasks = await asyncio.to_thread(load_taskwarrior_module().workspace_tasks, workspace)
+            from coach_taskwarrior_scheduler import with_taskwarrior_lock
+            tasks = await asyncio.to_thread(with_taskwarrior_lock, load_taskwarrior_module().workspace_tasks, workspace)
             return {'tasks': tasks, 'storage': 'local-client-workspace'}
         except Exception:
             logging.exception('Unable to read client Taskwarrior database')
             raise HTTPException(503, 'Taskwarrior-Datenbank des Klienten nicht lesbar.')
+
+    @router.get('/api/client/{client}/taskwarrior/automation')
+    async def taskwarrior_automation_get(client: str, request: Request):
+        local_only(request)
+        try:
+            workspace = store.client(client)
+        except plans_module.PlanError as error:
+            raise HTTPException(error.status, str(error))
+        from coach_taskwarrior_scheduler import enabled_plan_ids
+        return {'enabledPlanIds': enabled_plan_ids(workspace), 'intervalSeconds': 60, 'storage': 'local-client-workspace'}
+
+    @router.patch('/api/client/{client}/taskwarrior/automation')
+    async def taskwarrior_automation_update(client: str, request: Request):
+        local_only(request)
+        try:
+            workspace = store.client(client)
+            body = await request.json()
+        except plans_module.PlanError as error:
+            raise HTTPException(error.status, str(error))
+        except ValueError:
+            raise HTTPException(400, 'Ungültiges JSON.')
+        plan_id = body.get('planId') if isinstance(body, dict) else None
+        enabled = body.get('enabled') if isinstance(body, dict) else None
+        if not isinstance(plan_id, str) or not plans_module.IDENTIFIER.fullmatch(plan_id):
+            raise HTTPException(400, 'Lokale Plan-ID fehlt.')
+        if type(enabled) is not bool:
+            raise HTTPException(400, 'Automatikstatus muss wahr oder falsch sein.')
+        try:
+            store.get(client, plan_id)
+        except plans_module.PlanError as error:
+            raise HTTPException(error.status, str(error))
+        from coach_taskwarrior_scheduler import enabled_plan_ids, set_plan_enabled
+        ids = set_plan_enabled(workspace, plan_id, enabled)
+        return {'enabledPlanIds': ids, 'enabled': plan_id in ids, 'intervalSeconds': 60, 'storage': 'local-client-workspace'}
 
     @router.post('/api/client/{client}/taskwarrior/sync')
     async def taskwarrior_sync(client: str, request: Request):
@@ -436,7 +471,8 @@ def create_router(root=None, deliver=None):
             if not isinstance(workouts, list):
                 raise HTTPException(503, 'Lokale Fitness-Workoutdaten sind ungültig.')
             workout_source_updated_at = datetime.fromtimestamp(workout_path.stat().st_mtime).astimezone().isoformat() if workouts_available else None
-            report = await asyncio.to_thread(load_taskwarrior_module().sync_workspace_plan, workspace, plan, None, workouts)
+            from coach_taskwarrior_scheduler import with_taskwarrior_lock
+            report = await asyncio.to_thread(with_taskwarrior_lock, load_taskwarrior_module().sync_workspace_plan, workspace, plan, None, workouts)
             delivery = plan.get('delivery') if isinstance(plan.get('delivery'), dict) else {}
             delivered_current = delivery.get('localVersion') == plan.get('headVersion')
             remote_plan_id = delivery.get('remotePlanId')
@@ -473,7 +509,8 @@ def create_router(root=None, deliver=None):
         if not isinstance(key, str) or len(key) > 300:
             raise HTTPException(400, 'Plan-Vorkommen fehlt.')
         try:
-            found = await asyncio.to_thread(load_taskwarrior_module().complete_workspace_occurrence, workspace, key)
+            from coach_taskwarrior_scheduler import with_taskwarrior_lock
+            found = await asyncio.to_thread(with_taskwarrior_lock, load_taskwarrior_module().complete_workspace_occurrence, workspace, key)
             if not found:
                 raise HTTPException(404, 'Taskwarrior-Aufgabe nicht gefunden.')
             return {'ok': True, 'storage': 'local-client-workspace'}

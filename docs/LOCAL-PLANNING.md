@@ -65,12 +65,13 @@ Logdatei oder wurde die aktuelle Planversion noch nicht übergeben, zeigt die
 Konsole das an; Tasks können weiterhin manuell als erledigt markiert werden.
 
 Tasks bleiben in `<client>/tw-data/` und werden weder in Firestore noch in die
-Fitness-Logdatei zurückgeschrieben. Das ist eine explizite lokale Synchronisierung
-und standardmäßig kein Hintergrunddienst. Für einen Plan kann der Coach einen
-lokalen Auto-Abgleich einschalten: beim Öffnen und dann alle 60 Sekunden, solange
-der Premium-Tracking-Tab offen ist. Die Einstellung liegt im Browser-LocalStorage
-und gilt nur für diesen Klienten und Plan. Tabwechsel, Klientenwechsel oder das
-Ausschalten beenden den Abgleich.
+Fitness-Logdatei zurückgeschrieben. Der Auto-Abgleich ist standardmäßig aus und
+kann explizit pro Klient und Plan aktiviert werden. Die Auswahl liegt unter
+`<client>/coach/taskwarrior-auto-sync.json`; der lokale Coach-Server gleicht
+aktivierte Paare alle 60 Sekunden ab, auch wenn der Browser geschlossen ist.
+Mehrere aktuelle Coach-Prozesse serialisieren Taskwarrior-Zugriffe über einen
+gemeinsamen lokalen Lock. Das Abschalten eines Plans beendet dessen künftige
+Abgleiche; vorhandene Tasks bleiben bearbeitbar in `tw-data/`.
 
 Das **Trainingstagebuch** fasst sowohl Plan-Workouts aus `workouts.json` als
 auch gespeicherte Legacy-Sessions aus `sessions/*.json` zusammen. Coach erhält

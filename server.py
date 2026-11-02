@@ -105,7 +105,18 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def lifespan(app):
         async with httpx.AsyncClient(timeout=60, follow_redirects=False, trust_env=False, transport=transport) as client:
             app.state.api_client = client
-            yield
+            stop_scheduler = asyncio.Event()
+            scheduler_task = None
+            if os.environ.get('COACH_TASKWARRIOR_SCHEDULER', '1').casefold() not in {'0', 'false', 'off'}:
+                from coach_taskwarrior_scheduler import run_scheduler
+                interval = int(os.environ.get('COACH_TASKWARRIOR_SYNC_INTERVAL_SECONDS', '60'))
+                scheduler_task = asyncio.create_task(run_scheduler(stop_scheduler, interval))
+            try:
+                yield
+            finally:
+                stop_scheduler.set()
+                if scheduler_task:
+                    await scheduler_task
 
     app = FastAPI(title="Coach backend", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 
