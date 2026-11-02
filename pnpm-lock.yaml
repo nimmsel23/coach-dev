@@ -157,8 +157,8 @@ importers:
         specifier: ^14.5.0
         version: 14.5.0(@firebase/app-compat@0.5.20)(@firebase/app@0.16.4)
       fit-file-parser:
-        specifier: ^5.2.1
-        version: 5.2.1
+        specifier: ^6.2.3
+        version: 6.2.3
       hono:
         specifier: ^4.13.14
         version: 4.13.14
@@ -2317,8 +2317,8 @@ packages:
   firebase@13.1.0:
     resolution: {integrity: sha512-II/6P63vYzWdS6gTM9+OaMZD6XaCHJdI/9OVa8Z+bEs18t3CR2JlSwCI12KYMramNqTkywJocjSpGePaVPng+A==}
 
-  fit-file-parser@5.2.1:
-    resolution: {integrity: sha512-7KBHcY9I6GmfpYDq4iL/ESxmMSl5da4MOWBKKXYIZwsK5TLgX7hNAce2O/5ZzHKdSEL58hfDhuEnraXndoWEbQ==}
+  fit-file-parser@6.2.3:
+    resolution: {integrity: sha512-Vl43P72udKT7Fvmwg18TwOyztK/GbN9kfKsO1FPKrc4tmFpY6oHHQkqtfg7vzYPZjz/a7Ok7wF6zCPJ39+TLgw==}
 
   flat-cache@4.0.1:
     resolution: {integrity: sha512-f7ccFPK3SXFHpx15UIGyRJ/FJQctuKZ0zVuN3frBo4HnK3cay9VEW0R6yPYFHC0AgqhukPzKjq22t5DmAyqGyw==}
@@ -6250,7 +6250,7 @@ snapshots:
     transitivePeerDependencies:
       - '@react-native-async-storage/async-storage'
 
-  fit-file-parser@5.2.1:
+  fit-file-parser@6.2.3:
     dependencies:
       buffer: 6.0.3
 

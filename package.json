@@ -94,7 +94,7 @@
     "eventemitter3": "^5.0.4",
     "firebase": "^13.1.0",
     "firebase-admin": "^14.5.0",
-    "fit-file-parser": "^5.2.1",
+    "fit-file-parser": "^6.2.3",
     "hono": "^4.13.14",
     "idb": "^8.0.4",
     "ieee754": "1.2.1",
