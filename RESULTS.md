@@ -1636,3 +1636,11 @@ keine echten Klientenpläne freigegeben oder versendet.
 Alte ClientForge-Oberfläche an den ID-Routen eingebunden; Assets isoliert, bestehende klienten-python-Handler wiederverwendet und auf lokale, gültige Klienten begrenzt. API- und Gateway-Abschlussprüfung: 15 Tests bestanden; alter UI-Build erfolgreich.
 
 Live-Abnahme: `/<id>/` und `/k/<id>/` HTTP 200, UI-Assets 200, native Plan- und alte Habit-/Fuel-APIs 200. Echter Browser öffnet Matthias Mayer direkt und lädt das eingebettete Planstudio. Keine realen Pläne verändert oder versendet.
+
+# 2026-11-02 — Lokaler Coach-Einstieg als Konsole
+
+Auf Loopback öffnet die Coach-Startseite jetzt den lokalen Klienten- und
+Planungsarbeitsplatz; gehostete Ursprünge behalten den angemeldeten Cloud-Coach.
+Der lokale Kopfbereich bietet einen direkten Wechsel zum Cloud-Coach. Aus einer
+ausgewählten Klientenplanung führt ein Link in die vorhandene Klientenakte.
+Speichern und App-Übergabe behalten ihre getrennten lokalen Abläufe.
