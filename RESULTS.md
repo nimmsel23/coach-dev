@@ -1644,3 +1644,10 @@ Planungsarbeitsplatz; gehostete Ursprünge behalten den angemeldeten Cloud-Coach
 Der lokale Kopfbereich bietet einen direkten Wechsel zum Cloud-Coach. Aus einer
 ausgewählten Klientenplanung führt ein Link in die vorhandene Klientenakte.
 Speichern und App-Übergabe behalten ihre getrennten lokalen Abläufe.
+
+## 2026-11-02 — Lokaler Klientenüberblick
+
+Die Startansicht der lokalen Planung zeigt für jeden vorhandenen Klienten
+Plananzahl und Trainingseinträge der letzten 28 Tage, dazu direkte Aktionen für
+Trainingsplanung und Klientenakte. Summen werden live über die vorhandenen
+Klienten-APIs geladen und nicht dupliziert gespeichert.

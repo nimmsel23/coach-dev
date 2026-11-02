@@ -29,6 +29,8 @@ export default function LocalCoachApp() {
   const [clientId, setClientId] = useState(() => entry.get('client') || '');
   const [query, setQuery] = useState('');
   const [plans, setPlans] = useState([]);
+  const [clientSummaries, setClientSummaries] = useState([]);
+  const [summariesLoading, setSummariesLoading] = useState(false);
   const [viewing, setViewing] = useState(null);
   const [editing, setEditing] = useState(null);
   const [name, setName] = useState('');
@@ -41,15 +43,40 @@ export default function LocalCoachApp() {
   const [releasing, setReleasing] = useState(null);
   const [message, setMessage] = useState('');
   const sequence = useRef(0);
+  const summarySequence = useRef(0);
   const client = clients.find((item) => item.id === clientId);
   const clientPath = `client/${encodeURIComponent(clientId)}`;
   const planPath = (id) => `${clientPath}/plans/${encodeURIComponent(id)}`;
 
   async function loadClients() {
     setLoading(true); setError('');
-    try { const data = await api('clients'); setClients(data.clients); }
+    try {
+      const data = await api('clients');
+      const list = [...data.clients].sort((a, b) => a.name.localeCompare(b.name, 'de'));
+      setClients(list);
+      const request = ++summarySequence.current;
+      setSummariesLoading(true);
+      const summaries = await Promise.all(list.map(async (item) => {
+        const client = `client/${encodeURIComponent(item.id)}`;
+        const [plansResult, workoutsResult] = await Promise.allSettled([
+          api(`${client}/plans`),
+          api(`${client}/workout/logs?days=28`),
+        ]);
+        const workouts = workoutsResult.status === 'fulfilled' && Array.isArray(workoutsResult.value.workouts)
+          ? workoutsResult.value.workouts
+          : [];
+        const lastWorkoutAt = workouts.map((workout) => workout.date || workout.id).filter(Boolean).sort().at(-1) || '';
+        return {
+          id: item.id,
+          plansCount: plansResult.status === 'fulfilled' ? plansResult.value.plans.length : null,
+          workoutsCount: workoutsResult.status === 'fulfilled' ? workouts.length : null,
+          lastWorkoutAt,
+        };
+      }));
+      if (request === summarySequence.current) setClientSummaries(summaries);
+    }
     catch (err) { setError(err.message); }
-    finally { setLoading(false); }
+    finally { setLoading(false); setSummariesLoading(false); }
   }
   useEffect(() => { loadClients(); }, []);
   useEffect(() => {
@@ -92,7 +119,26 @@ export default function LocalCoachApp() {
       <main className="min-w-0 space-y-5">
         {error && <div role="alert" className="rounded-xl border border-fit-red/40 bg-fit-card p-4 text-sm text-fit-red">{error}<button className="ml-3 underline" disabled={busy || !!editing} onClick={() => clientId ? act(reload) : loadClients()}>Erneut versuchen</button></div>}
         {notice && <p role="status" className="rounded-xl border border-fit-accent/30 bg-fit-accent/10 p-4 text-sm">{notice}</p>}
-        {!client && <section className="rounded-2xl border border-fit-line bg-fit-card p-8"><FolderOpen className="mb-4 text-fit-accent" size={30} /><h2 className="text-xl font-semibold">Willkommen in deiner Coach-Konsole</h2><p className="mt-3 max-w-lg text-sm leading-relaxed text-fit-muted">Wähle links einen Klienten für seine Trainingsplanung. Die Klientenakte öffnet die bestehende lokale Verwaltung. Entwürfe und Versionen bleiben auf deinem Laptop; eine Übergabe an die App startest du ausdrücklich.</p>{loading && <p role="status" className="mt-4 text-sm">Klienten werden geladen…</p>}</section>}
+        {!client && <section className="space-y-5">
+          <header className="rounded-2xl border border-fit-line bg-fit-card p-6 sm:p-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-fit-muted">Deine lokale Übersicht</p><h2 className="mt-1 text-2xl font-semibold">Klientenarbeitsplatz</h2><p className="mt-2 max-w-xl text-sm leading-relaxed text-fit-muted">Öffne die Trainingsplanung oder springe direkt in die bestehende Klientenakte. Die Aktivität bezieht sich auf die letzten 28 Tage.</p></div><button className={button} disabled={loading || summariesLoading} onClick={loadClients}><RefreshCw size={15} className="mr-2 inline" /> Übersicht aktualisieren</button></div>
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Klienten</p><p className="mt-1 text-2xl font-semibold">{clients.length}</p></div>
+              <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">App-Zuordnung</p><p className="mt-1 text-2xl font-semibold">{clients.filter((item) => item.canDeliver).length}</p></div>
+              <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Trainingseinträge · 28 Tage</p><p className="mt-1 text-2xl font-semibold">{clientSummaries.reduce((total, item) => total + (item.workoutsCount || 0), 0)}</p></div>
+              <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Ohne Eintrag · 28 Tage</p><p className="mt-1 text-2xl font-semibold">{clientSummaries.filter((item) => item.workoutsCount === 0).length}</p></div>
+            </div>
+          </header>
+          {loading && <p role="status" className="text-sm text-fit-muted">Klienten werden geladen…</p>}
+          {!loading && !clients.length && <div className="rounded-2xl border border-dashed border-fit-line p-8 text-sm text-fit-muted">Die bestehende Klientenverwaltung enthält noch keine Klienten.</div>}
+          <div className="grid gap-3 xl:grid-cols-2">{clients.map((item) => {
+            const summary = clientSummaries.find((candidate) => candidate.id === item.id);
+            return <article key={item.id} className="rounded-2xl border border-fit-line bg-fit-card p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="text-lg font-semibold">{item.name}</h3><p className="mt-1 text-xs text-fit-muted">{item.status || 'Aktiver Klient'} · {item.canDeliver ? 'App zugeordnet' : 'Lokale Betreuung'}</p></div><a className={button} href={`/${encodeURIComponent(item.id)}/`}>Klientenakte öffnen</a></div>
+              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span></div>
+              <button className={`${button} mt-4 bg-fit-accent text-fit-bg`} onClick={() => setClientId(item.id)}>Trainingsplanung öffnen</button>
+            </article>;
+          })}</div>
+        </section>}
         {client && <><header className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-fit-accent">Trainingsplanung</p><h2 className="mt-1 text-2xl font-semibold">{client.name}</h2></div><a className={button} href={`/${encodeURIComponent(clientId)}/`}>Klientenakte öffnen</a></header>
           {viewing ? <section className="space-y-4"><div className="flex flex-wrap items-center gap-2"><button className={button} onClick={() => setViewing(null)}><ArrowLeft size={15} className="mr-1 inline" /> Alle Pläne</button><button className={button} onClick={() => { setEditing(viewing); setViewing(null); }}>Plan bearbeiten</button></div><PlanDocument plan={viewing} clientName={client.name} /></section> : editing ? <PlanEditor key={`${clientId}:${editing.id}`} plan={editing} clientName={client.name} uid={clientId} actorUid="local-coach" draftNamespace="laptop" catalogSearch={searchCatalog} templates={[]} saveDraft={(draft) => api(planPath(editing.id), 'PUT', draft)} onClose={returnToPlans} onSaved={async () => { setEditing(null); setNotice('Entwurf lokal gesichert. Noch nicht an den Klienten gesendet.'); await reload(); }} /> : <>
             <section className="rounded-2xl border border-fit-line bg-fit-card p-4 sm:p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="flex items-center gap-2 font-semibold"><ClipboardList size={19} /> Trainingspläne</h3><p className="mt-1 text-sm text-fit-muted">Erstellen → lokal sichern → Version freigeben → übergeben</p></div><button className={`${button} bg-fit-accent text-fit-bg`} disabled={busy} onClick={() => setCreating(!creating)}><Plus size={15} className="mr-1 inline" /> Neuen Plan schmieden</button></div>

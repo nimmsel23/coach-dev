@@ -7,6 +7,11 @@ The Python HTTP boundary delegates storage to modules/plan/runtime/local_plans.p
 Released snapshots and working drafts stay separate. Explicit delivery delegates
 to Plan's transactional publisher using the existing Coach credential loader.
 
+When no client is selected, the workspace shows a local office overview. It
+loads each client's plan count and 28-day workout summary from the existing
+client-scoped Coach APIs. It stores no summary copy; opening the plan workspace
+or the existing client record continues to use the respective owner.
+
 Plan ansehen opens the shared PlanDocument from the pinned Plan source, separate
 from form editing. It shows responsive exercise tables/cards and A4 sheets; long
 source notes are disclosures. No plan data changes when opening or printing.
