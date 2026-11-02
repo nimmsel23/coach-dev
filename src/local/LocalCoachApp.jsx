@@ -80,11 +80,11 @@ export default function LocalCoachApp() {
         const workouts = workoutsResult.status === 'fulfilled' && Array.isArray(workoutsResult.value.workouts)
           ? workoutsResult.value.workouts
           : [];
-        const lastWorkoutAt = workouts.map((workout) => workout.date || workout.id).filter(Boolean).sort().at(-1) || '';
+        const lastWorkoutAt = workouts.map((workout) => workout.finished_at || workout.date || workout.id).filter(Boolean).sort().at(-1) || '';
         return {
           id: item.id,
           plansCount: plansResult.status === 'fulfilled' ? plansResult.value.plans.length : null,
-          workoutsCount: workoutsResult.status === 'fulfilled' ? workouts.length : null,
+          workoutsCount: workoutsResult.status === 'fulfilled' && workoutsResult.value.available !== false ? workouts.length : null,
           lastWorkoutAt,
         };
       }));

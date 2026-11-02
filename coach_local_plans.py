@@ -6,6 +6,7 @@ import importlib.util
 import json
 import os
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit
 from fastapi import APIRouter, HTTPException, Request
@@ -27,6 +28,11 @@ def load_taskwarrior_module():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def fitness_runtime_root():
+    """Return the existing local Fitness mirror without importing Fitness services."""
+    return Path(os.getenv('FITNESS_AGENT_HOME', str(Path.home() / '.aos/fitness'))).expanduser()
 
 # Modules are loaded from the pinned submodule, never the sibling development source.
 plans_module = load_plan_module('local_plans')
@@ -125,6 +131,43 @@ def create_router(root=None, deliver=None):
     @router.get('/api/client/{client}/plans')
     async def listing(client: str, request: Request):
         return {'plans': await handle(request, store.list, client)}
+
+    @router.get('/api/client/{client}/workout/logs')
+    async def workout_logs(client: str, request: Request):
+        """Read the existing local Fitness mirror for a registered client UID.
+
+        The client workspace remains the identity source; workout records stay
+        in Fitness runtime and are never copied into the private Coach workspace.
+        """
+        workspace = await handle(request, store.client, client)
+        profile = plans_module.read(workspace / 'client.json') or {}
+        uids = list(profile.get('firebase_uids') or [])
+        if profile.get('firebase_uid') and profile['firebase_uid'] not in uids:
+            uids.insert(0, profile['firebase_uid'])
+        uid = next((value for value in uids if isinstance(value, str) and value.strip()), None)
+        if not uid:
+            return {'workouts': [], 'available': False, 'storage': 'local-fitness-runtime'}
+        try:
+            days = max(1, min(3650, int(request.query_params.get('days', '28'))))
+        except ValueError:
+            raise HTTPException(400, 'Ungültiger Zeitraum.')
+        path = fitness_runtime_root() / 'users' / uid / 'workouts.json'
+        workouts = plans_module.read(path) if path.is_file() else []
+        if not isinstance(workouts, list):
+            raise HTTPException(503, 'Lokale Fitness-Workoutdaten sind ungültig.')
+        cutoff = datetime.now().astimezone().date() - timedelta(days=days - 1)
+        recent = []
+        for workout in workouts:
+            if not isinstance(workout, dict) or not workout.get('finished_at'):
+                continue
+            try:
+                day = datetime.fromisoformat(str(workout['finished_at']).replace('Z', '+00:00')).astimezone().date()
+            except ValueError:
+                continue
+            if day >= cutoff:
+                recent.append(workout)
+        recent.sort(key=lambda item: str(item.get('finished_at') or ''), reverse=True)
+        return {'workouts': recent, 'available': True, 'storage': 'local-fitness-runtime'}
 
     @router.get('/api/client/{client}/taskwarrior')
     async def taskwarrior_tasks(client: str, request: Request):
