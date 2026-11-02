@@ -1,6 +1,6 @@
 # Coach repository
 
-Coach is the standalone coach-facing product on `dev`. The `vitalos/` submodule is retained historical integration context, not a Coach build or Hosting dependency. See `docs/COACH-ARCHITECTURE.md` for checkout and release instructions. Do not add Coach beneath VitalOS or restore the former `vitalos/coach-app` release path.
+Coach is the standalone coach-facing product on `dev`. The `vitalos/` submodule is a local checkout used only as historical context and, where needed, for Git merges. It is not a Coach build or Hosting dependency. Do not directly edit files inside this checkout; make changes in their owning source repository and bring them in through the intended Git merge. See `docs/COACH-ARCHITECTURE.md` for checkout and release instructions. Do not add Coach beneath VitalOS or restore the former `vitalos/coach-app` release path.
 
 Use pnpm. Commit scoped completed changes; do not push unless explicitly requested. Do not update the historical VitalOS gitlink as a prerequisite for Coach releases. Preserve unrelated changes.
 
