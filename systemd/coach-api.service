@@ -1,7 +1,6 @@
 [Unit]
-Description=Coach backend (Fitness, Fuel, Relax) :9150
-After=network.target coach-relax.service
-Wants=coach-relax.service
+Description=Coach backend (Fitness, Fuel, embedded Relax) :9150
+After=network.target
 
 [Service]
 Type=simple

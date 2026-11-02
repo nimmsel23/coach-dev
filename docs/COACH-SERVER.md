@@ -10,11 +10,11 @@ Coach dispatches to existing domain workers. Domain implementations, databases, 
 | --- | --- | --- |
 | `/api/fitness/*` or `/fitness-api/*` | Fitness preview API `127.0.0.1:8100` | `/api/fitness/fitness/inbox` → `/fitness/inbox` |
 | `/api/fuel/*` or `/fuel-api/*` | VitalOS unified API `127.0.0.1:8000/api/fuel` | `/api/fuel/nutrition` → `/api/fuel/nutrition` |
-| `/api/relax/*` or `/relax-api/*` | Relax worker `127.0.0.1:9123` | `/api/relax/techniques` → `/techniques` |
+| `/api/relax/*` or `/relax-api/*` | Relax FastAPI mounted in-process | `/relax-api/techniques` → Relax route |
 
 The Fitness worker is currently the existing staging instance; Coach does not claim that it is a dedicated production worker. Existing root Fitness APIs (`/fitness`, `/exercise`, `/session`, `/workouts`, `/api/workouts`, etc.) are forwarded unchanged for compatibility. Domain routes are registered first so Fuel/Relax requests never fall into that legacy Fitness dispatcher.
 
-`/health` and `/_coach/health` report Coach liveness and build availability. `/_coach/backends` checks all configured workers and reports readiness separately per domain. `/api/fitness/health`, `/api/fuel/health` and `/api/relax/health` return the respective worker's original response. An unavailable domain returns 502 without taking down the other domains or static UI.
+`/health` and `/_coach/health` report Coach liveness and build availability. `/_coach/backends` checks all configured workers and reports readiness separately per domain. `/api/fitness/health` and `/api/fuel/health` return their workers’ original responses; Relax is served in-process at `/relax-api/health`. An unavailable domain returns 502 without taking down the other domains or static UI.
 
 ## Start and manage
 
@@ -35,7 +35,7 @@ bin/coach-server logs
 bin/coach-server restart
 ```
 
-The installer links the project-owned units into the user systemd directory and enables `coach-api.service`. It starts the existing Relax Node implementation via `coach-relax.service`. Fitness preview (`8100`) and Fuel's unified VitalOS API (`8000`) are separate services and are not restarted by Coach. The inactive old `fitness-api.service` unit is archived locally under `.worktrees/legacy-services`; its unit name becomes an alias for `coach-api.service`, preventing a second server from claiming `9150`. Stopping/restarting Coach also stops/restarts its Relax worker. The unit defaults to loopback and optionally reads `~/.config/coach/backend.env`.
+The installer links the project-owned units into the user systemd directory and enables `coach-api.service`. Relax is loaded from `~/dev/relax-dev/server.py` into the Coach process, so no Relax worker is started. Fitness preview (`8100`) and Fuel's unified VitalOS API (`8000`) remain separate services and are not restarted by Coach. The inactive old `fitness-api.service` unit is archived locally under `.worktrees/legacy-services`; its unit name becomes an alias for `coach-api.service`, preventing a second server from claiming `9150`. Stopping/restarting Coach also takes its in-process Relax routes offline. The unit defaults to loopback and optionally reads `~/.config/coach/backend.env`.
 
 ## Add a domain or change workers
 
