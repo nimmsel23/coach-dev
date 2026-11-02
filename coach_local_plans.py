@@ -181,6 +181,8 @@ def create_router(root=None, deliver=None):
         if not isinstance(body, dict) or type(body.get('included')) is not bool:
             raise HTTPException(400, 'Coach-Auswahl fehlt.')
         role = body.get('role')
+        if role is not None and role not in ('friend', 'client'):
+            raise HTTPException(400, 'Rolle muss Freund oder Klient sein.')
         if body['included'] and role not in ('friend', 'client'):
             raise HTTPException(400, 'Rolle muss Freund oder Klient sein.')
         try:
@@ -214,12 +216,14 @@ def create_router(root=None, deliver=None):
         if matches:
             client_id, profile_path, profile = matches[0]
             existing_role = profile.get('role') or ('contact' if profile.get('status') in {'freund', 'interessent', 'lead', 'kontakt'} else 'client')
-            if existing_role not in {'client', 'contact'} and body['included']:
+            if existing_role not in {'client', 'contact'}:
                 raise HTTPException(409, 'Coach-Konten können nicht als Klienten aufgenommen werden.')
+            selected_role = ('contact' if role == 'friend' else 'client') if role else existing_role
             profile['coach_visible'] = body['included']
+            profile['role'] = selected_role
             profile['updated_at'] = plans_module.now()
             plans_module.atomic(profile_path, profile)
-            return {'ok': True, 'uid': uid, 'clientId': client_id, 'included': body['included'], 'role': existing_role}
+            return {'ok': True, 'uid': uid, 'clientId': client_id, 'included': body['included'], 'role': selected_role}
         if not body['included']:
             return {'ok': True, 'uid': uid, 'clientId': None, 'included': False}
 

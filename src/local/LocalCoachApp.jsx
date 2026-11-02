@@ -117,13 +117,23 @@ export default function LocalCoachApp() {
   }
   async function updateFirebaseMembership(user) {
     const included = !user.coachVisible;
-    const role = firebaseUserRoles[user.uid] || 'friend';
+    const role = user.knownClient ? (user.role === 'contact' ? 'friend' : 'client') : firebaseUserRoles[user.uid] || 'friend';
     if (included && !user.knownClient && !confirm(`Einen lokalen Workspace für ${user.displayName || user.email || user.uid} als ${role === 'friend' ? 'Freund' : 'Klient'} anlegen? Das verändert nur ~/.local/Klienten; Freund-Workspaces erhalten keinen Praxis-Klientendatensatz. Firebase wird nicht verändert.`)) return;
     setSavingFirebaseUid(user.uid); setError(''); setNotice('');
     try {
       await api(`coach/local/users/${encodeURIComponent(user.uid)}/membership`, 'PATCH', { included, role });
       await Promise.all([loadClients(), loadFirebaseUsers()]);
       setNotice(included ? `${user.displayName || user.uid} ist jetzt in deiner Coach-Liste.` : `${user.displayName || user.uid} ist aus der Coach-Liste ausgeblendet. Workspace und Daten bleiben erhalten.`);
+    } catch (err) { setError(err.message); }
+    finally { setSavingFirebaseUid(''); }
+  }
+  async function saveFirebaseRole(user) {
+    const role = firebaseUserRoles[user.uid] || (user.role === 'contact' ? 'friend' : 'client');
+    setSavingFirebaseUid(user.uid); setError(''); setNotice('');
+    try {
+      await api(`coach/local/users/${encodeURIComponent(user.uid)}/membership`, 'PATCH', { included: user.coachVisible, role });
+      await Promise.all([loadClients(), loadFirebaseUsers()]);
+      setNotice(`${user.displayName || user.uid} ist jetzt als ${role === 'friend' ? 'Freund' : 'Klient'} eingeordnet.`);
     } catch (err) { setError(err.message); }
     finally { setSavingFirebaseUid(''); }
   }
@@ -285,16 +295,17 @@ export default function LocalCoachApp() {
         {error && <div role="alert" className="rounded-xl border border-fit-red/40 bg-fit-card p-4 text-sm text-fit-red">{error}<button className="ml-3 underline" disabled={busy || !!editing} onClick={() => clientId ? act(reload) : loadClients()}>Erneut versuchen</button></div>}
         {notice && <p role="status" className="rounded-xl border border-fit-accent/30 bg-fit-accent/10 p-4 text-sm">{notice}</p>}
         {rosterOpen && <section className="space-y-5">
-          <header className="rounded-2xl border border-fit-line bg-fit-card p-6"><p className="text-sm text-fit-muted">Lokale Sichtbarkeit verwalten</p><h2 className="mt-1 text-2xl font-semibold">Nutzer für die Coach-Liste</h2><p className="mt-2 max-w-3xl text-sm leading-relaxed text-fit-muted">Firebase-Konten werden nur hier lokal angezeigt. Ein Freund erhält einen privaten Klienten-Workspace ohne Praxis-Klientendatensatz; ein Klient wird über die vorhandene Klientenverwaltung angelegt. Ausblenden entfernt nichts und löscht keine Daten.</p><div className="mt-4 flex flex-wrap gap-3"><button className={button} onClick={() => { setRosterOpen(false); setClientId(''); }}>Zur Coach-Übersicht</button><button className={button} disabled={firebaseUsersLoading} onClick={loadFirebaseUsers}><RefreshCw size={15} className="mr-2 inline" /> Aktualisieren</button></div></header>
+          <header className="rounded-2xl border border-fit-line bg-fit-card p-6"><p className="text-sm text-fit-muted">Lokale Sichtbarkeit verwalten</p><h2 className="mt-1 text-2xl font-semibold">Nutzer für die Coach-Liste</h2><p className="mt-2 max-w-3xl text-sm leading-relaxed text-fit-muted">Firebase-Konten werden nur hier lokal angezeigt. Rolle (Freund oder Klient) und Sichtbarkeit lassen sich unabhängig ändern; die Rolle ist eine Coach-Kategorisierung und kein Zahlungsstatus. Neue Freund-Workspaces bleiben privat ohne Praxis-Klientendatensatz; neue Klienten werden über die vorhandene Klientenverwaltung angelegt. Ausblenden entfernt nichts und löscht keine Daten.</p><div className="mt-4 flex flex-wrap gap-3"><button className={button} onClick={() => { setRosterOpen(false); setClientId(''); }}>Zur Coach-Übersicht</button><button className={button} disabled={firebaseUsersLoading} onClick={loadFirebaseUsers}><RefreshCw size={15} className="mr-2 inline" /> Aktualisieren</button></div></header>
           <input aria-label="Firebase-Nutzer suchen" placeholder="Name oder E-Mail suchen…" value={firebaseUserSearch} onChange={(event) => setFirebaseUserSearch(event.target.value)} className={input} />
           {firebaseUsersLoading && <p role="status" className="text-sm text-fit-muted">Firebase-Nutzer werden geladen…</p>}
           {!firebaseUsersLoading && !firebaseUsers.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Keine Firebase-Nutzer geladen. Prüfe die lokale Firebase-Admin-Konfiguration und lade erneut.</p>}
           <div className="space-y-3">{filteredFirebaseUsers.map((user) => {
-            const role = user.role || firebaseUserRoles[user.uid] || 'friend';
+            const role = firebaseUserRoles[user.uid] || (user.role === 'client' ? 'client' : 'friend');
+            const savedRole = user.role === 'client' ? 'client' : user.role === 'contact' ? 'friend' : null;
             const saving = savingFirebaseUid === user.uid;
             return <article key={user.uid} className="flex flex-col gap-4 rounded-2xl border border-fit-line bg-fit-card p-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0"><h3 className="font-semibold">{user.displayName || user.email || `Firebase ${user.uid.slice(0, 8)}`}</h3><p className="mt-1 truncate text-xs text-fit-muted">{user.email || 'Keine E-Mail'}{user.clientId ? ` · ${user.clientId}` : ''}</p><p className="mt-1 text-xs text-fit-muted">{user.duplicateProfiles ? 'Mehrere lokale Workspaces mit dieser UID — manuelle Klärung nötig.' : user.selectable === false ? `${user.role || 'Admin'}-Konto · bleibt aus der Klientenliste ausgeschlossen` : user.coachVisible ? `In Coach-Liste · ${user.role === 'contact' ? 'Freund / Kontakt' : 'Klient'}` : user.knownClient ? 'Workspace vorhanden · ausgeblendet' : 'Noch kein lokaler Klienten-Workspace'}</p></div>
-              {user.selectable === false || user.duplicateProfiles ? null : <div className="flex flex-wrap items-center gap-2 sm:justify-end">{!user.knownClient && <label className="text-xs text-fit-muted">Aufnehmen als<select aria-label={`${user.displayName || user.email || user.uid}: Rolle`} className="ml-2 min-h-[44px] rounded-xl border border-fit-line bg-fit-bg px-3 text-sm text-fit-ink" value={firebaseUserRoles[user.uid] || 'friend'} onChange={(event) => setFirebaseUserRoles((current) => ({ ...current, [user.uid]: event.target.value }))}><option value="friend">Freund</option><option value="client">Klient</option></select></label>}<button className={`${button} ${user.coachVisible ? 'text-fit-red' : 'bg-fit-accent text-fit-bg'}`} disabled={!!savingFirebaseUid || busy} onClick={() => updateFirebaseMembership(user)}>{saving ? 'Speichere…' : user.coachVisible ? 'Aus Coach-Liste nehmen' : user.knownClient ? 'Wieder aufnehmen' : `Als ${role === 'client' ? 'Klient' : 'Freund'} aufnehmen`}</button></div>}
+              {user.selectable === false || user.duplicateProfiles ? null : <div className="flex flex-wrap items-center gap-2 sm:justify-end"><label className="text-xs text-fit-muted">{user.knownClient ? 'Coach-Rolle' : 'Aufnehmen als'}<select aria-label={`${user.displayName || user.email || user.uid}: Rolle`} className="ml-2 min-h-[44px] rounded-xl border border-fit-line bg-fit-bg px-3 text-sm text-fit-ink" value={role} onChange={(event) => setFirebaseUserRoles((current) => ({ ...current, [user.uid]: event.target.value }))}><option value="friend">Freund</option><option value="client">Klient</option></select></label>{user.knownClient && savedRole && role !== savedRole && <button className={button} disabled={!!savingFirebaseUid || busy} onClick={() => saveFirebaseRole(user)}>{saving ? 'Speichere…' : 'Rolle speichern'}</button>}<button className={`${button} ${user.coachVisible ? 'text-fit-red' : 'bg-fit-accent text-fit-bg'}`} disabled={!!savingFirebaseUid || busy} onClick={() => updateFirebaseMembership(user)}>{saving ? 'Speichere…' : user.coachVisible ? 'Aus Coach-Liste nehmen' : user.knownClient ? 'Wieder aufnehmen' : `Als ${role === 'client' ? 'Klient' : 'Freund'} aufnehmen`}</button></div>}
             </article>;
           })}</div>
           {!firebaseUsersLoading && firebaseUsers.length > 0 && !filteredFirebaseUsers.length && <p className="text-sm text-fit-muted">Keine Nutzer passen zur Suche.</p>}
