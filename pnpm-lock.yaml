@@ -68,13 +68,13 @@ importers:
         version: 1.0.7
       '@hono/node-server':
         specifier: ^2.1.5
-        version: 2.1.5(hono@4.13.13)
+        version: 2.1.5(hono@4.13.14)
       '@hono/swagger-ui':
         specifier: ^0.6.1
-        version: 0.6.1(hono@4.13.13)
+        version: 0.6.1(hono@4.13.14)
       '@hono/zod-openapi':
         specifier: ^1.6.3
-        version: 1.6.3(hono@4.13.13)(zod@4.6.7)
+        version: 1.6.3(hono@4.13.14)(zod@4.6.7)
       '@reduxjs/toolkit':
         specifier: ^2.13.0
         version: 2.13.0(react-redux@9.3.0(react@18.3.1)(redux@5.0.1))(react@18.3.1)
@@ -145,8 +145,8 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1
       es-toolkit:
-        specifier: ^1.52.0
-        version: 1.52.0
+        specifier: ^1.53.0
+        version: 1.53.0
       eventemitter3:
         specifier: ^5.0.4
         version: 5.0.4
@@ -160,8 +160,8 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
       hono:
-        specifier: ^4.13.13
-        version: 4.13.13
+        specifier: ^4.13.14
+        version: 4.13.14
       idb:
         specifier: ^7.1.1
         version: 7.1.1
@@ -2186,8 +2186,8 @@ packages:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
 
-  es-toolkit@1.52.0:
-    resolution: {integrity: sha512-XTNEJQh1tY1ZJVcf6ayP/2n4ZPyaHlW2FWs7xvw5ddPuhUVjLD3olQVQS7kf58JbAB48iL0uL/jerTrjtV3lDA==}
+  es-toolkit@1.53.0:
+    resolution: {integrity: sha512-3+AYXp9fmJ/UhHBMYj2/U+RaUouMD90SzoItyDOB2Za7W6dB7fQApFGnZPl2MF6K8/Tv1koh1JyirSx/kju6Pw==}
 
   esbuild@0.25.12:
     resolution: {integrity: sha512-bbPBYYrtZbkt6Os6FiTLCTFxvq4tt3JKall1vRwshA3fdVztsLAatFaZobhkBC8/BrPetoa0oksYoKXoG4ryJg==}
@@ -2533,8 +2533,8 @@ packages:
   help-me@5.0.0:
     resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
 
-  hono@4.13.13:
-    resolution: {integrity: sha512-CQ46U0ZkAGmbT/4UxdzzGJpacP2IeKgY4a5/tOI9AABbpOMfK739wfDXmv1usCk+3RkKj1hQy4/fjhiwa2xlrA==}
+  hono@4.13.14:
+    resolution: {integrity: sha512-yhRLQ21U6qa9Hsu2N7Qcbh8tE+WKEcoErjIo56LeSGiGXGp9sA7UpE86Ui9uexb61KakiGwuHMn2QdV7w6i6kQ==}
     engines: {node: '>=16.9.0'}
 
   html-entities@2.6.0:
@@ -5160,25 +5160,25 @@ snapshots:
       protobufjs: 7.6.6
       yargs: 17.7.3
 
-  '@hono/node-server@2.1.5(hono@4.13.13)':
+  '@hono/node-server@2.1.5(hono@4.13.14)':
     dependencies:
-      hono: 4.13.13
+      hono: 4.13.14
 
-  '@hono/swagger-ui@0.6.1(hono@4.13.13)':
+  '@hono/swagger-ui@0.6.1(hono@4.13.14)':
     dependencies:
-      hono: 4.13.13
+      hono: 4.13.14
 
-  '@hono/zod-openapi@1.6.3(hono@4.13.13)(zod@4.6.7)':
+  '@hono/zod-openapi@1.6.3(hono@4.13.14)(zod@4.6.7)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 9.1.0(zod@4.6.7)
-      '@hono/zod-validator': 0.9.1(hono@4.13.13)(zod@4.6.7)
-      hono: 4.13.13
+      '@hono/zod-validator': 0.9.1(hono@4.13.14)(zod@4.6.7)
+      hono: 4.13.14
       openapi3-ts: 4.6.2
       zod: 4.6.7
 
-  '@hono/zod-validator@0.9.1(hono@4.13.13)(zod@4.6.7)':
+  '@hono/zod-validator@0.9.1(hono@4.13.14)(zod@4.6.7)':
     dependencies:
-      hono: 4.13.13
+      hono: 4.13.14
       zod: 4.6.7
 
   '@humanfs/core@0.19.2':
@@ -6037,7 +6037,7 @@ snapshots:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
-  es-toolkit@1.52.0: {}
+  es-toolkit@1.53.0: {}
 
   esbuild@0.25.12:
     optionalDependencies:
@@ -6561,7 +6561,7 @@ snapshots:
 
   help-me@5.0.0: {}
 
-  hono@4.13.13: {}
+  hono@4.13.14: {}
 
   html-entities@2.6.0:
     optional: true
@@ -7295,7 +7295,7 @@ snapshots:
       '@reduxjs/toolkit': 2.13.0(react-redux@9.3.0(react@18.3.1)(redux@5.0.1))(react@18.3.1)
       clsx: 2.1.1
       decimal.js-light: 2.5.1
-      es-toolkit: 1.52.0
+      es-toolkit: 1.53.0
       eventemitter3: 5.0.4
       immer: 11.2.9
       react: 18.3.1
