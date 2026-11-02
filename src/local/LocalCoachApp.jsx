@@ -23,10 +23,12 @@ async function api(suffix, method = 'GET', body) {
   return value;
 }
 const fmt = (date) => date ? new Date(date).toLocaleString('de-AT', { dateStyle: 'short', timeStyle: 'short' }) : '';
+const todayISO = () => { const now = new Date(); return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
 
 export default function LocalCoachApp() {
   const [clients, setClients] = useState([]);
   const [clientId, setClientId] = useState(() => entry.get('client') || '');
+  const [workspaceTab, setWorkspaceTab] = useState('plans');
   const [query, setQuery] = useState('');
   const [plans, setPlans] = useState([]);
   const [clientSummaries, setClientSummaries] = useState([]);
@@ -42,8 +44,15 @@ export default function LocalCoachApp() {
   const [history, setHistory] = useState(null);
   const [releasing, setReleasing] = useState(null);
   const [message, setMessage] = useState('');
+  const [coachNotes, setCoachNotes] = useState([]);
+  const [notesLoading, setNotesLoading] = useState(false);
+  const [noteDate, setNoteDate] = useState(todayISO);
+  const [noteDraft, setNoteDraft] = useState('');
+  const [noteDirty, setNoteDirty] = useState(false);
+  const [noteEditingDate, setNoteEditingDate] = useState('');
   const sequence = useRef(0);
   const summarySequence = useRef(0);
+  const notesSequence = useRef(0);
   const client = clients.find((item) => item.id === clientId);
   const clientPath = `client/${encodeURIComponent(clientId)}`;
   const planPath = (id) => `${clientPath}/plans/${encodeURIComponent(id)}`;
@@ -82,10 +91,21 @@ export default function LocalCoachApp() {
   useEffect(() => {
     const mine = ++sequence.current;
     setPlans([]); setViewing(null); setHistory(null); setReleasing(null); setCreating(false); setError(''); setNotice('');
+    setCoachNotes([]); setNoteDate(todayISO()); setNoteDraft(''); setNoteDirty(false); setNoteEditingDate('');
     if (!clientId) return;
     setLoading(true);
     api(`${clientPath}/plans`).then((data) => { if (mine === sequence.current) setPlans(data.plans); }).catch((err) => { if (mine === sequence.current) setError(err.message); }).finally(() => { if (mine === sequence.current) setLoading(false); });
   }, [clientId]);
+  useEffect(() => {
+    if (!clientId || workspaceTab !== 'notes') return undefined;
+    const request = ++notesSequence.current;
+    setNotesLoading(true);
+    api(`${clientPath}/coaching-notes?limit=50`)
+      .then((data) => { if (request === notesSequence.current) setCoachNotes(Array.isArray(data.notes) ? data.notes : []); })
+      .catch((err) => { if (request === notesSequence.current) setError(err.message); })
+      .finally(() => { if (request === notesSequence.current) setNotesLoading(false); });
+    return () => { notesSequence.current += 1; };
+  }, [clientId, workspaceTab]);
   async function reload() { setPlans((await api(`${clientPath}/plans`)).plans); }
   async function act(fn) {
     if (busy) return;
@@ -110,12 +130,32 @@ export default function LocalCoachApp() {
     setReleasing(null); await reload(); setNotice('Version lokal freigegeben. Du kannst sie jetzt übergeben.');
   }
   function returnToPlans() { setEditing(null); act(reload); }
+  function selectClient(id, tab = 'plans') {
+    if (noteDirty && !confirm('Die ungespeicherte Betreuungsnotiz verwerfen?')) return false;
+    setNoteDirty(false); setWorkspaceTab(tab); setClientId(id);
+    return true;
+  }
+  function editNote(note) {
+    if (noteDirty && !confirm('Die ungespeicherte Änderung verwerfen und diese Notiz laden?')) return;
+    setNoteDate(note.date); setNoteDraft(note.note || ''); setNoteEditingDate(note.date); setNoteDirty(false);
+  }
+  async function saveNote() {
+    const existing = coachNotes.find((note) => note.date === noteDate);
+    if (existing && noteEditingDate !== noteDate && !confirm(`Für ${new Date(`${noteDate}T12:00:00`).toLocaleDateString('de-AT')} existiert bereits eine Betreuungsnotiz. Diesen Tageseintrag ersetzen?`)) return;
+    await act(async () => {
+      await api(`${clientPath}/coaching-note`, 'POST', { date: noteDate, note: noteDraft.trim() });
+      const data = await api(`${clientPath}/coaching-notes?limit=50`);
+      setCoachNotes(Array.isArray(data.notes) ? data.notes : []);
+      setNoteEditingDate(noteDate); setNoteDirty(false);
+      setNotice('Betreuungsnotiz lokal gesichert.');
+    });
+  }
   const filtered = clients.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
 
   return <div className="min-h-screen bg-fit-bg text-fit-ink">
     {!embedded && <header className="border-b border-fit-line px-4 py-5 sm:px-8"><div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4"><div><a href="./" className="text-xs font-semibold uppercase tracking-widest text-fit-accent">VitalOS · Coach</a><h1 className="mt-1 text-2xl font-bold tracking-tight">Coach-Konsole</h1><p className="mt-2 text-sm text-fit-muted">Klienten öffnen, Trainingspläne bearbeiten und freigegebene Versionen übergeben.</p></div><span className="flex items-center gap-2 rounded-full border border-fit-line px-3 py-2 text-xs text-fit-muted"><CheckCircle2 size={15} className="text-fit-accent" /> Lokale Klientendaten</span></div></header>}
     <div className={`mx-auto grid max-w-7xl gap-6 p-4 pb-20 sm:p-8 ${embedded ? '' : 'lg:grid-cols-[260px_minmax(0,1fr)]'}`}>
-      {!embedded && <aside className="min-w-0"><div className="mb-3 flex items-center justify-between"><h2 className="flex items-center gap-2 font-semibold"><Users size={17} /> Klienten</h2><button disabled={busy || !!editing} aria-label="Klienten aktualisieren" onClick={loadClients} className="min-h-[44px] p-3"><RefreshCw size={16} /></button></div><input aria-label="Klienten suchen" placeholder="Klienten suchen…" value={query} onChange={(e) => setQuery(e.target.value)} className={input} /><div className="mt-3 max-h-64 space-y-2 overflow-y-auto lg:max-h-[65vh]">{filtered.map((item) => <button key={item.id} disabled={busy || !!editing} aria-pressed={clientId === item.id} onClick={() => setClientId(item.id)} className={`min-h-[64px] w-full rounded-xl border p-3 text-left disabled:opacity-50 ${clientId === item.id ? 'border-fit-accent bg-fit-accent/10' : 'border-fit-line bg-fit-card'}`}><span className="block font-semibold">{item.name}</span><span className="mt-1 block text-xs text-fit-muted">{item.canDeliver ? 'App-Zuordnung vorhanden' : 'Lokale Planarbeit möglich'}</span></button>)}</div>{!loading && !filtered.length && <p className="mt-4 text-sm text-fit-muted">{clients.length ? 'Kein Treffer.' : 'Noch keine Klienten in der bestehenden Klientenverwaltung.'}</p>}</aside>}
+      {!embedded && <aside className="min-w-0"><div className="mb-3 flex items-center justify-between"><h2 className="flex items-center gap-2 font-semibold"><Users size={17} /> Klienten</h2><button disabled={busy || !!editing || loading || summariesLoading} aria-label="Klienten aktualisieren" onClick={loadClients} className="min-h-[44px] p-3"><RefreshCw size={16} /></button></div><input aria-label="Klienten suchen" placeholder="Klienten suchen…" value={query} onChange={(e) => setQuery(e.target.value)} className={input} /><div className="mt-3 max-h-64 space-y-2 overflow-y-auto lg:max-h-[65vh]">{filtered.map((item) => <button key={item.id} disabled={busy || !!editing} aria-pressed={clientId === item.id} onClick={() => selectClient(item.id)} className={`min-h-[64px] w-full rounded-xl border p-3 text-left disabled:opacity-50 ${clientId === item.id ? 'border-fit-accent bg-fit-accent/10' : 'border-fit-line bg-fit-card'}`}><span className="block font-semibold">{item.name}</span><span className="mt-1 block text-xs text-fit-muted">{item.canDeliver ? 'App-Zuordnung vorhanden' : 'Lokale Planarbeit möglich'}</span></button>)}</div>{!loading && !filtered.length && <p className="mt-4 text-sm text-fit-muted">{clients.length ? 'Kein Treffer.' : 'Noch keine Klienten in der bestehenden Klientenverwaltung.'}</p>}</aside>}
       <main className="min-w-0 space-y-5">
         {error && <div role="alert" className="rounded-xl border border-fit-red/40 bg-fit-card p-4 text-sm text-fit-red">{error}<button className="ml-3 underline" disabled={busy || !!editing} onClick={() => clientId ? act(reload) : loadClients()}>Erneut versuchen</button></div>}
         {notice && <p role="status" className="rounded-xl border border-fit-accent/30 bg-fit-accent/10 p-4 text-sm">{notice}</p>}
@@ -135,11 +175,21 @@ export default function LocalCoachApp() {
             return <article key={item.id} className="rounded-2xl border border-fit-line bg-fit-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="text-lg font-semibold">{item.name}</h3><p className="mt-1 text-xs text-fit-muted">{item.status || 'Aktiver Klient'} · {item.canDeliver ? 'App zugeordnet' : 'Lokale Betreuung'}</p></div><a className={button} href={`/${encodeURIComponent(item.id)}/`}>Klientenakte öffnen</a></div>
               <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span></div>
-              <button className={`${button} mt-4 bg-fit-accent text-fit-bg`} onClick={() => setClientId(item.id)}>Trainingsplanung öffnen</button>
+              <div className="mt-4 flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} onClick={() => selectClient(item.id)}>Trainingsplanung öffnen</button><button className={button} onClick={() => selectClient(item.id, 'notes')}>Betreuungsnotizen</button></div>
             </article>;
           })}</div>
         </section>}
-        {client && <><header className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-fit-accent">Trainingsplanung</p><h2 className="mt-1 text-2xl font-semibold">{client.name}</h2></div><a className={button} href={`/${encodeURIComponent(clientId)}/`}>Klientenakte öffnen</a></header>
+        {client && <><header className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-fit-accent">Vital Coach · {workspaceTab === 'plans' ? 'Trainingsplanung' : 'Betreuung'}</p><h2 className="mt-1 text-2xl font-semibold">{client.name}</h2></div><a className={button} href={`/${encodeURIComponent(clientId)}/`}>Klientenakte öffnen</a></header>
+          <nav aria-label="Klientenarbeitsbereich" className="flex flex-wrap gap-2 border-b border-fit-line pb-3"><button className={`${button} ${workspaceTab === 'plans' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'plans' ? 'page' : undefined} onClick={() => setWorkspaceTab('plans')}>Trainingspläne</button><button className={`${button} ${workspaceTab === 'notes' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'notes' ? 'page' : undefined} onClick={() => { if (workspaceTab === 'notes') return; setWorkspaceTab('notes'); }}>Betreuungsnotizen <span className="ml-1 text-xs text-fit-muted">{coachNotes.length}</span></button></nav>
+          {workspaceTab === 'notes' ? <section className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+            <form className="h-fit space-y-4 rounded-2xl border border-fit-line bg-fit-card p-5" onSubmit={(event) => { event.preventDefault(); saveNote(); }}>
+              <div><h3 className="text-lg font-semibold">{noteEditingDate ? 'Betreuungsnotiz bearbeiten' : 'Neue Betreuungsnotiz'}</h3><p className="mt-1 text-sm text-fit-muted">Private Notizen in der lokalen Klientenablage. Eine Notiz pro Klient und Tag.</p></div>
+              <label className="block text-sm">Datum<input className={`${input} mt-1`} type="date" max={todayISO()} required value={noteDate} onChange={(event) => { setNoteDate(event.target.value); setNoteDirty(true); }} /></label>
+              <label className="block text-sm">Notiz<textarea className={`${input} mt-1 min-h-48 resize-y`} maxLength={10000} required value={noteDraft} onChange={(event) => { setNoteDraft(event.target.value); setNoteDirty(true); }} placeholder="Beobachtung, nächster Schritt oder Gesprächsvorbereitung…" /></label>
+              <div className="flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} disabled={busy || !noteDraft.trim() || !noteDate}>{busy ? 'Speichert…' : noteEditingDate ? 'Änderung speichern' : 'Notiz sichern'}</button><button type="button" className={button} disabled={busy} onClick={() => { if (noteDirty && !confirm('Die ungespeicherte Änderung verwerfen?')) return; setNoteDate(todayISO()); setNoteDraft(''); setNoteEditingDate(''); setNoteDirty(false); }}>Neue Notiz</button></div>
+            </form>
+            <section aria-label="Gespeicherte Betreuungsnotizen" className="space-y-3"><div className="flex items-center justify-between"><h3 className="font-semibold">Gespeicherte Notizen</h3><button className={button} disabled={notesLoading} onClick={() => setWorkspaceTab('plans')}>Zur Planung</button></div>{notesLoading && <p role="status" className="text-sm text-fit-muted">Notizen werden geladen…</p>}{!notesLoading && !coachNotes.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Noch keine Betreuungsnotizen für diesen Klienten.</p>}{coachNotes.map((note) => <article key={note.date} className="rounded-xl border border-fit-line bg-fit-card p-4"><div className="flex items-start justify-between gap-3"><p className="font-semibold">{new Date(`${note.date}T12:00:00`).toLocaleDateString('de-AT')}</p><button className="min-h-10 text-sm text-fit-accent underline" disabled={busy} onClick={() => editNote(note)}>Bearbeiten</button></div><p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed">{note.note || 'Leerer Eintrag'}</p><p className="mt-3 text-xs text-fit-dim">Geändert {fmt(note.updated_at)}</p></article>)}</section>
+          </section> : <>
           {viewing ? <section className="space-y-4"><div className="flex flex-wrap items-center gap-2"><button className={button} onClick={() => setViewing(null)}><ArrowLeft size={15} className="mr-1 inline" /> Alle Pläne</button><button className={button} onClick={() => { setEditing(viewing); setViewing(null); }}>Plan bearbeiten</button></div><PlanDocument plan={viewing} clientName={client.name} /></section> : editing ? <PlanEditor key={`${clientId}:${editing.id}`} plan={editing} clientName={client.name} uid={clientId} actorUid="local-coach" draftNamespace="laptop" catalogSearch={searchCatalog} templates={[]} saveDraft={(draft) => api(planPath(editing.id), 'PUT', draft)} onClose={returnToPlans} onSaved={async () => { setEditing(null); setNotice('Entwurf lokal gesichert. Noch nicht an den Klienten gesendet.'); await reload(); }} /> : <>
             <section className="rounded-2xl border border-fit-line bg-fit-card p-4 sm:p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="flex items-center gap-2 font-semibold"><ClipboardList size={19} /> Trainingspläne</h3><p className="mt-1 text-sm text-fit-muted">Erstellen → lokal sichern → Version freigeben → übergeben</p></div><button className={`${button} bg-fit-accent text-fit-bg`} disabled={busy} onClick={() => setCreating(!creating)}><Plus size={15} className="mr-1 inline" /> Neuen Plan schmieden</button></div>
               {creating && <form onSubmit={(e) => { e.preventDefault(); act(() => create({ name: name.trim(), totalWeeks: 10, routines: [] })); }} className="mt-4 space-y-3"><label className="block text-sm">Planname<input aria-label="Neuer Planname" autoFocus maxLength={80} value={name} onChange={(e) => setName(e.target.value)} className={`${input} mt-1`} placeholder="z. B. Kraftaufbau · 3 Tage" /></label><button disabled={busy || !name.trim()} className={`${button} bg-fit-accent text-fit-bg`}>Plan gestalten</button></form>}
@@ -155,6 +205,7 @@ export default function LocalCoachApp() {
             </article>; })}
             {history && <section aria-label="Planversionen" className="space-y-3 rounded-2xl border border-fit-accent/30 bg-fit-card p-5"><div className="flex items-center justify-between"><h3 className="font-semibold">Versionen · {history.plan.name}</h3><button className={button} onClick={() => setHistory(null)}>Schließen</button></div>{!history.versions.length && <p className="text-sm text-fit-muted">Noch keine Version freigegeben.</p>}{history.versions.map((v) => <div key={v.number} className="rounded-xl border border-fit-line p-3"><p className="font-semibold">Version {v.number} · {v.message}</p><p className="mt-1 text-xs text-fit-muted">{fmt(v.createdAt)} · {v.snapshot.routines.length} Trainingstage</p><button className="mt-2 min-h-[44px] text-sm text-fit-accent underline" disabled={busy} onClick={() => { if (!confirm(`Version ${v.number} als neuen Arbeitsstand übernehmen?`)) return; act(async () => { const restored = await api(planPath(history.plan.id), 'PUT', { ...v.snapshot, expectedUpdatedAt: history.plan.updatedAt }); setHistory(null); setEditing(restored); await reload(); }); }}>Als Entwurf wiederherstellen</button></div>)}</section>}
           </>}
+        </>}
         </>}
       </main>
     </div>

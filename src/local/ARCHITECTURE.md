@@ -12,6 +12,12 @@ loads each client's plan count and 28-day workout summary from the existing
 client-scoped Coach APIs. It stores no summary copy; opening the plan workspace
 or the existing client record continues to use the respective owner.
 
+The client workspace also exposes private coaching notes through the existing
+client-scoped `coaching-notes` API. Notes stay in klienten-python's client
+workspace, one dated entry per client per day; the Coach UI only reads and
+writes them through that local API. Replacing an existing daily entry requires
+confirmation.
+
 Plan ansehen opens the shared PlanDocument from the pinned Plan source, separate
 from form editing. It shows responsive exercise tables/cards and A4 sheets; long
 source notes are disclosures. No plan data changes when opening or printing.

@@ -1651,3 +1651,10 @@ Die Startansicht der lokalen Planung zeigt für jeden vorhandenen Klienten
 Plananzahl und Trainingseinträge der letzten 28 Tage, dazu direkte Aktionen für
 Trainingsplanung und Klientenakte. Summen werden live über die vorhandenen
 Klienten-APIs geladen und nicht dupliziert gespeichert.
+
+## 2026-11-02 — Private Betreuungsnotizen
+
+Die lokale Klientenplanung bietet jetzt einen eigenen Notizbereich. Er lädt die
+private Notizchronik über die bestehende Klienten-API, erlaubt datierte Notizen
+und schützt vorhandene Tagesnotizen vor versehentlichem Ersetzen. Änderungen
+bleiben im bestehenden Klienten-Datenspeicher; es gibt keinen Firebase-Versand.
