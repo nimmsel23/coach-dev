@@ -1668,9 +1668,9 @@ Profil starten ausgeblendet. Vorhandene Firebase-Profile lassen sich als Klient,
 Freund/Test oder ausgeblendet markieren; die Auswahl liegt im bestehenden
 `fitness/{uid}/profile/metadata.clientStatus`-Feld. Bereits registrierte Profile
 ohne Status bleiben sichtbar (Freund/Test), darunter Jakob. Lint und lokaler
-Coach-Build sind erfolgreich. Die laufende :9150-Abnahme war nicht möglich: der
-Loopback-Verbindungsversuch scheiterte; der User-Service-Status ließ sich in
-dieser Umgebung nicht auslesen.
+Coach-Build sind erfolgreich. Hostprüfung bestätigt den laufenden
+`coach-api.service` auf :9150 und `/coach/local.html` HTTP 200. Die frühere
+Sandbox konnte den Host-Loopback nicht direkt erreichen.
 
 ## 2026-11-02 — Lokales Workout-Tracking in Taskwarrior
 
@@ -1686,4 +1686,8 @@ unabhängigen Task und behielt einen manuell erledigten Plan-Task beim Folgesync
 Der lokale Pilot für Jakobs PPL-Entwurf hat anschließend 30 Tasks vom 2.11.2026
 bis 8.1.2027 erzeugt; der vorhandene, unabhängige Task blieb erhalten. Vorherige
 Taskwarrior-Ablage liegt unter `tw-data.pre-ppl-pilot-20261102`. Es gab keinen
-Firestore-Aufruf.
+Firestore-Aufruf. Isolierter Coach-Worktree läuft zusätzlich auf
+`http://127.0.0.1:9151/coach/local.html`; statische Seite und JS-Bundle liefern
+HTTP 200. Taskwarrior-API meldet 30 Aufgaben im Workspace; ein zweiter Sync über
+HTTP erstellte/änderte/entfernte null Aufgaben. Der bestehende Dienst auf :9150
+wurde nicht beendet oder neu gestartet.
