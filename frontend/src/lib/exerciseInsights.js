@@ -72,16 +72,22 @@ function inferMovement(ex) {
   }
 
   // Keine anatomy_teaching-Lesson vorhanden: statt erfundenem Bewegungsmuster-Text
-  // die echten Rohdaten aus wger/yuhonas zeigen (original_description, instructions).
-  // Diese Felder liegen bereits im ExerciseRecord (fitness/catalog/core/resolver.py)
-  // und werden über dataclasses.asdict() an /fitness/exercises/all durchgereicht.
-  const instructions = cleanList(ex?.instructions)
+  // die echten Rohdaten aus wger/yuhonas zeigen (original_description, instructions, coaching_notes).
+  // Diese Felder liegen im ExerciseRecord (fitness/catalog/core/resolver.py)
+  // und in den Bulk- bzw. Mirror-Records.
+  const instructions = cleanList(
+    (Array.isArray(ex?.instructions) && ex.instructions.length)
+      ? ex.instructions
+      : (Array.isArray(ex?.steps) && ex.steps.length)
+        ? ex.steps
+        : (Array.isArray(ex?.coaching_notes) && ex.coaching_notes.length > 1)
+          ? ex.coaching_notes
+          : []
+  )
   const description = Array.isArray(ex?.original_description)
     ? cleanList(ex.original_description).join(' ')
-    : String(ex?.original_description || '').trim()
-  const rawCoachingNotes = (isUnreviewedExercise(ex) || ex?.tags?.includes('bulk_import'))
-    ? cleanList(ex?.coaching_notes).join(' ')
-    : ''
+    : String(ex?.original_description || ex?.description || '').trim()
+  const rawCoachingNotes = cleanList(ex?.coaching_notes).join(' ')
   const primary = cleanList(ex?.primaryMuscles)
   const fallbackLesson = description || instructions.join(' ') || rawCoachingNotes
 

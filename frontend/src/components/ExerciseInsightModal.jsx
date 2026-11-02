@@ -409,7 +409,7 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
   const exerciseId = localExercise.exercise_id || localExercise.id || localExercise.name
   const displayName = localExercise.display_name || localExercise.displayName || localExercise.name || 'Übung'
   const rawInstructions = Array.isArray(insight.rawInstructions) ? insight.rawInstructions : []
-  const sourceDescription = insight.rawDescription || localExercise.description || ''
+  const sourceDescription = insight.rawDescription || localExercise.description || localExercise.original_description || (Array.isArray(localExercise.coaching_notes) ? localExercise.coaching_notes.join(' ') : (localExercise.coaching_notes || ''))
   const primaryLabels = insight.primary.map((muscle) => translateMuscle(muscle, taxonomy, muscleLanguage))
   const secondaryLabels = insight.secondary.map((muscle) => translateMuscle(muscle, taxonomy, muscleLanguage))
   const stabilizerLabels = roleEntries(localExercise.stabilizers, taxonomy, muscleLanguage)
@@ -1017,7 +1017,7 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
                           <div className="space-y-2">
                             <div className="text-[10px] font-black uppercase tracking-[0.24em]" style={{ color: 'var(--muted)' }}>Original Description</div>
                             <div className="rounded-2xl p-3 text-sm leading-6" style={{ background: 'rgba(0,0,0,0.12)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
-                              {insight.rawDescription || localExercise.original_description || 'Keine Beschreibung vorhanden.'}
+                              {insight.rawDescription || localExercise.original_description || localExercise.description || (Array.isArray(localExercise.coaching_notes) ? localExercise.coaching_notes.join(' ') : localExercise.coaching_notes) || 'Keine Beschreibung vorhanden.'}
                             </div>
                           </div>
                         </div>
