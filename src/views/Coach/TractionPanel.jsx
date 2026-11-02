@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Activity, AlertCircle, Clock3, Eye, Users } from 'lucide-react';
 import { collectionGroup, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '../../firebase.js';
+import { getAllUserProfiles } from '@db';
 
 const COACH_UIDS = new Set(['59ole36uNpNwml5H6VDYCXyCME92', 'pJay0LeAwDN93Q4NT6i5FNxrQHH2']);
 const LABELS = {
@@ -34,11 +35,31 @@ function ago(value) {
   return `vor ${Math.floor(hours / 24)} Tagen`;
 }
 
+function membership(profile) {
+  const status = profile?.clientStatus || (profile?.authUserOnly ? 'hidden' : 'friend');
+  return {
+    status,
+    visible: Boolean(profile && status !== 'hidden' && !profile.authUserOnly),
+  };
+}
+
 export default function TractionPanel() {
   const [records, setRecords] = useState([]);
+  const [profiles, setProfiles] = useState({});
+  const [profilesLoaded, setProfilesLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    let active = true;
+    getAllUserProfiles().then((value) => {
+      if (active) setProfiles(value || {});
+    }).catch(() => {}).finally(() => {
+      if (active) setProfilesLoaded(true);
+    });
+    return () => { active = false; };
+  }, []);
 
   useEffect(() => {
     const since = new Date();
@@ -83,16 +104,27 @@ export default function TractionPanel() {
       if (!days.has(record.date)) days.set(record.date, new Set());
       days.get(record.date).add(record.uid);
     }
+    const latestEntries = [...latest.entries()]
+      .map(([uid, record]) => ({ uid, ...record }))
+      .sort((a, b) => millis(b.lastSeenAt) - millis(a.lastSeenAt));
+    let anonymousIndex = 0;
+    const latestActivity = latestEntries.map((record) => {
+      return {
+        ...record,
+        anonymousIndex: membership(profiles[record.uid]).visible ? 0 : ++anonymousIndex,
+      };
+    });
+
     return {
       active: [...latest.values()].filter((record) => millis(record.lastSeenAt) >= now - 10 * 60000).length,
       users: latest.size,
       views,
       opens,
-      latest: [...latest.entries()].map(([uid, record]) => ({ uid, ...record })).sort((a, b) => millis(b.lastSeenAt) - millis(a.lastSeenAt)),
+      latest: latestActivity,
       sections: [...sections.entries()].sort((a, b) => b[1] - a[1]),
       days: [...days.entries()].sort((a, b) => a[0].localeCompare(b[0])),
     };
-  }, [records, now]);
+  }, [records, now, profiles]);
 
   const maxDaily = Math.max(1, ...stats.days.map(([, users]) => users.size));
   const maxSection = Math.max(1, stats.sections[0]?.[1] || 0);
@@ -131,9 +163,19 @@ export default function TractionPanel() {
             </section>
           </div>
 
-          <section className="card overflow-hidden">
+            <section className="card overflow-hidden">
             <div className="border-b border-fit-line px-4 py-4 md:px-5"><h2 className="font-semibold">Letzte Aktivität</h2></div>
-            {stats.latest.length ? <div className="divide-y divide-fit-line">{stats.latest.slice(0, 20).map((record) => <div key={record.uid} className="flex items-center justify-between gap-3 px-4 py-3 md:px-5"><div className="min-w-0"><p className="truncate text-sm font-medium">Nutzer · {record.uid.slice(0, 7)}</p><p className="mt-0.5 text-xs text-fit-muted">{LABELS[record.lastSection] || record.lastSection || 'Bereich unbekannt'}</p></div><div className="shrink-0 text-right text-xs text-fit-muted">{ago(record.lastSeenAt)}<p className="mt-0.5">{Number(record.sections?.[record.lastSection] || 0)} Aufrufe heute</p></div></div>)}</div> : <Empty>Im neuen Tracker gibt es noch keine Aktivitäten.</Empty>}
+            {stats.latest.length ? <div className="divide-y divide-fit-line">{stats.latest.slice(0, 20).map((record) => {
+              const profile = profiles[record.uid];
+              const { status, visible } = membership(profile);
+              const name = visible
+                ? (profile.displayName || profile.email || 'Coach-Kontakt')
+                : `Nicht zugeordnetes Konto · ${record.anonymousIndex}`;
+              const relation = visible
+                ? (status === 'client' ? 'Klient' : 'Freund / Kontakt')
+                : profilesLoaded ? 'Nicht in der Coach-Liste' : 'Coach-Zuordnung lädt …';
+              return <div key={record.uid} className="flex items-center justify-between gap-3 px-4 py-3 md:px-5"><div className="min-w-0"><p className="truncate text-sm font-medium">{name}</p><p className="mt-0.5 text-xs text-fit-muted">{relation} · {LABELS[record.lastSection] || record.lastSection || 'Bereich unbekannt'}</p></div><div className="shrink-0 text-right text-xs text-fit-muted">{ago(record.lastSeenAt)}<p className="mt-0.5">{Number(record.sections?.[record.lastSection] || 0)} Aufrufe am {record.date}</p></div></div>;
+            })}</div> : <Empty>Im neuen Tracker gibt es noch keine Aktivitäten.</Empty>}
           </section>
           <p className="text-xs leading-relaxed text-fit-muted">Erfasst werden App-Öffnungen, Bereichsaufrufe und Aktivitätszeitpunkte. Workout-Inhalte, Übungen und Notizen fließen nicht in diese Ansicht ein.</p>
         </>

@@ -35,7 +35,10 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   Tage mit aktiven Nutzern, täglichen Nutzerzahlen, Bereichsaufrufen und
   letzter Aktivität. Die Daten kommen über einen Firestore-
   `collectionGroup("tractionDaily")`-Snapshot. Erfasst werden nur grobe
-  Nutzungsmetadaten, keine Workout-Inhalte.
+  Nutzungsmetadaten, keine Workout-Inhalte. Letzte Aktivitäten verwenden die
+  vorhandenen Coach-Profile für Namen und Freund-/Klient-Rolle. Ausgeblendete
+  oder nicht zugeordnete Konten bleiben in den aggregierten Nutzungszahlen,
+  erscheinen in der Aktivitätsliste aber anonym ohne UID.
 - **`CatalogBrowser.jsx`**: Interaktiver Katalog-Enhancer zum Suchen, Analysieren (Anatomie-Cues, Biomechanik, Muskelgruppen) und Bearbeiten/Speichern von Übungen in Firestore (`fitness/kb/exercises`).
 - **`ClientsPanel.jsx`** (seit 2026-08-20): Klientenzentrierter Workflow —
   links eine Liste aller User aus `getAllUserProfiles()` (Klick wählt einen
