@@ -14,7 +14,7 @@ from db.schemas import HealthResponse, BodyResponse
 from fitness.firestore.mirror import mirror_session
 from fitness.firestore.mirror import get_status as firestore_status
 try:
-    from fitness.firestore.sync import pull as firestore_pull
+    from fitness.firestore.sync import pull as firestore_pull, pull_workout_logs as firestore_pull_workout_logs
     _FIRESTORE_PULL_AVAILABLE = True
 except ImportError:
     _FIRESTORE_PULL_AVAILABLE = False
@@ -46,6 +46,19 @@ def _require_uid(request: Request) -> str:
     if not uid or uid == "default":
         raise HTTPException(400, detail="uid Pflicht. Aktive UID fehlt; via ?uid=... oder X-User-UID Header senden.")
     return uid
+
+
+def _require_local_request(request: Request) -> None:
+    if not request.client or request.client.host not in ("127.0.0.1", "::1", "localhost"):
+        raise HTTPException(403, detail="Lokaler Fitness-Sync ist nur auf diesem Rechner verfügbar.")
+    if request.url.hostname not in ("127.0.0.1", "localhost", "::1"):
+        raise HTTPException(403, detail="Lokaler Hostname erforderlich.")
+    origin = request.headers.get("origin")
+    if origin:
+        from urllib.parse import urlsplit
+        parsed = urlsplit(origin)
+        if parsed.netloc != request.url.netloc or parsed.scheme != request.url.scheme:
+            raise HTTPException(403, detail="Fremder Ursprung abgelehnt.")
 
 @router.get("/health", response_model=HealthResponse)
 def health():
@@ -151,6 +164,25 @@ def fs_pull(request: Request):
     except Exception as exc:
         logger.error(f"firestore/pull {uid}: {exc}")
         raise HTTPException(500, detail=str(exc))
+
+
+@router.post("/firestore/pull-workout-logs")
+def fs_pull_workout_logs(request: Request):
+    """Local-only, metadata-only pull for the selected client's cloud workouts."""
+    _require_local_request(request)
+    uid = _require_uid(request)
+    status = firestore_status()
+    if not status.get("ok"):
+        raise HTTPException(503, detail="Firestore nicht verbunden")
+    if not _FIRESTORE_PULL_AVAILABLE:
+        raise HTTPException(503, detail="firestore.sync.pull_workout_logs nicht verfügbar")
+    try:
+        result = firestore_pull_workout_logs(uid=uid)
+        logger.info(f"firestore/pull-workout-logs  {uid}  {result}")
+        return {"ok": True, **result, "storage": "local-fitness-runtime/cloud-workouts"}
+    except Exception as exc:
+        logger.error(f"firestore/pull-workout-logs {uid}: {exc}")
+        raise HTTPException(500, detail="Lokale Workout-Projektion konnte nicht aktualisiert werden.")
 
 @router.get("/fitness/config")
 def fitness_config():

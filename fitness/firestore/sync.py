@@ -1,17 +1,109 @@
 """pull/push: Firestore ↔ ~/.aos/users/<uid>/ (one-shot)"""
 
 import json
+import os
+import tempfile
+import threading
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from ._db import get_db, ts, UID, remote_wins, same_content
 from fitness.catalog.core.session_signal import exercise_has_training_signal
+from fitness.catalog.core.paths import runtime_root
+from fitness.runtime.session_store import validate_runtime_uid, validate_session_id
 from fitness.runtime.journal_store import upsert_entry as _journal_upsert
 
 USERS_DIR = Path.home() / ".aos" / "users"
 FITNESS_DIR = Path.home() / ".aos" / "fitness"
 STATE_DIR = FITNESS_DIR / "agent-state"  # state bleibt kompatibel
+_WORKOUT_PULL_LOCK = threading.Lock()
+
+
+def pull_workout_logs(uid: str, *, db=None) -> dict[str, int]:
+    """Mirror only Coach-relevant workout metadata from Firestore into local runtime.
+
+    The Firebase ``workouts`` collection is distinct from ``wf_workouts`` (assigned
+    WorkoutForge programs). Keep its projection in ``cloud-workouts/`` so it never
+    overwrites local ``workouts.json`` or the existing ``workouts/`` assignment mirror.
+    Exercise subcollections and set/event payloads are not copied.
+    """
+    uid = validate_runtime_uid(uid)
+    db = db or get_db()
+    users_root = (runtime_root() / "users").resolve()
+    user_root = (users_root / uid).resolve()
+    if not user_root.is_relative_to(users_root):
+        raise ValueError("Invalid runtime UID path")
+    target = user_root / "cloud-workouts"
+    target.mkdir(parents=True, exist_ok=True)
+    if not target.resolve().is_relative_to(user_root):
+        raise ValueError("Cloud workout mirror must remain inside the user runtime")
+
+    collection = db.collection("fitness").document(uid).collection("workouts")
+    # Materialize the entire query before touching local files. A Firestore read
+    # failure therefore preserves the last successful local projection.
+    snapshots = list(collection.stream())
+    projected: dict[str, dict[str, Any]] = {}
+    for snapshot in snapshots:
+        try:
+            workout_id = validate_session_id(snapshot.id)
+        except ValueError:
+            continue
+        if not workout_id:
+            continue
+        data = snapshot.to_dict() or {}
+        if not isinstance(data, dict):
+            continue
+        events = data.get("eventLog") if isinstance(data.get("eventLog"), list) else []
+        completed_sets = sum(
+            1 for event in events
+            if isinstance(event, dict) and event.get("setId")
+        )
+        try:
+            exercise_count = max(0, int(data.get("exerciseCount") or 0))
+        except (TypeError, ValueError, OverflowError):
+            exercise_count = 0
+        projection = {
+            "id": workout_id,
+            "sourceType": "firestore-workout",
+            "name": str(data.get("name") or "Trainingseinheit"),
+            "started_at": ts(data.get("started_at")),
+            "finished_at": ts(data.get("finished_at")),
+            "sessionState": str(data.get("sessionState") or ""),
+            "routine_id": data.get("routine_id"),
+            "sourcePlanId": data.get("sourcePlanId"),
+            "sourcePlanRoutineId": data.get("sourcePlanRoutineId"),
+            "exerciseCount": exercise_count,
+            "completedSetCount": completed_sets,
+        }
+        projected[workout_id] = projection
+
+    with _WORKOUT_PULL_LOCK:
+        for workout_id, projection in projected.items():
+            destination = target / f"{workout_id}.json"
+            fd, temporary = tempfile.mkstemp(prefix=".cloud-workout-", dir=target)
+            try:
+                with os.fdopen(fd, "w", encoding="utf-8") as stream:
+                    json.dump(projection, stream, ensure_ascii=False, indent=2, allow_nan=False)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                os.replace(temporary, destination)
+            finally:
+                if os.path.exists(temporary):
+                    os.unlink(temporary)
+
+        removed = 0
+        for existing in target.glob("*.json"):
+            if existing.stem in projected:
+                continue
+            try:
+                previous = json.loads(existing.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if isinstance(previous, dict) and previous.get("sourceType") == "firestore-workout":
+                existing.unlink(missing_ok=True)
+                removed += 1
+    return {"workout_logs": len(projected), "workout_logs_removed": removed}
 
 
 def _load_known(uid: str) -> set:
@@ -46,6 +138,7 @@ def pull(uid: str | None = None) -> dict:
     total_journal = 0
     total_habit_journal = 0
     total_inbox = 0
+    total_workout_logs = 0
 
     _SKIP_UIDS = {"default", "kb", "_template"}
     if uid:
@@ -65,6 +158,9 @@ def pull(uid: str | None = None) -> dict:
         journal_dir.mkdir(parents=True, exist_ok=True)
         inbox_dir.mkdir(parents=True, exist_ok=True)
         workouts_dir.mkdir(parents=True, exist_ok=True)
+
+        workout_result = pull_workout_logs(uid, db=db)
+        total_workout_logs += workout_result["workout_logs"]
 
         # logger.info(f"Syncing user: {uid}")
 
@@ -224,7 +320,7 @@ def pull(uid: str | None = None) -> dict:
         _save_known(uid, known)
         _save_known_habits(uid, known_habits)
 
-    return {"sessions": total_pulled, "skipped": total_skipped, "journal": total_journal, "habit_journal": total_habit_journal, "inbox": total_inbox}
+    return {"sessions": total_pulled, "skipped": total_skipped, "journal": total_journal, "habit_journal": total_habit_journal, "inbox": total_inbox, "workout_logs": total_workout_logs}
 
 
 def push(uid: str | None = None, *, force: bool = False, dry_run: bool = False) -> dict:
