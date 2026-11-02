@@ -163,8 +163,8 @@ importers:
         specifier: ^4.13.14
         version: 4.13.14
       idb:
-        specifier: ^7.1.1
-        version: 7.1.1
+        specifier: ^8.0.4
+        version: 8.0.4
       ieee754:
         specifier: 1.2.1
         version: 1.2.1
@@ -2553,6 +2553,9 @@ packages:
 
   idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
+
+  idb@8.0.4:
+    resolution: {integrity: sha512-jd0ITCrN+Zah4J7R/Z2jnR3W7A4BXDAjmo62MwWuSjxCiueUAf7X5rbodEdidWzeknwXHmLpdZkoiiCppNi30Q==}
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -6585,6 +6588,8 @@ snapshots:
       - supports-color
 
   idb@7.1.1: {}
+
+  idb@8.0.4: {}
 
   ieee754@1.2.1: {}
 

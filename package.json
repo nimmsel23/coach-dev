@@ -96,7 +96,7 @@
     "firebase-admin": "^14.5.0",
     "fit-file-parser": "^5.2.1",
     "hono": "^4.13.14",
-    "idb": "^7.1.1",
+    "idb": "^8.0.4",
     "ieee754": "1.2.1",
     "immer": "^10.2.0",
     "internmap": "^2.0.3",
