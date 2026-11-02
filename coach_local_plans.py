@@ -94,6 +94,44 @@ def fitness_workouts_for_uid(uid):
     updated_at = datetime.fromtimestamp(newest_mtime).astimezone().isoformat() if newest_mtime else None
     return list(by_id.values()), bool(local_path.is_file() or cloud_root.is_dir()), updated_at
 
+
+def fitness_workout_logs_for_uid(uid):
+    """Include legacy saved Fitness sessions when creating Taskwarrior workout records."""
+    workouts, available, updated_at = fitness_workouts_for_uid(uid)
+    users_root = (fitness_runtime_root() / 'users').resolve()
+    user_root = (users_root / str(uid)).resolve()
+    if not user_root.is_relative_to(users_root):
+        raise ValueError('Ungültige Fitness-UID-Zuordnung.')
+    sessions_root = user_root / 'sessions'
+    session_files = sorted(sessions_root.glob('*.json')) if sessions_root.is_dir() else []
+    known = {str(workout.get('id') or '') for workout in workouts if isinstance(workout, dict)}
+    for session_path in session_files:
+        session = plans_module.read(session_path)
+        if not isinstance(session, dict):
+            continue
+        exercises = session.get('exercises') if isinstance(session.get('exercises'), list) else []
+        gate = session.get('sessionGate') if isinstance(session.get('sessionGate'), dict) else {}
+        has_workout = bool(exercises or str(session.get('block') or '').strip()
+                           or session.get('activity') or gate.get('endedAt'))
+        if not has_workout:
+            continue
+        workout_id = f"fitness-session:{session.get('session_id') or session_path.stem}"
+        if workout_id in known:
+            continue
+        day_text = str(session.get('date') or session_path.stem.split('__', 1)[0])
+        workouts.append({
+            'id': workout_id,
+            'sourceType': 'fitness-session',
+            'name': str(session.get('trainingsart') or session.get('block') or 'Fitness-Training'),
+            'started_at': gate.get('startedAt'),
+            'finished_at': gate.get('endedAt') or session.get('saved_at') or day_text,
+            'sessionState': str(gate.get('status') or 'saved'),
+            'sourcePlanId': None,
+            'sourcePlanRoutineId': None,
+        })
+        known.add(workout_id)
+    return workouts, available or bool(session_files), updated_at
+
 # Modules are loaded from the pinned submodule, never the sibling development source.
 plans_module = load_plan_module('local_plans')
 
@@ -477,7 +515,7 @@ def create_router(root=None, deliver=None):
         if not uid:
             raise HTTPException(409, 'Für diesen Workspace ist keine Firebase-UID hinterlegt.')
         result = await pull_fitness_workouts(request, uid)
-        workouts, _available, _updated = fitness_workouts_for_uid(uid)
+        workouts, _available, _updated = fitness_workout_logs_for_uid(uid)
         from coach_taskwarrior_scheduler import with_taskwarrior_lock
         taskwarrior_module = load_taskwarrior_module()
         result['taskwarrior'] = await asyncio.to_thread(
@@ -562,7 +600,7 @@ def create_router(root=None, deliver=None):
                     logging.info('Fitness cloud workout refresh unavailable for local plan sync: %s', error.detail)
                     cloud_pull = {'ok': False, 'reason': error.detail}
             try:
-                workouts, workouts_available, workout_source_updated_at = fitness_workouts_for_uid(uid) if uid else ([], False, None)
+                workouts, workouts_available, workout_source_updated_at = fitness_workout_logs_for_uid(uid) if uid else ([], False, None)
             except ValueError as error:
                 raise HTTPException(503, str(error))
             from coach_taskwarrior_scheduler import with_taskwarrior_lock

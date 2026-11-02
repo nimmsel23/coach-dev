@@ -126,6 +126,13 @@ class LocalPlanHTTPTest(unittest.IsolatedAsyncioTestCase):
                 'sourcePlanRoutineId': routine_id, 'finished_at': today.isoformat(),
                 'sessionState': 'completed',
             }]))
+            sessions = runtime_user/'sessions'
+            sessions.mkdir()
+            (sessions/'2026-11-02__legacy-session.json').write_text(json.dumps({
+                'session_id': 'legacy-session', 'date': today.date().isoformat(),
+                'trainingsart': 'Core Training', 'activity': 'core',
+                'saved_at': today.isoformat(), 'exercises': [],
+            }))
             with patch.dict(os.environ, {'FITNESS_AGENT_HOME': str(fitness)}):
                 sync = await client.post('/api/client/test-client/taskwarrior/sync',json={'planId':plan['id']})
                 self.assertEqual(sync.status_code,200,sync.text)
@@ -136,8 +143,9 @@ class LocalPlanHTTPTest(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(payload['report']['completed'],1)
                 tasks = await client.get('/api/client/test-client/taskwarrior')
             self.assertEqual(tasks.status_code,200)
-            self.assertEqual(tasks.json()['tasks'][0]['status'],'completed')
-            self.assertEqual(tasks.json()['tasks'][0]['workoutid'],'logged-session')
+            records = tasks.json()['tasks']
+            self.assertEqual({task['workoutid'] for task in records}, {'logged-session', 'fitness-session:legacy-session'})
+            self.assertTrue(all(task['status'] == 'completed' for task in records))
 
     async def test_workout_history_returns_coach_summary_without_exercise_details(self):
         fitness = self.root / 'fitness-history'

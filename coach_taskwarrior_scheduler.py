@@ -13,7 +13,7 @@ from urllib.parse import urlencode, urlsplit
 from urllib.request import Request, urlopen
 
 from coach_local_plans import clients_root, fitness_runtime_root, load_taskwarrior_module, plans_module
-from coach_local_plans import fitness_workouts_for_uid
+from coach_local_plans import fitness_workout_logs_for_uid
 
 AUTO_SYNC_PATH = Path('coach/taskwarrior-auto-sync.json')
 CLIENT_ID = re.compile(r'[A-Za-z0-9][A-Za-z0-9_-]{0,127}\Z')
@@ -139,7 +139,7 @@ def _reconcile_opted_in(root: Path | None = None) -> dict[str, int]:
         if refresh_fitness_workouts(uid) is True:
             summary['cloudPulls'] += 1
         try:
-            workouts, _available, _updated = fitness_workouts_for_uid(uid)
+            workouts, _available, _updated = fitness_workout_logs_for_uid(uid)
         except ValueError:
             logging.warning('Taskwarrior auto-sync skipped client %s: invalid Fitness log file', client_id)
             continue
