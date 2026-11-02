@@ -1716,3 +1716,12 @@ ESLint und vollständiger Firebase-Coach-Build waren erfolgreich. Der laufende
 :9150-Server liefert das neue Local-Coach-Bundle aus. Live-Leseabnahme ohne
 Klientendaten auszugeben: vier Klienten abgefragt, 30 Tasks, 30 offen, 0
 überfällig. Keine Taskwarrior-Daten verändert.
+
+## 2026-11-02 — Klienten nach Handlungsbedarf sortieren
+
+Die lokale Startübersicht kann Klienten alphabetisch oder nach Betreuungsbedarf
+sortieren. Überfällige Workout-Tasks erscheinen zuerst, danach Klienten ohne
+Trainingseintrag in den letzten 28 Tagen und zuletzt das älteste bekannte
+Training. Geprüfter Coach-Build erfolgreich; :9150 liefert das Bundle mit
+Sortierauswahl und Taskwarrior-Kennzahlen aus. Nur Lesezugriffe auf vorhandene
+Klientendaten; keine Aufgaben geändert.

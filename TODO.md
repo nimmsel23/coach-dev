@@ -32,6 +32,7 @@
 - [x] Private Betreuungsnotizen im bestehenden Klienten-Datenspeicher lesen und bearbeiten.
 - [x] Coach-Nutzerliste verwalten: Profile als Klient, Freund/Test oder ausgeblendet einordnen.
 - [x] Workout-Vorkommen aus lokalen Plänen in die vorhandene Klienten-Taskwarrior-DB `tw-data` synchronisieren.
+- [x] Klientenübersicht nach Handlungsbedarf (überfällige Tasks, fehlende Einträge) oder alphabetisch sortieren.
 - [ ] Planbesprechung zwischen Klient und Coach mit Verlauf und Kommentaren pro Übung.
 - [ ] Betreuungsübersicht um Plan-Rückmeldungen und offene Antworten erweitern.
 
