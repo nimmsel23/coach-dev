@@ -157,7 +157,7 @@ def create_router(root=None, deliver=None):
                         'duplicateProfiles': len(matches) > 1,
                         'role': role if profile else None,
                         'status': profile.get('status') if profile else None,
-                        'selectable': not coach_account and (not profile or role in {'client', 'contact'}),
+                        'selectable': not coach_account and len(matches) <= 1 and (not profile or role in {'client', 'contact'}),
                         'coachVisible': not coach_account and bool(matches) and len(matches) == 1 and role in {'client', 'contact'} and profile.get('coach_visible') is not False,
                     })
                 token = page.next_page_token
