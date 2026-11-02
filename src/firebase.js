@@ -2,7 +2,7 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, browserLocalPersistence, setPersistence } from "firebase/auth";
 import { getMessaging, isSupported as isMessagingSupported } from "firebase/messaging";
-import { getAI, VertexAIBackend } from "firebase/ai";
+import { getAI, AgentPlatformBackend } from "firebase/ai";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { config } from "../firebase.config.js";
 
@@ -19,7 +19,9 @@ let vertexAIInstance = undefined;
 export function getVertexAI() {
   if (vertexAIInstance !== undefined) return vertexAIInstance;
   try {
-    vertexAIInstance = getAI(app, { backend: new VertexAIBackend() });
+    // @firebase/ai >= 3 benennt VertexAIBackend in AgentPlatformBackend um.
+    // Location explizit setzen: der neue Default ist "global", der alte war us-central1.
+    vertexAIInstance = getAI(app, { backend: new AgentPlatformBackend("us-central1") });
   } catch (error) {
     console.warn("[firebase] Vertex AI init failed", error);
     vertexAIInstance = null;
