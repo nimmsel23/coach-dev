@@ -31,6 +31,10 @@ service cloud.firestore {
     match /{path=**}/sessions/{sessionId} {
       allow read: if isCoach() || (request.auth != null && resource.data.userId == request.auth.uid);
     }
+    // Live-Traction: collectionGroup reads are limited to the Coach account.
+    match /{path=**}/tractionDaily/{dayId} {
+      allow read: if isCoach();
+    }
     match /{path=**}/inbox/{itemId} {
       allow read:  if isCoach() || (request.auth != null && resource.data.userId == request.auth.uid);
       // Users always write inbox via direct path /fitness/{uid}/inbox (covered by per-user rule).
