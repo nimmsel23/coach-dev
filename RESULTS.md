@@ -1741,3 +1741,10 @@ fehlerfrei. `coach-api.service` ist aktiv; `/_coach/health` auf :9150 meldet
 `coach_ready: true`, und `/coach/local.html` liefert das neu gebaute
 `local-main-SJTX0ISB.js` aus. Das Bundle enthält den Feedback-Link und den
 Fehlertext für fehlende eindeutige UID-Zuordnung. Keine Klientendaten verändert.
+## 2026-11-02 — Feedbackstatus in der Coach-Übersicht
+
+Die Übersicht liest für sichtbare Klienten die Zustände ihrer bereitgestellten
+Planversionen: ausstehende Empfangsbestätigungen und Nachrichten, auf die der
+Coach antworten muss. Der loopback-geschützte Server verwendet nur eindeutige
+UID-Zuordnungen und liefert Zähler statt Nachrichtentexten oder Sender-IDs.
+Firestore-Ausfälle und unklare Zuordnungen bleiben als nicht verfügbar sichtbar.

@@ -229,6 +229,79 @@ def create_router(root=None, deliver=None):
             visible.append(item)
         return {'clients': visible}
 
+    @router.get('/api/client/{client}/feedback-summary')
+    async def client_feedback_summary(client: str, request: Request):
+        local_only(request)
+
+        def summarize():
+            try:
+                folder = store.client(client)
+            except plans_module.PlanError as error:
+                raise HTTPException(error.status, str(error))
+            profile = plans_module.read(folder / 'client.json') or {}
+            status = profile.get('status') or ''
+            role = profile.get('role') or ('contact' if status in {'freund', 'interessent', 'lead', 'kontakt'} else 'client')
+            if role not in {'client', 'contact'} or profile.get('coach_visible') is False:
+                raise HTTPException(404, 'Klient ist in der Coach-Übersicht ausgeblendet.')
+
+            uids = set(profile.get('firebase_uids') if isinstance(profile.get('firebase_uids'), list) else [])
+            if profile.get('firebase_uid'):
+                uids.add(profile['firebase_uid'])
+            uids = {uid for uid in uids if isinstance(uid, str) and plans_module.IDENTIFIER.fullmatch(uid)}
+            if len(uids) != 1:
+                reason = 'no-firebase-uid' if not uids else 'ambiguous-firebase-uid'
+                return {'available': False, 'reason': reason, 'deliveredPlans': 0, 'awaitingReply': 0, 'awaitingReceipt': 0}
+            uid = next(iter(uids))
+
+            for profile_path in store.root.glob('*/client.json'):
+                if profile_path.parent.name == client:
+                    continue
+                other = plans_module.read(profile_path) or {}
+                other_uids = set(other.get('firebase_uids') if isinstance(other.get('firebase_uids'), list) else [])
+                if other.get('firebase_uid'):
+                    other_uids.add(other['firebase_uid'])
+                if uid in other_uids:
+                    return {'available': False, 'reason': 'duplicate-workspace-uid', 'deliveredPlans': 0, 'awaitingReply': 0, 'awaitingReceipt': 0}
+
+            tracked = []
+            for plan in store.list(client):
+                delivery = plan.get('delivery') if isinstance(plan.get('delivery'), dict) else {}
+                remote_id = delivery.get('remotePlanId')
+                remote_version = delivery.get('remoteVersion')
+                if (isinstance(remote_id, str) and plans_module.IDENTIFIER.fullmatch(remote_id)
+                        and type(remote_version) is int and remote_version > 0):
+                    tracked.append((plan, remote_id, remote_version))
+            tracked.sort(key=lambda item: item[0].get('delivery', {}).get('at') or '', reverse=True)
+            selected = tracked[:50]
+            if not selected:
+                return {'available': True, 'reason': None, 'deliveredPlans': 0, 'awaitingReply': 0, 'awaitingReceipt': 0, 'truncated': False}
+
+            from coach_plan_push import get_db
+            db = get_db()
+            awaiting_reply = 0
+            awaiting_receipt = 0
+            for _plan, remote_id, version in selected:
+                response = (db.collection('planResponses').document(uid).collection('plans')
+                    .document(remote_id).collection('versions').document(f'v{version}'))
+                if not response.get().exists:
+                    awaiting_receipt += 1
+                latest = list(response.collection('entries').order_by('createdAt', direction='DESCENDING').limit(1).stream())
+                if latest and (latest[0].to_dict() or {}).get('senderRole') == 'client':
+                    awaiting_reply += 1
+            return {
+                'available': True, 'reason': None, 'deliveredPlans': len(tracked),
+                'awaitingReply': awaiting_reply, 'awaitingReceipt': awaiting_receipt,
+                'truncated': len(tracked) > len(selected),
+            }
+
+        try:
+            return await asyncio.to_thread(summarize)
+        except HTTPException:
+            raise
+        except Exception:
+            logging.exception('Unable to read local Coach plan-feedback summary')
+            raise HTTPException(503, 'Plan-Rückmeldungen lokal nicht verfügbar. Serverprotokoll prüfen.')
+
     @router.get('/api/coach/local/users')
     async def firebase_users(request: Request):
         local_only(request)
