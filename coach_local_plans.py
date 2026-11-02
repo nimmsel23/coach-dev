@@ -282,7 +282,7 @@ def create_router(root=None, deliver=None):
             uids.insert(0, profile['firebase_uid'])
         uid = next((value for value in uids if isinstance(value, str) and value.strip()), None)
         if not uid:
-            return {'workouts': [], 'available': False, 'storage': 'local-fitness-runtime'}
+            return {'workouts': [], 'available': False, 'reason': 'no-firebase-uid', 'storage': 'local-fitness-runtime'}
         try:
             days = max(1, min(3650, int(request.query_params.get('days', '28'))))
         except ValueError:
@@ -291,19 +291,54 @@ def create_router(root=None, deliver=None):
         workouts = plans_module.read(path) if path.is_file() else []
         if not isinstance(workouts, list):
             raise HTTPException(503, 'Lokale Fitness-Workoutdaten sind ungültig.')
+        if not path.is_file():
+            return {'workouts': [], 'available': False, 'reason': 'mirror-missing', 'storage': 'local-fitness-runtime'}
+
+        def parse_timestamp(value):
+            if not value:
+                return None
+            try:
+                parsed = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+                return parsed.astimezone() if parsed.tzinfo is None else parsed.astimezone()
+            except (TypeError, ValueError):
+                return None
+
         cutoff = datetime.now().astimezone().date() - timedelta(days=days - 1)
         recent = []
         for workout in workouts:
             if not isinstance(workout, dict) or not workout.get('finished_at'):
                 continue
-            try:
-                day = datetime.fromisoformat(str(workout['finished_at']).replace('Z', '+00:00')).astimezone().date()
-            except ValueError:
+            finished = parse_timestamp(workout.get('finished_at'))
+            if not finished:
                 continue
+            day = finished.date()
             if day >= cutoff:
-                recent.append(workout)
+                started = parse_timestamp(workout.get('started_at'))
+                duration = max(0, int((finished - started).total_seconds())) if started else None
+                exercises = workout.get('exercises') if isinstance(workout.get('exercises'), list) else []
+                events = workout.get('eventLog') if isinstance(workout.get('eventLog'), list) else None
+                completed_sets = sum(1 for event in (events or []) if isinstance(event, dict) and event.get('setId'))
+                if not completed_sets:
+                    completed_sets = sum(
+                        1 for exercise in exercises if isinstance(exercise, dict)
+                        for entry in (exercise.get('sets') or exercise.get('setsArray') or [])
+                        if isinstance(entry, dict) and entry.get('completed') is True
+                    )
+                recent.append({
+                    'id': str(workout.get('id') or ''),
+                    'name': str(workout.get('name') or 'Trainingseinheit'),
+                    'started_at': workout.get('started_at'),
+                    'finished_at': workout.get('finished_at'),
+                    'sessionState': str(workout.get('sessionState') or ''),
+                    'routine_id': workout.get('routine_id'),
+                    'sourcePlanId': workout.get('sourcePlanId'),
+                    'sourcePlanRoutineId': workout.get('sourcePlanRoutineId'),
+                    'exerciseCount': len(exercises),
+                    'completedSetCount': completed_sets,
+                    'durationSeconds': duration,
+                })
         recent.sort(key=lambda item: str(item.get('finished_at') or ''), reverse=True)
-        return {'workouts': recent, 'available': path.is_file(), 'storage': 'local-fitness-runtime'}
+        return {'workouts': recent[:30], 'available': True, 'reason': None, 'storage': 'local-fitness-runtime'}
 
     @router.get('/api/client/{client}/taskwarrior')
     async def taskwarrior_tasks(client: str, request: Request):

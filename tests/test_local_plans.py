@@ -3,7 +3,7 @@ import json
 import os
 import tempfile
 import unittest
-from datetime import datetime
+from datetime import datetime, timedelta
 from unittest.mock import patch
 from pathlib import Path
 from fastapi import FastAPI
@@ -138,5 +138,34 @@ class LocalPlanHTTPTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(tasks.status_code,200)
             self.assertEqual(tasks.json()['tasks'][0]['status'],'completed')
             self.assertEqual(tasks.json()['tasks'][0]['workoutid'],'logged-session')
+
+    async def test_workout_history_returns_coach_summary_without_exercise_details(self):
+        fitness = self.root / 'fitness-history'
+        runtime_user = fitness / 'users' / 'fixture-uid'
+        runtime_user.mkdir(parents=True)
+        finished = datetime.now().astimezone()
+        started = finished - timedelta(minutes=42)
+        (runtime_user/'workouts.json').write_text(json.dumps([{
+            'id': 'history-session', 'name': 'Ganzkörper A',
+            'started_at': started.isoformat(), 'finished_at': finished.isoformat(),
+            'sessionState': 'completed', 'sourcePlanId': 'remote-plan',
+            'sourcePlanRoutineId': 'routine-a',
+            'exercises': [{'name': 'Squat'}, {'name': 'Row'}],
+            'eventLog': [{'setId': 'a1'}, {'setId': 'a2'}, {'setId': 'b1'}],
+        }]))
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(self.app),base_url='http://localhost') as client:
+            with patch.dict(os.environ, {'FITNESS_AGENT_HOME': str(fitness)}):
+                response = await client.get('/api/client/test-client/workout/logs?days=90')
+                self.assertEqual(response.status_code,200,response.text)
+                payload = response.json()
+                self.assertTrue(payload['available'])
+                workout = payload['workouts'][0]
+                self.assertEqual(workout['id'],'history-session')
+                self.assertEqual(workout['exerciseCount'],2)
+                self.assertEqual(workout['completedSetCount'],3)
+                self.assertEqual(workout['durationSeconds'],42*60)
+                self.assertEqual(workout['sourcePlanId'],'remote-plan')
+                self.assertNotIn('exercises',workout)
+                self.assertNotIn('eventLog',workout)
 
 if __name__ == '__main__': unittest.main()

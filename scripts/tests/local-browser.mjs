@@ -122,6 +122,9 @@ try {
   assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(autoSyncStorageKey)})`),'1');
   await evaluate(`[...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen')).querySelector('input').click()`);
   assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(autoSyncStorageKey)})`),'0');
+  await click('Trainingstagebuch');
+  await wait(has('Fixture Training'));
+  assert.equal(await evaluate(has('1 abgeschlossene Sätze')),true);
   assert.deepEqual(cloudRequests,[], 'Only the test server handles fake delivery');
   assert.deepEqual(errors,[]);
   console.log('PASS: Local client → plan → exercise prescriptions → disk save → versioning/delivery → opt-in automatic workout reconciliation, without Firebase browser calls.');

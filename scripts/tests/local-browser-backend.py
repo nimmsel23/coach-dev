@@ -26,10 +26,13 @@ with tempfile.TemporaryDirectory(prefix='coach-local-client-') as folder:
         runtime = root/'fitness/users/fixture-uid'
         runtime.mkdir(parents=True, exist_ok=True)
         (runtime/'workouts.json').write_text(json.dumps([{
-            'id': 'auto-sync-session', 'sourcePlanId': payload['planId'],
+            'id': 'auto-sync-session', 'name': 'Fixture Training', 'sourcePlanId': payload['planId'],
             'sourcePlanRoutineId': payload['routineId'],
+            'started_at': datetime.now().astimezone().isoformat(),
             'finished_at': datetime.now().astimezone().isoformat(),
             'sessionState': 'completed',
+            'exercises': [{'name': 'Fixture Exercise', 'sets': [{'completed': True}]}],
+            'eventLog': [{'setId': 'fixture-set'}],
         }]))
         return {'ok': True}
     @app.get('/legacy-plan-worker.js')

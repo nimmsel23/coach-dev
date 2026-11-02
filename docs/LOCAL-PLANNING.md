@@ -72,6 +72,12 @@ der Premium-Tracking-Tab offen ist. Die Einstellung liegt im Browser-LocalStorag
 und gilt nur für diesen Klienten und Plan. Tabwechsel, Klientenwechsel oder das
 Ausschalten beenden den Abgleich.
 
+Das **Trainingstagebuch** liest abgeschlossene Einheiten aus derselben Fitness-
+Runtime-Datei und zeigt Name, Datum, Dauer, Übungszahl und abgeschlossene
+Satzanzahl. Coach erhält dafür nur diese Zusammenfassung; Übungs-, Satz- und
+Eventdaten bleiben bei Fitness. Eine fehlende UID-Zuordnung und eine fehlende
+lokale Fitness-Datei werden getrennt als nicht verfügbare Quelle angezeigt.
+
 Schreibzugriffe sind atomar und prüfen den Bearbeitungsstand. Ungesicherte
 Editoränderungen bleiben zusätzlich gerätegebunden im Browser. Die API
 `/api/coach/local/*` ist nur für Loopback-Verbindungen zugelassen, fremde Origins
@@ -136,10 +142,13 @@ Ordner-Slug aus klienten-python. Beispiel: `http://127.0.0.1:9150/matthias-mayer
 | `GET /api/clients` | Vorhandene Klienten auflisten |
 | `GET /api/client/<id>` | Reduzierte Klientenmetadaten |
 | `GET/POST /api/client/<id>/plans` | Pläne auflisten / erstellen |
+| `GET /api/client/<id>/workout/logs?days=90` | Zusammenfassung abgeschlossener lokaler Fitness-Workouts |
 | `GET/PUT /api/client/<id>/plans/<plan>` | Lesen / mit `expectedUpdatedAt` sichern |
 | `GET/POST …/<plan>/versions` | Historie / mit `expectedUpdatedAt` freigeben |
 | `GET …/<plan>/export/json` oder `/md` | Exportieren |
 | `POST …/<plan>/deliver` | Expliziter Versand, Body `{"version": 1}` |
+| `GET /api/client/<id>/taskwarrior` | Lokale Workout-Tasks lesen |
+| `POST /api/client/<id>/taskwarrior/sync` | Plan-Vorkommen mit lokalen Fitness-Logs abgleichen |
 | `GET /api/client/<id>/legacy` | Altplan für ausdrückliche Übernahme lesen |
 
 Klientenbezogene APIs sind auch unter `/k/<id>/…` erreichbar; die bisherigen
