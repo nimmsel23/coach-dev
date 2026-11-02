@@ -66,7 +66,11 @@ Konsole das an; Tasks können weiterhin manuell als erledigt markiert werden.
 
 Tasks bleiben in `<client>/tw-data/` und werden weder in Firestore noch in die
 Fitness-Logdatei zurückgeschrieben. Das ist eine explizite lokale Synchronisierung
-und kein Hintergrunddienst.
+und standardmäßig kein Hintergrunddienst. Für einen Plan kann der Coach einen
+lokalen Auto-Abgleich einschalten: beim Öffnen und dann alle 60 Sekunden, solange
+der Premium-Tracking-Tab offen ist. Die Einstellung liegt im Browser-LocalStorage
+und gilt nur für diesen Klienten und Plan. Tabwechsel, Klientenwechsel oder das
+Ausschalten beenden den Abgleich.
 
 Schreibzugriffe sind atomar und prüfen den Bearbeitungsstand. Ungesicherte
 Editoränderungen bleiben zusätzlich gerätegebunden im Browser. Die API
