@@ -474,8 +474,8 @@ serverseitig) fehlschlägt, weil der lokale Coach-Rechner gerade nicht läuft.
 Der Pfad ist Fitness-eigen: lokaler Coach-Backendpfad zuerst, Browser-/Cloud-
 Fallback nur wenn der lokale Coach-Rechner nicht erreichbar ist.
 
-- `src/firebase.js`: `vertexAI = getAI(app, { backend: new VertexAIBackend() })`
-  — bewusst die aktuelle `firebase/ai`-API.
+- `src/firebase.js`: `vertexAI = getAI(app, { backend: new AgentPlatformBackend("us-central1") })`
+  — `firebase/ai` ≥ 3 (Name `VertexAIBackend` existiert dort nicht mehr; Location explizit, Default ist jetzt `global`).
 - `lib/exerciseAiEnrich.js`: Prompts 1:1 aus
   `fitness/catalog/agent/gemini.py` (`PROMPT_EXERCISE_ENRICH`/`_NEW`)
   portiert, aber mit `responseSchema`/`responseMimeType: "application/json"`

@@ -32,6 +32,10 @@ Command Center für Coach-seitige Exercise-Freigabe, Klienten-Betreuung und Kata
   Template-Auswahl) und pusht ihn direkt an den Klienten
   (`assignPlanToClient()`). Zeigt bereits zugewiesene Pläne dieses Coaches an
   diesen Klienten inkl. Tages-Fortschritt (`getClientPlanProgress()`).
+- **`TractionPanel.jsx`**: Coach-only Live-Übersicht über App-Öffnungen,
+  Bereichsaufrufe, aktive Konten und letzte Nutzung. Zeigt nur kurze Firebase-
+  UID-Präfixe und Funktionsbereiche; Trainingsinhalte und Freitext werden nicht
+  erfasst. Daten kommen per Firestore-`collectionGroup`-Snapshot.
 
 ## Datenfluss (Firebase / Firestore)
 
@@ -49,3 +53,13 @@ Command Center für Coach-seitige Exercise-Freigabe, Klienten-Betreuung und Kata
 - **Feedback**: `saveCoachFeedback()` speichert Kommentare direkt in der entsprechenden Klienten-Dokument-Referenz.
 - **Katalog**: `searchExercises()`, `getAnatomy()`, `saveExercise()` arbeiten direkt mit `fitness/kb/exercises` und `fitness/kb/anatomy`.
 - **Plan-Zuweisung**: `assignPlanToClient(coachUid, clientUid, plan)` — Firestore schreibt per `setDoc` (merge) auf `fitness/{clientUid}/wf_workouts/{planId}` (neue ID via `doc(collection(...)).id` falls `plan.id` fehlt); Local-Build ruft `POST /fitness/coach/plans/:clientUid` (`server.mjs`) auf, das nach `~/.aos/fitness/users/<clientUid>/plans/<planId>.json` schreibt. Beide Backends teilen sich dieselbe Funktionssignatur (`src/lib/db/{firestore,local}/assignedPlans.js`). Klienten-seitiges Abarbeiten des zugewiesenen Plans läuft außerhalb dieses View-Ordners in `src/views/Plan/AssignedPlans.jsx` (Training-Tab, kein eigener Coach-Unterpunkt).
+
+## Live-Traction
+
+`src/App.jsx` schreibt beim Einstieg, Bereichswechsel und im sichtbaren Tab alle
+zwei Minuten aggregierte Tageswerte unter
+`fitness/{uid}/tractionDaily/{YYYY-MM-DD}`; sichtbare Tabs senden alle fünf
+Minuten einen Aktivitäts-Ping. `TractionPanel.jsx` lauscht auf die
+letzten sieben Tage via `collectionGroup("tractionDaily")`. Die zentrale
+Rules-Quelle in `~/vitalos/firestore.rules` braucht dafür eine Coach-only
+`collectionGroup`-Leseregel; Fitness pflegt keine eigenen Firestore Rules.

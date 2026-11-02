@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout vitalos (Meta-Repo, liefert Nachbar-Repos)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: nimmsel23/vitalos
           ref: master
@@ -52,11 +52,11 @@ jobs:
           git submodule sync --recursive
           git submodule update --init --recursive
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 11.3.0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm

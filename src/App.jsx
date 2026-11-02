@@ -31,6 +31,7 @@ import { useUser } from './contexts/UserContext'
 import { useSettings } from './contexts/SettingsContext'
 import { useSwipeNavigation } from './hooks/useSwipeNavigation'
 import { getStaticMuscleTaxonomy } from './lib/kb/muscles.js'
+import { recordFitnessUsage } from './lib/traction.js'
 
 const SESSION_SUB_TABS = new Set(['today', 'timer', 'skills', 'plan', 'history', 'logbuch'])
 const REVIEW_SUB_TABS = new Set(['report', 'muscles', 'readiness', 'verlauf', 'protokoll'])
@@ -230,6 +231,8 @@ export default function App() {
   const [inspectorExercise, setInspectorExercise] = useState(null)
   const [taxonomy] = useState(() => getStaticMuscleTaxonomy());
   const [focusLayer, setFocusLayer] = useState(() => initialRoute.focusLayer);
+  const tractionOpenedUidRef = useRef('');
+  const tractionLastViewRef = useRef('');
 
   const { mainRef, swipeHint, slideDirection, setSlideDirection } = useSwipeNavigation({
     navMode, tab, swipeEnabled, setTab, NAV_ITEMS: navItems
@@ -239,6 +242,31 @@ export default function App() {
     if (!user) return;
     getAllMuscles().catch(() => {});
   }, [user]);
+
+  useEffect(() => {
+    if (!user || isLocalMode()) return undefined;
+    const section = subTab || focusLayer || tab;
+    const isFirstOpen = tractionOpenedUidRef.current !== user.uid;
+    const routeKey = `${user.uid}:${section}`;
+    const isNewView = tractionLastViewRef.current !== routeKey;
+    tractionOpenedUidRef.current = user.uid;
+    tractionLastViewRef.current = routeKey;
+    const record = () => recordFitnessUsage(user.uid, section, { pageView: isNewView, appOpen: isFirstOpen }).catch(() => {});
+    record();
+    const heartbeat = window.setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        recordFitnessUsage(user.uid, section).catch(() => {});
+      }
+    }, 300000);
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') recordFitnessUsage(user.uid, section).catch(() => {});
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.clearInterval(heartbeat);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [user?.uid, tab, subTab, focusLayer]);
 
   useEffect(() => {
     if (isLocalMode()) return undefined;

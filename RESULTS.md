@@ -29,3 +29,14 @@ Die vendorte Mini-App-Shell mit der aktuellen VitalOS-Quelle synchronisiert. Ein
 ## 2026-11-01: Push-Test nach Admin-SDK-Update repariert
 
 Firebase-Log von sendTestPush: `TypeError: admin.firestore is not a function` (HTTP 500). `firebase-admin` 14.5.0 entfernt die Namespace-API. Alle Firestore-, FieldValue-, Messaging- und Auth-Aufrufe in functions/index.js nutzen jetzt die modularen Einstiegspunkte. Damit erhalten auch Reminder, Coach-Workout-Push und Strava denselben Fix. Keine Änderung an Rules oder Klientendaten.
+
+## 2026-11-02 — Exercise Buckets als Katalog-Entwurf
+
+- `docs/EXERCISE-BUCKETS.md` dokumentiert das additive Bucket-Modell für
+  Übungsfamilien, konkrete Varianten, Quellenbelege und Muskel-/Regionsbrücken.
+- Dips- und Seitheben-Beispiele grenzen verwandte Varianten explizit ab.
+- Den Bench-Dips-Eintrag von der generischen wger-Dips-ID 194 auf den
+  passenden wger-Quellbeleg 1324 korrigiert.
+- Keine Neuimport- oder Build-Änderung: vorhandene wger-/yuhonas-Daten bleiben
+  Quellenbestand. Unvollständige automatische Namens-Deduplikation und ein
+  unsicherer Akzentzeichen-Sprachfilter wurden verworfen.

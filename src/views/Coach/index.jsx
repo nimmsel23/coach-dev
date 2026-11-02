@@ -1,25 +1,21 @@
 import { useState } from 'react';
-import { CheckCircle2, Dumbbell, Users } from 'lucide-react';
+import { Activity, CheckCircle2, Dumbbell, Users } from 'lucide-react';
 import { useInbox } from '../Inbox/useInbox';
 import InboxCard from '../Inbox/InboxCard';
 import CatalogBrowser from './CatalogBrowser';
 import ClientsPanel from './ClientsPanel';
+import TractionPanel from './TractionPanel';
 
 const SUB_TABS = [
   { id: 'exercises', idx: '01 · UPLINK', label: () => 'Übungsanfragen', cnt: (n) => `(${n})` },
   { id: 'catalog', idx: '02 · ARCHIV', label: () => 'Katalog Browser', icon: Dumbbell },
   { id: 'clients', idx: '03 · DOSSIER', label: () => 'Klienten', icon: Users },
+  { id: 'traction', idx: '04 · SIGNAL', label: () => 'Nutzung', icon: Activity },
 ];
 
 export default function Coach({ onInspectExercise }) {
   const { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich, linkSource } = useInbox({ global: true });
   const [activeSubTab, setActiveSubTab] = useState('exercises');
-
-  if (loading) return (
-    <div className="flex items-center justify-center py-20">
-      <div className="w-6 h-6 border-2 border-fit-accent/30 border-t-fit-accent rounded-full animate-spin" />
-    </div>
-  );
 
   return (
     <div className="space-y-6 p-4 md:p-6 pb-20">
@@ -58,7 +54,9 @@ export default function Coach({ onInspectExercise }) {
             <h2>Offene Übungsanfragen</h2>
             <span className="cc-tag">{exercises.length} unreviewed</span>
           </div>
-          {exercises.length === 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center py-20"><div className="w-6 h-6 border-2 border-fit-accent/30 border-t-fit-accent rounded-full animate-spin" /></div>
+          ) : exercises.length === 0 ? (
             <div className="card py-16 flex flex-col items-center justify-center text-center" style={{ opacity: 0.5 }}>
               <CheckCircle2 size={40} className="mb-3 text-fit-green" />
               <h3 className="text-base font-semibold text-fit-ink">Alles freigegeben</h3>
@@ -100,6 +98,7 @@ export default function Coach({ onInspectExercise }) {
           <ClientsPanel />
         </div>
       )}
+      {activeSubTab === 'traction' && <TractionPanel />}
 
       {toast && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full text-xs font-semibold shadow-lg z-50 bg-fit-card text-fit-accent border border-fit-line animate-in slide-in-from-bottom-4 duration-300">

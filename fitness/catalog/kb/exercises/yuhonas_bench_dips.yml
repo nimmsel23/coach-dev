@@ -1,9 +1,9 @@
 exercise_id: yuhonas_bench_dips
-description: Expert details for Dips
+description: Expert details for Bench Dips
 approved_at: '2026-10-31T14:40:48.356973+00:00'
 exercises:
 - id: yuhonas_bench_dips
-  german: Dips
+  german: Bank-Dips
   exercise_id: yuhonas_bench_dips
   wger_muscle_ids:
     primary:
@@ -11,17 +11,17 @@ exercises:
     - 5
     secondary:
     - 5
-  wger_id: 194
-  display_name: Dips
+  wger_id: 1324
+  display_name: Bank-Dips (Bench Dips)
   external_ids:
     wger:
-    - 194
+    - 1324
   english: Bench Dips
   origin:
     type: external
     source_refs:
       wger:
-      - '194'
+      - '1324'
   category: push
   equipment:
   - bench
@@ -95,7 +95,7 @@ exercises:
   - wger
   - yuhonas
   - merged_external
-  name: Dips
+  name: Bank-Dips (Bench Dips)
   movements:
   - elbow_extension
   - shoulder_extension
@@ -113,8 +113,10 @@ exercises:
     approved_at: '2026-10-31T14:40:48.356973+00:00'
   approved_at: '2026-10-31T14:40:48.356973+00:00'
   search_aliases:
-  - wger_194
-  - Dips
+  - yuhonas_bench_dips
+  - wger_1324
+  - Bench_Dips
+  - Bank-Dips
   - Bench Dips
   source_selection:
     yuhonas: null
