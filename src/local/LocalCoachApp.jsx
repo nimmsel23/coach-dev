@@ -54,6 +54,12 @@ export default function LocalCoachApp() {
   const [taskwarriorLoading, setTaskwarriorLoading] = useState(false);
   const [taskwarriorPlanId, setTaskwarriorPlanId] = useState('');
   const [taskwarriorReport, setTaskwarriorReport] = useState(null);
+  const [rosterOpen, setRosterOpen] = useState(false);
+  const [firebaseUsers, setFirebaseUsers] = useState([]);
+  const [firebaseUsersLoading, setFirebaseUsersLoading] = useState(false);
+  const [firebaseUserSearch, setFirebaseUserSearch] = useState('');
+  const [firebaseUserRoles, setFirebaseUserRoles] = useState({});
+  const [savingFirebaseUid, setSavingFirebaseUid] = useState('');
   const sequence = useRef(0);
   const summarySequence = useRef(0);
   const notesSequence = useRef(0);
@@ -92,6 +98,26 @@ export default function LocalCoachApp() {
     }
     catch (err) { setError(err.message); }
     finally { setLoading(false); setSummariesLoading(false); }
+  }
+  async function loadFirebaseUsers() {
+    setFirebaseUsersLoading(true); setError('');
+    try {
+      const data = await api('coach/local/users');
+      setFirebaseUsers(Array.isArray(data.users) ? data.users : []);
+    } catch (err) { setError(err.message); }
+    finally { setFirebaseUsersLoading(false); }
+  }
+  async function updateFirebaseMembership(user) {
+    const included = !user.coachVisible;
+    const role = firebaseUserRoles[user.uid] || 'friend';
+    if (included && !user.knownClient && !confirm(`Einen lokalen Workspace für ${user.displayName || user.email || user.uid} als ${role === 'friend' ? 'Freund' : 'Klient'} anlegen? Das verändert nur ~/.local/Klienten; Freund-Workspaces erhalten keinen Praxis-Klientendatensatz. Firebase wird nicht verändert.`)) return;
+    setSavingFirebaseUid(user.uid); setError(''); setNotice('');
+    try {
+      await api(`coach/local/users/${encodeURIComponent(user.uid)}/membership`, 'PATCH', { included, role });
+      await Promise.all([loadClients(), loadFirebaseUsers()]);
+      setNotice(included ? `${user.displayName || user.uid} ist jetzt in deiner Coach-Liste.` : `${user.displayName || user.uid} ist aus der Coach-Liste ausgeblendet. Workspace und Daten bleiben erhalten.`);
+    } catch (err) { setError(err.message); }
+    finally { setSavingFirebaseUid(''); }
   }
   useEffect(() => { loadClients(); }, []);
   useEffect(() => {
@@ -170,7 +196,7 @@ export default function LocalCoachApp() {
   function returnToPlans() { setEditing(null); act(reload); }
   function selectClient(id, tab = 'plans') {
     if (noteDirty && !confirm('Die ungespeicherte Betreuungsnotiz verwerfen?')) return false;
-    setNoteDirty(false); setWorkspaceTab(tab); setClientId(id);
+    setNoteDirty(false); setRosterOpen(false); setWorkspaceTab(tab); setClientId(id);
     return true;
   }
   function editNote(note) {
@@ -189,15 +215,31 @@ export default function LocalCoachApp() {
     });
   }
   const filtered = clients.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
+  const filteredFirebaseUsers = firebaseUsers.filter((user) => `${user.displayName} ${user.email} ${user.clientId || ''}`.toLowerCase().includes(firebaseUserSearch.toLowerCase()));
 
   return <div className="min-h-screen bg-fit-bg text-fit-ink">
     {!embedded && <header className="border-b border-fit-line px-4 py-5 sm:px-8"><div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4"><div><a href="./" className="text-xs font-semibold uppercase tracking-widest text-fit-accent">VitalOS · Coach</a><h1 className="mt-1 text-2xl font-bold tracking-tight">Coach-Konsole</h1><p className="mt-2 text-sm text-fit-muted">Klienten öffnen, Trainingspläne bearbeiten und freigegebene Versionen übergeben.</p></div><span className="flex items-center gap-2 rounded-full border border-fit-line px-3 py-2 text-xs text-fit-muted"><CheckCircle2 size={15} className="text-fit-accent" /> Lokale Klientendaten</span></div></header>}
     <div className={`mx-auto grid max-w-7xl gap-6 p-4 pb-20 sm:p-8 ${embedded ? '' : 'lg:grid-cols-[260px_minmax(0,1fr)]'}`}>
-      {!embedded && <aside className="min-w-0"><div className="mb-3 flex items-center justify-between"><h2 className="flex items-center gap-2 font-semibold"><Users size={17} /> Klienten</h2><button disabled={busy || !!editing || loading || summariesLoading} aria-label="Klienten aktualisieren" onClick={loadClients} className="min-h-[44px] p-3"><RefreshCw size={16} /></button></div><input aria-label="Klienten suchen" placeholder="Klienten suchen…" value={query} onChange={(e) => setQuery(e.target.value)} className={input} /><div className="mt-3 max-h-64 space-y-2 overflow-y-auto lg:max-h-[65vh]">{filtered.map((item) => <button key={item.id} disabled={busy || !!editing} aria-pressed={clientId === item.id} onClick={() => selectClient(item.id)} className={`min-h-[64px] w-full rounded-xl border p-3 text-left disabled:opacity-50 ${clientId === item.id ? 'border-fit-accent bg-fit-accent/10' : 'border-fit-line bg-fit-card'}`}><span className="block font-semibold">{item.name}</span><span className="mt-1 block text-xs text-fit-muted">{item.canDeliver ? 'App-Zuordnung vorhanden' : 'Lokale Planarbeit möglich'}</span></button>)}</div>{!loading && !filtered.length && <p className="mt-4 text-sm text-fit-muted">{clients.length ? 'Kein Treffer.' : 'Noch keine Klienten in der bestehenden Klientenverwaltung.'}</p>}</aside>}
+      {!embedded && <aside className="min-w-0"><div className="mb-3 flex items-center justify-between"><h2 className="flex items-center gap-2 font-semibold"><Users size={17} /> Klienten</h2><button disabled={busy || !!editing || loading || summariesLoading} aria-label="Klienten aktualisieren" onClick={loadClients} className="min-h-[44px] p-3"><RefreshCw size={16} /></button></div><input aria-label="Klienten suchen" placeholder="Klienten suchen…" value={query} onChange={(e) => setQuery(e.target.value)} className={input} /><div className="mt-3 max-h-64 space-y-2 overflow-y-auto lg:max-h-[65vh]">{filtered.map((item) => <button key={item.id} disabled={busy || !!editing} aria-pressed={!rosterOpen && clientId === item.id} onClick={() => selectClient(item.id)} className={`min-h-[64px] w-full rounded-xl border p-3 text-left disabled:opacity-50 ${!rosterOpen && clientId === item.id ? 'border-fit-accent bg-fit-accent/10' : 'border-fit-line bg-fit-card'}`}><span className="block font-semibold">{item.name}</span><span className="mt-1 block text-xs text-fit-muted">{item.role === 'contact' ? 'Freund / Kontakt' : item.canDeliver ? 'Klient · App zugeordnet' : 'Klient · lokale Betreuung'}</span></button>)}</div>{!loading && !filtered.length && <p className="mt-4 text-sm text-fit-muted">{clients.length ? 'Kein Treffer.' : 'Noch keine Klienten in der bestehenden Klientenverwaltung.'}</p>}<button className={`${button} mt-4 w-full`} onClick={() => { setRosterOpen(true); loadFirebaseUsers(); }}>Nutzer für Coach-Liste auswählen</button></aside>}
       <main className="min-w-0 space-y-5">
         {error && <div role="alert" className="rounded-xl border border-fit-red/40 bg-fit-card p-4 text-sm text-fit-red">{error}<button className="ml-3 underline" disabled={busy || !!editing} onClick={() => clientId ? act(reload) : loadClients()}>Erneut versuchen</button></div>}
         {notice && <p role="status" className="rounded-xl border border-fit-accent/30 bg-fit-accent/10 p-4 text-sm">{notice}</p>}
-        {!client && <section className="space-y-5">
+        {rosterOpen && <section className="space-y-5">
+          <header className="rounded-2xl border border-fit-line bg-fit-card p-6"><p className="text-sm text-fit-muted">Lokale Sichtbarkeit verwalten</p><h2 className="mt-1 text-2xl font-semibold">Nutzer für die Coach-Liste</h2><p className="mt-2 max-w-3xl text-sm leading-relaxed text-fit-muted">Firebase-Konten werden nur hier lokal angezeigt. Ein Freund erhält einen privaten Klienten-Workspace ohne Praxis-Klientendatensatz; ein Klient wird über die vorhandene Klientenverwaltung angelegt. Ausblenden entfernt nichts und löscht keine Daten.</p><div className="mt-4 flex flex-wrap gap-3"><button className={button} onClick={() => { setRosterOpen(false); setClientId(''); }}>Zur Coach-Übersicht</button><button className={button} disabled={firebaseUsersLoading} onClick={loadFirebaseUsers}><RefreshCw size={15} className="mr-2 inline" /> Aktualisieren</button></div></header>
+          <input aria-label="Firebase-Nutzer suchen" placeholder="Name oder E-Mail suchen…" value={firebaseUserSearch} onChange={(event) => setFirebaseUserSearch(event.target.value)} className={input} />
+          {firebaseUsersLoading && <p role="status" className="text-sm text-fit-muted">Firebase-Nutzer werden geladen…</p>}
+          {!firebaseUsersLoading && !firebaseUsers.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Keine Firebase-Nutzer geladen. Prüfe die lokale Firebase-Admin-Konfiguration und lade erneut.</p>}
+          <div className="space-y-3">{filteredFirebaseUsers.map((user) => {
+            const role = user.role || firebaseUserRoles[user.uid] || 'friend';
+            const saving = savingFirebaseUid === user.uid;
+            return <article key={user.uid} className="flex flex-col gap-4 rounded-2xl border border-fit-line bg-fit-card p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0"><h3 className="font-semibold">{user.displayName || user.email || `Firebase ${user.uid.slice(0, 8)}`}</h3><p className="mt-1 truncate text-xs text-fit-muted">{user.email || 'Keine E-Mail'}{user.clientId ? ` · ${user.clientId}` : ''}</p><p className="mt-1 text-xs text-fit-muted">{user.duplicateProfiles ? 'Mehrere lokale Workspaces mit dieser UID — manuelle Klärung nötig.' : user.selectable === false ? `${user.role || 'Admin'}-Konto · bleibt aus der Klientenliste ausgeschlossen` : user.coachVisible ? `In Coach-Liste · ${user.role === 'contact' ? 'Freund / Kontakt' : 'Klient'}` : user.knownClient ? 'Workspace vorhanden · ausgeblendet' : 'Noch kein lokaler Klienten-Workspace'}</p></div>
+              {user.selectable === false || user.duplicateProfiles ? null : <div className="flex flex-wrap items-center gap-2 sm:justify-end">{!user.knownClient && <label className="text-xs text-fit-muted">Aufnehmen als<select aria-label={`${user.displayName || user.email || user.uid}: Rolle`} className="ml-2 min-h-[44px] rounded-xl border border-fit-line bg-fit-bg px-3 text-sm text-fit-ink" value={firebaseUserRoles[user.uid] || 'friend'} onChange={(event) => setFirebaseUserRoles((current) => ({ ...current, [user.uid]: event.target.value }))}><option value="friend">Freund</option><option value="client">Klient</option></select></label>}<button className={`${button} ${user.coachVisible ? 'text-fit-red' : 'bg-fit-accent text-fit-bg'}`} disabled={!!savingFirebaseUid || busy} onClick={() => updateFirebaseMembership(user)}>{saving ? 'Speichere…' : user.coachVisible ? 'Aus Coach-Liste nehmen' : user.knownClient ? 'Wieder aufnehmen' : `Als ${role === 'client' ? 'Klient' : 'Freund'} aufnehmen`}</button></div>}
+            </article>;
+          })}</div>
+          {!firebaseUsersLoading && firebaseUsers.length > 0 && !filteredFirebaseUsers.length && <p className="text-sm text-fit-muted">Keine Nutzer passen zur Suche.</p>}
+        </section>}
+        {!rosterOpen && !client && <section className="space-y-5">
           <header className="rounded-2xl border border-fit-line bg-fit-card p-6 sm:p-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-fit-muted">Deine lokale Übersicht</p><h2 className="mt-1 text-2xl font-semibold">Klientenarbeitsplatz</h2><p className="mt-2 max-w-xl text-sm leading-relaxed text-fit-muted">Öffne die Trainingsplanung oder springe direkt in die bestehende Klientenakte. Die Aktivität bezieht sich auf die letzten 28 Tage.</p></div><button className={button} disabled={loading || summariesLoading} onClick={loadClients}><RefreshCw size={15} className="mr-2 inline" /> Übersicht aktualisieren</button></div>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Klienten</p><p className="mt-1 text-2xl font-semibold">{clients.length}</p></div>
@@ -217,7 +259,7 @@ export default function LocalCoachApp() {
             </article>;
           })}</div>
         </section>}
-        {client && <><header className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-fit-accent">Vital Coach · {workspaceTab === 'plans' ? 'Trainingsplanung' : workspaceTab === 'notes' ? 'Betreuung' : 'Premium-Tracking'}</p><h2 className="mt-1 text-2xl font-semibold">{client.name}</h2></div><a className={button} href={`/${encodeURIComponent(clientId)}/`}>Klientenakte öffnen</a></header>
+        {!rosterOpen && client && <><header className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-fit-accent">Vital Coach · {workspaceTab === 'plans' ? 'Trainingsplanung' : workspaceTab === 'notes' ? 'Betreuung' : 'Premium-Tracking'}</p><h2 className="mt-1 text-2xl font-semibold">{client.name}</h2></div><a className={button} href={`/${encodeURIComponent(clientId)}/`}>Klientenakte öffnen</a></header>
           <nav aria-label="Klientenarbeitsbereich" className="flex flex-wrap gap-2 border-b border-fit-line pb-3"><button className={`${button} ${workspaceTab === 'plans' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'plans' ? 'page' : undefined} onClick={() => setWorkspaceTab('plans')}>Trainingspläne</button><button className={`${button} ${workspaceTab === 'notes' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'notes' ? 'page' : undefined} onClick={() => { if (workspaceTab === 'notes') return; setWorkspaceTab('notes'); }}>Betreuungsnotizen <span className="ml-1 text-xs text-fit-muted">{coachNotes.length}</span></button><button className={`${button} ${workspaceTab === 'taskwarrior' ? 'border-fit-accent bg-fit-accent/10' : ''}`} aria-current={workspaceTab === 'taskwarrior' ? 'page' : undefined} onClick={() => setWorkspaceTab('taskwarrior')}>Premium-Tracking</button></nav>
           {workspaceTab === 'notes' ? <section className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             <form className="h-fit space-y-4 rounded-2xl border border-fit-line bg-fit-card p-5" onSubmit={(event) => { event.preventDefault(); saveNote(); }}>

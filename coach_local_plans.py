@@ -1,10 +1,12 @@
 """Client-ID Coach HTTP boundary; Plan owns storage, klienten-python owns the registry."""
 from __future__ import annotations
 import asyncio
+import hashlib
 import logging
 import importlib.util
 import json
 import os
+import re
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -28,6 +30,31 @@ def load_taskwarrior_module():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def load_client_workspace_module():
+    source = Path(os.getenv('KLIENTEN_PYTHON_ROOT', str(Path.home() / 'klienten-python'))).expanduser()
+    if not (source / 'klienten_manager/workspace.py').is_file():
+        raise FileNotFoundError('klienten-python workspace owner is unavailable')
+    if str(source) not in sys.path:
+        sys.path.insert(0, str(source))
+    import importlib
+    return importlib.import_module('klienten_manager.workspace')
+
+
+def is_coach_auth_user(user):
+    email_name = (getattr(user, 'email', None) or '').partition('@')[0].casefold()
+    display_name = (getattr(user, 'display_name', None) or '').strip().casefold()
+    claims = getattr(user, 'custom_claims', None) or {}
+    if not isinstance(claims, dict):
+        claims = {}
+    claim_role = str(claims.get('role') or '').casefold()
+    return (
+        email_name in {'nimmsel23', 'nimmdaniel'}
+        or display_name in {'nimmsel23', 'nimmdaniel'}
+        or claim_role in {'coach', 'admin', 'superuser'}
+        or any(claims.get(key) is True for key in ('coach', 'admin', 'superuser'))
+    )
 
 
 def fitness_runtime_root():
@@ -78,7 +105,18 @@ def create_router(root=None, deliver=None):
 
     @router.get('/api/clients')
     async def clients(request: Request):
-        return {'clients': await handle(request, store.clients)}
+        records = await handle(request, store.clients)
+        visible = []
+        for item in records:
+            profile_path = store.client(item['id']) / 'client.json'
+            profile = plans_module.read(profile_path) or {}
+            status = profile.get('status') or ''
+            role = profile.get('role') or ('contact' if status in {'freund', 'interessent', 'lead', 'kontakt'} else 'client')
+            if role not in {'client', 'contact'} or profile.get('coach_visible') is False:
+                continue
+            item.update({'role': role, 'status': status, 'canDeliver': bool(profile.get('firebase_uid') or profile.get('firebase_uids'))})
+            visible.append(item)
+        return {'clients': visible}
 
     @router.get('/api/coach/local/users')
     async def firebase_users(request: Request):
@@ -90,24 +128,38 @@ def create_router(root=None, deliver=None):
 
             await asyncio.to_thread(get_db)
             app = firebase_admin.get_app()
-            known_uids = set()
-            for profile_path in clients_root().glob('*/client.json'):
+            profiles_by_uid = {}
+            for profile_path in store.root.glob('*/client.json'):
                 try:
                     profile = json.loads(profile_path.read_text(encoding='utf-8'))
-                    known_uids.update(uid for uid in profile.get('firebase_uids', []) if uid)
+                    profile_uids = profile.get('firebase_uids') if isinstance(profile.get('firebase_uids'), list) else []
                     if profile.get('firebase_uid'):
-                        known_uids.add(profile['firebase_uid'])
+                        profile_uids.append(profile['firebase_uid'])
+                    for uid in profile_uids:
+                        if uid:
+                            profiles_by_uid.setdefault(uid, []).append((profile_path.parent.name, profile))
                 except (OSError, ValueError, TypeError):
                     continue
             users = []
             page = await asyncio.to_thread(auth.list_users, max_results=1000, app=app)
             while page:
-                users.extend({
-                    'uid': user.uid,
-                    'displayName': user.display_name or '',
-                    'email': user.email or '',
-                    'knownClient': user.uid in known_uids,
-                } for user in page.users)
+                for user in page.users:
+                    matches = profiles_by_uid.get(user.uid, [])
+                    profile = matches[0][1] if len(matches) == 1 else {}
+                    coach_account = is_coach_auth_user(user)
+                    role = 'coach' if coach_account else profile.get('role') or ('contact' if profile.get('status') in {'freund', 'interessent', 'lead', 'kontakt'} else 'client')
+                    users.append({
+                        'uid': user.uid,
+                        'displayName': user.display_name or '',
+                        'email': user.email or '',
+                        'knownClient': bool(matches),
+                        'clientId': matches[0][0] if len(matches) == 1 else None,
+                        'duplicateProfiles': len(matches) > 1,
+                        'role': role if profile else None,
+                        'status': profile.get('status') if profile else None,
+                        'selectable': not coach_account and (not profile or role in {'client', 'contact'}),
+                        'coachVisible': not coach_account and bool(matches) and len(matches) == 1 and role in {'client', 'contact'} and profile.get('coach_visible') is not False,
+                    })
                 token = page.next_page_token
                 if not token:
                     break
@@ -116,6 +168,90 @@ def create_router(root=None, deliver=None):
         except Exception:
             logging.exception('Firebase Auth user listing failed')
             raise HTTPException(503, 'Firebase-Nutzerliste lokal nicht verfügbar. Coach-Serverprotokoll prüfen.')
+
+    @router.patch('/api/coach/local/users/{uid}/membership')
+    async def update_user_membership(uid: str, request: Request):
+        local_only(request)
+        if not re.fullmatch(r'[A-Za-z0-9_-]{1,128}', uid):
+            raise HTTPException(400, 'Ungültige Firebase-UID.')
+        try:
+            body = await request.json()
+        except ValueError:
+            raise HTTPException(400, 'Ungültiges JSON.')
+        if not isinstance(body, dict) or type(body.get('included')) is not bool:
+            raise HTTPException(400, 'Coach-Auswahl fehlt.')
+        role = body.get('role')
+        if body['included'] and role not in ('friend', 'client'):
+            raise HTTPException(400, 'Rolle muss Freund oder Klient sein.')
+        try:
+            import firebase_admin
+            from firebase_admin import auth
+            from coach_plan_push import get_db
+
+            await asyncio.to_thread(get_db)
+            app = firebase_admin.get_app()
+            auth_user = await asyncio.to_thread(auth.get_user, uid, app=app)
+        except Exception:
+            logging.exception('Firebase Auth user lookup failed')
+            raise HTTPException(503, 'Firebase-Nutzer konnte lokal nicht verifiziert werden.')
+        if body['included'] and is_coach_auth_user(auth_user):
+            raise HTTPException(409, 'Coach- und Admin-Konten können nicht als Klienten aufgenommen werden.')
+
+        root = store.root
+        matches = []
+        for profile_path in root.glob('*/client.json'):
+            try:
+                profile = json.loads(profile_path.read_text(encoding='utf-8'))
+            except (OSError, ValueError):
+                continue
+            profile_uids = profile.get('firebase_uids') if isinstance(profile.get('firebase_uids'), list) else []
+            if profile.get('firebase_uid'):
+                profile_uids.append(profile['firebase_uid'])
+            if uid in profile_uids:
+                matches.append((profile_path.parent.name, profile_path, profile))
+        if len(matches) > 1:
+            raise HTTPException(409, 'Diese UID ist mehreren Klienten-Workspaces zugeordnet; Zuordnung zuerst bereinigen.')
+        if matches:
+            client_id, profile_path, profile = matches[0]
+            existing_role = profile.get('role') or ('contact' if profile.get('status') in {'freund', 'interessent', 'lead', 'kontakt'} else 'client')
+            if existing_role not in {'client', 'contact'} and body['included']:
+                raise HTTPException(409, 'Coach-Konten können nicht als Klienten aufgenommen werden.')
+            profile['coach_visible'] = body['included']
+            profile['updated_at'] = plans_module.now()
+            plans_module.atomic(profile_path, profile)
+            return {'ok': True, 'uid': uid, 'clientId': client_id, 'included': body['included'], 'role': existing_role}
+        if not body['included']:
+            return {'ok': True, 'uid': uid, 'clientId': None, 'included': False}
+
+        display_name = (auth_user.display_name or '').strip()
+        if not display_name:
+            display_name = (auth_user.email or '').split('@', 1)[0].strip() or f'Fitness Nutzer {uid[:8]}'
+        role = body['role']
+        role_tag = 'contact' if role == 'friend' else 'client'
+        status = 'freund' if role == 'friend' else 'aktiv'
+        suffix = hashlib.sha256(uid.encode('utf-8')).hexdigest()[:10]
+        stem = re.sub(r'[^a-z0-9]+', '-', display_name.lower()).strip('-')[:90].strip('-') or 'firebase-user'
+        client_id = f'{stem}-{suffix}'
+        if not plans_module.IDENTIFIER.fullmatch(client_id):
+            raise HTTPException(400, 'Aus dem Kontonamen konnte keine lokale Klienten-ID gebildet werden.')
+        if (root / client_id).exists():
+            raise HTTPException(409, 'Lokale Klienten-ID ist bereits belegt; bitte den Workspace manuell zuordnen.')
+        try:
+            manager = load_client_workspace_module()
+            if role == 'friend':
+                result = await asyncio.to_thread(manager.create_contact_workspace, display_name, client_id, uid)
+            else:
+                result = await asyncio.to_thread(manager.create_workspace, display_name, client_id, uid, role=role_tag, status=status)
+            profile_path = root / client_id / 'client.json'
+            profile = result.get('client') or json.loads(profile_path.read_text(encoding='utf-8'))
+            profile.update({'coach_visible': True, 'role': role_tag, 'status': status})
+            plans_module.atomic(profile_path, profile)
+            return {'ok': True, 'uid': uid, 'clientId': client_id, 'included': True, 'role': role_tag}
+        except FileExistsError:
+            raise HTTPException(409, 'Lokaler Klienten-Workspace wurde gleichzeitig angelegt; bitte Liste aktualisieren.')
+        except Exception:
+            logging.exception('Firebase user local workspace creation failed')
+            raise HTTPException(503, 'Lokaler Klienten-Workspace konnte nicht angelegt werden. Serverprotokoll prüfen.')
 
     @router.get('/api/client/{client}')
     async def profile(client: str, request: Request):
@@ -281,7 +417,7 @@ def create_router(root=None, deliver=None):
             raise HTTPException(502, 'Versand fehlgeschlagen. Lokaler Plan bleibt gespeichert. Serverprotokoll prüfen.')
     # Compatibility aliases share handlers, store and access checks with the canonical API.
     for route in list(router.routes):
-        if route.path == '/api/coach/local/users':
+        if route.path.startswith('/api/coach/local/users'):
             continue
         if route.path == '/api/clients':
             aliases = ['/api/coach/local/clients']

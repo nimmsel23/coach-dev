@@ -26,6 +26,16 @@ workspace, one dated entry per client per day; the Coach UI only reads and
 writes them through that local API. Replacing an existing daily entry requires
 confirmation.
 
+The local roster manager reads Firebase Auth users and maps them to
+`~/.local/Klienten/*/client.json`. `coach_visible: false` hides an existing
+contact/client without deleting its workspace. Adding a Firebase user as a
+friend calls klienten-python's contact-aware workspace creator, which creates
+the local workspace without a Praxis client row; selecting a paying client
+uses the normal workspace creator. Both actions are local and loopback-only.
+Coach/admin accounts are not selectable (profile role, Firebase claims,
+`nimmsel23` and `nimmdaniel`); local workspaces with a non-client role are
+omitted from the client roster.
+
 Plan ansehen opens the shared PlanDocument from the pinned Plan source, separate
 from form editing. It shows responsive exercise tables/cards and A4 sheets; long
 source notes are disclosures. No plan data changes when opening or printing.
