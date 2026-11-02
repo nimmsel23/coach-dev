@@ -1690,4 +1690,5 @@ Firestore-Aufruf. Isolierter Coach-Worktree läuft zusätzlich auf
 `http://127.0.0.1:9151/coach/local.html`; statische Seite und JS-Bundle liefern
 HTTP 200. Taskwarrior-API meldet 30 Aufgaben im Workspace; ein zweiter Sync über
 HTTP erstellte/änderte/entfernte null Aufgaben. Der bestehende Dienst auf :9150
-wurde nicht beendet oder neu gestartet.
+wurde nicht beendet oder neu gestartet. `/coach/` führt im Pilot direkt in die
+lokale Konsole; Health meldet `coach_ready: true`.

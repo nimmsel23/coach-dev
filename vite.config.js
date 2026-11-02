@@ -90,6 +90,7 @@ export default defineConfig(async ({ mode }) => {
         input: isCoach
           ? {
               shell: resolve(__dirname, 'coach-shell.html'),
+              index: resolve(__dirname, 'index.html'),
               coach: resolve(__dirname, 'coach.html'),
               local: resolve(__dirname, 'local.html'),
               clientforge: resolve(__dirname, 'clientforge.html'),
