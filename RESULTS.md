@@ -1705,3 +1705,14 @@ HTTP 200. Taskwarrior-API meldet 30 Aufgaben im Workspace; ein zweiter Sync übe
 HTTP erstellte/änderte/entfernte null Aufgaben. Der bestehende Dienst auf :9150
 wurde nicht beendet oder neu gestartet. `/coach/` führt im Pilot direkt in die
 lokale Konsole; Health meldet `coach_ready: true`.
+
+## 2026-11-02 — Überfällige Workouts im Klientenüberblick
+
+Der lokale Coach-Überblick liest zusätzlich die Workout-Tasks über die bereits
+loopback-geschützte Klienten-Taskwarrior-API. Gesamtzahl der überfälligen Tasks
+und je Klient offene/überfällige Tasks erscheinen direkt in der Übersicht;
+fehlgeschlagene Abfragen werden nicht als null offene Tasks ausgegeben. Coach-
+ESLint und vollständiger Firebase-Coach-Build waren erfolgreich. Der laufende
+:9150-Server liefert das neue Local-Coach-Bundle aus. Live-Leseabnahme ohne
+Klientendaten auszugeben: vier Klienten abgefragt, 30 Tasks, 30 offen, 0
+überfällig. Keine Taskwarrior-Daten verändert.

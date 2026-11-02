@@ -234,3 +234,7 @@ Einstieg im Coach erreichbar machen.
 ## 2026-11-01 — Client-ID-Endpunkte
 
 - [x] ClientForge nutzt `/api/clients` und `/api/client/{id}/plans`. Direkte `/{id}/`-Einstiege und `/k/{id}/…` mit gleicher Planablage; bisherige lokale API bleibt Alias.
+
+## 2026-11-02 — Coach Office Taskwarrior-Übersicht
+
+- [x] Offene und überfällige Workout-Tasks aus den vorhandenen Klienten-`tw-data`-Datenbanken in Übersicht und Klientenkarten anzeigen; Fehlerantworten von null Tasks unterscheiden.
