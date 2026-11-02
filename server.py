@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import importlib
 import importlib.util
 import json
 import os
 import re
+import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -42,6 +44,32 @@ def catalog_dist() -> Path:
         ROOT.parent / "fitness-dev/fitness/catalog/dist",
     ]
     return next((p for p in candidates if (p / "index.html").is_file()), candidates[0])
+
+
+def fitness_frontend_dist() -> Path:
+    """Built local-mode Fitness client; COACH_FITNESS_FRONTEND_DIR can override it."""
+    configured = os.environ.get("COACH_FITNESS_FRONTEND_DIR")
+    if configured:
+        return Path(configured).expanduser().resolve()
+    return Path.home() / "dev" / "fitness-dev" / "frontend" / "dist"
+
+
+def load_fitness_app():
+    source_root = Path(os.environ.get(
+        "COACH_FITNESS_BACKEND_ROOT",
+        Path.home() / "dev" / "fitness-dev",
+    )).expanduser().resolve()
+    if not (source_root / "backend" / "api" / "app.py").is_file():
+        return None
+
+    source = str(source_root)
+    if source not in sys.path:
+        sys.path.insert(0, source)
+    module = importlib.import_module("backend.api.app")
+    module_path = Path(module.__file__).resolve()
+    if not module_path.is_relative_to(source_root):
+        raise RuntimeError(f"Fitness backend import resolved outside {source_root}: {module_path}")
+    return module.create_app()
 
 
 def end_to_end_headers(headers) -> list[tuple[str, str]]:
@@ -93,10 +121,12 @@ def configured_backends(overrides: dict[str, str] | None = None) -> dict[str, ht
 
 
 def create_app(*, catalog_directory: Path | None = None, coach_directory: Path | None = None,
+               fitness_directory: Path | None = None,
                upstream_url: str | None = None, backend_urls: dict[str, str] | None = None,
                transport=None) -> FastAPI:
     catalog = (catalog_directory or catalog_dist()).resolve()
     coach = (coach_directory or Path(os.environ.get("COACH_UI_DIR", ROOT / "dist-coach"))).resolve()
+    fitness_ui = (fitness_directory or fitness_frontend_dist()).resolve()
     overrides = dict(backend_urls or {})
     if upstream_url:
         overrides["fitness"] = upstream_url
@@ -122,6 +152,10 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     app = FastAPI(title="Coach backend", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 
     app.state.backends = backends
+    fitness_app = load_fitness_app()
+    if fitness_app is not None:
+        app.mount("/fitness-api", fitness_app, name="fitness-api")
+
     relax_embedded = "relax" not in backends
     relax_app = None
     if relax_embedded:
@@ -153,7 +187,9 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def health():
         return {"ok": True, "service": "coach", "port": int(os.environ.get("COACH_PORT", "9150")),
                 "backends": {name: str(url) for name, url in backends.items()},
+                "fitness_api": "in-process" if fitness_app is not None else ("worker" if "fitness" in backends else "unavailable"),
                 "relax_api": "in-process" if relax_app is not None else ("worker" if "relax" in backends else "unavailable"),
+                "fitness_frontend_ready": (fitness_ui / "index.html").is_file(),
                 "catalog_ready": (catalog / "index.html").is_file(),
                 "coach_ready": (coach / "index.html").is_file()}
 
@@ -168,6 +204,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
             except httpx.RequestError:
                 return name, {"ready": False, "status": None}
         statuses = dict(await asyncio.gather(*(check(name, origin) for name, origin in backends.items())))
+        if fitness_app is not None:
+            statuses["fitness_api"] = {"ready": True, "status": 200, "mode": "in-process"}
         if relax_app is not None:
             statuses["relax"] = {"ready": True, "status": 200, "mode": "in-process"}
         return {"ok": all(value["ready"] for value in statuses.values()), "backends": statuses}
@@ -197,6 +235,27 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
             return await proxy(request, name, strip_segments)
         return endpoint
 
+    @app.api_route("/fitness/{path:path}", methods=["GET", "HEAD"])
+    async def fitness_ui_route(path: str, request: Request):
+        if path.partition("/")[0] in {*API_PREFIXES, "health", "notify", "inbox"}:
+            # Keep older Fitness URLs working while the local-mode app uses
+            # the explicit /fitness-api namespace.
+            return await proxy(request, "fitness", strip_segments=1)
+        if not (fitness_ui / "index.html").is_file():
+            return JSONResponse({
+                "detail": "Fitness frontend build missing",
+                "directory": str(fitness_ui),
+                "build": "cd ../fitness-dev/frontend && VITE_API_BASE=/fitness-api pnpm exec vite build",
+            }, status_code=503)
+        if path == "sw.js":
+            return frontend(fitness_ui, path)
+        response = frontend(fitness_ui, path)
+        if not path or not Path(path).suffix:
+            html = (fitness_ui / "index.html").read_text(encoding="utf-8")
+            html = html.replace("navigator.serviceWorker.register('/sw.js')", "navigator.serviceWorker.register('/fitness/sw.js')")
+            return HTMLResponse(html, headers={"Cache-Control": "no-cache"})
+        return response
+
     # Coach-eigene Routen (kein Proxy) stehen vor den Domain- und /api-Catch-alls.
     app.include_router(sixpack_router)
     from coach_local_plans import create_router
@@ -214,6 +273,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     # Explicit domains precede the compatibility /api catch-all.
     for name in backends:
         for prefix in (f"/api/{name}", f"/{name}-api"):
+            if name == "fitness" and prefix == "/fitness-api" and fitness_app is not None:
+                continue
             endpoint = domain_proxy(name, prefix.count("/"))
             app.add_api_route(prefix, endpoint, methods=METHODS)
             app.add_api_route(f"{prefix}/{{path:path}}", endpoint, methods=METHODS)
