@@ -3,6 +3,14 @@
 ## Zweck
 Admin-Ansicht für Coach-seitige Verwaltung — nicht in der Nav, erreichbar per `#coach` (fitness-dev) bzw. eigener Sidebar-Button (vitalos, Sichtbarkeit per UID/Local-Mode-Gate).
 
+## Update 2026-11-02: Fitness-Nutzung
+
+`TractionPanel.jsx` ergänzt die Coach-Navigation um eine Live-Traction-Ansicht.
+Sie aggregiert App-Öffnungen, Bereichsaufrufe und Aktivitätszeitpunkte aus
+`fitness/{uid}/tractionDaily` für sieben Tage. Firestore-Rules müssen den
+Coach-`collectionGroup`-Read auf `tractionDaily` erlauben; Fitness pflegt
+dafür den entsprechenden Rules-Fragment.
+
 ## Komponenten
 | Datei | Zweck | Zeilen |
 |-------|-------|--------|

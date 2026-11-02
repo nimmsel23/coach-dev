@@ -8,7 +8,7 @@
 // Reine Funktionen ohne React, damit sie mit `node --test` prüfbar sind.
 // Der Hash ist das, was functions/clientWorkout.js in die Push-Links schreibt.
 
-export const SUB_TAB_IDS = ['exercises', 'catalog', 'clients']
+export const SUB_TAB_IDS = ['exercises', 'catalog', 'clients', 'traction']
 export const DETAIL_TAB_IDS = ['messages', 'workouts', 'sixpack', 'insights', 'habits', 'templates', 'trainingplan', 'plan']
 
 const DEFAULT_ROUTE = { sub: 'exercises', client: '', detail: 'workouts', date: '' }

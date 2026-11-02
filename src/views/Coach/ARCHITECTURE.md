@@ -31,6 +31,11 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   2. `Katalog Browser` (`CatalogBrowser.jsx`)
   3. `Klienten` (`ClientsPanel.jsx`, seit 2026-08-20) — ersetzt die vorherigen
      drei getrennten Tabs `Klienten-Workouts`/`Plan-Zuweisung`/`Klienten`
+- **`TractionPanel.jsx`** (`Fitness-Nutzung`): Live-Ansicht der letzten sieben
+  Tage mit aktiven Nutzern, täglichen Nutzerzahlen, Bereichsaufrufen und
+  letzter Aktivität. Die Daten kommen über einen Firestore-
+  `collectionGroup("tractionDaily")`-Snapshot. Erfasst werden nur grobe
+  Nutzungsmetadaten, keine Workout-Inhalte.
 - **`CatalogBrowser.jsx`**: Interaktiver Katalog-Enhancer zum Suchen, Analysieren (Anatomie-Cues, Biomechanik, Muskelgruppen) und Bearbeiten/Speichern von Übungen in Firestore (`fitness/kb/exercises`).
 - **`ClientsPanel.jsx`** (seit 2026-08-20): Klientenzentrierter Workflow —
   links eine Liste aller User aus `getAllUserProfiles()` (Klick wählt einen
@@ -84,7 +89,7 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
 
 Sub-Tab, Klient und Detail-Tab stehen im URL-Hash (`coachRoute.js` rein, `useCoachRoute.js` als Hook):
 
-- `#/exercises` · `#/catalog` · `#/clients`
+- `#/exercises` · `#/catalog` · `#/clients` · `#/traction`
 - `#/clients/<uid>/<tab>?date=YYYY-MM-DD` — `<tab>` ∈ `workouts` (Standard), `sixpack` (schreibgeschützter 6Pack-Spiegel, `ClientSixPack.jsx`), `insights`, `habits`, `templates`, `trainingplan`, `plan`
 - Älterer Push-Link `#/coach?client=<uid>&date=…` wird nach `#/clients/<uid>` übersetzt.
 

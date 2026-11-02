@@ -74,7 +74,7 @@ export default function CoachShell() {
   const current = findNavItem(route.sub)
   const subtitle = route.sub === 'exercises'
     ? (counts.exercises > 0 ? `${counts.exercises} offen` : 'Alles freigegeben')
-    : 'Verwaltung & Freigaben'
+    : route.sub === 'traction' ? 'Live-Nutzung' : 'Verwaltung & Freigaben'
 
   return (
     <ErrorBoundary>

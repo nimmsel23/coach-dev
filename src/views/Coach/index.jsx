@@ -5,6 +5,7 @@ import { useInbox } from '../Inbox/useInbox';
 import InboxCard from '../Inbox/InboxCard';
 import CatalogBrowser from './CatalogBrowser';
 import ClientsPanel from './ClientsPanel';
+import TractionPanel from './TractionPanel.jsx';
 
 // Inhalt der Coach-Konsole. Navigation (Sidebar/Tab-Bar) und Titel liegen in
 // der Shell (src/shell/CoachShell.jsx); `sub` kommt aus der Hash-Route.
@@ -54,6 +55,7 @@ export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCou
       )}
       {sub === 'catalog' && <CatalogBrowser onInspectExercise={onInspectExercise} />}
       {sub === 'clients' && <ClientsPanel unreadCounts={unread.byClient} />}
+      {sub === 'traction' && <TractionPanel />}
 
       {toast && (
         <div

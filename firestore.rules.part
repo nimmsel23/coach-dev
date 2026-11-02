@@ -33,3 +33,8 @@
         allow delete: if false;
       }
     }
+
+    // Fitness usage aggregates are readable across users only by Coach.
+    match /{path=**}/tractionDaily/{dayId} {
+      allow read: if isCoach();
+    }

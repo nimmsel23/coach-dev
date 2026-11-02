@@ -159,7 +159,7 @@ export default function CoachTabBar({ active, onNavigate, counts = {}, expanded 
           ref={tabsRef}
           aria-hidden={!expanded}
           {...(!expanded ? { inert: '' } : {})}
-          className="mx-auto grid max-w-xl grid-cols-4"
+          className="mx-auto grid max-w-xl grid-cols-5"
           style={{ height: 'var(--tabbar-h)', visibility: expanded || dragY !== null ? 'visible' : 'hidden' }}
         >
           {slots.map(({ id, label, Icon }) => {

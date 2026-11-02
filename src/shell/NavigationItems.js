@@ -1,4 +1,4 @@
-import { Inbox, LibraryBig, Users } from 'lucide-react'
+import { Activity, Inbox, LibraryBig, Users } from 'lucide-react'
 
 // Coach-Bereiche — entsprechen den Sub-Tabs der Hash-Route (views/Coach/coachRoute.js).
 // Geforkt aus ~/vitalos/src/shell/NavigationItems.js: gleiche Form ({ id, label, Icon }),
@@ -7,6 +7,7 @@ export const NAV_ITEMS = [
   { id: 'exercises', label: 'Anfragen', title: 'Übungsanfragen', Icon: Inbox },
   { id: 'catalog',   label: 'Katalog',  title: 'Katalog',        Icon: LibraryBig },
   { id: 'clients',   label: 'Klienten', title: 'Klienten',       Icon: Users },
+  { id: 'traction',  label: 'Nutzung',   title: 'Fitness-Nutzung', Icon: Activity },
 ]
 
 export function findNavItem(id) {
