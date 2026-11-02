@@ -33,6 +33,7 @@ export default function LocalCoachApp() {
   const [clientId, setClientId] = useState(() => entry.get('client') || '');
   const [workspaceTab, setWorkspaceTab] = useState('plans');
   const [query, setQuery] = useState('');
+  const [overviewSort, setOverviewSort] = useState('attention');
   const [plans, setPlans] = useState([]);
   const [clientSummaries, setClientSummaries] = useState([]);
   const [summariesLoading, setSummariesLoading] = useState(false);
@@ -310,6 +311,18 @@ export default function LocalCoachApp() {
   }
   const filtered = clients.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
   const filteredFirebaseUsers = firebaseUsers.filter((user) => `${user.displayName} ${user.email} ${user.clientId || ''}`.toLowerCase().includes(firebaseUserSearch.toLowerCase()));
+  const overviewClients = [...clients].sort((a, b) => {
+    if (overviewSort === 'name') return a.name.localeCompare(b.name, 'de');
+    const summaryA = clientSummaries.find((item) => item.id === a.id);
+    const summaryB = clientSummaries.find((item) => item.id === b.id);
+    const overdueDifference = (summaryB?.overdueTaskCount || 0) - (summaryA?.overdueTaskCount || 0);
+    if (overdueDifference) return overdueDifference;
+    const inactiveDifference = Number(summaryB?.workoutsCount === 0) - Number(summaryA?.workoutsCount === 0);
+    if (inactiveDifference) return inactiveDifference;
+    const lastA = summaryA?.lastWorkoutAt ? Date.parse(summaryA.lastWorkoutAt) : Infinity;
+    const lastB = summaryB?.lastWorkoutAt ? Date.parse(summaryB.lastWorkoutAt) : Infinity;
+    return lastA - lastB || a.name.localeCompare(b.name, 'de');
+  });
 
   return <div className="min-h-screen bg-fit-bg text-fit-ink">
     {!embedded && <header className="border-b border-fit-line px-4 py-5 sm:px-8"><div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4"><div><a href="./" className="text-xs font-semibold uppercase tracking-widest text-fit-accent">VitalOS · Coach</a><h1 className="mt-1 text-2xl font-bold tracking-tight">Coach-Konsole</h1><p className="mt-2 text-sm text-fit-muted">Klienten öffnen, Trainingspläne bearbeiten und freigegebene Versionen übergeben.</p></div><span className="flex items-center gap-2 rounded-full border border-fit-line px-3 py-2 text-xs text-fit-muted"><CheckCircle2 size={15} className="text-fit-accent" /> Lokale Klientendaten</span></div></header>}
@@ -335,7 +348,7 @@ export default function LocalCoachApp() {
           {!firebaseUsersLoading && firebaseUsers.length > 0 && !filteredFirebaseUsers.length && <p className="text-sm text-fit-muted">Keine Nutzer passen zur Suche.</p>}
         </section>}
         {!rosterOpen && !client && <section className="space-y-5">
-          <header className="rounded-2xl border border-fit-line bg-fit-card p-6 sm:p-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-fit-muted">Deine lokale Übersicht</p><h2 className="mt-1 text-2xl font-semibold">Klientenarbeitsplatz</h2><p className="mt-2 max-w-xl text-sm leading-relaxed text-fit-muted">Öffne die Trainingsplanung oder springe direkt in die bestehende Klientenakte. Die Aktivität bezieht sich auf die letzten 28 Tage.</p></div><button className={button} disabled={loading || summariesLoading} onClick={loadClients}><RefreshCw size={15} className="mr-2 inline" /> Übersicht aktualisieren</button></div>
+          <header className="rounded-2xl border border-fit-line bg-fit-card p-6 sm:p-8"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-fit-muted">Deine lokale Übersicht</p><h2 className="mt-1 text-2xl font-semibold">Klientenarbeitsplatz</h2><p className="mt-2 max-w-xl text-sm leading-relaxed text-fit-muted">Öffne die Trainingsplanung oder springe direkt in die bestehende Klientenakte. Die Aktivität bezieht sich auf die letzten 28 Tage.</p></div><div className="flex flex-wrap items-center gap-2"><label className="text-xs text-fit-muted">Sortierung<select aria-label="Klientenübersicht sortieren" value={overviewSort} onChange={(event) => setOverviewSort(event.target.value)} className="ml-2 min-h-[44px] rounded-xl border border-fit-line bg-fit-bg px-3 text-sm text-fit-ink"><option value="attention">Handlungsbedarf</option><option value="name">Name</option></select></label><button className={button} disabled={loading || summariesLoading} onClick={loadClients}><RefreshCw size={15} className="mr-2 inline" /> Übersicht aktualisieren</button></div></div>
             <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-5">
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Klienten</p><p className="mt-1 text-2xl font-semibold">{clients.length}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">App-Zuordnung</p><p className="mt-1 text-2xl font-semibold">{clients.filter((item) => item.canDeliver).length}</p></div>
@@ -346,7 +359,7 @@ export default function LocalCoachApp() {
           </header>
           {loading && <p role="status" className="text-sm text-fit-muted">Klienten werden geladen…</p>}
           {!loading && !clients.length && <div className="rounded-2xl border border-dashed border-fit-line p-8 text-sm text-fit-muted">Die bestehende Klientenverwaltung enthält noch keine Klienten.</div>}
-          <div className="grid gap-3 xl:grid-cols-2">{clients.map((item) => {
+          <div className="grid gap-3 xl:grid-cols-2">{overviewClients.map((item) => {
             const summary = clientSummaries.find((candidate) => candidate.id === item.id);
             return <article key={item.id} className="rounded-2xl border border-fit-line bg-fit-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="text-lg font-semibold">{item.name}</h3><p className="mt-1 text-xs text-fit-muted">{item.status || 'Aktiver Klient'} · {item.canDeliver ? 'App zugeordnet' : 'Lokale Betreuung'}</p></div><a className={button} href={`/${encodeURIComponent(item.id)}/`}>Klientenakte öffnen</a></div>
