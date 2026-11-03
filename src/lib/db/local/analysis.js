@@ -1,10 +1,10 @@
 import { api } from "./core";
 import { ACTIVITY_MUSCLE_GROUPS } from "../../../constants/ActivityConstants";
 import { muscleToGroupIds, getMuscleGroupsForGaps, buildMuscleBalanceInsights, muscleToRegion } from "../shared/muscle";
-import { computeMuscleScores } from "../../superkompensation.js";
+import { computeMuscleScores, RECOVERY_ANALYSIS_VERSION } from "../../superkompensation.js";
 import { ACTIVITY_WEIGHT, GAP_THRESHOLD, effortFactor, blockComplexMuscles } from "../shared/scoring.js";
 import { todayISO } from "../shared/utils.js";
-import { addDaysISO, mondayOfISO, weekDatesFromMonday, rollingDatesISO, isoWeekDatesForSelector } from "../shared/dates.js";
+import { addDaysISO, mondayOfISO, weekDatesFromMonday, rollingDatesISO, isoWeekDatesForSelector, sessionsInRollingWindow } from "../shared/dates.js";
 import { buildKbMap, findKbExercise, augmentKbMapWithMirror } from "../shared/kbLookup.js";
 import { sessionsForDates } from "../shared/reportSessions.js";
 
@@ -318,10 +318,11 @@ export async function getRecoveryAnalytics(days = 28) {
   const kbMap = buildKbMap(kbExercises);
   await augmentKbMapWithMirror(kbMap, safeSessions);
 
-  const cutoffStr = addDaysISO(todayISO(), -days);
-  const sessionsInRange = safeSessions.filter((session) => session.date && session.date >= cutoffStr);
+  const cutoffStr = addDaysISO(todayISO(), -(days - 1));
+  const sessionsInRange = sessionsInRollingWindow(safeSessions, days);
   return {
     ok: true,
+    analysis_version: RECOVERY_ANALYSIS_VERSION,
     days,
     cutoff_date: cutoffStr,
     updated_at: new Date().toISOString(),

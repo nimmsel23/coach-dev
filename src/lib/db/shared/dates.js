@@ -39,6 +39,14 @@ export function rollingDatesISO(days, endISO = todayISO()) {
   return out;
 }
 
+/** Sessions im rollenden Fenster, einschließlich des lokalen Enddatums. */
+export function sessionsInRollingWindow(sessions, days, endISO = todayISO()) {
+  const startISO = addDaysISO(endISO, -(days - 1));
+  return (Array.isArray(sessions) ? sessions : []).filter(
+    (session) => session?.date && session.date >= startISO && session.date <= endISO,
+  );
+}
+
 /** Montag der Woche, die `iso` enthält. */
 export function mondayOfISO(iso = todayISO()) {
   const d = parseISODate(iso);

@@ -14,7 +14,7 @@ import { setDoc, getDoc, getDocs } from "./offline.js";
 import { db } from "../../../firebase.js";
 import { num, todayISO } from "../shared/utils.js";
 import {
-  addDaysISO, toISODate, rollingDatesISO, isoWeekDatesForSelector, isoWeekSelectorForDate,
+  addDaysISO, toISODate, rollingDatesISO, isoWeekDatesForSelector, isoWeekSelectorForDate, sessionsInRollingWindow,
 } from "../shared/dates.js";
 import { buildKbMap, findKbExercise, augmentKbMapWithMirror } from "../shared/kbLookup.js";
 import { DAILY_WINDOW_DAYS, sumDailyScores, dailyScoresFromSessions } from "../shared/coverageWindow.js";
@@ -34,7 +34,7 @@ import {
   getMuscleCoverage as getLocalMuscleCoverage,
 } from "../local/analysis.js";
 import { getProgressTrend as getLocalProgressTrend } from "../local/sessions.js";
-import { computeMuscleScores } from "../../superkompensation.js";
+import { computeMuscleScores, RECOVERY_ANALYSIS_VERSION } from "../../superkompensation.js";
 import { muscleToRegion } from "../shared/muscle.js";
 import { ACTIVITY_WEIGHT, GAP_THRESHOLD, effortFactor, blockComplexMuscles } from "../shared/scoring.js";
 
@@ -266,10 +266,11 @@ async function buildRecoveryAnalyticsData(days = 28) {
   const kbMap = buildKbMap(kbExercises);
   await augmentKbMapWithMirror(kbMap, safeSessions);
 
-  const cutoffStr = addDaysISO(todayISO(), -days);
-  const sessionsInRange = safeSessions.filter((session) => session.date && session.date >= cutoffStr);
+  const cutoffStr = addDaysISO(todayISO(), -(days - 1));
+  const sessionsInRange = sessionsInRollingWindow(safeSessions, days);
   return {
     ok: true,
+    analysis_version: RECOVERY_ANALYSIS_VERSION,
     days,
     cutoff_date: cutoffStr,
     updated_at: new Date().toISOString(),
@@ -292,8 +293,9 @@ export async function getRecoveryAnalytics(days = 28) {
     const snap = await getDoc(doc(db, "fitness", getUid(), "analytics", "dashboard"));
     if (snap.exists()) {
       const data = snap.data() || {};
-      const field = days <= 7 ? "recovery_7_days" : days <= 14 ? "recovery_14_days" : "recovery_28_days";
-      if (data[field] && writtenToday(data[field].updated_at)) return data[field];
+      const field = { 7: "recovery_7_days", 14: "recovery_14_days", 28: "recovery_28_days" }[days];
+      const cached = field && data[field];
+      if (cached?.analysis_version === RECOVERY_ANALYSIS_VERSION && cached.days === days && writtenToday(cached.updated_at)) return cached;
     }
   } catch (e) {
     console.warn("Failed to fetch cached recovery analytics", e);

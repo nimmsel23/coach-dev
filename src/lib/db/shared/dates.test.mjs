@@ -5,9 +5,14 @@ process.env.TZ = "Europe/Vienna";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  toISODate, addDaysISO, rollingDatesISO, mondayOfISO, weekDatesFromMonday,
+  toISODate, addDaysISO, rollingDatesISO, sessionsInRollingWindow, mondayOfISO, weekDatesFromMonday,
   isoWeekMondayISO, isoWeekSelectorForDate, isoWeekDatesForSelector,
 } from "./dates.js";
+
+test("recovery window includes exactly the requested calendar days and excludes future sessions", () => {
+  const sessions = ['2026-10-27', '2026-10-28', '2026-11-03', '2026-11-04'].map((date) => ({ date }));
+  assert.deepEqual(sessionsInRollingWindow(sessions, 7, '2026-11-03').map((s) => s.date), ['2026-10-28', '2026-11-03']);
+});
 
 test("toISODate: lokale Mitternacht bleibt am lokalen Tag (toISOString würde den Vortag liefern)", () => {
   const d = new Date(2026, 10, 1, 0, 30); // 01.11.2026 00:30 lokal = 31.10. 23:30 UTC
