@@ -17,6 +17,7 @@ import {
   addDaysISO, toISODate, rollingDatesISO, isoWeekDatesForSelector, isoWeekSelectorForDate, sessionsInRollingWindow,
 } from "../shared/dates.js";
 import { buildKbMap, findKbExercise, augmentKbMapWithMirror } from "../shared/kbLookup.js";
+import { buildReportRecoveryIndex, reportRecoveryHours } from "../shared/reportRecovery.js";
 import { DAILY_WINDOW_DAYS, sumDailyScores, dailyScoresFromSessions } from "../shared/coverageWindow.js";
 import {
   ACTIVITY_MUSCLE_MAPPING, muscleToGroupIds,
@@ -41,6 +42,7 @@ import { ACTIVITY_WEIGHT, GAP_THRESHOLD, effortFactor, blockComplexMuscles } fro
 export { ACTIVITY_MUSCLE_MAPPING, muscleToGroupIds };
 
 const pendingWeeklyRefreshes = new Map();
+const WEEKLY_REPORT_VERSION = 2;
 
 const ROLE_W = { primary: 1, secondary: 0.5, stabilizer: 0.2 };
 
@@ -343,26 +345,13 @@ async function buildWeeklyReportData(selector = "current") {
     : [];
   await augmentKbMapWithMirror(kbMap, safeHistory);
 
-  const historyWithMuscles = safeHistory.map((s) => {
-    const groups = new Set();
-    for (const ex of (s.exercises || [])) {
-      const primary = ex.primaryMuscles || [];
-      const secondary = ex.secondaryMuscles || [];
-      const exName = ex.name || ex.exercise_id || "";
-      let hasMapped = false;
-      [...primary, ...secondary].forEach((m) => {
-        muscleToGroupIds(m, exName).forEach((gid) => { groups.add(gid); hasMapped = true; });
-      });
-      if (!hasMapped && exName) muscleToGroupIds("", exName).forEach((gid) => groups.add(gid));
+  const historyWithMuscles = buildReportRecoveryIndex(safeHistory, (s) => {
+    const hits = normalizedSessionHits(s, kbMap);
+    if (!s.activity?.muscles?.length) {
+      for (const muscle of ACTIVITY_MUSCLE_MAPPING[s.activity?.type]?.muscles || []) hits.push([muscle, null, ACTIVITY_WEIGHT]);
     }
-    if (s.activity && ACTIVITY_MUSCLE_MAPPING[s.activity.type]) {
-      ACTIVITY_MUSCLE_MAPPING[s.activity.type].muscles.forEach((m) => {
-        muscleToGroupIds(m).forEach((gid) => groups.add(gid));
-      });
-    }
-    if (!(s.exercises || []).length) blockComplexMuscles(s.block).forEach((m) => muscleToGroupIds(m).forEach((gid) => groups.add(gid)));
-    return { date: s.date, groups: [...groups] };
-  }).sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    return hits;
+  }, muscleToGroupIds);
 
   const sessions = [];
   let entriesCount = 0;
@@ -395,7 +384,10 @@ async function buildWeeklyReportData(selector = "current") {
     const sessGroupsCount = {};
 
     for (const ex of (Array.isArray(sess.exercises) ? sess.exercises : [])) {
-      const primary = ex.primaryMuscles || [], secondary = ex.secondaryMuscles || [], stabilizers = ex.stabilizers || [];
+      const kbEx = findKbExercise(kbMap, ex);
+      const primary = (ex.primaryMuscles?.length ? ex.primaryMuscles : null) || kbEx?.primary_muscles || kbEx?.primaryMuscles || [];
+      const secondary = (ex.secondaryMuscles?.length ? ex.secondaryMuscles : null) || kbEx?.secondary_muscles || kbEx?.secondaryMuscles || [];
+      const stabilizers = (ex.stabilizers?.length ? ex.stabilizers : null) || kbEx?.stabilizers || [];
       const exName = ex.name || ex.exercise_id || "";
       hasDoneExercises = true; entriesCount++;
       allExercises.push({ name: exName, primaryMuscles: primary });
@@ -435,16 +427,12 @@ async function buildWeeklyReportData(selector = "current") {
       // Score einheitlich über normalizedSessionHits (RPE-skaliert, Cardio leichter,
       // Split-Chip ohne Übungen = ganzer Komplex), wie Monats-/Rolling-Auswertung.
       for (const [m, exName, w] of normalizedSessionHits(sess, kbMap)) {
-        muscleToGroupIds(m, exName).forEach((gid) => { bodyRegionScores[gid] = (bodyRegionScores[gid] || 0) + w; });
+        muscleToGroupIds(m, exName).forEach((gid) => {
+          bodyRegionScores[gid] = (bodyRegionScores[gid] || 0) + w;
+          sessGroupsCount[gid] = (sessGroupsCount[gid] || 0) + w;
+        });
       }
-      const muscleRecovery = {};
-      for (const gid of Object.keys(sessGroupsCount)) {
-        const lastSessionWithGroup = historyWithMuscles.find((h) => h.date < date && h.groups.includes(gid));
-        if (lastSessionWithGroup) {
-          const d1 = new Date(date), d2 = new Date(lastSessionWithGroup.date);
-          muscleRecovery[gid] = Math.round((d1 - d2) / (1000 * 60 * 60));
-        }
-      }
+      const muscleRecovery = reportRecoveryHours(date, Object.keys(sessGroupsCount), historyWithMuscles);
       sessions.push({ ...sess, block: autoSplit, exercise_count: sess.exercises?.length || 0, muscle_recovery: muscleRecovery });
     }
     }
@@ -458,6 +446,7 @@ async function buildWeeklyReportData(selector = "current") {
 
   return {
     ok: true,
+    report_version: WEEKLY_REPORT_VERSION,
     week: resolveWeekSelector(selector),
     requested_week: selector,
     week_dates: dates,
@@ -532,7 +521,7 @@ export async function getWeeklyReport(selector = "current") {
       const cached = snap.data();
       // "current" ist ein rollendes 7-Tage-Fenster: der Cache stammt vom Tag
       // des letzten Speicherns und wäre am nächsten Tag um Tage verschoben.
-      if (selector !== "current" || writtenToday(cached?.updated_at)) return cached;
+      if (cached?.report_version === WEEKLY_REPORT_VERSION && (selector !== "current" || writtenToday(cached?.updated_at))) return cached;
     }
   } catch (e) {
     console.warn("Failed to fetch cached weekly report", e);
