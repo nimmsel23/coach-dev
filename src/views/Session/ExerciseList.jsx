@@ -22,6 +22,7 @@ import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import ExerciseCard from './ExerciseCard';
 import ExerciseSearchOverlay from '../../components/ExerciseSearchOverlay';
+import { previousExerciseFor } from '../../lib/db/shared/previousExercise.js';
 
 // Drag-Handle-Wrapper um ExerciseCard: Listener/Attribute sitzen nur am
 // Griff-Icon, nicht auf der ganzen Karte — sonst wären Inputs/Buttons in
@@ -53,7 +54,7 @@ function SortableExerciseRow({ ex, containerId, children }) {
 
 export default function ExerciseList({
   exercises = [], restHours, muscleRecovery = {}, containerId = '__base__',
-  date, prevMap = {}, onInspectExercise,
+  date, prevMap = [], onInspectExercise,
   exerciseOps,
 }) {
   const {
@@ -91,7 +92,7 @@ export default function ExerciseList({
                 moveEx={moveEx}
                 isFirst={idx === 0}
                 isLast={idx === safe.length - 1}
-                prev={prevMap[ex.name]}
+                prev={previousExerciseFor(prevMap, ex)}
                 onInspectExercise={onInspectExercise}
                 onToast={onToast}
               />

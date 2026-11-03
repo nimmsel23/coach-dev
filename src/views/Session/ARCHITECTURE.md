@@ -119,6 +119,8 @@ Pro Tag können mehrere Sessions existieren. `id: null` = Hauptsession, `id: "<t
 
 Die Übungskarte fragt den Gewichtstrend mit Übungs-ID und Name ab. Lokaler und Firebase-Pfad nutzen dieselbe Berechnung: konkrete IDs müssen übereinstimmen; ein exakter Name dient nur für ältere Einträge ohne ID als Fallback. Verglichen wird das höchste protokollierte Gewicht mit dem Durchschnitt der vorangehenden verfügbaren Messungen.
 
+Die Vorwerte zum Übernehmen werden separat aus Sessions vor dem geöffneten Kalendertag ermittelt und folgen derselben ID-Regel. Sessions desselben Tages werden mangels verlässlicher zeitlicher Reihenfolge nicht als vorheriges Workout ausgewählt.
+
 ## Autosave
 
 Kein Zeit-Debounce mehr (seit 2026-07). `scheduleAutoSave()` setzt nur das `dirty`-Flag. Gespeichert wird an semantischen Commit-Punkten: sofort bei `addEx`/`addQuick`, sonst via `flushDirty()` bei Tab-Hide/`pagehide`, Unmount (Haupt-Tab-Wechsel), Datumswechsel, Session-Wechsel und neuem Workout. `saveRef`/`dirtyRef`/`dateRef` halten die aktuellen Closures (stale-closure Workaround); der `dateRef`-Guard verhindert, dass der `listSessionsForDate`-Nachlauf eines Flush-Saves nach Datumswechsel die frische Tagesliste überschreibt.

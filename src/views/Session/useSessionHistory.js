@@ -19,13 +19,14 @@
 import { useState, useEffect } from 'react';
 import { getSessionHistory } from '@db';
 import { mergeSessionRuntimeDraftsIntoHistory } from '../../lib/sessionRuntimeStore.js';
+import { previousExerciseEntries } from '../../lib/db/shared/previousExercise.js';
 
 export function useSessionHistory({ block, date }) {
   const [restHours, setRestHours] = useState(null);
   const [recentSessions, setRecentSessions] = useState({});
   const [historyLimit, setHistoryLimit] = useState(60);
   const [hasMoreHistory, setHasMoreHistory] = useState(false);
-  const [prevMap, setPrevMap] = useState({});
+  const [prevMap, setPrevMap] = useState([]);
 
   // historyLimit ist stateful (statt fix 60) — SessionHistory.jsx bekommt
   // einen "Mehr laden"-Button, der ihn hochsetzt, weil sowohl die lokale
@@ -33,11 +34,13 @@ export function useSessionHistory({ block, date }) {
   // ohne Pagination. Betrifft Firebase-Prod genauso wie lokal (Matthias
   // konnte im Date-Picker/Verlauf nicht weiter als ~60 Sessions zurück).
   useEffect(() => {
+    let active = true;
+    setPrevMap([]);
     getSessionHistory(historyLimit).then(sessions => {
+      if (!active) return;
       const hydratedSessions = mergeSessionRuntimeDraftsIntoHistory(sessions);
       setHasMoreHistory(sessions.length >= historyLimit);
       const sessByDate = {};
-      const pMap = {};
       hydratedSessions.forEach(s => {
         const existing = sessByDate[s.date];
         if (existing) {
@@ -59,16 +62,9 @@ export function useSessionHistory({ block, date }) {
         } else {
           sessByDate[s.date] = s;
         }
-        if (s.date !== date) {
-          (s.exercises || []).forEach(ex => {
-            if (ex.name && !pMap[ex.name]) {
-              pMap[ex.name] = { date: s.date, sets: ex.sets, reps: ex.reps, weight: ex.weight, setsArray: ex.setsArray };
-            }
-          });
-        }
       });
       setRecentSessions(sessByDate);
-      setPrevMap(pMap);
+      setPrevMap(previousExerciseEntries(hydratedSessions, date));
       if (block) {
         const lastSame = sessions.find(s => s.date < date && (s.block === block || s.trainingsart === block));
         if (lastSame) {
@@ -79,6 +75,7 @@ export function useSessionHistory({ block, date }) {
         }
       }
     }).catch(() => {});
+    return () => { active = false; };
   }, [block, date, historyLimit]);
 
   function loadMoreHistory() {
