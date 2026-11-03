@@ -48,11 +48,12 @@ export default function ExerciseCard({
   // Abort-Guard: schneller Übungs-Wechsel darf keinen veralteten Trend mehr
   // setzen (Race-Condition, siehe PHASE3_TODO.md).
   useEffect(() => {
-    if (!ex.name) return;
+    if (!ex.name && !ex.exercise_id && !ex.id) return;
     let cancelled = false;
-    getProgressTrend(ex.name).then(t => { if (!cancelled) setTrend(t); });
+    setTrend(null);
+    getProgressTrend({ name: ex.name, exercise_id: ex.exercise_id, id: ex.id }).then(t => { if (!cancelled) setTrend(t); }).catch(() => { if (!cancelled) setTrend(null); });
     return () => { cancelled = true; };
-  }, [ex.name]);
+  }, [ex.name, ex.exercise_id, ex.id]);
 
   // ── NxM Expansion ────────────────────────────────────────────
   const tryExpandReps = (val, sIdx) => {

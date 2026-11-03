@@ -12,12 +12,13 @@ import {
 import { setDoc, getDoc, getDocs } from "./offline.js";
 
 import { db } from "../../../firebase.js";
-import { num, todayISO } from "../shared/utils.js";
+import { todayISO } from "../shared/utils.js";
 import {
   addDaysISO, toISODate, rollingDatesISO, isoWeekDatesForSelector, isoWeekSelectorForDate, sessionsInRollingWindow,
 } from "../shared/dates.js";
 import { buildKbMap, findKbExercise, augmentKbMapWithMirror } from "../shared/kbLookup.js";
 import { buildReportRecoveryIndex, reportRecoveryHours } from "../shared/reportRecovery.js";
+import { calculateProgressTrend } from "../shared/progressTrend.js";
 import { DAILY_WINDOW_DAYS, sumDailyScores, dailyScoresFromSessions } from "../shared/coverageWindow.js";
 import {
   ACTIVITY_MUSCLE_MAPPING, muscleToGroupIds,
@@ -649,38 +650,8 @@ export async function getMonthlyReport(days = 28) {
 
 // ── Progress trend ────────────────────────────────────────────────────────────
 
-export async function getProgressTrend(exerciseName, lastN = 4) {
-  if (!hasAuthSession()) return getLocalProgressTrend(exerciseName, lastN);
+export async function getProgressTrend(exercise, lastN = 4) {
+  if (!hasAuthSession()) return getLocalProgressTrend(exercise, lastN);
   const history = await getSessionHistory(lastN * 7);
-  const safeHistory = Array.isArray(history)
-    ? history.filter(Boolean).map((s) => ({ ...s, exercises: Array.isArray(s.exercises) ? s.exercises : [] }))
-    : [];
-
-  const sessions = safeHistory
-    .filter((s) => s.exercises.some((ex) => ex.name === exerciseName))
-    .sort((a, b) => b.date.localeCompare(a.date));
-
-  if (sessions.length < 2) return { status: "neutral", message: "Nicht genug Daten" };
-
-  const values = sessions.map((s) => {
-    const ex = s.exercises.find((e) => e.name === exerciseName);
-    if (!ex) return null;
-    if (Array.isArray(ex.setsArray)) {
-      const weights = ex.setsArray.map((s) => num(s.weight)).filter((w) => w !== null);
-      return weights.length > 0 ? Math.max(...weights) : null;
-    }
-    return num(ex.weight);
-  }).filter((v) => v !== null && v > 0);
-
-  if (values.length < 2) return { status: "neutral", message: "Zu wenig Daten" };
-
-  const current = values[0];
-  const previous = values.slice(1, lastN);
-  const avgPrevious = previous.reduce((a, b) => a + b, 0) / previous.length;
-  if (avgPrevious === 0) return { status: "neutral" };
-
-  const pctChange = ((current - avgPrevious) / avgPrevious) * 100;
-  if (pctChange > 2)  return { status: "up",      change: pctChange.toFixed(1) };
-  if (pctChange < -2) return { status: "down",    change: pctChange.toFixed(1) };
-  return                   { status: "neutral", change: pctChange.toFixed(1) };
+  return calculateProgressTrend(history, exercise, lastN);
 }

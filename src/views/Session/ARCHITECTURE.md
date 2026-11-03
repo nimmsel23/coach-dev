@@ -115,6 +115,10 @@ beide gefixt:
 
 Pro Tag können mehrere Sessions existieren. `id: null` = Hauptsession, `id: "<timestamp>"` = Suffix-Session. Switcher-Bar zeigt alle Sessions des Tages. "+ Neues Workout" legt eine neue Suffix-Session an. Löschen ist für jede Session der Tagesliste möglich — auch die Hauptsession (seit 2026-07, Klienten-Request).
 
+## Übungs-Trend
+
+Die Übungskarte fragt den Gewichtstrend mit Übungs-ID und Name ab. Lokaler und Firebase-Pfad nutzen dieselbe Berechnung: konkrete IDs müssen übereinstimmen; ein exakter Name dient nur für ältere Einträge ohne ID als Fallback. Verglichen wird das höchste protokollierte Gewicht mit dem Durchschnitt der vorangehenden verfügbaren Messungen.
+
 ## Autosave
 
 Kein Zeit-Debounce mehr (seit 2026-07). `scheduleAutoSave()` setzt nur das `dirty`-Flag. Gespeichert wird an semantischen Commit-Punkten: sofort bei `addEx`/`addQuick`, sonst via `flushDirty()` bei Tab-Hide/`pagehide`, Unmount (Haupt-Tab-Wechsel), Datumswechsel, Session-Wechsel und neuem Workout. `saveRef`/`dirtyRef`/`dateRef` halten die aktuellen Closures (stale-closure Workaround); der `dateRef`-Guard verhindert, dass der `listSessionsForDate`-Nachlauf eines Flush-Saves nach Datumswechsel die frische Tagesliste überschreibt.
