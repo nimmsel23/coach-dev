@@ -6,6 +6,7 @@ import { ACTIVITY_WEIGHT, GAP_THRESHOLD, effortFactor, blockComplexMuscles } fro
 import { todayISO } from "../shared/utils.js";
 import { addDaysISO, mondayOfISO, weekDatesFromMonday, rollingDatesISO, isoWeekDatesForSelector } from "../shared/dates.js";
 import { buildKbMap, findKbExercise, augmentKbMapWithMirror } from "../shared/kbLookup.js";
+import { sessionsForDates } from "../shared/reportSessions.js";
 
 const ROLE_W = { primary: 1, secondary: 0.5, stabilizer: 0.2 };
 
@@ -94,9 +95,8 @@ function computeReport(dates, { history, kbMap, historyWithMuscles, topExMap }) 
   const muscleScores = {};
   const allExercises = [];
 
-  for (const date of dates) {
-    const sess = history.find(h => h.date === date);
-    if (!sess) continue;
+  for (const sess of sessionsForDates(history, dates)) {
+    const date = sess.date;
     const sessGroupsCount = {};
     for (const ex of (sess.exercises || [])) {
       const exName = ex.name || ex.exercise_id || "";
@@ -256,7 +256,7 @@ export async function getMuscleCoverage(days = 7) {
   await augmentKbMapWithMirror(kbMap, history);
 
   const bodyRegionScores = {};
-  const sessionsInWindow = history.filter(s => s.date && s.date >= cutoffDate);
+  const sessionsInWindow = history.filter(s => s.date && s.date >= cutoffDate && s.date <= todayISO());
 
   for (const sess of sessionsInWindow) {
     for (const [m, exName, w] of normalizedSessionHits(sess, kbMap)) {
