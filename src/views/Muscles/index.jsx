@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { getRecoveryAnalytics, getMuscle, getRecentSessions, getSession } from "@db";
+import { getRecoveryAnalytics, getMuscle, getRecentSessions, listSessionsForDate } from "@db";
+import { sessionsInRollingWindow } from "../../lib/db/shared/dates.js";
 
 import MuscleHeader from "./MuscleHeader";
 import MuscleAnalysis from "./MuscleAnalysis";
@@ -25,9 +26,13 @@ export default function Muscles({ gender, muscleLanguage = 'de', taxonomy = null
 
   useEffect(() => {
     if (viewMode !== 'today') return;
-    getSession()
-      .then(d => setTodayExercises(Array.isArray(d?.exercises) ? d.exercises : []))
-      .catch(() => setTodayExercises([]));
+    let active = true;
+    listSessionsForDate()
+      .then(list => {
+        if (active) setTodayExercises((Array.isArray(list) ? list : []).flatMap(s => Array.isArray(s?.exercises) ? s.exercises : []));
+      })
+      .catch(() => { if (active) setTodayExercises([]); });
+    return () => { active = false; };
   }, [viewMode]);
 
   useEffect(() => {
@@ -52,11 +57,9 @@ export default function Muscles({ gender, muscleLanguage = 'de', taxonomy = null
   }, [days]);
 
   useEffect(() => {
-    const cutoff = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
     getRecentSessions(60)
       .then(list => {
-        const filtered = (Array.isArray(list) ? list : [])
-          .filter(s => s.date >= cutoff)
+        const filtered = sessionsInRollingWindow(list, days)
           .map(s => ({ ...s, exercise_count: s.exercises?.length || 0 }))
           .sort((a, b) => b.date.localeCompare(a.date));
         setSessions(filtered);
@@ -115,7 +118,7 @@ export default function Muscles({ gender, muscleLanguage = 'de', taxonomy = null
         <div className="mt-8">
           <ReviewSessionList
             sessions={sessions}
-            onNavigate={(_, date) => setSelectedSession(sessions.find(s => s.date === date) || null)}
+            onNavigate={(_, date, session) => setSelectedSession(session)}
             muscleLanguage={muscleLanguage}
             taxonomy={taxonomy}
           />

@@ -12,12 +12,12 @@ export default function ReviewSessionList({ sessions, onNavigate, muscleLanguage
         </div>
       </div>
       <div className="space-y-4">
-        {(sessions || []).slice().reverse().map(session => {
-          const isActivity = !!session.activity;
+        {(sessions || []).slice().reverse().map((session, index) => {
+          const isActivity = !!session.activity && !session.exercise_count;
           return (
             <button
-              key={`${session.date}`}
-              onClick={() => onNavigate?.("session", session.date)}
+              key={`${session.date}:${session.doc_id || session.id || session.session_id || index}`}
+              onClick={() => onNavigate?.("session", session.date, session)}
               className="w-full text-left p-6 rounded-2xl border bg-fit-bg2 border-fit-line hover:border-accent/50 hover:shadow-lg transition-all flex items-center justify-between group"
             >
               <div className="flex items-center gap-5">

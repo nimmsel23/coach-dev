@@ -13,6 +13,8 @@ Muskelabdeckungs- und Superkompensations-Analyse mit interaktiver Body-Map. War 
 
 ## Datenfluss
 
+- Die Heute-Karte lädt mit `listSessionsForDate()` alle Workouts des lokalen Tages und kombiniert deren Übungen.
+- Die Sessionliste filtert die Historie auf das gewählte lokale Kalenderfenster; beim Öffnen wird die angeklickte Session direkt an das Detailmodal übergeben, auch wenn mehrere Sessions dasselbe Datum haben.
 - `getSessionHistory(60)` → letzte 60 Sessions (Basis für `lastSeen`-Berechnung)
 - `getAllExercises()` → KB-Map für Muskel-Lookup (custom YAML überschreibt Session-Daten)
 - `getMuscle(selectedMuscleId)` → `AnatomyDetailModal` bei Muskel-Klick
