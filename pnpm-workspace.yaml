@@ -5,9 +5,14 @@ allowBuilds:
   better-sqlite3: true
   esbuild: true
   protobufjs: true
+minimumReleaseAgeExclude:
+  - rimraf@6.1.4
 overrides:
   '@grpc/grpc-js@<1.13.6': '^1.14.6'
   'brace-expansion@<1.1.20': '^1.1.20'
   'brace-expansion@>=2.0.0 <2.1.7': '^2.1.7'
   'brace-expansion@>=5.0.0 <5.0.11': '^5.0.11'
   'postcss-selector-parser@<6.1.5': '^6.1.5'
+  'glob@<14.0.2': '^14.0.3'
+  'minimatch@<11.0.1': '^11.0.4'
+  'rimraf@<6.0.0': '^6.1.4'
