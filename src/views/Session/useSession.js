@@ -143,7 +143,7 @@ export function useSession({ initialDate, initialDraft, recentDays = 7, coverage
 
   const {
     recentSessions, setRecentSessions, restHours, hasMoreHistory, loadMoreHistory, prevMap,
-  } = useSessionHistory({ block, date });
+  } = useSessionHistory({ block, date, sessionId, daySessions });
 
   // Ungespeicherte Änderungen sichern, bevor der Editor-State neu geladen wird
   // (Datumswechsel, Session-Wechsel, neues Workout, Unmount). save() liest den

@@ -21,7 +21,7 @@ import { getSessionHistory } from '@db';
 import { mergeSessionRuntimeDraftsIntoHistory } from '../../lib/sessionRuntimeStore.js';
 import { previousExerciseEntries } from '../../lib/db/shared/previousExercise.js';
 
-export function useSessionHistory({ block, date }) {
+export function useSessionHistory({ block, date, sessionId, daySessions }) {
   const [restHours, setRestHours] = useState(null);
   const [recentSessions, setRecentSessions] = useState({});
   const [historyLimit, setHistoryLimit] = useState(60);
@@ -64,7 +64,8 @@ export function useSessionHistory({ block, date }) {
         }
       });
       setRecentSessions(sessByDate);
-      setPrevMap(previousExerciseEntries(hydratedSessions, date));
+      const currentSession = (daySessions || []).find((session) => session.id === sessionId);
+      setPrevMap(previousExerciseEntries(hydratedSessions, date, currentSession));
       if (block) {
         const lastSame = sessions.find(s => s.date < date && (s.block === block || s.trainingsart === block));
         if (lastSame) {
@@ -76,7 +77,7 @@ export function useSessionHistory({ block, date }) {
       }
     }).catch(() => {});
     return () => { active = false; };
-  }, [block, date, historyLimit]);
+  }, [block, date, historyLimit, sessionId, daySessions]);
 
   function loadMoreHistory() {
     setHistoryLimit(current => current + 60);

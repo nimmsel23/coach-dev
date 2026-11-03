@@ -119,7 +119,7 @@ Pro Tag können mehrere Sessions existieren. `id: null` = Hauptsession, `id: "<t
 
 Die Übungskarte fragt den Gewichtstrend mit Übungs-ID und Name ab. Lokaler und Firebase-Pfad nutzen dieselbe Berechnung: konkrete IDs müssen übereinstimmen; ein exakter Name dient nur für ältere Einträge ohne ID als Fallback. Verglichen wird das höchste protokollierte Gewicht mit dem Durchschnitt der vorangehenden verfügbaren Messungen.
 
-Die Vorwerte zum Übernehmen werden separat aus Sessions vor dem geöffneten Kalendertag ermittelt und folgen derselben ID-Regel. Sessions desselben Tages werden mangels verlässlicher zeitlicher Reihenfolge nicht als vorheriges Workout ausgewählt.
+Die Vorwerte zum Übernehmen folgen derselben Übungs-ID-Regel. Frühere Tage zählen immer; Workouts am selben Tag zählen nur, wenn beide gespeicherten Zeitstempel ihre Reihenfolge gegenüber dem geöffneten Workout belegen.
 
 ## Autosave
 
