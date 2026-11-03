@@ -14,6 +14,7 @@ import { addDoc, getDoc, getDocs, deleteDoc, updateDoc } from "./offline.js";
 
 import { db } from "../../../firebase.js";
 import { getUid, LOCAL_FITNESS_API_BASE } from "./core.js";
+import { isProductBuild, localFitnessFetch } from "./localBackend.js";
 import { normalizeExerciseRecord } from "../shared/exercise.js";
 
 function mapLocalInboxItems(data) {
@@ -25,7 +26,7 @@ function mapLocalInboxItems(data) {
 }
 
 async function fetchLocalInbox() {
-  const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox`);
+  const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox`);
   if (!res.ok) throw new Error(`local_inbox_${res.status}`);
   return mapLocalInboxItems(await res.json());
 }
@@ -43,7 +44,7 @@ function markFirestoreCacheItem(item) {
 export async function sendToInbox(exerciseData) {
   const uid = getUid();
   try {
-    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/queue`, {
+    const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox/queue`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...exerciseData, uid }),
@@ -59,7 +60,7 @@ export async function sendToInbox(exerciseData) {
       userId: uid,
       received_at: serverTimestamp(),
       cache_source: "firestore_cache",
-      sync_status: "pending_local",
+      sync_status: isProductBuild ? "pending_review" : "pending_local",
     });
     return { ok: true, id: ref.id, cached: true };
   } catch (e) {
@@ -134,7 +135,7 @@ export async function approveInbox(id, userId, ex = null) {
 
   const currentData = exercise ? normalizeExerciseRecord(exercise) : null;
   try {
-    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/approve`, {
+    const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/approve`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -159,7 +160,7 @@ export async function reenrichInbox(id, userId, ex) {
   const data = ex?.exercises?.[0] || ex?.enriched || ex || {};
   const feedback = ex?.coachFeedback || ex?.feedback || null;
   try {
-    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/reenrich`, {
+    const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/reenrich`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -181,7 +182,7 @@ export async function reenrichInbox(id, userId, ex) {
 export async function deleteInbox(id, userId) {
   const targetUid = userId || getUid();
   try {
-    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}`, { method: "DELETE" });
+    const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}`, { method: "DELETE" });
     if (res.ok) return await res.json();
   } catch {
     // Firestore cache cleanup remains useful when local is unavailable.
@@ -204,7 +205,7 @@ export async function deleteInbox(id, userId) {
 // kein kritischer Pfad.
 export async function getInboxMergeCandidates() {
   try {
-    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/merge-candidates`);
+    const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox/merge-candidates`);
     if (!res.ok) return {};
     const data = await res.json();
     return data?.candidates || {};
@@ -215,7 +216,7 @@ export async function getInboxMergeCandidates() {
 
 export async function linkInboxSource(id, source, sourceId, userId, currentData = null) {
   const targetUid = userId || getUid();
-  const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/link-source`, {
+  const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/link-source`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -232,14 +233,14 @@ export async function linkInboxSource(id, source, sourceId, userId, currentData 
 
 export async function getInboxDuplicates(id, userId) {
   const targetUid = userId || getUid();
-  const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/duplicates?uid=${encodeURIComponent(targetUid)}`);
+  const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/duplicates?uid=${encodeURIComponent(targetUid)}`);
   if (!res.ok) return { ok: false, has_duplicates: false, plan: null };
   return await res.json();
 }
 
 export async function mergeInboxDuplicates(id, userId) {
   const targetUid = userId || getUid();
-  const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/merge-duplicates`, {
+  const res = await localFitnessFetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/merge-duplicates`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ uid: targetUid }),

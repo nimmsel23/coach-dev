@@ -7,6 +7,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { setDoc, deferStart } from "./offline.js";
+import { localFitnessFetch } from "./localBackend.js";
 import {
   onAuthStateChanged,
   signInWithPopup, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, createUserWithEmailAndPassword,
@@ -134,5 +135,5 @@ function resolveLocalFitnessApiBase() {
 export const LOCAL_FITNESS_API_BASE = resolveLocalFitnessApiBase();
 const LOCAL_FITNESS_NOTIFY = `${LOCAL_FITNESS_API_BASE}/notify`;
 export function pingBridge() {
-  fetch(LOCAL_FITNESS_NOTIFY, { method: "POST" }).catch(() => {});
+  localFitnessFetch(LOCAL_FITNESS_NOTIFY, { method: "POST" }).catch(() => {});
 }
