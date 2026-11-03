@@ -38,6 +38,8 @@ Recovery-Modell — aufgetrennt + auf geteiltes Scoring umgestellt.
 
 ## Data Flow
 
+The rolling monthly report cache is scoped to the signed-in user and local calendar day; saving or deleting a session invalidates it. A pending calculation is discarded or retried if invalidated during loading.
+
 1.  **Selection**: User changes the `week` in `ReviewHeader`.
 2.  **Fetching**: `index.jsx` triggers a re-fetch via `db.js` (`getWeeklyReport`).
 3.  **Distribution**: Data is passed down to specialized presentational components.

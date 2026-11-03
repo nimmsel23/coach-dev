@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getMonthlyReport, exportFitnessData, getHistoryEntries } from '@db';
 import { BarChart3, Activity, History, Zap, FileText } from 'lucide-react';
-import { readMonthlyReportCache, writeMonthlyReportCache, clearMonthlyReportCache } from '../../lib/reportCache';
+import { readMonthlyReportCache, writeMonthlyReportCache, clearMonthlyReportCache, reportCacheRevision } from '../../lib/reportCache';
+import { useUser } from '../../contexts/UserContext.jsx';
+import { todayISO } from '../../lib/db/shared/utils.js';
 
 import ReviewHeader from './ReviewHeader';
 import ReviewOverview from './ReviewOverview';
@@ -18,10 +20,11 @@ import TrainingProtocol from './TrainingProtocol.jsx';
 
 const SUB_TABS = ['muscles', 'verlauf', 'readiness', 'protokoll'];
 const REVIEW_WINDOW_DAYS = 28;
-let monthlyReportCache = null; // schnellster Pfad: gleicher Tab, kein JSON.parse
-
 export default function WeeklyReview({ onOpenSession, onInspectExercise, muscleLanguage = 'de', taxonomy = null, gender = 'male', recentDays = 10, subTab = null, onSubNav }) {
-  const [data, setData]       = useState(null);
+  const { user } = useUser();
+  const cacheOwner = user?.uid || 'local';
+  const [reportState, setReportState] = useState(null);
+  const data = reportState?.owner === cacheOwner && reportState.day === todayISO() ? reportState.data : null;
   const [loading, setLoading] = useState(false);
   const [toast, setToast]     = useState('');
   const [historySessions, setHistorySessions] = useState([]);
@@ -49,34 +52,35 @@ export default function WeeklyReview({ onOpenSession, onInspectExercise, muscleL
   useEffect(() => {
     if (viewMode !== 'report') return;
 
-    if (monthlyReportCache) {
-      setData(monthlyReportCache);
-      setLoading(false);
-      return;
-    }
-
-    const cached = readMonthlyReportCache();
+    let active = true;
+    const day = todayISO();
+    const cached = readMonthlyReportCache(cacheOwner, day);
     if (cached) {
-      monthlyReportCache = cached;
-      setData(cached);
+      setReportState({ owner: cacheOwner, day, data: cached });
       setLoading(false);
       return;
     }
 
     setLoading(true);
-    getMonthlyReport(REVIEW_WINDOW_DAYS)
-      .then(d => {
-        const next = d || null;
-        monthlyReportCache = next;
-        if (next) writeMonthlyReportCache(next);
-        setData(next);
-      })
+    const load = async () => {
+      let startRevision = reportCacheRevision();
+      let next = await getMonthlyReport(REVIEW_WINDOW_DAYS);
+      if (startRevision !== reportCacheRevision()) {
+        startRevision = reportCacheRevision();
+        next = await getMonthlyReport(REVIEW_WINDOW_DAYS);
+      }
+      if (!active || startRevision !== reportCacheRevision() || day !== todayISO()) return;
+      if (next) writeMonthlyReportCache(next, cacheOwner, day);
+      setReportState({ owner: cacheOwner, day, data: next || null });
+    };
+    load()
       .catch(err => {
         console.error('getMonthlyReport failed', err);
-        setData(null);
+        if (active) setReportState(null);
       })
-      .finally(() => setLoading(false));
-  }, [viewMode]);
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [viewMode, cacheOwner]);
 
   async function exportWeekly() {
     try {
@@ -85,7 +89,6 @@ export default function WeeklyReview({ onOpenSession, onInspectExercise, muscleL
         week_selector: 'current',
         force: true,
       })
-      monthlyReportCache = null
       clearMonthlyReportCache()
       setToast(result?.path ? `Export: ${result.path}` : 'Exportiert')
     } catch {

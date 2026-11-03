@@ -522,7 +522,7 @@ export async function getWeeklyReport(selector = "current") {
       const cached = snap.data();
       // "current" ist ein rollendes 7-Tage-Fenster: der Cache stammt vom Tag
       // des letzten Speicherns und wäre am nächsten Tag um Tage verschoben.
-      if (cached?.report_version === WEEKLY_REPORT_VERSION && (selector !== "current" || writtenToday(cached?.updated_at))) return cached;
+      if (cached?.report_version === WEEKLY_REPORT_VERSION && cached.requested_week === selector && (selector !== "current" || writtenToday(cached?.updated_at))) return cached;
     }
   } catch (e) {
     console.warn("Failed to fetch cached weekly report", e);
