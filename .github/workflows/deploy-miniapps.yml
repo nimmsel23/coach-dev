@@ -1,29 +1,30 @@
-# Solo-Mini-Apps aus fitness-dev: vos-training (Tab Session) und vos-atlas (Tab Exercises).
+# Solo-Mini-Apps aus fitness-dev, je Tab eine App (vos-training, vos-logbuch, vos-review, vos-atlas,
+# vos-touren, vos-setup, vos-anamnese, vos-fokus). SSOT ist scripts/miniapps.json: Eintrag je App mit
+# Tab, Hosting-Site und den View-Ordnern, die sie betreffen. Gebaut wird mit
+# `pnpm run build:miniapp <id>` (vite --mode <id>, die anderen Views sind per soloStubPlugin ausgestubbt).
+# Neue App = Eintrag in miniapps.json + .env.<id> + Hosting-Target <id> + Icon (siehe _note in der Datei);
+# an diesem Workflow ändert sich nichts.
 #
-# Beide werden mit `vite build --mode training|atlas` aus diesem Repo gebaut (die anderen Views sind
-# dort per soloStubPlugin ausgestubbt, siehe vite.config.js) und liefen bisher nur per Handbefehl
-# (`pnpm run training` / `pnpm run atlas`). Jetzt: Push auf master deployt die betroffene Mini-App.
+# Push auf master deployt nur die betroffenen Apps (Schritt "Betroffene Apps"):
+#   - Dateien in den "paths" einer App                         -> diese App
+#   - solo-icons/<id>/ oder .env.<id>                          -> diese App
+#   - gemeinsamer Code (src/ ausser src/views/, scripts/, vite.config.js, package.json, Lockfile,
+#     mini-app.json, firebase.json, miniapps.json, diese Datei) -> alle Apps
+#   - Änderungen in anderen Views erreichen die Solo-Builds nicht (ausgestubbt)  -> kein Deploy
+# workflow_dispatch: alle oder eine App gezielt.
 #
-# Welche App neu deployt wird, entscheidet der Schritt "Betroffene Apps" aus dem Diff des Pushs:
-#   src/views/Session/**    -> training
-#   src/views/Exercises/**  -> atlas
-#   gemeinsamer Code (src/ außer src/views/, scripts/, vite.config.js, package.json, Lockfile,
-#   mini-app.json, firebase.json, solo-icons/)  -> beide
-#   Änderungen in anderen Views erreichen die Solo-Builds nicht (ausgestubbt) -> kein Deploy.
-# workflow_dispatch deployt beide (oder gezielt eine).
-#
-# Aufbau wie deploy-master.yml (Nachbar-Repos auf master, je eigener Lockfile, FIREBASE_CONFIG-Secret).
+# learn/plan/6pack/skills haben eigene Repos und Sites und stehen nicht in der Tabelle.
+# Aufbau wie deploy-master.yml (Nachbarn auf master, je eigener Lockfile, FIREBASE_CONFIG-Secret).
 
-name: Live Deploy (Mini-Apps training/atlas)
+name: Live Deploy (Mini-Apps je Tab)
 
 'on':
   workflow_dispatch:
     inputs:
       app:
-        description: "Welche Mini-App? (both | training | atlas)"
-        type: choice
-        options: [both, training, atlas]
-        default: both
+        description: "Welche Mini-App? (all oder eine id aus scripts/miniapps.json)"
+        type: string
+        default: all
   push:
     branches:
       - master
@@ -36,6 +37,7 @@ name: Live Deploy (Mini-Apps training/atlas)
       - 'mini-app.json'
       - 'firebase.json'
       - 'solo-icons/**'
+      - '.env.*'
       - '.github/workflows/deploy-miniapps.yml'
 
 concurrency:
@@ -43,31 +45,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy_miniapps:
+  detect:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    outputs:
+      matrix: ${{ steps.apps.outputs.matrix }}
+      any: ${{ steps.apps.outputs.any }}
     steps:
-      - name: Checkout fitness-dev
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
-          path: fitness-dev
           fetch-depth: 0
 
       - name: Betroffene Apps
         id: apps
-        working-directory: fitness-dev
         env:
           BEFORE: ${{ github.event.before }}
           INPUT_APP: ${{ inputs.app }}
         run: |
           set -euo pipefail
-          training=false; atlas=false
+          SHARED='^(src/|scripts/|vite\.config\.js$|package\.json$|pnpm-lock\.yaml$|mini-app\.json$|firebase\.json$|\.github/workflows/deploy-miniapps\.yml$)'
+          all_ids=$(jq -r '.apps[].id' scripts/miniapps.json)
+          selected=""
           if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
-            case "${INPUT_APP:-both}" in
-              training) training=true ;;
-              atlas) atlas=true ;;
-              *) training=true; atlas=true ;;
-            esac
+            if [ -z "${INPUT_APP:-}" ] || [ "$INPUT_APP" = "all" ]; then selected="$all_ids"
+            else
+              echo "$all_ids" | grep -qx "$INPUT_APP" || { echo "::error::unbekannte App: $INPUT_APP"; exit 1; }
+              selected="$INPUT_APP"
+            fi
           else
             if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
               changed=$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA")
@@ -75,20 +78,41 @@ jobs:
               changed=$(git diff --name-only "$BEFORE" "$GITHUB_SHA")
             fi
             echo "$changed"
-            # gemeinsamer Code: src/ ausser src/views/, dazu Build-Konfiguration -> beide Apps
-            if echo "$changed" | grep -Ev '^src/views/' \
-               | grep -Eq '^(src/|scripts/|vite\.config\.js$|package\.json$|pnpm-lock\.yaml$|mini-app\.json$|firebase\.json$|solo-icons/|\.github/workflows/deploy-miniapps\.yml$)'; then
-              training=true; atlas=true
+            # gemeinsamer Code: src/ ausser src/views/ (plus Build-Konfiguration) betrifft alle Apps
+            if echo "$changed" | grep -Ev '^src/views/' | grep -Eq "$SHARED" \
+               || echo "$changed" | grep -qx 'scripts/miniapps.json'; then
+              selected="$all_ids"
+            else
+              for id in $all_ids; do
+                prefixes=$(jq -r --arg id "$id" '.apps[] | select(.id==$id) | .paths[]' scripts/miniapps.json | sed 's/\./\\./g' | paste -sd'|')
+                if echo "$changed" | grep -Eq "^(${prefixes}|solo-icons/${id}/|\.env\.${id}$)"; then
+                  selected="$selected $id"
+                fi
+              done
             fi
-            echo "$changed" | grep -Eq '^src/views/Session/' && training=true || true
-            echo "$changed" | grep -Eq '^src/views/Exercises/' && atlas=true || true
           fi
-          echo "training=$training" >> "$GITHUB_OUTPUT"
-          echo "atlas=$atlas" >> "$GITHUB_OUTPUT"
-          echo "Deploy: training=$training atlas=$atlas"
+          ids=$(echo "$selected" | tr ' ' '\n' | sed '/^$/d' | sort -u | paste -sd' ')
+          echo "Deploy: ${ids:-keine}"
+          matrix=$(for id in $ids; do jq -c --arg id "$id" '.apps[] | select(.id==$id) | {id, site}' scripts/miniapps.json; done | jq -sc '{include: .}')
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          if [ -n "$ids" ]; then echo "any=true" >> "$GITHUB_OUTPUT"; else echo "any=false" >> "$GITHUB_OUTPUT"; fi
+
+  deploy:
+    needs: detect
+    if: needs.detect.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.detect.outputs.matrix) }}
+    steps:
+      - name: Checkout fitness-dev
+        uses: actions/checkout@v7
+        with:
+          path: fitness-dev
 
       - name: Checkout Nachbarn (master)
-        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
         run: |
           set -euo pipefail
           for repo in plan-dev 6pack-dev skills-dev learn-dev relax-dev; do
@@ -97,24 +121,20 @@ jobs:
           done
 
       - uses: pnpm/action-setup@v6
-        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
         with:
           version: 11.3.0
 
       - uses: actions/setup-node@v7
-        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
         with:
           node-version: 22
           cache: pnpm
           cache-dependency-path: fitness-dev/pnpm-lock.yaml
 
       - name: Install (fitness-dev, eigener Lockfile)
-        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
         working-directory: fitness-dev
         run: pnpm install --frozen-lockfile
 
       - name: Install Nachbarn (je eigener Lockfile)
-        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
         run: |
           set -euo pipefail
           for repo in plan-dev 6pack-dev skills-dev learn-dev relax-dev; do
@@ -128,7 +148,6 @@ jobs:
           done
 
       - name: Firebase config bereitstellen (Secret)
-        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
         working-directory: fitness-dev
         env:
           FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
@@ -136,36 +155,16 @@ jobs:
           test -n "$FIREBASE_CONFIG" || { echo "::error::Secret FIREBASE_CONFIG fehlt"; exit 1; }
           printf '%s\n' "$FIREBASE_CONFIG" > firebase.config.js
 
-      # --- vos-training -------------------------------------------------
-      - name: Build vos-training
-        if: steps.apps.outputs.training == 'true'
+      - name: Build ${{ matrix.id }}
         working-directory: fitness-dev
-        run: pnpm run build:training
+        run: pnpm run build:miniapp ${{ matrix.id }}
 
-      - name: Deploy vos-training
-        if: steps.apps.outputs.training == 'true'
+      - name: Deploy ${{ matrix.id }} (${{ matrix.site }})
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS || secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: fitness-aos
           entryPoint: fitness-dev
-          target: training
-          channelId: live
-
-      # --- vos-atlas ----------------------------------------------------
-      - name: Build vos-atlas
-        if: steps.apps.outputs.atlas == 'true'
-        working-directory: fitness-dev
-        run: pnpm run build:atlas
-
-      - name: Deploy vos-atlas
-        if: steps.apps.outputs.atlas == 'true'
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS || secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: fitness-aos
-          entryPoint: fitness-dev
-          target: atlas
+          target: ${{ matrix.id }}
           channelId: live

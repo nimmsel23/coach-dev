@@ -1,0 +1,136 @@
+{
+  "_note": "SSOT der Solo-Mini-Apps aus fitness-dev (je Tab). Genutzt von vite.config.js (Stubs), scripts/build-miniapp.mjs, stamp-training.mjs und .github/workflows/deploy-miniapps.yml. Neue App: Eintrag hier + .env.<id> (VITE_SOLO_TAB) + Hosting-Target <id> in firebase.json/.firebaserc + Icon in scripts/solo-icons.py. learn/plan/6pack/skills haben eigene Repos bzw. Sites und stehen nicht hier.",
+  "apps": [
+    {
+      "id": "training",
+      "tab": "session",
+      "keep": [
+        "Session"
+      ],
+      "site": "vos-training",
+      "name": "VitalOS Training",
+      "short": "Training",
+      "start": "/#session",
+      "description": "Krafttraining loggen — Session-Tab als eigene App",
+      "accent": "#e8a020",
+      "paths": [
+        "src/views/Session/",
+        "src/views/Logbuch/"
+      ]
+    },
+    {
+      "id": "logbuch",
+      "tab": "session",
+      "keep": [
+        "Session"
+      ],
+      "site": "vos-logbuch",
+      "name": "VitalOS Logbuch",
+      "short": "Logbuch",
+      "start": "/#session/logbuch",
+      "description": "Logbuch und Chronik der Trainingswochen — als eigene App",
+      "accent": "#c084fc",
+      "paths": [
+        "src/views/Session/",
+        "src/views/Logbuch/"
+      ]
+    },
+    {
+      "id": "review",
+      "tab": "review",
+      "keep": [
+        "WeeklyReview"
+      ],
+      "site": "vos-review",
+      "name": "VitalOS Review",
+      "short": "Review",
+      "start": "/#review",
+      "description": "Wochenreview, Muskeln, Readiness — Review-Tab als eigene App",
+      "accent": "#f472b6",
+      "paths": [
+        "src/views/WeeklyReview/",
+        "src/views/Muscles/"
+      ]
+    },
+    {
+      "id": "atlas",
+      "tab": "atlas",
+      "keep": [
+        "Exercises"
+      ],
+      "site": "vos-atlas",
+      "name": "VitalOS Atlas",
+      "short": "Atlas",
+      "start": "/#atlas",
+      "description": "Übungsdatenbank durchsuchen — Atlas als eigene App",
+      "accent": "#35c2c8",
+      "paths": [
+        "src/views/Exercises/"
+      ]
+    },
+    {
+      "id": "touren",
+      "tab": "touren",
+      "keep": [
+        "Touren"
+      ],
+      "site": "vos-touren",
+      "name": "VitalOS Radtouren",
+      "short": "Radtouren",
+      "start": "/#touren",
+      "description": "Radtouren planen und loggen — als eigene App",
+      "accent": "#34d399",
+      "paths": [
+        "src/views/Touren/"
+      ]
+    },
+    {
+      "id": "setup",
+      "tab": "settings",
+      "keep": [
+        "Settings"
+      ],
+      "site": "vos-setup",
+      "name": "VitalOS Setup",
+      "short": "Setup",
+      "start": "/#settings",
+      "description": "Einstellungen — Setup-Tab als eigene App",
+      "accent": "#94a3b8",
+      "paths": [
+        "src/views/Settings/"
+      ]
+    },
+    {
+      "id": "anamnese",
+      "tab": "anamnese",
+      "keep": [
+        "Anamnese"
+      ],
+      "site": "vos-anamnese",
+      "name": "VitalOS Anamnese",
+      "short": "Anamnese",
+      "start": "/#anamnese",
+      "description": "Anamnese erfassen — als eigene App",
+      "accent": "#fb923c",
+      "paths": [
+        "src/views/Anamnese/"
+      ]
+    },
+    {
+      "id": "fokus",
+      "tab": "focus",
+      "keep": [
+        "Fokus"
+      ],
+      "site": "vos-fokus",
+      "name": "VitalOS Fokus",
+      "short": "Fokus",
+      "start": "/#focus",
+      "description": "Fokus-Ebenen — als eigene App",
+      "accent": "#facc15",
+      "paths": [
+        "src/views/Fokus/"
+      ]
+    }
+  ]
+}

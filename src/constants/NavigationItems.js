@@ -49,7 +49,7 @@ export const SOLO_TAB = import.meta.env.VITE_SOLO_TAB || '';
 export const IS_SOLO = Boolean(SOLO_TAB);
 
 export function getNavItems({ focusReady = false, devBypass = false } = {}) {
-  if (SOLO_TAB) return baseItems.filter((item) => item.id === SOLO_TAB);
+  if (SOLO_TAB) return [...baseItems, { id: 'anamnese', label: 'Anamnese', Icon: ClipboardList }, { id: 'focus', label: 'Fokus', Icon: Crosshair }].filter((item) => item.id === SOLO_TAB);
   if (devBypass) {
     return [
       ...baseItems.slice(0, 3),

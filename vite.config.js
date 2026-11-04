@@ -2,10 +2,13 @@ import { vosChangelog } from './scripts/vos-changelog/vos-changelog-vite.mjs'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { dirname, isAbsolute, relative, resolve, sep } from 'path'
-import { existsSync } from 'fs'
+import { existsSync, readFileSync } from 'fs'
 import { miniAppSubmodulePlugin } from './vite-miniapp-submodules.mjs'
 
 const BACKEND = 'http://localhost:9150'
+
+// Solo-Mini-Apps (je Tab): SSOT scripts/miniapps.json
+const MINIAPPS = Object.fromEntries(JSON.parse(readFileSync(resolve(__dirname, 'scripts/miniapps.json'), 'utf8')).apps.map((a) => [a.id, a]))
 
 // Sibling-Repos existieren unter zwei Namen, je nach Checkout-Kontext:
 // ~/<name>-dev (Home-Root, dev-Branch-Arbeitskopie) oder
@@ -36,13 +39,12 @@ function resolveCrossAppAliases() {
   }
 }
 
-// Solo-Builds (mode 'training' | 'atlas'): Views, die dort unerreichbar sind, durch einen leeren
+// Solo-Builds (mode = Eintrag in scripts/miniapps.json): Views, die dort unerreichbar sind, durch einen leeren
 // Platzhalter ersetzen, damit sie samt Abhängigkeiten nicht im Bundle landen. Bewusst
 // ein Build-Plugin statt lazy()-Imports: so bleibt die normale App unverändert.
 const SOLO_APP_VIEWS = ['Session', 'WeeklyReview', 'Touren', 'Exercises', 'Settings', 'Anamnese', 'Fokus', 'Inbox']
-const SOLO_KEEP = { training: ['Session'], atlas: ['Exercises'] }
 function soloStubs(mode) {
-  const stubbed = SOLO_APP_VIEWS.filter((v) => !SOLO_KEEP[mode].includes(v)).join('|')
+  const stubbed = SOLO_APP_VIEWS.filter((v) => !MINIAPPS[mode].keep.includes(v)).join('|')
   return [
     { importer: /[\\/]src[\\/]App\.jsx$/, source: new RegExp(`^(\\./views/(${stubbed})/index\\.jsx?$|@learn/views/Learn/)`) },
     // Plan lebt im Solo-Build auf vos-plan.web.app
@@ -66,10 +68,10 @@ function soloStubPlugin(mode) {
 }
 
 export default defineConfig(async ({ mode }) => {
-  const isFirebase = mode === 'firebase' || mode === 'coach' || mode === 'training' || mode === 'atlas' || mode === 'plan'
+  const isFirebase = mode === 'firebase' || mode === 'coach' || mode in MINIAPPS || mode === 'plan'
   const isCoach = mode === 'coach'
   const isPlan = mode === 'plan'
-  const isSolo = mode === 'training' || mode === 'atlas'
+  const isSolo = mode in MINIAPPS
   const crossAppAliases = resolveCrossAppAliases()
 
   return {
@@ -77,7 +79,7 @@ export default defineConfig(async ({ mode }) => {
     // Präfix (z.B. /fitness-dev/) fälschlich zur Domain-Wurzel auf (404 →
     // Whitescreen). Core4/Door/Game/Fuel haben denselben Fix schon.
     base: './',
-    plugins: [vosChangelog({ appId: isSolo || isPlan ? mode : 'fitness', appName: isSolo || isPlan ? ({ training: 'Training', atlas: 'Atlas', plan: 'Plan' })[mode] : 'Fitness', accent: '#60a5fa' }), react(), miniAppSubmodulePlugin(), ...(isSolo ? [soloStubPlugin(mode)] : [])],
+    plugins: [vosChangelog({ appId: isSolo || isPlan ? mode : 'fitness', appName: isSolo || isPlan ? (MINIAPPS[mode]?.short || 'Plan') : 'Fitness', accent: '#60a5fa' }), react(), miniAppSubmodulePlugin(), ...(isSolo ? [soloStubPlugin(mode)] : [])],
     resolve: {
       preserveSymlinks: true,
       alias: {

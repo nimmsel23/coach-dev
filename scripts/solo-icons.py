@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Erzeugt die App-Icons der Mini-Apps (training, atlas, sixpack, plan, coach) nach solo-icons/<app>/.
+"""Erzeugt die App-Icons der Mini-Apps (training, atlas, sixpack, plan, coach, logbuch, review, touren, setup, anamnese, fokus) nach solo-icons/<app>/.
 
 Quelle ist das SVG je Modus; PNGs werden mit rsvg-convert gerendert und eingecheckt, damit
 der Build selbst kein rsvg braucht. Neu erzeugen: python3 scripts/solo-icons.py
@@ -78,12 +78,71 @@ def coach(accent):
     )
 
 
+def logbuch(accent):
+    # aufgeschlagenes Buch mit Zeilen
+    out = [f'<path d="M256 152C220 130 168 128 120 142V370C168 356 220 358 256 380Z" fill="{accent}" opacity="0.9"/>',
+           f'<path d="M256 152C292 130 344 128 392 142V370C344 356 292 358 256 380Z" fill="{accent}" opacity="0.55"/>']
+    for y in (192, 232, 272):
+        out.append(f'<rect x="146" y="{y}" width="80" height="12" rx="6" fill="{BG}" opacity="0.7"/>')
+    return "".join(out)
+
+
+def review(accent):
+    # Balkendiagramm
+    return "".join(
+        f'<rect x="{x}" y="{412 - h}" width="56" height="{h}" rx="12" fill="{accent}" opacity="{o}"/>'
+        for x, h, o in [(118, 110, 0.5), (200, 190, 0.7), (282, 150, 0.6), (364, 250, 1.0)]
+    )
+
+
+def touren(accent):
+    # zwei Räder + Rahmen
+    return (
+        f'<circle cx="160" cy="320" r="62" fill="none" stroke="{accent}" stroke-width="16"/>'
+        f'<circle cx="352" cy="320" r="62" fill="none" stroke="{accent}" stroke-width="16"/>'
+        f'<path d="M160 320L228 198H316L352 320M228 198L268 320H160M316 198L292 160H336" fill="none" stroke="{accent}" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+
+
+def setup(accent):
+    # drei Regler
+    out = []
+    for y, kx in [(168, 190), (256, 320), (344, 240)]:
+        out.append(f'<rect x="120" y="{y - 8}" width="272" height="16" rx="8" fill="{accent}" opacity="0.4"/>')
+        out.append(f'<circle cx="{kx}" cy="{y}" r="30" fill="{accent}"/>')
+    return "".join(out)
+
+
+def anamnese(accent):
+    # Formular mit Feldern
+    out = [f'<rect x="132" y="108" width="248" height="296" rx="28" fill="none" stroke="{accent}" stroke-width="16"/>']
+    for y in (176, 240, 304):
+        out.append(f'<rect x="170" y="{y}" width="60" height="14" rx="7" fill="{accent}" opacity="0.5"/>')
+        out.append(f'<rect x="170" y="{y + 26}" width="172" height="22" rx="8" fill="{accent}" opacity="0.9"/>')
+    return "".join(out)
+
+
+def fokus(accent):
+    # Fadenkreuz
+    return (
+        f'<circle cx="256" cy="256" r="118" fill="none" stroke="{accent}" stroke-width="16"/>'
+        f'<circle cx="256" cy="256" r="26" fill="{accent}"/>'
+        + "".join(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8" fill="{accent}"/>' for x, y, w, h in [(248, 96, 16, 56), (248, 360, 16, 56), (96, 248, 56, 16), (360, 248, 56, 16)])
+    )
+
+
 APPS = {
     "training": (training, "#e8a020"),
     "atlas": (atlas, "#35c2c8"),
     "sixpack": (sixpack, "#e5192b"),
     "plan": (plan, "#5b8cff"),
     "coach": (coach, "#a78bfa"),
+    "logbuch": (logbuch, "#c084fc"),
+    "review": (review, "#f472b6"),
+    "touren": (touren, "#34d399"),
+    "setup": (setup, "#94a3b8"),
+    "anamnese": (anamnese, "#fb923c"),
+    "fokus": (fokus, "#facc15"),
 }
 
 

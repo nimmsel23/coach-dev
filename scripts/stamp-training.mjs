@@ -4,7 +4,7 @@
 // public/manifest.json bleibt unberührt — nur der Build-Output wird umgeschrieben.
 // Manifest/Titel/Icons/Splash macht @vos/mini-app-shell (scripts/mini-app-shell/); der SW bleibt der
 // der Haupt-App (Push, Workout-Notifications) und wird von `mini-app-shell sw` (scripts/mini-app-shell/cli.mjs) versioniert.
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { stampApp } from "./mini-app-shell/stamp.mjs";
@@ -13,7 +13,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = resolve(root, process.argv[2] || "dist-training");
 const [, , , NAME = "VitalOS Training", SHORT = "Training", START = "/#session",
   DESC = "Krafttraining loggen — Session-Tab als eigene App"] = process.argv;
-const ACCENTS = { training: "#e8a020", atlas: "#35c2c8" };
+const ACCENTS = Object.fromEntries(JSON.parse(readFileSync(resolve(root, "scripts/miniapps.json"), "utf8")).apps.map((a) => [a.id, a.accent]));
 
 if (!existsSync(resolve(outDir, "manifest.json"))) {
   console.error(`❌ ${resolve(outDir, "manifest.json")} nicht gefunden — erst "vite build --mode training"`);
