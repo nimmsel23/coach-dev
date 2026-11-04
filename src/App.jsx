@@ -23,6 +23,7 @@ import MobileNav from './components/layout/MobileNav.jsx'
 import UserProfile from './components/common/UserProfile.jsx'
 import ErrorBoundary from './components/common/ErrorBoundary.jsx'
 import PwaUpdateBanner from './components/common/PwaUpdateBanner.jsx'
+import SoloHelper from './components/common/SoloHelper.jsx'
 import { IosInstallHint } from './components/IosInstallHint.jsx'
 import { InstallPromptHandler } from './components/InstallPromptHandler.jsx'
 import AuthGateModal from './components/AuthGateModal.jsx'
@@ -550,6 +551,7 @@ export default function App() {
       <InstallPromptHandler />
       <IosInstallHint />
       <PwaUpdateBanner />
+      {IS_SOLO && <SoloHelper />}
       <AuthGateModal
         open={!isLocalMode() && !user && showAuthGateModal}
         onClose={handleDismissAuthGate}
