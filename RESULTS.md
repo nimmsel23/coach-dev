@@ -1,3 +1,13 @@
+# Fitness-Release dev → master → vitalos, Firebase-Konto (2026-11-04)
+
+Release der Logbuch- und Mini-App-Änderungen über `vos-ship fitness`: PR #40 (`dev` → `master`) wurde gemergt und der Standalone-Live-Deploy lief grün. Der Schritt `vos-release` (`master` → `vitalos`) scheiterte zunächst am Pre-Push-Hook von `fitness-app`, weil die lokale Firebase-Anmeldung für `fitness-aos` keine Berechtigung hatte.
+
+- **Firebase-Login (Systemeinstellung, kein Repo-Inhalt)**: `firebase login:use nimmsel23@gmail.com` setzt das Konto mit Zugriff auf `fitness-aos` für das Projektverzeichnis. Danach lief `vos-release fitness --yes` (ohne TTY nötig) durch.
+- **`fitness-app` / Meta-Repo `~/vitalos`**: 13 Commits auf `vitalos` gepusht, Pointer-Bump auf `master` (`84d3a0b`); der Push löste die CI für Shell und `vos-fitness` aus. Deren Ergebnis wurde nur für `deploy-vos-fitness.yml` geprüft (grün, ca. 1m20s).
+- **`dev`**: `7421fc9` (Stempel-Build) und `33df556` (Lint-Hook, CI-Cache in `check.yml`) nach `origin/dev` gepusht; der Pre-Push-Hook meldete „Build-Verifikation OK“.
+
+---
+
 # 2026-11-04 — Fuel-App-Wrapper (vos-fuel)
 
 Ein neuer Wrapper für die Fuel-App (`vos-fuel`) wurde im `vitalos`-Monorepo erstellt, der die bestehenden Fuel-Funktionen in einer neuen React-Hülle zusammenführt. Der Fokus liegt auf einem integrierten Home-Screen und der Nutzung der vorhandenen Fuel-Tabs über Hash-Routen.
