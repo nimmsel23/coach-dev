@@ -72,5 +72,19 @@ jobs:
       - name: Firebase config bereitstellen (gitignored, Platzhalter genügt zum Bauen)
         run: cp firebase.config.js fitness-app/firebase.config.js
 
+      # KB-Daten (generierte Dateien + Stempel). Der Stempel prüft den Inhalt der Eingaben,
+      # ein veralteter Cache führt also nur zu einem Neubau, nie zu falschen Daten.
+      - name: KB-Daten-Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            fitness-app/.cache/kb-data
+            fitness-app/src/lib/db/firestore/*.generated.js
+            fitness-app/src/lib/db/shared/nonExercises.generated.js
+            fitness-app/src/lib/coachNotesData.generated.js
+            fitness-app/src/views/SixPack/sixpackData.generated.js
+          key: kb-data-${{ runner.os }}-${{ hashFiles('fitness-app/fitness/catalog/kb/**') }}
+          restore-keys: kb-data-${{ runner.os }}-
+
       - name: Build Fitness
         run: pnpm --filter ./fitness-app run build:firebase

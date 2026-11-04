@@ -34,21 +34,22 @@ fi
 # und public/manifest.json bleiben als getrackte Quelle unverändert
 # (Platzhalter fitness-v0 / version "0"), kein Bump-Commit mehr nötig.
 
-# --- Build-Verifikation (blocking, nur bei build-relevanten Dateien) ----
-# Analog zum TRIGGER-Pattern im pre-push-Hook. Verhindert kaputte Commits
-# frueh, statt erst beim dev-Push zu bemerken, dass npm run build fehlschlaegt.
+# --- Lint (blocking, nur bei build-relevanten Dateien) ------------------
+# Seit 2026-11-04 nur noch Lint statt vollem Build: der komplette Build läuft einmal im
+# pre-push-Hook (Push nach dev) und in der CI (Check/Deploy). So scheitert ein Commit nicht
+# an Daten-Schritten oder fehlenden Nachbar-Checkouts (z. B. in Worktrees).
 BUILD_TRIGGER='^(src/|public/|index.html$|vite.config.(js|ts|mjs)$|package.json$)'
 staged_files="$(git diff --cached --name-only)"
 if echo "$staged_files" | grep -Eq "$BUILD_TRIGGER"; then
   if command -v gum >/dev/null 2>&1; then
-    gum log --level info "fitness-dev: build-relevante Dateien gestaged — pnpm run build zur Verifikation…"
+    gum log --level info "fitness-dev: build-relevante Dateien gestaged — pnpm run lint…"
   else
-    echo "🔍 fitness-dev: build-relevante Dateien gestaged — pnpm run build zur Verifikation…"
+    echo "🔍 fitness-dev: build-relevante Dateien gestaged — pnpm run lint…"
   fi
-  if ! pnpm run build; then
-    echo "❌ pnpm run build fehlgeschlagen — Commit wird abgebrochen." >&2
+  if ! pnpm run lint; then
+    echo "❌ pnpm run lint fehlgeschlagen — Commit wird abgebrochen." >&2
     echo "   Mit 'git commit --no-verify' kannst du den Hook überspringen, falls das Absicht ist." >&2
     exit 1
   fi
-  echo "✅ Build-Verifikation OK."
+  echo "✅ Lint OK."
 fi
