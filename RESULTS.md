@@ -1,3 +1,9 @@
+# 2026-11-04 — Fuel-App-Wrapper (vos-fuel)
+
+Ein neuer Wrapper für die Fuel-App (`vos-fuel`) wurde im `vitalos`-Monorepo erstellt, der die bestehenden Fuel-Funktionen in einer neuen React-Hülle zusammenführt. Der Fokus liegt auf einem integrierten Home-Screen und der Nutzung der vorhandenen Fuel-Tabs über Hash-Routen.
+
+-   **`vos-fuel` App-Wrapper (`src/FuelApp.jsx`, `src/Menu.jsx`, `src/nav.js`, `src/home/*.jsx`)**: Die Kernkomponenten des Wrappers wurden erstellt. `FuelApp.jsx` dient als Haupt-Container und verw
+
 # Results
 
 ## 2026-11-04 — Mini-Apps pro Tab, Ship-Hook, TWA-APK
