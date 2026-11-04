@@ -90,7 +90,7 @@ export const SWIM_STYLE_PRIMARY_MUSCLES = {
  * A session with exercises (strength) stays primary even when an activity
  * finisher (e.g. HIIT/cardio) is attached — the finisher is reported
  * separately via hasFinisher, never as a label override.
- * Used by SessionHistory (Session tab) and ReviewHistory (WeeklyReview → Verlauf).
+ * Used by SessionHistory (Session tab) (ReviewHistory ist im Logbuch aufgegangen).
  */
 export function classifySession(session) {
   // Index-Zeilen (workoutIndex) tragen nur exerciseCount statt der exercises-Liste.

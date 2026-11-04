@@ -35,8 +35,10 @@ import { useSwipeNavigation } from './hooks/useSwipeNavigation'
 import { getStaticMuscleTaxonomy } from './lib/kb/muscles.js'
 import { recordFitnessUsage } from './lib/traction.js'
 
-const SESSION_SUB_TABS = new Set(['today', 'timer', 'skills', 'plan', 'history', 'logbuch'])
-const REVIEW_SUB_TABS = new Set(['report', 'muscles', 'readiness', 'verlauf', 'protokoll'])
+const SESSION_SUB_TABS = new Set(['today', 'timer', 'skills', 'plan', 'logbuch'])
+const REVIEW_SUB_TABS = new Set(['report', 'muscles', 'readiness', 'protokoll'])
+// History/Verlauf sind im Logbuch aufgegangen; alte Links (#session/history, #review/verlauf) landen dort.
+const SESSION_SUB_ALIAS = { history: 'logbuch' }
 const LEARN_SUB_TABS = new Set(['exercises', 'anatomy', 'quiz', 'strength'])
 const FOCUS_LAYERS = new Set(['focus', 'anamnese', 'freedom'])
 const EXTERNAL_SESSION_APPS = {
@@ -115,8 +117,8 @@ function parseHashRoute({ resolveFlowTab, navMode }) {
 
   if (next.tab === 'session') {
     const explicitDate = isIsoDate(rawSub) || (!rawSub && isIsoDate(legacyDate))
-    if (SESSION_SUB_TABS.has(rawSub) && rawSub !== 'today') {
-      next.subTab = rawSub
+    if (SESSION_SUB_TABS.has(SESSION_SUB_ALIAS[rawSub] || rawSub) && rawSub !== 'today') {
+      next.subTab = SESSION_SUB_ALIAS[rawSub] || rawSub
     } else if (explicitDate) {
       // Deep-Link mit explizitem Datum (z.B. von Dashboard/Review) — kein Gate
       next.sessionDate = next.sessionDate || localToday()
@@ -135,6 +137,11 @@ function parseHashRoute({ resolveFlowTab, navMode }) {
 
   if (next.tab === 'review') {
     // Alter Deep-Link #review/strength: die Stärke-Matrix wohnt jetzt im Learn-Tab.
+    if (rawSub === 'verlauf') {
+      next.tab = 'session'
+      next.subTab = 'logbuch'
+      return next
+    }
     if (rawSub === 'strength') {
       next.tab = 'learn'
       next.subTab = 'strength'

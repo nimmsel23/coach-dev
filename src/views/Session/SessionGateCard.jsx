@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Play, Square, Clock3, CheckCircle2, PencilLine, CalendarDays, ClipboardList, History, TimerReset, Sparkles, BookOpen } from 'lucide-react';
+import { Play, Square, Clock3, CheckCircle2, PencilLine, CalendarDays, ClipboardList, TimerReset, Sparkles, BookOpen } from 'lucide-react';
 import {
   normalizeSessionGate,
   isSessionGateActive,
@@ -12,10 +12,9 @@ import GateIdleSuggestion from './GateIdleSuggestion.jsx';
 const SESSION_NAV_ITEMS = [
   { id: 'today', label: 'Session', code: '01', Icon: CalendarDays },
   { id: 'plan', label: 'Plan', code: '02', Icon: ClipboardList, comingSoon: true },
-  { id: 'history', label: 'Verlauf', code: '03', Icon: History },
-  { id: 'logbuch', label: 'Logbuch', code: '04', Icon: BookOpen },
-  { id: 'timer', label: '6Pack-App', code: '05', Icon: TimerReset },
-  { id: 'skills', label: 'Skills-App', code: '06', Icon: Sparkles },
+  { id: 'logbuch', label: 'Logbuch', code: '03', Icon: BookOpen },
+  { id: 'timer', label: '6Pack-App', code: '04', Icon: TimerReset },
+  { id: 'skills', label: 'Skills-App', code: '05', Icon: Sparkles },
 ];
 
 // Ring füllt sich sichtbar über eine 90-Minuten-Referenzsession, läuft danach

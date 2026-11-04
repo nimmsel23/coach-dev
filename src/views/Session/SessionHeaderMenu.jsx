@@ -15,7 +15,6 @@ import { IS_SOLO } from '../../constants/NavigationItems.js';
 // Plan und History sind dort nur über dieses Menü erreichbar.
 const SOLO_LINKS = [
   { id: 'plan', label: 'Plan ↗', href: 'https://vos-plan.web.app/' },
-  { id: 'history', label: 'History' },
   { id: 'logbuch', label: 'Logbuch' },
   { id: 'atlas', label: 'Atlas ↗', href: 'https://vos-atlas.web.app/' },
 ];

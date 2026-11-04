@@ -1,4 +1,4 @@
-import { BookOpen, Dumbbell, Brain, BarChart3, Settings2, CalendarDays, ClipboardList, History, LibraryBig, Microscope, HelpCircle, Layers, Zap, Crosshair, TimerReset, Sparkles, Bike, LayoutGrid, FileText } from "lucide-react";
+import { BookOpen, Dumbbell, Brain, BarChart3, Settings2, CalendarDays, ClipboardList, LibraryBig, Microscope, HelpCircle, Layers, Zap, Crosshair, TimerReset, Sparkles, Bike, LayoutGrid, FileText } from "lucide-react";
 
 const baseItems = [
   { id: 'session',  label: 'Training', Icon: Dumbbell,  sub: [
@@ -6,7 +6,6 @@ const baseItems = [
     { id: 'timer',   label: '6Pack-App', Icon: TimerReset },
     { id: 'skills',  label: 'Skills-App', Icon: Sparkles },
     { id: 'plan',    label: 'Plan',     Icon: ClipboardList },
-    { id: 'history', label: 'History',  Icon: History },
     { id: 'logbuch', label: 'Logbuch',  Icon: BookOpen },
   ]},
   // 'Bericht' ist bewusst KEIN eigener Sub-Eintrag: das ist der Review-Tab
@@ -18,7 +17,6 @@ const baseItems = [
   { id: 'review',   label: 'Review',   Icon: BarChart3, noDefaultSub: true, sub: [
     { id: 'muscles',   label: 'Muskeln',      Icon: Layers },
     { id: 'readiness', label: 'Readiness',    Icon: Zap },
-    { id: 'verlauf',   label: 'Verlauf',      Icon: History },
     { id: 'protokoll', label: 'Protokoll',    Icon: FileText },
   ]},
   { id: 'learn',    label: 'Lernen',   Icon: Brain,     sub: [

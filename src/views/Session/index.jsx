@@ -97,7 +97,7 @@ export default function Session({
   }
 
   // Logbuch = Makro-Gegenstück zum Einzelsession-Tab; lädt seine Historie selbst.
-  if (subTab === 'logbuch') {
+  if (subTab === 'logbuch' || subTab === 'history') {
     return (
       <Suspense fallback={null}>
         <Logbuch onOpenSession={onOpenSession} onInspectExercise={onInspectExercise} onSubNav={onSubNav} />
