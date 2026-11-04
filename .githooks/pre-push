@@ -28,6 +28,7 @@ KB_TRIGGER='^fitness/catalog/kb/'
 # unabhaengige Deploy-Ziele sind.
 BACKEND_TRIGGER='^(fitness/|db/|alembic/|server\.mjs$|fitness-runtime\.mjs$|firestore-mirror\.mjs$)'
 
+ship_sha=""
 should_deploy=false
 should_deploy_staging=false
 should_build_dev=false
@@ -55,6 +56,14 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     kb_since="$remote_sha"
   fi
   kb_until="$local_sha"
+
+  # Auto-Release: "[ship]" im Betreff des gepushten dev-Commits (oder VOS_SHIP=1) startet NACH dem Push
+  # losgelöst scripts/ship-after-push.sh (vos-ship fitness --yes, danach fitness-vos-CI abwarten).
+  # Ohne Marker passiert nichts — nicht jeder WIP-Push soll einen Prod-Release auslösen.
+  if [ "$branch" = "dev" ] && [ "$local_sha" != "0000000000000000000000000000000000000000" ] \
+     && { [ "${VOS_SHIP:-}" = "1" ] || git log -1 --format=%s "$local_sha" | grep -qF '[ship]'; }; then
+    ship_sha="$local_sha"
+  fi
 
   relevant=$(echo "$changed" | grep -Ev "$SKIP" || true)
 
@@ -93,6 +102,11 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     fi
   fi
 done
+
+if [ -n "$ship_sha" ]; then
+  echo "🚢 [ship]: Release startet nach dem Push im Hintergrund (Log: ~/.cache/vos-ship/, Ergebnis per Desktop-Meldung)." >&2
+  nohup setsid ./scripts/ship-after-push.sh "$PPID" "$ship_sha" >/dev/null 2>&1 &
+fi
 
 if [ "$should_build_dev" = true ]; then
   if command -v gum >/dev/null 2>&1; then
