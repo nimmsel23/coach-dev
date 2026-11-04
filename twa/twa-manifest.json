@@ -27,5 +27,5 @@
   "splashScreenFadeOutDuration": 300,
   "shortcuts": [],
   "features": {},
-  "minSdkVersion": 21
+  "minSdkVersion": 24
 }

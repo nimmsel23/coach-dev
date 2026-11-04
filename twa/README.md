@@ -15,10 +15,9 @@ Inhalte aktualisieren sich also mit jedem Web-Deploy, nur die Hülle braucht ein
 
 ## Bauen
 1. Web-Deploy mit der `assetlinks.json` (`.well-known/` muss auf der Site liegen, `firebase.json` ignoriert sie nicht mehr).
-2. `cd twa && npx @bubblewrap/cli build` — braucht JDK 17 und das Android-SDK. `~/.bubblewrap/config.json` ist leer
-   (`jdkPath`/`androidSdkPath`); hier liegt nur JDK 27, Bubblewrap lädt beim ersten Lauf ein passendes JDK 17 nach
-   oder `jdkPath` auf ein installiertes JDK 17 setzen. SDK: `~/Android/Sdk`. Passwort beim Signieren aus `~/.env/fitness-twa.env`.
-3. Ergebnis: `twa/app-release-signed.apk` (und `.aab`). Installieren: `adb install twa/app-release-signed.apk`
+2. Bauen und signieren: siehe `docs/TWA-APK.md`, Abschnitt „Bauen“ (Bubblewrap `update`, dann `./gradlew assembleRelease`, `zipalign`, `apksigner`).
+   `bubblewrap build` selbst scheitert hier an der SDK-Prüfung (`cmdline-tools` fehlt).
+3. Ergebnis: `twa/app-release-signed.apk`. Installieren: `adb install twa/app-release-signed.apk`
    oder die Datei aufs Handy kopieren (Installation aus unbekannten Quellen erlauben).
 
 Version erhöhen: `appVersionCode` und `appVersion` in `twa-manifest.json` bei jeder neuen APK.
