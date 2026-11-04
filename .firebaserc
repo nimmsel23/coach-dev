@@ -13,9 +13,6 @@
         ],
         "atlas": [
           "vos-atlas"
-        ],
-        "plan": [
-          "vos-plan"
         ]
       }
     }

@@ -20,9 +20,13 @@ const STAMP_FILE = join(REPO, '.cache/kb-data/stamps.json');
 const FORCE = process.argv.includes('--force') || process.env.KB_DATA_FORCE === '1';
 
 // Nachbar-Checkouts wie in den Einzel-Skripten (build-sixpack-data.mjs, build-plan-data.mjs)
-const sibling = (names, nested) => names.map((n) => join(REPO, '..', n)).find(existsSync) || join(REPO, nested);
-const SIXPACK = sibling(['6pack-app', '6pack-dev'], '6pack');
-const PLAN = sibling(['plan-app', 'plan-dev'], 'plan');
+const sibling = (names) => {
+  const dir = names.map((n) => join(REPO, '..', n)).find(existsSync);
+  if (!dir) throw new Error(`Checkout fehlt: ${names.map((n) => join(REPO, '..', n)).join(' | ')}`);
+  return dir;
+};
+const SIXPACK = sibling(['6pack-app', '6pack-dev']);
+const PLAN = sibling(['plan-app', 'plan-dev']);
 
 const SKIP_DIRS = new Set(['.git', 'node_modules', '.cache', '.worktrees', 'android', 'ios', 'dist', 'dist-firebase', 'dist-versions']);
 const DATA_EXT = /\.(mjs|js|json|ya?ml|md)$/;

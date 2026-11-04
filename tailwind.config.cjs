@@ -17,14 +17,13 @@ function siblingGlob(devName, appName) {
 }
 
 /** @type {import('tailwindcss').Config} */
-// Plan/6Pack/Skills: Nachbar-Checkout (-app im vitalos-Workspace, sonst -dev im Home-Root),
-// sonst verschachtelter Ordner (Altbestand).
-function miniAppDir(siblings, nested) {
+// Plan/6Pack/Skills: Nachbar-Checkout (-app im vitalos-Workspace, sonst -dev im Home-Root).
+function miniAppDir(siblings) {
   for (const name of siblings) {
     const dir = path.resolve(__dirname, "..", name)
     if (fs.existsSync(dir)) return dir
   }
-  return path.resolve(__dirname, nested)
+  throw new Error(`Mini-App-Checkout fehlt: ${siblings.map((n) => path.resolve(__dirname, "..", n)).join(" | ")}`)
 }
 
 module.exports = {
@@ -33,12 +32,12 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     // Plan, 6Pack und Skills kommen als Submodule (src/views/{Plan,SixPack,Skills}
     // sind nicht mehr eingecheckt) — ihre Klassen müssen direkt aus dem Checkout gescannt werden.
-    path.join(miniAppDir(["plan-app", "plan-dev"], "plan"), "src/views/Plan/**/*.{js,jsx,ts,tsx}"),
-    path.join(miniAppDir(["6pack-app", "6pack-dev"], "6pack"), "**/*.{js,jsx,ts,tsx}"),
-    path.join(miniAppDir(["skills-app", "skills-dev"], "Skills"), "**/*.{js,jsx,ts,tsx}"),
-    "!" + path.join(miniAppDir(["6pack-app", "6pack-dev"], "6pack"), "node_modules/**"),
-    "!" + path.join(miniAppDir(["6pack-app", "6pack-dev"], "6pack"), "android/**"),
-    "!" + path.join(miniAppDir(["skills-app", "skills-dev"], "Skills"), "node_modules/**"),
+    path.join(miniAppDir(["plan-app", "plan-dev"]), "src/views/Plan/**/*.{js,jsx,ts,tsx}"),
+    path.join(miniAppDir(["6pack-app", "6pack-dev"]), "**/*.{js,jsx,ts,tsx}"),
+    path.join(miniAppDir(["skills-app", "skills-dev"]), "**/*.{js,jsx,ts,tsx}"),
+    "!" + path.join(miniAppDir(["6pack-app", "6pack-dev"]), "node_modules/**"),
+    "!" + path.join(miniAppDir(["6pack-app", "6pack-dev"]), "android/**"),
+    "!" + path.join(miniAppDir(["skills-app", "skills-dev"]), "node_modules/**"),
     siblingGlob("journal-dev", "journal-app"),
     siblingGlob("habits-dev", "habit-app"),
     siblingGlob("learn-dev", "learn-app"),

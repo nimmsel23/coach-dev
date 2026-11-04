@@ -12,8 +12,9 @@ import * as yaml from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-// 6Pack-Quelle: Nachbar-Checkout (~/dev/6pack-dev bzw. im vitalos-Workspace 6pack-app), sonst verschachteltes ./6pack.
-const SIXPACK_SRC = ['6pack-app', '6pack-dev'].map((n) => join(REPO_ROOT, '..', n)).find(existsSync) || join(REPO_ROOT, '6pack');
+// 6Pack-Quelle: Nachbar-Checkout (~/dev/6pack-dev bzw. im vitalos-Workspace 6pack-app).
+const SIXPACK_SRC = ['6pack-app', '6pack-dev'].map((n) => join(REPO_ROOT, '..', n)).find(existsSync);
+if (!SIXPACK_SRC) { console.error('build-sixpack-data: Checkout ../6pack-app bzw. ../6pack-dev fehlt'); process.exit(1); }
 const { loadMuscles, exerciseContent } = await import(pathToFileURL(join(SIXPACK_SRC, 'catalogContent.mjs')).href);
 const SIXPACK_DIR = join(REPO_ROOT, 'fitness/catalog/kb/exercises/6pack');
 const CALISTHENICS_DIR = join(REPO_ROOT, 'fitness/catalog/kb/exercises/calisthenics');

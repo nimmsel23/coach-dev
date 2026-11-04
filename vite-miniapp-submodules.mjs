@@ -13,21 +13,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 // resolver makes Fitness compile that checkout directly instead of a copied
 // view under src/views. Missing files fall back to Fitness-owned adapters.
 //
-// Quelle je Mini-App, in dieser Reihenfolge: Nachbar-Checkout neben `root`
-// (`../plan-dev` in ~/dev/fitness-dev, `../plan-app` im vitalos-Workspace), sonst der
-// verschachtelte Submodul-Ordner unter `root` (bisheriger Weg).
-function firstExisting(root, siblings, nested) {
+// Quelle je Mini-App: Nachbar-Checkout neben `root` (`../plan-app` im vitalos-Workspace,
+// `../plan-dev` in ~/dev bzw. in der CI). Kein verschachtelter Fallback mehr.
+function firstExisting(root, siblings) {
   for (const name of siblings) {
     const dir = resolve(root, '..', name)
     if (existsSync(dir)) return dir
   }
-  return resolve(root, nested)
+  throw new Error(`Mini-App-Checkout fehlt: ${siblings.map((n) => resolve(root, '..', n)).join(' | ')}`)
 }
 
 export function miniAppSubmodulePlugin(root = __dirname) {
-  const planRoot = firstExisting(root, ['plan-app', 'plan-dev'], 'plan')
-  const sixpackRoot = firstExisting(root, ['6pack-app', '6pack-dev'], '6pack')
-  const skillsRoot = firstExisting(root, ['skills-app', 'skills-dev'], 'Skills')
+  const planRoot = firstExisting(root, ['plan-app', 'plan-dev'])
+  const sixpackRoot = firstExisting(root, ['6pack-app', '6pack-dev'])
+  const skillsRoot = firstExisting(root, ['skills-app', 'skills-dev'])
 
   const maps = [
     {
