@@ -42,3 +42,25 @@ Umdatieren und Löschen bleiben dort; das Logbuch ist rein lesend und öffnet Se
 - Kein Live-Gym-Bezug: alles nachträglich geloggt, keine Echtzeit-Annahmen.
 - Keine Vereinheitlichung mit History/Review-Verlauf — Logbuch ist eine eigene Linse, die
   Chronik-Linse ist bewusst eine reduzierte Kopie.
+
+## Update 2026-11-04 — Daten kommen aus Monats-Digests statt aus allen Sessions
+
+`useLogbook.js` ruft `getLogbookSessions()` (`@db`) statt `getSessionHistory(2000)`.
+
+- **Firestore** (`lib/db/firestore/workoutIndex.js`): `fitness/{uid}/logbookDigest/{YYYY-MM}` →
+  `{ docs: { [sessionDocId]: Digest } }`, `_meta` → `{ schema, builtAtMs, builtThrough }`. Gleiche
+  Monats-Pools und gleiche Pflege wie der `workoutIndex` (`indexUpsert`/`indexRemove`/Verdichtung
+  inkl. Nachzügler über `saved_at`). Gelesen werden alle Monats-Docs (≈ 1 Read pro Monat) plus die
+  letzten 7 Tage live aus `sessions`.
+- **Digest** = `sessionToDigest()` in `logbookStats.js`: Warm-ups raus, Alt-Format zu `setsArray`,
+  je Übung nur id/Name/Muskeln, je Session Datum/Block/Activity/Modus/Ort/Gate-Zeiten. Er ist selbst
+  ein gültiger `buildLogbook`-Input, die Auswertung bleibt also unverändert (Test: „Digest: …").
+- **Aufbau**: fehlt `_meta` oder passt `schema` nicht (`LOGBOOK_DIGEST_SCHEMA`), liest das Logbuch
+  einmal wie bisher die volle Historie und baut den Digest im Hintergrund (`rebuildLogbookDigest()`).
+  Schema-Änderung am Digest = Konstante erhöhen, dann baut sich alles von selbst neu.
+- **Lokal** (`lib/db/local/historyEntries.js`): unverändert `getSessionHistory(2000)`, kein Digest.
+- Grenzen: In Firestore gelöschte Sessions außerhalb der App bleiben im Digest, bis
+  `rebuildLogbookDigest()` läuft (gleiche Einschränkung wie der Index). Die Rules decken
+  `fitness/{uid}/**` bereits ab.
+- Nächste Abnehmer für das gleiche Pool-Muster: Review (`TrainingProtocol`, Monatsbericht),
+  Recovery/Superkompensation, `getExerciseHistory`, Touren.

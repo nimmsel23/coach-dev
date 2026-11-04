@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  buildLogbook, weekWindow, weeklyIntensity, mondayOf, isoWeekNumber, fmtTop, fmtAgo,
+  buildLogbook, sessionToDigest, weekWindow, weeklyIntensity, mondayOf, isoWeekNumber, fmtTop, fmtAgo,
 } from './logbookStats.js';
 
 const bench = (date, sets, extra = {}) => ({
@@ -97,4 +97,34 @@ test('Datums-Helfer', () => {
   assert.equal(isoWeekNumber('2025-12-29'), 1); // gehört schon zu KW 1/2026
   assert.equal(fmtAgo(0), 'heute');
   assert.equal(fmtAgo(30), 'vor 4 Wo.');
+});
+
+test('Digest: buildLogbook liefert aus Digests dasselbe wie aus vollen Sessions', () => {
+  const full = [
+    { date: '2026-09-01', block: 'Push', saved_at: 'x', notes: 'lang', exercises: [
+      { exercise_id: 'bench', name: 'Bankdrücken', primaryMuscles: ['chest'], instructions: 'viel Text', setsArray: [
+        { reps: '10', weight: '40', setType: 'warmup' }, { reps: '5', weight: '80', setType: 'normal', note: 'n' },
+      ] },
+      { id: 'dips', name: 'Dips', sets: '3', reps: '12', weight: '' },
+      { name: 'Leer' },
+    ] },
+    { date: '2026-09-08', block: 'Pull', activity: { type: 'cardio', duration: 20 }, sessionGate: { startedAt: 'a', endedAt: 'b', gps: { lat: 1 } },
+      exercises: [{ exercise_id: 'bench', name: 'Bankdrücken', setsArray: [{ reps: '5', weight: '90' }] }] },
+    { date: '2026-09-08', exercises: [{ exercise_id: 'bench', name: 'Bankdrücken', setsArray: [{ reps: '3', weight: '95' }] }] },
+    { date: '2026-09-10', block: 'Rest', exercises: [] },
+  ];
+  const digests = full.map((s) => sessionToDigest(s));
+  const strip = (book) => JSON.parse(JSON.stringify(book, (k, v) => (k === 'exercises' && Array.isArray(v) && v[0] && 'setsArray' in v[0] ? undefined : v)));
+  const a = buildLogbook(full, '2026-09-20');
+  const b = buildLogbook(digests, '2026-09-20');
+  assert.deepEqual(strip(b.kpis), strip(a.kpis));
+  assert.deepEqual(b.records.map((r) => [r.key, r.date, r.score]), a.records.map((r) => [r.key, r.date, r.score]));
+  assert.deepEqual(b.exercises.map((e) => [e.key, e.count, e.mode, e.peak?.score, e.last.date, e.status]),
+                   a.exercises.map((e) => [e.key, e.count, e.mode, e.peak?.score, e.last.date, e.status]));
+  assert.deepEqual(b.dayRows.map((d) => [d.date, d.hasWorkout, d.exerciseCount, d.volume, d.records]),
+                   a.dayRows.map((d) => [d.date, d.hasWorkout, d.exerciseCount, d.volume, d.records]));
+  // schlank: keine Warm-ups, keine Freitexte
+  assert.equal(digests[0].exercises[0].setsArray.length, 1);
+  assert.equal(digests[0].notes, undefined);
+  assert.equal(digests[1].sessionGate.gps, undefined);
 });

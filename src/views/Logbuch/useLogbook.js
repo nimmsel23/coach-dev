@@ -1,12 +1,13 @@
 /**
  * useLogbook — lädt die komplette Session-Historie einmal und aggregiert sie
  * (logbookStats.buildLogbook). Bewusst eigener Fetch statt useSession():
- * Logbuch braucht die ganze Historie (2000 Einträge wie TrainingProtocol),
- * nicht das 60er-Fenster des Einzelsession-Tabs.
+ * Logbuch braucht die ganze Historie, nicht das 60er-Fenster des Einzelsession-Tabs.
+ * Firestore: getLogbookSessions() liest Monats-Digests (workoutIndex.js) statt
+ * jeder einzelnen Session; lokal bleibt es getSessionHistory(2000).
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { getSessionHistory } from '@db';
+import { getLogbookSessions } from '@db';
 import { localToday } from '@utils';
 import { mergeSessionRuntimeDraftsIntoHistory } from '../../lib/sessionRuntimeStore.js';
 import { buildLogbook } from './logbookStats.js';
@@ -16,7 +17,7 @@ export function useLogbook() {
 
   useEffect(() => {
     let alive = true;
-    getSessionHistory(2000)
+    getLogbookSessions()
       .then((h) => {
         if (!alive) return;
         const list = Array.isArray(h) ? h : [];
