@@ -31,7 +31,7 @@ stampApp({
     short: SHORT,
     description: DESC,
     start: START,
-    scope: "/",
+    scope: process.env.MINIAPP_SCOPE || "/", // gemeinsame Origin: "/<id>/" (scripts/build-miniapps-origin.mjs)
     accent: ACCENTS[mode] || "#e8a020",
     iconDir: `solo-icons/${mode}`,
     sw: { mode: "keep" },

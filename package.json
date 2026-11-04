@@ -34,6 +34,7 @@
     "training": "pnpm run build:training && pnpm run deploy:training",
     "build:atlas": "node scripts/build-miniapp.mjs atlas",
     "build:miniapp": "node scripts/build-miniapp.mjs",
+    "build:origin": "node scripts/build-miniapps-origin.mjs",
     "deploy:atlas": "firebase deploy --only hosting:atlas",
     "atlas": "pnpm run build:atlas && pnpm run deploy:atlas",
     "deploy": "node scripts/deploy-runner.mjs",
