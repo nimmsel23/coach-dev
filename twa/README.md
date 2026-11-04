@@ -1,5 +1,7 @@
 # Fitness Centre als Android-App (TWA, ohne Play Store)
 
+Ausführliche Doku: `docs/TWA-APK.md`.
+
 Die klassische App `https://fitness-aos.web.app` als Trusted Web Activity (Bubblewrap). Die App lädt die Live-Seite,
 Inhalte aktualisieren sich also mit jedem Web-Deploy, nur die Hülle braucht eine neue APK.
 
