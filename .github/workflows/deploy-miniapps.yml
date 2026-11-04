@@ -1,0 +1,171 @@
+# Solo-Mini-Apps aus fitness-dev: vos-training (Tab Session) und vos-atlas (Tab Exercises).
+#
+# Beide werden mit `vite build --mode training|atlas` aus diesem Repo gebaut (die anderen Views sind
+# dort per soloStubPlugin ausgestubbt, siehe vite.config.js) und liefen bisher nur per Handbefehl
+# (`pnpm run training` / `pnpm run atlas`). Jetzt: Push auf master deployt die betroffene Mini-App.
+#
+# Welche App neu deployt wird, entscheidet der Schritt "Betroffene Apps" aus dem Diff des Pushs:
+#   src/views/Session/**    -> training
+#   src/views/Exercises/**  -> atlas
+#   gemeinsamer Code (src/ außer src/views/, scripts/, vite.config.js, package.json, Lockfile,
+#   mini-app.json, firebase.json, solo-icons/)  -> beide
+#   Änderungen in anderen Views erreichen die Solo-Builds nicht (ausgestubbt) -> kein Deploy.
+# workflow_dispatch deployt beide (oder gezielt eine).
+#
+# Aufbau wie deploy-master.yml (Nachbar-Repos auf master, je eigener Lockfile, FIREBASE_CONFIG-Secret).
+
+name: Live Deploy (Mini-Apps training/atlas)
+
+'on':
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "Welche Mini-App? (both | training | atlas)"
+        type: choice
+        options: [both, training, atlas]
+        default: both
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+      - 'vite.config.js'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'mini-app.json'
+      - 'firebase.json'
+      - 'solo-icons/**'
+      - '.github/workflows/deploy-miniapps.yml'
+
+concurrency:
+  group: live-deploy-miniapps
+  cancel-in-progress: false
+
+jobs:
+  deploy_miniapps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout fitness-dev
+        uses: actions/checkout@v7
+        with:
+          path: fitness-dev
+          fetch-depth: 0
+
+      - name: Betroffene Apps
+        id: apps
+        working-directory: fitness-dev
+        env:
+          BEFORE: ${{ github.event.before }}
+          INPUT_APP: ${{ inputs.app }}
+        run: |
+          set -euo pipefail
+          training=false; atlas=false
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            case "${INPUT_APP:-both}" in
+              training) training=true ;;
+              atlas) atlas=true ;;
+              *) training=true; atlas=true ;;
+            esac
+          else
+            if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+              changed=$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA")
+            else
+              changed=$(git diff --name-only "$BEFORE" "$GITHUB_SHA")
+            fi
+            echo "$changed"
+            # gemeinsamer Code: src/ ausser src/views/, dazu Build-Konfiguration -> beide Apps
+            if echo "$changed" | grep -Ev '^src/views/' \
+               | grep -Eq '^(src/|scripts/|vite\.config\.js$|package\.json$|pnpm-lock\.yaml$|mini-app\.json$|firebase\.json$|solo-icons/|\.github/workflows/deploy-miniapps\.yml$)'; then
+              training=true; atlas=true
+            fi
+            echo "$changed" | grep -Eq '^src/views/Session/' && training=true || true
+            echo "$changed" | grep -Eq '^src/views/Exercises/' && atlas=true || true
+          fi
+          echo "training=$training" >> "$GITHUB_OUTPUT"
+          echo "atlas=$atlas" >> "$GITHUB_OUTPUT"
+          echo "Deploy: training=$training atlas=$atlas"
+
+      - name: Checkout Nachbarn (master)
+        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
+        run: |
+          set -euo pipefail
+          for repo in plan-dev 6pack-dev skills-dev learn-dev relax-dev; do
+            git clone --depth 1 --branch master "https://github.com/nimmsel23/${repo}.git" "$repo"
+            echo "$repo @ $(git -C "$repo" rev-parse --short HEAD)"
+          done
+
+      - uses: pnpm/action-setup@v6
+        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
+        with:
+          version: 11.3.0
+
+      - uses: actions/setup-node@v7
+        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: fitness-dev/pnpm-lock.yaml
+
+      - name: Install (fitness-dev, eigener Lockfile)
+        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
+        working-directory: fitness-dev
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Nachbarn (je eigener Lockfile)
+        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
+        run: |
+          set -euo pipefail
+          for repo in plan-dev 6pack-dev skills-dev learn-dev relax-dev; do
+            echo "::group::$repo"
+            if [ -f "$repo/pnpm-lock.yaml" ]; then
+              (cd "$repo" && pnpm install --frozen-lockfile --ignore-scripts)
+            elif [ -f "$repo/package.json" ]; then
+              (cd "$repo" && pnpm install --no-frozen-lockfile --ignore-scripts)
+            fi
+            echo "::endgroup::"
+          done
+
+      - name: Firebase config bereitstellen (Secret)
+        if: steps.apps.outputs.training == 'true' || steps.apps.outputs.atlas == 'true'
+        working-directory: fitness-dev
+        env:
+          FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+        run: |
+          test -n "$FIREBASE_CONFIG" || { echo "::error::Secret FIREBASE_CONFIG fehlt"; exit 1; }
+          printf '%s\n' "$FIREBASE_CONFIG" > firebase.config.js
+
+      # --- vos-training -------------------------------------------------
+      - name: Build vos-training
+        if: steps.apps.outputs.training == 'true'
+        working-directory: fitness-dev
+        run: pnpm run build:training
+
+      - name: Deploy vos-training
+        if: steps.apps.outputs.training == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS || secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: fitness-aos
+          entryPoint: fitness-dev
+          target: training
+          channelId: live
+
+      # --- vos-atlas ----------------------------------------------------
+      - name: Build vos-atlas
+        if: steps.apps.outputs.atlas == 'true'
+        working-directory: fitness-dev
+        run: pnpm run build:atlas
+
+      - name: Deploy vos-atlas
+        if: steps.apps.outputs.atlas == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS || secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: fitness-aos
+          entryPoint: fitness-dev
+          target: atlas
+          channelId: live
