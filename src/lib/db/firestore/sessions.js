@@ -163,6 +163,7 @@ export async function saveSession(date = todayISO(), sessionData, id = null) {
       reindex(() => indexRemove(`${date}__${id}`, date));
     }
     reindex(() => indexUpsert(date, { ...merged, date }));
+    invalidateHistoryCache();
     pingBridge();
     updateAnalyticsDoc();
     scheduleWeeklyReportRefreshForDate(date).catch(() => {});
@@ -193,6 +194,7 @@ export async function saveSession(date = todayISO(), sessionData, id = null) {
     saved_at: serverTimestamp(),
   });
   reindex(() => indexUpsert(targetId, { ...addonCarryOver, ...sessionData, date }));
+  invalidateHistoryCache();
   pingBridge();
   updateAnalyticsDoc(); // fire-and-forget
   scheduleWeeklyReportRefreshForDate(date).catch(() => {});
@@ -219,6 +221,7 @@ export async function deleteActivityAddon(date = todayISO(), index) {
     saved_at: serverTimestamp(),
   });
   reindex(() => indexUpsert(date, { ...data, activityAddons: addons, activity: addons[0] || null, date }));
+  invalidateHistoryCache();
   pingBridge();
   updateAnalyticsDoc();
   scheduleWeeklyReportRefreshForDate(date).catch(() => {});
@@ -231,6 +234,7 @@ export async function deleteSession(date = todayISO(), id = null) {
   const targetId = id ? `${date}__${id}` : date;
   await deleteDoc(doc(db, "fitness", getUid(), "sessions", targetId));
   reindex(() => indexRemove(targetId, date));
+  invalidateHistoryCache();
   pingBridge();
   updateAnalyticsDoc();
   scheduleWeeklyReportRefreshForDate(date).catch(() => {});
@@ -286,8 +290,36 @@ export async function getLatestSession() {
   return sessions.length > 0 ? sessions[0] : null;
 }
 
+// Kurzlebiger Cache für getSessionHistory(days): Review, Recovery, Wochen-/
+// Monatsbericht und Analytics-Update fragen im selben Moment dasselbe Fenster
+// mehrfach ab (allein updateAnalyticsDoc 3× getSessionHistory(60)). Gleichzeitige
+// Aufrufe teilen sich eine Query; Ergebnisse gelten HISTORY_TTL_MS. Jeder
+// Schreibweg dieser Datei leert den Cache (invalidateHistoryCache).
+const HISTORY_TTL_MS = 60 * 1000;
+const historyCache = new Map(); // `${uid}:${days}` → { at, promise }
+
+export function invalidateHistoryCache() { historyCache.clear(); }
+
+function copyHistory(list) {
+  return list.map((s) => ({ ...s, exercises: [...s.exercises] }));
+}
+
 export async function getSessionHistory(days = 90) {
   if (!hasAuthSession()) return getLocalSessionHistory(days);
+  const key = `${getUid()}:${days}`;
+  const hit = historyCache.get(key);
+  if (hit && Date.now() - hit.at < HISTORY_TTL_MS) return copyHistory(await hit.promise);
+  const promise = fetchSessionHistory(days);
+  historyCache.set(key, { at: Date.now(), promise });
+  try {
+    return copyHistory(await promise);
+  } catch (err) {
+    if (historyCache.get(key)?.promise === promise) historyCache.delete(key);
+    throw err;
+  }
+}
+
+async function fetchSessionHistory(days) {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - days);
   const cutoffISO = cutoff.toISOString().slice(0, 10);

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FileText, Printer } from 'lucide-react';
-import { getSessionHistory } from '@db';
+import { getLogbookSessions } from '@db';
 import { classifySession } from '../../constants/ActivityConstants';
 import { estimateDurationMinutes, normalizeSessionGate } from '../../lib/sessionGate.js';
 
@@ -50,7 +50,7 @@ export default function TrainingProtocol() {
 
   useEffect(() => {
     let alive = true;
-    getSessionHistory(2000)
+    getLogbookSessions()
       .then((h) => { if (alive) setSessions(Array.isArray(h) ? h : []); })
       .catch(() => { if (alive) setSessions([]); });
     return () => { alive = false; };

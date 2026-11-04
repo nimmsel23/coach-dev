@@ -246,36 +246,53 @@ function ensureLogbookDigest() {
 }
 
 /**
- * Sessions fürs Logbuch (Eingabe für buildLogbook): Monats-Digests für alles bis
- * zum Index-Cutoff (≈ 1 Read pro Monat statt pro Session) + die letzten 7 Tage
- * live. Solange kein Digest existiert, kommt die volle Historie wie bisher aus
- * den Sessions und der Digest wird im Hintergrund aufgebaut.
+ * Digest-Sessions (Eingabe für buildLogbook, Trainingsprotokoll, Touren):
+ * Monats-Digests bis zum Index-Cutoff (≈ 1 Read pro Monat statt pro Session)
+ * + die letzten 7 Tage live. `sinceDate` ("YYYY-MM-DD") begrenzt auf einen
+ * Zeitraum, ohne sinceDate kommt die komplette Historie. Solange kein Digest
+ * existiert, kommt sie wie bisher aus den Sessions und der Digest wird im
+ * Hintergrund aufgebaut.
  */
-export async function getLogbookSessions() {
+export async function getDigestSessions({ sinceDate = null } = {}) {
   if (!hasAuthSession()) return getLocalSessionHistory(LOGBOOK_FALLBACK_DAYS);
 
   const metaSnap = await getDoc(digestMetaRef());
   if (!metaSnap.exists() || metaSnap.data()?.schema !== LOGBOOK_DIGEST_SCHEMA) {
     ensureLogbookDigest().catch((err) => console.warn("[logbookDigest] Aufbau fehlgeschlagen", err));
-    const from = new Date();
-    from.setDate(from.getDate() - LOGBOOK_FALLBACK_DAYS);
-    const snap = await getDocs(query(sessionsCol(), where("date", ">=", localDateOf(from)), orderBy("date", "desc")));
+    let from = sinceDate;
+    if (!from) {
+      const d = new Date();
+      d.setDate(d.getDate() - LOGBOOK_FALLBACK_DAYS);
+      from = localDateOf(d);
+    }
+    const snap = await getDocs(query(sessionsCol(), where("date", ">=", from), orderBy("date", "desc")));
     return snap.docs.map((d) => sessionFromDoc(d.id, d.data() || {}));
   }
 
   try { await compactWorkoutIndex(); } catch (err) { console.warn("[workoutIndex] Verdichtung fehlgeschlagen", err); }
 
   const cutoff = indexCutoffDate();
-  const [recentSnap, digestSnap] = await Promise.all([
-    getDocs(query(sessionsCol(), where("date", ">", cutoff))),
-    getDocs(digestCol()),
-  ]);
+  const liveFrom = sinceDate && sinceDate > cutoff ? sinceDate : null;
+  const recentQuery = liveFrom
+    ? query(sessionsCol(), where("date", ">=", liveFrom))
+    : query(sessionsCol(), where("date", ">", cutoff));
+  const digestQuery = sinceDate
+    ? query(digestCol(), where(documentId(), ">=", monthOf(sinceDate)), where(documentId(), "<=", monthOf(cutoff)))
+    : digestCol();
+  const [recentSnap, digestSnap] = await Promise.all([getDocs(recentQuery), getDocs(digestQuery)]);
   const sessions = recentSnap.docs.map((d) => sessionFromDoc(d.id, d.data() || {}));
   digestSnap.docs.forEach((m) => {
     if (m.id === "_meta") return;
     Object.entries(m.data()?.docs || {}).forEach(([id, digest]) => {
-      if (digest && digest.date && digest.date <= cutoff) sessions.push(sessionFromDoc(id, digest));
+      if (!digest?.date || digest.date > cutoff) return;
+      if (sinceDate && digest.date < sinceDate) return;
+      sessions.push(sessionFromDoc(id, digest));
     });
   });
   return sessions;
+}
+
+/** Komplette Historie fürs Logbuch / Trainingsprotokoll. */
+export function getLogbookSessions() {
+  return getDigestSessions();
 }

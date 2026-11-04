@@ -64,3 +64,22 @@ Umdatieren und Löschen bleiben dort; das Logbuch ist rein lesend und öffnet Se
   `fitness/{uid}/**` bereits ab.
 - Nächste Abnehmer für das gleiche Pool-Muster: Review (`TrainingProtocol`, Monatsbericht),
   Recovery/Superkompensation, `getExerciseHistory`, Touren.
+
+### Weitere Abnehmer (2026-11-04, gleicher Tag)
+
+- **Digest Schema 2** trägt zusätzlich `duration`, `trainingsart`, `effort`, `activityAddons`. Neuer
+  Reader `getDigestSessions({ sinceDate })` (`workoutIndex.js`), `getLogbookSessions()` ist der
+  Alias für die komplette Historie.
+- **Trainingsprotokoll** (`WeeklyReview/TrainingProtocol.jsx`): `getLogbookSessions()` statt `getSessionHistory(2000)`.
+- **Touren** (`firestore/tours.js`): Digest-Monate im Fenster statt jeder Session (ohne Login weiter alter Pfad).
+- **Wochen-/Monatsbericht** (`firestore/analysis.js`): Sessions je Tag kommen aus dem schon geladenen
+  `getSessionHistory(120)` (`sessionsByDateFromHistory`) statt einer Query pro Tag (7× bzw. 28×);
+  nur Tage älter als das Fenster (alte Wochen-Selektoren) fragen einzeln ab.
+- **`getSessionHistory(days)`** (`firestore/sessions.js`) hat einen 60-s-Cache mit Single-Flight:
+  Recovery, Berichte, Analytics-Update und `getExerciseHistory` teilen sich dasselbe Fenster.
+  Jeder Schreibweg (`saveSession`, `deleteSession`, `deleteActivityAddon`) leert ihn vor dem
+  Analytics-/Report-Refresh. Fremd geschriebene Sessions (anderes Gerät) erscheinen nach ≤ 60 s.
+- **Bewusst nicht auf den Digest gestellt:** `getExerciseHistory`/`getLastExercisePerformance`/
+  `getProgressTrend` (Geister-Sätze brauchen Warm-ups/Distanz/Dauer, Fenster nur 28–90 Tage) und
+  Dashboard/Heute (lesen schon `analytics/dashboard`). Learn liest keine Sessions, nur
+  `getLatestSession()` (1 Doc) und den KB-Katalog (`getAllExercises()`, siehe `src/CLAUDE.md`).

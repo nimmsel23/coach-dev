@@ -128,3 +128,17 @@ test('Digest: buildLogbook liefert aus Digests dasselbe wie aus vollen Sessions'
   assert.equal(digests[0].notes, undefined);
   assert.equal(digests[1].sessionGate.gps, undefined);
 });
+
+test('Digest trägt Dauer, Trainingsart, Finisher-Addons und Gate-Zeiten (Protokoll/Touren)', () => {
+  const d = sessionToDigest({
+    date: '2026-09-02', duration: 55, trainingsart: 'Hypertrophie', effort: 8, notes: 'x',
+    activityAddons: [{ type: 'cycling', distanceKm: '30' }],
+    sessionGate: { startedAt: 'a', endedAt: 'b', gps: { lat: 1 } }, exercises: [],
+  });
+  assert.equal(d.duration, 55);
+  assert.equal(d.trainingsart, 'Hypertrophie');
+  assert.equal(d.effort, 8);
+  assert.equal(d.activityAddons[0].type, 'cycling');
+  assert.deepEqual(d.sessionGate, { startedAt: 'a', endedAt: 'b' });
+  assert.equal(d.notes, undefined);
+});

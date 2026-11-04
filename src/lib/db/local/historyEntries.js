@@ -17,3 +17,9 @@ export async function compactWorkoutIndex() { return { processed: 0 }; }
 export async function getLogbookSessions() {
   return getSessionHistory(2000);
 }
+
+// Digest-Gegenstück: lokal liegt alles in der lokalen Abfrage, sinceDate wird nur gefiltert.
+export async function getDigestSessions({ sinceDate = null } = {}) {
+  const list = await getSessionHistory(2000);
+  return sinceDate ? (Array.isArray(list) ? list : []).filter((s) => s?.date && s.date >= sinceDate) : list;
+}

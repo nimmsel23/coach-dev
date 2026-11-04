@@ -333,6 +333,27 @@ function weeklyReportDocRef(selector = "current") {
   return doc(db, "fitness", getUid(), "analytics", `weekly_${resolveWeekSelector(selector)}`);
 }
 
+// Sessions je Tag aus dem bereits geladenen Verlauf (getSessionHistory(120))
+// statt einer Query pro Tag (Wochenbericht 7×, Monatsbericht 28×). Nur Tage
+// älter als das Verlaufsfenster (alte Wochen-Selektoren) fragen weiter einzeln ab.
+const HISTORY_WINDOW_DAYS = 120;
+async function sessionsByDateFromHistory(history, dates) {
+  const from = addDaysISO(todayISO(), -(HISTORY_WINDOW_DAYS - 2));
+  const byDate = new Map();
+  for (const s of history) {
+    if (!s?.date) continue;
+    if (!byDate.has(s.date)) byDate.set(s.date, []);
+    byDate.get(s.date).push(s);
+  }
+  const out = new Map();
+  for (const date of dates) {
+    out.set(date, date >= from
+      ? (byDate.get(date) || []).slice().sort((a, b) => String(a.saved_at).localeCompare(String(b.saved_at)))
+      : await listSessionsForDate(date));
+  }
+  return out;
+}
+
 async function buildWeeklyReportData(selector = "current") {
   const dates = getWeekBounds(selector);
   const [kbExercises, history] = await Promise.all([
@@ -377,8 +398,9 @@ async function buildWeeklyReportData(selector = "current") {
   // Trainingstage (inkl. aller Muskelgruppen) aus dem Weekly Report verschwanden.
   // listSessionsForDate() nutzt eine Query auf das "date"-Feld und findet alle
   // Sessions eines Tages, unabhängig von der Dokument-ID.
+  const weekSessionsByDate = await sessionsByDateFromHistory(safeHistory, dates);
   for (const date of dates) {
-    const daySessions = await listSessionsForDate(date);
+    const daySessions = weekSessionsByDate.get(date) || [];
 
     for (const sess of daySessions) {
     let hasDoneExercises = false;
@@ -560,12 +582,9 @@ export async function getMonthlyReport(days = 28) {
     }
   }
 
-  // Ein listSessionsForDate()-Call pro Tag, das Ergebnis wird für den
+  // Sessions je Tag aus dem Verlauf (siehe sessionsByDateFromHistory), für den
   // Gesamtzeitraum UND die 7-Tage-Wochen-Chunks wiederverwendet.
-  const sessionsByDate = new Map();
-  for (const date of dates) {
-    sessionsByDate.set(date, await listSessionsForDate(date));
-  }
+  const sessionsByDate = await sessionsByDateFromHistory(safeHistory, dates);
 
   await augmentKbMapWithMirror(kbMap, Array.from(sessionsByDate.values()).flat());
 

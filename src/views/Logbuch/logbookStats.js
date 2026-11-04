@@ -68,14 +68,16 @@ function rawSets(ex) {
 }
 
 // ── Digest (Monats-Rollup in Firestore) ────────────────────────────────────
-export const LOGBOOK_DIGEST_SCHEMA = 1;
+export const LOGBOOK_DIGEST_SCHEMA = 2;
 
 /**
  * Verdichtet ein Session-Doc auf genau die Felder, die buildLogbook liest
  * (Warm-ups raus, Alt-Format zu setsArray aufgefächert, nur id/name/Muskeln
  * je Übung). Das Ergebnis ist selbst wieder ein gültiger buildLogbook-Input —
  * dadurch rechnet das Logbuch aus dem Digest exakt dasselbe wie aus den
- * vollen Sessions. Schema-Änderung → LOGBOOK_DIGEST_SCHEMA erhöhen.
+ * vollen Sessions. Neben dem Logbuch lesen auch Trainingsprotokoll (duration,
+ * trainingsart, sessionGate) und Touren (activity, activityAddons) daraus.
+ * Schema-Änderung → LOGBOOK_DIGEST_SCHEMA erhöhen.
  */
 export function sessionToDigest(s) {
   if (!s?.date) return null;
@@ -94,6 +96,10 @@ export function sessionToDigest(s) {
   if (s.activity) digest.activity = s.activity;
   if (s.sessionMode) digest.sessionMode = s.sessionMode;
   if (s.location) digest.location = s.location;
+  if (s.duration != null && s.duration !== '') digest.duration = s.duration;
+  if (s.trainingsart) digest.trainingsart = s.trainingsart;
+  if (Array.isArray(s.activityAddons) && s.activityAddons.length) digest.activityAddons = s.activityAddons;
+  if (typeof s.effort === 'number') digest.effort = s.effort;
   const gate = s.sessionGate;
   if (gate && typeof gate === 'object' && (gate.startedAt || gate.endedAt)) {
     digest.sessionGate = { startedAt: gate.startedAt || null, endedAt: gate.endedAt || null };

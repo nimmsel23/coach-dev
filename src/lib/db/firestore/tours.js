@@ -3,12 +3,19 @@
 // (das selbst intern auf local/sessions.js zurückfällt, wenn !hasAuthSession()
 // — Coach-Solo-Nutzung ohne Login bleibt also automatisch funktionsfähig).
 import { getSessionHistory, saveSession, deleteSession } from "./sessions.js";
+import { getDigestSessions } from "./workoutIndex.js";
+import { hasAuthSession } from "./core.js";
+import { todayISO } from "../shared/utils.js";
+import { addDaysISO } from "../shared/dates.js";
 import { extractTours, aggregateTours, buildTourSessionPayload } from "../../tours/schema.js";
 
 const DEFAULT_WINDOW_DAYS = 365; // firestore/sessions.js::getSessionHistory(days) ist ein echtes Tage-Fenster.
 
 export async function getCyclingTours(days = DEFAULT_WINDOW_DAYS) {
-  const sessions = await getSessionHistory(days);
+  // Eingeloggt: Monats-Digests (activity + activityAddons) statt jede Session des Fensters.
+  const sessions = hasAuthSession()
+    ? await getDigestSessions({ sinceDate: addDaysISO(todayISO(), -days) })
+    : await getSessionHistory(days);
   return extractTours(sessions);
 }
 
