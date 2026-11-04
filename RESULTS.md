@@ -1,5 +1,20 @@
 # Results
 
+## 2026-11-04 — Mini-Apps pro Tab, Ship-Hook, TWA-APK
+
+Jeder Tab aus fitness-dev bekommt eine Solo-Mini-App mit eigenem Hosting-Target, deren Deploy per CI tabellengesteuert läuft. Dazu kommt ein `[ship]`-Hook, der den Release bis `fitness-vos` anstößt, und eine signierte Android-APK (TWA) der klassischen Fitness-Centre-App. Die APK wurde im Android-Emulator getestet (Start, Vollbild ohne Adressleiste); ein Test auf einem echten Gerät steht aus.
+
+- **`scripts/miniapps.json` + `.github/workflows/deploy-miniapps.yml`**: SSOT für alle Solo-Mini-Apps (training, logbuch, review, atlas, touren, setup, anamnese, fokus → Sites `vos-<id>`); Workflow baut per Matrix nur diffgesteuert die geänderten Apps. Nach dem Release-Merge löst ein Dispatch den Deploy aus (`96d64c4`).
+- **`firebase.json` / `.firebaserc` / `package.json` / `vite-miniapp-submodules.mjs`**: Deploy-Target `plan` und verschachtelte Mini-App-Fallbacks entfernt, `build:miniapp <id>` als einheitlicher Build.
+- **`.githooks/pre-push` + `scripts/ship-after-push.sh`**: `[ship]` im dev-Push startet den Release dev → master → vitalos bis zum Deploy von `fitness-vos`.
+- **`src/components/common/SoloHelper.jsx` / `src/App.jsx`**: kleiner Login- und Update-Helfer für die Mini-Apps. Firebase-Auth-Domains für die Mini-App-Sites eingetragen.
+- **`twa/`, `public/.well-known/assetlinks.json`, `firebase.json` (Target `client`), `.gitignore`**: Fitness Centre als TWA (`app.vitalos.fitnesscentre`, minSdk 24), mit Gradle/`zipalign`/`apksigner` gebaut und signiert, Fingerabdruck entspricht der live ausgelieferten `assetlinks.json`. Keystore liegt außerhalb des Repos.
+- **`docs/TWA-APK.md`, `docs/MINI-APPS.md`**: Bauanleitung der APK (inkl. Gradle statt `bubblewrap build`) und Beschreibung der Mini-App-Struktur.
+- **Branch `feat/shared-origin`** (Worktree `~/dev/fitness-dev-origin`): Variante, in der alle Mini-Apps unter einer gemeinsamen Origin als Unterpfade laufen (`scripts/build-miniapps-origin.mjs`); als Branch gepusht, nicht nach `dev` gemergt.
+- **Waydroid/Emulator**: Netz in Waydroid über `DOCKER-USER`-Regeln (iptables) repariert, um die APK testen zu können; Systemänderung außerhalb des Repos.
+
+---
+
 ## 2026-10-31 — Dependabot
 
 Enabled Dependabot alerts and security updates. Configured weekly GitHub Actions and npm/pnpm updates plus Python dependency updates; version updates target `dev`. Minor/patch updates are grouped; vendored mini-app-shell copies stay maintained at their source. Validated YAML, repository manifest paths and update targets.
