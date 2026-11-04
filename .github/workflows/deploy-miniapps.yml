@@ -11,7 +11,8 @@
 #   - gemeinsamer Code (src/ ausser src/views/, scripts/, vite.config.js, package.json, Lockfile,
 #     mini-app.json, firebase.json, miniapps.json, diese Datei) -> alle Apps
 #   - Änderungen in anderen Views erreichen die Solo-Builds nicht (ausgestubbt)  -> kein Deploy
-# workflow_dispatch: alle oder eine App gezielt.
+# workflow_dispatch: alle oder eine App gezielt; mit `before` (so startet automerge.yml nach dem Release-Merge)
+# wie ein Push per Diff. Ein Merge mit GITHUB_TOKEN löst keinen push-Trigger aus, deshalb der Dispatch.
 #
 # learn/plan/6pack/skills haben eigene Repos und Sites und stehen nicht in der Tabelle.
 # Aufbau wie deploy-master.yml (Nachbarn auf master, je eigener Lockfile, FIREBASE_CONFIG-Secret).
@@ -25,6 +26,10 @@ name: Live Deploy (Mini-Apps je Tab)
         description: "Welche Mini-App? (all oder eine id aus scripts/miniapps.json)"
         type: string
         default: all
+      before:
+        description: "Optional: Commit vor dem Merge. Gesetzt = nur die vom Diff betroffenen Apps (setzt automerge.yml)"
+        type: string
+        default: ''
   push:
     branches:
       - master
@@ -60,18 +65,20 @@ jobs:
         env:
           BEFORE: ${{ github.event.before }}
           INPUT_APP: ${{ inputs.app }}
+          INPUT_BEFORE: ${{ inputs.before }}
         run: |
           set -euo pipefail
           SHARED='^(src/|scripts/|vite\.config\.js$|package\.json$|pnpm-lock\.yaml$|mini-app\.json$|firebase\.json$|\.github/workflows/deploy-miniapps\.yml$)'
           all_ids=$(jq -r '.apps[].id' scripts/miniapps.json)
           selected=""
-          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ] && [ -z "${INPUT_BEFORE:-}" ]; then
             if [ -z "${INPUT_APP:-}" ] || [ "$INPUT_APP" = "all" ]; then selected="$all_ids"
             else
               echo "$all_ids" | grep -qx "$INPUT_APP" || { echo "::error::unbekannte App: $INPUT_APP"; exit 1; }
               selected="$INPUT_APP"
             fi
           else
+            BEFORE="${INPUT_BEFORE:-$BEFORE}"   # dispatch mit before (Automerge) diffed wie ein Push
             if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
               changed=$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA")
             else

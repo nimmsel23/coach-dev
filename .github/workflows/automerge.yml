@@ -1,8 +1,9 @@
 # Auto-Merge bei grünem Check:
 #   - Dependabot-PRs (-> dev): Squash
 #   - Release-PR dev -> master (vos-release-pr): Merge-Commit (kein Squash, sonst driftet dev),
-#     danach wird deploy-master.yml per workflow_dispatch gestartet, weil ein Merge mit
-#     GITHUB_TOKEN keinen push-Trigger auslöst.
+#     danach werden deploy-master.yml und deploy-miniapps.yml per workflow_dispatch gestartet, weil ein
+#     Merge mit GITHUB_TOKEN keinen push-Trigger auslöst (die Mini-Apps bekommen den Stand vor dem Merge
+#     als `before`, damit sie nur die betroffenen Apps deployen).
 # Rot bleibt liegen. Läuft als workflow_run im Kontext des Default-Branch und checkt nie
 # PR-Code aus.
 
@@ -38,7 +39,9 @@ jobs:
           pr=$(gh pr list -R "$REPO" --head "$BRANCH" --base "$base" --state open --json number,headRefOid \
             --jq ".[] | select(.headRefOid == \"$SHA\") | .number")
           [ -n "$pr" ] || { echo "Kein offener PR mit Stand $SHA (veraltet oder schon gemergt)."; exit 0; }
+          before=$(gh pr view "$pr" -R "$REPO" --json baseRefOid --jq .baseRefOid)   # master vor dem Merge (für den Diff der Mini-Apps)
           gh pr merge "$pr" -R "$REPO" $flag
           if [ "$base" = master ]; then
             gh workflow run deploy-master.yml -R "$REPO" --ref master
+            gh workflow run deploy-miniapps.yml -R "$REPO" --ref master -f before="$before"
           fi
