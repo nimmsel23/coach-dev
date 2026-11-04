@@ -24,7 +24,8 @@ export function getVertexAI() {
     // Namespace-Import: die Vitalos-Shell dedupliziert firebase auf eine Root-Kopie
     // (11.x, dort heißt die Klasse noch VertexAIBackend) — ein Named Import von
     // AgentPlatformBackend würde dort mit SyntaxError die ganze App lahmlegen.
-    const Backend = firebaseAI.AgentPlatformBackend ?? firebaseAI.VertexAIBackend;
+    const Backend = Reflect.get(firebaseAI, "AgentPlatformBackend") ?? Reflect.get(firebaseAI, "VertexAIBackend");
+    if (typeof Backend !== "function") throw new Error("Firebase AI backend is unavailable");
     vertexAIInstance = firebaseAI.getAI(app, { backend: new Backend("us-central1") });
   } catch (error) {
     console.warn("[firebase] Vertex AI init failed", error);
