@@ -57,3 +57,14 @@ TODO.md
 NEXT.md
 RESULTS.md
 .cache/
+
+# TWA (Android): Build-Artefakte und Schlüssel-Symlink
+twa/*.apk
+twa/*.aab
+twa/android.keystore
+twa/app/
+twa/build/
+twa/.gradle/
+twa/gradle/
+twa/gradlew*
+twa/*.idsig
