@@ -25,9 +25,9 @@ const API_PORT = Number(process.env.FITNESS_NODE_PORT || 9100)
 const alreadyRunning = await portInUse(API_PORT)
 
 if (alreadyRunning) {
-  console.log(`[dev-runner] server.mjs already running on :${API_PORT} — skipping nodemon`)
+  console.log(`[dev-runner] fitness-backend/server.mjs already running on :${API_PORT} — skipping nodemon`)
 } else {
-  run('node', ['node_modules/.bin/nodemon', '--watch', 'server.mjs', '--ext', 'mjs', '--signal', 'SIGTERM', 'server.mjs'])
+  run('node', ['node_modules/.bin/nodemon', '--watch', '../fitness-backend', '--ext', 'mjs', '--signal', 'SIGTERM', '../fitness-backend/server.mjs'])
 }
 
 const vite = run('node', ['node_modules/.bin/vite'], { VITE_API_BASE: '' })
