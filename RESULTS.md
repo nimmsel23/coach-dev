@@ -122,3 +122,5 @@ Firebase-Log von sendTestPush: `TypeError: admin.firestore is not a function` (H
 - Keine Neuimport- oder Build-Änderung: vorhandene wger-/yuhonas-Daten bleiben
   Quellenbestand. Unvollständige automatische Namens-Deduplikation und ein
   unsicherer Akzentzeichen-Sprachfilter wurden verworfen.
+
+- 2026-11-05: Changelog fehlte nach CI-Live-Deploys — automerge startet deploy-master.yml per workflow_dispatch (kein Push-Event mit Commits), der Checkout war flach (depth 1), `git log parent..HEAD` lief ins Leere → keine release-info.json. Fix: `fetch-depth: 0` im Checkout von fitness-dev (deploy-master.yml).
