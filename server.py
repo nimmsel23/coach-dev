@@ -333,6 +333,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
         # Asset names belong to the static server, not to client identity lookup.
         if "." in client_id:
             return public_or_catalog(client_id)
+        if client_id == "portal":
+            return public_or_catalog("portal.html")
         from coach_local_plans import local_only, clients_root, plans_module
         local_only(request)
         try:
