@@ -39,5 +39,15 @@ with tempfile.TemporaryDirectory(prefix='coach-local-client-') as folder:
     def old_cache_worker():
         return Response("""self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.method==='GET'&&new URL(e.request.url).pathname.startsWith('/api/coach/local/'))e.respondWith(caches.open('fixture-old-local-cache').then(async c=>(await c.match(e.request))||fetch(e.request).then(r=>{c.put(e.request,r.clone());return r})));});""", media_type='application/javascript')
     app.include_router(create_router(root,deliver=deliver))
-    app.mount('/coach',StaticFiles(directory=os.environ.get('COACH_LOCAL_TEST_DIST','/tmp/coach-local-build'),html=True),name='coach')
+    app.mount('/coach',StaticFiles(directory=os.environ.get('COACH_LOCAL_TEST_DIST',str(Path(__file__).resolve().parents[2]/'dist-coach')),html=True),name='coach')
+    # Der echte Server gleicht per Scheduler (60 s) ab; der Test braucht einen schnellen, isolierten Tick.
+    import threading
+    import time
+    from coach_taskwarrior_scheduler import _reconcile_opted_in
+    def tick():
+        while True:
+            try: _reconcile_opted_in(root)
+            except Exception as error: print('auto-sync tick failed:', error, file=sys.stderr, flush=True)
+            time.sleep(2)
+    threading.Thread(target=tick, daemon=True).start()
     uvicorn.run(app,host='127.0.0.1',port=15904,log_level='warning')

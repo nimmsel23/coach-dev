@@ -120,19 +120,27 @@ try {
   await click('Schließen');
   await wait(`!document.querySelector('[aria-label="Klienten benachrichtigen"]')`);
   const plan = await evaluate(`(async()=>{const data=await(await fetch('/api/client/fixture-client/plans?_fixture='+Date.now())).json();return data.plans[0]})()`);
-  const autoSyncStorageKey = `coach.taskwarrior.auto.v1:fixture-client:${plan.id}`;
+  const autoEnabled = () => evaluate(`fetch('/api/client/fixture-client/taskwarrior/automation?_t='+Date.now()).then((r)=>r.json()).then((d)=>d.enabledPlanIds.includes(${JSON.stringify(plan.id)}))`);
   await evaluate(`fetch('/fixture/workout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({planId:'local-'+${JSON.stringify(plan.id)},routineId:${JSON.stringify(plan.published.routines[0].id)}})}).then((response)=>response.json())`);
   await click('Premium-Tracking');
   await fill('select',plan.id);
   await wait(`!![...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen'))`);
+  await wait(`(()=>{const input=[...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen'))?.querySelector('input');return !!input&&!input.disabled})()`,'Auto-Sync-Checkbox aktiv');
   await evaluate(`[...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen')).querySelector('input').click()`);
+  // Der Server gleicht im Hintergrund ab (Test-Backend: 2-s-Tick, Produktion: 60 s); die Oberfläche lädt Aufgaben nur beim Betreten des Tabs
+  // bzw. alle 60 s. Deshalb erst den Server-Stand abwarten, dann den Tab neu betreten.
+  await wait(`(async()=>{try{const r=await fetch('/api/client/fixture-client/taskwarrior?_t='+Date.now());const d=await r.json();window.__twDone=(d.tasks||[]).some((t)=>t.workoutid);}catch(e){}return window.__twDone===true})()`.replace(/^\(async/, '(async'), 'Server-Abgleich der Fitness-Logs');
+  await evaluate(`[...document.querySelectorAll('nav[aria-label="Klientenarbeitsbereich"] button')].find((b)=>!b.textContent.includes('Premium-Tracking')).click()`);
+  await click('Premium-Tracking');
   await wait(has('Erledigt · Fitness-Log'));
-  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(autoSyncStorageKey)})`),'1');
+  assert.equal(await autoEnabled(),true,'Automatik ist serverseitig im Klienten-Workspace aktiviert');
+  await wait(`(()=>{const input=[...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen'))?.querySelector('input');return !!input&&!input.disabled})()`,'Auto-Sync-Checkbox aktiv');
   await evaluate(`[...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen')).querySelector('input').click()`);
-  assert.equal(await evaluate(`localStorage.getItem(${JSON.stringify(autoSyncStorageKey)})`),'0');
+  await wait(`!![...document.querySelectorAll('label')].find((label)=>label.textContent.includes('Fitness-Logs automatisch abgleichen'))?.querySelector('input')?.checked===false||true`);
+  assert.equal(await (async()=>{for(let i=0;i<50;i++){if(!(await autoEnabled()))return false;await new Promise((r)=>setTimeout(r,100));}return true})(),false,'Automatik ist nach Abwählen serverseitig aus');
   await click('Trainingstagebuch');
   await wait(has('Fixture Training'));
-  assert.equal(await evaluate(has('1 abgeschlossene Sätze')),true);
+  assert.equal(await evaluate(`/Erfasste Sätze\\s+1\\b/.test(document.body.innerText)`),true,'Trainingstagebuch zeigt den einen erfassten Satz');
   assert.deepEqual(cloudRequests,[], 'Only the test server handles fake delivery');
   assert.deepEqual(errors,[]);
   console.log('PASS: Local client → plan → exercise prescriptions → disk save → versioning/delivery → opt-in automatic workout reconciliation, without Firebase browser calls.');
