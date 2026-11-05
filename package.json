@@ -119,6 +119,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@tailwindcss/postcss": "^4.3.3",
     "@vitejs/plugin-react": "^5.2.0",
     "autoprefixer": "^10.6.2",
     "eslint": "^9.39.4",
@@ -126,7 +127,7 @@
     "globals": "^17.13.0",
     "nodemon": "^3.1.10",
     "postcss": "^8.5.32",
-    "tailwindcss": "^3.4.13",
+    "tailwindcss": "^4.3.3",
     "vite": "^6.4.5",
     "vite-plugin-pwa": "^2.0.0"
   }
