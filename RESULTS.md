@@ -1,3 +1,26 @@
+# Fitness-Dev: Setup-Tab mit Prop `hideAppearance` für den Pulse-Wrapper (2026-11-05)
+
+Der Setup-Tab kann die Themes-Auswahl jetzt ausblenden, weil `vos-fitness` (Pulse) ein festes Design hat. Anlass war die Prüfung des Pulse-Setups: Dort scheiterte „Push aktivieren“ mit „messaging-sw.js load failed“, weil im Wrapper-Build `fitness-messaging-sw.js` fehlte (Fix im Meta-Repo `~/vitalos`, nicht hier). Die Prop ist über `vos-ship fitness --yes` (dev → master → vitalos) ausgeliefert; ob „Erscheinungsbild“ im Live-Setup tatsächlich verschwunden ist, wurde nicht auf der Live-Seite geprüft.
+
+- **`src/views/Settings/index.jsx`** (`35c803d`): Neue Prop `hideAppearance` blendet die Sektion „Erscheinungsbild“ (`AppearanceSection`) aus; Standard bleibt sichtbar, alle anderen Builds unverändert.
+
+---
+
+# Fitness-Dev: Session-Gate-Sheet wird Quick-Entrance-Portal / Nav-Sheet mit Hub (2026-11-05)
+
+Das Session-Gate-Sheet (`src/views/Session/`) wurde vom reinen Start-Sheet zum Schnelleinstieg-Portal ausgebaut: Die untere Nav ist der eingeklappte Rand des Sheets, ein weiteres Hochziehen öffnet den Hub. Alles ist auf `dev` committed und gepusht und über PR #67 bereits in `master` gemergt (`fitness-release` meldete „Bereits aktuell“). Geprüft wurde per Lint/Build und Headless-Firefox-Harness mit simulierten Touch-Events, nicht auf einem echten Gerät.
+
+- **`GatePortalGrid.jsx`** (neu, `1fba0e0`): Portal-Grid mit Suche (`/`, Ziffern, Enter), „Zuletzt genutzt“ (`fitness-gate-portal-recent`) und Einträgen für Heute, Plan, Logbuch, Timer, Skills, Gestern sowie (außerhalb von Solo-Builds) Review, Learn, Atlas, Touren, Settings. Named Export `GateHubBar`: sticky Leiste mit 5 Einträgen und „Hub aufklappen“-Button (Swipe-up).
+- **`SessionGateSheet.jsx`, `SessionGateCard.jsx`, `SessionModalsLayer.jsx`, `SessionEditor.jsx`** (`747ac1a`, `1966d4e`, `e5051e5`): Sheet öffnet nicht mehr reflexartig; Hochziehen am Griff expandiert zum Hub (`initialExpanded`, `activeModal` `'gate'|'hub'`). Tageszähler (Übungen/Sätze/Volumen), Kraft/Ausdauer-Toggle und Split-Chips im Gate; kompakter Split-Chip im Session-Tab statt `SplitPicker`.
+- **`App.jsx`, `MobileNav.jsx`, `Sidebar.jsx`** (`86ba486`, `e2cf6e4`): `openHub(mode)` ersetzt das alte Auto-Open-Effect; Mobile-Nav hat Hub-Button und Swipe-up/Griff zum Herausziehen des Sheets, Sidebar einen Hub-Eintrag.
+- **`SplitPicker.jsx`, `utils.js`**: neue Splits Shoulders und Arms (Farben in `BLOCK_COLORS`), `inferIsolationBlock` erkennt sie über Primärmuskeln.
+- **`GateNextPlanCard.jsx`** (neu, `64aafa7`): Karte „Nächster Plan“ (via `useTodayPlan()`), „Übernehmen“ legt die Routine über `applyNextRoutine` an.
+- **`SessionGateBar.jsx`, `index.jsx`**: Grid-Button „Schnelleinstieg öffnen“; TodayPlan-Screen wird übersprungen, wenn das Gate automatisch öffnet.
+- **`views/Session/ARCHITECTURE.md`, `AUDIT.md`**: Portal, Hub, Dock, Splits und Nächster-Plan-Karte dokumentiert.
+- **`.claude/settings.json`** (`14e20f6`): Hook-Pfade zeigten noch auf das nicht mehr existierende `~/fitness-dev`, jetzt `~/dev/fitness-dev` (Backup `.claude/settings.json.bak`); betraf `pre-compact-fill-docs.sh` und `post-edit-commit-docs.sh`.
+
+---
+
 # Fitness-Dev: App-Portal (docs/apps.html) und Fix leere Fokus-/Anamnese-Mini-App (2026-11-05)
 
 Für alle Mini-Apps gibt es jetzt eine aus den vorhandenen Manifesten erzeugte Übersicht. Dabei fiel auf, dass `vos-fokus` nur Hintergrund und Login zeigte; die Ursache liegt in der Flow-Weiterleitung und ist behoben (committed und auf `dev` gepusht, noch nicht per `vos-ship fitness` live).
