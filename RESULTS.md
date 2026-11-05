@@ -2,6 +2,12 @@
 
 Die `fitness-dev`-App wurde um die Möglichkeit erweitert, Mini-Apps als Unterpfade unter einer gemeinsamen Origin (`fitness-aos.web.app/<id>/`) zu hosten. Ein neuer Build-Workflow und Skripte wurden implementiert, um dies zu unterstützen, inklusive eines eigenen Cache-Präfixes für jede Unterpfad-App, um Cache-Kollisionen zu vermeiden.
 
+-   **`7dbb987` feat(origin) Commit**: Implementierung der Unterpfad-Struktur, eigener Cache-Präfixe (`vos-<id>-`
+
+# Fitness-Dev: Mini-Apps als Unterpfade, eigener Cache-Präfix (2026-11-05)
+
+Die `fitness-dev`-App wurde um die Möglichkeit erweitert, Mini-Apps als Unterpfade unter einer gemeinsamen Origin (`fitness-aos.web.app/<id>/`) zu hosten. Ein neuer Build-Workflow und Skripte wurden implementiert, um dies zu unterstützen, inklusive eines eigenen Cache-Präfixes für jede Unterpfad-App, um Cache-Kollisionen zu vermeiden.
+
 -   **`7dbb987` feat(origin) Commit**: Implementierung der Unterpfad-Struktur, eigener Cache-Präfixe und des neuen Merge
 
 # Fitness-Release dev → master → vitalos, Firebase-Konto (2026-11-04)
