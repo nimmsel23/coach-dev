@@ -52,3 +52,7 @@ dist-catalog/
 
 # Local context links supplied by the workspace owner
 /workspace
+
+# Rollback-Snapshots vor Deploys/Umbauten (nur lokal, nie committen)
+dist-coach.pre-*/
+*.py.pre-*

@@ -1,3 +1,24 @@
+# 2026-11-05 — plan-Submodule auf Drills 1–8 gehoben, public-coach um 6pack/portal ergänzt
+
+Die Weiterentwicklung der Trainingsplan-App passierte in `plan-dev`; hier in
+coach-dev wurde nur der Submodule-Pointer nachgezogen und `public-coach`
+erweitert (Commits `e218aa0`, `0084922` auf `integrate-klienten`).
+
+- **modules/plan** → plan-dev `e10afe6`: Mikrozyklen/Phasen (`PhaseEditor`),
+  Gewichtsprogression und `PhaseProgress` („Fortschritt je Phase") erscheinen
+  über das geteilte `PlanCard` automatisch im Klientenpfad der Coach-Shell
+  (`ClientTrainingWorkspace`/`ClientsPanel`).
+- **.gitignore**: `dist-coach.pre-*/` und `*.py.pre-*` (lokale Rollback-Snapshots).
+- **public-coach/6pack.html**: 6Pack-Promise-Seite aufgenommen (referenziert
+  `/styles.css`, `/assets/fonts/*` und die APK, die nicht in `public-coach` liegen).
+- **public-coach/portal.html**: Kopie des generierten VitalOS-Portals
+  (`~/vitalos/portal/index.html`, erzeugt von `plan-dev/scripts/portal.mjs --all`);
+  bei Portal-Änderungen neu kopieren, nicht von Hand ändern.
+- Verifikation für den Pointer-Bump: `eslint src/`, `test:plan:contract` und
+  `vite build --mode coach` (Scratch-outDir) grün. Kein Deploy, kein Browser-/Handy-Test.
+
+---
+
 ## 2026-11-02 — Coach akzeptiert Fitness-Alias für Schöffys lokale Workout-Historie
 
 Die Workout-Historie gab 503 zurück, weil Schöffys direkte Runtime-Verknüpfung
@@ -1734,6 +1755,13 @@ genau einer sichtbaren Zuordnung verwendet; fehlende oder mehrdeutige Zuordnung
 zeigt einen Fehler statt eine falsche Klientenakte zu öffnen. Lokale
 Betreuungsnotizen werden dabei nicht übertragen. Übungskommentare bleiben offen.
 
+## 2026-11-02 — Coach-Feedback-Übergabe live verifiziert
+
+Nach Commit `aeec749` lief `npm run build:firebase:coach` im aktiven Checkout
+fehlerfrei. `coach-api.service` ist aktiv; `/_coach/health` auf :9150 meldet
+`coach_ready: true`, und `/coach/local.html` liefert das neu gebaute
+`local-main-SJTX0ISB.js` aus. Das Bundle enthält den Feedback-Link und den
+Fehlertext für fehlende eindeutige UID-Zuordnung. Keine Klientendaten verändert.
 ## 2026-11-02 — Feedbackstatus in der Coach-Übersicht
 
 Die Übersicht liest für sichtbare Klienten die Zustände ihrer bereitgestellten

@@ -512,3 +512,13 @@ pruefen.
 *   **Unverifizierte Behauptung:** Claude behauptet, Jakobs Push-Plan liege in Firestore, obwohl die unmittelbar folgende Tool-Ausgabe (`GET /routines` nach einem `DELETE`) zeigt, dass keine Routinen mehr für den Client existieren. Es scheint, dass der "Aufräum"-Schritt den gerade gepushten Plan gelöscht hat.
 *   **Ungeprüfte Annahme:** Claude löscht eine Routine mit einer spezifischen UUID (`2bf790fd-...`) im Glauben, es sei eine "lokale Test-Routine". Es wird nicht explizit geprüft, ob diese UUID tatsächlich der ID des gerade gepushten Plans `plan-push-rpe-5-7` entspricht oder ob es sich um eine andere Routine handelt. Die Ausgabe legt nahe, dass es der gepushte Plan war.
 *   **Teilweise gelöstes Problem:** Der Hauptzweck, Jakobs Plan nach Firestore zu pushen, wurde durch den nachfolgenden Aufräumschritt effektiv rückgängig gemacht, ohne dass dies im Selbstbericht oder in der abschließenden Zusammenfassung reflektiert wird.
+- `modules/plan` zeigt auf plan-dev `e10afe6`, das noch nicht nach `origin/dev`
+  gepusht war — zuerst plan-dev `dev` pushen, dann `integrate-klienten`.
+- `public-coach/6pack.html` ist ohne `/styles.css`, `/assets/fonts/*` und
+  `6pack-app-debug.apk` ungestylt bzw. mit totem APK-Link (APK bewusst nicht
+  committet, liegt ungestagt im Verzeichnis).
+
+**Gemini-Review (potenzielle blinde Flecken, 2026-11-05):**
+*   Die `RESULTS.md`-Zusammenfassung beansprucht die "Hebung des plan-Submodules" und `public-coach`-Ergänzungen, obwohl das Transkript zeigt, dass diese Schritte durch ein Firebase-Login-Problem blockiert waren und erst durch manuelle Benutzereingabe *nach* Claudes letztem Zug behoben wurden.
+*   Die Kernintegration des Submodules wurde laut `RESULTS.md` explizit "Kein Deploy, kein Browser-/Handy-Test" verifiziert, was eine wesentliche Lücke in der End-to-End-Validierung der "vollwertigen Trainingsplan-App" darstellt.
+*   Obwohl die Ursachen für den scheiternden `test:local:browser` identifiziert wurden (Scheduler, `localStorage`-Diskrepanz, ungeklärter `enabledPlanIds`-Backend-Fehler), wurde keine dieser Ursachen innerhalb der Session behoben oder der Test repariert.
