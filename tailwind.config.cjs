@@ -1,10 +1,12 @@
 const { sharedPlanRoot } = require('./scripts/shared-plan-root.cjs')
+const { sharedFitnessRoot } = require('./scripts/shared-fitness-root.cjs')
 const path = require("path")
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./coach.html",
     path.join(sharedPlanRoot(), "src", "**", "*.{js,jsx}"),
+    path.join(sharedFitnessRoot(), "src", "**", "*.{js,jsx}"),
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
