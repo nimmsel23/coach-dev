@@ -45,7 +45,7 @@ export default function ReviewMuscleImpact({ regionEntries, muscleLanguage = 'de
             </div>
           )
         }) : (
-          <div className="col-span-full py-8 text-center text-sm font-semibold border border-dashed rounded-2xl" style={{ color: 'var(--dim)', opacity: 0.6 }}>Keine Daten in diesem Zeitraum</div>
+          <div className="col-span-full py-8 text-center text-sm font-semibold border border-dashed border-gray-200 rounded-2xl" style={{ color: 'var(--dim)', opacity: 0.6 }}>Keine Daten in diesem Zeitraum</div>
         )}
       </div>
     </section>

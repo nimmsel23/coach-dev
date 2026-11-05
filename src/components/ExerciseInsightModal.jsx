@@ -617,7 +617,7 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
 
   return createPortal(
     <div className="fixed inset-0 z-50">
-      <div ref={swipeBackdropRef} className="absolute inset-0 bg-fit-scrim backdrop-blur-sm" onClick={onClose} />
+      <div ref={swipeBackdropRef} className="absolute inset-0 bg-fit-scrim backdrop-blur-xs" onClick={onClose} />
 
       <div className="absolute inset-x-0 bottom-0 md:inset-4 md:bottom-4">
         <div

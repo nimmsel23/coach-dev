@@ -27,11 +27,11 @@ export default function MuscleSessionMap({ exercises, gender, onGroupClick }) {
     <div className="flex-1 flex flex-col min-h-[500px] relative">
       <div className="absolute top-0 left-0 z-20 flex gap-1 bg-fit-card/80 backdrop-blur-md p-1 rounded-xl border border-fit-line shadow-lg">
         <button onClick={() => setSide("front")}
-          className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${side === "front" ? 'bg-fit-accent text-black shadow-sm' : 'text-fit-dim hover:text-ink'}`}>
+          className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${side === "front" ? 'bg-fit-accent text-black shadow-xs' : 'text-fit-dim hover:text-ink'}`}>
           Anterior
         </button>
         <button onClick={() => setSide("back")}
-          className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${side === "back" ? 'bg-fit-accent text-black shadow-sm' : 'text-fit-dim hover:text-ink'}`}>
+          className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${side === "back" ? 'bg-fit-accent text-black shadow-xs' : 'text-fit-dim hover:text-ink'}`}>
           Posterior
         </button>
       </div>

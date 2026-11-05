@@ -85,7 +85,7 @@ export default function ActivityAddon({ hasActivity, setHasActivity, activity, s
                 title={t.label}
                 className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all ${
                   isActive
-                    ? 'border-fit-orange bg-fit-orange/15 shadow-sm'
+                    ? 'border-fit-orange bg-fit-orange/15 shadow-xs'
                     : 'border-fit-line bg-fit-bg2 hover:border-fit-orange/30'
                 }`}
               >

@@ -10,7 +10,7 @@ export default function SegmentedControl({ label, options, value, onChange }) {
             key={String(id)}
             onClick={() => onChange(id)}
             className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition-all ${
-              value === id ? 'bg-fit-card shadow-sm text-fit-accent' : 'text-fit-dim hover:text-fit-ink'
+              value === id ? 'bg-fit-card shadow-xs text-fit-accent' : 'text-fit-dim hover:text-fit-ink'
             }`}
           >
             {label}

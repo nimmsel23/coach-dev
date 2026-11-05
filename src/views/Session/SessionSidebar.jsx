@@ -144,7 +144,7 @@ export default function SessionSidebar({
           </div>
         </button>
         
-        <button onClick={onDownload} className="w-full p-6 rounded-[32px] border flex items-center justify-between bg-fit-card border-fit-line hover:border-accent/30 transition-all shadow-sm group">
+        <button onClick={onDownload} className="w-full p-6 rounded-[32px] border flex items-center justify-between bg-fit-card border-fit-line hover:border-accent/30 transition-all shadow-xs group">
           <div className="text-left">
             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-fit-dim/40 mb-1 group-hover:translate-x-1 transition-transform">Download MD</div>
             <div className="text-[11px] font-bold opacity-30">Lokale Datei</div>

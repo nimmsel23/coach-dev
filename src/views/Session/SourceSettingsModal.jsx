@@ -104,7 +104,7 @@ export default function SourceSettingsModal({ onClose }) {
                   <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
                     active ? 'border-fit-accent bg-fit-accent' : 'border-fit-line/50'
                   }`}>
-                    {active && <div className="w-2 h-2 bg-black rounded-sm" />}
+                    {active && <div className="w-2 h-2 bg-black rounded-xs" />}
                   </div>
                 </button>
               );
@@ -166,7 +166,7 @@ export default function SourceSettingsModal({ onClose }) {
                   <div className={`w-4 h-4 rounded-md border-2 flex items-center justify-center transition-all ${
                     active ? 'border-fit-accent bg-fit-accent' : 'border-fit-line/50'
                   }`}>
-                    {active && <div className="w-1.5 h-1.5 bg-black rounded-sm" />}
+                    {active && <div className="w-1.5 h-1.5 bg-black rounded-xs" />}
                   </div>
                 </button>
               );

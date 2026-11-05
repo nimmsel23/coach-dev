@@ -199,7 +199,7 @@ export default function ExerciseSearchOverlay({ onSelect, onClose, date }) {
                         key={ex.name}
                         onClick={() => pick(ex)}
                         style={{ animationDelay: `${idx * 20}ms` }}
-                        className="search-row-in group flex flex-col p-4 rounded-3xl bg-fit-card border border-fit-line hover:border-fit-accent/50 hover:bg-fit-accent/5 transition-all text-left shadow-sm active:scale-[0.98]"
+                        className="search-row-in group flex flex-col p-4 rounded-3xl bg-fit-card border border-fit-line hover:border-fit-accent/50 hover:bg-fit-accent/5 transition-all text-left shadow-xs active:scale-[0.98]"
                       >
                         <span className="font-bold text-sm text-fit-ink group-hover:text-fit-accent transition-colors">{ex.name}</span>
                       </button>
@@ -221,7 +221,7 @@ export default function ExerciseSearchOverlay({ onSelect, onClose, date }) {
                         key={ex.name}
                         onClick={() => pick(ex)}
                         style={{ animationDelay: `${idx * 20}ms` }}
-                        className="search-row-in group flex items-center gap-4 p-4 rounded-3xl bg-fit-orange/5 border border-fit-orange/20 hover:border-fit-orange/50 hover:bg-fit-orange/10 transition-all text-left shadow-sm active:scale-[0.98]"
+                        className="search-row-in group flex items-center gap-4 p-4 rounded-3xl bg-fit-orange/5 border border-fit-orange/20 hover:border-fit-orange/50 hover:bg-fit-orange/10 transition-all text-left shadow-xs active:scale-[0.98]"
                       >
                         <div className="w-10 h-10 rounded-2xl bg-fit-orange/10 flex items-center justify-center text-fit-orange group-hover:scale-110 transition-transform">
                           <Plus size={20} />

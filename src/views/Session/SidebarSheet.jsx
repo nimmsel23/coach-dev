@@ -17,7 +17,7 @@ export default function SidebarSheet({
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-end justify-center lg:items-stretch lg:justify-end animate-in fade-in duration-200">
-      <div ref={backdropRef} className="absolute inset-0 bg-fit-scrim backdrop-blur-sm" onClick={onClose} />
+      <div ref={backdropRef} className="absolute inset-0 bg-fit-scrim backdrop-blur-xs" onClick={onClose} />
       <div
         ref={sheetRef}
         className="relative w-full max-w-2xl bg-fit-card border-t border-fit-line rounded-t-[40px] shadow-2xl animate-in slide-in-from-bottom duration-300 max-h-[85vh] overflow-y-auto overscroll-contain

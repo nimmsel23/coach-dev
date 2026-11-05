@@ -69,7 +69,7 @@ export default function DetailSheet({ ex, position, total, onClose, onStep, onOp
     <>
       <div className="xa-scrim" onClick={onClose} />
       <aside className="xa xa-sheet text-fit-ink" role="dialog" aria-modal="true" aria-label={title}>
-        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 px-5 py-3.5 bg-fit-bg/95 backdrop-blur-md border-b border-fit-line shadow-sm">
+        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 px-5 py-3.5 bg-fit-bg/95 backdrop-blur-md border-b border-fit-line shadow-xs">
           <div className="flex items-center gap-2">
             <span className="xa-label font-bold text-fit-accent">Tafel {position} / {total}</span>
             {ex.catalog && (
@@ -151,7 +151,7 @@ export default function DetailSheet({ ex, position, total, onClose, onStep, onOp
               </div>
               <div className="flex flex-wrap gap-2">
                 {ex.primary.length ? ex.primary.map((m) => (
-                  <span key={m} className="xa-chip font-medium shadow-sm" data-on="true">{muscleDe(m)}</span>
+                  <span key={m} className="xa-chip font-medium shadow-xs" data-on="true">{muscleDe(m)}</span>
                 )) : <span className="text-fit-dim text-sm">—</span>}
               </div>
             </div>

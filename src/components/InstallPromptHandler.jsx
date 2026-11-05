@@ -62,7 +62,7 @@ export function InstallPromptHandler() {
 
   return createPortal(
     <div className="fixed top-20 left-4 right-4 z-50 animate-in fade-in slide-in-from-top-4 duration-300">
-      <div className="bg-fit-accent/10 border border-fit-accent/20 rounded-2xl p-4 flex items-center gap-4 shadow-lg backdrop-blur-sm">
+      <div className="bg-fit-accent/10 border border-fit-accent/20 rounded-2xl p-4 flex items-center gap-4 shadow-lg backdrop-blur-xs">
         <Download size={20} className="text-fit-accent flex-shrink-0" />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-bold text-fit-ink">App installieren?</p>

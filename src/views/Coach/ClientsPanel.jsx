@@ -89,7 +89,7 @@ export default function ClientsPanel() {
       <span className="cc-br1" /><span className="cc-br2" />
       {/* Klientenliste */}
       <div className="cc-panel-side w-full md:w-72 md:border-r border-b md:border-b-0 border-fit-line/30 flex flex-col shrink-0 max-h-56 md:max-h-none overflow-y-auto">
-        <div className="cc-panel-head px-4 py-3 sticky top-0 bg-fit-bg2/80 backdrop-blur-sm">
+        <div className="cc-panel-head px-4 py-3 sticky top-0 bg-fit-bg2/80 backdrop-blur-xs">
           03 · {uids.length} Klient{uids.length === 1 ? '' : 'en'}
         </div>
         <ul className="divide-y divide-fit-line/20">

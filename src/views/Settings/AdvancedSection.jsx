@@ -45,7 +45,7 @@ export default function AdvancedSection({
                 <div className="flex bg-fit-bg p-1 rounded-xl border border-fit-line">
                    {[{ id: true, label: 'Ein' }, { id: false, label: 'Aus' }].map(({ id, label }) => (
                       <button key={label} onClick={() => setSwipeEnabled(id)}
-                         className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${swipeEnabled === id ? 'bg-fit-card shadow-sm text-fit-accent' : 'text-fit-dim hover:text-fit-ink'}`}>
+                         className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${swipeEnabled === id ? 'bg-fit-card shadow-xs text-fit-accent' : 'text-fit-dim hover:text-fit-ink'}`}>
                          {label}
                       </button>
                    ))}

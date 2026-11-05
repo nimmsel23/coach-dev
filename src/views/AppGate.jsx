@@ -10,7 +10,7 @@ export default function AppGate({ navigate, navItems }) {
           <button
             key={id}
             onClick={() => navigate(id)}
-            className="relative group p-6 rounded-[32px] bg-fit-card border border-fit-line/50 active:scale-95 transition-all overflow-hidden flex flex-col items-center gap-4 shadow-sm hover:shadow-2xl hover:shadow-fit-accent/10 hover:border-fit-accent/40"
+            className="relative group p-6 rounded-[32px] bg-fit-card border border-fit-line/50 active:scale-95 transition-all overflow-hidden flex flex-col items-center gap-4 shadow-xs hover:shadow-2xl hover:shadow-fit-accent/10 hover:border-fit-accent/40"
           >
             {/* Glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-fit-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

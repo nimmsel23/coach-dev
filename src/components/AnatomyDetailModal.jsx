@@ -48,7 +48,7 @@ export default function MuscleDetailModal({ muscleId, muscleData, onClose, loadi
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-fit-scrim backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-fit-scrim backdrop-blur-xs" onClick={onClose} />
       
       <div className="relative w-full max-w-2xl bg-fit-card rounded-[32px] border border-fit-line shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
          {/* Modal Header */}

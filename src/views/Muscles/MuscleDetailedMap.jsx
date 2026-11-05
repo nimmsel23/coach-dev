@@ -16,22 +16,22 @@ export default function MuscleDetailedMap({ scores, gender, onGroupClick }) {
        <div className="absolute top-0 left-0 z-20 flex flex-col gap-3">
           <div className="flex gap-1 bg-fit-card/80 backdrop-blur-md p-1 rounded-xl border border-fit-line shadow-lg">
              <button onClick={() => setSide("front")} 
-               className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${side === "front" ? 'bg-fit-accent text-black shadow-sm' : 'text-fit-dim hover:text-ink'}`}>
+               className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${side === "front" ? 'bg-fit-accent text-black shadow-xs' : 'text-fit-dim hover:text-ink'}`}>
                Anterior
              </button>
              <button onClick={() => setSide("back")} 
-               className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${side === "back" ? 'bg-fit-accent text-black shadow-sm' : 'text-fit-dim hover:text-ink'}`}>
+               className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${side === "back" ? 'bg-fit-accent text-black shadow-xs' : 'text-fit-dim hover:text-ink'}`}>
                Posterior
              </button>
           </div>
 
           <div className="flex gap-1 bg-fit-card/80 backdrop-blur-md p-1 rounded-xl border border-fit-line shadow-lg">
              <button onClick={() => setCurrentGender("male")} 
-               className={`p-1.5 rounded-lg transition-all ${currentGender === "male" ? 'bg-fit-accent text-black shadow-sm' : 'text-fit-dim hover:text-ink'}`}>
+               className={`p-1.5 rounded-lg transition-all ${currentGender === "male" ? 'bg-fit-accent text-black shadow-xs' : 'text-fit-dim hover:text-ink'}`}>
                <User size={14} />
              </button>
              <button onClick={() => setCurrentGender("female")} 
-               className={`p-1.5 rounded-lg transition-all ${currentGender === "female" ? 'bg-fit-accent text-black shadow-sm' : 'text-fit-dim hover:text-ink'}`}>
+               className={`p-1.5 rounded-lg transition-all ${currentGender === "female" ? 'bg-fit-accent text-black shadow-xs' : 'text-fit-dim hover:text-ink'}`}>
                <User size={14} className="scale-x-[-1]" />
              </button>
           </div>
@@ -70,7 +70,7 @@ export default function MuscleDetailedMap({ scores, gender, onGroupClick }) {
 function LegendRow({ color, label }) {
   return (
     <div className="flex items-center gap-2 group">
-       <div className="w-3 h-3 rounded shadow-sm transition-transform group-hover:scale-125" style={{ background: color }} />
+       <div className="w-3 h-3 rounded shadow-xs transition-transform group-hover:scale-125" style={{ background: color }} />
        <span className="text-[10px] font-bold text-fit-ink opacity-60 group-hover:opacity-100 transition-opacity">{label}</span>
     </div>
   );

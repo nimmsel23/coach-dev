@@ -37,7 +37,7 @@ export default function ReviewTopExercises({ topExercises = [], onInspectExercis
           </button>
         ))}
         {topExercises.length === 0 && (
-          <div className="py-8 text-center text-sm font-semibold border border-dashed rounded-2xl" style={{ color: 'var(--dim)', opacity: 0.6 }}>Keine Top Exercises</div>
+          <div className="py-8 text-center text-sm font-semibold border border-dashed border-gray-200 rounded-2xl" style={{ color: 'var(--dim)', opacity: 0.6 }}>Keine Top Exercises</div>
         )}
       </div>
     </section>

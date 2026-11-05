@@ -88,7 +88,7 @@ export default function ProfileSection() {
               <button
                 key={id}
                 onClick={() => setGender(id)}
-                className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition-all ${gender === id ? 'bg-fit-card shadow-sm text-fit-accent' : 'text-fit-dim hover:text-fit-ink'}`}
+                className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition-all ${gender === id ? 'bg-fit-card shadow-xs text-fit-accent' : 'text-fit-dim hover:text-fit-ink'}`}
               >
                 {label}
               </button>
