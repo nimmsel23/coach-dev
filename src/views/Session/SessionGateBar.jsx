@@ -9,7 +9,7 @@
  */
 
 import { useMemo, useState } from 'react';
-import { Play, Square, CheckCircle2 } from 'lucide-react';
+import { Play, Square, CheckCircle2, LayoutGrid } from 'lucide-react';
 import { normalizeSessionGate } from '../../lib/sessionGate.js';
 import { useGateElapsed } from './useGateElapsed.js';
 import { gateTone, GATE_STOP_STYLE } from './gateTone.js';
@@ -68,15 +68,25 @@ export default function SessionGateBar({ sessionGate, exercises, isToday, onOpen
   if (!active && !completed) {
     if (!isToday) return null;
     return (
-      <button
-        onClick={handleStart}
-        disabled={starting}
-        className="w-full mb-3 flex items-center justify-center gap-2 h-9 rounded-full text-[11px] font-bold transition-all active:scale-[0.98]"
-        style={{ background: 'var(--bg2)', color: 'var(--dim)', border: '1px dashed var(--line)' }}
-      >
-        <Play size={12} strokeWidth={2.5} style={{ color: 'var(--accent)' }} />
-        {starting ? 'Workout startet …' : 'Workout starten — Zeit & Zähler laufen mit'}
-      </button>
+      <div className="w-full mb-3 flex items-center gap-2">
+        <button
+          onClick={handleStart}
+          disabled={starting}
+          className="flex-1 flex items-center justify-center gap-2 h-9 rounded-full text-[11px] font-bold transition-all active:scale-[0.98]"
+          style={{ background: 'var(--bg2)', color: 'var(--dim)', border: '1px dashed var(--line)' }}
+        >
+          <Play size={12} strokeWidth={2.5} style={{ color: 'var(--accent)' }} />
+          {starting ? 'Workout startet …' : 'Workout starten — Zeit & Zähler laufen mit'}
+        </button>
+        <button
+          onClick={onOpenGate}
+          aria-label="Schnelleinstieg öffnen"
+          className="shrink-0 h-9 w-9 rounded-full flex items-center justify-center transition-all active:scale-95"
+          style={{ background: 'var(--bg2)', color: 'var(--dim)', border: '1px solid var(--line)' }}
+        >
+          <LayoutGrid size={14} />
+        </button>
+      </div>
     );
   }
 

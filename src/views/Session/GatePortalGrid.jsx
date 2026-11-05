@@ -61,7 +61,7 @@ function writeRecent(id) {
   } catch { /* Speicher gesperrt: kein Problem */ }
 }
 
-export default function GatePortalGrid({ currentSubTab, onSubNav, onLeave }) {
+export default function GatePortalGrid({ currentSubTab, onSubNav, onLeave, hub = false }) {
   const [query, setQuery] = useState('');
   const [recent, setRecent] = useState(readRecent);
   const inputRef = useRef(null);
@@ -125,7 +125,7 @@ export default function GatePortalGrid({ currentSubTab, onSubNav, onLeave }) {
       {visible.length === 0 ? (
         <div className="text-[12px] py-3 text-center" style={{ color: 'var(--dim)' }}>Kein Treffer für „{query}“.</div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <div className={`grid grid-cols-2 sm:grid-cols-3 ${hub ? 'gap-3' : 'gap-2'}`}>
           {visible.map((entry, i) => {
             const { id, label, hint, Icon, kind } = entry;
             const selected = kind === 'sub' && (currentSubTab || 'today') === id;
@@ -134,7 +134,7 @@ export default function GatePortalGrid({ currentSubTab, onSubNav, onLeave }) {
               <button
                 key={id}
                 onClick={() => open(entry)}
-                className="relative rounded-xl px-3 py-2.5 text-left transition-all active:scale-[0.98] hover:brightness-110"
+                className={`relative text-left ${hub ? 'rounded-2xl px-4 py-6' : 'rounded-xl px-3 py-2.5'} transition-all active:scale-[0.98] hover:brightness-110`}
                 style={{
                   background: selected ? 'rgba(200,255,0,0.08)' : 'var(--bg2)',
                   border: selected ? '1px solid rgba(200,255,0,0.3)' : '1px solid transparent',
@@ -146,8 +146,8 @@ export default function GatePortalGrid({ currentSubTab, onSubNav, onLeave }) {
                   </span>
                 )}
                 <div className="flex items-center gap-2">
-                  <Icon size={13} style={{ color: selected ? 'var(--accent)' : 'var(--dim)' }} />
-                  <span className="text-xs font-semibold truncate" style={{ color: selected ? 'var(--accent)' : 'var(--ink)' }}>
+                  <Icon size={hub ? 22 : 13} style={{ color: selected ? 'var(--accent)' : 'var(--dim)' }} />
+                  <span className={`${hub ? 'text-sm' : 'text-xs'} font-semibold truncate`} style={{ color: selected ? 'var(--accent)' : 'var(--ink)' }}>
                     {label}
                   </span>
                 </div>

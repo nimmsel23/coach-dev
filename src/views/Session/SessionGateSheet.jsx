@@ -6,9 +6,9 @@
  * enthalten) — rein mechanisch, keine Logik/Werte verändert.
  */
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
+import { X, ChevronUp, ChevronDown } from 'lucide-react';
 import SessionGateCard from './SessionGateCard.jsx';
 import { useSwipeToDismiss } from '../../hooks/useSwipeToDismiss.js';
 
@@ -19,7 +19,23 @@ export default function SessionGateSheet({
   // Swipe-down-to-close über den gemeinsamen Hook (gleiches Verhalten wie
   // alle anderen VOS-Sheets: Tempo + Distanz, Scroll hat Vorrang).
   const backdropRef = useRef(null);
-  const sheetRef = useSwipeToDismiss(onClose, { enabled: open, backdropRef });
+  // Hub-Modus: Sheet nach oben herausziehen (oder Chevron tippen) → füllt den
+  // Screen, darunter öffnet sich der Schnelleinstieg als großer Hub. Im Hub-Modus
+  // ist Wegwischen nach unten deaktiviert; es klappt erst auf Sheet-Größe zurück.
+  const [expanded, setExpanded] = useState(false);
+  const sheetRef = useSwipeToDismiss(onClose, { enabled: open && !expanded, backdropRef });
+  const dragRef = useRef(null);
+
+  useEffect(() => { if (!open) setExpanded(false); }, [open]);
+
+  function onHandleTouchStart(e) { dragRef.current = e.touches[0].clientY; }
+  function onHandleTouchEnd(e) {
+    if (dragRef.current == null) return;
+    const dy = e.changedTouches[0].clientY - dragRef.current;
+    dragRef.current = null;
+    if (dy < -40) setExpanded(true);
+    else if (dy > 40 && expanded) setExpanded(false);
+  }
 
   if (!open) return null;
   return createPortal(
@@ -27,10 +43,19 @@ export default function SessionGateSheet({
       <div ref={backdropRef} className="absolute inset-0 bg-fit-scrim backdrop-blur-sm" onClick={onClose} />
       <div
         ref={sheetRef}
-        className="relative w-full max-w-xl bg-fit-card border-t border-fit-line rounded-t-[32px] sm:rounded-t-[40px] shadow-2xl animate-in slide-in-from-bottom duration-300 max-h-[92vh] overflow-y-auto overscroll-contain"
+        className={`relative w-full bg-fit-card border-t border-fit-line shadow-2xl animate-in slide-in-from-bottom duration-300 overflow-y-auto overscroll-contain transition-[max-width,height,border-radius] ${expanded ? 'max-w-3xl h-[100dvh] rounded-t-none sm:rounded-t-[40px]' : 'max-w-xl max-h-[92vh] rounded-t-[32px] sm:rounded-t-[40px]'}`}
       >
         <div className="sticky top-0 bg-fit-card pt-3 pb-2 flex items-center justify-between px-4 sm:px-5 z-10">
-          <div className="w-10 h-1 rounded-full bg-fit-line mx-auto" />
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            onTouchStart={onHandleTouchStart}
+            onTouchEnd={onHandleTouchEnd}
+            aria-label={expanded ? 'Hub einklappen' : 'Hub öffnen'}
+            className="mx-auto flex flex-col items-center gap-0.5 px-8 py-1 text-fit-dim"
+          >
+            {expanded ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+            <span className="w-10 h-1 rounded-full bg-fit-line" />
+          </button>
           <button
             onClick={onClose}
             className="absolute right-4 top-3 p-1.5 rounded-lg text-fit-dim hover:text-fit-ink transition-colors"
@@ -45,6 +70,7 @@ export default function SessionGateSheet({
             sessionGate={sessionGate}
             currentSubTab={currentSubTab}
             exercises={exercises}
+            hub={expanded}
             onLeave={onClose}
             onSubNav={(id) => { onClose(); onSubNav?.(id); }}
             onStart={onStart}

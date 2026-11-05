@@ -115,9 +115,9 @@ export default function SessionEditor({
     // Zusätzliche Absicherung neben dem date-Check in App.jsx (Race
     // zwischen Flag-Konsum und Remount): Gate nie öffnen, wenn das
     // aktuell angezeigte Datum nicht heute ist.
-    if (gateAutoOpenFlag && date === localToday()) {
-      setActiveModal('gate');
-    }
+    // Kein Auto-Open mehr (User-Feedback 2026-11-05: das Sheet wurde beim App-Start
+    // nur reflexhaft weggewischt, erwartet wird direkt der Session-Tab). Das Portal
+    // öffnet über die Gate-Leiste im Header (SessionGateBar). Flag nur konsumieren.
     if (gateAutoOpenFlag) onGateAutoOpenConsumed?.();
   }, []);
 

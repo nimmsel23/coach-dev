@@ -57,7 +57,7 @@ function TodayCounters({ exercises }) {
   );
 }
 
-export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], onSubNav, onLeave, onStart, onStop }) {
+export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], hub = false, onSubNav, onLeave, onStart, onStop }) {
   const gate = normalizeSessionGate(sessionGate);
   const active = isSessionGateActive(gate);
   const completed = isSessionGateCompleted(gate);
@@ -192,7 +192,7 @@ export default function SessionGateCard({ date, sessionGate, currentSubTab = nul
       {(active || completed) && <TodayCounters exercises={exercises} />}
 
       <div className="relative mt-5 pt-4" style={{ borderTop: '1px dashed var(--line)' }}>
-        <GatePortalGrid currentSubTab={currentSubTab} onSubNav={onSubNav} onLeave={onLeave} />
+        <GatePortalGrid hub={hub} currentSubTab={currentSubTab} onSubNav={onSubNav} onLeave={onLeave} />
       </div>
     </section>
   );
