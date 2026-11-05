@@ -20,7 +20,7 @@ import { getNavItems, VALID_TABS, IS_SOLO, SOLO_TAB } from './constants/Navigati
 
 import Sidebar from './components/layout/Sidebar.jsx'
 import MobileNav from './components/layout/MobileNav.jsx'
-import TabSheet, { useIsMobile } from './components/layout/TabSheet.jsx'
+import TabSheet, { useIsMobile, tabSheetHistory } from './components/layout/TabSheet.jsx'
 import UserProfile from './components/common/UserProfile.jsx'
 import ErrorBoundary from './components/common/ErrorBoundary.jsx'
 import PwaUpdateBanner from './components/common/PwaUpdateBanner.jsx'
@@ -463,6 +463,8 @@ export default function App() {
   // bei bloßem Datumswechsel erneut feuern. Dieses Flag lebt hier in App
   // (remountet nicht) und wird als One-Shot-Signal nach unten gereicht.
   const [gateAutoOpenFlag, setGateAutoOpenFlag] = useState(false)
+  // Zählt hoch, wenn ein hashchange absichtlich ignoriert wurde (Tab-Sheet-Zurück): erzwingt, dass die URL wieder zum State passt.
+  const [hashTick, setHashTick] = useState(0)
   // Hub öffnen (Bottom-Nav "Hub"): wechselt auf Session/Heute und fordert das Gate im
   // Hub-Modus an. KEIN Auto-Open mehr beim bloßen Wechsel auf "Heute" (User-Feedback
   // 2026-11-05) — das Flag wird nur noch hier gesetzt.
@@ -477,12 +479,13 @@ export default function App() {
   useEffect(() => {
     const targetHash = buildHashRoute({ tab, subTab, sessionDate, focusLayer, planView, planId })
     if (window.location.hash !== targetHash) {
-      history.replaceState(null, '', targetHash)
+      history.replaceState(history.state, '', targetHash)
     }
-  }, [tab, subTab, sessionDate, focusLayer, planView, planId])
+  }, [tab, subTab, sessionDate, focusLayer, planView, planId, hashTick])
 
   useEffect(() => {
     const handleHashChange = () => {
+      if (Date.now() < tabSheetHistory.suppressUntil) { setHashTick((n) => n + 1); return }
       if (window.location.pathname === '/catalog-ui') {
         setSubTab(null)
         setSessionDate(null)

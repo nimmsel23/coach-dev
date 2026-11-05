@@ -26,16 +26,45 @@ export function useIsMobile(query = '(max-width: 1023px)') {
   return match
 }
 
+// Zurück-Taste: Beim Öffnen kommt ein History-Eintrag dazu, Zurück (popstate) schließt das
+// Sheet. Wird es per Wischen/X geschlossen, räumt der Cleanup den Eintrag mit history.back()
+// wieder ab; das dabei ausgelöste hashchange darf App.jsx nicht als Navigation lesen
+// (`suppressUntil`), sonst ginge das Sheet sofort wieder auf.
+export const tabSheetHistory = { suppressUntil: 0 }
+
 export default function TabSheet({ open, title, onClose, children }) {
   const backdropRef = useRef(null)
   const sheetRef = useSwipeToDismiss(onClose, { enabled: open, backdropRef })
+  const closeRef = useRef(onClose)
+  closeRef.current = onClose
+
+  useEffect(() => {
+    if (!open) return undefined
+    let pushed = true
+    history.pushState({ tabSheet: true }, '', window.location.href)
+    const onPop = () => {
+      if (!pushed) return
+      pushed = false
+      closeRef.current?.()
+    }
+    window.addEventListener('popstate', onPop)
+    return () => {
+      window.removeEventListener('popstate', onPop)
+      if (pushed && history.state?.tabSheet) {
+        tabSheetHistory.suppressUntil = Date.now() + 600
+        history.back()
+      }
+    }
+  }, [open])
+
   if (!open) return null
   return createPortal(
     <div className="fixed inset-0 z-[60] flex items-end justify-center animate-in fade-in duration-200" role="dialog" aria-label={title}>
       <div ref={backdropRef} className="absolute inset-0 bg-fit-scrim backdrop-blur-sm" onClick={onClose} />
       <div
         ref={sheetRef}
-        className="relative w-full max-w-3xl h-[94dvh] flex flex-col bg-fit-bg border-t border-fit-line rounded-t-[32px] shadow-2xl animate-in slide-in-from-bottom duration-300"
+        style={{ height: 'min(94dvh, calc(100dvh - env(safe-area-inset-top, 0px) - 1.5rem))' }}
+        className="relative w-full max-w-3xl flex flex-col bg-fit-bg border-t border-fit-line rounded-t-[32px] shadow-2xl animate-in slide-in-from-bottom duration-300"
       >
         <div className="shrink-0 relative pt-3 pb-2 flex flex-col items-center">
           <span className="w-10 h-1 rounded-full bg-fit-line" />

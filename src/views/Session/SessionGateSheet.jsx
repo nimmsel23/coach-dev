@@ -44,7 +44,10 @@ export default function SessionGateSheet({
       <div ref={backdropRef} className="absolute inset-0 bg-fit-scrim backdrop-blur-xs" onClick={onClose} />
       <div
         ref={sheetRef}
-        className={`relative w-full bg-fit-card border-t border-fit-line shadow-2xl animate-in slide-in-from-bottom duration-300 overflow-y-auto overscroll-contain transition-[max-width,height,border-radius] ${expanded ? 'max-w-3xl h-[100dvh] rounded-t-none sm:rounded-t-[40px]' : 'max-w-xl max-h-[92vh] rounded-t-[32px] sm:rounded-t-[40px]'}`}
+        className={`relative w-full bg-fit-card border-t border-fit-line shadow-2xl animate-in slide-in-from-bottom duration-300 overflow-y-auto overscroll-contain transition-[max-width,height,border-radius] ${expanded ? 'max-w-3xl rounded-t-none sm:rounded-t-[40px]' : 'max-w-xl rounded-t-[32px] sm:rounded-t-[40px]'}`}
+        style={expanded
+          ? { height: 'calc(100dvh - env(safe-area-inset-top, 0px))' }
+          : { maxHeight: 'min(92vh, calc(100dvh - env(safe-area-inset-top, 0px) - 1rem))' }}
       >
         <div className="sticky top-0 bg-fit-card pt-3 pb-2 flex items-center justify-between px-4 sm:px-5 z-10">
           <button
