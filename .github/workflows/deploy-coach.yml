@@ -90,7 +90,7 @@ jobs:
 
       - name: Install
         run: |
-          printf 'packages: ["."]\nnodeLinker: hoisted\nverifyDepsBeforeRun: false\nignoreScripts: true\n' > pnpm-workspace.yaml
+          printf 'packages: ["."]\nnodeLinker: hoisted\nverifyDepsBeforeRun: false\nignoreScripts: true\noverrides:\n  "@grpc/grpc-js@<1.13.6": ^1.14.6\n' > pnpm-workspace.yaml
           pnpm install --frozen-lockfile --ignore-scripts
 
       # *.generated.js sind gitignored; build:firebase:coach erzeugt sie nicht selbst
