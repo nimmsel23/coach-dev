@@ -172,7 +172,7 @@ export default function Logbuch({ onOpenSession, onInspectExercise, onSubNav }) 
       </header>
 
       {loading ? (
-        <div className="py-32 text-center text-[11px] font-black uppercase tracking-[0.3em] animate-pulse" style={dim(0.3)}>Logbuch wird geladen…</div>
+        <div className="py-32 text-center text-[11px] font-black uppercase tracking-[0.3em] animate-pulse" style={dim(0.3)}>Logbuch wird initialisiert…</div>
       ) : error ? (
         <div className="py-32 text-center text-[11px] font-black uppercase tracking-[0.3em]" style={dim(0.4)}>Verlauf konnte nicht geladen werden</div>
       ) : book.exercises.length === 0 && book.dayRows.length === 0 ? (
