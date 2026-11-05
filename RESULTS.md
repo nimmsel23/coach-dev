@@ -1,3 +1,33 @@
+# 2026-11-05 — Lokales Planstudio: Modul-Workouts, Klienten-Link-Karte, grüner Browsertest
+
+Begleitarbeit zur Weiterentwicklung von plan-dev zur Trainingsplan-App: in coach-dev
+wurde die lokale Coach-Konsole (`LocalCoachApp`) angebunden, der Browsertest repariert
+und der `modules/plan`-Pointer mehrfach nachgezogen (Commits `bb38e6a`, `f07de83`,
+`1827a17`, `fd867c1`, `2656585` auf `dev`).
+
+-   **src/local/LocalCoachApp.jsx**: Nach „An Klienten senden" erscheint eine Karte mit
+    fertigem Nachrichtentext (App-URL vos-training.web.app, Tab Session), Kopieren-,
+    WhatsApp- und App-öffnen-Aktion. Außerdem werden die Modul-Vorlagen als
+    `templates`/`apiClient` an den `PlanEditor` übergeben („Modul anhängen").
+-   **coach_local_plans.py**: Neue lokale Endpunkte `GET /api/coach/local/modules` und
+    `/modules/{id}` liefern die 19 Modul-Workouts (6Pack-Tage, Calisthenics-Skills)
+    direkt aus dem Katalog über `runtime/module_templates.py` im plan-Klon, ohne Firestore.
+-   **scripts/tests/local-browser.mjs**: Neue Abnahme der Klienten-Link-Karte (Nachricht,
+    WhatsApp-Link, Handy-Layout, Schließen) und der Modul-Auswahl (`6Pack · Woche 1 · Tag 1`,
+    `Skill · Front Lever`, Anhängen an einen Wegwerf-Tag).
+-   **scripts/tests/local-browser.mjs / local-browser-backend.py**: `test:local:browser`
+    repariert (wieder grün). Ursachen lagen im Test, nicht in der App: Test-Backend startete
+    den Auto-Sync-Scheduler nicht (jetzt 2-s-Tick, isoliert) und suchte sein Frontend in
+    `/tmp/coach-local-build` (Default jetzt `dist-coach`); der Test klickte die noch
+    deaktivierte Auto-Sync-Checkbox; veraltete Erwartungen (Auto-Sync-Status serverseitig
+    statt `localStorage`, „Erfasste Sätze" statt „1 abgeschlossene Sätze").
+-   **modules/plan**: Pointer auf plan-dev `master` gehoben (Mikrozyklen/aktiver Plan,
+    kompakterer Editor mit dunklem Plan-Dokument, Suchfeld-Fix).
+-   **Deploy**: `pnpm run deploy:firebase` (vos-coach.web.app) wurde im Verlauf mehrfach
+    ausgeführt, `coach-api` einmal neu gestartet.
+
+---
+
 # 2026-11-05 — APK-Links im VitalOS Portal und lokales Hosting für `public-coach`
 
 Das Portal (`public-coach/portal.html`) wurde um Download-Links für Debug-APKs erweitert und der `coach-dev`-Server (`server.py`) so angepasst, dass er Inhalte aus `public-coach/` direkt ausliefert.
