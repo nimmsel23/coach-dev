@@ -1,20 +1,22 @@
 /**
  * Logbuch — Makro-Gegenstück zum Einzelsession-Tab (Training → Logbuch).
  *
- * Vier Linsen auf dieselben Daten:
+ * Fünf Linsen auf dieselben Daten:
  *  - Kodex    alle Übungen mit zuletzt / Gipfel / Abstand + Gipfel-Profil
  *  - Rekorde  Chronik aller Bestleistungen
  *  - Rhythmus Stempelkarte Übung × Woche
+ *  - Muskeln  Arbeitssätze je Muskel × Woche
  *  - Chronik  Wochen-Timeline (abgeleitet vom History-Tab, der unverändert bleibt)
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { Search, Mountain, Grid3x3, Trophy, CalendarRange, ChevronLeft } from 'lucide-react';
+import { Search, Mountain, Grid3x3, Trophy, CalendarRange, ChevronLeft, Activity } from 'lucide-react';
 import { useLogbook } from './useLogbook.js';
 import ExerciseCodex from './ExerciseCodex.jsx';
 import RecordChronicle from './RecordChronicle.jsx';
 import RhythmGrid from './RhythmGrid.jsx';
 import WeekChronik from './WeekChronik.jsx';
+import MuscleLoad from './MuscleLoad.jsx';
 import { fmtNum, addDays } from './logbookStats.js';
 import { IS_SOLO } from '../../constants/NavigationItems.js';
 
@@ -23,6 +25,7 @@ const LENSES = [
   { id: 'rekorde', label: 'Rekorde', Icon: Trophy },
   { id: 'rhythmus', label: 'Rhythmus', Icon: Grid3x3 },
   { id: 'chronik', label: 'Chronik', Icon: CalendarRange },
+  { id: 'muskeln', label: 'Muskeln', Icon: Activity },
 ];
 const STATUS_FILTERS = [
   ['alle', 'Alle'], ['gipfel', 'Am Gipfel'], ['nah', 'Nah dran'], ['tal', 'Im Tal'], ['schlaeft', 'Schläft'],
@@ -116,7 +119,7 @@ export default function Logbuch({ onOpenSession, onInspectExercise, onSubNav }) 
 
   useEffect(() => { if (expandedKey && !filtered.some((e) => e.key === expandedKey)) setExpandedKey(null); }, [filtered, expandedKey]);
 
-  const showFilters = lens === 'kodex' || lens === 'rhythmus';
+  const showFilters = lens === 'kodex' || lens === 'rhythmus' || lens === 'muskeln';
 
   return (
     <div className="px-3 pb-32 pt-3">
@@ -214,6 +217,7 @@ export default function Logbuch({ onOpenSession, onInspectExercise, onSubNav }) 
           )}
           {lens === 'rekorde' && <RecordChronicle records={book.records} onOpenSession={onOpenSession} onFocusExercise={focusExercise} />}
           {lens === 'rhythmus' && <RhythmGrid exercises={filtered} today={today} weekCount={weekCount} onFocusExercise={focusExercise} />}
+          {lens === 'muskeln' && <MuscleLoad exercises={filtered} today={today} weekCount={weekCount} />}
           {lens === 'chronik' && <WeekChronik dayRows={book.dayRows} today={today} onOpenSession={onOpenSession} />}
         </>
       )}

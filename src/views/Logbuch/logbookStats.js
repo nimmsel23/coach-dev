@@ -323,6 +323,33 @@ export function weeklyIntensity(exercise, weeks) {
   });
 }
 
+// ── Muskel-Volumen ─────────────────────────────────────────────────────────
+/**
+ * Arbeitssätze je Hauptmuskel und Woche (Aufwärmsätze zählen nicht, `entry.setCount`).
+ * Übungen ohne `primaryMuscles` laufen unter "Ohne Zuordnung".
+ * Ergebnis: [{ muscle, cells:[{week, sets}], total, last4 }] nach `total` absteigend.
+ */
+export const NO_MUSCLE = 'Ohne Zuordnung';
+export function muscleWeekly(exercises, weeks) {
+  const idx = new Map(weeks.map((w, i) => [w, i]));
+  const rows = new Map();
+  for (const ex of exercises) {
+    const muscles = ex.muscles?.length ? ex.muscles : [NO_MUSCLE];
+    for (const e of ex.entries) {
+      const i = idx.get(mondayOf(e.date));
+      if (i == null) continue;
+      for (const m of muscles) {
+        let r = rows.get(m);
+        if (!r) { r = { muscle: m, cells: weeks.map((w) => ({ week: w, sets: 0 })), total: 0, last4: 0 }; rows.set(m, r); }
+        r.cells[i].sets += e.setCount;
+        r.total += e.setCount;
+        if (i >= weeks.length - 4) r.last4 += e.setCount;
+      }
+    }
+  }
+  return [...rows.values()].sort((a, b) => b.total - a.total || a.muscle.localeCompare(b.muscle, 'de'));
+}
+
 // ── Formatierung ───────────────────────────────────────────────────────────
 export function fmtNum(v, digits = 1) {
   if (v == null || !Number.isFinite(v)) return '–';

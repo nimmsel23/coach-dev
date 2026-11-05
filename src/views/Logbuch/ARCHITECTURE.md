@@ -83,3 +83,11 @@ Umdatieren und Löschen bleiben dort; das Logbuch ist rein lesend und öffnet Se
   `getProgressTrend` (Geister-Sätze brauchen Warm-ups/Distanz/Dauer, Fenster nur 28–90 Tage) und
   Dashboard/Heute (lesen schon `analytics/dashboard`). Learn liest keine Sessions, nur
   `getLatestSession()` (1 Doc) und den KB-Katalog (`getAllExercises()`, siehe `src/CLAUDE.md`).
+
+## Update 2026-11-05 — fünfte Linse „Muskeln"
+
+`MuscleLoad.jsx` + `muscleWeekly()` (`logbookStats.js`): Arbeitssätze je Hauptmuskel × Woche
+(13/26/52 Wochen, gleiche Filter wie Rhythmus), rechts Summe der letzten 4 Wochen mit Ø pro Woche.
+Datenquelle ist `exercise.muscles` (aus `primaryMuscles`, steckt schon im Digest — kein Schema-Wechsel).
+Aufwärmsätze zählen nicht, Übungen ohne Muskel stehen unter „Ohne Zuordnung". Ein Satz zählt
+für jeden Hauptmuskel der Übung voll (keine Gewichtung nach Sekundärmuskeln).

@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  buildLogbook, sessionToDigest, weekWindow, weeklyIntensity, mondayOf, isoWeekNumber, fmtTop, fmtAgo,
+  buildLogbook, sessionToDigest, muscleWeekly, weekWindow, weeklyIntensity, mondayOf, isoWeekNumber, fmtTop, fmtAgo,
 } from './logbookStats.js';
 
 const bench = (date, sets, extra = {}) => ({
@@ -141,4 +141,17 @@ test('Digest trägt Dauer, Trainingsart, Finisher-Addons und Gate-Zeiten (Protok
   assert.equal(d.activityAddons[0].type, 'cycling');
   assert.deepEqual(d.sessionGate, { startedAt: 'a', endedAt: 'b' });
   assert.equal(d.notes, undefined);
+});
+
+test('Muskel-Volumen: Arbeitssätze je Muskel und Woche, Warm-ups zählen nicht', () => {
+  const book = buildLogbook([
+    bench('2026-09-08', [{ reps: '10', weight: '40', setType: 'warmup' }, { reps: '5', weight: '80' }, { reps: '5', weight: '80' }], { primaryMuscles: ['Brust'] }),
+    bench('2026-09-15', [{ reps: '5', weight: '82' }], { primaryMuscles: ['Brust'] }),
+  ], '2026-09-17');
+  const rows = muscleWeekly(book.exercises, weekWindow('2026-09-17', 4));
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].muscle, 'Brust');
+  assert.deepEqual(rows[0].cells.map((c) => c.sets), [0, 0, 2, 1]);
+  assert.equal(rows[0].total, 3);
+  assert.equal(rows[0].last4, 3);
 });
