@@ -517,6 +517,13 @@ pruefen.
 - `public-coach/6pack.html` ist ohne `/styles.css`, `/assets/fonts/*` und
   `6pack-app-debug.apk` ungestylt bzw. mit totem APK-Link (APK bewusst nicht
   committet, liegt ungestagt im Verzeichnis).
+- `public-coach/fitness-app-debug.apk` wurde vom Emulator gezogen (Paket
+  `at.vitalos.fitness`, debuggable, versionCode 1) und ist im Portal verlinkt,
+  aber untracked/uncommittet. Unklar, ob stattdessen `app.vitalos.fitnesscentre`
+  gemeint ist; der Portal-Link ("↓ Android-APK (Debug)" unter der Fitness-Karte)
+  wurde nicht im Browser/auf dem Handy geprüft. `server.py` liefert `public-coach/`
+  erst nach Neustart von `coach-api.service` aus; Commit und Deploy von
+  `server.py`/`portal.html`/APKs stehen aus.
 
 **Gemini-Review (potenzielle blinde Flecken, 2026-11-05):**
 *   Die `RESULTS.md`-Zusammenfassung beansprucht die "Hebung des plan-Submodules" und `public-coach`-Ergänzungen, obwohl das Transkript zeigt, dass diese Schritte durch ein Firebase-Login-Problem blockiert waren und erst durch manuelle Benutzereingabe *nach* Claudes letztem Zug behoben wurden.
@@ -527,3 +534,8 @@ pruefen.
 *   **Unberichteter Fehler:** Claude verschweigt den `Exit code 1` Fehler beim ersten Versuch, die Fitness-APK vom Emulator zu ziehen, und die notwendige Korrektur des `adb pull` Befehls.
 *   **Ungeprüfte Annahme:** Die visuelle Darstellung des neu hinzugefügten APK-Links im `portal.html` wurde nicht im Browser oder auf mobilen Geräten überprüft ("Ich habe das nicht im Browser angeschaut").
 *   **Ignorierte Warnung:** Die `StarletteDeprecationWarning` aus den Test-Outputs wurde nicht kommentiert oder adressiert.
+
+**Gemini-Review (potenzielle blinde Flecken, 2026-11-05):**
+*   **Ungeprüfte Live-Funktionalität und UI:** Die `fitness-app-debug.apk` und ihr Link im Portal wurden nicht auf dem laufenden `coach-api`-Server oder im Browser (insbesondere mobil) verifiziert, obwohl dies im Transkript explizit als offener Punkt genannt wurde.
+*   **Ungeklärte externe Ressourcen für `6pack.html`:** Die `6pack.html` referenziert CSS, Fonts und APKs, die laut Claude nicht in `public-coach` liegen. Es wird nicht berichtet, wie diese externen Ressourcen korrekt geladen werden oder ob dies überprüft wurde.
+*   **Unbestätigte APK-Auswahl:** Claude hat die `at.vitalos.fitness`-APK vom Emulator gezogen, obwohl auch `app.vitalos.fitnesscentre` vorhanden war, und die Wahl nicht explizit vom Nutzer bestätigen lassen.
