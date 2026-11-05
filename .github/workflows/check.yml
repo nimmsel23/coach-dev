@@ -75,7 +75,7 @@ jobs:
       # KB-Daten (generierte Dateien + Stempel). Der Stempel prüft den Inhalt der Eingaben,
       # ein veralteter Cache führt also nur zu einem Neubau, nie zu falschen Daten.
       - name: KB-Daten-Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             fitness-app/.cache/kb-data
