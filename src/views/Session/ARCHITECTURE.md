@@ -20,7 +20,7 @@ Workout-Journal für Kraft- und Ausdauertraining. Zwei Session-Modi, Multi-Sessi
 - **`MuscleMapModal.jsx`**: Anterior/Posterior BodyMap aller Session-Exercises + Anatomie-Detail.
 - **`SourceSettingsModal.jsx`**: Übungsquellen-Toggle (wger/yuhonas/coach) via localStorage.
 - **`SessionModeTabs.jsx`**: Kraft/Ausdauer setzen den Session-Modus. Skills und 6Pack öffnen eigene Apps: im VitalOS-Shell-Build lokale Shell-Routen, im Fitness-Standalone die Hosting-Sites.
-- **`SessionGateSheet.jsx` / `GatePortalGrid.jsx`** (2026-11-05): kein Auto-Open mehr beim Wechsel auf „Heute"; das Sheet öffnet über die Gate-Leiste (Grid-Button / Tap). Nach oben herausziehen (oder Chevron) = Hub-Modus: Vollbild mit großem Schnelleinstieg (Suche, Kürzel `/`, `1`–`9`, Zuletzt genutzt, Ziele über alle Tabs).
+- **`SessionGateSheet.jsx` / `GatePortalGrid.jsx`** (2026-11-05): kein Auto-Open mehr beim Wechsel auf „Heute"; das Sheet öffnet über die Gate-Leiste (Grid-Button / Tap). Nach oben herausziehen (oder Chevron) = Hub-Modus: Vollbild mit großem Schnelleinstieg (Suche, Kürzel `/`, `1`–`9`, Zuletzt genutzt, Ziele über alle Tabs). Das Gate fängt außerdem Kraft/Ausdauer und die Split-Chips (inkl. neu **Shoulders**, **Arms**) ab, bevor man in den Session-Tab geht; Autoerkennung (`utils.js::inferBlockFromExercises`) erkennt reine Schulter-/Arm-Tage über die Primärmuskeln.
 - **`SessionGateCard.jsx`**: enthält ebenfalls direkte Einstiege zu den eigenständigen Skills- und 6Pack-Apps; deren Inhalte werden nicht in der Fitness-Session gerendert.
 
 ## Session-Modi

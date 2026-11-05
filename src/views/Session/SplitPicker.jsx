@@ -8,7 +8,7 @@
  */
 
 import { useRef, useState } from 'react';
-import { ArrowUpCircle, ArrowDownCircle, Footprints, ChevronsUp, ChevronsDown, CircleDot } from 'lucide-react';
+import { ArrowUpCircle, ArrowDownCircle, Footprints, ChevronsUp, ChevronsDown, CircleDot, Triangle, Dumbbell } from 'lucide-react';
 import { blockColor } from './utils';
 
 // SPLITS ist NICHT die einzige Stelle mit Push/Pull/Legs-Vokabular im Repo —
@@ -30,6 +30,8 @@ const SPLITS = [
   { key: 'Upper', icon: ChevronsUp },
   { key: 'Lower', icon: ChevronsDown },
   { key: 'Full',  icon: CircleDot },
+  { key: 'Shoulders', icon: Triangle },
+  { key: 'Arms',  icon: Dumbbell },
 ];
 
 // Long-Press (≥ LONG_PRESS_MS halten, ohne zu verrutschen) öffnet über
@@ -70,7 +72,7 @@ export default function SplitPicker({ block, setBlock, onLongPress }) {
   };
 
   return (
-    <div className="grid grid-cols-6 gap-1.5">
+    <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
       {SPLITS.map(({ key, icon: Icon }) => {
         const isActive = block === key;
         const isHovered = hovered === key && !isActive;

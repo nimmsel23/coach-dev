@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Play, Square, Clock3, CheckCircle2, PencilLine } from 'lucide-react';
+import { Play, Square, Clock3, CheckCircle2, PencilLine, Dumbbell, Activity } from 'lucide-react';
 import {
   normalizeSessionGate,
   isSessionGateActive,
@@ -9,6 +9,7 @@ import { useGateElapsed } from './useGateElapsed.js';
 import { gateTone, GATE_STOP_STYLE } from './gateTone.js';
 import GateIdleSuggestion from './GateIdleSuggestion.jsx';
 import GatePortalGrid from './GatePortalGrid.jsx';
+import SplitPicker from './SplitPicker.jsx';
 import { countSessionProgress } from './SessionGateBar.jsx';
 
 // Ring füllt sich sichtbar über eine 90-Minuten-Referenzsession, läuft danach
@@ -57,7 +58,7 @@ function TodayCounters({ exercises }) {
   );
 }
 
-export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], hub = false, onSubNav, onLeave, onStart, onStop }) {
+export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], sessionMode = 'strength', setSessionMode, block = '', setBlock, hub = false, onSubNav, onLeave, onStart, onStop }) {
   const gate = normalizeSessionGate(sessionGate);
   const active = isSessionGateActive(gate);
   const completed = isSessionGateCompleted(gate);
@@ -188,6 +189,30 @@ export default function SessionGateCard({ date, sessionGate, currentSubTab = nul
           </div>
         </div>
       </div>
+
+      {setSessionMode && (
+        <div className="relative mt-5">
+          <div className="text-[10px] font-bold tracking-[0.15em] mb-2 font-mono" style={{ color: 'var(--dim)', opacity: 0.5 }}>TRAINING</div>
+          <div className="grid grid-cols-2 gap-2 mb-2">
+            {[['strength', 'Kraft', Dumbbell, 'var(--accent)'], ['cardio', 'Ausdauer', Activity, 'var(--orange)']].map(([key, label, Icon, color]) => {
+              const on = sessionMode === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => setSessionMode(key)}
+                  className="h-10 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all active:scale-95"
+                  style={{ background: on ? color : 'var(--bg2)', color: on ? '#000' : 'var(--dim)', border: `1px solid ${on ? color : 'transparent'}` }}
+                >
+                  <Icon size={14} /> {label}
+                </button>
+              );
+            })}
+          </div>
+          {sessionMode === 'strength' && setBlock && <SplitPicker block={block} setBlock={setBlock} />}
+        </div>
+      )}
 
       {(active || completed) && <TodayCounters exercises={exercises} />}
 

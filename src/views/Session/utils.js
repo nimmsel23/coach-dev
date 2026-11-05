@@ -1,6 +1,7 @@
 export const BLOCK_COLORS = {
   push: "#f472b6", pull: "#34d399", legs: "#fb923c",
   upper: "#38bdf8", lower: "#a78bfa", full: "#fbbf24",
+  shoulders: "#2dd4bf", arms: "#e879f9",
   hiking: "#48c87a", running: "#e05060", cycling: "#38bdf8", swimming: "#5294e2"
 };
 
@@ -44,8 +45,24 @@ function classifyMuscle(name) {
  * eingetragenen Übungen einer Session ab — greift nur, solange der User
  * selbst noch keinen Split gewählt hat (block === '').
  */
+// Reine Schulter- bzw. Arm-Tage (Bi/Tri) erkennt die Autoerkennung nur über die
+// PRIMÄR-Muskeln — als Sekundärmuskeln tauchen Schulter/Trizeps in fast jeder
+// Druckübung auf und würden sonst jeden Push-Tag zu "Shoulders"/"Arms" machen.
+const SHOULDER_MUSCLES = ['shoulder', 'delt'];
+const ARM_MUSCLES = ['bicep', 'tricep', 'forearm'];
+
+function inferIsolationBlock(list) {
+  const primaries = list.flatMap((ex) => ex.primaryMuscles || []).map((m) => String(m || '').toLowerCase());
+  if (!primaries.length) return null;
+  if (primaries.every((m) => SHOULDER_MUSCLES.some((k) => m.includes(k)))) return 'Shoulders';
+  if (primaries.every((m) => ARM_MUSCLES.some((k) => m.includes(k)))) return 'Arms';
+  return null;
+}
+
 export function inferBlockFromExercises(exercises) {
   const list = Array.isArray(exercises) ? exercises : [];
+  const isolation = inferIsolationBlock(list);
+  if (isolation) return isolation;
   let hasPush = false, hasPull = false, hasLegs = false;
   for (const ex of list) {
     const muscles = [...(ex.primaryMuscles || []), ...(ex.secondaryMuscles || [])];

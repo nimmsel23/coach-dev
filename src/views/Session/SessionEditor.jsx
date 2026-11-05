@@ -330,6 +330,8 @@ export default function SessionEditor({
         sessionGate={sessionGate}
         currentSubTab={currentSubTab}
         exercises={exercises}
+        sessionMode={sessionMode} setSessionMode={setSessionMode}
+        block={block} setBlock={v => { setBlock(v); scheduleAutoSave(); }}
         onSubNav={onSubNav}
         onStartGate={() => { startSessionGate(); setActiveModal(null); }}
         onStopGate={stopSessionGate}
