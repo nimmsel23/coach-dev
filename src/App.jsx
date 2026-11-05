@@ -228,7 +228,9 @@ export default function App() {
   const inboxUnread = useCoachUnread();
   const navItems = getNavItems({ focusReady, devBypass: devBypassFlow });
   const resolveFlowTab = (id) => {
-    if (devBypassFlow) return id;
+    // Solo-Builds (vos-fokus, vos-anamnese) enthalten nur ihren einen Tab; die Weiterleitung Anamnese↔Fokus
+    // würde dort auf einen ausgestubbten View zeigen → leere Seite.
+    if (devBypassFlow || IS_SOLO) return id;
     if (id === 'anamnese' && focusReady) return 'focus';
     if (id === 'focus' && !focusReady) return 'anamnese';
     return id;
