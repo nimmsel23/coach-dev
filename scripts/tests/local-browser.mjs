@@ -111,6 +111,14 @@ try {
   await click('Schließen');
   await click('An Klienten senden');
   await wait(has('Plan an die Klienten-App übergeben'));
+  await wait(has('jetzt Bescheid geben'));
+  const share = await evaluate(`(()=>{const card=document.querySelector('[aria-label="Klienten benachrichtigen"]');return {text:card.innerText,wa:[...card.querySelectorAll('a')].map((a)=>a.href)}})()`);
+  assert.match(share.text, /vos-training\.web\.app/, 'Klienten-Nachricht nennt die App');
+  assert.match(share.text, /Session/, 'Klienten-Nachricht nennt den Session-Tab');
+  assert.ok(share.wa.some((href) => href.startsWith('https://wa.me/?text=')), 'WhatsApp-Link vorhanden');
+  assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth'), true, 'Link-Karte sprengt das Handy-Layout nicht');
+  await click('Schließen');
+  await wait(`!document.querySelector('[aria-label="Klienten benachrichtigen"]')`);
   const plan = await evaluate(`(async()=>{const data=await(await fetch('/api/client/fixture-client/plans?_fixture='+Date.now())).json();return data.plans[0]})()`);
   const autoSyncStorageKey = `coach.taskwarrior.auto.v1:fixture-client:${plan.id}`;
   await evaluate(`fetch('/fixture/workout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({planId:'local-'+${JSON.stringify(plan.id)},routineId:${JSON.stringify(plan.published.routines[0].id)}})}).then((response)=>response.json())`);
