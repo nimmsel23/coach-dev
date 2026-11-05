@@ -1,10 +1,12 @@
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
+const functions = require("firebase-functions/v1");
+const { initializeApp } = require("firebase-admin/app");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
+const { getMessaging } = require("firebase-admin/messaging");
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 
-admin.initializeApp();
+initializeApp();
 
 const TIME_ZONE = "Europe/Berlin";
 const REMINDER_WINDOW_MINUTES = 5;
@@ -199,7 +201,7 @@ async function sendReminder(uid, tokens, title, body, link) {
       },
       tokens,
     };
-    const response = await admin.messaging().sendEachForMulticast(message);
+    const response = await getMessaging().sendEachForMulticast(message);
     return {
       sentCount: response.successCount,
       failureCount: response.failureCount,
@@ -216,7 +218,7 @@ exports.scheduledPushReminders = functions
   .timeZone(TIME_ZONE)
   .onRun(async () => {
     const { date, minutes } = getLocalDateParts();
-    const db = admin.firestore();
+    const db = getFirestore();
     let sentCount = 0;
     let failureCount = 0;
 
@@ -293,7 +295,7 @@ exports.scheduledPushReminders = functions
           if ((result.sentCount || 0) > 0 && notification._sessionRef) {
             await notification._sessionRef.set({
               sessionGate: {
-                reminderSentAt: admin.firestore.FieldValue.serverTimestamp(),
+                reminderSentAt: FieldValue.serverTimestamp(),
               },
             }, { merge: true });
           }
@@ -320,7 +322,7 @@ exports.onCoachFeedback = functions
       return null;
     }
 
-    const db = admin.firestore();
+    const db = getFirestore();
     const pushDoc = await db.collection("fitness").doc(uid).collection("settings").doc("push").get();
     const pushData = pushDoc.data() || {};
 
