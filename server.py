@@ -308,6 +308,16 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def catalog_ui(path: str):
         return frontend(catalog, path)
 
+    public_coach = ROOT / "public-coach"
+
+    def public_or_catalog(relative: str):
+        # public-coach (portal.html, 6pack.html, APKs, Icons) hat Vorrang, wie beim Firebase-Hosting.
+        base = public_coach.resolve()
+        candidate = (base / relative).resolve()
+        if candidate.is_relative_to(base) and candidate.is_file():
+            return FileResponse(candidate, headers={"Cache-Control": "no-cache"})
+        return frontend(catalog, relative)
+
     # Register after reserved routes; never turn unknown slugs into catalog HTML.
     @app.api_route("/k/{client_id}", methods=["GET", "HEAD"])
     @app.api_route("/k/{client_id}/", methods=["GET", "HEAD"])
@@ -316,7 +326,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def client_entry(client_id: str, request: Request):
         # Asset names belong to the static server, not to client identity lookup.
         if "." in client_id:
-            return frontend(catalog, client_id)
+            return public_or_catalog(client_id)
         from coach_local_plans import local_only, clients_root, plans_module
         local_only(request)
         try:
@@ -331,7 +341,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     @app.api_route("/{path:path}", methods=["GET", "HEAD"])
     async def index(path: str):
-        return frontend(catalog, path)
+        return public_or_catalog(path)
 
     return app
 
