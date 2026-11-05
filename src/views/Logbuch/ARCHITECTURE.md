@@ -91,3 +91,13 @@ Umdatieren und Löschen bleiben dort; das Logbuch ist rein lesend und öffnet Se
 Datenquelle ist `exercise.muscles` (aus `primaryMuscles`, steckt schon im Digest — kein Schema-Wechsel).
 Aufwärmsätze zählen nicht, Übungen ohne Muskel stehen unter „Ohne Zuordnung". Ein Satz zählt
 für jeden Hauptmuskel der Übung voll (keine Gewichtung nach Sekundärmuskeln).
+
+## Update 2026-11-05 — Digest-Abweichungen abfangen
+
+Sessions, die außerhalb der App geändert oder gelöscht werden (Skripte wie `mirror_session()`, Konsole),
+kennt der Digest nicht. Dagegen:
+- **Knopf „Logbuch neu aufbauen"** (Kreispfeil im Logbuch-Kopf, `refreshLogbookDigest()`): baut den Digest
+  aus den Sessions neu und lädt danach neu. Lokal ein No-op.
+- **Monatlicher Auto-Neuaufbau**: ist `_meta.builtAtMs` älter als 30 Tage, startet `getDigestSessions()`
+  den Neuaufbau im Hintergrund (single-flight, die Anzeige nutzt solange den vorhandenen Digest).
+- `rebuildLogbookDigest()` löscht jetzt auch Monats-Docs, zu denen keine Session mehr existiert.

@@ -10,7 +10,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { Search, Mountain, Grid3x3, Trophy, CalendarRange, ChevronLeft, Activity } from 'lucide-react';
+import { Search, Mountain, Grid3x3, Trophy, CalendarRange, ChevronLeft, Activity, RefreshCw } from 'lucide-react';
 import { useLogbook } from './useLogbook.js';
 import ExerciseCodex from './ExerciseCodex.jsx';
 import RecordChronicle from './RecordChronicle.jsx';
@@ -62,7 +62,7 @@ function Kpi({ label, value, sub }) {
 }
 
 export default function Logbuch({ onOpenSession, onInspectExercise, onSubNav }) {
-  const { loading, error, book, today } = useLogbook();
+  const { loading, error, book, today, rebuild, rebuilding } = useLogbook();
   const [lens, setLensState] = useState(readLens);
   const [query, setQuery] = useState('');
   const [block, setBlock] = useState('alle');
@@ -129,7 +129,14 @@ export default function Logbuch({ onOpenSession, onInspectExercise, onSubNav }) 
         </button>
       )}
 
-      <header className="mb-3">
+      <header className="mb-3 relative">
+        <button
+          onClick={rebuild} disabled={rebuilding || loading}
+          className="absolute right-0 top-0 p-1.5 rounded-xl disabled:opacity-40" style={{ color: 'var(--dim)' }}
+          title="Logbuch neu aufbauen (wenn Sessions außerhalb der App geändert oder gelöscht wurden)" aria-label="Logbuch neu aufbauen"
+        >
+          <RefreshCw size={13} className={rebuilding ? 'animate-spin' : ''} />
+        </button>
         <h2 className="text-[11px] font-black uppercase tracking-[0.3em]" style={dim(0.6)}>Logbuch</h2>
         <p className="text-[10px] font-bold" style={dim(0.45)}>
           {book.firstDate ? `Alles seit ${new Date(`${book.firstDate}T12:00:00`).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' })}` : 'Noch keine Einträge'}

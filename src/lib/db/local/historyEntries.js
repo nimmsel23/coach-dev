@@ -23,3 +23,6 @@ export async function getDigestSessions({ sinceDate = null } = {}) {
   const list = await getSessionHistory(2000);
   return sinceDate ? (Array.isArray(list) ? list : []).filter((s) => s?.date && s.date >= sinceDate) : list;
 }
+
+// Lokal gibt es keinen Digest — Neuaufbau ist ein No-op (gleiche Form wie firestore/workoutIndex.js).
+export async function refreshLogbookDigest() { return { months: 0, sessions: 0 }; }

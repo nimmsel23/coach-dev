@@ -51,6 +51,7 @@ const metaRef = () => doc(db, "fitness", getUid(), "workoutIndex", "_meta");
 const digestCol = () => collection(db, "fitness", getUid(), "logbookDigest");
 const digestMetaRef = () => doc(db, "fitness", getUid(), "logbookDigest", "_meta");
 const LOGBOOK_FALLBACK_DAYS = 2000;
+const LOGBOOK_REFRESH_MS = 30 * 24 * 3600 * 1000;
 
 function dateOfDoc(id, data) {
   return data?.date || String(id).split("__")[0];
@@ -182,6 +183,11 @@ export async function getHistoryEntries({ months = 6 } = {}) {
     return { entries, hasMore: snap.size >= LEGACY_LIMIT };
   }
 
+  // Sicherheitsnetz gegen Abweichungen durch Änderungen außerhalb der App: höchstens monatlich neu bauen.
+  if (Date.now() - Number(metaSnap.data()?.builtAtMs || 0) > LOGBOOK_REFRESH_MS) {
+    ensureLogbookDigest().catch((err) => console.warn("[logbookDigest] Auffrischen fehlgeschlagen", err));
+  }
+
   try { await compactWorkoutIndex(); } catch (err) { console.warn("[workoutIndex] Verdichtung fehlgeschlagen", err); }
 
   const cutoff = indexCutoffDate();
@@ -228,6 +234,14 @@ export async function rebuildLogbookDigest() {
     byMonth.get(month)[d.id] = digest;
   });
   const months = [...byMonth.entries()];
+  // Monats-Docs ohne verbliebene Sessions (z.B. außerhalb der App gelöscht) entfernen.
+  const existing = await getDocs(digestCol());
+  const stale = existing.docs.filter((d) => d.id !== "_meta" && !byMonth.has(d.id));
+  for (let i = 0; i < stale.length; i += 400) {
+    const batch = writeBatch(db);
+    stale.slice(i, i + 400).forEach((d) => batch.delete(d.ref));
+    await batch.commit();
+  }
   for (let i = 0; i < months.length; i += 400) {
     const batch = writeBatch(db);
     months.slice(i, i + 400).forEach(([month, docs]) => {
@@ -243,6 +257,11 @@ let rebuildInflight = null;
 function ensureLogbookDigest() {
   if (!rebuildInflight) rebuildInflight = rebuildLogbookDigest().finally(() => { rebuildInflight = null; });
   return rebuildInflight;
+}
+
+/** Manueller Neuaufbau (Logbuch-Knopf); teilt sich den Lauf mit dem automatischen Aufbau. */
+export function refreshLogbookDigest() {
+  return ensureLogbookDigest();
 }
 
 /**

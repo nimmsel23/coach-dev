@@ -6,14 +6,26 @@
  * jeder einzelnen Session; lokal bleibt es getSessionHistory(2000).
  */
 
-import { useEffect, useMemo, useState } from 'react';
-import { getLogbookSessions } from '@db';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getLogbookSessions, refreshLogbookDigest } from '@db';
 import { localToday } from '@utils';
 import { mergeSessionRuntimeDraftsIntoHistory } from '../../lib/sessionRuntimeStore.js';
 import { buildLogbook } from './logbookStats.js';
 
 export function useLogbook() {
   const [state, setState] = useState({ loading: true, error: false, sessions: [] });
+
+  const [reloadTick, setReloadTick] = useState(0);
+  const [rebuilding, setRebuilding] = useState(false);
+
+  /** Digest aus den Sessions neu bauen (fängt Änderungen außerhalb der App ab), dann neu laden. */
+  const rebuild = useCallback(async () => {
+    setRebuilding(true);
+    try { await refreshLogbookDigest(); } catch (err) { console.warn('[logbuch] Neuaufbau fehlgeschlagen', err); }
+    setRebuilding(false);
+    setState((st) => ({ ...st, loading: true }));
+    setReloadTick((n) => n + 1);
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -25,9 +37,9 @@ export function useLogbook() {
       })
       .catch(() => { if (alive) setState({ loading: false, error: true, sessions: [] }); });
     return () => { alive = false; };
-  }, []);
+  }, [reloadTick]);
 
   const today = localToday();
   const book = useMemo(() => buildLogbook(state.sessions, today), [state.sessions, today]);
-  return { loading: state.loading, error: state.error, book, today };
+  return { loading: state.loading, error: state.error, book, today, rebuild, rebuilding };
 }
