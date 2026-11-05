@@ -1,7 +1,0 @@
-node_modules/
-dist/
-dist-*/
-.firebase/
-*.generated.js
-src/lib/api/openapi.json
-.vite/

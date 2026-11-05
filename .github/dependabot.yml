@@ -28,8 +28,6 @@ updates:
   directories:
   - /
   - /catalog-ui
-  - /frontend
-  - /frontend/catalog-ui
   - /functions
   target-branch: dev
   cooldown:
