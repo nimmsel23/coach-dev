@@ -1,4 +1,6 @@
 import { sharedPlanRoot } from './scripts/shared-plan.mjs'
+import { sharedFitnessRoot } from './scripts/shared-fitness-root.mjs'
+import { fitnessOverlay } from './modules/plan/vite-fitness-overlay.mjs'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
@@ -15,7 +17,7 @@ export default defineConfig(async ({ mode }) => {
     // Präfix (z.B. /coach-dev/) fälschlich zur Domain-Wurzel auf (404 →
     // Whitescreen). Core4/Door/Game/Fuel haben denselben Fix schon.
     base: './',
-    plugins: [react()],
+    plugins: [fitnessOverlay({ planRoot: sharedPlanRoot(), fitnessRoot: sharedFitnessRoot() }), react()],
     resolve: {
       // Resolve pnpm packages from their real directory so transitive Vue imports work.
       preserveSymlinks: false,
@@ -40,6 +42,7 @@ export default defineConfig(async ({ mode }) => {
     },
     server: {
       port: 5902,
+      fs: { allow: [__dirname, sharedFitnessRoot()] },
       watch: {
         ignored: [
           '**/dist/**',

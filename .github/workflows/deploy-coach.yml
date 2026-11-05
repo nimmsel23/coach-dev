@@ -53,6 +53,23 @@ jobs:
       - name: Initialize pinned Plan source
         run: git submodule update --init modules/plan
 
+      # plan-dev hält nur noch das Plan-Eigene; Gemeinsames kommt per Overlay aus fitness-dev
+      # (modules/plan/vite-fitness-overlay.mjs). Stand: modules/plan/fitness.ref (Branch oder SHA).
+      - name: fitness-dev-Stand lesen
+        id: fitref
+        run: echo "ref=$(tr -d '[:space:]' < modules/plan/fitness.ref)" >> "$GITHUB_OUTPUT"
+
+      - name: fitness-dev auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: nimmsel23/fitness-dev
+          ref: ${{ steps.fitref.outputs.ref }}
+          path: .fitness-dev
+          token: ${{ secrets.GH_SUBMODULE_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: FITNESS_ROOT setzen
+        run: echo "FITNESS_ROOT=$GITHUB_WORKSPACE/.fitness-dev" >> "$GITHUB_ENV"
+
       - uses: pnpm/action-setup@v4
         with:
           version: 11.3.0

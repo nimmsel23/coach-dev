@@ -16,7 +16,10 @@ Plan owns training-plan/program authoring, workout-template editors and plan
 versioning/assignment code. Coach consumes the pinned `modules/plan` Git submodule; do not
 maintain a second editor or use an unpinned sibling checkout. Change Plan at
 `~/plan-dev`, commit, verify, then deliberately advance Coach's pointer. Publish
-Plan before pushing a Coach commit referencing it. Coach retains access control,
+Plan before pushing a Coach commit referencing it. Since 2026-11-05 `modules/plan` holds
+only Plan-specific files; everything shared comes from `fitness-dev/src` via
+`modules/plan/vite-fitness-overlay.mjs` (path: `FITNESS_ROOT`, else sibling `../fitness-dev` or
+`../fitness-app`; CI checks it out per `modules/plan/fitness.ref`). Coach retains access control,
 client selection, navigation and Hosting ownership.
 
 ## Local planning
