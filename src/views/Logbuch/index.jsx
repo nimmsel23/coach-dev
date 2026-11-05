@@ -9,7 +9,7 @@
  *  - Chronik  Wochen-Timeline (abgeleitet vom History-Tab, der unverändert bleibt)
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Search, Mountain, Grid3x3, Trophy, CalendarRange, ChevronLeft, Activity, RefreshCw } from 'lucide-react';
 import { useLogbook } from './useLogbook.js';
 import ExerciseCodex from './ExerciseCodex.jsx';
@@ -18,6 +18,7 @@ import RhythmGrid from './RhythmGrid.jsx';
 import WeekChronik from './WeekChronik.jsx';
 import MuscleLoad from './MuscleLoad.jsx';
 import { fmtNum, addDays } from './logbookStats.js';
+import { parseLogbuchHash, logbuchHash } from './logbuchRoute.js';
 import { IS_SOLO } from '../../constants/NavigationItems.js';
 
 const LENSES = [
@@ -45,6 +46,8 @@ const chip = (active) => ({
 });
 
 function readLens() {
+  const fromUrl = parseLogbuchHash(window.location.hash).lens;
+  if (fromUrl) return fromUrl;
   try {
     const v = localStorage.getItem(LS_LENS);
     return LENSES.some((l) => l.id === v) ? v : 'kodex';
@@ -70,7 +73,7 @@ export default function Logbuch({ onOpenSession, onInspectExercise, onSubNav }) 
   const [sort, setSort] = useState('zuletzt');
   const [range, setRange] = useState('alles');
   const [weekCount, setWeekCount] = useState(26);
-  const [expandedKey, setExpandedKey] = useState(null);
+  const [expandedKey, setExpandedKey] = useState(() => parseLogbuchHash(window.location.hash).ex);
 
   const setLens = (id) => {
     setLensState(id);
@@ -117,7 +120,32 @@ export default function Logbuch({ onOpenSession, onInspectExercise, onSubNav }) 
     setTimeout(() => document.getElementById(`codex-${key}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 60);
   };
 
-  useEffect(() => { if (expandedKey && !filtered.some((e) => e.key === expandedKey)) setExpandedKey(null); }, [filtered, expandedKey]);
+  useEffect(() => { if (!loading && expandedKey && !filtered.some((e) => e.key === expandedKey)) setExpandedKey(null); }, [filtered, expandedKey, loading]);
+
+  // Deep-Link: Linse und aufgeklappte Übung in der URL spiegeln (ersetzt, kein Verlaufseintrag)…
+  useEffect(() => {
+    const target = logbuchHash(lens, expandedKey);
+    if (window.location.hash.startsWith('#session/logbuch') && window.location.hash !== target) history.replaceState(null, '', target);
+  }, [lens, expandedKey]);
+
+  // …und umgekehrt: ein Link auf dieselbe Seite (z. B. aus einer Meldung) wechselt die Linse.
+  useEffect(() => {
+    const onHash = () => {
+      const { lens: l, ex } = parseLogbuchHash(window.location.hash);
+      if (l) setLensState(l);
+      if (l === 'kodex') setExpandedKey(ex);
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  // Beim ersten Laden zur verlinkten Übung scrollen.
+  const scrolledToLink = useRef(false);
+  useEffect(() => {
+    if (loading || scrolledToLink.current || !expandedKey) return;
+    scrolledToLink.current = true;
+    setTimeout(() => document.getElementById(`codex-${expandedKey}`)?.scrollIntoView({ block: 'center' }), 80);
+  }, [loading, expandedKey]);
 
   const showFilters = lens === 'kodex' || lens === 'rhythmus' || lens === 'muskeln';
 

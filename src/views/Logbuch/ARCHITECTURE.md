@@ -101,3 +101,11 @@ kennt der Digest nicht. Dagegen:
 - **Monatlicher Auto-Neuaufbau**: ist `_meta.builtAtMs` älter als 30 Tage, startet `getDigestSessions()`
   den Neuaufbau im Hintergrund (single-flight, die Anzeige nutzt solange den vorhandenen Digest).
 - `rebuildLogbookDigest()` löscht jetzt auch Monats-Docs, zu denen keine Session mehr existiert.
+
+## Update 2026-11-05 — Deep-Links
+
+`#session/logbuch/<linse>` (`kodex|rekorde|rhythmus|muskeln|chronik`), im Kodex zusätzlich
+`?ex=<Übungs-Key>` (klappt die Übung auf und scrollt hin, z. B. `#session/logbuch/kodex?ex=id%3Abench`).
+`logbuchRoute.js` parst/baut den Hash; die URL ist die einzige Quelle: `App.jsx` (`buildHashRoute`)
+lässt Linse/Übung beim Neuschreiben stehen, das Logbuch spiegelt jeden Wechsel per `replaceState`
+zurück und reagiert auf `hashchange`. Ohne Linse im Link gilt weiter die zuletzt gewählte (localStorage).

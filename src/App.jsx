@@ -36,6 +36,7 @@ import { useSwipeNavigation } from './hooks/useSwipeNavigation'
 import { getStaticMuscleTaxonomy } from './lib/kb/muscles.js'
 import { recordFitnessUsage } from './lib/traction.js'
 
+import { parseLogbuchHash, logbuchHash } from './views/Logbuch/logbuchRoute.js'
 const SESSION_SUB_TABS = new Set(['today', 'timer', 'skills', 'plan', 'logbuch'])
 const REVIEW_SUB_TABS = new Set(['report', 'muscles', 'readiness', 'protokoll'])
 // History/Verlauf sind im Logbuch aufgegangen; alte Links (#session/history, #review/verlauf) landen dort.
@@ -175,7 +176,11 @@ function buildHashRoute({ tab, subTab, sessionDate, focusLayer, planView, planId
   const params = new URLSearchParams()
 
   if (tab === 'session') {
-    if (SESSION_SUB_TABS.has(subTab) && subTab !== 'today') {
+    if (subTab === 'logbuch') {
+      // Linse/Übung stehen nur in der URL (Logbuch schreibt sie selbst) — hier erhalten.
+      const lb = parseLogbuchHash(window.location.hash)
+      return logbuchHash(lb.lens, lb.ex)
+    } else if (SESSION_SUB_TABS.has(subTab) && subTab !== 'today') {
       segments.push(subTab)
     } else if (sessionDate) {
       segments.push(sessionDate)
