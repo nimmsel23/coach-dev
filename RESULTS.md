@@ -1,3 +1,18 @@
+# Fitness-Dev: Logbuch-Digests statt Voll-Read, Linse „Muskeln", Deep-Links, FF-Automatik (2026-11-05)
+
+Ausgangspunkt war der Wunsch, dass Logbuch und Review nicht bei jedem Öffnen alle Sessions aus Firestore lesen und neu summieren. Umgesetzt wurde ein monatliches Digest-Rollup (`fitness/{uid}/logbookDigest/{YYYY-MM}`), auf das die Abnehmer umgestellt wurden; danach kamen die Linse „Muskeln", ein Digest-Neuaufbau und Deep-Links dazu. Alles liegt auf `dev`, ist per `vos-release-pr fitness` (u. a. PR #42) nach `master` und per `fitness-release` nach `vitalos` ausgeliefert. Geprüft wurden ESLint, die Logbuch-Tests und `vite build --mode firebase`; gegen echte Firestore-Daten und im Browser wurde nichts getestet.
+
+- **`src/lib/db/firestore/workoutIndex.js`, `src/lib/db/local/historyEntries.js`** (`856308c`): Digest-Pflege im selben Pfad wie der `workoutIndex` (Speichern, Löschen, Verdichtung, Nachzügler); `getLogbookSessions()` liest Monats-Digests plus die letzten 7 Tage live (≈ 1 Read pro Monat statt pro Session). Schema 2 trägt zusätzlich Dauer, Trainingsart, Aufwand u. Ä. Neu: `rebuildLogbookDigest()` (räumt auch Monats-Docs ohne Session auf), automatischer Hintergrund-Neuaufbau bei Digest-Alter > 30 Tage in `getDigestSessions()`, Export in beiden DB-Barrels.
+- **`src/views/Logbuch/logbookStats.js`, `useLogbook.js`** (+ Test `logbookStats.test.mjs`): `buildLogbook` arbeitet auf Digest-Zeilen; Test „Digest liefert dasselbe Ergebnis wie volle Sessions". Ladetext „Logbuch wird initialisiert…" beim ersten Aufbau (`d9db218`).
+- **`src/lib/db/firestore/sessions.js`, `analysis.js`, `tours.js`, `src/views/WeeklyReview/TrainingProtocol.jsx`** (`43a6895`, `7de0f49`): Weitere Abnehmer umgestellt: Trainingsprotokoll und Touren lesen Digests statt 2000/365 Tage Sessions; Wochenbericht gruppiert Sessions je Tag aus dem geladenen Verlauf statt 7 Einzelqueries; Session-Cache wird bei Schreibvorgängen invalidiert.
+- **`src/views/Logbuch/MuscleLoad.jsx`** (neu, `9f394ba`): Fünfte Linse „Muskeln" — Arbeitssätze je Hauptmuskel × Woche (13/26/52 Wochen), Summe/Schnitt der letzten 4 Wochen, Aufwärmsätze zählen nicht, „Ohne Zuordnung" für Übungen ohne Muskel; Auswertungsfunktion samt Test in `logbookStats.js`.
+- **`src/views/Logbuch/index.jsx`** (`2227b8e`): Knopf „Logbuch neu aufbauen" im Kopf (im lokalen Modus ohne Wirkung).
+- **`src/views/Logbuch/logbuchRoute.js`** (neu, + Test, `0330932`), **`src/App.jsx`**: Deep-Links `#session/logbuch/<linse>` (`kodex|rekorde|rhythmus|muskeln|chronik`) und `?ex=<Übungs-Key>` im Kodex; das Logbuch schreibt Wechsel ohne neuen Verlaufseintrag in die URL zurück; `buildHashRoute` überschreibt Linse/Übung nicht mehr.
+- **`.github/workflows/deploy-master.yml`** (`5e7f5ff`): Letzter Schritt spult `vitalos` nach erfolgreichem Live-Deploy per Push ohne Force auf `master` vor, wenn `vitalos` in `master` enthalten ist; sonst nur Warnung; `continue-on-error`.
+- **`src/views/Logbuch/ARCHITECTURE.md`**: Digest-Modell, weitere Abnehmer, Linse „Muskeln", Digest-Abweichungen und Deep-Links dokumentiert.
+
+---
+
 # Fitness-Dev: Setup-Tab mit Prop `hideAppearance` für den Pulse-Wrapper (2026-11-05)
 
 Der Setup-Tab kann die Themes-Auswahl jetzt ausblenden, weil `vos-fitness` (Pulse) ein festes Design hat. Anlass war die Prüfung des Pulse-Setups: Dort scheiterte „Push aktivieren“ mit „messaging-sw.js load failed“, weil im Wrapper-Build `fitness-messaging-sw.js` fehlte (Fix im Meta-Repo `~/vitalos`, nicht hier). Die Prop ist über `vos-ship fitness --yes` (dev → master → vitalos) ausgeliefert; ob „Erscheinungsbild“ im Live-Setup tatsächlich verschwunden ist, wurde nicht auf der Live-Seite geprüft.
