@@ -1,3 +1,9 @@
+# 2026-11-05 — APK-Links im VitalOS Portal und lokales Hosting für `public-coach`
+
+Das Portal (`public-coach/portal.html`) wurde um Download-Links für Debug-APKs erweitert und der `coach-dev`-Server (`server.py`) so angepasst, dass er Inhalte aus `public-coach/` direkt ausliefert.
+
+-   **`server.py`**: Die neue Funktion `public_or_catalog` wurde implementiert, um statische Dateien aus `public-coach/` (wie HTML-Seiten und APKs) mit Vorrang vor dem Catalog-UI zu servieren. Die Routen für Client-IDs (`/{client_id}`) und
+
 # 2026-11-05 — plan-Submodule auf Drills 1–8 gehoben, public-coach um 6pack/portal ergänzt
 
 Die Weiterentwicklung der Trainingsplan-App passierte in `plan-dev`; hier in
