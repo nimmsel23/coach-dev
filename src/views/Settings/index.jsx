@@ -14,7 +14,8 @@ import { useUser } from "../../contexts/UserContext";
 import { useSettings } from "../../contexts/SettingsContext";
 import { THEMES } from "../../constants/Themes";
 
-export default function Settings() {
+// hideAppearance: Themes-Auswahl ausblenden (vos-fitness/Pulse hat ein festes eigenes Design).
+export default function Settings({ hideAppearance = false } = {}) {
   const { user, gender, setGender, split, setSplit, cycleLength, setCycleLength, defaultLocation, setDefaultLocation } = useUser();
   const {
     layoutScale, setLayoutScale,
@@ -125,12 +126,14 @@ export default function Settings() {
       <ProfileSection />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <AppearanceSection
-          themeMode={themeMode} setModeState={setModeState}
-          circLight={circLight} setCircLight={setCircLight}
-          circDark={circDark} setCircDark={setCircDark}
-          themes={THEMES} theme={theme} setThemeState={setThemeState}
-        />
+        {!hideAppearance && (
+          <AppearanceSection
+            themeMode={themeMode} setModeState={setModeState}
+            circLight={circLight} setCircLight={setCircLight}
+            circDark={circDark} setCircDark={setCircDark}
+            themes={THEMES} theme={theme} setThemeState={setThemeState}
+          />
+        )}
         <TrainingSection
           split={split} setSplit={setSplit}
           gender={gender} setGender={setGender}
