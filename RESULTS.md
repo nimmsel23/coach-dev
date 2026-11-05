@@ -1,3 +1,9 @@
+# Fitness-Dev: Mini-Apps als Unterpfade, eigener Cache-Präfix und Master-Deploy (2026-11-05)
+
+Die `fitness-dev`-App wurde um die Möglichkeit erweitert, Mini-Apps als Unterpfade unter einer gemeinsamen Origin (`fitness-aos.web.app/<id>/`) zu hosten. Ein neuer Build-Workflow und Skripte wurden implementiert, um dies zu unterstützen, inklusive eines eigenen Cache-Präfixes für jede Unterpfad-App, um Cache-Kollisionen zu vermeiden. Diese Änderungen wurden in `fitness-dev` committed und der `dev`-Branch erfolgreich gepusht.
+
+-   **`7dbb987` feat(origin) Commit
+
 # Fitness-Dev: Mini-Apps als Unterpfade, eigener Cache-Präfix (2026-11-05)
 
 Die `fitness-dev`-App wurde um die Möglichkeit erweitert, Mini-Apps als Unterpfade unter einer gemeinsamen Origin (`fitness-aos.web.app/<id>/`) zu hosten. Ein neuer Build-Workflow und Skripte wurden implementiert, um dies zu unterstützen, inklusive eines eigenen Cache-Präfixes für jede Unterpfad-App, um Cache-Kollisionen zu vermeiden.
