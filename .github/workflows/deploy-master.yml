@@ -44,6 +44,9 @@ name: Live Deploy (Fitness master)
       - master
       - 'ci-test/**'
 
+permissions:
+  contents: write   # nur für das Vorspulen des Branches vitalos
+
 concurrency:
   group: live-deploy-fitness-${{ github.ref }}
   cancel-in-progress: false
@@ -145,6 +148,20 @@ jobs:
           entryPoint: fitness-dev
           target: client
           channelId: live
+
+      - name: Branch vitalos auf master vorspulen (Fast-Forward, Release-Branch der Shell)
+        if: env.DO_DEPLOY == 'true' && success()
+        continue-on-error: true
+        working-directory: fitness-dev
+        run: |
+          set -euo pipefail
+          git fetch origin vitalos
+          if git merge-base --is-ancestor origin/vitalos HEAD; then
+            git push origin HEAD:refs/heads/vitalos
+            echo "vitalos -> $(git rev-parse --short HEAD)"
+          else
+            echo "::warning::vitalos enthält Commits, die nicht in master sind — kein Fast-Forward, bitte manuell abgleichen"
+          fi
 
       - name: Telegram-Benachrichtigung senden
         if: env.DO_DEPLOY == 'true' && success()
