@@ -202,3 +202,18 @@ def test_unbekannte_uids_ohne_push_werden_ausgeblendet():
     assert {r.uid for r in shown if r.uid.startswith("test_junk")} == {"test_junk_1", "test_junk_2"}
     # Registry-Klienten bleiben auch ohne Push sichtbar (Jakob: Push aus)
     assert "Jakob" in [r.name for r in recipients(source)]
+
+
+def test_pausierte_geraete_bekommen_nichts():
+    data = {"enabled": True, "tokens": ["a", "b", "c"], "token": "a",
+            "devices": [{"token": "b", "paused": True}, {"token": "c", "paused": False}]}
+    assert normalize_tokens(data) == ["a", "c"]
+    assert normalize_tokens(data, include_paused=True) == ["a", "b", "c"]
+    r = recipient_from_settings("U", "X", False, data)
+    assert r.tokens == ["a", "c"] and r.paused == 1 and r.eligible
+
+
+def test_alle_geraete_pausiert_ist_nicht_bereit():
+    data = {"enabled": True, "tokens": ["a"], "devices": [{"token": "a", "paused": True}]}
+    r = recipient_from_settings("U", "X", False, data)
+    assert r.status == "Geräte pausiert" and not r.eligible and r.tokens == []

@@ -78,8 +78,21 @@ function testCooldownLeft(lastTestAtMs, nowMs = Date.now()) {
   return Math.max(0, TEST_COOLDOWN_MS - (nowMs - lastTestAtMs));
 }
 
+// Alle Tokens eines Nutzers (tokens[] + Einzelfeld token). Geräte mit paused=true bekommen nichts —
+// außer includePaused (gezielter Test an ein pausiertes Gerät).
+function activeTokens(data = {}, { includePaused = false } = {}) {
+  const paused = new Set(
+    includePaused ? [] : (Array.isArray(data.devices) ? data.devices : []).filter((d) => d?.paused === true).map((d) => d.token),
+  );
+  return Array.from(new Set([
+    ...(Array.isArray(data.tokens) ? data.tokens : []),
+    ...(data.token ? [data.token] : []),
+  ].filter((t) => t && !paused.has(t))));
+}
+
 module.exports = {
   TEST_KINDS,
+  activeTokens,
   allowsClientWorkout,
   buildTestMessage,
   isQuietNow,

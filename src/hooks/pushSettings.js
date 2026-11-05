@@ -98,3 +98,19 @@ export function formatLastSeen(iso, now = Date.now()) {
   const d = Math.round(h / 24)
   return `vor ${d} Tag${d === 1 ? '' : 'en'}`
 }
+
+// Ein einzelnes Gerät pausieren/fortsetzen, ohne den globalen Schalter (settings.enabled) anzufassen.
+export function setDevicePaused(settings, token, paused) {
+  if (!token || !(settings?.devices || []).some((d) => d.token === token)) return settings
+  return {
+    ...settings,
+    devices: settings.devices.map((d) => (d.token === token ? { ...d, paused: Boolean(paused) } : d)),
+  }
+}
+
+// Wie viele Geräte bekommen tatsächlich Meldungen (global an, Gerät nicht pausiert)?
+export function activeDeviceCount(settings) {
+  if (!settings?.enabled) return 0
+  const devices = settings.devices?.length ? settings.devices : (settings.tokens || []).map((token) => ({ token }))
+  return devices.filter((d) => d.paused !== true).length
+}

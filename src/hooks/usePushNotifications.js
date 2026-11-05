@@ -3,9 +3,9 @@ import { isLocalMode, getPushSettings, savePushSettings } from '@db'
 import { getMessagingIfSupported, functionsInstance, httpsCallable } from '@cloud/firebase.js'
 import { getToken } from 'firebase/messaging'
 import { VAPID_KEY } from '@firebase-config'
-import { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, refreshPushDevice, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice } from './pushSettings.js'
+import { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, refreshPushDevice, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice, setDevicePaused, activeDeviceCount } from './pushSettings.js'
 
-export { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice }
+export { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice, activeDeviceCount }
 
 const PUSH_SW_URL = '/fitness-messaging-sw.js'
 const PUSH_SW_SCOPE = '/fitness-push/'
@@ -123,6 +123,12 @@ export function usePushNotifications(user) {
     }
   }, [user, settings, persist, currentToken])
 
+  // Pro Gerät ein/aus (z. B. altes iPhone stummschalten), unabhängig vom globalen Schalter.
+  const pauseDevice = useCallback(async (token, paused) => {
+    if (isLocalMode() || !user) return
+    await persist(setDevicePaused(settings, token, paused))
+  }, [user, settings, persist])
+
   const sendTest = useCallback(async (kind = 'reminder', token = null) => {
     if (isLocalMode() || !user) return
     setBusy(true)
@@ -142,6 +148,6 @@ export function usePushNotifications(user) {
 
   return {
     settings, permission, busy, notice, currentToken,
-    enable, disable, update, updateTypes, updateReminderTime, removeDevice, sendTest,
+    enable, disable, update, updateTypes, updateReminderTime, removeDevice, pauseDevice, sendTest,
   }
 }

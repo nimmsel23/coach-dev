@@ -14,6 +14,7 @@ class Recipient:
     is_coach: bool = False
     enabled: bool = False
     tokens: list[str] = field(default_factory=list)
+    paused: int = 0                   # Geräte, die im Panel pausiert sind (bekommen nichts)
     messages_off: bool = False        # types.coachMessage == False im Panel des Empfängers
 
     @property
@@ -21,7 +22,7 @@ class Recipient:
         if not self.enabled:
             return "Push aus"
         if not self.tokens:
-            return "keine Geräte"
+            return "Geräte pausiert" if self.paused else "keine Geräte"
         if self.messages_off:
             return "Nachrichten aus"
         return "bereit"
@@ -31,10 +32,17 @@ class Recipient:
         return self.status == "bereit"
 
 
-def normalize_tokens(data: dict) -> list[str]:
+def paused_tokens(data: dict) -> set[str]:
+    """Tokens von Geräten, die im Panel pausiert wurden (devices[].paused) — gleiche Regel wie die Cloud Function."""
+    devices = data.get("devices") if isinstance(data.get("devices"), list) else []
+    return {d["token"] for d in devices if isinstance(d, dict) and d.get("paused") is True and d.get("token")}
+
+
+def normalize_tokens(data: dict, include_paused: bool = False) -> list[str]:
+    paused = set() if include_paused else paused_tokens(data)
     seen: dict[str, None] = {}
     for token in [*(data.get("tokens") or []), data.get("token")]:
-        if isinstance(token, str) and token:
+        if isinstance(token, str) and token and token not in paused:
             seen.setdefault(token, None)
     return list(seen)
 
@@ -45,6 +53,7 @@ def recipient_from_settings(uid: str, name: str, is_coach: bool, data: dict) -> 
         uid=uid, name=name, is_coach=is_coach,
         enabled=bool(data.get("enabled")),
         tokens=normalize_tokens(data),
+        paused=len(normalize_tokens(data, include_paused=True)) - len(normalize_tokens(data)),
         messages_off=types.get("coachMessage") is False,
     )
 

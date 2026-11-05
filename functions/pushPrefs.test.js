@@ -1,7 +1,7 @@
 const test = require("node:test");
 const { NOTIFICATIONS } = require("./texts.js");
 const assert = require("node:assert/strict");
-const { allowsClientWorkout, buildTestMessage, isQuietNow, testCooldownLeft } = require("./pushPrefs.js");
+const { activeTokens, allowsClientWorkout, buildTestMessage, isQuietNow, testCooldownLeft } = require("./pushPrefs.js");
 
 // 2026-10-15 ist Sommerzeit (MESZ, UTC+2)
 const at = (hhmmBerlin) => new Date(`2026-10-15T${hhmmBerlin}:00+02:00`);
@@ -65,4 +65,15 @@ test("Test-Cooldown", () => {
   assert.equal(testCooldownLeft(null, 1000), 0);
   assert.equal(testCooldownLeft(1000, 4000), 7000);
   assert.equal(testCooldownLeft(1000, 20000), 0);
+});
+
+test('activeTokens: pausierte Geräte bekommen nichts, gezielter Test schon', () => {
+  const data = {
+    token: 'a', tokens: ['a', 'b', 'c'],
+    devices: [{ token: 'b', paused: true }, { token: 'c', paused: false }],
+  };
+  assert.deepEqual(activeTokens(data), ['a', 'c']);
+  assert.deepEqual(activeTokens(data, { includePaused: true }), ['a', 'b', 'c']);
+  assert.deepEqual(activeTokens({}), []);
+  assert.deepEqual(activeTokens({ token: 'x' }), ['x']);
 });

@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, refreshPushDevice, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice } from './pushSettings.js'
+import { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, refreshPushDevice, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice, setDevicePaused, activeDeviceCount } from './pushSettings.js'
 
 test('Gerätebeschreibung aus dem User-Agent', () => {
   assert.equal(describeDevice('Mozilla/5.0 (Linux; Android 14) AppleWebKit Chrome/120 Mobile Safari/537'), 'Chrome · Android')
@@ -97,4 +97,26 @@ test('Hilfen: App-Name, zuletzt gesehen, veraltet', () => {
   assert.equal(isStaleDevice({ lastSeenAt: new Date(NOW - 20 * 86400_000).toISOString() }, NOW), true)
   assert.equal(isStaleDevice({ lastSeenAt: new Date(NOW - 2 * 86400_000).toISOString() }, NOW), false)
   assert.equal(isStaleDevice({}, NOW), false)
+})
+
+test('Gerät pausieren: globaler Schalter bleibt, Zählung und Merge-Verhalten', () => {
+  const base = { enabled: true, tokens: ['a', 'b'], devices: [{ token: 'a', label: 'Safari · iPhone' }, { token: 'b', label: 'Safari · iPad' }] }
+  const paused = setDevicePaused(base, 'b', true)
+  assert.equal(paused.enabled, true)
+  assert.equal(paused.devices.find((d) => d.token === 'b').paused, true)
+  assert.equal(paused.devices.find((d) => d.token === 'a').paused, undefined)
+  assert.equal(activeDeviceCount(base), 2)
+  assert.equal(activeDeviceCount(paused), 1)
+  assert.equal(activeDeviceCount({ ...paused, enabled: false }), 0)
+  // unbekannter Token ändert nichts
+  assert.equal(setDevicePaused(base, 'x', true), base)
+  // Pause übersteht das Auffrischen (Label/Aktivität) und das Zusammenführen
+  const refreshed = refreshPushDevice(paused, 'b', 'Safari · iPad', { screen: '820×1180' }, Date.parse('2026-11-05T12:00:00Z'))
+  assert.equal(refreshed.devices.find((d) => d.token === 'b').paused, true)
+  const merged = mergePushSettings(paused, { enabled: true })
+  assert.equal(merged.devices.find((d) => d.token === 'b').paused, true)
+  // Fortsetzen
+  assert.equal(setDevicePaused(paused, 'b', false).devices.find((d) => d.token === 'b').paused, false)
+  // Altbestand ohne devices[]: alle Tokens zählen als aktiv
+  assert.equal(activeDeviceCount({ enabled: true, tokens: ['a', 'b'] }), 2)
 })

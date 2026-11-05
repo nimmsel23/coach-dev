@@ -105,11 +105,9 @@ function getEnabledTypes(data = {}) {
   return { ...REMINDER_TYPES, ...(data.types || {}) };
 }
 
-function normalizeTokens(data = {}) {
-  return Array.from(new Set([
-    ...(Array.isArray(data.tokens) ? data.tokens : []),
-    ...(data.token ? [data.token] : []),
-  ].filter(Boolean)));
+// Pausierte Geräte (devices[].paused) ausgenommen — siehe pushPrefs.activeTokens.
+function normalizeTokens(data = {}, options) {
+  return pushPrefs.activeTokens(data, options);
 }
 
 function exerciseHasTrainingSignal(exercise = {}) {
@@ -544,7 +542,8 @@ exports.sendTestPush = functions
       throw new functions.https.HttpsError("permission-denied", "Nur für den Coach.");
     }
 
-    const all = normalizeTokens(pushData);
+    // Gezielter Test an ein Gerät funktioniert auch, wenn es pausiert ist.
+    const all = normalizeTokens(pushData, { includePaused: Boolean(data?.token) });
     const tokens = data?.token ? all.filter((t) => t === data.token) : all;
     if (tokens.length === 0) {
       throw new functions.https.HttpsError("failed-precondition", "Kein registriertes Gerät.");
