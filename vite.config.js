@@ -4,8 +4,24 @@ import { fitnessOverlay } from './modules/plan/vite-fitness-overlay.mjs'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
+import { existsSync, readdirSync, readFileSync } from 'fs'
 
 const BACKEND = 'http://localhost:9150'
+
+// Coach-Build: Dateien aus dem Submodul website/ (website/coach/* und src/6pack.html) ins Hosting-Wurzelverzeichnis legen.
+function websiteFiles() {
+  const root = resolve(__dirname, 'website')
+  return {
+    name: 'coach-website-files',
+    generateBundle() {
+      const add = (fileName, path) => this.emitFile({ type: 'asset', fileName, source: readFileSync(path) })
+      const coachDir = resolve(root, 'coach')
+      if (existsSync(coachDir)) for (const f of readdirSync(coachDir)) add(f, resolve(coachDir, f))
+      const page = resolve(root, 'src/6pack.html')
+      if (existsSync(page)) add('6pack.html', page)
+    },
+  }
+}
 
 export default defineConfig(async ({ mode }) => {
   const isFirebase = mode === 'firebase' || mode === 'coach'
@@ -17,7 +33,7 @@ export default defineConfig(async ({ mode }) => {
     // Präfix (z.B. /coach-dev/) fälschlich zur Domain-Wurzel auf (404 →
     // Whitescreen). Core4/Door/Game/Fuel haben denselben Fix schon.
     base: './',
-    plugins: [fitnessOverlay({ planRoot: sharedPlanRoot(), fitnessRoot: sharedFitnessRoot() }), react()],
+    plugins: [fitnessOverlay({ planRoot: sharedPlanRoot(), fitnessRoot: sharedFitnessRoot() }), react(), ...(isCoach ? [websiteFiles()] : [])],
     resolve: {
       // Resolve pnpm packages from their real directory so transitive Vue imports work.
       preserveSymlinks: false,

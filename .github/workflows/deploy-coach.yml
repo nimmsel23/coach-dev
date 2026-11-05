@@ -21,6 +21,7 @@ on:
       - 'local.html'
       - 'clientforge.html'
       - 'public-coach/**'
+      - 'website'
       - 'fitness/catalog/kb/**'
       - 'scripts/**'
       - 'vite.config.js'
@@ -55,6 +56,15 @@ jobs:
 
       # plan-dev hält nur noch das Plan-Eigene; Gemeinsames kommt per Overlay aus fitness-dev
       # (modules/plan/vite-fitness-overlay.mjs). Stand: modules/plan/fitness.ref (Branch oder SHA).
+      # website/ (daniel-vitaltrainer-firebase, privat): Coach-Dateien und 6pack.html; Token wie bei fitness-dev
+      - name: website auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: nimmsel23/daniel-vitaltrainer-firebase
+          ref: main
+          path: website
+          token: ${{ secrets.GH_SUBMODULE_TOKEN || secrets.GITHUB_TOKEN }}
+
       - name: fitness-dev-Stand lesen
         id: fitref
         run: echo "ref=$(tr -d '[:space:]' < modules/plan/fitness.ref)" >> "$GITHUB_OUTPUT"
