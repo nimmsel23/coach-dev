@@ -1,5 +1,5 @@
 import UnreadBadge from '../UnreadBadge.jsx';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { MessageSquare, MoreHorizontal, ChevronLeft, LayoutGrid } from 'lucide-react';
 
 // Training (session) ist der mit Abstand meistgenutzte Tab und startet
@@ -15,8 +15,18 @@ import { MessageSquare, MoreHorizontal, ChevronLeft, LayoutGrid } from 'lucide-r
 const HIDDEN_SUBS = ['timer', 'skills'];
 const PRIMARY_TABS = ['atlas'];
 
-export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHint, navItems, inboxUnread, onOpenHub }) {
+export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHint, navItems, inboxUnread, onOpenHub, onOpenSheet }) {
   const [showMore, setShowMore] = useState(false);
+  // Die Leiste ist die eingeklappte Unterkante des Gate-Sheets: nach oben wischen (oder den
+  // Griff tippen) zieht das Sheet heraus; dort ersetzt die Hub-Leiste diese Nav.
+  const dragStartY = useRef(null);
+  const onDragStart = (e) => { dragStartY.current = e.touches[0].clientY; };
+  const onDragEnd = (e) => {
+    if (dragStartY.current == null) return;
+    const dy = e.changedTouches[0].clientY - dragStartY.current;
+    dragStartY.current = null;
+    if (dy < -40) onOpenSheet?.();
+  };
 
   const sessionItem = navItems.find((i) => i.id === 'session');
   const sessionSubs = sessionItem?.sub || [];
@@ -72,7 +82,22 @@ export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHin
       ];
 
   return (
-    <nav aria-label="Hauptnavigation" className="mobile-nav lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-fit-card/90 backdrop-blur-2xl border-t border-fit-line/40">
+    <nav
+      aria-label="Hauptnavigation"
+      onTouchStart={onOpenSheet ? onDragStart : undefined}
+      onTouchEnd={onOpenSheet ? onDragEnd : undefined}
+      className="mobile-nav lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-fit-card/90 backdrop-blur-2xl border-t border-fit-line/40"
+    >
+      {onOpenSheet && (
+        <button
+          type="button"
+          onClick={onOpenSheet}
+          aria-label="Sheet herausziehen"
+          className="absolute -top-3 left-1/2 -translate-x-1/2 h-6 w-16 flex items-start justify-center pt-1.5"
+        >
+          <span className="block h-1 w-10 rounded-full bg-fit-line" />
+        </button>
+      )}
       {/* Swipe direction indicator — thin accent line at top */}
       <div className={`absolute top-0 left-0 right-0 h-[2px] transition-all duration-200 ${
         swipeHint === 'left'
