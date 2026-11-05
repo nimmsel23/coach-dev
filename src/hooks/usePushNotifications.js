@@ -10,6 +10,13 @@ export { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings }
 const PUSH_SW_URL = '/fitness-messaging-sw.js'
 const PUSH_SW_SCOPE = '/fitness-push/'
 
+// Dieselbe Hardware kann mehrere installierte Apps haben (fitness-aos = klassisch, fitness-vos = Pulse), jede mit eigenem
+// Token. Der Origin-Name im Label macht in der Geräteliste sichtbar, welcher Eintrag zu welcher App gehört.
+function deviceLabel() {
+  const host = typeof location !== 'undefined' ? location.hostname.replace(/\.web\.app$/, '') : ''
+  return host && host !== 'localhost' ? `${describeDevice()} · ${host}` : describeDevice()
+}
+
 export function usePushNotifications(user) {
   const [settings, setSettings] = useState(null)
   const [permission, setPermission] = useState(() =>
@@ -44,7 +51,7 @@ export function usePushNotifications(user) {
         const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: registration })
         if (!alive) return
         setCurrentToken(token || null)
-        const next = refreshPushDevice(settings, token, describeDevice())
+        const next = refreshPushDevice(settings, token, deviceLabel())
         if (next !== settings) await persist(next)
       } catch {
         // Gerät nicht erkennbar → die Liste kommt ohne "Dieses Gerät"-Markierung aus
@@ -72,7 +79,7 @@ export function usePushNotifications(user) {
       await persist(mergePushSettings(settings, {
         enabled: true,
         token,
-        devices: [{ token, label: describeDevice(), addedAt: new Date().toISOString() }],
+        devices: [{ token, label: deviceLabel(), addedAt: new Date().toISOString() }],
       }))
     } catch (error) {
       setNotice({ kind: 'error', text: error?.message || 'Aktivieren fehlgeschlagen' })

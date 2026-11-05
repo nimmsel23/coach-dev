@@ -268,6 +268,21 @@ async function sendReminder(uid, tokens, title, body, link, tag = "fitness-remin
       tokens,
     };
     const response = await getMessaging().sendEachForMulticast(message);
+    // Abgemeldete Geräte (z. B. alte SW-Registrierungen) aufräumen, sonst wächst die Token-Liste
+    // und jedes Gerät mit Altlast liefert dieselbe Meldung mehrfach.
+    const dead = clientWorkout.deadTokens(tokens, response.responses);
+    if (dead.length > 0) {
+      try {
+        const pushRef = getFirestore().collection("fitness").doc(uid).collection("settings").doc("push");
+        const cleanup = { apps: { fitness: { tokens: FieldValue.arrayRemove(...dead) } } };
+        const stored = (await pushRef.get()).data() || {};
+        // normalizeTokens() zählt auch das Einzelfeld "token" mit — sonst würde ein toter Token dort weiter angeschrieben.
+        if (dead.includes(stored.apps?.fitness?.token)) cleanup.apps.fitness.token = FieldValue.delete();
+        await pushRef.set(cleanup, { merge: true });
+      } catch (cleanupError) {
+        console.error(`Token-Cleanup für ${uid} fehlgeschlagen:`, cleanupError);
+      }
+    }
     return {
       sentCount: response.successCount,
       failureCount: response.failureCount,
