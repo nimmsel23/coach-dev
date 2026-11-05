@@ -55,7 +55,7 @@ export function scanRepo(dir) {
     entries.push({
       id: a.id, kind: "solo", name: m.name ?? a.id, short: m.short ?? m.name ?? a.id,
       description: m.description ?? "", accent: m.accent ?? "#888",
-      site: a.site ?? null, url: a.site && !a.planned ? url(a.site) : null, tab: a.tab ?? a.defaultTab ?? null, planned: Boolean(a.planned),
+      site: a.site ?? null, url: a.site && !a.planned ? url(a.site) + (a.path ?? "") : null, tab: a.tab ?? a.defaultTab ?? null, planned: Boolean(a.planned),
     });
   }
   // Haupt-App(s): alle übrigen Hosting-Targets (bzw. firebase.json-Sites), die keine Solo-App sind

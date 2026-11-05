@@ -42,7 +42,14 @@ for (const app of list) {
   const html = readFileSync(htmlPath, 'utf8');
   if (!html.includes("register('/sw.js')")) { console.error(`❌ ${app.id}: register('/sw.js') nicht in index.html gefunden — Patch nötig`); process.exit(1); }
   writeFileSync(htmlPath, html.replace("register('/sw.js')", "register('./sw.js')"));
-  run(`node scripts/mini-app-shell/cli.mjs sw ${out} --app fitness`);
+  // Eigener Cache-Präfix je App: Der SW räumt in activate alle Caches mit seinem Präfix ab, die er nicht kennt. Teilten sich
+  // Haupt-App ("fitness-") und Unterpfad-Apps den Präfix, löschten sie einander die Shell-Caches (Offline kaputt).
+  // "vos-<id>-" beginnt nicht mit "fitness-"; dataCache ebenfalls je App (Quota/Versionierung getrennt).
+  const cfg = JSON.parse(readFileSync(resolve(root, 'mini-app.json'), 'utf8'));
+  cfg.apps.fitness.sw = { ...cfg.apps.fitness.sw, prefix: `vos-${app.id}-` };
+  const cfgPath = `dist-origin/_cfg-${app.id}.json`;
+  writeFileSync(resolve(root, cfgPath), JSON.stringify(cfg));
+  run(`node scripts/mini-app-shell/cli.mjs sw ${out} --app fitness --config ${cfgPath}`);
   run(`node scripts/stamp-training.mjs ${out} ${q(app.name)} ${q(app.short)} ${q(start)} ${q(app.description)}`, { MINIAPP_SCOPE: scope });
 }
 

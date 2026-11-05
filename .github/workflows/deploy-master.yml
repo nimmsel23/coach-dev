@@ -111,6 +111,18 @@ jobs:
         working-directory: fitness-dev
         run: pnpm run build:firebase
 
+      # Mini-Apps als Unterpfade DERSELBEN Origin (fitness-aos.web.app/<id>/): gleicher Login, gleiche IndexedDB wie die
+      # klassische App, keine neue Site, keine neue autorisierte Domain. Tabelle: scripts/miniapps.json, Doku: docs/MINI-APPS.md
+      # (Variante B). Ein Hosting-Deploy ersetzt die ganze Site, deshalb baut und deployt dieser Workflow beides zusammen.
+      # Die eigenen Sites vos-<id> (deploy-miniapps.yml) bleiben unverändert.
+      - name: Mini-Apps als Unterpfade bauen
+        working-directory: fitness-dev
+        run: pnpm run build:origin
+
+      - name: Mini-Apps in die Site übernehmen
+        working-directory: fitness-dev
+        run: pnpm run merge:origin dist-firebase firebase.json client
+
       - name: Bau-Ergebnis
         working-directory: fitness-dev
         run: |
