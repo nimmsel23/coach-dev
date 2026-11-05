@@ -20,6 +20,7 @@ import { getNavItems, VALID_TABS, IS_SOLO, SOLO_TAB } from './constants/Navigati
 
 import Sidebar from './components/layout/Sidebar.jsx'
 import MobileNav from './components/layout/MobileNav.jsx'
+import TabSheet, { useIsMobile } from './components/layout/TabSheet.jsx'
 import UserProfile from './components/common/UserProfile.jsx'
 import ErrorBoundary from './components/common/ErrorBoundary.jsx'
 import PwaUpdateBanner from './components/common/PwaUpdateBanner.jsx'
@@ -369,7 +370,11 @@ export default function App() {
   }, [tab, subTab]);
 
   // Stoppuhr-Notification/1h-Reminder auch auf anderen Haupt-Tabs weiterlaufen lassen.
-  useTodayGateWatcher(tab !== 'session')
+  // Quick-Entrance-Portal: auf Mobil (Tab-Nav) bleibt die Session Basis, alle anderen
+  // Tabs öffnen als wegwischbares Sheet darüber (TabSheet). Desktop/Home-Modus/Solo unverändert.
+  const isMobile = useIsMobile()
+  const sheetMode = navMode === 'tabs' && !IS_SOLO && isMobile && tab !== 'session' && tab !== 'gate'
+  useTodayGateWatcher(tab !== 'session' && !sheetMode)
 
   const navigateToTab = (newTabId) => {
     const targetTabId = resolveFlowTab(newTabId);
@@ -641,10 +646,11 @@ export default function App() {
                       <span className="text-[9px] font-black uppercase tracking-widest text-fit-dim opacity-60">Menü</span>
                     </button>
                   )}
-                  <div key={tab} className={`${navMode === 'home' && tab !== 'gate' ? 'p-4 pb-20 sm:p-10' : ''} animate-in fade-in ${slideDirection === 'left' ? 'slide-in-from-right-8' : slideDirection === 'right' ? 'slide-in-from-left-8' : 'slide-in-from-bottom-4'} duration-500`}>
+                  <div key={sheetMode ? 'session' : tab} className={`${navMode === 'home' && tab !== 'gate' ? 'p-4 pb-20 sm:p-10' : ''} animate-in fade-in ${slideDirection === 'left' ? 'slide-in-from-right-8' : slideDirection === 'right' ? 'slide-in-from-left-8' : 'slide-in-from-bottom-4'} duration-500`}>
                       {/* Render content */}
                       <Suspense fallback={null}>
-                      {tab === 'session'  && <Session key={sessionDate || 'today'} initialDate={sessionDate} initialDraft={sessionDraft} onInspectExercise={inspectExercise} onOpenSession={openSession} recentDays={recentDays} coverageThreshold={coverageThreshold} subTab={subTab} onDateChange={setSessionDate} onSubNav={navigateSub} planView={planView} planId={planId} onPlanRouteChange={(view, id) => { setPlanView(view); setPlanId(id); }} gateAutoOpenFlag={gateAutoOpenFlag} onGateAutoOpenConsumed={() => setGateAutoOpenFlag(false)} />}
+                      {(tab === 'session' || sheetMode) && <Session key={sessionDate || 'today'} initialDate={sessionDate} initialDraft={sessionDraft} onInspectExercise={inspectExercise} onOpenSession={openSession} recentDays={recentDays} coverageThreshold={coverageThreshold} subTab={sheetMode ? null : subTab} onDateChange={setSessionDate} onSubNav={navigateSub} planView={planView} planId={planId} onPlanRouteChange={(view, id) => { setPlanView(view); setPlanId(id); }} gateAutoOpenFlag={sheetMode ? false : gateAutoOpenFlag} onGateAutoOpenConsumed={() => setGateAutoOpenFlag(false)} />}
+                      {!sheetMode && (<>
                       {tab === 'review'   && <WeeklyReview onOpenSession={openSession} onInspectExercise={inspectExercise} muscleLanguage={muscleLanguage} taxonomy={taxonomy} gender={gender} recentDays={recentDays} subTab={subTab} onSubNav={navigateSub} />}
                       {tab === 'learn'    && <Learn subTab={subTab} />}
                       {tab === 'touren'   && <Touren onOpenSession={openSession} />}
@@ -663,6 +669,7 @@ export default function App() {
                       {tab === 'anamnese' && <Anamnese />}
                       {tab === 'focus'    && <Fokus initialLayer={focusLayer} onLayerChange={navigateFocusLayer} />}
                       {tab === 'settings' && <Settings />}
+                      </>)}
                       </Suspense>
                   </div>
                 </div>
@@ -672,6 +679,28 @@ export default function App() {
             {navMode === 'tabs' && !IS_SOLO && <MobileNav tab={tab} subTab={subTab} navigate={navigate} navigateSub={navigateSub} onOpenHub={openHub} onOpenSheet={() => openHub('gate')} swipeHint={swipeHint} navItems={navItems} inboxUnread={inboxUnread} />}
           </div>
         </div>
+        <TabSheet open={sheetMode} title={navItems.find((i) => i.id === tab)?.label || (tab === 'inbox' ? 'Nachrichten' : '')} onClose={() => navigate('session')}>
+          <Suspense fallback={null}>
+                      {tab === 'review'   && <WeeklyReview onOpenSession={openSession} onInspectExercise={inspectExercise} muscleLanguage={muscleLanguage} taxonomy={taxonomy} gender={gender} recentDays={recentDays} subTab={subTab} onSubNav={navigateSub} />}
+                      {tab === 'learn'    && <Learn subTab={subTab} />}
+                      {tab === 'touren'   && <Touren onOpenSession={openSession} />}
+                      {tab === 'atlas'    && <Exercises onInspectExercise={inspectExercise} />}
+                      {tab === 'inbox'    && (user ? <Inbox /> : (
+                        <div className="card mx-auto max-w-2xl p-6 text-center">
+                          <h2 className="text-lg font-black tracking-tight">Inbox nur mit Login</h2>
+                          <p className="mt-2 text-sm text-fit-dim">
+                            Der Demo-Modus bleibt lokal. Für Inbox- und Coach-Daten brauchst du einen angemeldeten Cloud-User.
+                          </p>
+                          <button onClick={() => setShowAuthGateModal(true)} className="mt-4 btn btn-primary px-5 py-3 text-[10px] font-black uppercase tracking-widest">
+                            Login öffnen
+                          </button>
+                        </div>
+                      ))}
+                      {tab === 'anamnese' && <Anamnese />}
+                      {tab === 'focus'    && <Fokus initialLayer={focusLayer} onLayerChange={navigateFocusLayer} />}
+                      {tab === 'settings' && <Settings />}
+          </Suspense>
+        </TabSheet>
       </ErrorBoundary>
       <ExerciseInsightModal
         exercise={inspectorExercise}
