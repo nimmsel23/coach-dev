@@ -58,7 +58,7 @@ function TodayCounters({ exercises }) {
   );
 }
 
-export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], sessionMode = 'strength', setSessionMode, block = '', setBlock, hub = false, onSubNav, onLeave, onStart, onStop }) {
+export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], sessionMode = 'strength', setSessionMode, block = '', setBlock, onSplitLongPress, hub = false, onSubNav, onLeave, onStart, onStop }) {
   const gate = normalizeSessionGate(sessionGate);
   const active = isSessionGateActive(gate);
   const completed = isSessionGateCompleted(gate);
@@ -210,7 +210,7 @@ export default function SessionGateCard({ date, sessionGate, currentSubTab = nul
               );
             })}
           </div>
-          {sessionMode === 'strength' && setBlock && <SplitPicker block={block} setBlock={setBlock} />}
+          {sessionMode === 'strength' && setBlock && <SplitPicker block={block} setBlock={setBlock} onLongPress={onSplitLongPress} />}
         </div>
       )}
 

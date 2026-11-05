@@ -21,7 +21,7 @@ export default function SessionModalsLayer({
   trainingsart, setTrainingsart, notes, setNotes,
   onDownload, onExportObsidian, coachFeedback,
   // gate
-  date, sessionGate, currentSubTab, exercises, sessionMode, setSessionMode, block, setBlock, onSubNav, onStartGate, onStopGate,
+  date, sessionGate, currentSubTab, exercises, sessionMode, setSessionMode, block, setBlock, onSplitLongPress, onSubNav, onStartGate, onStopGate,
 }) {
   // ESC schließt das jeweils offene Modal — ein zentraler Handler reicht,
   // weil `activeModal` bereits zentral gebündelt ist (siehe Kommentar oben),
@@ -65,14 +65,15 @@ export default function SessionModalsLayer({
       )}
 
       <SessionGateSheet
-        open={activeModal === 'gate'}
+        open={activeModal === 'gate' || activeModal === 'hub'}
+        initialExpanded={activeModal === 'hub'}
         onClose={onClose}
         date={date}
         sessionGate={sessionGate}
         currentSubTab={currentSubTab}
         exercises={exercises}
         sessionMode={sessionMode} setSessionMode={setSessionMode}
-        block={block} setBlock={setBlock}
+        block={block} setBlock={setBlock} onSplitLongPress={onSplitLongPress}
         onSubNav={onSubNav}
         onStart={onStartGate}
         onStop={onStopGate}

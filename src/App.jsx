@@ -452,18 +452,16 @@ export default function App() {
   // Datumswechsel, ein lokaler useEffect in SessionEditor würde also auch
   // bei bloßem Datumswechsel erneut feuern. Dieses Flag lebt hier in App
   // (remountet nicht) und wird als One-Shot-Signal nach unten gereicht.
-  const prevSubTabForGateRef = useRef(null)
   const [gateAutoOpenFlag, setGateAutoOpenFlag] = useState(false)
-  useEffect(() => {
-    // Gate darf nur für HEUTE aufpoppen — ein explizit gewähltes Datum
-    // (Day-Strip, Kalender-Icon) darf subTab zwar weiterhin 'today' halten,
-    // soll das Gate aber nicht erneut öffnen (User-Feedback 2026-09-07).
-    const isActuallyToday = !sessionDate || sessionDate === localToday()
-    if (tab === 'session' && subTab === 'today' && prevSubTabForGateRef.current !== 'today' && isActuallyToday) {
-      setGateAutoOpenFlag(true)
-    }
-    prevSubTabForGateRef.current = subTab
-  }, [tab, subTab, sessionDate])
+  // Hub öffnen (Bottom-Nav "Hub"): wechselt auf Session/Heute und fordert das Gate im
+  // Hub-Modus an. KEIN Auto-Open mehr beim bloßen Wechsel auf "Heute" (User-Feedback
+  // 2026-11-05) — das Flag wird nur noch hier gesetzt.
+  function openHub() {
+    setGateAutoOpenFlag(true)
+    if (tab !== 'session') navigate('session')
+    setSessionDate(null)
+    setSubTab('today')
+  }
 
   useEffect(() => {
     const targetHash = buildHashRoute({ tab, subTab, sessionDate, focusLayer, planView, planId })
@@ -664,7 +662,7 @@ export default function App() {
               </div>
             </main>
 
-            {navMode === 'tabs' && !IS_SOLO && <MobileNav tab={tab} subTab={subTab} navigate={navigate} navigateSub={navigateSub} swipeHint={swipeHint} navItems={navItems} inboxUnread={inboxUnread} />}
+            {navMode === 'tabs' && !IS_SOLO && <MobileNav tab={tab} subTab={subTab} navigate={navigate} navigateSub={navigateSub} onOpenHub={openHub} swipeHint={swipeHint} navItems={navItems} inboxUnread={inboxUnread} />}
           </div>
         </div>
       </ErrorBoundary>

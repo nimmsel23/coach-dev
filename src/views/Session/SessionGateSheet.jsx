@@ -13,8 +13,8 @@ import SessionGateCard from './SessionGateCard.jsx';
 import { useSwipeToDismiss } from '../../hooks/useSwipeToDismiss.js';
 
 export default function SessionGateSheet({
-  open, onClose,
-  date, sessionGate, currentSubTab, exercises, sessionMode, setSessionMode, block, setBlock, onSubNav, onStart, onStop,
+  open, onClose, initialExpanded = false,
+  date, sessionGate, currentSubTab, exercises, sessionMode, setSessionMode, block, setBlock, onSplitLongPress, onSubNav, onStart, onStop,
 }) {
   // Swipe-down-to-close über den gemeinsamen Hook (gleiches Verhalten wie
   // alle anderen VOS-Sheets: Tempo + Distanz, Scroll hat Vorrang).
@@ -26,7 +26,7 @@ export default function SessionGateSheet({
   const sheetRef = useSwipeToDismiss(onClose, { enabled: open && !expanded, backdropRef });
   const dragRef = useRef(null);
 
-  useEffect(() => { if (!open) setExpanded(false); }, [open]);
+  useEffect(() => { setExpanded(open && initialExpanded); }, [open, initialExpanded]);
 
   function onHandleTouchStart(e) { dragRef.current = e.touches[0].clientY; }
   function onHandleTouchEnd(e) {
@@ -71,7 +71,7 @@ export default function SessionGateSheet({
             currentSubTab={currentSubTab}
             exercises={exercises}
             sessionMode={sessionMode} setSessionMode={setSessionMode}
-            block={block} setBlock={setBlock}
+            block={block} setBlock={setBlock} onSplitLongPress={onSplitLongPress}
             hub={expanded}
             onLeave={onClose}
             onSubNav={(id) => { onClose(); onSubNav?.(id); }}

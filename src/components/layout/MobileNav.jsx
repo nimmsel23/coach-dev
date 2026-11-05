@@ -1,6 +1,6 @@
 import UnreadBadge from '../UnreadBadge.jsx';
 import { useState } from 'react';
-import { MessageSquare, MoreHorizontal, ChevronLeft } from 'lucide-react';
+import { MessageSquare, MoreHorizontal, ChevronLeft, LayoutGrid } from 'lucide-react';
 
 // Training (session) ist der mit Abstand meistgenutzte Tab und startet
 // standardmäßig offen — deshalb erscheinen seine Subtabs (Heute/Timer/
@@ -15,7 +15,7 @@ import { MessageSquare, MoreHorizontal, ChevronLeft } from 'lucide-react';
 const HIDDEN_SUBS = ['timer', 'skills'];
 const PRIMARY_TABS = ['atlas'];
 
-export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHint, navItems, inboxUnread }) {
+export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHint, navItems, inboxUnread, onOpenHub }) {
   const [showMore, setShowMore] = useState(false);
 
   const sessionItem = navItems.find((i) => i.id === 'session');
@@ -60,7 +60,14 @@ export default function MobileNav({ tab, subTab, navigate, navigateSub, swipeHin
         tabEntry({ id: 'inbox', label: 'Nachrichten', Icon: MessageSquare }),
       ]
     : [
-        ...sessionSubs.filter((i) => !HIDDEN_SUBS.includes(i.id)).map(subEntry),
+        // Plan/Logbuch/Timer/Skills + alle Tabs liegen im Hub (Gate-Sheet, hochziehbar);
+        // die Leiste behält nur Training, den Hub-Einstieg und Atlas.
+        ...(onOpenHub
+          ? [
+              ...sessionSubs.filter((i) => i.id === 'today').map(subEntry),
+              { id: 'hub', label: 'Hub', Icon: LayoutGrid, isActive: false, onClick: () => { setShowMore(false); onOpenHub(); } },
+            ]
+          : sessionSubs.filter((i) => !HIDDEN_SUBS.includes(i.id)).map(subEntry)),
         ...navItems.filter((i) => PRIMARY_TABS.includes(i.id)).map(tabEntry),
       ];
 

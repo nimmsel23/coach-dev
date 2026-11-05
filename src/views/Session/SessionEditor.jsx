@@ -13,7 +13,6 @@ import SessionModalsLayer from './SessionModalsLayer.jsx';
 import SessionSlots from './SessionSlots.jsx';
 import SessionHeader from './SessionHeader';
 import SessionGateBar from './SessionGateBar.jsx';
-import SplitPicker from './SplitPicker';
 // Zieht Plan-API + Übungskatalog (inkl. ~1,8 MB Bulk-Daten) nach — erst beim ersten Long-Press laden.
 const SplitPlanSheet = lazy(() => import('./SplitPlanSheet.jsx'));
 import EffortPicker from './EffortPicker';
@@ -25,7 +24,7 @@ import SessionToast from './SessionToast.jsx';
 import SessionSaveFab from './SessionSaveFab.jsx';
 import SessionSidebar from './SessionSidebar';
 import { normalizeSessionGate, sessionGateTimeToHHMM, buildManualSessionGate, estimateDurationMinutes } from '../../lib/sessionGate.js';
-import { inferBlockFromExercises } from './utils';
+import { inferBlockFromExercises, blockColor } from './utils';
 import { localToday } from '@utils';
 
 export default function SessionEditor({
@@ -115,11 +114,12 @@ export default function SessionEditor({
     // Zusätzliche Absicherung neben dem date-Check in App.jsx (Race
     // zwischen Flag-Konsum und Remount): Gate nie öffnen, wenn das
     // aktuell angezeigte Datum nicht heute ist.
-    // Kein Auto-Open mehr (User-Feedback 2026-11-05: das Sheet wurde beim App-Start
-    // nur reflexhaft weggewischt, erwartet wird direkt der Session-Tab). Das Portal
-    // öffnet über die Gate-Leiste im Header (SessionGateBar). Flag nur konsumieren.
+    // Kein Auto-Open beim Tab-Wechsel mehr (User-Feedback 2026-11-05: reflexhaft
+    // weggewischt). Das Flag kommt nur noch vom Bottom-Nav-"Hub"-Button (App.openHub)
+    // und öffnet das Gate direkt im Hub-Modus; sonst über die Gate-Leiste im Header.
+    if (gateAutoOpenFlag && date === localToday()) setActiveModal('hub');
     if (gateAutoOpenFlag) onGateAutoOpenConsumed?.();
-  }, []);
+  }, [gateAutoOpenFlag]);
 
   // Split-Autoerkennung: solange der User selbst noch keinen Split gewählt
   // hat (block === ''), leitet sie den Split aus den bereits eingetragenen
@@ -207,14 +207,21 @@ export default function SessionEditor({
         }
       />
 
-      {/* Split-Auswahl — 1 Klick, direkt unter dem Datumspicker statt hinter "Weitere Details" */}
+      {/* Split-Anzeige — die Auswahl (Chips, Long-Press → Pläne) liegt im Gate; hier genügt die
+          Autoerkennung aus den geloggten Übungen. Tap öffnet das Gate zum Ändern. */}
       {sessionMode === 'strength' && (
         <div className="px-3 mt-1.5 mb-1.5">
-          <SplitPicker
-            block={block}
-            setBlock={v => { setBlock(v); scheduleAutoSave(); }}
-            onLongPress={addFromTemplate ? setPlanSplit : undefined}
-          />
+          <button
+            type="button"
+            onClick={() => setActiveModal('gate')}
+            className="flex items-center gap-2 h-8 px-3 rounded-full text-[11px] font-bold active:scale-95 transition-all"
+            style={{ background: 'var(--card)', border: '1px solid var(--line)', color: block ? blockColor(block) : 'var(--dim)' }}
+            aria-label="Split im Gate ändern"
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: block ? blockColor(block) : 'var(--dim)' }} />
+            {block ? `Split: ${block}` : 'Split: automatisch'}
+            <span style={{ color: 'var(--dim)', opacity: 0.7 }}>· ändern</span>
+          </button>
         </div>
       )}
       {planSheetLoaded && (
@@ -332,6 +339,7 @@ export default function SessionEditor({
         exercises={exercises}
         sessionMode={sessionMode} setSessionMode={setSessionMode}
         block={block} setBlock={v => { setBlock(v); scheduleAutoSave(); }}
+        onSplitLongPress={addFromTemplate ? (k) => { setActiveModal(null); setPlanSplit(k); } : undefined}
         onSubNav={onSubNav}
         onStartGate={() => { startSessionGate(); setActiveModal(null); }}
         onStopGate={stopSessionGate}
