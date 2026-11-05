@@ -20,13 +20,11 @@ import ExerciseList from './ExerciseList';
 import CardioSection from './CardioSection.jsx';
 import ActivityAddon from './ActivityAddon';
 import ActivityAddonHistory from './ActivityAddonHistory.jsx';
-import { withLastPerformance } from '../Plan/lib/sessionDraft.js';
-import TemplateLauncher from './TemplateLauncher.jsx';
 import SessionToast from './SessionToast.jsx';
 import SessionSaveFab from './SessionSaveFab.jsx';
 import SessionSidebar from './SessionSidebar';
 import { normalizeSessionGate, sessionGateTimeToHHMM, buildManualSessionGate, estimateDurationMinutes } from '../../lib/sessionGate.js';
-import { inferBlockFromExercises, blockColor } from './utils';
+import { inferBlockFromExercises } from './utils';
 import { localToday } from '@utils';
 
 export default function SessionEditor({
@@ -219,23 +217,6 @@ export default function SessionEditor({
         }
       />
 
-      {/* Split-Anzeige — die Auswahl (Chips, Long-Press → Pläne) liegt im Gate; hier genügt die
-          Autoerkennung aus den geloggten Übungen. Tap öffnet das Gate zum Ändern. */}
-      {sessionMode === 'strength' && (
-        <div className="px-3 mt-1.5 mb-1.5">
-          <button
-            type="button"
-            onClick={() => setActiveModal('gate')}
-            className="flex items-center gap-2 h-8 px-3 rounded-full text-[11px] font-bold active:scale-95 transition-all"
-            style={{ background: 'var(--card)', border: '1px solid var(--line)', color: block ? blockColor(block) : 'var(--dim)' }}
-            aria-label="Split im Gate ändern"
-          >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: block ? blockColor(block) : 'var(--dim)' }} />
-            {block ? `Split: ${block}` : 'Split: automatisch'}
-            <span style={{ color: 'var(--dim)', opacity: 0.7 }}>· ändern</span>
-          </button>
-        </div>
-      )}
       {planSheetLoaded && (
         <Suspense fallback={null}>
           <SplitPlanSheet split={planSplit} onClose={() => setPlanSplit(null)} onPick={applyPlanTemplate} />
@@ -248,12 +229,6 @@ export default function SessionEditor({
       </div>
 
       <div className="px-2 space-y-4 mt-1">
-        {sessionMode === 'strength' && exerciseOps.appendDraft && (
-          <details className="rounded-lg border border-fit-line/40 px-3 py-2">
-            <summary className="min-h-[44px] cursor-pointer text-xs font-black uppercase text-fit-dim leading-[44px]">Workout / Vorlage laden</summary>
-            <div className="pb-2"><TemplateLauncher onLoadDraft={(d) => exerciseOps.appendDraft(withLastPerformance(d, prevMap))} /></div>
-          </details>
-        )}
         {sessionMode === 'strength' ? (
           <DndContext sensors={dndSensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             {/* Basis-Übungsliste = impliziter erster Abschnitt der Session
