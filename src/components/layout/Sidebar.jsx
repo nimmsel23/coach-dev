@@ -1,7 +1,7 @@
 import UnreadBadge from '../UnreadBadge.jsx';
-import { Activity, ChevronLeft, ChevronRight, Bell, ClipboardList } from "lucide-react";
+import { Activity, ChevronLeft, ChevronRight, Bell, ClipboardList, LayoutGrid } from "lucide-react";
 
-export default function Sidebar({ tab, navigate, subTab, navigateSub, navigateToPlan, pinned, setPinned, children, navItems, inboxUnread }) {
+export default function Sidebar({ tab, navigate, subTab, navigateSub, navigateToPlan, pinned, setPinned, children, navItems, inboxUnread, onOpenHub }) {
   return (
     <aside className={`hidden lg:flex flex-col alpha-glass border-r border-fit-line fixed inset-y-0 z-40 transition-all duration-500 ease-in-out ${pinned ? 'w-[280px]' : 'w-24'}`}>
       <div className={`p-8 flex flex-col h-full ${!pinned ? 'items-center' : ''}`}>
@@ -63,6 +63,14 @@ export default function Sidebar({ tab, navigate, subTab, navigateSub, navigateTo
               </div>
             );
           })}
+
+          {onOpenHub && (
+            <button onClick={onOpenHub} title={!pinned ? 'Hub' : ''}
+              className={`w-full flex items-center transition-all duration-300 mt-4 ${pinned ? 'gap-4 px-5 py-3.5 rounded-2xl' : 'justify-center p-4 rounded-2xl'} text-fit-dim hover:bg-white/5 font-bold hover:translate-x-1`}>
+              <LayoutGrid size={20} />
+              {pinned && <span className="text-sm truncate animate-in fade-in slide-in-from-left-4 duration-500">Hub</span>}
+            </button>
+          )}
 
           <button onClick={navigateToPlan} title={!pinned ? 'Plan' : ''}
             className={`w-full flex items-center transition-all duration-300 mt-4 ${pinned ? 'gap-4 px-5 py-3.5 rounded-2xl' : 'justify-center p-4 rounded-2xl'} ${tab === 'session' && subTab === 'plan' ? 'bg-fit-accent text-black shadow-xl shadow-fit-accent/20 font-black scale-[1.02]' : 'text-fit-dim hover:bg-white/5 font-bold hover:translate-x-1'}`}>

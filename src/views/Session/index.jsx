@@ -56,7 +56,7 @@ export default function Session({
   // TodayPlan — Sackgasse ohne "Workout beenden"-Button (Bug/UX-Lücke aus
   // TODO.md, 2026-10-12).
   const gateActive = isSessionGateActive(session.sessionGate);
-  if (isTodayTab && !planLoading && cycle && nextRoutine && !logFreely && !gateActive) {
+  if (isTodayTab && !planLoading && cycle && nextRoutine && !logFreely && !gateActive && !gateAutoOpenFlag) {
     return (
       <TodayPlan
         cycle={cycle}

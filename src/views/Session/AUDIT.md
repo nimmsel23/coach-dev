@@ -32,7 +32,7 @@ Skills und 6Pack sind aus der Fitness-Session herausgelöst. Die Session bietet 
 | `SessionEditor.jsx` | `SessionGateCard` ist kein inline Card-Element mehr, sondern ein Sheet (Portal, Bottom-Sheet), das öffnet wenn `currentSubTab === 'today'` (Nav-Klick auf "Heute"/"Session") — Editor bleibt darunter jederzeit erreichbar |
 
 - **Gate-Portal** (2026-11-05) — `GatePortalGrid` (Suche, Kürzel `/` `1`–`9`, Zuletzt genutzt, Ziele über alle Tabs), Kraft/Ausdauer + Split-Chips im Gate, Hub-Modus per Hochziehen, KEIN Auto-Open mehr. Per Browser-Harness (Firefox headless, echte Komponente) geprüft: Zähler, Suche, Enter/Kürzel, Recent, Chips, Modus-Toggle, Hub-Geste, Sheet-Schließen bei Hash-Navigation.
-- **Hub-Einstieg** — Bottom-Nav-Button `Hub` (App.openHub → gateAutoOpenFlag → activeModal 'hub'), Split-Chip im Session-Tab nur Anzeige, Long-Press→Pläne im Gate. Per Browser-Harness geprüft.
+- **Hub-Einstieg** — Bottom-Nav-Button `Hub` (App.openHub → gateAutoOpenFlag → activeModal 'hub'), Split-Chip im Session-Tab nur Anzeige, Long-Press→Pläne im Gate. Per Browser-Harness geprüft, zusätzlich in der laufenden App (echte index.html, Firefox headless): Hub-Button (Sidebar/Nav) → Hub-Modus, kein Auto-Open, Navigation Lernen. Desktop-Sidebar hat ebenfalls einen Hub-Eintrag; Coach-Klienten mit Plan-Zyklus sehen bei Hub-Wunsch direkt den Editor (nicht TodayPlan).
 - **Splits Shoulders/Arms** — Autoerkennung nur über Primärmuskeln (`utils.js::inferBlockFromExercises`).
 
 ## Auffälligkeiten (2026-10-13)

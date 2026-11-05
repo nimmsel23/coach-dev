@@ -588,6 +588,7 @@ export default function App() {
           user={user}
           navItems={navItems}
           inboxUnread={inboxUnread}
+          onOpenHub={openHub}
         >
           <UserProfile user={user} subtitle={isLocalMode() ? `${user?.email || 'localhost'} · localhost` : (user?.email || 'Demo-Modus · lokal gespeichert')} />
           {!isLocalMode() && user && (
