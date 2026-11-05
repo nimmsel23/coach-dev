@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { Dumbbell, Check } from 'lucide-react'
 import { useUser } from '../../contexts/UserContext'
 import { clientView } from '../Plan/lib/planVersions.js'
-import { phaseForWeek, phaseSummary, planWeek, applyPhaseToRoutine } from '../Plan/lib/microcycles.js'
+import { pickActiveMacrocycle } from '../Plan/lib/activeMacrocycle.js'
+import { microcycleForWeek, microcycleSummary, planWeek, applyMicrocycleToRoutine } from '../Plan/lib/microcycles.js'
 import { routineToSessionDraft, prescriptionText, lastPerformanceMap, withLastPerformance } from '../Plan/lib/sessionDraft.js'
 import TemplateLauncher from './TemplateLauncher.jsx'
 import { getSessionHistory, watchAuth, listMacrocycles, getMacrocycle, completeRoutine, getLastPerformance } from '@db'
@@ -24,7 +25,7 @@ export function useTodayPlan() {
     if (!user?.uid) { setState({ loading: false, cycle: null, nextRoutine: null, lastPerformance: null }); return }
     const list = await listMacrocycles(user.uid)
     if (!list.length) { setState({ loading: false, cycle: null, nextRoutine: null, lastPerformance: null }); return }
-    const full = await getMacrocycle(user.uid, list[0].id)
+    const full = await getMacrocycle(user.uid, pickActiveMacrocycle(list).id)
     if (!full || !(full.macrocycle.routines || []).length) {
       setState({ loading: false, cycle: null, nextRoutine: null, lastPerformance: null })
       return
@@ -48,8 +49,8 @@ export default function TodayPlan({ cycle: rawCycle, nextRoutine: next, lastPerf
   const [pickedId, setPickedId] = useState(next.id)
   const picked = routines.find(r => r.id === pickedId) || next
   const week = planWeek(cycle)
-  const phase = phaseForWeek(cycle.phases, week)
-  const nextRoutine = applyPhaseToRoutine(picked, phase, week)
+  const microcycle = microcycleForWeek(cycle.microcycles, week)
+  const nextRoutine = applyMicrocycleToRoutine(picked, microcycle, week)
 
   function lastFor(exerciseId) {
     return lastPerformance?.exercises?.find(e => e.exercise_id === exerciseId)
@@ -83,7 +84,7 @@ export default function TodayPlan({ cycle: rawCycle, nextRoutine: next, lastPerf
             ))}
           </div>
         )}
-        {phase && <div aria-label="Aktuelle Phase" className={`mx-3 mt-3 rounded-lg px-3 py-2 text-xs font-bold ${phase.kind === 'deload' ? 'bg-green-500/10 text-green-500' : 'bg-fit-accent/10 text-fit-accent'}`}>{phaseSummary(cycle.phases, week)}{phase.note ? <span className="block font-normal text-fit-dim">{phase.note}</span> : null}</div>}
+        {microcycle && <div aria-label="Aktueller Mikrozyklus" className={`mx-3 mt-3 rounded-lg px-3 py-2 text-xs font-bold ${microcycle.kind === 'deload' ? 'bg-green-500/10 text-green-500' : 'bg-fit-accent/10 text-fit-accent'}`}>{microcycleSummary(cycle.microcycles, week)}{microcycle.note ? <span className="block font-normal text-fit-dim">{microcycle.note}</span> : null}</div>}
 
         {(nextRoutine.exercises || []).length > 0 ? (
           <div className="divide-y divide-fit-line/20">
@@ -116,7 +117,7 @@ export default function TodayPlan({ cycle: rawCycle, nextRoutine: next, lastPerf
         <div className="p-3 space-y-2">
           {onLoadDraft && (nextRoutine.exercises || []).length > 0 && (
             <button
-              onClick={() => onLoadDraft(withLastPerformance(routineToSessionDraft(picked, { phase, week, planName: cycle.name }), lastPerformanceMap(history)))}
+              onClick={() => onLoadDraft(withLastPerformance(routineToSessionDraft(picked, { microcycle, week, planName: cycle.name }), lastPerformanceMap(history)))}
               className="w-full btn btn-primary py-3 text-sm font-black uppercase"
             >
               Mit Vorbereitung loggen
