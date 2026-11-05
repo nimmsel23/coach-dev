@@ -10,3 +10,7 @@
 	path = modules/plan
 	url = https://github.com/nimmsel23/plan-dev.git
 	branch = dev
+[submodule "website"]
+	path = website
+	url = git@github.com:nimmsel23/daniel-vitaltrainer-firebase.git
+	branch = main

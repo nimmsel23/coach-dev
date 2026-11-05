@@ -179,7 +179,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     @app.get("/sw.js")
     async def retire_root_worker():
-        return FileResponse(ROOT / "public-coach/retire-root-sw.js", media_type="application/javascript",
+        return FileResponse(ROOT / "website/coach/retire-root-sw.js", media_type="application/javascript",
                             headers={"Cache-Control": "no-store", "Service-Worker-Allowed": "/"})
 
     @app.get("/health")
@@ -308,14 +308,20 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def catalog_ui(path: str):
         return frontend(catalog, path)
 
-    public_coach = ROOT / "public-coach"
+    # Statische Coach-Dateien: public-coach (APKs, Downloads) und das Submodul website/
+    # (website/coach: Portal, Manifest, Icons; website/src/6pack.html). Vorrang vor dem Katalog, wie beim Firebase-Hosting.
+    public_dirs = [ROOT / "public-coach", ROOT / "website" / "coach"]
+    website_pages = {"6pack.html": ROOT / "website" / "src" / "6pack.html"}
 
     def public_or_catalog(relative: str):
-        # public-coach (portal.html, 6pack.html, APKs, Icons) hat Vorrang, wie beim Firebase-Hosting.
-        base = public_coach.resolve()
-        candidate = (base / relative).resolve()
-        if candidate.is_relative_to(base) and candidate.is_file():
-            return FileResponse(candidate, headers={"Cache-Control": "no-cache"})
+        for directory in public_dirs:
+            base = directory.resolve()
+            candidate = (base / relative).resolve()
+            if candidate.is_relative_to(base) and candidate.is_file():
+                return FileResponse(candidate, headers={"Cache-Control": "no-cache"})
+        page = website_pages.get(relative)
+        if page is not None and page.is_file():
+            return FileResponse(page, headers={"Cache-Control": "no-cache"})
         return frontend(catalog, relative)
 
     # Register after reserved routes; never turn unknown slugs into catalog HTML.

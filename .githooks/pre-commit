@@ -33,7 +33,7 @@ fi
 # --- Build-Verifikation (blocking, nur bei build-relevanten Dateien) ----
 # Analog zum TRIGGER-Pattern im pre-push-Hook. Verhindert kaputte Commits
 # frueh, statt erst beim dev-Push zu bemerken, dass npm run build fehlschlaegt.
-BUILD_TRIGGER='^(src/|public-coach/|coach.html$|vite\.config\.(js|ts|mjs)$|tailwind\.config\.cjs$|postcss\.config\.cjs$|mini-app\.json$|package\.json$|firebase\.config\.js$|scripts/|fitness/catalog/kb/|vitalos$)'
+BUILD_TRIGGER='^(src/|public-coach/|website$|coach.html$|vite\.config\.(js|ts|mjs)$|tailwind\.config\.cjs$|postcss\.config\.cjs$|mini-app\.json$|package\.json$|firebase\.config\.js$|scripts/|fitness/catalog/kb/|vitalos$)'
 staged_files="$(git diff --cached --name-only)"
 if echo "$staged_files" | grep -Eq "$BUILD_TRIGGER"; then
   if command -v gum >/dev/null 2>&1; then
