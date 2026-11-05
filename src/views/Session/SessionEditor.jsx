@@ -119,7 +119,7 @@ export default function SessionEditor({
     // Kein Auto-Open beim Tab-Wechsel mehr (User-Feedback 2026-11-05: reflexhaft
     // weggewischt). Das Flag kommt nur noch vom Bottom-Nav-"Hub"-Button (App.openHub)
     // und öffnet das Gate direkt im Hub-Modus; sonst über die Gate-Leiste im Header.
-    if (gateAutoOpenFlag && date === localToday()) setActiveModal('hub');
+    if (gateAutoOpenFlag && date === localToday()) setActiveModal(gateAutoOpenFlag === 'gate' ? 'gate' : 'hub');
     if (gateAutoOpenFlag) onGateAutoOpenConsumed?.();
   }, [gateAutoOpenFlag]);
 

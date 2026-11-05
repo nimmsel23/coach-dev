@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ChevronUp, ChevronDown } from 'lucide-react';
 import SessionGateCard from './SessionGateCard.jsx';
+import { GateHubBar } from './GatePortalGrid.jsx';
 import { useSwipeToDismiss } from '../../hooks/useSwipeToDismiss.js';
 
 export default function SessionGateSheet({
@@ -78,6 +79,14 @@ export default function SessionGateSheet({
             onStart={onStart}
             onStop={onStop}
           />
+          {!expanded && (
+            <GateHubBar
+              currentSubTab={currentSubTab}
+              onSubNav={(id) => { onClose(); onSubNav?.(id); }}
+              onLeave={onClose}
+              onExpand={() => setExpanded(true)}
+            />
+          )}
         </div>
       </div>
     </div>,

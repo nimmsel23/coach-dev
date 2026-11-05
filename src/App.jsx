@@ -456,8 +456,9 @@ export default function App() {
   // Hub öffnen (Bottom-Nav "Hub"): wechselt auf Session/Heute und fordert das Gate im
   // Hub-Modus an. KEIN Auto-Open mehr beim bloßen Wechsel auf "Heute" (User-Feedback
   // 2026-11-05) — das Flag wird nur noch hier gesetzt.
-  function openHub() {
-    setGateAutoOpenFlag(true)
+  // Flag-Wert: 'hub' (Vollbild-Hub) oder 'gate' (Sheet, z.B. per Hochwischen auf der Bottom-Nav).
+  function openHub(mode) {
+    setGateAutoOpenFlag(mode === 'gate' ? 'gate' : 'hub')
     if (tab !== 'session') navigate('session')
     setSessionDate(null)
     setSubTab('today')
@@ -663,7 +664,7 @@ export default function App() {
               </div>
             </main>
 
-            {navMode === 'tabs' && !IS_SOLO && <MobileNav tab={tab} subTab={subTab} navigate={navigate} navigateSub={navigateSub} onOpenHub={openHub} swipeHint={swipeHint} navItems={navItems} inboxUnread={inboxUnread} />}
+            {navMode === 'tabs' && !IS_SOLO && <MobileNav tab={tab} subTab={subTab} navigate={navigate} navigateSub={navigateSub} onOpenHub={openHub} onOpenSheet={() => openHub('gate')} swipeHint={swipeHint} navItems={navItems} inboxUnread={inboxUnread} />}
           </div>
         </div>
       </ErrorBoundary>

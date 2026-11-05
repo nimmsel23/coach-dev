@@ -216,7 +216,8 @@ export default function SessionGateCard({ date, sessionGate, currentSubTab = nul
 
       {(active || completed) && <TodayCounters exercises={exercises} />}
 
-      <div className="relative mt-5 pt-4" style={{ borderTop: '1px dashed var(--line)' }}>
+      {/* Mobil im Sheet-Modus ersetzt die Hub-Leiste (GateHubBar im Sheet) das Raster; im Hub-Modus und auf Desktop bleibt es. */}
+      <div className={`relative mt-5 pt-4 ${hub ? '' : 'hidden lg:block'}`} style={{ borderTop: '1px dashed var(--line)' }}>
         <GatePortalGrid hub={hub} currentSubTab={currentSubTab} onSubNav={onSubNav} onLeave={onLeave} />
       </div>
     </section>

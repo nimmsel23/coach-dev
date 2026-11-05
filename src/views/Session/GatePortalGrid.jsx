@@ -10,7 +10,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   CalendarDays, ClipboardList, TimerReset, Sparkles, BookOpen, BarChart3, Brain,
-  LayoutGrid, Bike, Settings2, History, Search,
+  LayoutGrid, Bike, Settings2, History, Search, ChevronUp,
 } from 'lucide-react';
 import { localToday } from '@utils';
 import { IS_SOLO } from '../../constants/NavigationItems.js';
@@ -59,6 +59,71 @@ function writeRecent(id) {
     const next = [id, ...readRecent().filter((x) => x !== id)].slice(0, RECENT_MAX);
     localStorage.setItem(RECENT_KEY, JSON.stringify(next));
   } catch { /* Speicher gesperrt: kein Problem */ }
+}
+
+function openEntry(entry, { onSubNav, onLeave }) {
+  writeRecent(entry.id);
+  if (entry.kind === 'sub') onSubNav?.(entry.id);
+  else { onLeave?.(); window.location.hash = entry.hash; }
+}
+
+const BAR_MAX = 5;
+const BAR_DEFAULT = ['today', 'plan', 'logbuch', 'review', 'learn'];
+
+/**
+ * GateHubBar — die Hub-Leiste am unteren Rand des geöffneten Sheets. Sie ersetzt dort
+ * die Bottom-Nav (das Sheet verdrängt sie): fünf Ziele (zuletzt genutzte zuerst, sonst
+ * Standard) plus Chevron. Hochwischen auf der Leiste oder Tipp aufs Chevron klappt den
+ * Hub voll auf (`onExpand`). Nur mobil (lg:hidden), Desktop nutzt das Raster im Sheet.
+ */
+export function GateHubBar({ currentSubTab, onSubNav, onLeave, onExpand }) {
+  const entries = useMemo(buildPortalEntries, []);
+  const recent = readRecent();
+  const ids = [...recent, ...BAR_DEFAULT].filter((id, i, a) => a.indexOf(id) === i);
+  const items = ids.map((id) => entries.find((e) => e.id === id)).filter(Boolean).slice(0, BAR_MAX);
+  const startY = useRef(null);
+
+  return (
+    <div
+      className="lg:hidden sticky bottom-0 z-10 -mx-2 mt-4 border-t border-fit-line bg-fit-card/95 backdrop-blur-xl pb-[max(0.25rem,env(safe-area-inset-bottom))]"
+      onTouchStart={(e) => { startY.current = e.touches[0].clientY; }}
+      onTouchEnd={(e) => {
+        if (startY.current == null) return;
+        const dy = e.changedTouches[0].clientY - startY.current;
+        startY.current = null;
+        if (dy < -40) onExpand?.();
+      }}
+    >
+      <div className="flex items-end justify-around">
+        {items.map(({ id, label, Icon, kind }) => {
+          const selected = kind === 'sub' && (currentSubTab || 'today') === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => openEntry(entries.find((e) => e.id === id), { onSubNav, onLeave })}
+              aria-current={selected ? 'page' : undefined}
+              className="min-h-12 flex flex-1 flex-col items-center justify-center gap-[5px] px-1 active:scale-90 transition-transform duration-150 min-w-[44px]"
+            >
+              <div className={`flex items-center justify-center rounded-2xl transition-all duration-300 ${selected ? 'bg-fit-accent w-12 h-8 shadow-lg shadow-fit-accent/30' : 'w-10 h-8'}`}>
+                <Icon size={selected ? 17 : 19} className={selected ? 'text-black stroke-[2.5]' : 'text-fit-dim stroke-[1.8]'} />
+              </div>
+              <span className={`text-[10px] font-bold leading-tight ${selected ? 'text-fit-accent' : 'text-fit-dim'}`}>{label}</span>
+            </button>
+          );
+        })}
+        <button
+          type="button"
+          onClick={onExpand}
+          aria-label="Hub aufklappen"
+          className="min-h-12 flex flex-1 flex-col items-center justify-center gap-[5px] px-1 active:scale-90 transition-transform duration-150 min-w-[44px]"
+        >
+          <div className="w-10 h-8 flex items-center justify-center"><ChevronUp size={19} className="text-fit-dim stroke-[1.8]" /></div>
+          <span className="text-[10px] font-bold leading-tight text-fit-dim">Hub</span>
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default function GatePortalGrid({ currentSubTab, onSubNav, onLeave, hub = false }) {
