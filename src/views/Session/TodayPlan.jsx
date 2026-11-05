@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Dumbbell, Check } from 'lucide-react'
 import { useUser } from '../../contexts/UserContext'
-import { watchAuth, listMacrocycles, getMacrocycle, completeRoutine, getLastPerformance } from '@db'
+import { clientView } from '../Plan/lib/planVersions.js'
+import { phaseForWeek, phaseSummary, planWeek, applyPhaseToRoutine } from '../Plan/lib/microcycles.js'
+import { routineToSessionDraft, prescriptionText, lastPerformanceMap, withLastPerformance } from '../Plan/lib/sessionDraft.js'
+import TemplateLauncher from './TemplateLauncher.jsx'
+import { getSessionHistory, watchAuth, listMacrocycles, getMacrocycle, completeRoutine, getLastPerformance } from '@db'
 
 // Habit-artig: Coach legt eine rotierende Liste von Routinen an (Push/Pull/
 // Legs o.ä.), kein Kalender/Wochentag. Der Klient sieht immer nur "die
@@ -35,8 +39,17 @@ export function useTodayPlan() {
   return { ...state, reload }
 }
 
-export default function TodayPlan({ cycle, nextRoutine, lastPerformance, clientUid, onDone, onLogFreely }) {
+export default function TodayPlan({ cycle: rawCycle, nextRoutine: next, lastPerformance, clientUid, onDone, onLogFreely, onLoadDraft }) {
   const [completing, setCompleting] = useState(false)
+  const [history, setHistory] = useState([])
+  useEffect(() => { getSessionHistory(30).then(h => setHistory(Array.isArray(h) ? h : [])).catch(() => {}) }, [])
+  const cycle = rawCycle.coachUid && rawCycle.coachUid !== clientUid ? clientView(rawCycle) : rawCycle
+  const routines = cycle.routines || []
+  const [pickedId, setPickedId] = useState(next.id)
+  const picked = routines.find(r => r.id === pickedId) || next
+  const week = planWeek(cycle)
+  const phase = phaseForWeek(cycle.phases, week)
+  const nextRoutine = applyPhaseToRoutine(picked, phase, week)
 
   function lastFor(exerciseId) {
     return lastPerformance?.exercises?.find(e => e.exercise_id === exerciseId)
@@ -45,7 +58,7 @@ export default function TodayPlan({ cycle, nextRoutine, lastPerformance, clientU
   async function markDone() {
     setCompleting(true)
     try {
-      await completeRoutine(clientUid, cycle.id, nextRoutine.id, nextRoutine.exercises || [])
+      await completeRoutine(clientUid, cycle.id, picked.id, nextRoutine.exercises || [])
       onDone()
     } finally {
       setCompleting(false)
@@ -60,10 +73,22 @@ export default function TodayPlan({ cycle, nextRoutine, lastPerformance, clientU
           <div className="text-lg font-black text-fit-ink mt-0.5">{nextRoutine.label}</div>
         </div>
 
+        {routines.length > 1 && (
+          <div role="group" aria-label="Einheit wählen" className="flex gap-1.5 overflow-x-auto px-3 pt-3">
+            {routines.map(r => (
+              <button key={r.id} type="button" aria-pressed={r.id === picked.id} onClick={() => setPickedId(r.id)}
+                className={`min-h-[44px] shrink-0 rounded-lg px-3 text-xs font-black uppercase ${r.id === picked.id ? 'bg-fit-accent text-fit-bg' : 'border border-fit-line text-fit-dim'}`}>
+                {r.label}{r.id === next.id ? ' ·  dran' : ''}
+              </button>
+            ))}
+          </div>
+        )}
+        {phase && <div aria-label="Aktuelle Phase" className={`mx-3 mt-3 rounded-lg px-3 py-2 text-xs font-bold ${phase.kind === 'deload' ? 'bg-green-500/10 text-green-500' : 'bg-fit-accent/10 text-fit-accent'}`}>{phaseSummary(cycle.phases, week)}{phase.note ? <span className="block font-normal text-fit-dim">{phase.note}</span> : null}</div>}
+
         {(nextRoutine.exercises || []).length > 0 ? (
           <div className="divide-y divide-fit-line/20">
             {nextRoutine.exercises.map((ex, i) => {
-              const last = lastFor(ex.exercise_id)
+              const last = picked.id === next.id ? lastFor(ex.exercise_id) : null
               return (
                 <div key={i} className="px-4 py-2.5 flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -72,7 +97,7 @@ export default function TodayPlan({ cycle, nextRoutine, lastPerformance, clientU
                   </div>
                   <div className="text-right">
                     <div className="text-xs font-bold text-fit-dim">
-                      {ex.sets}×{ex.reps}{ex.weight ? ` @ ${ex.weight}kg` : ''}
+                      {prescriptionText(ex) || `${ex.sets ?? ex.target_sets ?? '?'}×${ex.reps ?? ex.target_reps ?? '?'}`}
                     </div>
                     {last && (
                       <div className="text-[10px] text-fit-dim/60">
@@ -88,7 +113,15 @@ export default function TodayPlan({ cycle, nextRoutine, lastPerformance, clientU
           <div className="px-4 py-4 text-xs text-fit-dim text-center">Keine Übungen hinterlegt</div>
         )}
 
-        <div className="p-3">
+        <div className="p-3 space-y-2">
+          {onLoadDraft && (nextRoutine.exercises || []).length > 0 && (
+            <button
+              onClick={() => onLoadDraft(withLastPerformance(routineToSessionDraft(picked, { phase, week, planName: cycle.name }), lastPerformanceMap(history)))}
+              className="w-full btn btn-primary py-3 text-sm font-black uppercase"
+            >
+              Mit Vorbereitung loggen
+            </button>
+          )}
           <button
             onClick={markDone}
             disabled={completing}
@@ -98,6 +131,8 @@ export default function TodayPlan({ cycle, nextRoutine, lastPerformance, clientU
           </button>
         </div>
       </div>
+
+      {onLoadDraft && <TemplateLauncher onLoadDraft={(d) => onLoadDraft(withLastPerformance(d, lastPerformanceMap(history)))} />}
 
       <button
         onClick={onLogFreely}

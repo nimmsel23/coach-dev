@@ -15,6 +15,7 @@
  * footer stays inline here (too small to warrant its own sub-component).
  */
 
+import { adoptLastSets } from '../Plan/lib/sessionDraft.js';
 import { useState, useEffect, useMemo } from 'react';
 import { getProgressTrend } from '@db';
 import { Info } from 'lucide-react';
@@ -215,6 +216,12 @@ export default function ExerciseCard({
           onApplyPrev={applyPrev}
         />
       </div>
+
+      {/* Drill 8: Vorschlag „Wie letztes Mal“ – füllt nur leere Felder, ausdrücklich per Tipp */}
+      {replaceSets && adoptLastSets(setsArr, prev?.setsArray) && (
+        <button type="button" onClick={() => { const next = adoptLastSets(setsArr, prev?.setsArray); if (next) { replaceSets(i, next); onToast?.('Werte vom letzten Mal übernommen'); } }}
+          className="mx-3 mb-2 min-h-[44px] text-xs font-bold text-fit-accent underline">Wie letztes Mal übernehmen</button>
+      )}
 
       {/* Set grid */}
       <SetGridEditor

@@ -25,6 +25,7 @@
 import { useState } from 'react';
 import { getExercise, normalizeExerciseRecord, parseQuick, queueForEnrichment } from '@db';
 import { slugify } from './utils';
+import { mergeDraftIntoExercises } from '../Plan/lib/sessionDraft.js';
 
 const PLAIN_NUMBER = /^\s*\d+([.,]\d+)?\s*$/;
 
@@ -145,6 +146,14 @@ export function useExerciseList({ scheduleAutoSave, showToast, saveRef, setDirty
     return added;
   }
 
+  // Drill 6: vorbereiteten Plan-/Vorlagen-Entwurf in die laufende Session einfügen.
+  function appendDraft(draft) {
+    if (!draft?.exercises?.length) return;
+    setExercises(prev => mergeDraftIntoExercises(prev, draft));
+    showToast(`+ ${draft.block || 'Workout'}`);
+    setTimeout(() => { saveRef.current?.(true); setDirty(false); }, 0);
+  }
+
   function addQuick() {
     if (!quickInput.trim()) return;
     const parsed = parseQuick(quickInput);
@@ -236,6 +245,6 @@ export function useExerciseList({ scheduleAutoSave, showToast, saveRef, setDirty
   return {
     exercises, setExercises,
     quickInput, setQuickInput,
-    addEx, addFromTemplate, addQuick, updateEx, addSet, replaceSets, removeSet, moveEx, moveExercise, removeEx,
+    addEx, addFromTemplate, addQuick, appendDraft, updateEx, addSet, replaceSets, removeSet, moveEx, moveExercise, removeEx,
   };
 }

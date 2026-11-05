@@ -49,7 +49,10 @@ import { useSessionRuntimeSync } from './useSessionRuntimeSync.js';
 import { useSessionCrud } from './useSessionCrud.js';
 import { useSessionExport } from './useSessionExport.js';
 
+import { mergeDraftIntoExercises } from '../Plan/lib/sessionDraft.js';
+
 export function useSession({ initialDate, initialDraft, recentDays = 7, coverageThreshold = 1.0, onDateChange = null }) {
+  const draftAppliedRef = useRef(false);
   const [date, setDateState]        = useState(initialDate || localToday());
   const [sessionMode, setSessionMode] = useState('strength');
   const [block, setBlock]           = useState('');
@@ -127,7 +130,7 @@ export function useSession({ initialDate, initialDraft, recentDays = 7, coverage
   // ── Mini-Hooks (PHASE3_TODO.md Stück 4) ─────────────────────────
   const {
     exercises, setExercises, quickInput, setQuickInput,
-    addEx, addFromTemplate, addQuick, updateEx, addSet, replaceSets, removeSet, moveEx, moveExercise, removeEx,
+    addEx, addFromTemplate, addQuick, appendDraft, updateEx, addSet, replaceSets, removeSet, moveEx, moveExercise, removeEx,
   } = useExerciseList({ scheduleAutoSave, showToast, saveRef, setDirty });
 
   const {
@@ -184,6 +187,12 @@ export function useSession({ initialDate, initialDraft, recentDays = 7, coverage
           const found = list.find(s => s.id === sessionId);
           if (found) { setSessionId(found.id); loadSessionData(found); }
           else { setSessionId(list[0].id); loadSessionData(list[0]); }
+          // Drill 6: Plan-Entwurf einmalig in eine schon bestehende Tages-Session einfügen.
+          if (initialDraft?.exercises?.length && !draftAppliedRef.current) {
+            draftAppliedRef.current = true;
+            setExercises(prev => mergeDraftIntoExercises(prev, initialDraft));
+            setTimeout(() => { saveRef.current?.(true); setDirty(false); }, 0);
+          }
         } else {
           setSessionId(null);
           resetSessionData();
@@ -385,7 +394,7 @@ export function useSession({ initialDate, initialDraft, recentDays = 7, coverage
     // falls andere Aufrufer sie direkt brauchen.
     exerciseOps: {
       updateEx, addSet, removeSet, removeEx, replaceSets, moveEx,
-      addEx, quickInput, setQuickInput, addQuick, onToast: showToast,
+      addEx, appendDraft, quickInput, setQuickInput, addQuick, onToast: showToast,
     },
   };
 }

@@ -20,6 +20,8 @@ import ExerciseList from './ExerciseList';
 import CardioSection from './CardioSection.jsx';
 import ActivityAddon from './ActivityAddon';
 import ActivityAddonHistory from './ActivityAddonHistory.jsx';
+import { withLastPerformance } from '../Plan/lib/sessionDraft.js';
+import TemplateLauncher from './TemplateLauncher.jsx';
 import SessionToast from './SessionToast.jsx';
 import SessionSaveFab from './SessionSaveFab.jsx';
 import SessionSidebar from './SessionSidebar';
@@ -236,6 +238,12 @@ export default function SessionEditor({
       </div>
 
       <div className="px-2 space-y-4 mt-1">
+        {sessionMode === 'strength' && exerciseOps.appendDraft && (
+          <details className="rounded-lg border border-fit-line/40 px-3 py-2">
+            <summary className="min-h-[44px] cursor-pointer text-xs font-black uppercase text-fit-dim leading-[44px]">Workout / Vorlage laden</summary>
+            <div className="pb-2"><TemplateLauncher onLoadDraft={(d) => exerciseOps.appendDraft(withLastPerformance(d, prevMap))} /></div>
+          </details>
+        )}
         {sessionMode === 'strength' ? (
           <DndContext sensors={dndSensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             {/* Basis-Übungsliste = impliziter erster Abschnitt der Session

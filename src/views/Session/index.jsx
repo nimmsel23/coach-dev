@@ -56,7 +56,7 @@ export default function Session({
   // TodayPlan — Sackgasse ohne "Workout beenden"-Button (Bug/UX-Lücke aus
   // TODO.md, 2026-10-12).
   const gateActive = isSessionGateActive(session.sessionGate);
-  if (isTodayTab && !planLoading && cycle && nextRoutine && !logFreely && !gateActive && !gateAutoOpenFlag) {
+  if (isTodayTab && !planLoading && cycle && nextRoutine && !logFreely && !gateActive && !gateAutoOpenFlag && !initialDraft) {
     return (
       <TodayPlan
         cycle={cycle}
@@ -65,6 +65,7 @@ export default function Session({
         clientUid={clientUid}
         onDone={reload}
         onLogFreely={() => setLogFreely(true)}
+        onLoadDraft={(draft) => onOpenSession?.(localToday(), draft)}
       />
     );
   }
