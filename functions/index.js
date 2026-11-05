@@ -1,4 +1,5 @@
 const functions = require("firebase-functions/v1");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { getMessaging } = require("firebase-admin/messaging");
@@ -291,11 +292,9 @@ async function sendReminder(uid, tokens, title, body, link, tag = "fitness-remin
   }
 }
 
-exports.scheduledFitnessPushReminders = functions
-  .region("europe-west1")
-  .pubsub.schedule("every 5 minutes")
-  .timeZone(TIME_ZONE)
-  .onRun(async () => {
+exports.scheduledFitnessPushReminders = onSchedule(
+  { schedule: "every 5 minutes", timeZone: TIME_ZONE, region: "europe-west1" },
+  async () => {
     const { date, minutes } = getLocalDateParts();
     const db = getFirestore();
     let sentCount = 0;
@@ -422,7 +421,8 @@ exports.scheduledFitnessPushReminders = functions
       console.error("Error in scheduledPushReminders:", error);
       return { error: error.message };
     }
-  });
+  }
+);
 
 exports.onCoachFeedback = functions
   .region("europe-west1")
