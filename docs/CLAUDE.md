@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+> **Node-Backend ausgelagert (2026-11-04):** `server.mjs` und Server-Code liegen in `~/dev/fitness-backend`. Dev-Scripts (`dev`/`start`) rufen `../fitness-backend/server.mjs` auf; Server-Doku in dessen `CLAUDE.md`. Dependencies dort pflegen, nicht hier.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 **Sub-Docs (lies mit, je nach Bereich):**
@@ -207,75 +209,9 @@ mit Buttons und Sammelmeldung pro Klient. Texte stehen in `functions/notificatio
 Setup-Tab (Notification-Panel). Der Coach-Tab läuft **standalone aus `~/coach-dev`** (`vos-coach.web.app`),
 dort liegt auch der Hash-Router. Details, Datenfluss, Deploy-Stand: `docs/PUSH-NOTIFICATIONS.md`.
 
-## Backend — Server-Rollen auf einen Blick
+## Backend — Server-Rollen
 
-| Datei | Port | Typ | Rolle |
-|-------|------|-----|-------|
-| `server.mjs` | 9100 | Node/Hono | **DEV-Server** — Vite-Proxy-Target, Frontend-Dev |
-| `fitness/api/main.py` | 9150 | Python/FastAPI | **Prod-Backend** — Tailscale-Funnel, Direktimports, Service `fitness-api.service` |
-
-**server.mjs** (Hono, `@hono/node-server`):
-- API-Routen: `/session`, `/journal`, `/exercises/search`, `/coverage`, `/fitness/plan`, `/fitness/weekly`, `/fitness/export`, `/fitness/body`
-- Static-Serving (dist/ oder public/) + SPA-Fallback
-- Proxies: wger (lokal, derzeit gestoppt), HabitSync (:6842)
-- **Session-Storage (seit 2026-08-23, siehe Sub-Doc-Sektion "Session-Storage:
-  Schichten & Konfliktmodell" in `docs/ARCHITECTURE.md`):** `POST /session`
-  schreibt nur noch die JSON-Datei (SOT) und benachrichtigt danach — awaited,
-  nicht mehr fire-and-forget — `fitness-api.service`, das per SQLAlchemy-
-  Upsert die einzige `training_history.sqlite`-Instanz schreibt. Node hat
-  keinen eigenen SQLite-Writer mehr (früher paralleler, unkoordinierter
-  better-sqlite3-Writer, Ursache für ~57/116 Zero-Value-Zeilen). Response
-  trägt `sqliteSync: false`, wenn der Python-Sync fehlschlägt — der JSON-Save
-  selbst bleibt davon unberührt.
-- **wger Status (2026-08-30)**: Der Docker-Stack unter `~/.local/docker-apps/wger` ist aktuell bewusst gestoppt, weil wger faktisch nicht als aktives Fitness-Backend genutzt wird. Relevante SOTs fuer Plaene, Sessions und lokale Runtime bleiben `server.mjs`/`fitness-api.service` plus `~/.aos/fitness/`. Falls wger spaeter wieder aktiviert wird, Host-Zugang ueber `http://localhost` bzw. `WGER_BASE=http://127.0.0.1/api/v2`, nicht `:8000`.
-- **wger Gewichtssync**: `POST /fitness/body` mit `weight_kg` → schreibt Body-JSON + pusht `POST /api/v2/weightentry/` zu wger (fire-and-forget). Token: `WGER_API_TOKEN` env. Base-URL: `WGER_BASE` env (frueher oft `:8000` dokumentiert, tatsaechlicher Host-Zugang ueber `:80`, siehe `../fitness/catalog/CLAUDE.md`).
-- **UID-Fallback (Fix 2026-08-15)**: alle Routen ohne expliziten `uid`-Query-Param
-  fallen jetzt einheitlich auf `FITNESS_UID` (aufgelöst aus `.active-uid`-Datei
-  bzw. Env, Modul-Konstante oben in der Datei) zurück. Vorher fielen 12 Routen
-  stattdessen auf den literalen String `"default"` zurück, während andere
-  bereits korrekt `FITNESS_UID` nutzten — dadurch landeten Requests ohne
-  `?uid=`/`X-User-UID`-Header in einem separaten `~/.aos/fitness/users/default/`-
-  Ordner, byte-identisch dupliziert zur echten UID (verifiziert + Ordner
-  gelöscht). Das Python-Prod-Backend (`fitness/api/config.py::_uid_from_request`)
-  hatte diesen Bug nie — dort war die Fallback-Kette schon korrekt bis auf
-  `_active_uid_fallback()`.
-
-**API-Autodoc (2026-08-31, `@hono/swagger-ui` + `@hono/zod-openapi`):**
-`GET /docs` (Swagger UI) und `GET /openapi.json` (das Spec selbst) laufen
-mit. Zwei Ebenen, bewusst nicht identisch tief dokumentiert:
-- **Basis-Ebene (alle ~60 Routen):** `buildOpenApiSpec()` in `server.mjs`
-  introspektiert zur Laufzeit Honos eigene Routing-Tabelle (`app.routes`,
-  offiziell öffentliches API laut `hono-base.d.ts`) und listet jede Route
-  mit Pfad/Methode/Path-Params — kein Handschrift-Eintrag, kann also nie
-  hinter dem Code zurückfallen, liefert aber keine Body-/Response-Schemas.
-- **Zod-Ebene (nur `GET /exercises/search`, `GET /fitness/plan`,
-  `POST /session`):** `app` ist `OpenAPIHono` statt `Hono` (Drop-in-Ersatz,
-  alle anderen `app.get/post/...`-Aufrufe unverändert lauffähig). Diese drei
-  Routen sind stattdessen über `app.openapi(createRoute({...}), handler)`
-  mit echten Zod-Schemas registriert — inkl. echter Request-Validierung
-  (kaputte Query-Werte/Bodies geben jetzt `400` mit ZodError statt vorher
-  stillem Fallback auf leere Defaults). `POST /session`s Body-Schema ist
-  bewusst `.loose()` + fast komplett optional, um reale Session-Payloads mit
-  gewachsenen Zusatzfeldern (`slots[]`, `rev`, ...) nicht zurückzuweisen —
-  Ziel ist Malformed-Input-Schutz, keine strenge Shape-Gate-Validierung.
-  `GET /openapi.json` merged beide Ebenen: Basis-Spec als Fallback, die
-  Zod-Routen überschreiben ihren jeweiligen Pfad/Methode-Eintrag mit dem
-  über `app.getOpenAPIDocument()` gewonnenen, schema-reichen Eintrag.
-- Muster für weitere Routen: siehe die drei bestehenden `createRoute(...)`-
-  Blöcke in `server.mjs` als Vorlage.
-
-**fitness-runtime.mjs** (Shared Runtime): `searchExercises()`, `buildPlan()`,
-`getWeeklySummary()` (via Python weekly.py), `exportSessionMarkdown()`.
-
-**Daten**: `~/.aos/fitness/`
-- `sessions/YYYY-MM-DD.json` — Session-Logs (SOT für Node-Server)
-- `sessions/training_history.sqlite` — SQLite Mirror (SOT für catalog Python-Tools)
-- `journal/YYYY-MM-DD.md` — Text-Notizen
-- `body/YYYY-MM-DD.json` — Körpermessungen (Fitbit-Pipeline)
-- `plan.json` — Aktiver Trainingsplan
-- `agent-state/` — catalog Runtime-State (Symlink: catalog/state)
-
----
+Der Node-Dev-Server (`server.mjs`, Hono, :9100, Swagger/Zod-Autodoc, Session-Storage) liegt in `~/dev/fitness-backend` (Doku dort in `CLAUDE.md`). Prod-Backend bleibt `fitness/api/main.py` (:9150, Python/FastAPI). Rollen-Tabelle und Datenpfade stehen im Backend-Repo.
 
 ## Commands
 
