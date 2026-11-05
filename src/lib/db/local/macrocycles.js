@@ -1,7 +1,9 @@
 import { api } from "./core";
 
 // Makrozyklen — rotierender Trainingszyklus (Push/Pull/Legs o.ä.), kein Kalender.
-const base = (clientUid) => `/fitness/coach/macrocycles/${encodeURIComponent(clientUid)}`;
+// Pfadpräfix des Coach-Servers; Plan/Coach setzen VITE_COACH_API_PREFIX (z. B. "api/"), Standard "/".
+const PREFIX = import.meta.env.VITE_COACH_API_PREFIX || "/";
+const base = (clientUid) => `${PREFIX}fitness/coach/macrocycles/${encodeURIComponent(clientUid)}`;
 
 export async function listMacrocycles(clientUid) {
   try {
