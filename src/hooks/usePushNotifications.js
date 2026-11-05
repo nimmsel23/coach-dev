@@ -3,18 +3,24 @@ import { isLocalMode, getPushSettings, savePushSettings } from '@db'
 import { getMessagingIfSupported, functionsInstance, httpsCallable } from '@cloud/firebase.js'
 import { getToken } from 'firebase/messaging'
 import { VAPID_KEY } from '@firebase-config'
-import { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, refreshPushDevice } from './pushSettings.js'
+import { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, refreshPushDevice, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice } from './pushSettings.js'
 
-export { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings }
+export { DEFAULT_QUIET_HOURS, describeDevice, mergePushSettings, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice }
 
 const PUSH_SW_URL = '/fitness-messaging-sw.js'
 const PUSH_SW_SCOPE = '/fitness-push/'
 
-// Dieselbe Hardware kann mehrere installierte Apps haben (fitness-aos = klassisch, fitness-vos = Pulse), jede mit eigenem
-// Token. Der Origin-Name im Label macht in der Geräteliste sichtbar, welcher Eintrag zu welcher App gehört.
-function deviceLabel() {
+// Bildschirmgröße in CSS-Pixeln (kürzere Seite zuerst, unabhängig von der Drehung), z. B. "390×844" (iPhone) gegen "820×1180" (iPad).
+function screenSize() {
+  if (typeof screen === 'undefined' || !screen.width || !screen.height) return null
+  const [w, h] = [Math.min(screen.width, screen.height), Math.max(screen.width, screen.height)]
+  return `${w}×${h}`
+}
+
+// Hostname ohne ".web.app" (fitness-aos = klassisch, fitness-vos = Pulse); auf localhost leer.
+function originName() {
   const host = typeof location !== 'undefined' ? location.hostname.replace(/\.web\.app$/, '') : ''
-  return host && host !== 'localhost' ? `${describeDevice()} · ${host}` : describeDevice()
+  return host && host !== 'localhost' ? host : null
 }
 
 export function usePushNotifications(user) {
@@ -51,7 +57,7 @@ export function usePushNotifications(user) {
         const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: registration })
         if (!alive) return
         setCurrentToken(token || null)
-        const next = refreshPushDevice(settings, token, deviceLabel())
+        const next = refreshPushDevice(settings, token, describeDevice(), { origin: originName(), screen: screenSize() })
         if (next !== settings) await persist(next)
       } catch {
         // Gerät nicht erkennbar → die Liste kommt ohne "Dieses Gerät"-Markierung aus
@@ -79,7 +85,7 @@ export function usePushNotifications(user) {
       await persist(mergePushSettings(settings, {
         enabled: true,
         token,
-        devices: [{ token, label: deviceLabel(), addedAt: new Date().toISOString() }],
+        devices: [{ token, label: describeDevice(), ...(originName() ? { origin: originName() } : {}), ...(screenSize() ? { screen: screenSize() } : {}), addedAt: new Date().toISOString(), lastSeenAt: new Date().toISOString() }],
       }))
     } catch (error) {
       setNotice({ kind: 'error', text: error?.message || 'Aktivieren fehlgeschlagen' })

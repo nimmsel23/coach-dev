@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Bell, BellOff, BellRing, Moon, Send, Smartphone, Trash2, Users, Volume2, VolumeX } from 'lucide-react'
 import { getAllUserProfiles } from '@db'
-import { DEFAULT_QUIET_HOURS, usePushNotifications } from '../../hooks/usePushNotifications.js'
+import { DEFAULT_QUIET_HOURS, usePushNotifications, appNameFromOrigin, likelyDuplicateTokens, formatLastSeen, isStaleDevice } from '../../hooks/usePushNotifications.js'
 
 // Erinnerungen für alle Nutzer — functions/index.js (scheduledPushReminders)
 const REMINDER_TYPES = [
@@ -123,6 +123,13 @@ export default function NotificationsSection({ user }) {
     ? settings.devices
     : (settings?.tokens || []).map((token) => ({ token, label: 'Gerät (älter)', addedAt: null }))
 
+  const duplicates = likelyDuplicateTokens(devices)
+  const sortedDevices = [...devices].sort((a, b) => {
+    if (a.token === currentToken) return -1
+    if (b.token === currentToken) return 1
+    return (Date.parse(b.lastSeenAt || '') || 0) - (Date.parse(a.lastSeenAt || '') || 0)
+  })
+
   return (
     <section className="card p-6 space-y-6 animate-in fade-in slide-in-from-left-4 duration-500">
       <div className="flex items-center gap-3">
@@ -170,17 +177,34 @@ export default function NotificationsSection({ user }) {
       ) : (
         <div className="space-y-6">
           <Group icon={Smartphone} title="Geräte" hint="Jedes Gerät, das Push empfängt. Entfernte Geräte melden sich beim nächsten Aktivieren neu an.">
-            {devices.map((device) => (
+            {sortedDevices.map((device) => (
               <div key={device.token} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-fit-bg2 border border-fit-line">
                 <div className="min-w-0">
                   <div className="text-xs font-medium text-fit-ink truncate">
                     {device.label || 'Gerät'}
+                    {appNameFromOrigin(device.origin) && (
+                      <span className="ml-2 text-[10px] font-semibold text-fit-dim bg-fit-line/40 px-1.5 py-0.5 rounded">{appNameFromOrigin(device.origin)}</span>
+                    )}
                     {device.token === currentToken && (
                       <span className="ml-2 text-[10px] font-semibold text-fit-accent bg-fit-accent/10 px-1.5 py-0.5 rounded">Dieses Gerät</span>
                     )}
                   </div>
-                  {formatAdded(device.addedAt) && (
-                    <div className="text-[11px] text-fit-dim" style={{ opacity: 0.7 }}>seit {formatAdded(device.addedAt)}</div>
+                  <div className="text-[11px] text-fit-dim" style={{ opacity: 0.7 }}>
+                    {[
+                      device.screen,
+                      formatAdded(device.addedAt) && `seit ${formatAdded(device.addedAt)}`,
+                      formatLastSeen(device.lastSeenAt) ? `zuletzt aktiv ${formatLastSeen(device.lastSeenAt)}` : 'zuletzt aktiv: unbekannt',
+                    ].filter(Boolean).join(' · ')}
+                  </div>
+                  {isStaleDevice(device) && (
+                    <div className="text-[11px] text-fit-accent" style={{ opacity: 0.9 }}>Lange nicht gesehen – vermutlich ein altes Gerät</div>
+                  )}
+                  {duplicates.has(device.token) && device.token !== currentToken && (
+                    <div className="text-[11px] text-fit-accent" style={{ opacity: 0.9 }}>
+                      {duplicates.get(device.token) === 'apps'
+                        ? 'Gleiches Gerät, andere App – Meldungen kommen evtl. doppelt'
+                        : 'Gleiche Gerätebeschreibung – evtl. altes oder doppeltes Gerät (Test senden zeigt, wo es ankommt)'}
+                    </div>
                   )}
                 </div>
                 <div className="flex gap-2 shrink-0">
