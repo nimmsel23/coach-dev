@@ -55,12 +55,12 @@ export function scanRepo(dir) {
     entries.push({
       id: a.id, kind: "solo", name: m.name ?? a.id, short: m.short ?? m.name ?? a.id,
       description: m.description ?? "", accent: m.accent ?? "#888",
-      site: a.site, url: url(a.site), tab: a.tab ?? null,
+      site: a.site ?? null, url: a.site && !a.planned ? url(a.site) : null, tab: a.tab ?? a.defaultTab ?? null, planned: Boolean(a.planned),
     });
   }
   // Haupt-App(s): alle übrigen Hosting-Targets (bzw. firebase.json-Sites), die keine Solo-App sind
   const mainSites = Object.entries(rcTargets).filter(([t]) => !soloTargets.has(t)).flatMap(([t, sites]) => sites.map((s) => [t, s]));
-  if (!mainSites.length) for (const s of fbSites) if (!entries.some((e) => e.site === s)) mainSites.push([s, s]);
+  if (!mainSites.length && !solo.length) for (const s of fbSites) if (!entries.some((e) => e.site === s)) mainSites.push([s, s]);
   for (const [t, site] of mainSites) {
     const m = meta[t] ?? meta[repo.replace(/-dev$/, "")] ?? Object.values(meta).find((x) => !x.id || x.id === t) ?? {};
     entries.unshift({
@@ -81,12 +81,14 @@ p.sub{color:var(--mut);margin:0 0 16px}input{width:100%;padding:10px 12px;border
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
 a.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:12px 14px}
 a.card:hover{border-color:var(--accent)}b{display:block}small{color:var(--mut);display:block}.tag{display:inline-block;font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:0 6px;margin-top:6px}
+a.planned{opacity:.6;border-style:dashed;cursor:default}
 .hide{display:none}`;
 
 function card(a, withRepo) {
-  return `<a class="card" style="--accent:${esc(a.accent)}" href="${esc(a.url)}" target="_blank" rel="noopener" data-q="${esc((a.name + " " + a.description + " " + a.site + " " + (a.repo ?? "")).toLowerCase())}">
+  const open = a.url ? `<a class="card" href="${esc(a.url)}" target="_blank" rel="noopener"` : `<a class="card planned"`;
+  return `${open} style="--accent:${esc(a.accent)}" data-q="${esc((a.name + " " + a.description + " " + (a.site ?? "") + " " + (a.repo ?? "")).toLowerCase())}">
   <b>${esc(a.name)}</b><small>${esc(a.description || "–")}</small>
-  <span class="tag">${esc(a.site)}</span>${a.kind === "main" ? ' <span class="tag">Haupt-App</span>' : ""}${a.tab ? ` <span class="tag">Tab ${esc(a.tab)}</span>` : ""}${withRepo ? ` <span class="tag">${esc(a.repo)}</span>` : ""}
+  ${a.site ? `<span class="tag">${esc(a.site)}</span>` : ""}${a.planned ? ' <span class="tag">geplant, noch keine eigene Site</span>' : ""}${a.kind === "main" ? ' <span class="tag">Haupt-App</span>' : ""}${a.tab ? ` <span class="tag">Tab ${esc(a.tab)}</span>` : ""}${withRepo ? ` <span class="tag">${esc(a.repo)}</span>` : ""}
 </a>`;
 }
 
