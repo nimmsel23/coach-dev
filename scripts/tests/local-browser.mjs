@@ -57,6 +57,16 @@ try {
   await click('Plan gestalten');
   await click('+ Trainingstag');
   await labelFill('Name des Trainingstags','Ganzkörper A');
+  // Modul-Workouts (6Pack-Tage, Calisthenics-Skills) kommen aus dem Katalog und lassen sich an einen Tag anhängen (hier an einen Wegwerf-Tag).
+  await click('+ Trainingstag');
+  await wait(`!!document.querySelector('[aria-label="Modul-Workout an diesen Tag anhängen"]')`, 'Modul-Auswahl im Planstudio');
+  const moduleOptions = await evaluate(`[...document.querySelector('[aria-label="Modul-Workout an diesen Tag anhängen"]').options].map((o) => o.text)`);
+  assert.ok(moduleOptions.includes('6Pack · Woche 1 · Tag 1') && moduleOptions.includes('Skill · Front Lever'), 'Module stehen in der Auswahl (' + moduleOptions.length + ' Einträge)');
+  await fill('[aria-label="Modul-Workout an diesen Tag anhängen"]', await evaluate(`[...document.querySelector('[aria-label="Modul-Workout an diesen Tag anhängen"]').options].find((o) => o.text === '6Pack · Woche 1 · Tag 1').value`));
+  await click('Anhängen');
+  await wait(has('Marching Planks'), 'angehängte 6Pack-Übungen erscheinen im Tag');
+  await click('Tag entfernen');
+  await wait(`!document.body.innerText.includes('Marching Planks')`, 'Wegwerf-Tag entfernt');
   await fill('[aria-label="Übung suchen und hinzufügen"]','Barbell Bench Press');
   await click('Barbell Bench Press',false);
   await wait(`!!document.querySelector('[aria-label$="Satzvorgaben bearbeiten"]')`);

@@ -60,6 +60,7 @@ export default function LocalCoachApp() {
   const [query, setQuery] = useState('');
   const [overviewSort, setOverviewSort] = useState('attention');
   const [plans, setPlans] = useState([]);
+  const [modules, setModules] = useState([]);
   const [clientSummaries, setClientSummaries] = useState([]);
   const [summariesLoading, setSummariesLoading] = useState(false);
   const [tractionOpen, setTractionOpen] = useState(false);
@@ -212,6 +213,8 @@ export default function LocalCoachApp() {
     finally { setSavingFirebaseUid(''); }
   }
   useEffect(() => { loadClients(); }, []);
+  // Modul-Workouts (6Pack, Skills) für 'Modul anhängen' im Planstudio; fehlt der Endpunkt, bleibt die Liste leer.
+  useEffect(() => { api('coach/local/modules').then((data) => setModules(data.modules || [])).catch(() => setModules([])); }, []);
   useEffect(() => {
     const mine = ++sequence.current;
     setPlans([]); setShareCard(null); setViewing(null); setHistory(null); setReleasing(null); setCreating(false); setError(''); setNotice('');
@@ -493,7 +496,7 @@ export default function LocalCoachApp() {
               </section>
             </div>
           </section> : <>
-          {viewing ? <section className="space-y-4"><div className="flex flex-wrap items-center gap-2"><button className={button} onClick={() => setViewing(null)}><ArrowLeft size={15} className="mr-1 inline" /> Alle Pläne</button><button className={button} onClick={() => { setEditing(viewing); setViewing(null); }}>Plan bearbeiten</button></div><PlanDocument plan={viewing} clientName={client.name} /></section> : editing ? <PlanEditor key={`${clientId}:${editing.id}`} plan={editing} clientName={client.name} uid={clientId} actorUid="local-coach" draftNamespace="laptop" catalogSearch={searchCatalog} templates={[]} saveDraft={(draft) => api(planPath(editing.id), 'PUT', draft)} onClose={returnToPlans} onSaved={async () => { setEditing(null); setNotice('Entwurf lokal gesichert. Noch nicht an den Klienten gesendet.'); await reload(); }} /> : <>
+          {viewing ? <section className="space-y-4"><div className="flex flex-wrap items-center gap-2"><button className={button} onClick={() => setViewing(null)}><ArrowLeft size={15} className="mr-1 inline" /> Alle Pläne</button><button className={button} onClick={() => { setEditing(viewing); setViewing(null); }}>Plan bearbeiten</button></div><PlanDocument plan={viewing} clientName={client.name} /></section> : editing ? <PlanEditor key={`${clientId}:${editing.id}`} plan={editing} clientName={client.name} uid={clientId} actorUid="local-coach" draftNamespace="laptop" catalogSearch={searchCatalog} templates={modules} apiClient={{ get: (suffix) => api(`coach/local/modules/${encodeURIComponent(suffix.replace(/^\/routines\//, ''))}`) }} saveDraft={(draft) => api(planPath(editing.id), 'PUT', draft)} onClose={returnToPlans} onSaved={async () => { setEditing(null); setNotice('Entwurf lokal gesichert. Noch nicht an den Klienten gesendet.'); await reload(); }} /> : <>
             <section className="rounded-2xl border border-fit-line bg-fit-card p-4 sm:p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="flex items-center gap-2 font-semibold"><ClipboardList size={19} /> Trainingspläne</h3><p className="mt-1 text-sm text-fit-muted">Erstellen → lokal sichern → Version freigeben → übergeben</p></div><button className={`${button} bg-fit-accent text-fit-bg`} disabled={busy} onClick={() => setCreating(!creating)}><Plus size={15} className="mr-1 inline" /> Neuen Plan schmieden</button></div>
               {creating && <form onSubmit={(e) => { e.preventDefault(); act(() => create({ name: name.trim(), totalWeeks: 10, routines: [] })); }} className="mt-4 space-y-3"><label className="block text-sm">Planname<input aria-label="Neuer Planname" autoFocus maxLength={80} value={name} onChange={(e) => setName(e.target.value)} className={`${input} mt-1`} placeholder="z. B. Kraftaufbau · 3 Tage" /></label><button disabled={busy || !name.trim()} className={`${button} bg-fit-accent text-fit-bg`}>Plan gestalten</button></form>}
               {client.hasLegacyPlan && <button disabled={busy} className="mt-4 min-h-[44px] text-left text-sm text-fit-accent underline" onClick={() => act(async () => { const old = await api(`${clientPath}/legacy`); const body = importClientForge(old); if (!body.routines.length) throw new Error('Der bestehende ClientForge-Plan enthält keine Einheiten.'); await create(body); })}>Bestehenden ClientForge-Plan übernehmen</button>}

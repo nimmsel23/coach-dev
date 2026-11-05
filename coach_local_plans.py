@@ -302,6 +302,22 @@ def create_router(root=None, deliver=None):
             logging.exception('Unable to read local Coach plan-feedback summary')
             raise HTTPException(503, 'Plan-Rückmeldungen lokal nicht verfügbar. Serverprotokoll prüfen.')
 
+    # Modul-Workouts (6Pack-Tage, Calisthenics-Skills) direkt aus dem Katalog, ohne Firestore.
+    @router.get('/api/coach/local/modules')
+    async def module_list(request: Request):
+        local_only(request)
+        modules = load_plan_module('module_templates')
+        return {'modules': [{'id': r['id'], 'name': r['meta']['name'], 'category': r['meta']['category'], 'exerciseCount': r['meta']['exerciseCount']} for r in modules.build_all()]}
+
+    @router.get('/api/coach/local/modules/{module_id}')
+    async def module_detail(module_id: str, request: Request):
+        local_only(request)
+        modules = load_plan_module('module_templates')
+        for r in modules.build_all():
+            if r['id'] == module_id:
+                return {'routine': {'id': r['id'], 'name': r['meta']['name'], 'exercises': r['exercises']}}
+        raise HTTPException(404, 'Modul nicht gefunden.')
+
     @router.get('/api/coach/local/users')
     async def firebase_users(request: Request):
         local_only(request)
@@ -791,7 +807,7 @@ def create_router(root=None, deliver=None):
             raise HTTPException(502, 'Versand fehlgeschlagen. Lokaler Plan bleibt gespeichert. Serverprotokoll prüfen.')
     # Compatibility aliases share handlers, store and access checks with the canonical API.
     for route in list(router.routes):
-        if route.path.startswith('/api/coach/local/users'):
+        if route.path.startswith(('/api/coach/local/users', '/api/coach/local/modules')):
             continue
         if route.path == '/api/clients':
             aliases = ['/api/coach/local/clients']
