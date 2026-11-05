@@ -31,6 +31,9 @@ Skills und 6Pack sind aus der Fitness-Session herausgelöst. Die Session bietet 
 | Dritte Datenquelle: Plan-Tab hat zusätzlich 14 "Skill: <Name>"-Routinen (Strong-Modell, `category: "calisthenics-skill"`), die aus denselben Skills generiert wurden — listen aber alle Progressionsstufen einer Skill gleichzeitig als flache Übungsliste statt stage-aware wie SkillsCard. Komplett unsynchronisiert mit #1/#2 (siehe Task "Skills/6Pack Learn-Tab-Überschneidung", Konsolidierung noch offen). |
 | `SessionEditor.jsx` | `SessionGateCard` ist kein inline Card-Element mehr, sondern ein Sheet (Portal, Bottom-Sheet), das öffnet wenn `currentSubTab === 'today'` (Nav-Klick auf "Heute"/"Session") — Editor bleibt darunter jederzeit erreichbar |
 
+- **Gate-Portal** (2026-11-05) — `GatePortalGrid` (Suche, Kürzel `/` `1`–`9`, Zuletzt genutzt, Ziele über alle Tabs), Kraft/Ausdauer + Split-Chips im Gate, Hub-Modus per Hochziehen, KEIN Auto-Open mehr. Per Browser-Harness (Firefox headless, echte Komponente) geprüft: Zähler, Suche, Enter/Kürzel, Recent, Chips, Modus-Toggle, Hub-Geste, Sheet-Schließen bei Hash-Navigation.
+- **Splits Shoulders/Arms** — Autoerkennung nur über Primärmuskeln (`utils.js::inferBlockFromExercises`).
+
 ## Auffälligkeiten (2026-10-13)
 - **Gefixt:** Push-Notification zur laufenden Workout-Stoppuhr führte beim
   Antippen ins Leere — kein Weg, die Session zu beenden, `sessionGate.endedAt`
