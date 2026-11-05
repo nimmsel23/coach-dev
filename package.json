@@ -97,7 +97,7 @@
     "immer": "^11.2.9",
     "internmap": "^2.0.3",
     "js-yaml": "^5.5.0",
-    "lucide-react": "^0.453.0",
+    "lucide-react": "^1.64.0",
     "re2js": "^2.9.1",
     "react": "^19.3.1",
     "react-body-highlighter": "^2.0.5",
