@@ -329,6 +329,7 @@ export default function SessionEditor({
         date={date}
         sessionGate={sessionGate}
         currentSubTab={currentSubTab}
+        exercises={exercises}
         onSubNav={onSubNav}
         onStartGate={() => { startSessionGate(); setActiveModal(null); }}
         onStopGate={stopSessionGate}

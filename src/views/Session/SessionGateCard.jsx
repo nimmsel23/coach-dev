@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Play, Square, Clock3, CheckCircle2, PencilLine, CalendarDays, ClipboardList, TimerReset, Sparkles, BookOpen } from 'lucide-react';
+import { Play, Square, Clock3, CheckCircle2, PencilLine } from 'lucide-react';
 import {
   normalizeSessionGate,
   isSessionGateActive,
@@ -8,14 +8,8 @@ import {
 import { useGateElapsed } from './useGateElapsed.js';
 import { gateTone, GATE_STOP_STYLE } from './gateTone.js';
 import GateIdleSuggestion from './GateIdleSuggestion.jsx';
-
-const SESSION_NAV_ITEMS = [
-  { id: 'today', label: 'Session', code: '01', Icon: CalendarDays },
-  { id: 'plan', label: 'Plan', code: '02', Icon: ClipboardList, comingSoon: true },
-  { id: 'logbuch', label: 'Logbuch', code: '03', Icon: BookOpen },
-  { id: 'timer', label: '6Pack-App', code: '04', Icon: TimerReset },
-  { id: 'skills', label: 'Skills-App', code: '05', Icon: Sparkles },
-];
+import GatePortalGrid from './GatePortalGrid.jsx';
+import { countSessionProgress } from './SessionGateBar.jsx';
 
 // Ring füllt sich sichtbar über eine 90-Minuten-Referenzsession, läuft danach
 // einfach weiter am Anschlag (kein harter Cutoff, nur ein Referenzrahmen für
@@ -48,7 +42,22 @@ function StatusEyebrow({ active, completed }) {
   );
 }
 
-export default function SessionGateCard({ date, sessionGate, currentSubTab = null, onSubNav, onStart, onStop }) {
+function TodayCounters({ exercises }) {
+  const { exerciseCount, setCount, volume } = countSessionProgress(exercises);
+  const items = [[exerciseCount, 'Übungen'], [setCount, 'Sätze'], [`${volume.toLocaleString('de-DE')} kg`, 'Volumen']];
+  return (
+    <div className="relative mt-4 grid grid-cols-3 gap-2">
+      {items.map(([value, label]) => (
+        <div key={label} className="rounded-xl py-2 text-center" style={{ background: 'var(--bg2)' }}>
+          <div className="font-mono font-bold tabular-nums text-sm" style={{ color: 'var(--ink)' }}>{value}</div>
+          <div className="text-[8px] font-bold tracking-[0.15em] uppercase mt-0.5" style={{ color: 'var(--dim)', opacity: 0.6 }}>{label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], onSubNav, onLeave, onStart, onStop }) {
   const gate = normalizeSessionGate(sessionGate);
   const active = isSessionGateActive(gate);
   const completed = isSessionGateCompleted(gate);
@@ -180,42 +189,10 @@ export default function SessionGateCard({ date, sessionGate, currentSubTab = nul
         </div>
       </div>
 
+      {(active || completed) && <TodayCounters exercises={exercises} />}
+
       <div className="relative mt-5 pt-4" style={{ borderTop: '1px dashed var(--line)' }}>
-        <div className="text-[10px] font-bold tracking-[0.15em] mb-2.5 font-mono" style={{ color: 'var(--dim)', opacity: 0.5 }}>
-          BEREICHE
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
-          {SESSION_NAV_ITEMS.map(({ id, label, code, Icon }) => {
-            const selected = (currentSubTab || 'today') === id;
-            return (
-              <button
-                key={id}
-                onClick={() => onSubNav?.(id)}
-                className="relative rounded-xl px-3 py-2.5 text-left transition-all active:scale-[0.98]"
-                style={{
-                  background: selected ? 'rgba(200,255,0,0.08)' : 'var(--bg2)',
-                  border: selected ? '1px solid rgba(200,255,0,0.3)' : '1px solid transparent',
-                }}
-              >
-                <span
-                  className="absolute top-1.5 right-2 text-[8px] font-mono font-bold"
-                  style={{ color: selected ? 'var(--accent)' : 'var(--dim)', opacity: 0.4 }}
-                >
-                  {code}
-                </span>
-                <div className="flex items-center gap-2">
-                  <Icon size={13} style={{ color: selected ? 'var(--accent)' : 'var(--dim)' }} />
-                  <span
-                    className="text-xs font-semibold"
-                    style={{ color: selected ? 'var(--accent)' : 'var(--ink)' }}
-                  >
-                    {label}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+        <GatePortalGrid currentSubTab={currentSubTab} onSubNav={onSubNav} onLeave={onLeave} />
       </div>
     </section>
   );
