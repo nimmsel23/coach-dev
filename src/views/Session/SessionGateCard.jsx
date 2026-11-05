@@ -10,6 +10,7 @@ import { gateTone, GATE_STOP_STYLE } from './gateTone.js';
 import GateIdleSuggestion from './GateIdleSuggestion.jsx';
 import GatePortalGrid from './GatePortalGrid.jsx';
 import SplitPicker from './SplitPicker.jsx';
+import GateNextPlanCard from './GateNextPlanCard.jsx';
 import { countSessionProgress } from './SessionGateBar.jsx';
 
 // Ring füllt sich sichtbar über eine 90-Minuten-Referenzsession, läuft danach
@@ -58,7 +59,7 @@ function TodayCounters({ exercises }) {
   );
 }
 
-export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], sessionMode = 'strength', setSessionMode, block = '', setBlock, onSplitLongPress, hub = false, onSubNav, onLeave, onStart, onStop }) {
+export default function SessionGateCard({ date, sessionGate, currentSubTab = null, exercises = [], sessionMode = 'strength', setSessionMode, block = '', setBlock, onSplitLongPress, onApplyRoutine, hub = false, onSubNav, onLeave, onStart, onStop }) {
   const gate = normalizeSessionGate(sessionGate);
   const active = isSessionGateActive(gate);
   const completed = isSessionGateCompleted(gate);
@@ -189,6 +190,13 @@ export default function SessionGateCard({ date, sessionGate, currentSubTab = nul
           </div>
         </div>
       </div>
+
+      {onApplyRoutine && !completed && (
+        <GateNextPlanCard
+          className="relative mt-5"
+          onApply={async (routine) => { await onApplyRoutine(routine); onLeave?.(); }}
+        />
+      )}
 
       {setSessionMode && (
         <div className="relative mt-5">

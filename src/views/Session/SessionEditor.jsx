@@ -84,6 +84,16 @@ export default function SessionEditor({
         : 'Alle Übungen sind schon in der Session'
     );
   }
+  // "Nächster Plan"-Karte im Gate-Sheet: Routine ohne Split-Wechsel in die Session übernehmen.
+  function applyNextRoutine(routine) {
+    const list = routine?.exercises || [];
+    const added = addFromTemplate?.(list) || 0;
+    exerciseOps?.onToast?.(
+      !list.length ? `${routine?.label || routine?.name || 'Plan'} hat keine Übungen`
+        : added ? `+ ${added} Übungen aus „${routine?.label || routine?.name}"`
+        : 'Alle Übungen sind schon in der Session'
+    );
+  }
   const gpsMapsUrl = normalizeSessionGate(sessionGate).gps?.mapsUrl || null;
   // Beginn/Ende manuell setzen (wie es Start/Stopp der Stoppuhr automatisch tun);
   // die Dauer folgt daraus, solange sie leer oder noch der alte Automatik-Wert ist.
@@ -347,6 +357,7 @@ export default function SessionEditor({
         exercises={exercises}
         sessionMode={sessionMode} setSessionMode={setSessionMode}
         block={block} setBlock={v => { setBlock(v); scheduleAutoSave(); }}
+        onApplyRoutine={addFromTemplate ? applyNextRoutine : undefined}
         onSplitLongPress={addFromTemplate ? (k) => { setActiveModal(null); setPlanSplit(k); } : undefined}
         onSubNav={onSubNav}
         onStartGate={() => { startSessionGate(); setActiveModal(null); }}
