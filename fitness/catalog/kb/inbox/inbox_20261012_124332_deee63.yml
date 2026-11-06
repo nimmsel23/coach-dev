@@ -1,29 +1,11 @@
 name: inbox_20261012_124332_deee63
 description: 'Proactively generated expert draft for: Klimmzug an Leiste'
-generated_at: '2026-11-01T20:49:59.854268+00:00'
-enriched_at: '2026-11-01T20:49:59.854268+00:00'
+generated_at: '2026-11-06T02:30:28.641108+00:00'
+enriched_at: '2026-11-06T02:30:28.641108+00:00'
 exercises:
-- name: Klimmzug an Leiste
-  wger_id: 821
-  external_ids:
-    wger:
-    - 821
-    yuhonas:
-    - Pullups
-  exercise_id: '020'
-  display_name: Klimmzug an Leiste
-  english: Fingerboard Pull-up
+- english: Fingerboard Pull-up
+  name: Klimmzug an Leiste
   yuhonas_id: Pullups
-  german: Klimmzug an Leiste
-  search_aliases:
-  - Klimmzug an Leiste
-  - Klimmzug im Obergriff
-  - Pull-Up
-  - Pullups
-  - wger_821
-  - yuhonas_pullups
-  - Fingerboard Pullup
-  - Hangboard Pullup
   aliases:
   - Klimmzug
   - Klimmzug Obergriff
@@ -40,7 +22,27 @@ exercises:
   - Standard Pull-up
   - Fingerboard Pull-up
   - Hangboard Pull-up
+  external_ids:
+    wger:
+    - 821
+    yuhonas:
+    - Pullups
   id: '020'
+  german: Klimmzug an Leiste
+  search_aliases:
+  - Klimmzug an Leiste
+  - Klimmzug im Obergriff
+  - Pull-Up
+  - Pullups
+  - wger_821
+  - yuhonas_pullups
+  - Fingerboard Pullup
+  - Hangboard Pullup
+  display_name: Klimmzug an Leiste
+  wger_id: 821
+  wger_muscle_ids:
+    secondary: []
+    primary: []
   origin:
     type: merged_external
     source_refs:
@@ -48,9 +50,7 @@ exercises:
       - '821'
       yuhonas:
       - Pullups
-  wger_muscle_ids:
-    primary: []
-    secondary: []
+  exercise_id: '020'
   category: pull
   movements:
   - elbow_flexion
@@ -62,10 +62,10 @@ exercises:
   equipment:
   - body only
   - bodyweight
-  - none (bodyweight exercise)
-  - pull_up_bar
   - fingerboard
   - hangboard
+  - none (bodyweight exercise)
+  - pull_up_bar
   primary_muscles:
   - 201_latissimus_dorsi
   - 207_teres_major
@@ -104,62 +104,63 @@ exercises:
   - Repeat this motion for the prescribed amount of repetitions.
   coaching_notes:
   - 'Starte jede Wiederholung aus einem aktiven Hang: Hals lang, Schultern bewusst
-    nach unten ziehen und vom Kopf weghalten (Scapula-Depression), Rippen unten, Bauch
-    und Gesäß leicht anspannen, um einen stabilen Rumpf zu gewährleisten.'
-  - Fokussiere den Zug auf deinen oberen Rücken und Latissimus. Denke daran, deine
-    Ellenbogen in Richtung deiner Hüften oder Flanken zu ziehen, nicht nur die Arme
-    zu beugen. Visualisiere, wie du die Leiste zu deinem Körper ziehst.
-  - Die Exzentrik (das Absenken) ist genauso wichtig wie die konzentrische Phase.
-    Senke dich langsam und kontrolliert ab, um die Zeit unter Spannung zu maximieren
-    und die Sehnenfestigkeit zu verbessern.
-  - 'Arbeite über die volle kontrollierte Bewegungsfreiheit (ROM): unten sauber strecken
+    nach unten ziehen (Scapula-Depression), Rippen unten, Bauch und Gesäß leicht anspannen
+    für einen stabilen Rumpf.'
+  - 'Arbeite über die volle, kontrollierte Bewegungsfreiheit (ROM): Unten sauber strecken
     (aktiver Hang), oben den Brustkorb zur Leiste bringen, ohne die Rumpfspannung
     zu verlieren oder die Schultern nach vorne fallen zu lassen.'
-  - Wähle die Leistengröße sorgfältig. Anfänger sollten mit größeren, fingerfreundlicheren
-    Leisten beginnen. Fortgeschrittene können kleinere Leisten oder spezifischere
-    Griffarten (z.B. Half-Crimp, Open-Hand) wählen.
-  - Achte auf eine saubere Fingerpositionierung. Die Gelenke sollten stabil sein,
-    und der Druck gleichmäßig auf die Finger verteilt werden, um übermäßige Belastung
-    einzelner Sehnen und Gelenke zu vermeiden.
+  - Fokussiere den Zug auf deinen oberen Rücken und Latissimus. Ziehe die Ellenbogen
+    bewusst in Richtung deiner Hüften oder Flanken, statt nur die Arme zu beugen.
+  - Steuere auch die exzentrische Phase bewusst. Ein langsames, kontrolliertes Absenken
+    maximiert die Zeit unter Spannung und verbessert die Sehnenfestigkeit sowie die
+    Schulterkontrolle.
+  - Vermeide jegliches Schwingen (Kipping) oder das Einsetzen von Beinschwung. Jede
+    Wiederholung sollte kontrolliert und aus reiner Oberkörperkraft erfolgen.
+  - Achte auf eine präzise Fingerpositionierung an der Leiste. Die Gelenke sollten
+    stabil sein, der Druck gleichmäßig verteilt, um Überlastung von Sehnen und Gelenken
+    zu vermeiden.
   - Die Handgelenke sollten während der gesamten Bewegung stabil und leicht gestreckt
-    bleiben, um eine effiziente Kraftübertragung und die Gesundheit der Handgelenke
-    zu gewährleisten.
-  - Ein spezifisches Aufwärmen für Finger, Handgelenke und Unterarme ist vor dem Training
-    an der Leiste unerlässlich, um das Verletzungsrisiko zu minimieren.
-  - Vermeide Schwingen (Kipping) oder das Einsetzen von Beinschwung. Jede Wiederholung
-    sollte kontrolliert aus der Kraft des Oberkörpers erfolgen, um den beabsichtigten
-    Trainingsreiz zu setzen und Verletzungen vorzubeugen.
+    bleiben, um eine effiziente Kraftübertragung zu gewährleisten.
+  - Führe vor dem Training an der Leiste ein spezifisches Aufwärmprogramm für Finger,
+    Handgelenke und Unterarme durch, um das Verletzungsrisiko zu minimieren.
+  - 'Wähle die Leistengröße entsprechend deinem Trainingsstand: größere, fingerfreundlichere
+    Leisten für Anfänger, kleinere oder spezifische Griffarten für Fortgeschrittene.'
   common_errors:
   - 'Beginn aus einem passiven Hang: Das Anziehen aus entspannten Schultern kann zu
     übermäßiger Belastung der Gelenke und einer ineffektiven Aktivierung der Rückenmuskulatur
     führen.'
-  - 'Kipping oder Beinschwung: Die Nutzung von Schwung anstelle von Muskelkraft reduziert
-    den Trainingseffekt erheblich und erhöht das Verletzungsrisiko, insbesondere an
-    den Fingersehnen und Schultern.'
   - 'Unvollständige Bewegungsfreiheit: Nicht vollständiges Strecken der Arme am unteren
-    Punkt oder nicht vollständiges Hochziehen bis zur Leiste reduziert den Trainingsreiz
-    und die Entwicklung der Kraft.'
-  - 'Verlust der Rumpfspannung (Hohlkreuz / Rippen aufklappen): Eine instabile Körpermitte
-    führt zu Energieverlust und kann die Wirbelsäule unnötig belasten.'
+    Punkt oder nicht vollständiges Hochziehen des Brustkorbs zur Leiste reduziert
+    den Trainingsreiz und die Entwicklung der Kraft.'
   - 'Schultern zu den Ohren ziehen: Dies signalisiert eine Überlastung der oberen
     Nackenmuskulatur und einen Verlust der optimalen Schulterblattposition für den
     Zug.'
-  - 'Kopf nach vorne schieben: Anstatt den Brustkorb zur Leiste zu bringen, wird oft
-    versucht, nur das Kinn über die Leiste zu bekommen, was die Haltung beeinträchtigt.'
-  - 'Wahl einer zu kleinen oder ungeeigneten Leiste: Dies kann zu einer gefährlichen
-    Überlastung der Fingersehnen und Gelenke führen, insbesondere ohne ausreichende
-    Vorbereitung und Kraft.'
-  - 'Krampfartiger Griff: Zu starkes Krallen oder Verkrampfen der Finger und Unterarme
-    führt zu schneller Ermüdung und kann die Technik negativ beeinflussen.'
-  - 'Mangelndes Aufwärmen: Das Ignorieren eines spezifischen Aufwärmprogramms für
-    Finger und Unterarme erhöht das Risiko von Sehnen- und Gelenkverletzungen erheblich.'
+  - 'Kipping oder Beinschwung: Die Nutzung von Schwung anstelle von Muskelkraft reduziert
+    den Trainingseffekt erheblich und erhöht das Verletzungsrisiko, insbesondere an
+    den Fingersehnen und Schultern.'
+  - 'Verlust der Rumpfspannung (Hohlkreuz / Rippen aufklappen): Eine instabile Körpermitte
+    führt zu Energieverlust und kann die Wirbelsäule unnötig belasten.'
+  - 'Nur das Kinn über die Leiste bringen: Anstatt den Brustkorb zur Leiste zu ziehen,
+    wird oft versucht, nur das Kinn zu erreichen, was die Haltung beeinträchtigt und
+    den vollen Trainingsreiz mindert.'
+  - 'Krampfartiger Griff oder Überkrallen: Zu starkes Krallen oder Verkrampfen der
+    Finger und Unterarme führt zu schneller Ermüdung der Griffkraft und kann die Technik
+    negativ beeinflussen.'
+  - 'Mangelndes spezifisches Aufwärmen: Das Ignorieren eines gezielten Aufwärmprogramms
+    für Finger, Handgelenke und Unterarme erhöht das Risiko von Sehnen- und Gelenkverletzungen
+    erheblich.'
+  - 'Wahl einer ungeeigneten Leistengröße: Die Verwendung einer zu kleinen oder schwierigen
+    Leiste ohne ausreichende Vorbereitung kann zu einer gefährlichen Überlastung der
+    Fingersehnen und Gelenke führen.'
   original_description:
   - Klimmzüge an einer gewählten Leiste eines Fingerboards / Hangboards
   tags:
   - back
   - bodyweight
   - calisthenics
+  - climbing
   - expert
+  - fingerboard
   - grip_strength
   - merged_external
   - pull
@@ -167,13 +168,11 @@ exercises:
   - vertical_pull
   - wger
   - yuhonas
-  - fingerboard
-  - climbing
   variations: []
   source: unreviewed
-  enriched_at: '2026-11-01T20:49:59.854268+00:00'
+  enriched_at: '2026-11-06T02:30:28.641108+00:00'
   schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
     ai_reviewed: false
-    enriched_at: '2026-11-01T20:49:59.854268+00:00'
+    enriched_at: '2026-11-06T02:30:28.641108+00:00'

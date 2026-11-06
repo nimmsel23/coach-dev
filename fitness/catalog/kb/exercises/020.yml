@@ -93,7 +93,6 @@ exercises:
   - Pronated Pull-up
   search_aliases:
   - Pullups
-  - yuhonas_pullups
   - Klimmzug an Leiste
   - wger_821
   - Klimmzug im Obergriff
@@ -101,8 +100,6 @@ exercises:
   external_ids:
     wger:
     - 821
-    yuhonas:
-    - Pullups
   wger_id: 821
   variations:
   - assisted_pull_up
@@ -121,14 +118,11 @@ exercises:
     source_refs:
       wger:
       - '821'
-      yuhonas:
-      - Pullups
   review_state:
     status: approved
     ai_reviewed: true
     approved_at: '2026-10-08T13:37:07.547474+00:00'
   approved_at: '2026-10-08T13:37:07.547474+00:00'
-  yuhonas_id: Pullups
   original_description:
   - Klimmzüge an einer gewählten Leiste eines Fingerboards / Hangboards
   instructions:

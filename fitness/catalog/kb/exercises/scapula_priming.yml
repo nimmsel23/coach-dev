@@ -1,6 +1,6 @@
-name: inbox_scapula_priming
-description: 'Zurueck zur Review geschickt (war faelschlich als expert getaggt): Schulterblatt-Aktivierung'
-generated_at: '2026-08-22T08:49:37.976131+00:00'
+exercise_id: scapula_priming
+description: Expert details for Schulterblatt-Aktivierung
+approved_at: '2026-11-06T02:26:28.863723+00:00'
 exercises:
 - exercise_id: scapula_priming
   id: scapula_priming
@@ -82,7 +82,7 @@ exercises:
   - Shoulder Blade Mobility Drills
   - Schulterblatt-Mobilisation
   variations: []
-  source: unreviewed
+  source: expert
   search_aliases:
   - Schulterblatt-Aktivierung
   - Scapular Activation
@@ -90,38 +90,31 @@ exercises:
   - Scapular Priming
   - Shoulder Blade Mobility Drills
   - Schulterblatt-Mobilisation
+  - Scapular_Pull-Up
   schema_version: 2026-08-12.exercise-v1
   origin:
     type: external
     source_refs:
       yuhonas:
       - Scapular_Pull-Up
-    yuhonas:
-      exercise_id: yuhonas_scapular_pull-up
-      display_name: Scapular Pull-Up
-      category: strength
-      primary_muscles:
-      - traps
-      secondary_muscles:
-      - lats
-      - middle_back
-      equipment: []
-      coaching_notes:
-      - Take a pronated grip on a pull-up bar.
-      - From a hanging position, raise yourself a few inches without using your arms.
-        Do this by depressing your shoulder girdle in a reverse shrugging motion.
-      - Pause at the completion of the movement, and then slowly return to the starting
-        position before performing more repetitions.
-      tags:
-      - unreviewed
-      - yuhonas
-      yuhonas_id: Scapular_Pull-Up
-      wger_muscle_ids:
-        primary: []
-        secondary: []
   review_state:
     status: approved
+    ai_reviewed: true
+    approved_at: '2026-11-06T02:26:28.863723+00:00'
   yuhonas_id: Scapular_Pull-Up
   external_ids:
     yuhonas:
     - Scapular_Pull-Up
+  approved_at: '2026-11-06T02:26:28.863723+00:00'
+  original_description:
+  - Take a pronated grip on a pull-up bar.
+  - From a hanging position, raise yourself a few inches without using your arms.
+    Do this by depressing your shoulder girdle in a reverse shrugging motion.
+  - Pause at the completion of the movement, and then slowly return to the starting
+    position before performing more repetitions.
+  instructions:
+  - Take a pronated grip on a pull-up bar.
+  - From a hanging position, raise yourself a few inches without using your arms.
+    Do this by depressing your shoulder girdle in a reverse shrugging motion.
+  - Pause at the completion of the movement, and then slowly return to the starting
+    position before performing more repetitions.
