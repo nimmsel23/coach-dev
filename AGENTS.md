@@ -4,7 +4,7 @@ Coach is the standalone coach-facing product on `dev`. The `vitalos/` submodule 
 
 Source-code edits belong only in `~/vitalos/src` or `~/dev/*-dev/src`, only on a `dev` branch, and must always be committed. Every `*-app` checkout is for intended Git merges/integration only and must not be edited directly.
 
-Use pnpm. Commit scoped completed changes; do not push unless explicitly requested. Do not update the historical VitalOS gitlink as a prerequisite for Coach releases. Preserve unrelated changes.
+Use pnpm. Commit scoped completed changes; push completed work to `dev` (CI promotes it; never force-push). Do not update the historical VitalOS gitlink as a prerequisite for Coach releases. Preserve unrelated changes.
 
 Coach owns Hosting preview/production via `.github/workflows/deploy-coach.yml` and `bin/coach-release`. Rules are owned by VitalOS. Coach owns `firestore.rules.part`; VitalOS imports a committed copy through `scripts/import-coach-rules.mjs` and composes/deploys the shared ruleset. Do not deploy Firestore rules from Coach.
 
