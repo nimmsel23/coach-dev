@@ -1,6 +1,6 @@
-name: inbox_20260831_161715_3b9447
-description: 'Neu angereichert (manueller Re-Enrich) fuer: Yoga Kopfstand (Sirsasana)'
-enriched_at: '2026-11-06T02:45:46.251618+00:00'
+exercise_id: yoga_kopfstand
+description: Expert details for Yoga Kopfstand (Sirsasana)
+approved_at: '2026-11-06T03:00:51.191875+00:00'
 exercises:
 - exercise_id: yoga_kopfstand
   id: yoga_kopfstand
@@ -93,11 +93,16 @@ exercises:
     type: manual
     source_refs: {}
   variations: []
-  source: unreviewed
+  source: expert
   enriched_at: '2026-11-06T02:45:46.251618+00:00'
   schema_version: 2026-08-12.exercise-v1
   review_state:
-    status: draft
-    ai_reviewed: false
+    status: approved
+    ai_reviewed: true
     enriched_at: '2026-11-06T02:45:46.251618+00:00'
+    approved_at: '2026-11-06T03:00:51.191875+00:00'
   name: Yoga Kopfstand (Sirsasana)
+  approved_at: '2026-11-06T03:00:51.191875+00:00'
+  search_aliases:
+  - Yoga Kopfstand (Sirsasana)
+  - Yoga Headstand (Sirsasana)
