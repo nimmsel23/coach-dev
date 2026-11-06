@@ -1,18 +1,20 @@
 name: inbox_20261012_124416_4411bf
-description: 'Inbox queued for: Bent Knee Windshield Wipers'
-queued_at: '2026-10-12T12:44:16.494732'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Bent Knee Windshield Wipers'
+enriched_at: '2026-11-06T02:46:55.749288+00:00'
 exercises:
 - exercise_id: bent_knee_windshield_wipers
   id: bent_knee_windshield_wipers
   name: Bent Knee Windshield Wipers
-  display_name: Bent Knee Windshield Wipers
-  german: Bent Knee Windshield Wipers
+  display_name: Scheibenwischer (Knie angewinkelt)
+  german: Scheibenwischer (Knie angewinkelt)
   english: Bent Knee Windshield Wipers
-  category: core
+  category: twist
   movements:
-  - anti_rotation
-  - pelvic_control
   - trunk_rotation
+  - pelvic_control
+  - anti_rotation
+  - hip_adduction
+  - hip_flexion
   equipment:
   - bodyweight
   primary_muscles:
@@ -22,17 +24,33 @@ exercises:
   - 501_rectus_abdominis
   - 504_transverse_abdominis
   stabilizers:
-  - 603_gluteus_maximus
+  - 105_serratus_anterior
+  - 205_rhomboids
+  - 507_multifidus
+  - 508_pelvic_floor
   coaching_notes:
-  - Bremsen Sie den Richtungswechsel aktiv über die Schrägbauchmuskeln ab.
-  - Halten Sie Arme und Schulterblätter breit am Boden, während die gebeugten Beine
-    von Seite zu Seite kippen.
-  - Wählen Sie nur so viel Bewegungsradius, wie Sie ohne Abheben der Rippen kontrollieren
-    können.
+  - Legen Sie sich auf den Rücken, Knie angewinkelt und Füße flach am Boden, Arme
+    seitlich ausgestreckt mit den Handflächen nach oben.
+  - Halten Sie die Arme und Schulterblätter breit am Boden, während Sie die angewinkelten
+    Knie langsam und kontrolliert von einer Seite zur anderen kippen.
+  - Bremsen Sie den Richtungswechsel aktiv über die schrägen Bauchmuskeln ab, um Schwung
+    zu vermeiden und die Kontrolle zu bewahren.
+  - Wählen Sie nur so viel Bewegungsradius, wie Sie kontrollieren können, ohne dass
+    sich der obere Rücken oder die Schultern vom Boden abheben.
+  - Achten Sie darauf, den unteren Rücken während der gesamten Bewegung stabil und
+    neutral zu halten und ein übermäßiges Hohlkreuz zu vermeiden.
+  - Atmen Sie tief und gleichmäßig; atmen Sie aus, während die Beine zur Seite kippen,
+    und atmen Sie ein, wenn sie zur Mitte zurückkehren.
   common_errors:
-  - Das Tempo ist höher als die Fähigkeit, den unteren Rücken sauber zu stabilisieren.
-  - Die Knie fallen einfach seitlich herunter und werden nicht aktiv zurückgeholt.
-  - Eine Schulter hebt ab und nimmt die Rotationskontrolle aus dem Rumpf.
+  - Die Schultern oder der obere Rücken heben sich vom Boden ab, was die Rotationskontrolle
+    aus dem Rumpf nimmt.
+  - Die Knie fallen einfach seitlich herunter, anstatt aktiv über die Bauchmuskeln
+    kontrolliert zu werden und zurückgeholt zu werden.
+  - Das Tempo ist zu hoch, wodurch Schwung genutzt wird und die Fähigkeit, den unteren
+    Rücken sauber zu stabilisieren, verloren geht.
+  - Der untere Rücken wird überstreckt oder rundet sich, anstatt eine neutrale Position
+    zu bewahren.
+  - Die Atmung wird angehalten oder ist flach, was die Rumpfstabilität beeinträchtigt.
   tags:
   - 6pack_promise
   - core
@@ -46,3 +64,7 @@ exercises:
   review_state:
     status: draft
     ai_reviewed: false
+    enriched_at: '2026-11-06T02:46:55.749288+00:00'
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-06T02:46:55.749288+00:00'

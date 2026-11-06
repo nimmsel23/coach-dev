@@ -1,14 +1,14 @@
 name: inbox_20261012_124354_b9160a
-description: 'Inbox queued for: The "Any Ball" BTB Pass'
-queued_at: '2026-10-12T12:43:54.076577'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: The "Any Ball" BTB Pass'
+enriched_at: '2026-11-06T02:46:43.280873+00:00'
 exercises:
 - exercise_id: any_ball_btb_pass
   id: any_ball_btb_pass
-  name: The "Any Ball" BTB Pass
-  display_name: The "Any Ball" BTB Pass
-  german: The "Any Ball" BTB Pass
-  english: The "Any Ball" BTB Pass
-  category: core
+  name: Hinter-dem-Rücken-Ballpass
+  display_name: Hinter-dem-Rücken-Ballpass
+  german: Hinter-dem-Rücken-Ballpass
+  english: Behind-the-Back Ball Pass
+  category: twist
   movements:
   - hand_to_hand_transfer
   - hip_flexion
@@ -25,14 +25,36 @@ exercises:
   stabilizers:
   - 607_iliopsoas
   coaching_notes:
-  - Halten Sie den Rumpf angehoben und geben Sie den Ball kontrolliert hinter dem
-    Körper von Hand zu Hand.
-  - Rotieren Sie über Brustkorb und Rippen, nicht nur über Schulterkreisen.
-  - Wenn kein Ball da ist, kann derselbe Bewegungsablauf trocken nachgebaut werden.
+  - Beginnen Sie in einer kontrollierten Sitzposition; optional können die Beine leicht
+    angehoben werden, um die Rumpfaktivierung zu intensivieren.
+  - Halten Sie den Rumpf während der gesamten Bewegung angespannt und leicht angehoben,
+    um die Bauchmuskulatur kontinuierlich zu fordern.
+  - Konzentrieren Sie sich auf eine flüssige und kontrollierte Übergabe des Balls
+    von einer Hand zur anderen, weit hinter dem Rücken.
+  - Leiten Sie die Rotation aus dem Brustkorb und den Rippen ein, nicht primär aus
+    den Schultern oder Armen. Der Blick folgt idealerweise der Bewegung des Rumpfes.
+  - Achten Sie auf eine gleichmäßige Rotationsamplitude zu beiden Seiten und vermeiden
+    Sie ruckartige oder kompensatorische Bewegungen.
+  - 'Atmen Sie kontrolliert: beim Rotieren ausatmen und beim Zurückführen zur Mitte
+    einatmen, um die Rumpfstabilität zu unterstützen.'
+  - Falls kein Ball verfügbar ist, kann die Bewegung auch mit einer imaginären Übergabe
+    zur Schulung der Koordination und Rumpfrotation ausgeführt werden.
   common_errors:
-  - Das Tempo steigt, bevor die Übergaben sauber und symmetrisch sind.
-  - Der Oberkörper fällt zwischen den Übergaben jedes Mal komplett ab.
-  - Die Rotation wird nur aus den Armen gemacht.
+  - '**Unkontrolliertes Tempo:** Die Bewegung wird zu schnell ausgeführt, was zu unsauberen
+    Ballübergaben, einem Verlust der Rumpfkontrolle und geringerer Muskelaktivierung
+    führt.'
+  - '**Verlust der Rumpfspannung:** Der Oberkörper fällt zwischen den Übergaben jedes
+    Mal vollständig ab, anstatt die Rumpfspannung konstant zu halten und die Bauchmuskeln
+    aktiv zu nutzen.'
+  - '**Rotation nur aus den Armen:** Die Rumpfrotation ist unzureichend, und die Bewegung
+    wird hauptsächlich durch das Kreisen der Arme statt durch die gezielte Arbeit
+    der schrägen Bauchmuskeln initiiert.'
+  - '**Rundrücken oder Hohlkreuz:** Eine schlechte Haltung der Wirbelsäule, die entweder
+    zu einem Rundrücken (thorakale Flexion) oder einem übertriebenen Hohlkreuz (lumbale
+    Extension) führt und die Effektivität des Rumpftrainings reduziert.'
+  - '**Unvollständige Übergaben:** Der Ball wird nicht vollständig hinter dem Rücken
+    von Hand zu Hand übergeben, was die Rotationsamplitude einschränkt und die Zielmuskulatur
+    weniger effektiv fordert.'
   tags:
   - 6pack_promise
   - core
@@ -42,6 +64,8 @@ exercises:
   - Any Ball BTB Pass
   - BTB Pass
   - The "Any Ball" BTB Pass
+  - Behind-the-Back Pass
+  - Behind The Back Ball Pass
   schema_version: 2026-08-12.exercise-v1
   origin:
     type: manual
@@ -49,3 +73,7 @@ exercises:
   review_state:
     status: draft
     ai_reviewed: false
+    enriched_at: '2026-11-06T02:46:43.280873+00:00'
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-06T02:46:43.280873+00:00'

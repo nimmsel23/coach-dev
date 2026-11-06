@@ -1,7 +1,6 @@
 name: inbox_wger_1465
-description: 'Proactively generated expert draft for: Trizeps-Kickback am Kabelzug'
-generated_at: '2026-10-12T10:31:21.549534+00:00'
-enriched_at: '2026-10-12T10:31:21.549534+00:00'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Trizeps-Kickback am Kabelzug'
+enriched_at: '2026-11-06T02:49:21.816665+00:00'
 exercises:
 - exercise_id: wger_1465
   id: wger_1465
@@ -25,39 +24,45 @@ exercises:
   - core_stability
   - scapular_stability
   coaching_notes:
-  - Stelle dich mit dem Rücken zum Kabelzug, greife den Griff mit neutralem Griff
-    (Daumen nach oben).
-  - Beuge dich leicht aus der Hüfte nach vorne, halte deinen Rücken gerade und den
-    Oberkörper stabil.
-  - Fixiere deinen Oberarm nah am Körper, sodass er parallel zum Boden ist und der
-    Ellbogen einen 90-Grad-Winkel bildet.
-  - Strecke deinen Unterarm nach hinten, indem du den Trizeps aktiv kontrahierst und
-    den Ellbogen vollständig streckst.
-  - Halte den Oberarm während der gesamten Bewegung absolut still und parallel zum
-    Boden; nur der Unterarm bewegt sich.
-  - Spüre die maximale Kontraktion im Trizeps am Ende der Bewegung und halte kurz
-    inne.
-  - Führe den Unterarm kontrolliert und langsam in die Ausgangsposition zurück, bis
-    der Trizeps gut gedehnt ist, ohne den Oberarm nach vorne zu bewegen oder den Ellbogen
-    überzustrecken.
-  - Konzentriere dich auf eine flüssige, kontrollierte Bewegung und vermeide jeglichen
-    Schwung.
+  - '**Startposition:** Stelle dich mit dem Rücken zum Kabelzugturm. Greife den Griff
+    (D-Griff oder Seil) mit einem neutralen Griff (Handfläche zum Körper zeigend).
+    Nimm eine leichte Schrittstellung ein, um die Stabilität zu erhöhen.'
+  - '**Körperhaltung:** Beuge dich aus der Hüfte nach vorne, sodass dein Oberkörper
+    in einem Winkel von etwa 45 Grad zum Boden steht. Halte deinen Rücken gerade,
+    die Schultern leicht zurückgezogen und den Rumpf fest angespannt.'
+  - '**Oberarm-Fixierung:** Ziehe deinen Oberarm eng an den Körper, sodass er parallel
+    zum Boden ist und dein Ellbogen einen 90-Grad-Winkel bildet. Dein Oberarm muss
+    während der gesamten Übung absolut still und fixiert bleiben.'
+  - '**Ausführung (Konzentrische Phase):** Atme aus und strecke deinen Unterarm kontrolliert
+    und kraftvoll nach hinten, indem du den Trizeps aktiv kontrahierst. Spanne den
+    Trizeps am Ende der Bewegung maximal an und halte die Kontraktion für einen Moment.'
+  - '**Bewegungskontrolle:** Achte darauf, dass sich ausschließlich dein Unterarm
+    bewegt. Jegliche Bewegung des Oberarms oder ein Mitschwingen aus dem Rumpf deutet
+    auf zu hohes Gewicht oder mangelnde Konzentration hin.'
+  - '**Rückführung (Exzentrische Phase):** Atme ein und führe den Unterarm langsam
+    und kontrolliert in die Ausgangsposition zurück, bis der Trizeps eine gute Dehnung
+    erfährt und der Ellbogen wieder den 90-Grad-Winkel erreicht. Halte dabei die Spannung
+    auf dem Muskel.'
+  - '**Fokus:** Konzentriere dich auf die Muskel-Geist-Verbindung und spüre die Arbeit
+    im Trizeps, sowohl während der Streckung als auch während der kontrollierten Rückführung.
+    Vermeide jeglichen Schwung.'
   common_errors:
-  - '**Bewegen des Oberarms:** Der häufigste Fehler ist, den Oberarm zu schwingen
-    oder vom Körper wegzubewegen. Der Oberarm muss die gesamte Zeit fixiert und parallel
-    zum Boden bleiben, um den Trizeps zu isolieren.'
-  - '**Verwenden von Schwung:** Ein zu hohes Gewicht führt dazu, dass der Körper schwungvoll
-    arbeitet, anstatt den Trizeps isoliert zu trainieren. Wähle ein Gewicht, das eine
-    saubere und kontrollierte Ausführung ermöglicht.'
-  - '**Unvollständiger Bewegungsumfang:** Nicht die volle Streckung des Ellbogens
-    erreichen oder nicht weit genug in die Dehnung zurückgehen. Nutze den vollen Bewegungsumfang,
-    um den Muskel optimal zu stimulieren.'
-  - '**Rundrücken oder Hohlkreuz:** Eine schlechte Körperhaltung kann zu Verletzungen
-    führen und die Stabilität beeinträchtigen. Halte den Rücken gerade und den Rumpf
-    während der gesamten Übung angespannt.'
+  - '**Bewegen des Oberarms:** Der häufigste und gravierendste Fehler ist das Schwingen
+    oder Bewegen des Oberarms. Dein Oberarm muss fest am Körper fixiert und parallel
+    zum Boden bleiben, um eine effektive Isolation des Trizeps zu gewährleisten.'
+  - '**Verwenden von Schwung:** Ein zu hohes Gewicht führt dazu, dass du mit Schwung
+    aus dem Oberkörper oder den Schultern arbeitest, anstatt den Trizeps isoliert
+    zu beanspruchen. Wähle ein Gewicht, das dir eine saubere und kontrollierte Ausführung
+    ermöglicht.'
+  - '**Unvollständiger Bewegungsumfang:** Den Ellbogen nicht vollständig zu strecken
+    oder den Unterarm nicht weit genug in die Dehnung zurückzuführen, reduziert die
+    Effektivität der Übung. Nutze den vollen, kontrollierten Bewegungsumfang.'
+  - '**Schlechte Rumpfstabilität:** Eine gekrümmte oder überstreckte Wirbelsäule (Rundrücken
+    oder Hohlkreuz) kann die Effektivität mindern und das Verletzungsrisiko erhöhen.
+    Halte den Rücken gerade und den Rumpf während der gesamten Übung fest angespannt.'
   - '**Ellbogen-Überstreckung:** Vermeide es, den Ellbogen am oberen Punkt der Bewegung
-    zu überstrecken, da dies die Gelenke unnötig belasten kann. Halte eine leichte
-    Spannung im Muskel.'
+    zu überstrecken, da dies unnötigen Stress auf das Gelenk ausübt. Halte eine leichte
+    Spannung im Muskel am Endpunkt der Streckung.'
   original_description:
   - Greife den Griff und ziehe deinen Ellenbogen nach oben und leicht hinter deinen
     Oberkörper. Halte deinen Oberarm während des gesamten Satzes parallel zum Boden.
@@ -74,7 +79,7 @@ exercises:
     - 1465
   variations: []
   source: unreviewed
-  enriched_at: '2026-10-12T10:31:21.549534+00:00'
+  enriched_at: '2026-11-06T02:49:21.816665+00:00'
   schema_version: 2026-08-12.exercise-v1
   origin:
     type: external
@@ -84,4 +89,4 @@ exercises:
   review_state:
     status: draft
     ai_reviewed: false
-    enriched_at: '2026-10-12T10:31:21.549534+00:00'
+    enriched_at: '2026-11-06T02:49:21.816665+00:00'

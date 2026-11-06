@@ -1,7 +1,6 @@
 name: inbox_20260831_161759_cc51fb
-description: 'Proactively generated expert draft for: Handstand'
-generated_at: '2026-11-06T02:31:06.047006+00:00'
-enriched_at: '2026-11-06T02:31:06.047006+00:00'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Handstand'
+enriched_at: '2026-11-06T02:46:08.273536+00:00'
 exercises:
 - german: Handstand
   display_name: Handstand
@@ -26,51 +25,69 @@ exercises:
   primary_muscles:
   - 301_anterior_deltoid
   - 302_lateral_deltoid
-  - 303_posterior_deltoid
   - 401_triceps_brachii
   secondary_muscles:
   - 105_serratus_anterior
   - 202a_trapezius_upper
   - 501_rectus_abdominis
   - 502_obliquus_externus
+  - 503_obliquus_internus
   - 504_transverse_abdominis
   - 603_gluteus_maximus
   - 601_quadriceps_femoris
   stabilizers:
   - 304_rotator_cuff
+  - 303_posterior_deltoid
   - 206_erector_spinae
   - 405_forearm_flexors
   - 406_forearm_extensors
+  - 701_gastrocnemius
+  - 702_soleus
+  - 608_gluteus_medius
+  - 609_gluteus_minimus
+  - 507_multifidus
+  - 508_pelvic_floor
   coaching_notes:
-  - Platziere die Hände schulterbreit mit gespreizten Fingern und presse die Handflächen
-    fest in den Boden, um maximale Stabilität zu gewährleisten.
-  - Schiebe den Boden aktiv von dir weg, um die Schultern zu protrahieren (nach vorne
-    unten zu drücken) und die Ellbogen vollständig zu arretieren. Dies schafft eine
-    stabile Basis.
-  - 'Forme eine Hohlkörperposition: Spanne die Bauchmuskeln fest an, ziehe die Rippen
-    nach innen und kontrahiere die Gesäßmuskulatur, um eine gerade Linie vom Kopf
-    bis zu den Füßen zu bilden. Vermeide ein Hohlkreuz.'
-  - Halte die Beine gestreckt und die Füße gespitzt; stelle dir vor, du versuchst,
-    größer zu werden und den Himmel zu berühren.
-  - Der Blick sollte zwischen die Hände oder leicht nach vorne gerichtet sein, um
-    eine neutrale Nackenposition zu bewahren und die Balance zu unterstützen.
-  - Achte auf eine ruhige und kontrollierte Atmung, um die Körperspannung während
-    der gesamten Ausführung aufrechtzuerhalten.
-  - Nutze die Finger und Handgelenke als primäre Balancekontrolle, indem du den Druck
-    auf die Fingerkuppen variierst, um kleine Ausgleichsbewegungen vorzunehmen.
+  - '**Fundament schaffen:** Platziere die Hände schulterbreit mit gespreizten Fingern.
+    Presse die Handflächen und Fingerkuppen aktiv in den Boden, um eine breite und
+    stabile Basis zu schaffen und feine Balancekorrekturen zu ermöglichen.'
+  - '**Schultergürtel aktivieren:** Schiebe den Boden explosiv von dir weg und "wachse"
+    aus den Schultern. Protrahiere die Schulterblätter (drücke sie nach vorne unten)
+    und hebe sie leicht an (Elevation), während die Ellbogen vollständig gestreckt
+    und arretiert bleiben. Dies schützt die Schultergelenke und sorgt für maximale
+    Stabilität.'
+  - '**Körperspannung aufbauen (Hohlkörper):** Spanne die Bauchmuskeln fest an, ziehe
+    die Rippen nach innen und kontrahiere die Gesäßmuskulatur kraftvoll. Stelle dir
+    vor, du bildest eine gerade, steife Linie vom Kopf bis zu den Zehen, um ein Hohlkreuz
+    zu verhindern.'
+  - '**Bein- und Fußposition:** Halte die Beine vollständig gestreckt und die Knie
+    durchgedrückt. Spanne die Oberschenkelmuskulatur an und spitze die Füße aktiv,
+    als ob du dich nach oben zum Himmel streckst.'
+  - '**Blickpunkt:** Richte deinen Blick leicht nach vorne zwischen deine Hände oder
+    auf einen festen Punkt auf dem Boden. Dies hilft, den Nacken in einer neutralen
+    Position zu halten und unterstützt die visuelle Balance.'
+  - '**Atmung und Konzentration:** Atme gleichmäßig und kontrolliert, um die durchgehende
+    Körperspannung aufrechtzuerhalten. Konzentriere dich auf das Halten der Form und
+    nutze minimale Anpassungen in Händen und Fingern.'
   common_errors:
-  - Durchhängender Rücken (Bananenform) durch fehlende Rumpfspannung, was zu einer
-    Überstreckung der Lendenwirbelsäule und Instabilität führt.
-  - Gekrümmte Ellbogen anstatt vollständig gestreckter und arretierter Arme, was die
-    Belastung auf die Gelenke erhöht und die Kraftübertragung mindert.
-  - Eingefallene Schultern (nicht protrahiert), wodurch die Schulterblätter nicht
-    stabilisiert sind und die Gelenke unnötig belastet werden.
-  - Auseinanderfallende Beine oder angewinkelte Knie, die die Körperspannung und die
-    ideale Körperlinie unterbrechen.
-  - Den Kopf in den Nacken legen und den Blick nach vorne oben richten, was den Nacken
-    überstreckt und die Balance negativ beeinflusst.
-  - Unzureichende Spannung in den Händen und Fingern, was die feine Balancekontrolle
-    erschwert und zu häufigem Fallen führt.
+  - '**"Bananenrücken" (Hyperlordose):** Ein durchhängender unterer Rücken entsteht
+    durch fehlende Rumpf- und Gesäßspannung. Dies überstreckt die Lendenwirbelsäule,
+    macht den Handstand instabil und erhöht das Verletzungsrisiko.'
+  - '**Eingeknickte Ellbogen:** Nicht vollständig gestreckte und arretierte Arme vermindern
+    die strukturelle Stabilität und belasten die Ellbogengelenke unnötig, anstatt
+    die Last effizient über die Knochen zu leiten.'
+  - '**Eingesunkene Schultern:** Wenn die Schultern nicht aktiv hochgeschoben und
+    protrahiert werden ("in den Schultern hängen"), führt dies zu einer instabilen
+    Schulterposition, die die Kraftübertragung mindert und die Gelenke überlastet.'
+  - '**Verlorene Körperlinie in den Beinen:** Angewinkelte Knie, nicht gespitzte Füße
+    oder auseinanderfallende Beine deuten auf mangelnde Ganzkörperspannung hin und
+    unterbrechen die ideale, gerade Linie.'
+  - '**Falsche Kopfposition:** Ein Blick nach vorne oben oder ein Überstrecken des
+    Nackens destabilisiert die gesamte Körperlinie und beeinträchtigt die Balance
+    erheblich. Der Nacken sollte neutral bleiben.'
+  - '**Inaktive Hände und Finger:** Eine passive Handposition ohne aktives Greifen
+    und Drücken in den Boden erschwert die feine Balancekontrolle und führt zu schnellem
+    Verlust der Position.'
   movements:
   - vertical_push
   - shoulder_flexion
@@ -91,9 +108,9 @@ exercises:
   - wger
   variations: []
   source: unreviewed
-  enriched_at: '2026-11-06T02:31:06.047006+00:00'
+  enriched_at: '2026-11-06T02:46:08.273536+00:00'
   schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
     ai_reviewed: false
-    enriched_at: '2026-11-06T02:31:06.047006+00:00'
+    enriched_at: '2026-11-06T02:46:08.273536+00:00'

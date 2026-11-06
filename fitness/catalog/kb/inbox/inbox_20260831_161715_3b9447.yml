@@ -1,7 +1,6 @@
 name: inbox_20260831_161715_3b9447
-description: 'Proactively generated expert draft for: Kopfstand'
-generated_at: '2026-11-06T02:32:05.394169+00:00'
-enriched_at: '2026-11-06T02:32:05.394169+00:00'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Yoga Kopfstand (Sirsasana)'
+enriched_at: '2026-11-06T02:45:46.251618+00:00'
 exercises:
 - exercise_id: yoga_kopfstand
   id: yoga_kopfstand
@@ -13,25 +12,30 @@ exercises:
   - 501_rectus_abdominis
   - 502_obliquus_externus
   - 503_obliquus_internus
+  - 504_transverse_abdominis
   - 301_anterior_deltoid
   - 302_lateral_deltoid
   - 303_posterior_deltoid
   - 401_triceps_brachii
+  - 105_serratus_anterior
   secondary_muscles:
   - 206_erector_spinae
   - 202_trapezius
   - 603_gluteus_maximus
   - 601_quadriceps_femoris
+  - 604_hamstrings
   - 701_gastrocnemius
   - 702_soleus
   stabilizers:
   - 304_rotator_cuff
-  - 504_transverse_abdominis
   - 507_multifidus
+  - 508_pelvic_floor
   - 608_gluteus_medius
+  - 609_gluteus_minimus
   - 405_forearm_flexors
   - 406_forearm_extensors
   - 703_tibialis_anterior
+  - 402_biceps_brachii
   movements:
   - trunk_stabilization
   - shoulder_stabilization
@@ -43,48 +47,57 @@ exercises:
   - knee_extension_static
   - ankle_plantarflexion_static
   coaching_notes:
-  - 'Beginne mit einer festen Dreipunkt-Basis: Scheitel des Kopfes und beide Unterarme.
-    Die Ellbogen sollten schulterbreit sein, die Hände fest am Boden oder ineinander
-    verschränkt.'
-  - Drücke die Unterarme aktiv in den Boden, um die Schultern von den Ohren wegzuschieben
-    und den Nacken zu entlasten. Das meiste Gewicht sollte auf den Unterarmen, nicht
-    auf dem Kopf liegen.
-  - Aktiviere den Core stark, ziehe den Bauchnabel zur Wirbelsäule und schließe die
-    Rippen, um ein Hohlkreuz zu vermeiden und die Wirbelsäule zu stabilisieren.
-  - Hebe die Beine langsam und kontrolliert an, entweder mit angewinkelten Knien zur
-    Brust oder mit gestreckten Beinen, die durch die Aktivierung der Bauchmuskeln
-    nach oben gleiten.
-  - Stelle sicher, dass der Nacken lang und neutral bleibt. Vermeide es, ihn zu sehr
-    zu beugen oder zu strecken.
-  - Halte die Beine und Füße aktiv und gestreckt, als ob du mit den Fersen und Zehen
-    zur Decke schiebst, um eine gerade Linie zu schaffen.
-  - Achte auf eine ruhige, gleichmäßige Atmung durch die Nase, um die Stabilität des
-    Rumpfes aufrechtzuerhalten.
-  - Übe den Kopfstand zuerst an einer Wand oder mit einem Spotter, um Sicherheit und
-    Vertrauen aufzubauen.
+  - '**Stabile Basis bilden:** Platziere den Scheitel deines Kopfes und deine Unterarme
+    fest auf dem Boden, sodass du ein stabiles Dreieck bildest. Die Ellbogen sollten
+    schulterbreit sein, die Hände entweder flach oder miteinander verschränkt, um
+    eine maximale Auflagefläche zu schaffen.'
+  - '**Nacken entlasten:** Drücke deine Unterarme und Hände aktiv in den Boden, um
+    deine Schultern von den Ohren wegzuschieben. Das primäre Gewicht sollte auf den
+    Unterarmen liegen, nicht auf dem Kopf, um den Nacken zu schützen.'
+  - '**Core aktiv halten:** Aktiviere deine gesamte Rumpfmuskulatur stark, indem du
+    den Bauchnabel zur Wirbelsäule ziehst und die Rippen schließt. Dies stabilisiert
+    die Wirbelsäule, verhindert ein Hohlkreuz und ermöglicht einen kontrollierten
+    Aufstieg.'
+  - '**Kontrollierter Aufstieg:** Hebe die Beine langsam und bewusst an. Dies kann
+    entweder durch Anziehen der Knie zur Brust geschehen (Tuck-Variante) oder, bei
+    ausreichender Kraft, durch ein langsames Hochschweben der gestreckten Beine durch
+    reine Core-Aktivierung.'
+  - '**Gerade Körperlinie:** Richte den Körper von den Handgelenken über die Schultern
+    und Hüften bis zu den Fersen aus. Halte die Beine und Füße aktiv gestreckt, als
+    ob du dich zur Decke schiebst, um eine präzise vertikale Linie zu erreichen.'
+  - '**Atemfluss bewahren:** Atme ruhig und gleichmäßig durch die Nase, um die innere
+    Stabilität aufrechtzuerhalten und unnötige Verspannungen im Rumpf zu vermeiden.'
+  - '**Sicherheitsvorkehrungen:** Übe den Kopfstand anfänglich immer an einer Wand
+    oder mit einem erfahrenen Spotter, um Balance und Vertrauen sicher aufzubauen
+    und das Sturzrisiko zu minimieren.'
   common_errors:
-  - Zu viel Gewicht auf dem Kopf und Nacken, wodurch der Nacken überlastet wird und
-    das Verletzungsrisiko steigt.
-  - Kollabierende Schultern, die nicht aktiv nach oben drücken und somit den Nacken
-    nicht entlasten.
-  - Ein Hohlkreuz oder Rundrücken im Rumpf aufgrund unzureichender Core-Aktivierung,
-    was die Wirbelsäule belastet.
-  - Ausrutschende Ellbogen, die breiter als schulterbreit werden und die Basis instabil
-    machen.
-  - Unkontrolliertes oder schnelles Hochschwingen der Beine, was zu einem Verlust
-    der Balance führen kann.
-  - Festhalten des Atems, wodurch der Rumpf angespannt wird und die Stabilität beeinträchtigt
-    wird.
-  - Fehlende Rumpf- und Schulterkraft als Voraussetzung, was die Übung unsicher macht.
+  - '**Zu viel Gewicht auf dem Kopf:** Die häufigste und gefährlichste Fehlhaltung.
+    Führt zu übermäßiger Belastung und potenziellen Verletzungen der Halswirbelsäule,
+    da die Unterarme nicht ausreichend in den Boden drücken.'
+  - '**Kollabierende Schultern:** Schultern, die nicht aktiv nach oben geschoben werden
+    und zu den Ohren sinken, was die Stabilität der gesamten Struktur beeinträchtigt
+    und den Nacken zusätzlich belastet.'
+  - '**Hohlkreuz oder Rundrücken:** Mangelnde Core-Aktivierung führt zu einer Instabilität
+    der Wirbelsäule. Ein Hohlkreuz ist besonders gefährlich und belastet die Lendenwirbelsäule
+    stark.'
+  - '**Ausrutschende Ellbogen:** Eine zu breite oder instabile Ellbogenposition destabilisiert
+    die Basis des Kopfstands und erschwert das Halten der Balance erheblich.'
+  - '**Schwunghafter Aufstieg:** Das Hochschwingen der Beine statt eines kontrollierten
+    Anhebens. Führt oft zu Kontrollverlust, einem unsauberen Stand und erhöhtem Sturzrisiko.'
+  - '**Atem anhalten:** Das Pressen oder Anhalten des Atems führt zu unnötiger Spannung
+    im Körper und beeinträchtigt die Fähigkeit zur feinen Balancekontrolle.'
+  - '**Fehlende Rumpf- und Schulterkraft:** Ein Versuch des Kopfstands ohne ausreichende
+    Vorbereitung der notwendigen Core- und Schulterkraft, wodurch die Ausführung unsicher
+    wird und das Verletzungsrisiko steigt.'
   origin:
     type: manual
     source_refs: {}
   variations: []
   source: unreviewed
-  enriched_at: '2026-11-06T02:32:05.394169+00:00'
+  enriched_at: '2026-11-06T02:45:46.251618+00:00'
   schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
     ai_reviewed: false
-    enriched_at: '2026-11-06T02:32:05.394169+00:00'
+    enriched_at: '2026-11-06T02:45:46.251618+00:00'
   name: Yoga Kopfstand (Sirsasana)

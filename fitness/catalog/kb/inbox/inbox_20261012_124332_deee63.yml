@@ -1,7 +1,6 @@
 name: inbox_20261012_124332_deee63
-description: 'Proactively generated expert draft for: Klimmzug an Leiste'
-generated_at: '2026-11-06T02:30:28.641108+00:00'
-enriched_at: '2026-11-06T02:30:28.641108+00:00'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Klimmzug an Leiste'
+enriched_at: '2026-11-06T02:46:29.223992+00:00'
 exercises:
 - english: Fingerboard Pull-up
   name: Klimmzug an Leiste
@@ -170,9 +169,9 @@ exercises:
   - yuhonas
   variations: []
   source: unreviewed
-  enriched_at: '2026-11-06T02:30:28.641108+00:00'
+  enriched_at: '2026-11-06T02:46:29.223992+00:00'
   schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
     ai_reviewed: false
-    enriched_at: '2026-11-06T02:30:28.641108+00:00'
+    enriched_at: '2026-11-06T02:46:29.223992+00:00'

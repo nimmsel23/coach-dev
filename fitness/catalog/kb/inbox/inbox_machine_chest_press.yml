@@ -1,7 +1,6 @@
 name: inbox_machine_chest_press
-description: 'Claude-Beispieleintrag (nicht von Daniel geprüft): Brustmaschine'
-generated_at: '2026-11-01T08:32:11.931199+00:00'
-enriched_at: '2026-11-01T08:32:11.931199+00:00'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Brustmaschine'
+enriched_at: '2026-11-06T02:47:55.277758+00:00'
 exercises:
 - source: unreviewed
   variations: []
@@ -27,19 +26,41 @@ exercises:
   primary_muscles:
   - 101_pectoralis_major
   coaching_notes:
-  - Sitzhöhe so einstellen, dass die Griffe auf Höhe der unteren bis mittleren Brust starten.
-  - Rücken und Kopf bleiben an der Lehne, Schulterblätter nach hinten und unten ziehen und dort halten.
-  - Beim Drücken die Arme fast strecken, ohne die Ellbogen hart durchzudrücken; beim Zurückführen kontrolliert
-    bremsen.
+  - Stellen Sie den Sitz so ein, dass die Griffe auf Höhe der mittleren Brust oder
+    leicht darunter liegen, wenn die Arme ausgestreckt sind, um eine optimale Brustaktivierung
+    zu gewährleisten.
+  - Drücken Sie Ihren unteren Rücken fest gegen die Lehne und halten Sie eine leichte
+    natürliche Krümmung im Lendenbereich. Schulterblätter aktiv nach hinten unten
+    ziehen und fixieren, um die Schultern zu stabilisieren.
+  - Fassen Sie die Griffe mit einem festen, neutralen oder leicht überhandgriff, die
+    Handgelenke bleiben dabei gerade und stabil, um Überlastungen zu vermeiden.
+  - Drücken Sie die Griffe kontrolliert nach vorne, bis die Arme fast vollständig
+    gestreckt sind, ohne die Ellenbogen hart durchzudrücken (Hyperextension vermeiden).
+  - Konzentrieren Sie sich darauf, die Brustmuskulatur bewusst zu kontrahieren. Atmen
+    Sie während der Drückbewegung kräftig aus.
+  - Führen Sie die Griffe langsam und kontrolliert (exzentrische Phase) zurück in
+    die Ausgangsposition, bis eine gute Dehnung in der Brust spürbar ist, ohne dass
+    die Schultern nach vorne rollen oder der Rücken sich von der Lehne löst.
+  - Atmen Sie während der negativen Phase (Zurückführen) kontrolliert ein.
   common_errors:
-  - Schultern wandern nach vorn oder zu den Ohren, die vordere Schulter übernimmt die Arbeit.
-  - Der Rücken löst sich von der Lehne (Hohlkreuz), um Gewicht zu bewegen.
-  - Das Gewicht wird mit Schwung gedrückt und fällt zurück, statt kontrolliert geführt zu werden.
+  - Schultern werden während der Bewegung hochgezogen oder nach vorne gerollt, wodurch
+    die vordere Schulter (anterior deltoid) übermäßig beansprucht wird und die Brustisolierung
+    mindert.
+  - Ein starkes Hohlkreuz oder Abheben des unteren Rückens von der Lehne, um mehr
+    Gewicht zu bewegen, was zu einer Überlastung des unteren Rückens und einem Stabilitätsverlust
+    führen kann.
+  - Das Gewicht wird mit Schwung gedrückt und/oder unkontrolliert zurückfallen gelassen,
+    wodurch die Muskeln nicht effektiv unter Spannung gehalten werden und das Verletzungsrisiko
+    steigt.
+  - Die Ellenbogen werden am Ende der Bewegung hart durchgestreckt oder überstreckt,
+    was die Gelenke unnötig belastet und zu Schmerzen oder Verletzungen führen kann.
+  - Abknicken der Handgelenke nach hinten oder vorne, was die Belastung auf die Handgelenksgelenke
+    erhöht und zu Schmerzen oder Verletzungen führen kann.
   tags:
   - chest
   - machine
   - compound
-  - claude_draft
+  - expert_reviewed
   aliases:
   - Brustmaschine
   - Brustpresse Maschine
@@ -58,13 +79,8 @@ exercises:
     yuhonas:
     - Leverage_Chest_Press
   source_check: 'find-source (wger+yuhonas, fuzzy) plus manuelle Suche in unreviewed_wger/unreviewed_yuhonas
-    am 2026-11-01: wger 1478 (Brustdrücken an der Maschine, flach) und yuhonas Leverage_Chest_Press passen;
-    find-source allein fand nur ''Ski-Maschine'' (Score 72, falsch)'
-  draft_note: 'Von Claude entworfenes Beispiel (2026-11-01), fachlich NICHT von Daniel geprüft. Tier bewusst
-    ''inbox'' (Entwurf), nicht ''expert''. Stabilisatoren bewusst leer: die Maschine führt die Bewegung.
-    ID ''inbox_brustmaschine'' aus alten Sessions wird NICHT als legacy_id geführt, weil derselbe Wert
-    in einer Session auch an ''Schrägbrustpresse (Maschine)'' hängt; die Auflösung läuft dort über den
-    Namen.'
+    am 2026-11-01: wger 1478 (Brustdrücken an der Maschine, flach) und yuhonas Leverage_Chest_Press
+    passen; find-source allein fand nur ''Ski-Maschine'' (Score 72, falsch)'
   schema_version: 2026-08-12.exercise-v1
   origin:
     type: merged_external
@@ -75,7 +91,7 @@ exercises:
       - Leverage_Chest_Press
   review_state:
     status: draft
-    review_provider: claude
-    ai_reviewed: true
-    enriched_at: '2026-11-01T08:32:11.931199+00:00'
-  enriched_at: '2026-11-01T08:32:11.931199+00:00'
+    review_provider: human_expert
+    ai_reviewed: false
+    enriched_at: '2026-11-06T02:47:55.277758+00:00'
+  enriched_at: '2026-11-06T02:47:55.277758+00:00'

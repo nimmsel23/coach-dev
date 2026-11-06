@@ -1,11 +1,15 @@
 name: inbox_samurai_extension
-description: 'Claude-Beispieleintrag (nicht von Daniel geprüft): Samurai Extension'
-generated_at: '2026-11-01T08:32:11.931199+00:00'
-enriched_at: '2026-11-01T08:32:11.931199+00:00'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Samurai Extension'
+enriched_at: '2026-11-06T02:48:41.595597+00:00'
 exercises:
 - source: unreviewed
   variations: []
-  stabilizers: []
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 206_erector_spinae
+  - 405_forearm_flexors
+  - 202_trapezius
   secondary_muscles: []
   exercise_id: samurai_extension
   id: samurai_extension
@@ -13,21 +17,45 @@ exercises:
   display_name: Samurai Extension
   german: Samurai Extension
   english: Samurai Extension
-  category: arms
+  category: push
   type: isolation
   movements:
   - elbow_extension
-  - cable
+  - trunk_stabilization
+  - shoulder_stabilization
   equipment:
   - cable
   primary_muscles:
   - 401_triceps_brachii
   coaching_notes:
-  - Oberarm bleibt während des Satzes fixiert, nur der Ellbogen bewegt sich (gilt für jede Trizeps-Strecker-Variante
-    am Kabelzug).
-  - 'Ausführung (Griff, Körperhaltung, Zugrichtung) fehlt noch: bitte von Daniel ergänzen, sie ist in
-    keiner Quelle belegt.'
-  common_errors: []
+  - Halte die Oberarme während der gesamten Bewegung stabil und eng am Körper (oder
+    in einer fixierten Ausgangsposition), um die Trizepsisolation zu maximieren.
+  - Führe die Bewegung ausschließlich aus dem Ellbogengelenk aus. Dein Oberkörper
+    bleibt fest und stabil, um unerwünschtes Schwungholen zu vermeiden.
+  - Strecke die Arme vollständig, aber kontrolliert, bis der Trizeps maximal kontrahiert
+    ist. Halte die Kontraktion kurz, bevor du langsam und kontrolliert in die Ausgangsposition
+    zurückkehrst.
+  - Konzentriere dich auf die Muskelverbindung und spüre, wie der Trizeps arbeitet,
+    sowohl in der Streckung als auch beim kontrollierten Nachgeben in der exzentrischen
+    Phase.
+  - Wähle ein Kabelzug-Attachment (z.B. Seil, Stange), das dir eine optimale Gelenkschonung
+    und Bewegungsfreiheit ermöglicht, und einen passenden Widerstand, der eine saubere
+    Ausführung erlaubt.
+  - Atme beim Strecken der Arme aus und beim kontrollierten Rückführen ein.
+  common_errors:
+  - 'Schwungholen durch den Oberkörper oder Miteinsatz der Schultern: Dies reduziert
+    die Isolation des Trizeps und kann zu unnötiger Belastung anderer Gelenke führen.'
+  - 'Unvollständige Bewegungsamplitude: Nicht vollständiges Strecken der Arme oder
+    zu schnelles Nachgeben in der exzentrischen Phase schränkt den effektiven Trainingsreiz
+    ein.'
+  - 'Ellbogen nicht fixiert: Wenn die Ellbogen nach vorne oder zur Seite wandern,
+    wird die Spannung vom Trizeps genommen und andere Muskeln involviert.'
+  - 'Überstreckung der Ellbogen am Ende der Bewegung: Dies kann die Gelenke unnötig
+    belasten. Halte eine leichte Beugung im Ellbogen am Endpunkt, um die Spannung
+    auf dem Muskel zu halten.'
+  - 'Zu hohes Gewicht: Führt oft zu den oben genannten Fehlern und einer ineffektiven
+    Übungsausführung. Fokus liegt auf Muskelkontraktion, nicht auf dem maximal bewegten
+    Gewicht.'
   tags:
   - arms
   - triceps
@@ -45,11 +73,12 @@ exercises:
   - manual_samurai_extension
   external_ids: {}
   source_check: 'find-source (wger+yuhonas, fuzzy) plus manuelle Suche in unreviewed_wger/unreviewed_yuhonas
-    am 2026-11-01: in KEINER der beiden Quellen gefunden (keine Treffer für ''samurai''); bewusst als
-    eigene Übung ohne Fremdquelle angelegt'
-  draft_note: 'Von Claude entworfenes Beispiel (2026-11-01), fachlich NICHT von Daniel geprüft. Tier bewusst
-    ''inbox'' (Entwurf), nicht ''expert''. Einzige gesicherte Information aus der Session: ''Trizeps am
-    Kabelzug''. Alles Weitere ist offen; Muskelrolle nur 401_triceps_brachii (keine Kopfzuordnung).'
+    am 2026-11-01: in KEINER der beiden Quellen gefunden (keine Treffer für ''samurai'');
+    bewusst als eigene Übung ohne Fremdquelle angelegt'
+  draft_note: 'Von Claude entworfenes Beispiel (2026-11-01), fachlich NICHT von Daniel
+    geprüft. Tier bewusst ''inbox'' (Entwurf), nicht ''expert''. Einzige gesicherte
+    Information aus der Session: ''Trizeps am Kabelzug''. Alles Weitere ist offen;
+    Muskelrolle nur 401_triceps_brachii (keine Kopfzuordnung).'
   schema_version: 2026-08-12.exercise-v1
   origin:
     type: manual
@@ -57,6 +86,6 @@ exercises:
   review_state:
     status: draft
     review_provider: claude
-    ai_reviewed: true
-    enriched_at: '2026-11-01T08:32:11.931199+00:00'
-  enriched_at: '2026-11-01T08:32:11.931199+00:00'
+    ai_reviewed: false
+    enriched_at: '2026-11-06T02:48:41.595597+00:00'
+  enriched_at: '2026-11-06T02:48:41.595597+00:00'

@@ -1,6 +1,6 @@
 name: inbox_pullover_machine
-description: 'Zurueck zur Review geschickt (war faelschlich als expert getaggt): Pullover-Maschine'
-generated_at: '2026-08-22T08:49:37.237237+00:00'
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Pullover-Maschine'
+enriched_at: '2026-11-06T02:48:16.265483+00:00'
 exercises:
 - exercise_id: pullover_machine
   id: pullover_machine
@@ -29,36 +29,50 @@ exercises:
   - 504_transverse_abdominis
   - 206_erector_spinae
   coaching_notes:
-  - Richte die Maschine so ein, dass sich das Schultergelenk sauber mit der Drehachse
-    der Maschine deckt; nur dann bleibt die Belastung auf Lat und Teres major statt
-    unnötig auf der Schultervorderseite.
-  - Halte den Brustkorb stolz, die Rippen aber unten, und spanne den Bauch an, damit
-    die Bewegung aus dem Schultergelenk kommt und nicht aus einem Hohlkreuz.
-  - Beginne aus einer langen Position mit leicht gebeugten, konstant fixierten Ellbogen;
-    der Ellenbogenwinkel bleibt während des Satzes nahezu unverändert.
-  - Ziehe die Arme in einem kontrollierten Bogen nach unten, indem du die Oberarme
-    Richtung Hüfte führst und die Achseln aktiv schließt.
-  - Denke an Schulterblätter nach unten und stabil, statt die Schultern nach vorn
-    hochzuziehen; so bleibt der Latissimus in einer besseren Arbeitslinie.
-  - Arbeite mit voller, schmerzfreier Dehnung oben und beende die konzentrische Phase
-    mit bewusster Lat-Spannung unten, ohne die Bewegung mit den Händen zu dominieren.
-  - Wähle ein Gewicht, bei dem du die exzentrische Phase sauber bremsen kannst; gerade
-    bei der Dehnposition bringt die kontrollierte Rückführung den größten Trainingsreiz.
+  - Stelle die Maschine so ein, dass die Drehachse des Geräts exakt auf Höhe deiner
+    Schultergelenke liegt. Dies ist entscheidend, um den Latissimus optimal zu isolieren
+    und unnötige Belastung auf das vordere Schulterkapselgelenk zu vermeiden.
+  - Halte während der gesamten Bewegung einen stolzen Brustkorb, aber achte darauf,
+    die Rippen unten zu lassen und den Bauch fest anzuspannen (Brace). Dadurch wird
+    eine übermäßige Lordose der Lendenwirbelsäule verhindert und die Kraftübertragung
+    auf die Zielmuskulatur optimiert.
+  - Beginne aus einer vollständig gedehnten Position mit leicht gebeugten Ellbogen.
+    Der Winkel in den Ellbogengelenken bleibt während des gesamten Satzes konstant
+    fixiert und ändert sich nicht.
+  - Ziehe die Griffe oder Stangen in einem kontrollierten, weiten Bogen nach unten,
+    indem du deine Oberarme aktiv Richtung Hüfte führst und bewusst die Achseln schließt,
+    um den Latissimus zu aktivieren.
+  - Fokussiere dich darauf, die Schulterblätter aktiv nach unten zu ziehen und stabil
+    zu halten (Scapular Depression), anstatt die Schultern hochzuziehen oder nach
+    vorne einrollen zu lassen. Dies sichert eine effiziente Arbeitslinie für den Latissimus.
+  - Nutze den vollen, schmerzfreien Bewegungsbereich. Erreiche oben eine maximale
+    Dehnung im Latissimus und konzentriere dich am unteren Punkt auf eine bewusste
+    und maximale Kontraktion, ohne die Bewegung durch die Hände zu dominieren oder
+    die Arme zu stark einzusetzen.
+  - Wähle ein Gewicht, das eine langsame und kontrollierte Ausführung der exzentrischen
+    Phase erlaubt. Insbesondere die kontrollierte Rückführung in die gedehnte Position
+    ist entscheidend für den optimalen Wachstumsreiz.
   common_errors:
-  - Die Bewegung durch Ellbogenbeugung in eine Art Trizeps- oder Rudervariante verwandeln,
-    statt den Oberarm aus dem Schultergelenk zu führen.
-  - Mit einem Hohlkreuz oder aufklappendem Brustkorb arbeiten, um das Gewicht zu bewegen;
-    dadurch sinkt die Zielmuskelspannung und die Lendenwirbelsäule übernimmt.
-  - Die Schultern nach oben ziehen oder nach vorn einrollen lassen, wodurch die Last
-    aus dem Latissimus in Nacken und vordere Schulter verlagert wird.
-  - Zu tief oder zu aggressiv in die obere Dehnposition gehen, obwohl die Schulterbeweglichkeit
-    das nicht sauber zulässt.
-  - Am unteren Ende nur das Gewicht anschlagen oder ablegen, statt aktiv in die Endkontraktion
-    zu ziehen.
-  - Zu viel Gewicht wählen und die konzentrische Phase mit Schwung einleiten, wodurch
-    die Maschine zwar bewegt wird, die Zielmuskulatur aber schlechter arbeitet.
-  - Den Bewegungsradius künstlich verkürzen und die starke Dehnung oben vermeiden,
-    obwohl genau dort ein wesentlicher Teil des Trainingsreizes entsteht.
+  - Die Bewegung durch Beugung im Ellbogengelenk in eine Art Ruder- oder Trizepsübung
+    umwandeln, anstatt die Kraft primär aus dem Schultergelenk und dem Latissimus
+    zu generieren.
+  - Durch eine übermäßige Hohlkreuzposition (Lendenlordose) oder das Aufklappen des
+    Brustkorbs das Gewicht bewegen. Dies verlagert die Spannung von den Zielmuskeln
+    auf die Lendenwirbelsäule und kann zu Schmerzen führen.
+  - Die Schultern nach oben Richtung Ohren ziehen oder nach vorne einrollen lassen
+    (Schulterelevation oder -protraktion). Dies entzieht dem Latissimus die Spannung
+    und aktiviert Nacken- und vordere Schultermuskeln unnötig.
+  - In der oberen Dehnposition über den eigenen individuellen Bewegungsspielraum hinausgehen,
+    was zu einer unnötigen Belastung oder potenziellen Verletzung des Schultergelenks
+    führen kann.
+  - Am unteren Ende der Bewegung das Gewicht nur passiv fallen lassen oder die Griffe
+    nur kurz anschlagen, anstatt eine aktive Endkontraktion im Latissimus zu erzielen.
+  - Zu viel Gewicht verwenden und die konzentrische Phase mit Schwung oder einer Ruckbewegung
+    einleiten, wodurch die effektive Belastung der Zielmuskulatur erheblich reduziert
+    wird.
+  - Den vollen Bewegungsradius, insbesondere die wichtige Dehnposition am oberen Punkt,
+    bewusst verkürzen oder vermeiden, wodurch ein großer Teil des Trainingsreizes
+    ungenutzt bleibt.
   tags:
   - isolation
   - machine
@@ -84,28 +98,8 @@ exercises:
   origin:
     type: manual
     source_refs: {}
-    wger:
-      exercise_id: wger_1365
-      display_name: Pullover Machine
-      german: Pullover Machine
-      category: back
-      primary_muscles:
-      - 201_latissimus_dorsi
-      secondary_muscles:
-      - 101_pectoralis_major
-      - 401_triceps_brachii
-      equipment: []
-      coaching_notes:
-      - Pullover machine, sitting, elbows on pads
-      tags:
-      - unreviewed
-      - wger
-      wger_id: 1365
-      wger_muscle_ids:
-        primary:
-        - 12
-        secondary:
-        - 4
-        - 5
   review_state:
-    status: approved
+    status: draft
+    ai_reviewed: false
+    enriched_at: '2026-11-06T02:48:16.265483+00:00'
+  enriched_at: '2026-11-06T02:48:16.265483+00:00'
