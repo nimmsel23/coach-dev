@@ -1,88 +1,19 @@
 name: inbox_dips_chest
-description: 'Neu angereichert (manueller Re-Enrich) fuer: Brust-Dips'
-enriched_at: '2026-11-06T02:47:41.895114+00:00'
+description: 'Proactively generated expert draft for: Brust-Dips'
+generated_at: '2026-11-06T03:45:06.161789+00:00'
+enriched_at: '2026-11-06T03:45:06.161789+00:00'
 exercises:
-- exercise_id: dips_chest
-  id: dips_chest
-  name: Dips
-  display_name: Brust-Dips
-  german: Brust-Dips
-  english: Chest Dip
-  category: push
-  type: compound
-  movements:
-  - vertical
-  - shoulder_extension
-  - shoulder_adduction
-  - shoulder_horizontal_adduction
-  - elbow_extension
-  - scapular_depression
-  - scapular_stabilization
-  - core_bracing
-  equipment:
-  - bodyweight
-  primary_muscles:
-  - 103_pectoralis_major_sternal
-  - 401_triceps_brachii
-  secondary_muscles:
-  - 301_anterior_deltoid
-  - 105_serratus_anterior
-  stabilizers:
-  - 304_rotator_cuff
-  - 504_transverse_abdominis
-  - 202b_trapezius_middle
-  - 202c_trapezius_lower
-  - 206_erector_spinae
-  coaching_notes:
-  - Positioniere dich mit gestreckten Armen auf den Barren, die Schultern aktiv nach
-    unten gedrückt und leicht nach hinten gezogen. Lehne den Oberkörper je nach Brustfokus
-    leicht bis deutlich nach vorn, um die Spannung auf die Brustmuskulatur zu lenken.
-  - Beginne die Abwärtsbewegung kontrolliert, indem du die Ellbogen beugst und sie
-    leicht nach außen führst. Halte dabei den Oberkörper weiterhin nach vorn gelehnt
-    und die Schultern aktiv stabilisiert, um sie nicht nach vorn kollabieren zu lassen.
-  - Senke dich nur so tief ab, wie du die Spannung in der Brust und die Kontrolle
-    über deine Schulterblätter vollständig aufrechterhalten kannst. Ein tieferer Winkel
-    kann den vorderen Schulterkopf unnötig belasten.
-  - Spüre in der untersten Position eine gute Dehnung in der Brust. Drücke dich dann
-    kraftvoll und explosiv über Brust und Trizeps zurück in die Ausgangsposition.
-  - Vermeide es, Schwung aus den Beinen oder durch ein Nachschwingen des Rumpfes zu
-    holen. Die Bewegung sollte aus den Armen und dem Oberkörper generiert werden.
-  - Strecke die Arme oben vollständig, aber ohne die Gelenke zu überstrecken oder
-    passiv in den Schultern zu hängen. Halte die Schultern weiterhin aktiv nach unten
-    gedrückt.
-  - Achte während der gesamten Übung auf eine konstante Rumpfspannung (Bauch und unterer
-    Rücken), um den Körper stabil zu halten und ein Hohlkreuz zu vermeiden.
-  common_errors:
-  - 'Zu aufrecht bleiben: Dadurch verlagert sich die Belastung stark auf den Trizeps
-    und die vordere Schulter, wodurch die Brust weniger effektiv trainiert wird.'
-  - 'Schultern hochziehen oder nach vorn fallen lassen: Dies belastet die Rotatorenmanschette
-    und den vorderen Schulterbereich übermäßig und erhöht das Verletzungsrisiko.'
-  - 'Zu tief absinken: Wenn die Mobilität oder Kontrolle der Schulter nicht ausreicht,
-    führt dies zu einer ungesunden Dehnung und Instabilität im Schultergelenk.'
-  - 'Schwung holen: Durch Schwingen mit dem Körper oder den Beinen wird die Muskelspannung
-    reduziert und die Effektivität der Übung verringert.'
-  - 'Ellbogen zu weit abspreizen: Dies kann die Schultergelenke überlasten und die
-    Spannung in der Brust reduzieren, anstatt sie zu erhöhen.'
-  - 'Oben in den Schultern passiv hängen: Die aktive Schulterdepression und -stabilisation
-    sollte auch in der obersten Position beibehalten werden, um Spannung zu halten
-    und Gelenke zu schützen.'
-  - 'Verlust der Rumpfspannung: Ein instabiler Rumpf führt zu schlechterer Kraftübertragung
-    und kann den unteren Rücken überlasten, besonders bei einer geneigten Haltung.'
-  tags:
-  - druecken
-  - koerpergewicht
-  - oberkoerper
-  - chest
-  - vertical_press
-  - dip
-  - pushing
-  - upper_body
+- name: Brust-Dips
+  origin:
+    type: external
+    source_refs:
+      wger:
+      - '194'
   aliases:
   - Barren-Dips
   - Brustbetonte Dips
   - Parallel Bar Chest Dip
-  variations: []
-  source: unreviewed
+  exercise_id: dips_chest
   search_aliases:
   - Brust-Dips
   - Chest Dip
@@ -90,12 +21,82 @@ exercises:
   - Dips
   - Barren-Dips
   - Brustbetonte Dips
+  id: dips_chest
+  german: Brust-Dips
+  display_name: Brust-Dips
+  english: Chest Dip
+  category: push
+  movements:
+  - elbow_extension
+  - shoulder_adduction
+  - horizontal_adduction
+  equipment:
+  - none (bodyweight exercise)
+  primary_muscles:
+  - 101_pectoralis_major
+  - 401_triceps_brachii
+  secondary_muscles:
+  - 301_anterior_deltoid
+  stabilizers:
+  - 304_rotator_cuff
+  - 105_serratus_anterior
+  - 504_transverse_abdominis
+  coaching_notes:
+  - Greife die Stangen mit gestreckten Armen und Schultern weg von den Ohren, die
+    Schulterblätter sind nach unten und hinten gezogen (leicht gepackt), bevor du
+    die Abwärtsbewegung startest.
+  - Neige den Oberkörper bewusst leicht nach vorne (ca. 20–30°) und lass die Knie
+    leicht gebeugt, damit der Brustmuskel den Hauptanteil der Arbeit übernimmt. Der
+    Ellenbogen zeigt dabei eher nach außen-hinten als eng am Körper.
+  - Senke dich kontrolliert ab, bis die Oberarme etwa parallel zum Boden sind oder
+    die Schultern leicht unter Brusthöhe liegen. Mehr Tiefe ist nur sinnvoll, wenn
+    die Schulter schmerzfrei und stabil bleibt.
+  - Drücke dich aus der Tiefe kraftvoll nach oben, ohne die Ellenbogen komplett durchzustrecken.
+    So bleibt die Spannung im Trizeps und in der Brust erhalten und die Gelenke werden
+    geschont.
+  - Halte den Rumpf während der gesamten Bewegung stabil angespannt, Beine locker
+    nach hinten, damit kein Schwung aus den Hüften entsteht.
+  - 'Atme beim Absenken ein und beim Drücken aus. Tempo bewusst kontrollieren: ca.
+    2–3 Sekunden nach unten, kurze Pause in der Tiefe, dann kraftvoll hoch.'
+  common_errors:
+  - 'Zu aufrechter Oberkörper: Dann arbeitet der Trizeps stärker und die Brust wird
+    kaum belastet. Neige dich bewusst nach vorne.'
+  - 'Schultern kippen nach vorne oder ziehen Richtung Ohren: Das belastet das Schultergelenk
+    unnötig. Schultern aktiv nach unten und hinten halten.'
+  - 'Zu tiefes Absenken mit gedehnter Schulter, besonders bei eingeschränkter Beweglichkeit
+    oder Vorschädigung: Tiefe an die persönliche Schulterkapazität anpassen.'
+  - Ellenbogen zeigen seitlich nach außen statt nach hinten-außen; das erhöht die
+    Belastung auf Schulter und Sehnen.
+  - Ruckartiger Schwung aus den Hüften oder Beinen statt kontrollierter Bewegung.
+    Das reduziert den Reiz auf die Zielmuskulatur.
+  - 'Vollständiges Durchstrecken der Ellenbogen oben: Die Spannung geht verloren und
+    die Gelenke werden belastet. Oben leicht gebeugt beenden.'
+  - 'Zu schnelles Absenken ohne Kontrolle: Verletzungsrisiko steigt, der exzentrische
+    Reiz wird verschenkt.'
+  wger_id: 194
+  wger_muscle_ids:
+    primary:
+    - 4
+    - 5
+    secondary:
+    - 5
+  external_ids:
+    wger:
+    - 194
+  tags:
+  - unreviewed
+  - wger
+  original_description:
+  - Greife die Stangen an einer engen Stelle und drücke dich hoch. Strecke dabei die
+    Arme nicht ganz aus, dann bleiben während des gesamten Bewegungablaufs die Muskeln
+    immer unter Spannung. Beuge nun die Arme und gehe so tief wie möglich runter,
+    die Ellenbogen zeigen nach hinten. Du kannst an dieser Stelle einige Sekunden
+    bleiben, bevor du die Übung weitermachst.
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-06T03:45:06.161789+00:00'
   schema_version: 2026-08-12.exercise-v1
-  origin:
-    type: manual
-    source_refs: {}
   review_state:
     status: draft
     ai_reviewed: false
-    enriched_at: '2026-11-06T02:47:41.895114+00:00'
-  enriched_at: '2026-11-06T02:47:41.895114+00:00'
+    enriched_at: '2026-11-06T03:45:06.161789+00:00'

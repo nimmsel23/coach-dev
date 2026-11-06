@@ -4,7 +4,7 @@ fitness-log — Session-Log direkt aus Dateien (ls|show|week|history|stats|
 sync-status|clients|console|drafts), kein Server nötig.
 
 Echter, im Repo versionierter Einstiegspunkt (statt des von `uv tool install`
-auto-generierten Shims unter ~/.local/share/uv/tools/fitness-agent/bin/) —
+auto-generierten Shims unter ~/.local/share/uv/tools/fitness/bin/) —
 gleiches Muster wie fitnessctl/fitness-devctl. Läuft mit der fitness-agent
 uv-Tool-venv, weil fitness.log.cli Typer/Rich etc. braucht, die im
 System-Python nicht installiert sind.

@@ -1,24 +1,70 @@
 name: inbox_20261013_085640_54a862
-description: 'Neu angereichert (manueller Re-Enrich) fuer: Klimmzug an Leiste'
-enriched_at: '2026-11-06T02:47:21.390797+00:00'
+description: 'Proactively generated expert draft for: Klimmzug im Obergriff'
+generated_at: '2026-11-06T03:44:27.363665+00:00'
+enriched_at: '2026-11-06T03:44:27.363665+00:00'
 exercises:
-- exercise_id: '020'
-  id: '020'
+- aliases:
+  - Klimmzug
+  - Klimmzug Obergriff
+  - Klimmzug im Obergriff
+  - Klimmzüge
+  - Obergriff Klimmzug
+  - Pronated Pull-up
+  - Pull Up
+  - Pull Ups
+  - Pull-Up
+  - Pull-Ups
+  - Pull-up
+  - Pull-up (Overhand Grip)
+  - Standard Pull-up
+  - Fingerboard Pull-up
+  - Hangboard Pull-up
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '821'
+      yuhonas:
+      - Pullups
+  exercise_id: '020'
+  search_aliases:
+  - Klimmzug an Leiste
+  - Klimmzug im Obergriff
+  - Pull-Up
+  - Pullups
+  - wger_821
+  - yuhonas_pullups
+  - Fingerboard Pullup
+  - Hangboard Pullup
+  yuhonas_id: Pullups
+  english: Pull-Up
   name: Klimmzug im Obergriff
-  display_name: Klimmzug im Obergriff
-  german: Klimmzug im Obergriff
-  english: Pull-up (Overhand Grip)
+  wger_id: 821
+  wger_muscle_ids:
+    primary: []
+    secondary: []
+  id: '020'
+  german: Klimmzug an Leiste
+  external_ids:
+    wger:
+    - 821
+    yuhonas:
+    - Pullups
+  display_name: Klimmzug an Leiste
   category: pull
   movements:
+  - vertical
+  - shoulder_extension
+  - shoulder_adduction
   - elbow_flexion
   - scapular_depression
+  - scapular_retraction
   - scapular_downward_rotation
-  - shoulder_adduction
-  - shoulder_extension
-  - vertical
   equipment:
   - body only
   - bodyweight
+  - fingerboard
+  - hangboard
   - none (bodyweight exercise)
   - pull_up_bar
   primary_muscles:
@@ -28,6 +74,7 @@ exercises:
   - 202b_trapezius_middle
   - 202c_trapezius_lower
   - 205_rhomboids
+  - 303_posterior_deltoid
   - 402_biceps_brachii
   - 403_brachialis
   - 404_brachioradialis
@@ -58,58 +105,56 @@ exercises:
     lats are fully stretched.
   - Repeat this motion for the prescribed amount of repetitions.
   coaching_notes:
-  - 'Aktiver Start: Beginne aus einem aktiven Hang – Schultern weg von den Ohren,
-    Brustbein leicht angehoben, Rumpf stabil. Vermeide ein passives Aushängen in den
-    Gelenken.'
-  - 'Ellenbogenführung: Konzentriere dich darauf, die Ellenbogen nach unten und hinten
-    (in Richtung deiner Hüften) zu ziehen, um die primäre Zugbewegung aus dem Latissimus
-    und dem oberen Rücken zu initiieren.'
-  - 'Schulterblattkontrolle: Die Schulterblätter aktiv nach unten drücken (Depression)
-    und leicht zusammenführen (Retraktion), während du dich hochziehst. Dies schützt
-    die Schultern und aktiviert den Rücken effektiv.'
-  - 'Rumpfspannung: Halte während der gesamten Bewegung eine stabile Rumpfspannung,
-    um ein Hohlkreuz oder unbeabsichtigtes Schwingen des Körpers zu verhindern. Dein
-    Körper sollte eine relativ gerade Linie bilden.'
-  - 'Volle Bewegungsamplitude: Ziehe dich hoch, bis die obere Brust die Stange berührt
-    oder zumindest das Kinn deutlich über der Stange ist, und senke dich dann kontrolliert
-    ab, bis die Arme fast vollständig gestreckt sind.'
-  - 'Kontrollierte Exzentrik: Die Abwärtsbewegung (Exzentrik) sollte langsam und kontrolliert
-    erfolgen. Dies fördert den Kraftaufbau, verbessert die Kontrolle und minimiert
-    das Verletzungsrisiko.'
-  - 'Griffweite und -tiefe: Ein Griff etwas breiter als schulterbreit ist üblich.
-    Halte die Stange fest und tief in der Handfläche, um die Unterarme und den Griff
-    optimal zu nutzen und Handgelenkbelastung zu reduzieren.'
-  - 'Mind-Muscle Connection: Fühle bewusst, wie dein Latissimus und dein oberer Rücken
-    arbeiten. Versuche, die Bewegung nicht nur mit den Armen zu forcieren.'
+  - 'Vor dem Training gezielt Finger, Handgelenke und Unterarme aufwärmen: zuerst
+    leichte Hänge und Schulterübungen, dann mit steigender Intensität an größeren
+    Leisten arbeiten.'
+  - 'Aktiver Start: Aus dem Hang zuerst die Schulterblätter sanft nach unten setzen,
+    Rippen unten halten und den Rumpf anspannen, bevor du ziehst.'
+  - Ellbogen nach unten und hinten Richtung Hüfte bzw. Flanken führen. So arbeiten
+    Latissimus und oberer Rücken, statt dass nur die Arme beugen.
+  - Der Obergriff belastet Latissimus, Teres major und oberen Rücken etwas stärker
+    als der Untergriff (Chin-Up) und den Bizeps etwas weniger.
+  - 'Volle, kontrollierte Bewegung: oben den Brustkorb zur Leiste bringen, unten die
+    Arme fast vollständig strecken und den Hang nicht verlieren.'
+  - Die Abwärtsbewegung langsam und kontrolliert ausführen (etwa 2 bis 3 Sekunden).
+    Das fördert Kraftaufbau, Sehnenstärke und Schulterkontrolle.
+  - 'Griff: Die Leiste tief in der Hand halten und das Handgelenk stabil und leicht
+    gestreckt lassen. Auf kleinen Leisten Halbkrallen (Half Crimp) statt Vollkrallen
+    nutzen, um Fingerbeugesehnen und Ringbänder (A2-Pulley) zu schonen.'
+  - 'Rumpf als ruhige Linie von Kopf bis Fuß halten: Gesäß und Bauch leicht anspannen,
+    kein Hohlkreuz und kein Beinschwung.'
+  - 'Wähle die Leistengröße passend zu deinem Stand: größere, fingerfreundlichere
+    Leisten für Einsteiger, kleinere oder spezifische Griffarten erst mit Erfahrung.'
   common_errors:
-  - 'Passives Aushängen: Aus einem völlig passiven Hang starten, ohne vorher Schulterblatt-Depression
-    und Rumpfspannung aufzubauen, was die Schultergelenke unnötig belastet.'
-  - 'Kipping/Schwung: Die Nutzung von Bein- oder Hüftschwung (Kipping) statt einer
-    kontrollierten, muskelgesteuerten Bewegung. Dies reduziert die effektive Belastung
-    der Zielmuskulatur.'
-  - 'Unvollständige ROM: Teilwiederholungen, bei denen die Arme unten nicht vollständig
-    gestreckt oder oben nicht die volle Höhe (Brust zur Stange/Kinn über Stange) erreicht
-    wird.'
-  - 'Schultern zu den Ohren: Die Schultern während des Hochziehens nach oben zu den
-    Ohren ziehen, anstatt sie aktiv nach unten zu drücken und zu stabilisieren, was
-    zu Verspannungen im Nacken führen kann.'
-  - 'Hohlkreuz/Rippenflare: Verlust der Rumpfspannung, was zu einem starken Hohlkreuz
-    oder aufgewölbten Rippen führt. Dies destabilisiert den Körper und reduziert die
-    Kraftübertragung.'
-  - 'Kopf vorschieben: Den Kopf nach vorne schieben, um das Kinn über die Stange zu
-    bekommen, während der Rest des Körpers nicht ausreichend hochgezogen wird.'
-  - 'Überbreiter Griff: Ein zu breiter Griff, der die Bewegungsamplitude einschränkt,
-    die Schultern ungünstig belastet und die effektive Aktivierung des Latissimus
-    reduzieren kann.'
-  - 'Exzentrik fallen lassen: Die Abwärtsbewegung unkontrolliert und zu schnell ausführen
-    (fallen lassen), was den Trainingseffekt mindert und das Verletzungsrisiko erhöht.'
+  - Aus einem passiven Hang starten, ohne vorher Spannung im Schultergürtel aufzubauen.
+    Das belastet Schultergelenk und Fingersehnen unnötig.
+  - Die Schultern zu den Ohren ziehen, statt sie aktiv nach unten zu stabilisieren.
+    Das führt zu Nackenverspannungen und verlorener Schulterblattposition.
+  - Nur das Kinn über die Leiste bringen, statt den Brustkorb zur Leiste zu ziehen.
+    Das ist eine verkürzte Wiederholung mit deutlich geringerem Trainingsreiz.
+  - 'Halbe Wiederholungen: unten nicht vollständig strecken oder oben vorzeitig abbrechen.'
+  - 'Kipping oder Beinschwung: Schwung ersetzt Muskelkraft und erhöht die Belastung
+    von Schultern und Fingern.'
+  - Den Kopf nach vorne schieben, um über die Leiste zu kommen, statt den Körper hochzuziehen.
+  - 'Verlust der Rumpfspannung (Hohlkreuz oder aufklappende Rippen): Der Körper wird
+    instabil und die Kraftübertragung leidet.'
+  - 'Verkrampftes Vollkrallen auf kleinen Leisten: überlastet Ringbänder und Fingerbeugesehnen
+    und führt zu schneller Griffermüdung.'
+  - 'Die Exzentrik fallen lassen: unkontrolliertes, zu schnelles Absenken mindert
+    den Trainingseffekt und erhöht das Verletzungsrisiko.'
+  - 'Überbreiter Griff: schränkt die Bewegungsamplitude ein, belastet die Schultern
+    ungünstig und verringert die Aktivierung des Latissimus.'
+  - Fehlendes spezifisches Aufwärmen für Finger und Unterarme erhöht das Risiko für
+    Sehnen- und Gelenkverletzungen deutlich.
   original_description:
   - Klimmzüge an einer gewählten Leiste eines Fingerboards / Hangboards
   tags:
   - back
   - bodyweight
   - calisthenics
+  - climbing
   - expert
+  - fingerboard
   - grip_strength
   - merged_external
   - pull
@@ -117,49 +162,11 @@ exercises:
   - vertical_pull
   - wger
   - yuhonas
-  aliases:
-  - Klimmzug
-  - Klimmzug Obergriff
-  - Klimmzug im Obergriff
-  - Klimmzüge
-  - Obergriff Klimmzug
-  - Pronated Pull-up
-  - Pull Up
-  - Pull Ups
-  - Pull-Up
-  - Pull-Ups
-  - Pull-up
-  - Pull-up (Overhand Grip)
-  - Standard Pull-up
-  search_aliases:
-  - Klimmzug an Leiste
-  - Klimmzug im Obergriff
-  - Pull-Up
-  - Pullups
-  - wger_821
-  - yuhonas_pullups
-  wger_id: 821
-  wger_muscle_ids:
-    secondary: []
-    primary: []
-  yuhonas_id: Pullups
-  external_ids:
-    wger:
-    - 821
-    yuhonas:
-    - Pullups
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-06T03:44:27.363665+00:00'
   schema_version: 2026-08-12.exercise-v1
-  origin:
-    type: merged_external
-    source_refs:
-      wger:
-      - '821'
-      yuhonas:
-      - Pullups
   review_state:
     status: draft
     ai_reviewed: false
-    enriched_at: '2026-11-06T02:47:21.390797+00:00'
-  variations: []
-  source: unreviewed
-  enriched_at: '2026-11-06T02:47:21.390797+00:00'
+    enriched_at: '2026-11-06T03:44:27.363665+00:00'

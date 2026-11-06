@@ -3,9 +3,9 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [project]
-name = "fitness-agent"
+name = "fitness"
 version = "0.1.0"
-description = "Local fitness agent foundation CLI"
+description = "Fitness: Katalog/KB, Backend-API und CLI (Coach)"
 authors = [
     { name = "Alpha OS team" }
 ]
