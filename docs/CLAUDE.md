@@ -39,9 +39,8 @@ dieser Doku steht noch aus.
 - `CLAUDE.md` ist Symlink → `docs/CLAUDE.md`. Direktes Schreiben scheitert
   ("Refusing to write through symlink") — immer `docs/CLAUDE.md` editieren.
 - **Release-Weg seit 2026-10-29: `dev` → `master` → `vitalos`.** Erst
-  `vos-release-pr fitness` (PR `dev` → `master`; `Check` grün → Auto-Merge →
-  Standalone-Live-Deploy per CI), dann `fitness-release` für `master` →
-  `vitalos`. Nie von Hand auf `master` pushen (außer Hotfix); `master` wird
+  `dev` pushen (CI promotet nach grünem `Check` automatisch nach `master` und deployt live), dann `fitness-release` für `master` →
+  `vitalos`. Direkte Pushes auf `master` nur für Hotfixes (`dev` zieht die Automatik nach); `master` wird
   lokal nie ausgecheckt. Die Beschreibung des Skripts direkt darunter stammt
   teils noch aus der Zeit vor dem PR-Schritt: es mergt jetzt `origin/master`
   (nicht `dev`) nach `vitalos`, mergt vor dem Parent-Push `origin/master` ein
