@@ -1,0 +1,24 @@
+# Nicht-Übungen: Einträge aus wger/yuhonas (oder alten Drafts), die in der App
+# Aktivitäten sind und KEINE Exercises. Sie dürfen nicht im Katalog-Index, in der
+# Suche, im Bulk-Bundle, im Quellen-Merge und nicht im Firestore-Push auftauchen.
+#
+# Warum eine Liste statt Löschen aus unreviewed_wger.yml: das ist Roh-Import, ein
+# erneuter `fitness-catalog import` würde den Eintrag zurückbringen. Die Sperrliste
+# überlebt Reimporte.
+#
+# Aktivitäten (HIIT, Laufen, Radfahren, ...) werden in der Session als Finisher /
+# Activity-Addon erfasst (src/constants/activities, src/views/Session/ActivityAddon.jsx,
+# Session-Feld `activityAddons`), nicht als Exercise.
+#
+# Matching ausschließlich über ID, nie über Namen (kein Fuzzy, keine False Positives).
+version: 1
+entries:
+  - exercise_id: wger_529
+    wger_id: 529
+    name: HIIT
+    reason: >
+      HIIT ist eine Aktivität (ACTIVITY_TYPES 'hiit'), keine Übung. Der Eintrag wurde
+      durch `fitness coach` / Klienten-Logging fuzzy auf "Core HIIT Finisher" gematcht
+      und erzeugte den Inbox-Draft inbox_wger_529.yml.
+    decided_by: Daniel
+    decided_at: '2026-11-01'

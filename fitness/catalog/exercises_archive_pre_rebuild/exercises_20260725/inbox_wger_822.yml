@@ -1,0 +1,84 @@
+name: inbox_wger_822
+description: 'Reenriched (Coach-Feedback) fuer: Cable Rear Delt Fly'
+exercises:
+- exercise_id: wger_822
+  display_name: Cable Rear Delt Fly
+  category: Glenohumerale Region
+  primary_muscles:
+  - 303_posterior_deltoid
+  secondary_muscles:
+  - 205_rhomboids
+  - 203_trapezius_middle
+  - 204_trapezius_lower
+  - 304_rotator_cuff
+  stabilizers:
+  - 206_erector_spinae
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 504_transverse_abdominis
+  - 601_gluteus_maximus
+  equipment:
+  - Cable Machine
+  movement_pattern: Horizontal Abduction
+  coaching_notes:
+  - '**Ausgangsposition:** Stellen Sie die Kabelrollen auf Höhe Ihres Glenohumeralgelenks
+    ein. Fassen Sie die Griffe mit überkreuzten Armen (rechter Griff mit linker Hand,
+    linker Griff mit rechter Hand). Stellen Sie sich mittig vor die Maschine mit einem
+    standbreiten Stand, leicht gebeugten Knien und einem aufrechten Oberkörper. Eine
+    leichte Vorneigung aus der Hüfte optimiert die Zuglinie für die posteriore Deltoidmuskulatur.
+    Spannen Sie Ihre Rumpfmuskulatur fest an und deprimen und retrahierten Sie die
+    Scapulae bewusst, um eine Überaktivierung des oberen Trapezius zu vermeiden.'
+  - '**Ausführung:** Beginnen Sie mit gestreckten Armen vor der Brust, wobei ein leichter,
+    konstanter Winkel im Ellbogen beibehalten wird. Initiieren Sie die Bewegung durch
+    eine Kontraktion der posterioren Deltoidfasern und ziehen Sie die Griffe kontrolliert
+    nach hinten und außen. Stellen Sie sich vor, Sie würden mit Ihren Ellbogen einen
+    weiten Bogen ziehen, um die Scapulae in Richtung Wirbelsäule zu bewegen, ohne
+    sie tatsächlich zu berühren. Konzentrieren Sie sich auf eine maximale Kontraktion
+    der posterioren Deltoidmuskulatur am Endpunkt der Bewegung. Führen Sie die Griffe
+    langsam und unter Spannung in die Ausgangsposition zurück, um die exzentrische
+    Phase optimal zu nutzen.'
+  - '**Fokus & Biomechanische Cues:** Der Fokus liegt auf der bewussten Aktivierung
+    der posterioren Deltoidfasern. Vermeiden Sie es, die Bewegung primär aus dem Latissimus
+    dorsi oder den Biceps brachii zu generieren. Die aktive Retraktion der Scapulae
+    ist essenziell, um eine maximale Kontraktion der posterioren Deltoidmuskulatur
+    zu erzielen. Ein stabilisierter Rumpf ist von zentraler Bedeutung, um unerwünschte
+    Rotation oder Kompensationen zu verhindern. Das Glenohumeralgelenk sollte eine
+    horizontale Abduktion ausführen.'
+  - '**Atmung:** Atmen Sie während der konzentrischen (Zieh-)Phase aus und während
+    der exzentrischen (Rückführ-)Phase ein.'
+  common_errors:
+  - '**Zu viel Gewicht:** Die Verwendung von zu hohem Gewicht führt dazu, dass die
+    Bewegung durch den Latissimus dorsi, Biceps brachii oder oberen Trapezius dominiert
+    wird. Dies reduziert die Isolation und Effektivität für die posterioren Deltoidfasern
+    erheblich und erhöht das Verletzungsrisiko. *Korrektur: Reduzieren Sie das Gewicht
+    und konzentrieren Sie sich auf eine präzise Form und die bewusste Muskel-Geist-Verbindung.*'
+  - '**Elevation der Scapulae (Shrugging):** Wenn die Scapulae während der Bewegung
+    zu den Ohren gezogen werden, überlastet dies den oberen Trapezius und verringert
+    die Spannung auf die posteriore Deltoidmuskulatur. *Korrektur: Halten Sie die
+    Scapulae aktiv deprimiert und stabil. Stellen Sie sich vor, Sie würden Ihre Scapulae
+    in die hinteren Hosentaschen ziehen.*'
+  - '**Arme zu stark beugen / Ruderbewegung:** Eine übermäßige Beugung der Arme (über
+    einen leichten, konstanten Winkel hinaus) verwandelt die Übung in ein Rudern,
+    was den Biceps brachii und Latissimus dorsi primär beansprucht. *Korrektur: Behalten
+    Sie während der gesamten Bewegung einen konstanten, leichten Winkel im Ellbogen
+    bei, um die Isolation der posterioren Deltoidmuskulatur zu gewährleisten. Denken
+    Sie an ''weite Ellbogen''.*'
+  - '**Schwungnutzung:** Das Verwenden von Schwung aus dem Rumpf oder dem Rücken reduziert
+    die effektive Time Under Tension für die Zielmuskulatur und erhöht das Risiko
+    von Verletzungen, insbesondere der Lendenwirbelsäule. *Korrektur: Führen Sie die
+    Bewegung bewusst und kontrolliert aus, ohne jeglichen Schwung. Der Fokus liegt
+    auf der Muskelkontraktion, nicht auf der Geschwindigkeit.*'
+  - '**Kyphotische (Rundrücken) oder hyperlordotische (Überstreckung) Wirbelsäule:**
+    Eine gebeugte oder überstreckte Wirbelsäule während der Ausführung kann die Bandscheiben
+    unnötig belasten und die Rumpfspannung kompromittieren. *Korrektur: Halten Sie
+    den Rumpf während der gesamten Übung stabil und die Wirbelsäule in einer neutralen
+    Position. Die Vorneigung sollte aus der Hüfte kommen, nicht aus dem Rücken.*'
+  - '**Unvollständiger Bewegungsbereich:** Das Nicht-Ausführen der vollständigen Kontraktion
+    (Arme nicht weit genug nach hinten ziehen) oder das zu frühe Ablassen des Widerstands
+    reduziert die Effektivität der Übung. *Korrektur: Ziehen Sie die Griffe so weit
+    wie möglich nach hinten und außen, um eine maximale Kontraktion der posterioren
+    Deltoidmuskulatur zu erreichen. Lassen Sie die Griffe kontrolliert bis kurz vor
+    die Ausgangsposition zurück, um die Spannung aufrechtzuerhalten.*'
+  wger_id: null
+  variations: []
+  source: unreviewed

@@ -1,0 +1,72 @@
+name: inbox_wger_659
+description: 'Proactively generated expert draft for: Trizeps Seildrücken'
+exercises:
+- exercise_id: wger_659
+  display_name: Trizeps Seildrücken
+  category: Strength
+  primary_muscles:
+  - 403_triceps_brachii
+  secondary_muscles: []
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 504_transverse_abdominis
+  - 203_trapezius_middle
+  equipment:
+  - Cable Machine
+  - Rope Attachment
+  movement_pattern: Elbow Extension
+  coaching_notes: '1.  **Startposition:** Stellen Sie sich mit dem Gesicht zum Kabelzugturm,
+    Füße schulterbreit auseinander und die Knie leicht gebeugt. Greifen Sie das Seil
+    im Obergriff (Handflächen zueinander) mit den Händen nah beieinander. Lehnen Sie
+    sich leicht nach vorne, halten Sie den Oberkörper aufrecht und spannen Sie den
+    Rumpf an. Die Ellbogen sind eng am Körper fixiert und die Oberarme parallel zum
+    Boden. Die Schultern sind dabei entspannt und leicht nach hinten unten gezogen.
+
+    2.  **Ausführung:** Drücken Sie das Seil kraftvoll nach unten, indem Sie ausschließlich
+    die Ellbogen strecken. Führen Sie die Hände am Ende der Bewegung auseinander,
+    um eine maximale Kontraktion der Trizepse zu erreichen (Peak Contraction) und
+    die Medial- und Lateral-Köpfe des Trizeps optimal zu aktivieren. Die Arme sollten
+    fast vollständig gestreckt sein, ohne die Ellbogen zu "überstrecken" (Hyperextension),
+    um die Gelenke zu schonen.
+
+    3.  **Kontrollierte Rückführung:** Lassen Sie das Seil langsam und kontrolliert
+    (ca. 2-3 Sekunden) in die Ausgangsposition zurückkehren, indem Sie die Ellbogen
+    wieder beugen. Spüren Sie dabei die volle Dehnung im Trizeps, bevor die nächste
+    Wiederholung beginnt. Achten Sie darauf, dass nur die Unterarme arbeiten und die
+    Oberarme während der gesamten Bewegung stabil und unbewegt bleiben.
+
+    4.  **Atmung:** Atmen Sie beim Herunterdrücken des Seils kraftvoll aus und beim
+    kontrollierten Zurückführen in die Ausgangsposition tief ein.
+
+    5.  **Fokus:** Konzentrieren Sie sich auf eine ausgeprägte Muskel-Gehirn-Verbindung.
+    Spüren Sie, wie der Trizeps die Arbeit verrichtet, anstatt die Bewegung nur mechanisch
+    auszuführen. Vermeiden Sie jeglichen Schwung aus dem Oberkörper.'
+  common_errors:
+  - '**Schwungholen und Rumpfbewegung:** Der häufigste Fehler ist das Verwenden des
+    Körpergewichts oder eines Schwungs aus dem Rücken und den Schultern, um das Seil
+    nach unten zu drücken. Dies nimmt die effektive Belastung vom Trizeps, erhöht
+    das Verletzungsrisiko für den unteren Rücken und reduziert die Isolation des Zielmuskels.
+    Halten Sie den Rumpf während der gesamten Bewegung absolut stabil und fixiert.'
+  - '**Ellbogen spreizen oder bewegen:** Die Ellbogen sollten während der gesamten
+    Bewegung eng am Körper fixiert und ihre Position nicht verändern. Ein Spreizen
+    der Ellbogen oder eine Bewegung der Oberarme verlagert die Belastung von den Trizeps
+    auf die Schultern und andere Hilfsmuskeln, was die Effektivität der Übung mindert.'
+  - '**Unvollständige Bewegungsausführung:** Oft wird die Bewegung nicht vollständig
+    ausgeführt, weder in der vollen Streckung nach unten noch in der kontrollierten
+    Beugung bis zur vollen Dehnung des Trizeps. Eine vollständige ROM (Range of Motion)
+    ist entscheidend für eine maximale Aktivierung und Entwicklung des Trizeps.
+
+    '
+  - '**Zu hohes Gewicht:** Die Wahl eines zu hohen Trainingsgewichts führt fast unweigerlich
+    zu einer schlechten Form, dem Bedarf, Schwung zu holen, und einer reduzierten
+    Muskelkontraktion. Reduzieren Sie das Gewicht, um die Bewegung sauber, kontrolliert
+    und mit voller Konzentration auf den Trizeps ausführen zu können.'
+  - '**Schultern hochziehen/Rundrücken:** Vermeiden Sie es, die Schultern während
+    der Ausführung nach oben zu den Ohren zu ziehen oder einen Rundrücken zu machen.
+    Halten Sie die Schultern bewusst entspannt, nach hinten unten gezogen und den
+    oberen Rücken in einer neutralen, stabilen Position, um die Scapula-Stabilität
+    zu gewährleisten und Nacken- oder Schulterproblemen vorzubeugen.'
+  wger_id: null
+  variations: []
+  source: unreviewed

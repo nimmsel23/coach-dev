@@ -1,0 +1,69 @@
+name: inbox_wger_1619
+description: 'Proactively generated expert draft for: Lat Pull Down'
+exercises:
+- exercise_id: wger_1619
+  display_name: Lat Pull Down
+  category: Strength
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 401_biceps_brachii
+  - 402_brachialis
+  secondary_muscles:
+  - 203_trapezius_middle
+  - 204_trapezius_lower
+  - 205_rhomboids
+  - 303_posterior_deltoid
+  - 207_teres_major
+  - 405_forearm_flexors
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  - 304_rotator_cuff
+  equipment: Cable Machine
+  movement_pattern: Vertical Pull
+  coaching_notes:
+  - Wählen Sie einen angemessenen Griff (typischerweise überhand, etwas breiter als
+    schulterbreit) und setzen Sie sich stabil hin. Fixieren Sie Ihre Oberschenkel
+    fest unter den Polstern, um eine stabile Basis zu schaffen.
+  - Richten Sie Ihren Oberkörper auf, die Brust ist leicht herausgestreckt, und halten
+    Sie eine leichte Lordose (natürliche Krümmung) in der Lendenwirbelsäule aufrecht.
+    Vermeiden Sie ein Rundrücken oder übermäßiges Zurücklehnen.
+  - Beginnen Sie die Bewegung, indem Sie Ihre Schulterblätter aktiv nach unten ziehen
+    (Depression) und leicht zusammenführen (Retraktion), bevor Sie mit den Armen ziehen.
+    Dies aktiviert primär den Latissimus.
+  - Ziehen Sie die Stange kontrolliert zur oberen Brust oder zum Schlüsselbein. Stellen
+    Sie sich vor, Sie ziehen die Ellbogen nach unten und leicht nach hinten, wobei
+    sie nah am Körper bleiben.
+  - Konzentrieren Sie sich auf die Kontraktion Ihrer Rückenmuskulatur. Die Arme fungieren
+    primär als Haken; der Rücken soll die Hauptarbeit leisten.
+  - Führen Sie die Aufwärtsbewegung langsam und kontrolliert aus, um eine maximale
+    Dehnung im Latissimus zu erzielen. Lassen Sie die Schultern nach oben gleiten,
+    aber behalten Sie die Kontrolle, um die Gelenke nicht zu überstrecken.
+  - Vermeiden Sie Schwung und Ruckbewegungen. Jede Wiederholung sollte bewusst und
+    mit vollem Fokus auf die Zielmuskulatur ausgeführt werden.
+  common_errors:
+  - '**Zu starkes Zurücklehnen und Schwungnutzung:** Viele neigen dazu, den Oberkörper
+    zu weit nach hinten zu lehnen und den Schwung des Körpers zu nutzen, wodurch die
+    Bewegung eher zu einem Rudern als zu einem vertikalen Zug wird und die Effektivität
+    für den Latissimus reduziert wird.'
+  - '**Ellbogen weit abgespreizt:** Wenn die Ellbogen beim Ziehen zu weit nach außen
+    gehen, wird die Belastung auf die Schultern verlagert und die Aktivierung des
+    Latissimus verringert.'
+  - '**Schulterhochziehen (Shrugging):** Das Hochziehen der Schultern während der
+    Bewegung anstatt der Depression und Retraktion kann zu Verspannungen im Nacken-
+    und oberen Trapeziusbereich führen und die Zielmuskulatur weniger effektiv trainieren.'
+  - '**Unvollständiger Bewegungsumfang:** Oft wird die Stange nicht weit genug nach
+    unten gezogen (keine volle Kontraktion) oder die Arme werden in der oberen Phase
+    nicht vollständig gestreckt, wodurch die Dehnung des Latissimus eingeschränkt
+    wird.'
+  - '**Ausschließlich mit den Armen ziehen:** Viele Athleten ziehen primär mit den
+    Bizeps- und Unterarmmuskeln, anstatt die Bewegung bewusst aus dem Rücken einzuleiten
+    und zu führen.'
+  - '**Überstreckung der Halswirbelsäule:** Den Kopf stark in den Nacken zu legen,
+    um die Stange weiter herunterzuziehen, kann zu Nackenschmerzen führen. Der Kopf
+    sollte in einer neutralen Position bleiben.'
+  wger_id: null
+  variations: []
+  source: unreviewed

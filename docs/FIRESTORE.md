@@ -11,6 +11,21 @@ Datenstand-Verdachts vom User (2026-08-23, siehe unten).
 | Realtime (Push→Pull-Echo) | `fitness/firestore/mirror.py::on_session()` | `on_snapshot`-Listener, läuft eingebettet in `fitness-api.service` | Ein User (`UID`), läuft dauerhaft |
 | One-Shot (CLI/manuell) | `fitness/firestore/sync.py::pull()`/`push()` | `fitness sync pull\|push`, `/firestore/pull` | Alle User oder gezielt einer |
 
+## Coach-Workout-Projektion (nur Pull)
+
+Die eigentlichen Strong-Workouts liegen in `fitness/{uid}/workouts`; sie sind
+von den zugewiesenen `wf_workouts` getrennt. Der normale Pull legt daraus eine
+lokale, datensparsame Projektion unter
+`~/.aos/fitness/users/<uid>/cloud-workouts/<workout-id>.json` an. Der
+Loopback-Endpunkt `POST /firestore/pull-workout-logs?uid=<uid>` aktualisiert
+nur diese Projektion und wird vom lokalen Coach-Backend verwendet.
+
+Die Projektion enthält Plan-/Routine-Referenzen, Zeitstempel, Status sowie
+Übungs- und Satz-Zählwerte. Übungs-Subcollections, Event-Listen und Satzwerte
+werden nicht gespiegelt. Lokale `workouts.json` und der separate
+`workouts/`-Mirror für `wf_workouts` bleiben unberührt. Die Route schreibt
+nichts nach Firestore und akzeptiert nur Loopback-Aufrufe.
+
 Beide Pfade nutzten bis 2026-08-23 **unabhängige, leicht unterschiedliche**
 Implementierungen derselben Konfliktentscheidung ("wessen Version gewinnt?")
 — das war selbst schon ein Robustheitsproblem: ein Fix in einer Datei (siehe

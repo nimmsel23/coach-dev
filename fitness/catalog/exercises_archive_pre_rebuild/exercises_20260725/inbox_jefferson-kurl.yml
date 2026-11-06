@@ -1,0 +1,61 @@
+name: inbox_jefferson-kurl
+description: AI generated base entry for Jefferson-Kurl
+exercises:
+- exercise_id: jefferson-kurl
+  id: jefferson-kurl
+  name: Jefferson-Kurl
+  display_name: Jefferson-Curling
+  german: Jefferson-Curling
+  category: core|legs
+  type: isolation
+  movement_pattern: spinal_flexion
+  equipment:
+  - dumbbell
+  - barbell
+  - bodyweight
+  primary_muscles:
+  - 206_erector_spinae
+  - 607_biceps_femoris
+  - 608_semitendinosus
+  - 609_semimembranosus
+  secondary_muscles:
+  - 501_rectus_abdominis
+  - 601_gluteus_maximus
+  - 405_forearm_flexors
+  stabilizers:
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 603_rectus_femoris
+  - 604_vastus_lateralis
+  - 605_vastus_medialis
+  - 606_vastus_intermedius
+  - 301_anterior_deltoid
+  - 304_rotator_cuff
+  coaching_notes:
+  - Führen Sie die Bewegung langsam und kontrolliert aus, indem Sie die Wirbelsäule
+    segment für Segment beugen und strecken (Roll-down und Roll-up Technik).
+  - Halten Sie die Beine während der gesamten Übung gestreckt, um eine maximale Dehnung
+    der hinteren Oberschenkelmuskulatur zu erzielen.
+  - Beginnen Sie mit einem sehr leichten Gewicht oder nur mit dem Körpergewicht, um
+    die Wirbelsäulenmobilität zu verbessern und die Kontrolle zu erlernen.
+  - Stellen Sie sich für einen größeren Bewegungsumfang auf eine erhöhte Plattform,
+    z.B. eine Stufe.
+  common_errors:
+  - Die Bewegung zu schnell ausführen und die segmentale Kontrolle verlieren, was
+    das Verletzungsrisiko für die Wirbelsäule erhöht.
+  - Die Knie während der Abwärtsbewegung beugen, was die Dehnung der hinteren Oberschenkelmuskulatur
+    reduziert und den Trainingseffekt mindert.
+  - Zu viel Gewicht verwenden, bevor die erforderliche Mobilität und Rumpfkontrolle
+    entwickelt wurde.
+  tags:
+  - flexibility
+  - mobility
+  - spine_health
+  - hamstring_stretch
+  - postural_control
+  aliases:
+  - jefferson_curl
+  - spinal_roll_down
+  variations: []
+  source: unreviewed

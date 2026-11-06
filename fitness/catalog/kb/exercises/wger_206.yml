@@ -1,0 +1,141 @@
+exercise_id: wger_206
+description: Expert details for Ausfallschritte im Gehen
+approved_at: '2026-10-17T21:08:45.330184+00:00'
+exercises:
+- exercise_id: wger_206
+  display_name: Ausfallschritte im Gehen
+  german: Ausfallschritte im Gehen
+  english: Walking Lunges
+  category: lunge
+  primary_muscles:
+  - 601_quadriceps_femoris
+  - 603_gluteus_maximus
+  secondary_muscles:
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
+  - 608_gluteus_medius
+  - 602_adductors
+  stabilizers:
+  - 206_erector_spinae
+  - 504_transverse_abdominis
+  - 507_multifidus
+  - 701_gastrocnemius
+  - 702_soleus
+  equipment: []
+  coaching_notes:
+  - Starte aufrecht mit aktivem Rumpf, langem Nacken und leicht gespanntem Gesäß.
+    Halte den Brustkorb über dem Becken gestapelt, damit du weder ins Hohlkreuz fällst
+    noch im Oberkörper einknickst.
+  - Setze jeden Schritt kontrolliert nach vorne und lande über einer stabilen, etwa
+    hüftbreiten Spur statt auf einer imaginären Linie. Diese Breite verbessert Balance,
+    Beckenstabilität und saubere Knieführung.
+  - Wähle die Schrittlänge so, dass du unten in beiden Knien ungefähr 90 Grad erreichst,
+    ohne dass das vordere Knie nach innen kollabiert oder die hintere Hüfte aufdreht.
+    Ein zu kurzer Schritt verlagert die Last stark aufs vordere Knie, ein zu langer
+    erschwert Kontrolle und Vortrieb.
+  - Senke dich senkrecht zwischen beide Beine ab, statt nur nach vorne zu fallen.
+    So bleiben Quadrizeps und Gesäß belastet, während die Lendenwirbelsäule und das
+    vordere Knie besser kontrolliert werden.
+  - Im unteren Punkt bleibt der gesamte vordere Fuß belastet, mit klarer Druckverteilung
+    über Ferse, Großzehenballen und Kleinzehenballen. Diese Dreipunkt-Basis stabilisiert
+    Knie und Fußgewölbe während der Gewichtsübernahme.
+  - Drücke dich aus dem vorderen Bein nach oben und nach vorne, ohne dich mit dem
+    hinteren Bein nur wegzuschieben. Den Hauptantrieb erzeugen Quadrizeps und Gesäß
+    des vorderen Beins.
+  - Halte das vordere Knie in Linie mit dem zweiten bis dritten Zeh. Denke daran,
+    den Boden leicht auseinanderzuziehen, um Hüfte und Fuß aktiv zu stabilisieren.
+  - Lass das Becken möglichst waagrecht und ruhig. Vermeide seitliches Wegkippen oder
+    Rotationen, besonders beim Übergang in den nächsten Schritt.
+  - Atme vor dem Absenken ein, baue Rumpfspannung auf und atme beim kraftvollen Hochkommen
+    aus. Die Atmung soll Stabilität unterstützen, nicht den Bewegungsrhythmus stören.
+  - 'Bevor du Last hinzufügst, muss jede Wiederholung gleich aussehen: stabile Schrittspur,
+    saubere Tiefe, kontrollierte Gewichtsverlagerung und ruhiger Oberkörper. Erst
+    dann sind Kurzhanteln, Kettlebell oder Langhantel sinnvoll.'
+  common_errors:
+  - Das vordere Knie fällt nach innen ein. Dadurch steigt die Belastung auf Knie und
+    passive Strukturen, während Gesäß und Fußstabilität an Kontrolle verlieren.
+  - Die Schrittspur ist zu schmal wie auf einem Seil. Das erschwert Balance unnötig
+    und führt häufig zu Wackeln, Beckenrotation und unsauberer Knieachse.
+  - Der Schritt ist zu kurz. Dadurch wandert das vordere Knie stark nach vorne, die
+    Belastung verschiebt sich übermäßig auf den Quadrizeps und die Bewegung verliert
+    Hüftanteil.
+  - Der Schritt ist zu lang. So geht Spannung im unteren Punkt verloren, der Vortrieb
+    stockt und die Beckenkontrolle leidet.
+  - Der Oberkörper kippt nach vorne oder wird ins Hohlkreuz gedrückt. Beides reduziert
+    die saubere Lastverteilung und macht die Bewegung im Rumpf unnötig instabil.
+  - Es fehlt die volle Bewegungstiefe. Wenn das hintere Knie nur halb abgesenkt wird,
+    sinken Trainingsreiz, Exzentrik und Kontrolle im Übergang zum nächsten Schritt.
+  - Der Athlet stößt sich überwiegend über die Zehen des vorderen Fußes ab. Das reduziert
+    die stabile Mittelfuß-Fersen-Belastung und nimmt dem Gesäß einen Teil seiner Arbeit.
+  - Das Becken kippt oder rotiert bei jedem Schritt sichtbar. Das weist oft auf fehlende
+    einbeinige Kontrolle oder mangelnde Rumpfspannung hin.
+  - Die Wiederholungen werden hastig aneinandergereiht. Schwung ersetzt dann aktive
+    Kontrolle, und die Qualität der Landung sowie der Knie- und Fußstabilität bricht
+    ein.
+  - Der Blick geht nach unten und die Körperhaltung kollabiert. Das verschlechtert
+    Gleichgewicht, Atemmechanik und die aufrechte Organisation der gesamten Bewegung.
+  movements:
+  - gait
+  - knee_flexion_extension
+  - hip_flexion_extension
+  - ankle_plantarflexion
+  - balance_control
+  - single_leg_stability
+  tags:
+  - wger
+  - compound
+  - unilateral
+  - walking_lunge
+  wger_id: 206
+  wger_muscle_ids:
+    primary:
+    - 10
+    secondary:
+    - 8
+  source: expert
+  variations: []
+  enriched_at: '2026-08-12T00:00:00+00:00'
+  external_ids:
+    wger:
+    - 206
+  search_aliases:
+  - wger_206
+  - Ausfallschritte im Gehen
+  - Walking Lunges
+  id: wger_206
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '206'
+      yuhonas:
+      - Barbell_Walking_Lunge
+  review_state:
+    status: approved
+    enriched_at: '2026-08-12T00:00:00+00:00'
+    approved_at: '2026-10-17T21:08:45.330184+00:00'
+    ai_reviewed: true
+  approved_at: '2026-10-17T21:08:45.330184+00:00'
+  yuhonas_id: Barbell_Walking_Lunge
+  original_description:
+  - 'Ausgangsposition: Stelle dich hüftbreit hin, die Hände entweder in der Hüfte
+    oder mit Kurzhanteln seitlich am Körper.
+
+    Der Schritt: Mache mit deinem rechten Bein einen weiten Schritt nach vorne.
+
+    Die Abwärtsbewegung: Senke deine Hüfte, bis beide Knie etwa im 90-Grad-Winkel
+    gebeugt sind.
+
+    Der Übergang: Drücke dich über die vordere Ferse nach oben und führe den hinteren
+    Fuß direkt nach vorne in den nächsten Ausfallschritt.'
+  instructions:
+  - Begin standing with your feet shoulder width apart and a barbell across your upper
+    back.
+  - Step forward with one leg, flexing the knees to drop your hips. Descend until
+    your rear knee nearly touches the ground. Your posture should remain upright,
+    and your front knee should stay above the front foot.
+  - Drive through the heel of your lead foot and extend both knees to raise yourself
+    back up.
+  - Step forward with your rear foot, repeating the lunge on the opposite leg.

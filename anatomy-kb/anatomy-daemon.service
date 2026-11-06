@@ -1,0 +1,16 @@
+[Unit]
+Description=Anatomy Expert Daemon - Autonomous KB Refinement
+After=network.target
+
+[Service]
+Type=simple
+User=alpha
+WorkingDirectory=/home/alpha/anatomy-kb
+ExecStart=/usr/bin/python3 /home/alpha/anatomy-kb/daemon.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/tmp/anatomy-daemon.log
+StandardError=append:/tmp/anatomy-daemon.log
+
+[Install]
+WantedBy=multi-user.target

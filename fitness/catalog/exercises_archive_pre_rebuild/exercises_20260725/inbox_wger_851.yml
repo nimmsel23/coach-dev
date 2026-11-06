@@ -1,0 +1,59 @@
+name: inbox_wger_851
+description: 'Proactively generated expert draft for: Beinstrecker'
+exercises:
+- exercise_id: wger_851
+  display_name: Beinstrecker
+  category: Isolation_Exercises
+  primary_muscles:
+  - 603_quadriceps
+  - 603_rectus_femoris
+  - 604_vastus_lateralis
+  - 605_vastus_medialis
+  - 606_vastus_intermedius
+  secondary_muscles: []
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 503_transverse_abdominis
+  - 611_iliopsoas
+  equipment: Leg_Extension_Machine
+  movement_pattern: Knee_Extension
+  coaching_notes:
+  - '**Sitz- und Polstereinstellung:** Stellen Sie den Sitz so ein, dass Ihre Kniegelenke
+    mit dem Drehpunkt der Maschine übereinstimmen. Das Schienbeinpolster sollte bequem
+    auf Ihren vorderen Schienbeinen, knapp oberhalb der Knöchel, aufliegen.'
+  - '**Rückenpositionierung:** Halten Sie Ihren Rücken während der gesamten Übung
+    fest an der Rückenlehne und das Gesäß auf dem Sitz. Nutzen Sie die Haltegriffe
+    der Maschine, um Stabilität zu gewährleisten und ein Abheben des Beckens zu verhindern.'
+  - '**Kontrollierte Aufwärtsbewegung:** Atmen Sie aus und strecken Sie Ihre Beine
+    langsam und kontrolliert, bis sie fast vollständig gestreckt sind. Konzentrieren
+    Sie sich dabei auf eine maximale Kontraktion des Quadrizeps.'
+  - '**Vermeiden von Hyperextension:** Strecken Sie die Knie am obersten Punkt der
+    Bewegung nicht vollständig durch, um eine Überlastung des Kniegelenks zu vermeiden.
+    Halten Sie eine leichte Beugung bei maximaler Muskelkontraktion.'
+  - '**Kontrollierte Abwärtsbewegung:** Atmen Sie ein und senken Sie das Gewicht langsam
+    und unter Kontrolle in die Ausgangsposition zurück. Achten Sie auf eine betontere
+    exzentrische Phase (negativer Teil der Bewegung), um den Muskel optimal zu stimulieren.'
+  - '**Muskel-Geist-Verbindung:** Konzentrieren Sie sich bewusst darauf, die Quadrizeps-Muskeln
+    während der gesamten Bewegung zu spüren und anzuspannen. Vermeiden Sie es, Schwung
+    zu nutzen.'
+  common_errors:
+  - '**Schwungholen:** Das Hochwerfen des Gewichts mit Schwung reduziert die Effektivität
+    für den Quadrizeps und erhöht das Verletzungsrisiko für die Knie. Führen Sie die
+    Bewegung langsam und kontrolliert aus.'
+  - '**Knie-Hyperextension:** Das vollständige Durchdrücken oder Überstrecken der
+    Knie am oberen Punkt der Bewegung kann die Kniegelenke unnötig belasten und langfristig
+    schädigen.'
+  - '**Abheben des Gesäßes:** Wenn sich Ihr Gesäß vom Sitz löst, ist das Gewicht oft
+    zu hoch oder die Rumpfstabilität unzureichend. Dies verlagert die Belastung weg
+    vom Quadrizeps.'
+  - '**Falsche Polsterpositionierung:** Ein Polster, das zu hoch auf den Knien oder
+    zu tief auf den Füßen liegt, kann die Gelenke falsch belasten und die gewünschte
+    Muskelaktivierung verringern.'
+  - '**Ruckartiges Ablassen des Gewichts:** Das Gewicht im negativen Teil der Bewegung
+    einfach fallen zu lassen, anstatt es kontrolliert abzusenken, nimmt Ihnen einen
+    wesentlichen Teil des Trainingseffekts. Die exzentrische Phase ist entscheidend
+    für Muskelwachstum.'
+  wger_id: null
+  variations: []
+  source: unreviewed

@@ -1,6 +1,7 @@
 export const BLOCK_COLORS = {
   push: "#f472b6", pull: "#34d399", legs: "#fb923c",
   upper: "#38bdf8", lower: "#a78bfa", full: "#fbbf24",
+  shoulders: "#2dd4bf", arms: "#e879f9",
   hiking: "#48c87a", running: "#e05060", cycling: "#38bdf8", swimming: "#5294e2"
 };
 
@@ -44,8 +45,24 @@ function classifyMuscle(name) {
  * eingetragenen Übungen einer Session ab — greift nur, solange der User
  * selbst noch keinen Split gewählt hat (block === '').
  */
+// Reine Schulter- bzw. Arm-Tage (Bi/Tri) erkennt die Autoerkennung nur über die
+// PRIMÄR-Muskeln — als Sekundärmuskeln tauchen Schulter/Trizeps in fast jeder
+// Druckübung auf und würden sonst jeden Push-Tag zu "Shoulders"/"Arms" machen.
+const SHOULDER_MUSCLES = ['shoulder', 'delt'];
+const ARM_MUSCLES = ['bicep', 'tricep', 'forearm'];
+
+function inferIsolationBlock(list) {
+  const primaries = list.flatMap((ex) => ex.primaryMuscles || []).map((m) => String(m || '').toLowerCase());
+  if (!primaries.length) return null;
+  if (primaries.every((m) => SHOULDER_MUSCLES.some((k) => m.includes(k)))) return 'Shoulders';
+  if (primaries.every((m) => ARM_MUSCLES.some((k) => m.includes(k)))) return 'Arms';
+  return null;
+}
+
 export function inferBlockFromExercises(exercises) {
   const list = Array.isArray(exercises) ? exercises : [];
+  const isolation = inferIsolationBlock(list);
+  if (isolation) return isolation;
   let hasPush = false, hasPull = false, hasLegs = false;
   for (const ex of list) {
     const muscles = [...(ex.primaryMuscles || []), ...(ex.secondaryMuscles || [])];
@@ -63,6 +80,34 @@ export function inferBlockFromExercises(exercises) {
   if (hasPush) return 'Push';
   if (hasPull) return 'Pull';
   return null;
+}
+
+/**
+ * Welche Split-Tags eine Session für den Zyklus-Zähler abdeckt. Der gewählte
+ * Block zählt immer; eine Full-Body-Session zählt zusätzlich für jeden Tag,
+ * dessen Muskeln die Übungen tatsächlich beansprucht haben (Push, Pull, Legs,
+ * Upper = Push+Pull, Lower = Legs). Cardio-Activities zählen bewusst nicht:
+ * sie sind kein Kraft-Slot (höchstens Deload, siehe ACTIVITY-Regeln).
+ */
+export function coveredBlocks(session) {
+  const tags = new Set();
+  const own = normalizeBlock(session?.block);
+  if (own) tags.add(own);
+  if (own !== 'full') return tags;
+  let hasPush = false, hasPull = false, hasLegs = false;
+  for (const ex of (Array.isArray(session?.exercises) ? session.exercises : [])) {
+    for (const m of [...(ex.primaryMuscles || []), ...(ex.secondaryMuscles || [])]) {
+      const c = classifyMuscle(m);
+      if (c === 'push') hasPush = true;
+      else if (c === 'pull') hasPull = true;
+      else if (c === 'legs') hasLegs = true;
+    }
+  }
+  if (hasPush) tags.add('push');
+  if (hasPull) tags.add('pull');
+  if (hasLegs) { tags.add('legs'); tags.add('lower'); }
+  if (hasPush && hasPull) tags.add('upper');
+  return tags;
 }
 
 export function getRollingDays(count) {
@@ -103,3 +148,38 @@ export const num = (v) => {
   const n = Number(s);
   return Number.isFinite(n) ? n : null;
 };
+
+// Satzliste der letzten Session einer Übung (prevMap-Eintrag aus
+// useSessionHistory) als `[{ reps, weight }]` — neues `setsArray`-Format
+// direkt, Alt-Format (`sets`/`reps`/`weight` als Einzel-Strings) wird auf
+// N gleiche Sätze aufgefächert. `null`, wenn dort nichts Verwertbares
+// eingetragen war (z.B. Übung nur geplant, Reps leer).
+export function prevSetsFromHistory(prev) {
+  if (!prev) return null;
+  let sets;
+  if (Array.isArray(prev.setsArray) && prev.setsArray.length) {
+    sets = prev.setsArray.map(s => ({ reps: String(s?.reps ?? ''), weight: String(s?.weight ?? '') }));
+  } else {
+    const n = Math.min(parseInt(prev.sets, 10) || 0, 20);
+    if (!n || !prev.reps) return null;
+    sets = Array.from({ length: n }, () => ({ reps: String(prev.reps), weight: String(prev.weight ?? '') }));
+  }
+  sets = sets.filter(s => s.reps.trim() || s.weight.trim());
+  return sets.length ? sets : null;
+}
+
+// Progressionsvorschlag (progressive Überlastung) auf Basis der letzten
+// Werte: mit Zusatzlast +2,5 kg pro Satz bei gleichen Wiederholungen, ohne
+// Last (Körpergewicht) +1 Wiederholung. Bewusst simpel — nur ein
+// Startwert, die Stepper im Satz-Raster korrigieren nach Tagesform.
+export const PROGRESSION_KG = 2.5;
+export function progressSets(sets) {
+  return sets.map(s => {
+    const w = parseFloat(String(s.weight || '').replace(',', '.'));
+    if (w > 0) {
+      return { ...s, weight: String(Math.round((w + PROGRESSION_KG) * 100) / 100) };
+    }
+    const r = parseInt(s.reps, 10);
+    return Number.isFinite(r) ? { ...s, reps: String(r + 1) } : s;
+  });
+}

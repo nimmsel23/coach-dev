@@ -3,9 +3,13 @@
  */
 
 import {
-  collection, doc, setDoc, getDocs, deleteDoc,
-  query, where, serverTimestamp,
+  collection,
+  doc,
+  query,
+  where,
+  serverTimestamp,
 } from "firebase/firestore";
+import { setDoc, getDocs, deleteDoc } from "./offline.js";
 
 import { db } from "../../../firebase.js";
 import { getUid, hasAuthSession } from "./core.js";

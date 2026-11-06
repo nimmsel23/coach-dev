@@ -1,0 +1,144 @@
+exercise_id: '021'
+description: Expert details for Untergriff-Klimmzug
+approved_at: '2026-10-16T21:14:52.264268+00:00'
+exercises:
+- exercise_id: '021'
+  id: '021'
+  name: Untergriff-Klimmzug
+  display_name: Untergriff-Klimmzug
+  german: Untergriff-Klimmzug
+  english: Chin-Up
+  category: pull
+  type: compound
+  movements:
+  - vertical
+  - shoulder_adduction
+  - shoulder_extension
+  - elbow_flexion
+  - scapular_depression
+  - scapular_retraction
+  - supinated_grip
+  equipment:
+  - bodyweight
+  - pull_up_bar
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 402_biceps_brachii
+  - 403_brachialis
+  secondary_muscles:
+  - 207_teres_major
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 205_rhomboids
+  - 404_brachioradialis
+  stabilizers:
+  - 304_rotator_cuff
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  - 405_forearm_flexors
+  coaching_notes:
+  - Greife etwa schulterbreit oder leicht enger im Untergriff, sodass die Handgelenke
+    gerade bleiben und die Ellenbogen sauber unter der Stange arbeiten können.
+  - 'Beginne im aktiven Hang: Schulterblätter leicht nach unten setzen, Rumpf anspannen
+    und die Beine ruhig halten, bevor die erste Zugphase startet.'
+  - Denke daran, die Ellenbogen nach unten Richtung Rippen zu ziehen, statt nur das
+    Kinn zur Stange vorzuschieben; so kommt der Zug aus Latissimus und Armbeugern.
+  - Halte Brustbein stolz und Rippen kontrolliert, damit du weder ins Hohlkreuz fällst
+    noch dich in eine lose Bananenform schwingst.
+  - Ziehe bis das Kinn klar über der Stange ist oder die obere Brust die Stange annähert,
+    ohne die Spannung in Schultergürtel und Rumpf zu verlieren.
+  - Senke dich kontrolliert in die volle Ellbogenstreckung zurück und nutze die exzentrische
+    Phase bewusst, statt unten einfach in die passive Schulterposition zu fallen.
+  common_errors:
+  - Aus einem passiven Hang mit hochgezogenen Schultern anziehen, wodurch die Schulterblattkontrolle
+    und ein sauberer Kraftaufbau verloren gehen.
+  - Schwung aus Hüfte, Knien oder Kipping nutzen, statt jede Wiederholung aus ruhiger
+    Rumpfspannung und kontrolliertem Zug zu erzeugen.
+  - Das Kinn nur nach vorne schieben, um die Wiederholung künstlich zu beenden, obwohl
+    Brustkorb und Ellenbogen nicht sauber nach oben beziehungsweise unten geführt
+    wurden.
+  - Zu weit oder zu eng greifen, sodass Handgelenke einknicken und Ellenbogen unnötig
+    gereizt werden.
+  - Unten nicht vollständig strecken oder oben die Endposition abkürzen, wodurch Bewegungsumfang
+    und Trainingsreiz deutlich sinken.
+  - Beim Hochziehen die Rippen aufreißen und ins Hohlkreuz kippen, statt Becken und
+    Rumpf stabil zu halten.
+  tags:
+  - expert
+  - back
+  - arms
+  - biceps
+  - bodyweight
+  - vertical_pull
+  - compound
+  aliases:
+  - Klimmzug im Untergriff
+  - Untergriff Klimmzug
+  - Klimmzug Untergriff
+  - Klimmzüge im Untergriff
+  - enger Untergriff-Klimmzug
+  - Chin-Up
+  - Chin Up
+  - Chin-Ups
+  - Underhand Pull-Up
+  - Underhand Grip Pull-Up
+  - Supinated Grip Pull-Up
+  - Reverse Grip Pull-Up
+  search_aliases:
+  - chin_up
+  - chin-up
+  - untergriff_klimmzug
+  - klimmzug_untergriff
+  - yuhonas_chin-up
+  - wger_152
+  - Chin-Up
+  - Untergriff-Klimmzug
+  external_ids:
+    wger:
+    - 152
+    yuhonas:
+    - Chin-Up
+  wger_id: 152
+  yuhonas_id: Chin-Up
+  original_description:
+  - Wie normale Klimmzüge, aber im Untergriff.
+  instructions:
+  - Grab the pull-up bar with the palms facing your torso and a grip closer than the
+    shoulder width.
+  - 'As you have both arms extended in front of you holding the bar at the chosen
+    grip width, keep your torso as straight as possible while creating a curvature
+    on your lower back and sticking your chest out. This is your starting position.
+    Tip: Keeping the torso as straight as possible maximizes biceps stimulation while
+    minimizing back involvement.'
+  - 'As you breathe out, pull your torso up until your head is around the level of
+    the pull-up bar. Concentrate on using the biceps muscles in order to perform the
+    movement. Keep the elbows close to your body. Tip: The upper torso should remain
+    stationary as it moves through space and only the arms should move. The forearms
+    should do no other work other than hold the bar.'
+  - After a second of squeezing the biceps in the contracted position, slowly lower
+    your torso back to the starting position; when your arms are fully extended. Breathe
+    in as you perform this portion of the movement.
+  - Repeat this motion for the prescribed amount of repetitions.
+  variations:
+  - assisted_chin_up
+  - weighted_chin_up
+  - close_grip_chin_up
+  - negative_chin_up
+  wger_muscle_ids:
+    primary: []
+    secondary: []
+  source: expert
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '152'
+      yuhonas:
+      - Chin-Up
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-16T21:14:52.264268+00:00'
+  approved_at: '2026-10-16T21:14:52.264268+00:00'

@@ -1,0 +1,10 @@
+exercises:
+- id: wger_1225
+  name: Kettlebell One Legged Deadlift
+  display_name: Kettlebell One Legged Deadlift
+  category: legs
+  movement_pattern: null
+  unreviewed: true
+  coaching_notes:
+  - Auto-generated expert draft based on usage demand.
+  common_errors_explained: {}

@@ -1,0 +1,64 @@
+name: inbox_wger_374
+description: 'Proactively generated expert draft for: Leg Presses (wide)'
+exercises:
+- exercise_id: wger_374
+  display_name: Beinpresse (breiter Stand)
+  category: Beine
+  primary_muscles:
+  - 603_quadriceps
+  - 601_glutes
+  - 605_adductors
+  secondary_muscles:
+  - 604_hamstrings
+  - 701_gastrocnemius
+  - 702_soleus
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  equipment: Beinpresse
+  wger_id: null
+  movement_pattern:
+  - Knie-Dominant
+  - Hüftgelenk-Dominant
+  coaching_notes:
+  - '**Startposition:** Setzen Sie sich auf die Beinpresse und positionieren Sie Ihre
+    Füße schulterbreiter als üblich auf der Plattform, wobei die Zehen leicht nach
+    außen zeigen. Ihre Fersen sollten fest auf der Plattform bleiben. Rückenlehne
+    anpassen, sodass der untere Rücken bequem aufliegt.'
+  - '**Ausführung (abwärts):** Lösen Sie die Sicherheitsarretierungen und senken Sie
+    die Plattform langsam und kontrolliert ab, indem Sie Knie und Hüften beugen. Achten
+    Sie darauf, dass Ihre Knie in Richtung Ihrer Zehen zeigen und nicht nach innen
+    fallen. Senken Sie ab, bis Ihre Oberschenkel etwa einen 90-Grad-Winkel zu Ihren
+    Waden bilden oder so tief, wie es Ihre Mobilität erlaubt, ohne dass Ihr unterer
+    Rücken von der Lehne abhebt (Pelvic Tilt vermeiden).'
+  - '**Ausführung (aufwärts):** Drücken Sie die Plattform kraftvoll nach oben, indem
+    Sie durch die Fersen drücken und Knie und Hüften strecken. Halten Sie die Spannung
+    in den Oberschenkeln, Gesäßmuskeln und Adduktoren. Vermeiden Sie ein vollständiges
+    Durchstrecken der Knie am obersten Punkt, um die Gelenke zu schonen und die Muskelspannung
+    aufrechtzuerhalten.'
+  - '**Atemtechnik:** Atmen Sie beim Absenken der Plattform ein und beim Hochdrücken
+    aus.'
+  - '**Fokus:** Konzentrieren Sie sich darauf, die Bewegung bewusst aus Oberschenkeln,
+    Gesäß und den inneren Oberschenkeln (Adduktoren) zu steuern. Die breite Fußstellung
+    verstärkt die Aktivierung dieser Muskelgruppen.'
+  common_errors:
+  - '**Abheben des unteren Rückens (Pelvic Tilt):** Zu tiefes Absenken der Plattform
+    führt dazu, dass das Becken kippt und der untere Rücken rund wird, was die Wirbelsäule
+    belastet. Reduzieren Sie den Bewegungsumfang, wenn dies auftritt.'
+  - '**Durchstrecken der Knie:** Die Knie am obersten Punkt der Bewegung vollständig
+    durchzustrecken, setzt die Kniegelenke unter unnötigen Druck und kann zu Verletzungen
+    führen. Halten Sie eine leichte Beugung der Knie bei der Endposition.'
+  - '**Abheben der Fersen:** Wenn die Fersen von der Plattform abheben, verlagert
+    sich die Belastung zu stark auf die Knie und reduziert die Aktivierung der Gesäß-
+    und hinteren Oberschenkelmuskulatur. Achten Sie darauf, die Fersen stets fest
+    auf der Plattform zu halten.'
+  - '**Schwung nutzen / unkontrollierte Bewegung:** Die Übung zu schnell auszuführen
+    oder Schwung zu nutzen, verringert die Muskelkontrolle und Effektivität. Führen
+    Sie jede Wiederholung langsam und kontrolliert aus.'
+  - '**Knie fallen nach innen:** Achten Sie darauf, dass Ihre Knie während der gesamten
+    Bewegung über den Zehen bleiben und nicht nach innen kollabieren, um Knieverletzungen
+    vorzubeugen.'
+  variations: []
+  source: unreviewed

@@ -123,8 +123,8 @@ def run_build(source_dir: Path, output_file: Path):
 @app.command()
 def build(
     source_dir: Optional[Path] = typer.Option(
-        Path.home() / "fitness" / "catalog" / "kb" / "exercises",
-        help="Directory containing exercise YAML files"
+        Path(__file__).resolve().parent.parent / "fitness" / "catalog" / "kb" / "exercises",
+        help="Directory containing exercise YAML files (Default: Repo-KB; ~/fitness existiert nicht mehr)"
     ),
     output_file: Optional[Path] = typer.Option(
         Path.home() / ".aos" / "fitness" / "workouts" / "catalog.json",

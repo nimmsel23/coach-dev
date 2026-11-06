@@ -1,11 +1,22 @@
 /**
  * ExerciseHistoryCollapse — "Previous stats bar" toggle + expanded history
- * list for ExerciseCard. Pure presentational, no logic recomputation.
+ * list for ExerciseCard, plus the "Übernehmen"/"Progression" chips that copy
+ * the previous sets into today's set grid. Pure presentational — the
+ * apply logic (onApplyPrev) lives in ExerciseCard.
  */
 
-import { TrendingUp, TrendingDown, ChevronDown, History } from 'lucide-react';
+import { TrendingUp, TrendingDown, ChevronDown, History, CornerDownLeft, ArrowUp } from 'lucide-react';
+import { PROGRESSION_KG } from './utils.js';
 
-export default function ExerciseHistoryCollapse({ prev, trend, showHistory, setShowHistory }) {
+const chipStyle = {
+  background: 'rgba(var(--accent-rgb,200,255,0),0.06)',
+  border: '1px solid rgba(var(--accent-rgb,200,255,0),0.2)',
+  color: 'var(--accent)',
+};
+
+export default function ExerciseHistoryCollapse({
+  prev, trend, showHistory, setShowHistory, canApply = false, onApplyPrev,
+}) {
   if (!prev) return null;
 
   return (
@@ -53,6 +64,32 @@ export default function ExerciseHistoryCollapse({ prev, trend, showHistory, setS
           }}
         />
       </button>
+
+      {/* Werte vom letzten Mal übernehmen */}
+      {canApply && (
+        <div className="mt-2 grid grid-cols-2 gap-1.5">
+          <button
+            type="button"
+            onClick={() => onApplyPrev?.('same')}
+            title="Sätze der letzten Session unverändert übernehmen"
+            className="flex items-center justify-center gap-1.5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-[0.98]"
+            style={chipStyle}
+          >
+            <CornerDownLeft size={11} strokeWidth={3} />
+            Übernehmen
+          </button>
+          <button
+            type="button"
+            onClick={() => onApplyPrev?.('progress')}
+            title={`Letzte Werte +${PROGRESSION_KG} kg pro Satz (ohne Gewicht: +1 Wdh.)`}
+            className="flex items-center justify-center gap-1.5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-[0.98]"
+            style={chipStyle}
+          >
+            <ArrowUp size={11} strokeWidth={3} />
+            Progression
+          </button>
+        </div>
+      )}
 
       {/* Expanded history */}
       {showHistory && (

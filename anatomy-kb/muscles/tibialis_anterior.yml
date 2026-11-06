@@ -1,0 +1,19 @@
+muscle_id: tibialis_anterior
+wger_id: None
+latin: Musculus tibialis anterior
+name_en: Tibialis anterior
+is_front: true
+exercises:
+  wger_1225:
+    function_in_exercise: Stabilisiert den Standfuß durch aktive Fixierung der Sprunggelenksstellung
+      auf dem Untergrund.
+origin: Ursprung (Origo) — Laterale Kondyle (Condylus lateralis) der Tibia, obere
+  zwei Drittel der lateralen Tibiafläche (Facies lateralis tibiae) und die angrenzende
+  interossäre Membran (Membrana interossea cruris).
+insertion: Ansatz (Insertio) — Mediale und plantare Oberfläche des medialen Keilbeins
+  (Os cuneiforme mediale) und Basis des ersten Mittelfußknochens (Os metatarsale I).
+innervation: Nervus fibularis profundus (Nervus peroneus profundus) (L4, L5, S1).
+function: Der Tibialis anterior führt eine Dorsalextension (Dorsalextension) des Fußes
+  im oberen Sprunggelenk (Articulatio talocruralis) und eine Supination (Supination)
+  sowie Inversion (Inversion) im unteren Sprunggelenk (Articulatio subtalaris) aus.
+  Er ist ein wichtiger Stabilisator des Fußlängsgewölbes.

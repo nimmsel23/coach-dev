@@ -1,0 +1,34 @@
+muscle_id: biceps_femoris
+wger_id: 11
+latin: Musculus biceps femoris
+name_en: Hamstrings
+is_front: false
+origin: 'Tuberositas ischiadica (alle Köpfe außer Caput breve des M. biceps femoris).
+  Caput breve M. biceps femoris: Linea aspera femoris.'
+insertion: Tibia (medialer Kondylus für Semimembranosus, pes anserinus für Semitendinosus)
+  und Fibula (Caput fibulae für Biceps Femoris).
+innervation: Nervus ischiadicus (tibialer und fibularer Anteil) (L4, L5, S1, S2)
+function: Die Hamstrings wirken synergistisch mit den Gluteen als Hüftextensoren und
+  unterstützen die Kniestabilisierung. Sie sind besonders aktiv bei der Hüftextension
+  in Squats mit stärkerer Rumpfvorlage (Low Bar) und wirken der Kniehyperextension
+  entgegen.
+exercises:
+  back_squat:
+    function_in_exercise: Die Hamstrings wirken synergistisch mit den Gluteen als
+      Hüftextensoren und unterstützen die Kniestabilisierung. Sie sind besonders aktiv
+      bei der Hüftextension in Squats mit stärkerer Rumpfvorlage (Low Bar) und wirken
+      der Kniehyperextension entgegen.
+  lunge:
+    function_in_exercise: Sie unterstützen den Gluteus maximus bei der Hüftstreckung
+      und stabilisieren das Kniegelenk exzentrisch.
+  romanian_deadlift:
+    function_in_exercise: Primär exzentrische Kontrolle der Hüftflexion und Knieextension
+      in der Abwärtsbewegung, wodurch Spannung in der hinteren Oberschenkelmuskulatur
+      erzeugt wird. Konzentrische Hüftextension in der Aufwärtsbewegung. Ihre Länge
+      limitiert maßgeblich die Bewegungstiefe.
+  wger_1225:
+    function_in_exercise: Einer der Hauptmotoren der Hüftextension und Unterstützung
+      der Kniegelenksstabilität durch exzentrische Kontrolle.
+  yuhonas_car_deadlift:
+    function_in_exercise: Unterstützt primär die Hüftextension und wirkt sekundär
+      bei der Stabilisierung des Kniegelenks, um die Kniebeugung zu kontrollieren.

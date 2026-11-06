@@ -25,6 +25,21 @@
 import { useState } from 'react';
 import { getExercise, normalizeExerciseRecord, parseQuick, queueForEnrichment } from '@db';
 import { slugify } from './utils';
+import { mergeDraftIntoExercises } from '@plan/views/Plan/lib/sessionDraft.js';
+
+const PLAIN_NUMBER = /^\s*\d+([.,]\d+)?\s*$/;
+
+function templateSetsToSessionSets(rex) {
+  const tSets = Array.isArray(rex.templateSets) && rex.templateSets.length
+    ? rex.templateSets
+    : Array.from({ length: Math.max(1, Math.min(Number(rex.target_sets) || 3, 20)) }, () => ({
+      targetReps: rex.target_reps, targetWeight: rex.target_weight,
+    }));
+  return tSets.map(t => ({
+    reps: PLAIN_NUMBER.test(String(t.targetReps ?? '')) ? String(t.targetReps).trim() : '',
+    weight: t.targetWeight != null && PLAIN_NUMBER.test(String(t.targetWeight)) ? String(t.targetWeight).trim() : '',
+  }));
+}
 
 export function useExerciseList({ scheduleAutoSave, showToast, saveRef, setDirty }) {
   const [exercises, setExercises] = useState([]);
@@ -82,6 +97,60 @@ export function useExerciseList({ scheduleAutoSave, showToast, saveRef, setDirty
     });
     if (!merged && normalized.source !== 'expert') queueForEnrichment({ ...normalized, id, name: displayName });
     showToast(merged ? `+ Satz (${displayName})` : `+ ${displayName}`);
+    setTimeout(() => { saveRef.current?.(true); setDirty(false); }, 0);
+  }
+
+  // Ganze Plan-Vorlage (Routine aus dem Plan-Tab, `getRoutine().exercises`)
+  // in einem Rutsch übernehmen — Schnell-Logging per Long-Press auf einen
+  // Split-Chip (SplitPlanSheet.jsx). Satzanzahl/Zielwerte kommen aus
+  // `templateSets` (bzw. Legacy `target_sets`/`target_reps`); Rep-Bereiche
+  // wie "8-12" bleiben leer statt eine Zahl zu erfinden — die Vorwerte der
+  // letzten Session stehen ohnehin als Platzhalter/"Übernehmen" bereit.
+  // Bereits in der Session vorhandene Übungen werden übersprungen.
+  function addFromTemplate(templateExercises = [], slotId = null) {
+    const candidates = [];
+    const seen = new Set();
+    for (const rex of templateExercises) {
+      const normalized = normalizeExerciseRecord({
+        name: rex.name,
+        id: rex.exercise_id || null,
+        exercise_id: rex.exercise_id || null,
+        primaryMuscles: rex.primaryMuscles || [],
+        secondaryMuscles: rex.secondaryMuscles || [],
+      });
+      const id = normalized.id || `inbox_${slugify(normalized.displayName)}`;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      candidates.push({
+        id,
+        name: normalized.displayName,
+        primaryMuscles: normalized.primaryMuscles,
+        secondaryMuscles: normalized.secondaryMuscles,
+        stabilizers: normalized.stabilizers || [],
+        setsArray: templateSetsToSessionSets(rex),
+        note: '',
+        source: rex.exercise_id ? 'plan' : 'inbox',
+        slotId: slotId || null,
+      });
+    }
+    // Zählung gegen den aktuellen Render-Stand (der Updater unten läuft bei
+    // React-Batching erst später), Dedup im Updater nochmal gegen `prev`.
+    const present = new Set(exercises.map(e => e.id));
+    const added = candidates.filter(c => !present.has(c.id)).length;
+    if (!added) return 0;
+    setExercises(prev => {
+      const ids = new Set(prev.map(e => e.id));
+      return [...prev, ...candidates.filter(c => !ids.has(c.id))];
+    });
+    setTimeout(() => { saveRef.current?.(true); setDirty(false); }, 0);
+    return added;
+  }
+
+  // Drill 6: vorbereiteten Plan-/Vorlagen-Entwurf in die laufende Session einfügen.
+  function appendDraft(draft) {
+    if (!draft?.exercises?.length) return;
+    setExercises(prev => mergeDraftIntoExercises(prev, draft));
+    showToast(`+ ${draft.block || 'Workout'}`);
     setTimeout(() => { saveRef.current?.(true); setDirty(false); }, 0);
   }
 
@@ -176,6 +245,6 @@ export function useExerciseList({ scheduleAutoSave, showToast, saveRef, setDirty
   return {
     exercises, setExercises,
     quickInput, setQuickInput,
-    addEx, addQuick, updateEx, addSet, replaceSets, removeSet, moveEx, moveExercise, removeEx,
+    addEx, addFromTemplate, addQuick, appendDraft, updateEx, addSet, replaceSets, removeSet, moveEx, moveExercise, removeEx,
   };
 }

@@ -1,7 +1,5 @@
 /* Dark Themes */
 @import "./styles/themes/vital.css";
-@import "./styles/themes/sixpack.css";
-@import "./styles/themes/skills.css";
 @import "./styles/themes/nordic.css";
 @import "./styles/themes/dracula.css";
 @import "./styles/themes/mocha.css";
@@ -25,9 +23,8 @@
 @import "./styles/themes/alucard.css";
 @import "./styles/themes/sweet-amber-blue.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.cjs";
 
 /* ==========================================================================
    1. ARCHITECTURE: Global Structural Variables

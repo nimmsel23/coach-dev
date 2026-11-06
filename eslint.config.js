@@ -3,9 +3,11 @@ import globals from 'globals';
 import reactPlugin from 'eslint-plugin-react';
 
 export default [
+  // Build-Ausgaben sind minifiziert und nicht lintbar.
+  { ignores: ['**/dist/**', '**/dist-*/**', '**/.firebase/**'] },
   js.configs.recommended,
   {
-    files: ['src/**/*.{js,jsx}'],
+    files: ['src/**/*.{js,jsx,mjs}'],
     plugins: { react: reactPlugin },
     languageOptions: {
       ecmaVersion: 2022,
@@ -24,5 +26,9 @@ export default [
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
     },
+  },
+  {
+    files: ['scripts/**/*.mjs', 'vite.config.js'],
+    languageOptions: { globals: { ...globals.node } },
   },
 ];

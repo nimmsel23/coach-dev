@@ -45,7 +45,7 @@ export const ACTIVITY_MUSCLE_DEFAULTS = Object.fromEntries(
 export const MUSCLE_TARGET_GROUPS = {
   core:  ['core'],
   legs:  ['quadriceps', 'hamstrings', 'glutes', 'calves'],
-  full:  ['chest', 'back', 'shoulders', 'arms', 'core', 'quadriceps', 'hamstrings', 'glutes'],
+  full:  ['chest', 'upper_back', 'middle_back', 'shoulders', 'biceps', 'triceps', 'abs', 'quadriceps', 'hamstrings', 'glutes'],
 };
 
 // Single source of truth: welche Muskelgruppen jede Cardio-/Activity-Art trifft.
@@ -90,10 +90,11 @@ export const SWIM_STYLE_PRIMARY_MUSCLES = {
  * A session with exercises (strength) stays primary even when an activity
  * finisher (e.g. HIIT/cardio) is attached — the finisher is reported
  * separately via hasFinisher, never as a label override.
- * Used by SessionHistory (Session tab) and ReviewHistory (WeeklyReview → Verlauf).
+ * Used by SessionHistory (Session tab) (ReviewHistory ist im Logbuch aufgegangen).
  */
 export function classifySession(session) {
-  const hasExercises = Array.isArray(session?.exercises) && session.exercises.length > 0;
+  // Index-Zeilen (workoutIndex) tragen nur exerciseCount statt der exercises-Liste.
+  const hasExercises = (Array.isArray(session?.exercises) && session.exercises.length > 0) || Number(session?.exerciseCount) > 0;
   const isActivity = !hasExercises && (session?.sessionMode === 'cardio' || !!session?.activity);
   const hasFinisher = hasExercises && !!session?.activity;
   const actType = session?.activity?.type;

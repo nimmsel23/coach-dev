@@ -1,0 +1,134 @@
+/* Atlas — Specimen-Tafelwerk. Farben ausschließlich über die Theme-Variablen
+   der App (--bg, --card, --line, --ink, --accent …), damit alle Themes greifen. */
+.xa {
+  --xa-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --xa-mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+.xa-serif { font-family: var(--xa-serif); }
+.xa-mono  { font-family: var(--xa-mono); }
+
+/* ── Hero ─────────────────────────────────────────────────────────── */
+.xa-count {
+  font-family: var(--xa-serif);
+  font-weight: 400;
+  font-size: clamp(72px, 15vw, 168px);
+  line-height: .8;
+  letter-spacing: -.04em;
+  color: var(--accent);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.xa-rule { height: 1px; background: var(--line); position: relative; }
+.xa-rule::after {
+  content: ""; position: absolute; left: 0; top: -2px; width: 56px; height: 5px;
+  background: var(--accent);
+}
+.xa-label {
+  font-family: var(--xa-mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ── Controls ─────────────────────────────────────────────────────── */
+.xa-controls {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.xa-chip {
+  font-family: var(--xa-mono);
+  font-size: 11px;
+  letter-spacing: .02em;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: transparent;
+  white-space: nowrap;
+  transition: background .2s, color .2s, border-color .2s, transform .15s;
+}
+.xa-chip:hover { border-color: var(--accent-border, var(--accent)); color: var(--ink); }
+.xa-chip:active { transform: scale(.96); }
+.xa-chip[data-on="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 700; }
+.xa-chip[data-zero="true"]:not([data-on="true"]) { opacity: .35; }
+.xa-chip sup { font-size: 9px; margin-left: 4px; opacity: .65; vertical-align: baseline; position: relative; top: -.35em; }
+
+/* ── Plate (Karte) ────────────────────────────────────────────────── */
+.xa-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 232px), 1fr)); }
+.xa-plate {
+  position: relative;
+  display: flex; flex-direction: column;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--card);
+  overflow: hidden;
+  animation: xa-rise .55s cubic-bezier(.2,.7,.2,1) both;
+  animation-delay: calc(min(var(--i, 0), 12) * 32ms);
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+}
+.xa-plate:hover, .xa-plate:focus-visible {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px -18px var(--accent);
+  outline: none;
+}
+.xa-plate-img { position: relative; aspect-ratio: 4 / 3; background: var(--bg2); margin: 8px 8px 0; border-radius: 11px; overflow: hidden; }
+.xa-plate-img img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(.45) contrast(1.06);
+  transition: opacity .55s ease, filter .4s ease;
+}
+.xa-plate-img img + img { opacity: 0; }
+.xa-plate:hover .xa-plate-img img,
+.xa-plate:focus-visible .xa-plate-img img { filter: saturate(1) contrast(1); }
+.xa-plate:hover .xa-plate-img img + img,
+.xa-plate:focus-visible .xa-plate-img img + img { opacity: 1; }
+.xa-plate-no {
+  position: absolute; left: 8px; top: 7px; z-index: 1;
+  font-family: var(--xa-mono); font-size: 10px; letter-spacing: .1em;
+  padding: 2px 6px; border-radius: 6px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  color: var(--ink); backdrop-filter: blur(6px);
+}
+.xa-pips { display: inline-flex; gap: 3px; }
+.xa-pips i { width: 9px; height: 3px; border-radius: 2px; background: var(--line); }
+.xa-pips i[data-on="true"] { background: var(--accent); }
+
+@keyframes xa-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ── Detail-Sheet ─────────────────────────────────────────────────── */
+.xa-scrim { position: fixed; inset: 0; z-index: 70; background: var(--scrim, rgba(0,0,0,.6)); animation: xa-fade .25s both; }
+.xa-sheet {
+  position: fixed; z-index: 71; inset: 0 0 0 auto;
+  width: min(100%, 760px);
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+  overflow-y: auto; overscroll-behavior: contain;
+  animation: xa-slide .38s cubic-bezier(.2,.8,.2,1) both;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (max-width: 640px) {
+  .xa-sheet { inset: 8% 0 0 0; width: 100%; border-left: 0; border-top: 1px solid var(--line); border-radius: 26px 26px 0 0; animation-name: xa-sheet-up; }
+}
+@keyframes xa-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes xa-slide { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes xa-sheet-up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.xa-flip { position: relative; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: var(--bg2); }
+.xa-flip img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.xa-flip img + img { animation: xa-blink 2.4s infinite steps(1, end); }
+@keyframes xa-blink { 0%, 49.99% { opacity: 0; } 50%, 100% { opacity: 1; } }
+
+.xa-step { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; }
+.xa-step-n { font-family: var(--xa-serif); font-size: 34px; line-height: .9; color: var(--accent); font-variant-numeric: lining-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  .xa-plate, .xa-sheet, .xa-scrim { animation: none; }
+  .xa-flip img + img { animation: none; opacity: 0; }
+  .xa-plate-img img { transition: none; }
+}

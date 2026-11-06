@@ -2,6 +2,8 @@
 
 # CLAUDE.md
 
+> **Node-Backend ausgelagert (2026-11-04):** `server.mjs` und Server-Code liegen in `~/dev/fitness-backend`. Dev-Scripts (`dev`/`start`) rufen `../fitness-backend/server.mjs` auf; Server-Doku in dessen `CLAUDE.md`. Dependencies dort pflegen, nicht hier.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ⚠️ **Diese Datei ist größtenteils 1:1 aus `~/fitness-dev/CLAUDE.md` kopiert**
@@ -17,6 +19,7 @@ dieser Doku steht noch aus.
 - `../fitness/catalog/CLAUDE.md` — Katalog-/KB-Tool-Set (Sub-Package von `fitness/`: KB-Struktur, Coverage-Formel, Gemini-Enrichment)
 - `../src/CLAUDE.md` — React-Frontend (Tabs/Views, DB-Layer, Body-Highlighter, PWA/Offline, Session-JSON-Format)
 - `../anatomy-kb/CLAUDE.md` — Muskel-Anatomie-KB (Git Subtree, :9200)
+- `DEPLOY.md` — Release-Weg (`fitness-ship`), Lockfile-Stolpersteine, Standalone-Deploy ohne Meta-Repo, Shell-Kopplung, Fehlerbild→Ursache
 - `BACKEND.md` — server.mjs API-Autodoc (Swagger/OpenAPI) + Zod-Validierung, Node↔Python-Routen-Parität
 
 ---
@@ -35,12 +38,20 @@ dieser Doku steht noch aus.
 
 - `CLAUDE.md` ist Symlink → `docs/CLAUDE.md`. Direktes Schreiben scheitert
   ("Refusing to write through symlink") — immer `docs/CLAUDE.md` editieren.
+- **Release-Weg seit 2026-10-29: `dev` → `master` → `vitalos`.** Erst
+  `vos-release-pr fitness` (PR `dev` → `master`; `Check` grün → Auto-Merge →
+  Standalone-Live-Deploy per CI), dann `fitness-release` für `master` →
+  `vitalos`. Nie von Hand auf `master` pushen (außer Hotfix); `master` wird
+  lokal nie ausgecheckt. Die Beschreibung des Skripts direkt darunter stammt
+  teils noch aus der Zeit vor dem PR-Schritt: es mergt jetzt `origin/master`
+  (nicht `dev`) nach `vitalos`, mergt vor dem Parent-Push `origin/master` ein
+  und gleicht Submodul-Checkouts an die Pointer an.
 - **`~/vitalos/bin/fitness-release` ist der bevorzugte Weg für den
-  `dev`→`vitalos`-Merge + Deploy** (dünner Wrapper um
+  `master`→`vitalos`-Merge + Deploy** (dünner Wrapper um
   `~/vitalos/bin/vos-release fitness`, verifiziert + branch-Fix
   2026-08-22). Er pusht `~/fitness-dev`s `dev`-Branch, mergt ihn in den
   `~/vitalos/fitness-app`-Worktree, pusht dort — was den Post-Push-Hook
-  triggert (`npm run firebase`: KB-Data-Rebuild → `vite build --mode
+  triggert (`pnpm run firebase`: KB-Data-Rebuild → `vite build --mode
   firebase` → stamp-sw → snapshot → `firebase deploy --only hosting` nach
   `fitness-aos.web.app`) — und bumpt danach den Submodule-Pointer im
   `~/vitalos`-Parent-Repo. `vos-release` deckt neben `fitness` auch fuel/
@@ -78,7 +89,7 @@ dieser Doku steht noch aus.
   dem man nachfragt, sondern der Normalfall.
 - **`fitness-dev.service` ist im Normalfall `disabled`/`inactive`**
   (verifiziert 2026-08-31, `systemctl --user status fitness-dev.service`)
-  — der Dev-Server läuft praktisch immer manuell (`npm run dev` /
+  — der Dev-Server läuft praktisch immer manuell (`pnpm run dev` /
   `scripts/dev-runner.mjs` in einem Terminal), nicht als Service. Vor
   Live-Tests gegen :9100 IMMER verifizieren ob überhaupt etwas läuft
   (`curl`/`systemctl status`), nicht annehmen. Und: `server.mjs` als
@@ -121,7 +132,7 @@ dieser Doku steht noch aus.
   die frühestens beim nächsten tatsächlichen `git push` nach `master` greift
   (der eigentliche Deploy-Trigger bleibt dieser spätere, separate `push`-
   Befehl, den der User ohnehin selbst auslöst). Deploy-Bestätigung bleibt
-  Pflicht für: `firebase deploy`, `npm run firebase`/`build:firebase &&
+  Pflicht für: `firebase deploy`, `pnpm run firebase`/`build:firebase &&
   deploy`, `git push` nach `master` selbst, `fitness-catalog push` (Prod-
   KB-Sync) — nicht für das bloße Freischalten eines bereits geschriebenen,
   gereviewten Hooks. (2026-08-14, nach einem Fall wo der Auto-Mode-
@@ -190,84 +201,36 @@ um den Katalog zu erweitern), kein eigenständiges Backend. Details:
 
 ---
 
-## Backend — Server-Rollen auf einen Blick
+## Backend (neu) — `backend/`
 
-| Datei | Port | Typ | Rolle |
-|-------|------|-----|-------|
-| `server.mjs` | 9100 | Node/Hono | **DEV-Server** — Vite-Proxy-Target, Frontend-Dev |
-| `fitness/api/main.py` | 9150 | Python/FastAPI | **Prod-Backend** — Tailscale-Funnel, Direktimports, Service `fitness-api.service` |
+Neues, schlankes Python-Backend (FastAPI + Firestore-Sync + Desktop-Meldungen), Ziel-Port 9150, nur 127.0.0.1,
+läuft standalone vom Repo-Root: `python3 -m backend serve` · `python3 -m backend sync pull|run|push sessions`.
+Details, Routen und Entscheidungen: `backend/README.md`. Kernpunkte: kein SQLite (die alte `training_history`
+hat keine UID-Spalte → Klienten kollidieren), JSON unter `~/.aos/fitness/users/<uid>/sessions/` ist die Quelle,
+eine Konfliktfunktion `decide()` für Pull/Daemon/Push, Löschen lokal mit Tombstone, `sync push` ist standardmäßig
+Dry-Run. Unit-Vorschläge unter `backend/deploy/` sind **nicht aktiv** — `fitness-api.service` (:9150) und
+`fitness-firestore-daemon.service` sind seit 2026-10-15 auf Wunsch gestoppt, dürfen nie parallel zu den neuen
+Prozessen auf denselben Daten schreiben. Frontend-Fork: `frontend/`, Notifications: `backend/notifier/`.
 
-**server.mjs** (Hono, `@hono/node-server`):
-- API-Routen: `/session`, `/journal`, `/exercises/search`, `/coverage`, `/fitness/plan`, `/fitness/weekly`, `/fitness/export`, `/fitness/body`
-- Static-Serving (dist/ oder public/) + SPA-Fallback
-- Proxies: wger (lokal, derzeit gestoppt), HabitSync (:6842)
-- **Session-Storage (seit 2026-08-23, siehe Sub-Doc-Sektion "Session-Storage:
-  Schichten & Konfliktmodell" in `docs/ARCHITECTURE.md`):** `POST /session`
-  schreibt nur noch die JSON-Datei (SOT) und benachrichtigt danach — awaited,
-  nicht mehr fire-and-forget — `fitness-api.service`, das per SQLAlchemy-
-  Upsert die einzige `training_history.sqlite`-Instanz schreibt. Node hat
-  keinen eigenen SQLite-Writer mehr (früher paralleler, unkoordinierter
-  better-sqlite3-Writer, Ursache für ~57/116 Zero-Value-Zeilen). Response
-  trägt `sqliteSync: false`, wenn der Python-Sync fehlschlägt — der JSON-Save
-  selbst bleibt davon unberührt.
-- **wger Status (2026-08-30)**: Der Docker-Stack unter `~/.local/docker-apps/wger` ist aktuell bewusst gestoppt, weil wger faktisch nicht als aktives Fitness-Backend genutzt wird. Relevante SOTs fuer Plaene, Sessions und lokale Runtime bleiben `server.mjs`/`fitness-api.service` plus `~/.aos/fitness/`. Falls wger spaeter wieder aktiviert wird, Host-Zugang ueber `http://localhost` bzw. `WGER_BASE=http://127.0.0.1/api/v2`, nicht `:8000`.
-- **wger Gewichtssync**: `POST /fitness/body` mit `weight_kg` → schreibt Body-JSON + pusht `POST /api/v2/weightentry/` zu wger (fire-and-forget). Token: `WGER_API_TOKEN` env. Base-URL: `WGER_BASE` env (frueher oft `:8000` dokumentiert, tatsaechlicher Host-Zugang ueber `:80`, siehe `../fitness/catalog/CLAUDE.md`).
-- **UID-Fallback (Fix 2026-08-15)**: alle Routen ohne expliziten `uid`-Query-Param
-  fallen jetzt einheitlich auf `FITNESS_UID` (aufgelöst aus `.active-uid`-Datei
-  bzw. Env, Modul-Konstante oben in der Datei) zurück. Vorher fielen 12 Routen
-  stattdessen auf den literalen String `"default"` zurück, während andere
-  bereits korrekt `FITNESS_UID` nutzten — dadurch landeten Requests ohne
-  `?uid=`/`X-User-UID`-Header in einem separaten `~/.aos/fitness/users/default/`-
-  Ordner, byte-identisch dupliziert zur echten UID (verifiziert + Ordner
-  gelöscht). Das Python-Prod-Backend (`fitness/api/config.py::_uid_from_request`)
-  hatte diesen Bug nie — dort war die Fallback-Kette schon korrekt bis auf
-  `_active_uid_fallback()`.
+## Push-Benachrichtigungen (Klienten-Workout → Coach)
 
-**API-Autodoc (2026-08-31, `@hono/swagger-ui` + `@hono/zod-openapi`):**
-`GET /docs` (Swagger UI) und `GET /openapi.json` (das Spec selbst) laufen
-mit. Zwei Ebenen, bewusst nicht identisch tief dokumentiert:
-- **Basis-Ebene (alle ~60 Routen):** `buildOpenApiSpec()` in `server.mjs`
-  introspektiert zur Laufzeit Honos eigene Routing-Tabelle (`app.routes`,
-  offiziell öffentliches API laut `hono-base.d.ts`) und listet jede Route
-  mit Pfad/Methode/Path-Params — kein Handschrift-Eintrag, kann also nie
-  hinter dem Code zurückfallen, liefert aber keine Body-/Response-Schemas.
-- **Zod-Ebene (nur `GET /exercises/search`, `GET /fitness/plan`,
-  `POST /session`):** `app` ist `OpenAPIHono` statt `Hono` (Drop-in-Ersatz,
-  alle anderen `app.get/post/...`-Aufrufe unverändert lauffähig). Diese drei
-  Routen sind stattdessen über `app.openapi(createRoute({...}), handler)`
-  mit echten Zod-Schemas registriert — inkl. echter Request-Validierung
-  (kaputte Query-Werte/Bodies geben jetzt `400` mit ZodError statt vorher
-  stillem Fallback auf leere Defaults). `POST /session`s Body-Schema ist
-  bewusst `.loose()` + fast komplett optional, um reale Session-Payloads mit
-  gewachsenen Zusatzfeldern (`slots[]`, `rev`, ...) nicht zurückzuweisen —
-  Ziel ist Malformed-Input-Schutz, keine strenge Shape-Gate-Validierung.
-  `GET /openapi.json` merged beide Ebenen: Basis-Spec als Fallback, die
-  Zod-Routen überschreiben ihren jeweiligen Pfad/Methode-Eintrag mit dem
-  über `app.getOpenAPIDocument()` gewonnenen, schema-reichen Eintrag.
-- Muster für weitere Routen: siehe die drei bestehenden `createRoute(...)`-
-  Blöcke in `server.mjs` als Vorlage.
+Cloud Function `onClientWorkout` meldet dem Coach neue Klienten-Sessions per FCM; der Service Worker zeigt sie
+mit Buttons und Sammelmeldung pro Klient. Texte stehen in `functions/notifications.yaml`, Schalter im
+Setup-Tab (Notification-Panel). Der Coach-Tab läuft **standalone aus `~/coach-dev`** (`vos-coach.web.app`),
+dort liegt auch der Hash-Router. Details, Datenfluss, Deploy-Stand: `docs/PUSH-NOTIFICATIONS.md`.
 
-**fitness-runtime.mjs** (Shared Runtime): `searchExercises()`, `buildPlan()`,
-`getWeeklySummary()` (via Python weekly.py), `exportSessionMarkdown()`.
+## Backend — Server-Rollen
 
-**Daten**: `~/.aos/fitness/`
-- `sessions/YYYY-MM-DD.json` — Session-Logs (SOT für Node-Server)
-- `sessions/training_history.sqlite` — SQLite Mirror (SOT für catalog Python-Tools)
-- `journal/YYYY-MM-DD.md` — Text-Notizen
-- `body/YYYY-MM-DD.json` — Körpermessungen (Fitbit-Pipeline)
-- `plan.json` — Aktiver Trainingsplan
-- `agent-state/` — catalog Runtime-State (Symlink: catalog/state)
-
----
+Der Node-Dev-Server (`server.mjs`, Hono, :9100, Swagger/Zod-Autodoc, Session-Storage) liegt in `~/dev/fitness-backend` (Doku dort in `CLAUDE.md`). Prod-Backend bleibt `fitness/api/main.py` (:9150, Python/FastAPI). Rollen-Tabelle und Datenpfade stehen im Backend-Repo.
 
 ## Commands
 
 | Befehl | Zweck |
 |--------|-------|
-| `npm run dev` | Backend (9100) + Vite DevServer (5902) mit HMR |
-| `npm run ui:dev` | Nur Vite DevServer (Port 5902) |
-| `npm run build` | Production-Build in `dist/` |
-| `npm run build:catalog` | Katalog → ~/.aos/fitness/workouts/catalog.json |
+| `pnpm run dev` | Backend (9100) + Vite DevServer (5902) mit HMR |
+| `pnpm run ui:dev` | Nur Vite DevServer (Port 5902) |
+| `pnpm run build` | Production-Build in `dist/` |
+| `pnpm run build:catalog` | Katalog → ~/.aos/fitness/workouts/catalog.json |
 | `fitnessctl dev status` / `fitnessctl prod status` | Service-Status Dev bzw. Prod |
 | `fitness sync kb\|pull\|pull-uid\|push\|watch\|all` | KB-Sync + Firestore-Sync (`fitness/commands/sync.py`) |
 | `fitness catalog` | Katalog-TUI (Dashboard/Inbox-Review "Neuzugänge"/Browser/Plan/Lesson/History) |
@@ -275,8 +238,8 @@ mit. Zwei Ebenen, bewusst nicht identisch tief dokumentiert:
 | `systemctl --user status fitness-enricher.service` | Status des dauerhaften Enrichment-Watchers |
 | `fitness session today` | Heutige Session anzeigen |
 | `fitness coverage -d DAYS` | Muskelabdeckung der letzten N Tage |
-| `cd pwa && npm run dev` | Firebase PWA Dev-Server |
-| `cd pwa && npm run deploy` | Firebase PWA bauen + deployen |
+| `pnpm run build:firebase` | Firebase-PWA-Build (`vite build --mode firebase` → `dist-firebase/`) — kein eigenes `pwa/`-Verzeichnis mehr, Scripts liegen im Root-`package.json` |
+| `pnpm run firebase` | Firebase-PWA bauen + deployen (`build:firebase && deploy:firebase`) |
 
 Weitere Dispatcher (fitness-devctl/fitness-prodctl/fitnessctl): `../fitness/CLAUDE.md`.
 
@@ -351,7 +314,7 @@ gibt den deutschen Anzeigenamen zurück (`"Rücken"`).
   basiertes Firestore-Konfliktmodell (Details: `docs/ARCHITECTURE.md`)
 - ✅ Gmail-Pipeline (bin/fitness-mail, Fitbit-Daten)
 - ✅ Firestore Sync + PWA Offline-Unterstützung (SW + IndexedDB offline-queue)
-- ✅ Firebase PWA: `npm run build:firebase` → `~/fitness/dist-firebase/`
+- ✅ Firebase PWA: `pnpm run build:firebase` → `~/fitness/dist-firebase/`
 - ✅ anatomy-kb Integration (Git Subtree, :9200)
 - ✅ Exercise-Insight-Modal zeigt bei fehlender Lesson echte wger/yuhonas-
   Rohdaten statt erfundenem Keyword-Fallback-Text (Details: `../src/CLAUDE.md`)
@@ -360,6 +323,28 @@ gibt den deutschen Anzeigenamen zurück (`"Rücken"`).
 - ⏳ AI Agent Workflow (Gemini → anatomy_teaching YAML-Generierung, laufend)
 - ⏳ Coverage-Granularität (primary/secondary/stabilizer) — teilweise
 - ⏳ Anatomie-Lehre für alle Übungen (~28 von ~50+ im Katalog)
-- ⏳ npm workspaces (root + pwa/ + arena/ als Workspace-Pakete)
+- ✅ Fitness-Tabs integriert (2026-10-20): Plan, 6Pack und Skills liegen im
+  Fitness-Build unter `src/views/{Plan,SixPack,Skills}`. Ihre eigenständigen
+  Arbeitsrepos (`~/plan-dev`, `~/6pack-dev`, `~/skills-dev`) bleiben verfügbar;
+  Fitness hat keine Gitlinks oder Workspace-Importer für diese Apps mehr.
+  `dev` bleibt der App-Entwicklungsbranch, `fitness` der Fitness-Integrations-
+  branch. Vite/Firebase baut die Fitness-App direkt aus diesem Checkout.
+  `@vos/cross-app-aliases` ist seit 2026-11-01 **entfernt** (nur `@relax`/`@learn`
+  gebraucht, Auflösung über `siblingDir()` in `vite.config.js`; der pfadabhängige
+  `link:` ließ den Lockfile je nach Installationsort kippen).
 - ⏳ Coach-Tab-Gesamtaufräumung (`views/Coach/`, 5 Sub-Tabs, ~1000 Zeilen) —
   noch nicht begonnen, Details + Zielbild in `../src/CLAUDE.md`
+
+## Mini-Apps: Splash / Service Worker / Manifest (seit 2026-10-16)
+
+- **Solo-Mini-Apps je Tab (seit 2026-11-04):** SSOT `scripts/miniapps.json` (training, logbuch, review, atlas, touren, setup, anamnese, fokus → Sites `vos-<id>`). Bauen: `pnpm run build:miniapp <id>` (`--deploy` hängt `firebase deploy --only hosting:<id>` an), CI: `.github/workflows/deploy-miniapps.yml` (Push auf master, Diff-gesteuert, Matrix). Neue App = Eintrag + `.env.<id>` + Hosting-Target `<id>` (`firebase.json`/`.firebaserc`) + Icon in `scripts/solo-icons.py` + Site (`firebase hosting:sites:create`). learn/plan/6pack/skills haben eigene Repos/Sites. Cache/IndexedDB sind pro Origin getrennt: die Mini-Apps teilen nichts mit `fitness-aos.web.app`.
+
+- Splash, Service Worker und SW-Register kommen aus `@vos/mini-app-shell` (SSOT `~/vitalos/packages/mini-app-shell`, hier vendored unter `scripts/mini-app-shell/` — nicht editieren, Aktualisieren/Drift: `node ~/vitalos/packages/mini-app-shell/cli.mjs vendor scripts/mini-app-shell [--check]`; Konfig `mini-app.json`).
+- Solo-Builds `training`/`atlas`: `scripts/stamp-training.mjs` → `stampApp` (Manifest, Titel `<Name> - VitalOS`, Icons aus `solo-icons/<mode>/`, Splash); der SW ist hier der Haupt-SW (generiert, s. u.).
+- **Haupt-Service-Worker ist generiert (seit 2026-10-16):** Quelle ist `mini-app.json` → App `fitness` (+ `frontend` für den Backend-Neubau-Fork) und das Template aus `@vos/mini-app-shell`. `public/sw.js` gibt es nicht mehr (archiviert: `docs/archive/sw.fitness-main-v1.js`); ältere Doku-Verweise auf `public/sw.js` meinen den generierten `sw.js`. Erzeugt wird er beim Build per `node scripts/mini-app-shell/cli.mjs sw <outDir> --app fitness` (ersetzt `stamp-sw.mjs`; `build`, `build:firebase:client`, `build:training`, `build:atlas`). Der Vite-Dev-Server liefert keinen SW mehr (kein Stale-Cache in der Entwicklung).
+- **Splash der Haupt-App (seit 2026-10-16):** `build` (→ `dist`) und `build:firebase:client` rufen zusätzlich `cli.mjs splash <outDir> --app fitness` (Splash + "Update wird geladen …"-Loader in `index.html`, Icon `/icon-192.png`, Akzent aus `mini-app.json`). Nicht im Dev-Server. Training/Atlas bekommen ihn über `stamp-training.mjs`.
+- **Änderungen am SW-Verhalten** in `mini-app.json` machen (SWR-Pfade, `neverCache`, Queue, Notifications) und danach `node scripts/mini-app-shell/cli.mjs parity --app fitness --old docs/archive/sw.fitness-main-v1.js` (bzw. `--app frontend --old frontend/public/sw.js`; `scripts/test-sw-parity.mjs` ist der Vorläufer, liefert dasselbe) laufen lassen — es spielt 36 Fetch-Szenarien (online/offline) plus Install/Activate/Messages gegen den archivierten Original-SW. Nicht abgedeckt: der Queue-Konfliktpfad (HTTP 409, nur Frontend-Fork).
+- 6Pack, Plan und Skills haben eigenständige Dev-Repos; ihre Fitness-Tabs werden
+  aus `src/views/` im Fitness-Repo gebaut. Coach bleibt im `src/views/Coach/`
+  integriert. Firebase Deploys laufen über den Fitness-Workflow.
+- Vor Push/Release: `vos-overview --plan`.

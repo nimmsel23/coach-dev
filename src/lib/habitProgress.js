@@ -1,3 +1,4 @@
+import { completionsInWindow, lastCompletedAt, localDay } from "@plan/views/Plan/lib/planProgress.js";
 // Gemeinsame Fortschritts-Logik für Routinen-als-Habit (targetCount/
 // targetPeriodDays auf einer Routine, "done" = abgeschlossenes Workout mit
 // passender routine_id im rollierenden Zeitfenster). Genutzt von
@@ -7,6 +8,8 @@
 
 export function countCompletionsInPeriod(routineId, workouts, periodDays) {
   if (!periodDays) return 0;
+  // Plan-Einheit (Objekt): gleiche Regel wie „heute offen“, auch ohne Herkunfts-Vorlage.
+  if (routineId && typeof routineId === "object") return completionsInWindow(routineId, workouts || [], periodDays);
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - periodDays);
   const cutoffIso = cutoff.toISOString();
@@ -33,13 +36,13 @@ export function getRecentCompletionDays(routineId, workouts, days = 14) {
   const doneDates = new Set(
     (workouts || [])
       .filter((w) => w.routine_id === routineId && w.sessionState === "completed" && w.finished_at)
-      .map((w) => w.finished_at.slice(0, 10))
+      .map((w) => localDay(w.finished_at))
   );
   const out = [];
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    const iso = d.toISOString().slice(0, 10);
+    const iso = localDay(d);
     out.push({ date: iso, done: doneDates.has(iso) });
   }
   return out;
@@ -103,14 +106,15 @@ export function pickNextRoutine(routines, workouts) {
 // des Ziels) — `targetCycles` ist nur eine Anzeige-Markierung, kein Cutoff.
 // Bewusst KEIN neues Datenfeld an Session/Routine nötig: `session.block`
 // existiert bereits (SplitPicker), hier nur ausgelesen + normalisiert.
-import { normalizeBlock } from "../views/Session/utils";
+import { normalizeBlock, coveredBlocks } from "../views/Session/utils";
 
 export function computeSplitCycleProgress(sessions, tags, targetCycles = 0) {
   const wantedTags = (tags || []).map(normalizeBlock).filter(Boolean);
   const counts = Object.fromEntries(wantedTags.map((t) => [t, 0]));
   for (const s of sessions || []) {
-    const tag = normalizeBlock(s?.block);
-    if (tag && tag in counts) counts[tag]++;
+    for (const tag of coveredBlocks(s)) {
+      if (tag in counts) counts[tag]++;
+    }
   }
   const cyclesCompleted = wantedTags.length > 0
     ? Math.min(...wantedTags.map((t) => counts[t]))
@@ -130,14 +134,14 @@ export function getRecentBlockDays(tag, sessions, days = 14) {
   const wantedTag = normalizeBlock(tag);
   const doneDates = new Set(
     (sessions || [])
-      .filter((s) => normalizeBlock(s?.block) === wantedTag && s?.date)
+      .filter((s) => coveredBlocks(s).has(wantedTag) && s?.date)
       .map((s) => String(s.date).slice(0, 10))
   );
   const out = [];
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    const iso = d.toISOString().slice(0, 10);
+    const iso = localDay(d);
     out.push({ date: iso, done: doneDates.has(iso) });
   }
   return out;
@@ -150,20 +154,8 @@ export function getRecentBlockDays(tag, sessions, days = 14) {
 // countCompletionsInPeriod). Handverdrahtete Plan-Routinen ohne
 // sourceTemplateId (noch kein Template verknüpft) sind nie "dran".
 export function pickNextPlanRoutine(planRoutines, workouts) {
-  const eligible = (planRoutines || []).filter((r) => r.sourceTemplateId);
+  const eligible = (planRoutines || []).filter((r) => r.sourceTemplateId || r.exercises?.length);
   if (eligible.length === 0) return null;
-
-  const lastCompletedAt = {};
-  for (const w of workouts || []) {
-    if (w.sessionState !== "completed" || !w.routine_id || !w.finished_at) continue;
-    if (!lastCompletedAt[w.routine_id] || w.finished_at > lastCompletedAt[w.routine_id]) {
-      lastCompletedAt[w.routine_id] = w.finished_at;
-    }
-  }
-
-  return eligible.slice().sort((a, b) => {
-    const aDate = lastCompletedAt[a.sourceTemplateId] || "";
-    const bDate = lastCompletedAt[b.sourceTemplateId] || "";
-    return aDate.localeCompare(bDate);
-  })[0];
+  // Stabil: bei gleichem Stand gewinnt die Reihenfolge im Plan (= Rotation).
+  return eligible.slice().sort((a, b) => lastCompletedAt(a, workouts || []).localeCompare(lastCompletedAt(b, workouts || [])))[0];
 }

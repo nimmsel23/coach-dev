@@ -3,9 +3,15 @@
  */
 
 import {
-  collection, doc, addDoc, setDoc, getDoc, getDocs,
-  query, where, orderBy, limit, serverTimestamp,
+  collection,
+  doc,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp,
 } from "firebase/firestore";
+import { addDoc, setDoc, getDoc, getDocs } from "./offline.js";
 
 import { db } from "../../../firebase.js";
 import { todayISO } from "../shared/utils.js";

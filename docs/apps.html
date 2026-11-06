@@ -1,0 +1,50 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>fitness-dev — Apps</title><style>
+:root{--bg:#0b0d12;--fg:#e8eaf0;--mut:#8b93a7;--card:#141822;--line:#232a3a}
+@media(prefers-color-scheme:light){:root{--bg:#f5f6fa;--fg:#161a24;--mut:#5d667a;--card:#fff;--line:#dde1ea}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif;padding:24px 16px 48px}
+main{max-width:1000px;margin:0 auto}h1{font-size:22px;margin:0 0 4px}h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:28px 0 10px}
+p.sub{color:var(--mut);margin:0 0 16px}input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+a.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:12px 14px}
+a.card:hover{border-color:var(--accent)}b{display:block}small{color:var(--mut);display:block}.tag{display:inline-block;font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:0 6px;margin-top:6px}
+a.planned{opacity:.6;border-style:dashed;cursor:default}
+.hide{display:none}</style></head><body><main>
+<h1>fitness-dev — Apps</h1><p class="sub">9 Apps, erzeugt aus mini-app.json, scripts/miniapps.json und .firebaserc. Nicht von Hand ändern.</p><input id="q" type="search" placeholder="Suchen …" autocomplete="off">
+<section><h2>Haupt-App</h2><div class="grid"><a class="card" href="https://fitness-aos.web.app" target="_blank" rel="noopener" style="--accent:#e8a020" data-q="fitness centre  fitness-aos ">
+  <b>Fitness Centre</b><small>–</small>
+  <span class="tag">fitness-aos</span> <span class="tag">Haupt-App</span>
+</a></div></section>
+<section><h2>Mini-Apps</h2><div class="grid"><a class="card" href="https://vos-training.web.app" target="_blank" rel="noopener" style="--accent:#e8a020" data-q="vitalos training krafttraining loggen — session-tab als eigene app vos-training ">
+  <b>VitalOS Training</b><small>Krafttraining loggen — Session-Tab als eigene App</small>
+  <span class="tag">vos-training</span> <span class="tag">Tab session</span>
+</a>
+<a class="card" href="https://vos-logbuch.web.app" target="_blank" rel="noopener" style="--accent:#c084fc" data-q="vitalos logbuch logbuch und chronik der trainingswochen — als eigene app vos-logbuch ">
+  <b>VitalOS Logbuch</b><small>Logbuch und Chronik der Trainingswochen — als eigene App</small>
+  <span class="tag">vos-logbuch</span> <span class="tag">Tab session</span>
+</a>
+<a class="card" href="https://vos-review.web.app" target="_blank" rel="noopener" style="--accent:#f472b6" data-q="vitalos review wochenreview, muskeln, readiness — review-tab als eigene app vos-review ">
+  <b>VitalOS Review</b><small>Wochenreview, Muskeln, Readiness — Review-Tab als eigene App</small>
+  <span class="tag">vos-review</span> <span class="tag">Tab review</span>
+</a>
+<a class="card" href="https://vos-atlas.web.app" target="_blank" rel="noopener" style="--accent:#35c2c8" data-q="vitalos atlas übungsdatenbank durchsuchen — atlas als eigene app vos-atlas ">
+  <b>VitalOS Atlas</b><small>Übungsdatenbank durchsuchen — Atlas als eigene App</small>
+  <span class="tag">vos-atlas</span> <span class="tag">Tab atlas</span>
+</a>
+<a class="card" href="https://vos-touren.web.app" target="_blank" rel="noopener" style="--accent:#34d399" data-q="vitalos radtouren radtouren planen und loggen — als eigene app vos-touren ">
+  <b>VitalOS Radtouren</b><small>Radtouren planen und loggen — als eigene App</small>
+  <span class="tag">vos-touren</span> <span class="tag">Tab touren</span>
+</a>
+<a class="card" href="https://vos-setup.web.app" target="_blank" rel="noopener" style="--accent:#94a3b8" data-q="vitalos setup einstellungen — setup-tab als eigene app vos-setup ">
+  <b>VitalOS Setup</b><small>Einstellungen — Setup-Tab als eigene App</small>
+  <span class="tag">vos-setup</span> <span class="tag">Tab settings</span>
+</a>
+<a class="card" href="https://vos-anamnese.web.app" target="_blank" rel="noopener" style="--accent:#fb923c" data-q="vitalos anamnese anamnese erfassen — als eigene app vos-anamnese ">
+  <b>VitalOS Anamnese</b><small>Anamnese erfassen — als eigene App</small>
+  <span class="tag">vos-anamnese</span> <span class="tag">Tab anamnese</span>
+</a>
+<a class="card" href="https://vos-fokus.web.app" target="_blank" rel="noopener" style="--accent:#facc15" data-q="vitalos fokus fokus-ebenen — als eigene app vos-fokus ">
+  <b>VitalOS Fokus</b><small>Fokus-Ebenen — als eigene App</small>
+  <span class="tag">vos-fokus</span> <span class="tag">Tab focus</span>
+</a></div></section>
+</main><script>const q=document.getElementById("q");q&&q.addEventListener("input",()=>{const v=q.value.toLowerCase();document.querySelectorAll("a.card").forEach(c=>c.classList.toggle("hide",!c.dataset.q.includes(v)));document.querySelectorAll("section").forEach(s=>s.classList.toggle("hide",!s.querySelector("a.card:not(.hide)")))})</script></body></html>

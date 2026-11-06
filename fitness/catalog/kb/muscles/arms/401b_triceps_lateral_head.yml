@@ -1,10 +1,11 @@
 id: 401b_triceps_lateral_head
+fma_id: FMA:37694
 display_name: Triceps Brachii (Lateral Head)
 label_de: Trizeps (Lateraler Kopf)
 label_en: Triceps (Lateral Head)
 label_lat: M. triceps brachii (caput laterale)
 wger_id: 5
-aliases: [triceps lateral head, lateraler kopf]
+aliases: [triceps lateral head]
 viz:
   body_muscles:
     view: BACK

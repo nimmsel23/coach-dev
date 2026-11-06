@@ -3,9 +3,14 @@
  */
 
 import {
-  collection, doc, setDoc, getDoc, getDocs,
-  query, orderBy, limit, serverTimestamp,
+  collection,
+  doc,
+  query,
+  orderBy,
+  limit,
+  serverTimestamp,
 } from "firebase/firestore";
+import { setDoc, getDoc, getDocs } from "./offline.js";
 
 import { db } from "../../../firebase.js";
 import { getUid, hasAuthSession } from "./core.js";
@@ -19,6 +24,8 @@ import {
   getBodyEntry as getLocalBodyEntry,
   saveBodyEntry as saveLocalBodyEntry,
   getBodyEntries as getLocalBodyEntries,
+  getSixpackProgram as getLocalSixpackProgram,
+  saveSixpackProgram as saveLocalSixpackProgram,
 } from "../local/user.js";
 
 // ── Settings ──────────────────────────────────────────────────────────────────
@@ -64,18 +71,21 @@ export async function getPushSettings() {
     return {
       enabled: false,
       tokens: [],
-      types: {},
+      types: { workout: true, activeWorkout: true, habit: true, coverage: true, pplRatio: true, restday: true },
       reminderTime: "18:00",
     };
   }
-  const data = snap.data() || {};
+  const stored = snap.data() || {};
+  const legacy = { ...stored, tokens: [], token: null };
+  delete legacy.apps;
+  const data = stored.apps?.fitness || legacy;
   const tokens = Array.from(new Set([
     ...(Array.isArray(data.tokens) ? data.tokens : []),
     ...(data.token ? [data.token] : []),
   ].filter(Boolean)));
   return {
     enabled: false,
-    types: {},
+    types: { workout: true, activeWorkout: true, habit: true, coverage: true, pplRatio: true, restday: true },
     reminderTime: "18:00",
     ...data,
     token: tokens[0] || data.token || null,
@@ -86,13 +96,12 @@ export async function getPushSettings() {
 export async function savePushSettings(settings) {
   if (!hasAuthSession()) return saveLocalPushSettings(settings);
   await setDoc(doc(db, "fitness", getUid(), "settings", "push"), {
-    ...settings,
-    tokens: Array.from(new Set([
-      ...(Array.isArray(settings?.tokens) ? settings.tokens : []),
-      ...(settings?.token ? [settings.token] : []),
-    ].filter(Boolean))),
+    apps: { fitness: {
+      ...settings,
+      tokens: Array.from(new Set([...(Array.isArray(settings?.tokens) ? settings.tokens : []), ...(settings?.token ? [settings.token] : [])].filter(Boolean))),
+    } },
     updated_at: serverTimestamp(),
-  });
+  }, { merge: true });
   return { ok: true };
 }
 
@@ -187,4 +196,23 @@ export async function updateUserProfile(uid, data) {
     console.error("Fehler beim Speichern des Profils:", error);
     return false;
   }
+}
+
+// ── 6Pack-Programmfortschritt ─────────────────────────────────────────────────
+// users/{uid}/meta/sixpack (gleicher Pfad wie die Standalone-6Pack-App). Enthält
+// Tracker (currentDay, completedDays, …) und settings.reminder.
+
+export async function getSixpackProgram() {
+  if (!hasAuthSession()) return getLocalSixpackProgram();
+  const snap = await getDoc(doc(db, "users", getUid(), "meta", "sixpack"));
+  return snap.exists() ? snap.data() : null;
+}
+
+export async function saveSixpackProgram(program) {
+  if (!hasAuthSession()) return saveLocalSixpackProgram(program);
+  await setDoc(doc(db, "users", getUid(), "meta", "sixpack"), {
+    ...JSON.parse(JSON.stringify(program)),
+    saved_at: serverTimestamp(),
+  });
+  return { ok: true };
 }

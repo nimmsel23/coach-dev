@@ -1,0 +1,112 @@
+{
+  "repo": "fitness-dev",
+  "apps": [
+    {
+      "id": "client",
+      "kind": "main",
+      "name": "Fitness Centre",
+      "short": "Fitness",
+      "description": "",
+      "accent": "#e8a020",
+      "site": "fitness-aos",
+      "url": "https://fitness-aos.web.app",
+      "tab": null
+    },
+    {
+      "id": "training",
+      "kind": "solo",
+      "name": "VitalOS Training",
+      "short": "Training",
+      "description": "Krafttraining loggen — Session-Tab als eigene App",
+      "accent": "#e8a020",
+      "site": "vos-training",
+      "url": "https://vos-training.web.app",
+      "tab": "session",
+      "planned": false
+    },
+    {
+      "id": "logbuch",
+      "kind": "solo",
+      "name": "VitalOS Logbuch",
+      "short": "Logbuch",
+      "description": "Logbuch und Chronik der Trainingswochen — als eigene App",
+      "accent": "#c084fc",
+      "site": "vos-logbuch",
+      "url": "https://vos-logbuch.web.app",
+      "tab": "session",
+      "planned": false
+    },
+    {
+      "id": "review",
+      "kind": "solo",
+      "name": "VitalOS Review",
+      "short": "Review",
+      "description": "Wochenreview, Muskeln, Readiness — Review-Tab als eigene App",
+      "accent": "#f472b6",
+      "site": "vos-review",
+      "url": "https://vos-review.web.app",
+      "tab": "review",
+      "planned": false
+    },
+    {
+      "id": "atlas",
+      "kind": "solo",
+      "name": "VitalOS Atlas",
+      "short": "Atlas",
+      "description": "Übungsdatenbank durchsuchen — Atlas als eigene App",
+      "accent": "#35c2c8",
+      "site": "vos-atlas",
+      "url": "https://vos-atlas.web.app",
+      "tab": "atlas",
+      "planned": false
+    },
+    {
+      "id": "touren",
+      "kind": "solo",
+      "name": "VitalOS Radtouren",
+      "short": "Radtouren",
+      "description": "Radtouren planen und loggen — als eigene App",
+      "accent": "#34d399",
+      "site": "vos-touren",
+      "url": "https://vos-touren.web.app",
+      "tab": "touren",
+      "planned": false
+    },
+    {
+      "id": "setup",
+      "kind": "solo",
+      "name": "VitalOS Setup",
+      "short": "Setup",
+      "description": "Einstellungen — Setup-Tab als eigene App",
+      "accent": "#94a3b8",
+      "site": "vos-setup",
+      "url": "https://vos-setup.web.app",
+      "tab": "settings",
+      "planned": false
+    },
+    {
+      "id": "anamnese",
+      "kind": "solo",
+      "name": "VitalOS Anamnese",
+      "short": "Anamnese",
+      "description": "Anamnese erfassen — als eigene App",
+      "accent": "#fb923c",
+      "site": "vos-anamnese",
+      "url": "https://vos-anamnese.web.app",
+      "tab": "anamnese",
+      "planned": false
+    },
+    {
+      "id": "fokus",
+      "kind": "solo",
+      "name": "VitalOS Fokus",
+      "short": "Fokus",
+      "description": "Fokus-Ebenen — als eigene App",
+      "accent": "#facc15",
+      "site": "vos-fokus",
+      "url": "https://vos-fokus.web.app",
+      "tab": "focus",
+      "planned": false
+    }
+  ]
+}

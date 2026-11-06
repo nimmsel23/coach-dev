@@ -23,6 +23,11 @@ coverage:
   body: "{regions} seit 7 Tagen kaum trainiert"
   link: "/?tab=review"
 
+pplRatio:
+  title: "PPL-Ratio kippt"
+  body: "{buckets} liegen unter 15 % deiner 7-Tage-Coverage"
+  link: "/?tab=review"
+
 habit:
   title: "Habit Reminder"
   body: "Noch offen heute: {names}"
@@ -32,3 +37,28 @@ coachFeedback:
   title: "Coach Feedback"
   link: "/?tab=session"
   # body ist dynamisch (Feedback-Text selbst) — kein Template hier
+
+# Klienten-Workout → Push an den Coach (functions/clientWorkout.js).
+# Platzhalter: {name} Vorname des Klienten, {details} "Art · Dauer", {date} Session-Datum, {minutes}.
+# Bewusst ohne Notizen/Gewichte/Übungsnamen — die Meldung steht auf dem Sperrbildschirm.
+# Der Text "N neue Workouts" (Sammelmeldung) wird im Service Worker zusammengesetzt
+# (public/firebase-messaging-sw.js) und steht nicht hier.
+clientWorkout:
+  title: "{name}: Workout eingegangen"
+  titleFinished: "{name}: Workout abgeschlossen"
+  body: "{details}"
+  bodyDate: "Session vom {date}"      # wenn weder Art noch Dauer bekannt sind
+  bodyFallback: "Neue Session"        # wenn auch das Datum fehlt
+  nameFallback: "Klient"              # wenn der Klient keinen Anzeigenamen hat
+  minutes: "{minutes} min"
+  detailSeparator: " · "
+
+# Test-Meldungen aus dem Notification-Panel (functions/pushPrefs.js, sendTestPush)
+testReminder:
+  title: "Test: Reminder"
+  body: "So sehen normale Erinnerungen aus."
+  link: "/?tab=session"
+
+testClientWorkout:
+  title: "Test: Workout eingegangen"
+  body: "Kraft · 45 min (Demo, kein echter Klient)"

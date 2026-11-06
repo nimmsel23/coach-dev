@@ -1,0 +1,87 @@
+name: inbox_wger_1465
+description: 'Proactively generated expert draft for: Trizeps-Kickback am Kabelzug'
+generated_at: '2026-10-12T10:31:21.549534+00:00'
+enriched_at: '2026-10-12T10:31:21.549534+00:00'
+exercises:
+- exercise_id: wger_1465
+  id: wger_1465
+  name: Trizeps-Kickback am Kabelzug
+  display_name: Trizeps-Kickback am Kabelzug
+  german: Trizeps-Kickback am Kabelzug
+  english: Cable Triceps Kickback
+  category: push
+  primary_muscles:
+  - 401_triceps_brachii
+  secondary_muscles: []
+  stabilizers:
+  - 206_erector_spinae
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 303_posterior_deltoid
+  movements:
+  - elbow_extension
+  - shoulder_extension
+  - core_stability
+  - scapular_stability
+  coaching_notes:
+  - Stelle dich mit dem Rücken zum Kabelzug, greife den Griff mit neutralem Griff
+    (Daumen nach oben).
+  - Beuge dich leicht aus der Hüfte nach vorne, halte deinen Rücken gerade und den
+    Oberkörper stabil.
+  - Fixiere deinen Oberarm nah am Körper, sodass er parallel zum Boden ist und der
+    Ellbogen einen 90-Grad-Winkel bildet.
+  - Strecke deinen Unterarm nach hinten, indem du den Trizeps aktiv kontrahierst und
+    den Ellbogen vollständig streckst.
+  - Halte den Oberarm während der gesamten Bewegung absolut still und parallel zum
+    Boden; nur der Unterarm bewegt sich.
+  - Spüre die maximale Kontraktion im Trizeps am Ende der Bewegung und halte kurz
+    inne.
+  - Führe den Unterarm kontrolliert und langsam in die Ausgangsposition zurück, bis
+    der Trizeps gut gedehnt ist, ohne den Oberarm nach vorne zu bewegen oder den Ellbogen
+    überzustrecken.
+  - Konzentriere dich auf eine flüssige, kontrollierte Bewegung und vermeide jeglichen
+    Schwung.
+  common_errors:
+  - '**Bewegen des Oberarms:** Der häufigste Fehler ist, den Oberarm zu schwingen
+    oder vom Körper wegzubewegen. Der Oberarm muss die gesamte Zeit fixiert und parallel
+    zum Boden bleiben, um den Trizeps zu isolieren.'
+  - '**Verwenden von Schwung:** Ein zu hohes Gewicht führt dazu, dass der Körper schwungvoll
+    arbeitet, anstatt den Trizeps isoliert zu trainieren. Wähle ein Gewicht, das eine
+    saubere und kontrollierte Ausführung ermöglicht.'
+  - '**Unvollständiger Bewegungsumfang:** Nicht die volle Streckung des Ellbogens
+    erreichen oder nicht weit genug in die Dehnung zurückgehen. Nutze den vollen Bewegungsumfang,
+    um den Muskel optimal zu stimulieren.'
+  - '**Rundrücken oder Hohlkreuz:** Eine schlechte Körperhaltung kann zu Verletzungen
+    führen und die Stabilität beeinträchtigen. Halte den Rücken gerade und den Rumpf
+    während der gesamten Übung angespannt.'
+  - '**Ellbogen-Überstreckung:** Vermeide es, den Ellbogen am oberen Punkt der Bewegung
+    zu überstrecken, da dies die Gelenke unnötig belasten kann. Halte eine leichte
+    Spannung im Muskel.'
+  original_description:
+  - Greife den Griff und ziehe deinen Ellenbogen nach oben und leicht hinter deinen
+    Oberkörper. Halte deinen Oberarm während des gesamten Satzes parallel zum Boden.
+  tags:
+  - unreviewed
+  - wger
+  wger_id: 1465
+  wger_muscle_ids:
+    primary:
+    - 5
+    secondary: []
+  external_ids:
+    wger:
+    - 1465
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-10-12T10:31:21.549534+00:00'
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: external
+    source_refs:
+      wger:
+      - '1465'
+  review_state:
+    status: draft
+    ai_reviewed: false
+    enriched_at: '2026-10-12T10:31:21.549534+00:00'

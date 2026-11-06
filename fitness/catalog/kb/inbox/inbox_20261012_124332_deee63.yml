@@ -1,0 +1,179 @@
+name: inbox_20261012_124332_deee63
+description: 'Proactively generated expert draft for: Klimmzug an Leiste'
+generated_at: '2026-11-01T20:49:59.854268+00:00'
+enriched_at: '2026-11-01T20:49:59.854268+00:00'
+exercises:
+- name: Klimmzug an Leiste
+  wger_id: 821
+  external_ids:
+    wger:
+    - 821
+    yuhonas:
+    - Pullups
+  exercise_id: '020'
+  display_name: Klimmzug an Leiste
+  english: Fingerboard Pull-up
+  yuhonas_id: Pullups
+  german: Klimmzug an Leiste
+  search_aliases:
+  - Klimmzug an Leiste
+  - Klimmzug im Obergriff
+  - Pull-Up
+  - Pullups
+  - wger_821
+  - yuhonas_pullups
+  - Fingerboard Pullup
+  - Hangboard Pullup
+  aliases:
+  - Klimmzug
+  - Klimmzug Obergriff
+  - Klimmzug im Obergriff
+  - Klimmzüge
+  - Obergriff Klimmzug
+  - Pronated Pull-up
+  - Pull Up
+  - Pull Ups
+  - Pull-Up
+  - Pull-Ups
+  - Pull-up
+  - Pull-up (Overhand Grip)
+  - Standard Pull-up
+  - Fingerboard Pull-up
+  - Hangboard Pull-up
+  id: '020'
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '821'
+      yuhonas:
+      - Pullups
+  wger_muscle_ids:
+    primary: []
+    secondary: []
+  category: pull
+  movements:
+  - elbow_flexion
+  - scapular_depression
+  - scapular_downward_rotation
+  - shoulder_adduction
+  - shoulder_extension
+  - vertical
+  equipment:
+  - body only
+  - bodyweight
+  - none (bodyweight exercise)
+  - pull_up_bar
+  - fingerboard
+  - hangboard
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 207_teres_major
+  secondary_muscles:
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 205_rhomboids
+  - 402_biceps_brachii
+  - 403_brachialis
+  - 404_brachioradialis
+  stabilizers:
+  - 206_erector_spinae
+  - 304_rotator_cuff
+  - 405_forearm_flexors
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  - 507_multifidus
+  instructions:
+  - 'Grab the pull-up bar with the palms facing forward using the prescribed grip.
+    Note on grips: For a wide grip, your hands need to be spaced out at a distance
+    wider than your shoulder width. For a medium grip, your hands need to be spaced
+    out at a distance equal to your shoulder width and for a close grip at a distance
+    smaller than your shoulder width.'
+  - As you have both arms extended in front of you holding the bar at the chosen grip
+    width, bring your torso back around 30 degrees or so while creating a curvature
+    on your lower back and sticking your chest out. This is your starting position.
+  - 'Pull your torso up until the bar touches your upper chest by drawing the shoulders
+    and the upper arms down and back. Exhale as you perform this portion of the movement.
+    Tip: Concentrate on squeezing the back muscles once you reach the full contracted
+    position. The upper torso should remain stationary as it moves through space and
+    only the arms should move. The forearms should do no other work other than hold
+    the bar.'
+  - After a second on the contracted position, start to inhale and slowly lower your
+    torso back to the starting position when your arms are fully extended and the
+    lats are fully stretched.
+  - Repeat this motion for the prescribed amount of repetitions.
+  coaching_notes:
+  - 'Starte jede Wiederholung aus einem aktiven Hang: Hals lang, Schultern bewusst
+    nach unten ziehen und vom Kopf weghalten (Scapula-Depression), Rippen unten, Bauch
+    und Gesäß leicht anspannen, um einen stabilen Rumpf zu gewährleisten.'
+  - Fokussiere den Zug auf deinen oberen Rücken und Latissimus. Denke daran, deine
+    Ellenbogen in Richtung deiner Hüften oder Flanken zu ziehen, nicht nur die Arme
+    zu beugen. Visualisiere, wie du die Leiste zu deinem Körper ziehst.
+  - Die Exzentrik (das Absenken) ist genauso wichtig wie die konzentrische Phase.
+    Senke dich langsam und kontrolliert ab, um die Zeit unter Spannung zu maximieren
+    und die Sehnenfestigkeit zu verbessern.
+  - 'Arbeite über die volle kontrollierte Bewegungsfreiheit (ROM): unten sauber strecken
+    (aktiver Hang), oben den Brustkorb zur Leiste bringen, ohne die Rumpfspannung
+    zu verlieren oder die Schultern nach vorne fallen zu lassen.'
+  - Wähle die Leistengröße sorgfältig. Anfänger sollten mit größeren, fingerfreundlicheren
+    Leisten beginnen. Fortgeschrittene können kleinere Leisten oder spezifischere
+    Griffarten (z.B. Half-Crimp, Open-Hand) wählen.
+  - Achte auf eine saubere Fingerpositionierung. Die Gelenke sollten stabil sein,
+    und der Druck gleichmäßig auf die Finger verteilt werden, um übermäßige Belastung
+    einzelner Sehnen und Gelenke zu vermeiden.
+  - Die Handgelenke sollten während der gesamten Bewegung stabil und leicht gestreckt
+    bleiben, um eine effiziente Kraftübertragung und die Gesundheit der Handgelenke
+    zu gewährleisten.
+  - Ein spezifisches Aufwärmen für Finger, Handgelenke und Unterarme ist vor dem Training
+    an der Leiste unerlässlich, um das Verletzungsrisiko zu minimieren.
+  - Vermeide Schwingen (Kipping) oder das Einsetzen von Beinschwung. Jede Wiederholung
+    sollte kontrolliert aus der Kraft des Oberkörpers erfolgen, um den beabsichtigten
+    Trainingsreiz zu setzen und Verletzungen vorzubeugen.
+  common_errors:
+  - 'Beginn aus einem passiven Hang: Das Anziehen aus entspannten Schultern kann zu
+    übermäßiger Belastung der Gelenke und einer ineffektiven Aktivierung der Rückenmuskulatur
+    führen.'
+  - 'Kipping oder Beinschwung: Die Nutzung von Schwung anstelle von Muskelkraft reduziert
+    den Trainingseffekt erheblich und erhöht das Verletzungsrisiko, insbesondere an
+    den Fingersehnen und Schultern.'
+  - 'Unvollständige Bewegungsfreiheit: Nicht vollständiges Strecken der Arme am unteren
+    Punkt oder nicht vollständiges Hochziehen bis zur Leiste reduziert den Trainingsreiz
+    und die Entwicklung der Kraft.'
+  - 'Verlust der Rumpfspannung (Hohlkreuz / Rippen aufklappen): Eine instabile Körpermitte
+    führt zu Energieverlust und kann die Wirbelsäule unnötig belasten.'
+  - 'Schultern zu den Ohren ziehen: Dies signalisiert eine Überlastung der oberen
+    Nackenmuskulatur und einen Verlust der optimalen Schulterblattposition für den
+    Zug.'
+  - 'Kopf nach vorne schieben: Anstatt den Brustkorb zur Leiste zu bringen, wird oft
+    versucht, nur das Kinn über die Leiste zu bekommen, was die Haltung beeinträchtigt.'
+  - 'Wahl einer zu kleinen oder ungeeigneten Leiste: Dies kann zu einer gefährlichen
+    Überlastung der Fingersehnen und Gelenke führen, insbesondere ohne ausreichende
+    Vorbereitung und Kraft.'
+  - 'Krampfartiger Griff: Zu starkes Krallen oder Verkrampfen der Finger und Unterarme
+    führt zu schneller Ermüdung und kann die Technik negativ beeinflussen.'
+  - 'Mangelndes Aufwärmen: Das Ignorieren eines spezifischen Aufwärmprogramms für
+    Finger und Unterarme erhöht das Risiko von Sehnen- und Gelenkverletzungen erheblich.'
+  original_description:
+  - Klimmzüge an einer gewählten Leiste eines Fingerboards / Hangboards
+  tags:
+  - back
+  - bodyweight
+  - calisthenics
+  - expert
+  - grip_strength
+  - merged_external
+  - pull
+  - unreviewed
+  - vertical_pull
+  - wger
+  - yuhonas
+  - fingerboard
+  - climbing
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-01T20:49:59.854268+00:00'
+  schema_version: 2026-08-12.exercise-v1
+  review_state:
+    status: draft
+    ai_reviewed: false
+    enriched_at: '2026-11-01T20:49:59.854268+00:00'

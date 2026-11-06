@@ -1,0 +1,12 @@
+muscle_id: posterior_deltoid
+wger_id: None
+latin: Musculus deltoideus, Pars spinalis
+name_en: Rear deltoid
+is_front: false
+exercises: {}
+origin: Hinterer Rand der Spina scapulae (Schulterblattgräte)
+insertion: Tuberositas deltoidea humeri (Delta-Rauigkeit des Oberarmknochens)
+innervation: Nervus axillaris (C5-C6)
+function: Die Pars spinalis deltoidei bewirkt hauptsächlich die Extension (Rückführung)
+  und Außenrotation des Oberarms im Schultergelenk. Zudem unterstützt sie die horizontale
+  Abduktion (Retroversion) des Arms.

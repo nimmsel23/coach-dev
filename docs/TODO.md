@@ -42,10 +42,8 @@ Arbeit. Quelle: `fitness/catalog/kb/coaching_notes/*.yaml` (`product_signals:`).
   ausgedacht — mögliche Opportunity für eine einfache In-App-Vorschlagslogik.
 
 ## 🏗 Architectural / Tech Debt
-- [ ] **SixPackPromiseCard.jsx aus Session/ auslösen**: Hat inhaltlich nichts
-  mit Session/ zu tun außer der Ordner-Verschachtelung — eigenes `views/6pack/`
-  anlegen, `Session/SixPackPromiseCard.jsx` als reinen Re-Export/Barrel stehen
-  lassen (User-Vorschlag 2026-08-22, bewusst zurückgestellt: "später evtl").
+- [x] **SixPackPromiseCard aus Session herauslösen**: Oberfläche liegt in
+  `src/views/SixPack/`, Session importiert den integrierten View.
 - [x] **Multi-Session Schema**: Migrate to `sessions/{sessionId}` structure to support multiple workouts per day.
 - [ ] **Habit Tab Refactoring**: Refactor Habit Tab into a more encapsulated, app-like structure.
 - [x] **Local Data Migration**: Move `data/` from repo-local to `~/.aos/fitness/`. ✅ (Implemented in server and agent).

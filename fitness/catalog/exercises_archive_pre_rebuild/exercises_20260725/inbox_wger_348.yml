@@ -1,0 +1,77 @@
+name: inbox_wger_348
+description: 'Proactively generated expert draft for: Seitheben KH'
+exercises:
+- exercise_id: wger_348
+  display_name: Seitheben Kurzhantel
+  category: Strength
+  equipment: Dumbbell
+  primary_muscles:
+  - 302_lateral_deltoid
+  secondary_muscles:
+  - 202_trapezius_upper
+  - 305_supraspinatus
+  stabilizers:
+  - 304_rotator_cuff
+  - 206_erector_spinae
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 504_transverse_abdominis
+  movement_pattern: Shoulder Abduction
+  coaching_notes: 'Die Seitheben mit Kurzhanteln sind eine ausgezeichnete Isolationsübung,
+    um die seitliche Schultermuskulatur (lateraler Deltoid) gezielt zu entwickeln
+    und ihr ein breiteres, runderes Aussehen zu verleihen. Die korrekte Ausführung
+    ist entscheidend, um die Spannung auf dem Zielmuskel zu halten und das Verletzungsrisiko
+    zu minimieren.
+
+
+    1.  **Startposition:** Stehen Sie aufrecht mit leicht gebeugten Knien und halten
+    Sie in jeder Hand eine Kurzhantel. Die Hanteln hängen seitlich am Körper, die
+    Handflächen zeigen zum Körper. Ihr Blick ist geradeaus gerichtet, der Rücken ist
+    gerade und die Schultern sind leicht nach hinten gezogen.
+
+    2.  **Ellbogenposition:** Beugen Sie die Ellbogen leicht an (ca. 10-20 Grad) und
+    halten Sie diese Beugung während der gesamten Übung bei. Stellen Sie sich vor,
+    Sie gießen aus zwei Kannen Wasser aus – diese Vorstellung hilft, die Ellbogenführung
+    korrekt zu gestalten.
+
+    3.  **Heben:** Heben Sie die Kurzhanteln kontrolliert und langsam seitlich nach
+    oben. Führen Sie die Bewegung primär aus den Schultern, nicht aus den Armen. Die
+    Ellbogen sollten dabei immer leicht höher sein als die Handgelenke. Konzentrieren
+    Sie sich darauf, die Hanteln nicht höher als Schulterhöhe zu heben; eine leichte
+    Unterschreitung dieses Punktes kann die Spannung auf dem lateralen Deltoid sogar
+    maximieren und die obere Trapezmuskulatur weniger involvieren.
+
+    4.  **Spitzenkontraktion:** Halten Sie die Position an der Spitze der Bewegung
+    für einen kurzen Moment, um die Kontraktion im lateralen Deltoid zu spüren.
+
+    5.  **Absenken:** Senken Sie die Hanteln ebenso langsam und kontrolliert wieder
+    ab. Widerstehen Sie dem Drang, die Hanteln einfach fallen zu lassen. Die exzentrische
+    Phase ist genauso wichtig für den Muskelaufbau wie die konzentrische.
+
+    6.  **Körperhaltung:** Halten Sie den Rumpf während der gesamten Bewegung stabil
+    und vermeiden Sie Schwung. Die Bewegung sollte isoliert aus den Schultern kommen.'
+  common_errors:
+  - '**Zu viel Gewicht:** Dies führt oft dazu, dass die Bewegung durch Schwungholen
+    aus dem Rumpf oder durch übermäßiges Einbeziehen der oberen Trapezmuskulatur (Nacken)
+    ausgeführt wird, anstatt isoliert aus dem lateralen Deltoid. Reduzieren Sie das
+    Gewicht und konzentrieren Sie sich auf die Technik.'
+  - '**Schulterzucken:** Wenn die Schultern nach oben gezogen werden, um die Hanteln
+    zu heben, übernimmt der obere Trapezius die Arbeit. Halten Sie die Schultern unten
+    und entspannt.'
+  - '**Hanteln zu hoch heben:** Das Heben der Hanteln über Schulterhöhe hinaus beansprucht
+    die obere Trapezmuskulatur stärker und kann unnötigen Stress auf die Rotatorenmanschette
+    ausüben. Die Bewegung sollte maximal bis zur Schulterhöhe reichen.'
+  - '**Schwungholen:** Ein Schwingen des Oberkörpers nach vorne oder hinten, um die
+    Hanteln zu bewegen, verringert die Effektivität der Übung für die Zielmuskulatur
+    und erhöht das Verletzungsrisiko für den unteren Rücken.'
+  - '**Gestreckte Arme:** Ganz gestreckte Arme während der Bewegung können die Ellbogengelenke
+    unnötig belasten. Behalten Sie immer eine leichte Beugung im Ellbogen bei.'
+  - '**Schnelles Absenken:** Das Absenken der Hanteln ohne Kontrolle vernachlässigt
+    die wichtige exzentrische Phase der Bewegung, die maßgeblich zum Muskelwachstum
+    beiträgt.'
+  - '**Fehlende Mind-Muscle Connection:** Ohne bewusste Konzentration auf den lateralen
+    Deltoid kann es passieren, dass andere Muskeln die Arbeit übernehmen. Stellen
+    Sie sicher, dass Sie spüren, wie der laterale Deltoid arbeitet.'
+  wger_id: null
+  variations: []
+  source: unreviewed

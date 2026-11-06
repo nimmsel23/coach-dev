@@ -1,7 +1,8 @@
 /**
  * SetGridEditor — Set grid area of ExerciseCard: pattern/drop-set banner,
  * column headers, set rows (reps/weight inputs with steppers, remove-set),
- * and the "Satz hinzufügen" button.
+ * and the "Satz hinzufügen" button. Leere Felder zeigen die Werte desselben
+ * Satzes aus der letzten Session (`prevSets`) als Platzhalter.
  *
  * Pure presentational — handlers (updateEx, tryExpandReps, stepReps,
  * stepWeight, removeSet, addSet) and computed values (setsArr, flashSet,
@@ -15,7 +16,7 @@ import { Plus, ChevronDown, ChevronUp, X } from 'lucide-react';
 export default function SetGridEditor({
   i, setsArr, updateEx, removeSet, addSet,
   expandHint, patternSummary, isDropSet,
-  flashSet, tryExpandReps, stepReps, stepWeight,
+  flashSet, tryExpandReps, stepReps, stepWeight, prevSets = null,
 }) {
   // Enter-Navigation zwischen Satz-Feldern (Tabellen-Kalkulation-artig,
   // statt Browser-Default-Tab-Reihenfolge): Reps → Weight derselben Zeile →
@@ -133,6 +134,7 @@ export default function SetGridEditor({
         {setsArr.map((set, sIdx) => {
           const flashReps   = flashSet?.idx === sIdx && flashSet?.field === 'reps';
           const flashWeight = flashSet?.idx === sIdx && flashSet?.field === 'weight';
+          const prevSet     = prevSets?.[sIdx];
           return (
             <div
               key={sIdx}
@@ -163,7 +165,7 @@ export default function SetGridEditor({
                   inputMode="numeric"
                   data-role="reps"
                   data-idx={sIdx}
-                  placeholder={sIdx === 0 ? '5×5' : '—'}
+                  placeholder={prevSet?.reps || (sIdx === 0 ? '5×5' : '—')}
                   value={set.reps || ''}
                   onChange={e => updateEx(i, 'reps', e.target.value, sIdx)}
                   onBlur={e => tryExpandReps(e.target.value, sIdx)}
@@ -222,7 +224,7 @@ export default function SetGridEditor({
                   inputMode="decimal"
                   data-role="weight"
                   data-idx={sIdx}
-                  placeholder="kg"
+                  placeholder={prevSet?.weight || 'kg'}
                   value={set.weight || ''}
                   onChange={e => updateEx(i, 'weight', e.target.value, sIdx)}
                   onKeyDown={e => {

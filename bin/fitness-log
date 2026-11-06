@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+"""
+fitness-log — Session-Log direkt aus Dateien (ls|show|week|history|stats|
+sync-status|clients|console|drafts), kein Server nötig.
+
+Echter, im Repo versionierter Einstiegspunkt (statt des von `uv tool install`
+auto-generierten Shims unter ~/.local/share/uv/tools/fitness-agent/bin/) —
+gleiches Muster wie fitnessctl/fitness-devctl. Läuft mit der fitness-agent
+uv-Tool-venv, weil fitness.log.cli Typer/Rich etc. braucht, die im
+System-Python nicht installiert sind.
+"""
+import subprocess
+import sys
+from pathlib import Path
+
+VENV_PY = Path.home() / ".local" / "share" / "uv" / "tools" / "fitness-agent" / "bin" / "python3"
+
+if __name__ == "__main__":
+    if VENV_PY.exists():
+        os_exec = [str(VENV_PY), "-c", "from fitness.log.cli import main; main()"] + sys.argv[1:]
+        sys.exit(subprocess.call(os_exec))
+    # Fallback falls die uv-Tool-venv fehlt: normales System-Python versuchen.
+    from fitness.log.cli import main
+    sys.exit(main())

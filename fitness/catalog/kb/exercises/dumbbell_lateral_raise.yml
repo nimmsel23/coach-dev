@@ -1,0 +1,124 @@
+exercise_id: dumbbell_lateral_raise
+description: Expert details for Seitheben mit Kurzhanteln
+approved_at: '2026-10-16T15:49:44.404527+00:00'
+exercises:
+- exercise_id: dumbbell_lateral_raise
+  id: dumbbell_lateral_raise
+  name: Seitheben mit Kurzhanteln
+  display_name: Seitheben mit Kurzhanteln
+  german: Seitheben mit Kurzhanteln
+  english: Dumbbell Lateral Raise
+  category: push
+  type: isolation
+  movements:
+  - shoulder_abduction
+  - scapular_upward_rotation
+  - scapular_control
+  equipment:
+  - dumbbell
+  primary_muscles:
+  - 302_lateral_deltoid
+  secondary_muscles:
+  - 305_supraspinatus
+  - 202a_trapezius_upper
+  - 105_serratus_anterior
+  stabilizers:
+  - 304_rotator_cuff
+  - 202c_trapezius_lower
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  - 206_erector_spinae
+  coaching_notes:
+  - Stehe aufrecht mit leicht gebeugten Knien und gespanntem Rumpf. Die Hanteln starten
+    seitlich vor dem Oberschenkel, ohne dass du ins Hohlkreuz oder in eine Ruecklage
+    ausweichst.
+  - Fuehre die Arme in einer leicht nach vorn versetzten Skapulaebene an, nicht exakt
+    frontal zur Seite. So bleibt die Schultermechanik meist sauberer und die seitliche
+    Schulter kann besser arbeiten.
+  - Lass die Ellbogen weich gebeugt und denke daran, die Ellbogen nach aussen und
+    oben zu fuehren. Die Haende folgen nur der Linie der Ellbogen, statt die Bewegung
+    aktiv aus den Handgelenken zu machen.
+  - Hebe kontrolliert nur bis etwa Schulterhoehe oder knapp darunter, solange du die
+    Spannung sauber im seitlichen Deltoid halten kannst. Mehr Hoehe verlagert die
+    Arbeit haeufig in den oberen Trapezius.
+  - Halte die Schultern weg von den Ohren und erzeuge Laenge im Nacken. Die Schulterblaetter
+    duerfen sich natuerlich mitbewegen, aber ohne aggressives Hochziehen.
+  - Senke die Hanteln bewusst langsamer ab, als du sie anhebst. Die exzentrische Phase
+    liefert viel Trainingsreiz und verhindert, dass Schwung die Wiederholung uebernimmt.
+  - Waehle eine Last, mit der jede Wiederholung gleich aussieht. Beim Seitheben ist
+    saubere Hebelkontrolle wichtiger als schwere Hanteln.
+  common_errors:
+  - Zu schwere Hanteln, sodass der Oberkoerper nach hinten lehnt oder aus den Beinen
+    und der Huefte angeschwungen wird.
+  - Die Schultern waehrend der Aufwaertsbewegung zu den Ohren hochziehen, wodurch
+    der obere Trapezius die Arbeit des seitlichen Deltoids uebernimmt.
+  - Die Arme deutlich ueber Schulterhoehe anzuheben, obwohl dabei die Zielspannung
+    verloren geht und die Bewegung unsauber wird.
+  - Die Ellbogen komplett durchzustrecken oder die Handgelenke stark abzuknicken,
+    was den Hebel unnoetig verschlechtert und die Kontrolle reduziert.
+  - Die Hanteln mit starker Innenrotation zu fuehren und das klassische Wasser-ausgiessen
+    zu erzwingen, was die Schulterposition oft eher verschlechtert.
+  - Die Abwaertsphase einfach fallen zu lassen, statt die Last aktiv und kontrolliert
+    zurueckzufuehren.
+  tags:
+  - isolation
+  - dumbbell
+  - shoulders
+  - shoulder_abduction
+  - lateral_deltoid
+  aliases:
+  - Kurzhantel-Seitheben
+  - Seitheben KH
+  - KH Seitheben
+  - Dumbbell Side Lateral Raise
+  - Side Lateral Raise
+  search_aliases:
+  - wger_348
+  - Seitheben mit Kurzhanteln
+  - Dumbbell Lateral Raise
+  external_ids:
+    wger:
+    - 348
+  wger_id: 348
+  variations: []
+  source: expert
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '348'
+      yuhonas:
+      - Side_Lateral_Raise
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-16T15:49:44.404527+00:00'
+  approved_at: '2026-10-16T15:49:44.404527+00:00'
+  yuhonas_id: Side_Lateral_Raise
+  original_description:
+  - 'Aufrechter Stand, Kopf nach vorne gerichtet, eine Kurzhantel in jeder Hand.
+
+    Handflächen nach innen, in Richtung des Körpers, gerichtet.
+
+    Hebe die Hanteln seitlich nach oben, ohne Schwung zu holen. Atme aus. Die Ellenbogen
+    sind leicht gebeugt. Hebe die Kurzhanteln soweit, bis die Arme parallel zum Boden
+    sind.
+
+    Am obersten Punkt sollten deine Handflächen nach unten zeigen.
+
+    Am höchsten Punkt hältst du für 1-2 Sekunden inne und ziehst deine Schulterblätter
+    zusammen.
+
+    Führe die Hanteln langsam wieder nach unten in die Ausgangsposition und atme ein.'
+  instructions:
+  - Pick a couple of dumbbells and stand with a straight torso and the dumbbells by
+    your side at arms length with the palms of the hand facing you. This will be your
+    starting position.
+  - While maintaining the torso in a stationary position (no swinging), lift the dumbbells
+    to your side with a slight bend on the elbow and the hands slightly tilted forward
+    as if pouring water in a glass. Continue to go up until you arms are parallel
+    to the floor. Exhale as you execute this movement and pause for a second at the
+    top.
+  - Lower the dumbbells back down slowly to the starting position as you inhale.
+  - Repeat for the recommended amount of repetitions.

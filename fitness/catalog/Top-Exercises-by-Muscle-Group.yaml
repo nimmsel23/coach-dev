@@ -1,0 +1,382 @@
+exercise_library:
+  version: "0.1"
+  focus: "strength_hypertrophy"
+  categories:
+
+    chest:
+      label: "Brust"
+      exercises:
+        - id: barbell_bench_press
+          name: "Barbell Bench Press"
+          german: "Langhantel-Bankdrücken"
+          type: compound
+          movement_pattern: horizontal_push
+          primary_muscles: [pectoralis_major, anterior_deltoid, triceps_brachii]
+          variations: [flat, paused, close_grip, reverse_grip, larsen_press]
+          notes: "Hohe Überladbarkeit, starke Grundübung für Brustkraft und Hypertrophie."
+
+        - id: incline_dumbbell_press
+          name: "Incline Dumbbell Press"
+          german: "Schrägbankdrücken mit Kurzhanteln"
+          type: compound
+          movement_pattern: incline_push
+          primary_muscles: [upper_pectoralis_major, anterior_deltoid, triceps_brachii]
+          variations: [low_incline, high_incline, neutral_grip, alternating]
+          notes: "Sehr guter Fokus auf obere Brust, größere ROM als Langhantel."
+
+        - id: dips
+          name: "Dips"
+          german: "Dips"
+          type: compound
+          movement_pattern: vertical_push
+          primary_muscles: [lower_pectoralis_major, triceps_brachii, anterior_deltoid]
+          variations: [chest_dips, triceps_dips, weighted_dips, ring_dips]
+          notes: "Mit Vorneigung stärkerer Brustfokus, aufrechter mehr Trizeps."
+
+        - id: cable_fly
+          name: "Cable Fly"
+          german: "Kabelzug-Fliegende"
+          type: isolation
+          movement_pattern: horizontal_adduction
+          primary_muscles: [pectoralis_major]
+          variations: [low_to_high, midline, high_to_low, unilateral]
+          notes: "Konstante Spannung; Winkel bestimmt Brustfokus."
+
+        - id: pec_deck
+          name: "Pec Deck"
+          german: "Butterfly Maschine"
+          type: isolation
+          movement_pattern: horizontal_adduction
+          primary_muscles: [pectoralis_major]
+          variations: [standard, unilateral, partials]
+          notes: "Stabile Isolation mit gutem Stimulus-Fatigue-Verhältnis."
+
+    back:
+      label: "Rücken"
+      exercises:
+        - id: pull_up
+          name: "Pull-Up"
+          german: "Klimmzug im Obergriff"
+          type: compound
+          movement_pattern: vertical_pull
+          primary_muscles: [latissimus_dorsi, teres_major]
+          secondary_muscles: [biceps_brachii, brachialis, trapezius, rhomboids, core]
+          variations: [standard, wide_grip, close_grip, weighted, l_sit]
+          notes: "Starke Lat- und Rückenübung; Obergriff meist weniger Bizeps-lastig als Chin-Up."
+
+        - id: chin_up
+          name: "Chin-Up"
+          german: "Klimmzug im Untergriff"
+          type: compound
+          movement_pattern: vertical_pull
+          primary_muscles: [latissimus_dorsi, biceps_brachii]
+          secondary_muscles: [brachialis, brachioradialis, rhomboids, trapezius, core]
+          variations: [standard, close_grip, weighted, negative, l_sit]
+          notes: "Mehr Bizepsbeteiligung als Pull-Up."
+
+        - id: lat_pulldown
+          name: "Lat Pulldown"
+          german: "Latzug"
+          type: compound
+          movement_pattern: vertical_pull
+          primary_muscles: [latissimus_dorsi, teres_major]
+          secondary_muscles: [biceps_brachii, brachialis, rhomboids, trapezius]
+          variations: [wide_grip, neutral_grip, close_grip, unilateral]
+          notes: "Skalierbare Alternative oder Ergänzung zu Klimmzügen."
+
+        - id: barbell_row
+          name: "Barbell Row"
+          german: "Langhantelrudern"
+          type: compound
+          movement_pattern: horizontal_pull
+          primary_muscles: [latissimus_dorsi, rhomboids, trapezius, rear_deltoid]
+          secondary_muscles: [biceps_brachii, spinal_erectors, core]
+          variations: [bent_over_row, pendlay_row, yates_row, underhand_row]
+          notes: "Top-Übung für Rückendichte."
+
+        - id: chest_supported_row
+          name: "Chest Supported Row"
+          german: "Brustgestütztes Rudern"
+          type: compound
+          movement_pattern: horizontal_pull
+          primary_muscles: [latissimus_dorsi, rhomboids, trapezius, rear_deltoid]
+          secondary_muscles: [biceps_brachii, brachialis]
+          variations: [machine, dumbbell, incline_bench]
+          notes: "Weniger Belastung für unteren Rücken."
+
+    shoulders:
+      label: "Schultern"
+      exercises:
+        - id: overhead_press
+          name: "Overhead Press"
+          german: "Schulterdrücken"
+          type: compound
+          movement_pattern: vertical_push
+          primary_muscles: [anterior_deltoid, lateral_deltoid, triceps_brachii]
+          secondary_muscles: [upper_pectoralis_major, core, trapezius]
+          variations: [barbell, dumbbell, seated, arnold_press, landmine_press]
+          notes: "Grundübung für Schulterkraft."
+
+        - id: lateral_raise
+          name: "Lateral Raise"
+          german: "Seitheben"
+          type: isolation
+          movement_pattern: shoulder_abduction
+          primary_muscles: [lateral_deltoid]
+          variations: [dumbbell, cable, machine, leaning, partials]
+          notes: "Essentiell für Schulterbreite."
+
+        - id: rear_delt_fly
+          name: "Rear Delt Fly"
+          german: "Reverse Fly"
+          type: isolation
+          movement_pattern: horizontal_abduction
+          primary_muscles: [rear_deltoid]
+          secondary_muscles: [rhomboids, trapezius]
+          variations: [dumbbell, cable, pec_deck_reverse]
+          notes: "Wichtig für Schulterbalance und Haltung."
+
+        - id: face_pull
+          name: "Face Pull"
+          german: "Face Pull"
+          type: accessory
+          movement_pattern: scapular_retraction_external_rotation
+          primary_muscles: [rear_deltoid, trapezius, rotator_cuff]
+          variations: [rope, high_cable, band]
+          notes: "Sehr gute präventive Schulterübung."
+
+    legs:
+      label: "Beine"
+      exercises:
+        - id: back_squat
+          name: "Back Squat"
+          german: "Kniebeuge"
+          type: compound
+          movement_pattern: squat
+          primary_muscles: [quadriceps, gluteus_maximus, adductors]
+          secondary_muscles: [hamstrings, spinal_erectors, core]
+          variations: [high_bar, low_bar, pause_squat, box_squat, safety_bar]
+          notes: "Klassische Grundübung für Unterkörperkraft."
+
+        - id: front_squat
+          name: "Front Squat"
+          german: "Frontkniebeuge"
+          type: compound
+          movement_pattern: squat
+          primary_muscles: [quadriceps, gluteus_maximus]
+          secondary_muscles: [adductors, hamstrings, core, spinal_erectors]
+          variations: [clean_grip, cross_grip, zombie, pause, heels_elevated]
+          notes: "Aufrechter Oberkörper, starker Quad-Fokus."
+
+        - id: deadlift
+          name: "Deadlift"
+          german: "Kreuzheben"
+          type: compound
+          movement_pattern: hinge
+          primary_muscles: [gluteus_maximus, hamstrings, spinal_erectors]
+          secondary_muscles: [quadriceps, latissimus_dorsi, trapezius, grip, core]
+          variations: [conventional, sumo, trap_bar, deficit, rack_pull]
+          notes: "Ganzkörper-Hinge mit hoher Last."
+
+        - id: romanian_deadlift
+          name: "Romanian Deadlift"
+          german: "Rumänisches Kreuzheben"
+          type: compound
+          movement_pattern: hinge
+          primary_muscles: [hamstrings, gluteus_maximus]
+          secondary_muscles: [spinal_erectors, lats, grip]
+          variations: [barbell, dumbbell, single_leg, deficit]
+          notes: "Top-Übung für Hamstrings und Glutes."
+
+        - id: bulgarian_split_squat
+          name: "Bulgarian Split Squat"
+          german: "Bulgarian Split Squat"
+          type: compound
+          movement_pattern: unilateral_squat
+          primary_muscles: [quadriceps, gluteus_maximus]
+          secondary_muscles: [adductors, hamstrings, core]
+          variations: [dumbbell, barbell, front_foot_elevated, smith_machine]
+          notes: "Elite-Übung für einbeinige Beinkraft und Hypertrophie."
+
+        - id: lunge
+          name: "Lunge"
+          german: "Ausfallschritt"
+          type: compound
+          movement_pattern: unilateral_squat
+          primary_muscles: [quadriceps, gluteus_maximus, hamstrings]
+          secondary_muscles: [adductors, calves, core, gluteus_medius]
+          variations: [forward, reverse, walking, lateral, deficit, curtsy]
+          notes: "Sehr vielseitige Unterkörperübung mit Balance-Komponente."
+
+        - id: leg_press
+          name: "Leg Press"
+          german: "Beinpresse"
+          type: machine_compound
+          movement_pattern: squat
+          primary_muscles: [quadriceps, gluteus_maximus]
+          secondary_muscles: [adductors, hamstrings]
+          variations: [standard, high_foot, low_foot, single_leg]
+          notes: "Hohe Beinbelastung bei geringerem technischem Anspruch."
+
+        - id: leg_extension
+          name: "Leg Extension"
+          german: "Beinstrecker"
+          type: isolation
+          movement_pattern: knee_extension
+          primary_muscles: [quadriceps]
+          variations: [bilateral, unilateral, partials]
+          notes: "Direkte Quad-Isolation."
+
+        - id: leg_curl
+          name: "Leg Curl"
+          german: "Beinbeuger"
+          type: isolation
+          movement_pattern: knee_flexion
+          primary_muscles: [hamstrings]
+          variations: [seated, lying, standing, unilateral]
+          notes: "Direkte Hamstring-Isolation über Kniebeugung."
+
+        - id: calf_raise
+          name: "Calf Raise"
+          german: "Wadenheben"
+          type: isolation
+          movement_pattern: plantar_flexion
+          primary_muscles: [gastrocnemius, soleus]
+          variations: [standing, seated, donkey, single_leg]
+          notes: "Stehend mehr Gastrocnemius, sitzend mehr Soleus."
+
+    arms:
+      label: "Arme"
+      exercises:
+        - id: barbell_curl
+          name: "Barbell Curl"
+          german: "Langhantelcurl"
+          type: isolation
+          movement_pattern: elbow_flexion
+          primary_muscles: [biceps_brachii]
+          secondary_muscles: [brachialis, brachioradialis]
+          variations: [straight_bar, ez_bar, strict]
+          notes: "Klassische Bizeps-Masseübung."
+
+        - id: incline_dumbbell_curl
+          name: "Incline Dumbbell Curl"
+          german: "Schrägbank-Kurzhantelcurl"
+          type: isolation
+          movement_pattern: elbow_flexion
+          primary_muscles: [biceps_brachii]
+          variations: [supinated, alternating, bilateral]
+          notes: "Starker Dehnreiz, guter Long-Head-Fokus."
+
+        - id: hammer_curl
+          name: "Hammer Curl"
+          german: "Hammercurl"
+          type: isolation
+          movement_pattern: elbow_flexion_neutral_grip
+          primary_muscles: [brachialis, brachioradialis]
+          secondary_muscles: [biceps_brachii]
+          variations: [dumbbell, rope_cable, cross_body]
+          notes: "Sehr gut für Armdicke und Unterarm."
+
+        - id: overhead_triceps_extension
+          name: "Overhead Triceps Extension"
+          german: "Überkopf-Trizepsstrecken"
+          type: isolation
+          movement_pattern: elbow_extension
+          primary_muscles: [triceps_long_head]
+          secondary_muscles: [triceps_lateral_head, triceps_medial_head]
+          variations: [cable, dumbbell, ez_bar, unilateral, katana]
+          notes: "Wichtig für langen Trizepskopf."
+
+        - id: cable_pushdown
+          name: "Cable Pushdown"
+          german: "Trizepsdrücken am Kabel"
+          type: isolation
+          movement_pattern: elbow_extension
+          primary_muscles: [triceps_lateral_head, triceps_medial_head]
+          secondary_muscles: [triceps_long_head]
+          variations: [rope, straight_bar, v_bar, reverse_grip, unilateral]
+          notes: "Stabile Trizeps-Isolation mit konstanter Spannung."
+
+        - id: skull_crusher
+          name: "Skull Crusher"
+          german: "French Press / Skull Crusher"
+          type: isolation
+          movement_pattern: elbow_extension
+          primary_muscles: [triceps_brachii]
+          variations: [ez_bar, dumbbell, cable, incline]
+          notes: "Starker Stretch-Stimulus, Ellbogen sauber kontrollieren."
+
+    core:
+      label: "Rumpf"
+      exercises:
+        - id: hanging_leg_raise
+          name: "Hanging Leg Raise"
+          german: "Hängendes Beinheben"
+          type: core
+          movement_pattern: hip_flexion_spinal_flexion
+          primary_muscles: [rectus_abdominis, hip_flexors]
+          secondary_muscles: [obliques, grip]
+          variations: [knee_raise, straight_leg, toes_to_bar]
+          notes: "Starke Core- und Hüftbeugerübung."
+
+        - id: cable_crunch
+          name: "Cable Crunch"
+          german: "Kabel-Crunch"
+          type: core
+          movement_pattern: loaded_spinal_flexion
+          primary_muscles: [rectus_abdominis]
+          secondary_muscles: [obliques]
+          variations: [kneeling, standing]
+          notes: "Gut progressiv überladbare Bauchübung."
+
+        - id: ab_wheel
+          name: "Ab Wheel"
+          german: "Ab Wheel Rollout"
+          type: core
+          movement_pattern: anti_extension
+          primary_muscles: [rectus_abdominis, transverse_abdominis]
+          secondary_muscles: [lats, hip_flexors, serratus_anterior]
+          variations: [kneeling, standing, band_assisted]
+          notes: "Sehr starke Anti-Extension-Übung."
+
+        - id: pallof_press
+          name: "Pallof Press"
+          german: "Pallof Press"
+          type: core
+          movement_pattern: anti_rotation
+          primary_muscles: [obliques, transverse_abdominis]
+          secondary_muscles: [glutes, shoulders]
+          variations: [standing, half_kneeling, cable, band]
+          notes: "Sehr gut für Rumpfstabilität und Anti-Rotation."
+
+program_builder:
+  upper_body_essentials:
+    - bench_press
+    - pull_up
+    - row
+    - overhead_press
+    - lateral_raise
+    - curl
+    - triceps_pushdown
+
+  lower_body_essentials:
+    - squat
+    - romanian_deadlift
+    - split_squat
+    - leg_curl
+    - calf_raise
+    - core
+
+  s_tier_overall:
+    - back_squat
+    - front_squat
+    - deadlift
+    - romanian_deadlift
+    - bench_press
+    - incline_dumbbell_press
+    - pull_up
+    - chin_up
+    - barbell_row
+    - overhead_press
+    - dips
+    - bulgarian_split_squat

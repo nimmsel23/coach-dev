@@ -1,0 +1,13 @@
+exercise_id: schulterdruecken_mit_hueftschwung
+name: Schulterdrücken mit Hüftschwung (Push Press)
+category: shoulders
+movement_pattern: vertical_press
+muscle_roles:
+  primary:
+  - anterior_deltoid
+  - triceps_brachii
+  secondary:
+  - quadriceps_femoris
+  - gluteus_maximus
+  - rectus_abdominis
+  - trapezius

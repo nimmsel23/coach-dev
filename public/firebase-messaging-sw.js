@@ -1,48 +1,12 @@
-/* global importScripts, firebase */
-
-importScripts("https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/11.10.0/firebase-messaging-compat.js");
-
-firebase.initializeApp({
-  apiKey: "AIzaSyD1hvp2UYrvizLOzoSqOX-bwRWcCpJVAlg",
-  authDomain: "fitness-aos.firebaseapp.com",
-  projectId: "fitness-aos",
-  storageBucket: "fitness-aos.firebasestorage.app",
-  messagingSenderId: "842575255284",
-  appId: "1:842575255284:web:65c4831683a893c110f0a1",
-});
-
-const messaging = firebase.messaging();
-
-messaging.onBackgroundMessage((payload) => {
-  const data = payload?.data || {};
-  const title = data.title || payload?.notification?.title || "VitalOS";
-  const body = data.body || payload?.notification?.body || "Zeit für deinen nächsten Check-in.";
-  const link = data.link || "/?tab=session";
-
-  self.registration.showNotification(title, {
-    body,
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
-    data: { link, tab: data.tab || "session" },
-  });
-});
-
-self.addEventListener("notificationclick", (event) => {
-  event.notification.close();
-  const link = event.notification?.data?.link || "/?tab=session";
-
+/* Veralteter Root-Service-Worker (Scope "/"). Keine App registriert ihn mehr: Push läuft über
+ *   Fitness: /fitness-messaging-sw.js (Scope /fitness-push/)   VitalOS: /vitalos-messaging-sw.js
+ *   6Pack:   /sixpack-messaging-sw.js (Scope /sixpack-push/)
+ * Auf Geräten mit alter Registrierung zeigte dieser SW JEDE Push-Nachricht ohne app-Filter an
+ * (auch 6Pack-/andere Apps) und doppelte damit die Meldungen des dedizierten SW.
+ * Er behandelt deshalb kein Push-Ereignis mehr und meldet sich beim Aktivieren selbst ab. */
+self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
-    const clients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-    for (const client of clients) {
-      if ("focus" in client) {
-        try {
-          await client.navigate(link);
-        } catch {}
-        return client.focus();
-      }
-    }
-    if (self.clients.openWindow) return self.clients.openWindow(link);
-    return null;
+    try { await self.registration.unregister(); } catch (_) { /* nichts zu tun */ }
   })());
 });

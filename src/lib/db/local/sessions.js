@@ -1,5 +1,5 @@
 import { api, localToday } from "./core";
-import { num } from "./utils";
+import { calculateProgressTrend } from "../shared/progressTrend.js";
 import { clearMonthlyReportCache } from "../../reportCache";
 
 function exerciseSets(exercise) {
@@ -172,37 +172,9 @@ export async function buildWorkoutFromRoutine(routine, lookup = getLastExerciseP
   };
 }
 
-export async function getProgressTrend(exerciseName, lastN = 4) {
+export async function getProgressTrend(exercise, lastN = 4) {
   const history = await getSessionHistory(lastN * 7);
-  const sessions = (Array.isArray(history) ? history.filter(Boolean) : [])
-    .map(s => ({ ...s, exercises: Array.isArray(s.exercises) ? s.exercises : [] }))
-    .filter(s => s.exercises.some(ex => ex.name === exerciseName))
-    .sort((a, b) => b.date.localeCompare(a.date));
-
-  if (sessions.length < 2) return { status: "neutral", message: "Nicht genug Daten" };
-
-  const values = sessions.map(s => {
-    const ex = s.exercises.find(e => e.name === exerciseName);
-    if (!ex) return null;
-    
-    // Trend is now always based on max weight
-    if (Array.isArray(ex.setsArray)) {
-      const weights = ex.setsArray.map(s => num(s.weight)).filter(w => w !== null);
-      return weights.length > 0 ? Math.max(...weights) : null;
-    }
-    return num(ex.weight);
-  }).filter(v => v !== null && v > 0);
-
-  if (values.length < 2) return { status: "neutral", message: "Zu wenig Daten" };
-
-  const current = values[0];
-  const avgPrevious = values.slice(1, lastN).reduce((a, b) => a + b, 0) / Math.max(values.length - 1, 1);
-  if (avgPrevious === 0) return { status: "neutral" };
-
-  const pctChange = ((current - avgPrevious) / avgPrevious) * 100;
-  if (pctChange > 2)  return { status: "up",      change: pctChange.toFixed(1) };
-  if (pctChange < -2) return { status: "down",    change: pctChange.toFixed(1) };
-  return                   { status: "neutral", change: pctChange.toFixed(1) };
+  return calculateProgressTrend(history, exercise, lastN);
 }
 
 export async function getPlan() {

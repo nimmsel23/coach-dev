@@ -4,7 +4,7 @@ Workout-Journal für Kraft- und Ausdauertraining. Zwei Session-Modi, Multi-Sessi
 
 ## Komponenten
 
-- **`index.jsx`**: Thin Sub-Tab-Router — editor (default) / timer / skills / plan / history.
+- **`index.jsx`**: Thin Sub-Tab-Router — editor (default) / plan / history / logbuch (lazy, eigener View `../Logbuch/`, siehe dort). Skills und 6Pack sind eigenständige Apps, keine Session-Untertabs mehr.
 - **`useSession.js`**: State-Owner — Session-Modi, Multi-Session, Autosave/Flush, alle Handler.
 - **`SessionEditor.jsx`**: Editor-Assembly — SessionHeader + ExerciseList + ActivityAddon (Basis-Abschnitt) + SessionSlots (zusätzliche Abschnitte) / ActivitySection (Cardio-Mode).
 - **`SessionSlots.jsx`**: zusätzliche, frei benannte Abschnitte einer Strength-Session — jeder Slot ein weiterer Übungen+Activity+Notiz-Block wie der Basis-Abschnitt, additiv, kein Ersatz für ihn. Slot-Inhalt 1:1 als wiederverwendbarer "Baustein" pro Trainingsblock speicherbar (`lib/db/local|firestore/slotTemplates.js`).
@@ -19,9 +19,9 @@ Workout-Journal für Kraft- und Ausdauertraining. Zwei Session-Modi, Multi-Sessi
 - **`SidebarSheet.jsx`**: Bottom-Sheet mit SessionSidebar (Block, Ort, Dauer, Effort, Notizen, Exports).
 - **`MuscleMapModal.jsx`**: Anterior/Posterior BodyMap aller Session-Exercises + Anatomie-Detail.
 - **`SourceSettingsModal.jsx`**: Übungsquellen-Toggle (wger/yuhonas/coach) via localStorage.
-- **`WorkoutTimerCard.jsx`**: reine Stoppuhr, lebt im `skills`-SubTab, Lime-Akzent (`#c8ff00`).
-- **`SixPackPromiseCard.jsx`**: lebt im `timer`-SubTab. Eigenständiger Mini-Router (Home/Track/Day/Runner/Shuffle/Learn/Favorites/Selfies) nach dem Athlean-X "6 Pack Promise"-Vorbild — verifizierte echte Übungsnamen (Crucifix, Rolling Jackknifes, Canoe Crunches u.a. aus App-Reviews + Nutzer-Screenshots), 8-Wochen-Track mit Rest-Tagen an Tag 3/7, Timing nach Nutzerangabe (30/60s Arbeit, 5s Standard-Übergang, 1-2× 30/45s echte Pause pro Workout). Setzt `document.documentElement[data-theme]` auf `"sixpack"` solange gemountet (gleiches Pattern wie `SettingsContext.jsx`) — kippt die ganze App ins Rot/Schwarz-Theme (`styles/themes/sixpack.css`), stellt vorherigen Wert beim Verlassen wieder her.
-- **`SkillsCard.jsx`**: lebt im `skills`-SubTab. Calisthenics-Skill-Liste (14 Skills, Thenics-App-Vorbild) mit Progressions-Kette im Thenics-Prinzip (aktuelle Stufe groß, nächste klein, weitere Stufen gesperrt bis "gemeistert"). Fortschritt pro Skill in localStorage. Setzt `data-theme="skills"` solange gemountet (`styles/themes/skills.css`, Lime-Akzent) — gleiches Pattern wie `SixPackPromiseCard.jsx`. Skill/Progressions-Daten aktuell im Component hardcodiert, **nicht** verbunden mit `fitness/catalog/kb/exercises/calisthenics/*.yml` (gleicher Inhalt, zwei Quellen — siehe AUDIT.md).
+- **`SessionModeTabs.jsx`**: Kraft/Ausdauer setzen den Session-Modus. Skills und 6Pack öffnen eigene Apps: im VitalOS-Shell-Build lokale Shell-Routen, im Fitness-Standalone die Hosting-Sites.
+- **`SessionGateSheet.jsx` / `GatePortalGrid.jsx`** (2026-11-05): kein Auto-Open mehr beim Wechsel auf „Heute"; das Sheet öffnet über die Gate-Leiste (Grid-Button / Tap). Nach oben herausziehen (oder Chevron) = Hub-Modus: Vollbild mit großem Schnelleinstieg (Suche, Kürzel `/`, `1`–`9`, Zuletzt genutzt, Ziele über alle Tabs). Dock (mobil, 2026-11-05): Die Bottom-Nav ist die eingeklappte Unterkante des Gate-Sheets — Hochwischen (oder Griff tippen) zieht das Sheet heraus (`App.openHub('gate')`); dort ersetzt die Hub-Leiste (`GatePortalGrid.jsx::GateHubBar`) die Nav, Hochwischen darauf oder Tipp auf „Hub" klappt den Hub-Vollbild auf. Bottom-Nav (mobil): Training · **Hub** · Atlas · Mehr — der Hub-Button (`App.openHub`) wechselt auf Session/Heute und öffnet das Gate direkt im Hub-Modus (`activeModal='hub'`); Plan/Logbuch/Timer/Skills liegen dort. Im Session-Tab zeigt nur noch ein Chip den Split (Tap → Gate; Long-Press auf Chips im Gate → Plan-Vorlagen). Das Gate fängt außerdem Kraft/Ausdauer und die Split-Chips (inkl. neu **Shoulders**, **Arms**) ab, bevor man in den Session-Tab geht; Autoerkennung (`utils.js::inferBlockFromExercises`) erkennt reine Schulter-/Arm-Tage über die Primärmuskeln.
+- **`SessionGateCard.jsx`**: enthält ebenfalls direkte Einstiege zu den eigenständigen Skills- und 6Pack-Apps; deren Inhalte werden nicht in der Fitness-Session gerendert.
 
 ## Session-Modi
 
@@ -96,9 +96,31 @@ Vor dem manuellen Editor liegt ein leichtgewichtiges `sessionGate` im selben Ses
 - Der manuelle Editor bleibt bewusst getrennt darunter für das Nachtragen.
 - Eine aktive Session kann best-effort eine laufende App-Service-Worker-Benachrichtigung halten.
 
+**Bugfix 2026-10-13 (Notification führte ins Leere):** Antippen der
+Workout-Stoppuhr-/Stunden-Erinnerung-Notification öffnete bisher nie das
+Gate-Sheet mit dem "Workout beenden"-Button — zwei unabhängige Sackgassen,
+beide gefixt:
+1. `public/sw.js`: `showWorkoutNotification()`/`showHourReminderNotification()`
+   verlinkten auf `/#session?date=...`, was `App.jsx::parseHashRoute()`
+   absichtlich als gate-loses Deep-Link behandelt (Fix 2026-09-07 für
+   Dashboard/Review-Links). `notificationclick`-Fallback war ebenfalls
+   `/#session`. Alle drei zeigen jetzt fest auf `/#session/today` — der
+   einzige Hash, der `subTab='today'` setzt und damit das Gate öffnet.
+2. `src/views/Session/index.jsx`: Selbst mit korrektem Hash verdrängte
+   `TodayPlan` (gate-unwissend) weiterhin den `SessionEditor`/das Gate,
+   solange ein Klient einen aktiven Coach-Plan-Zyklus hat. Fix: der
+   `isTodayTab`-Zweig prüft jetzt zusätzlich `isSessionGateActive(session.sessionGate)`
+   und lässt `TodayPlan` bei aktivem Gate nicht mehr zum Zug kommen.
+
 ## Multi-Session pro Tag
 
 Pro Tag können mehrere Sessions existieren. `id: null` = Hauptsession, `id: "<timestamp>"` = Suffix-Session. Switcher-Bar zeigt alle Sessions des Tages. "+ Neues Workout" legt eine neue Suffix-Session an. Löschen ist für jede Session der Tagesliste möglich — auch die Hauptsession (seit 2026-07, Klienten-Request).
+
+## Übungs-Trend
+
+Die Übungskarte fragt den Gewichtstrend mit Übungs-ID und Name ab. Lokaler und Firebase-Pfad nutzen dieselbe Berechnung: konkrete IDs müssen übereinstimmen; ein exakter Name dient nur für ältere Einträge ohne ID als Fallback. Verglichen wird das höchste protokollierte Gewicht mit dem Durchschnitt der vorangehenden verfügbaren Messungen.
+
+Die Vorwerte zum Übernehmen folgen derselben Übungs-ID-Regel. Frühere Tage zählen immer; Workouts am selben Tag zählen nur, wenn beide gespeicherten Zeitstempel ihre Reihenfolge gegenüber dem geöffneten Workout belegen.
 
 ## Autosave
 
@@ -122,3 +144,13 @@ Kein Zeit-Debounce mehr (seit 2026-07). `scheduleAutoSave()` setzt nur das `dirt
   ]
 }
 ```
+
+
+## App-Übergänge
+
+Legacy-Routen `#session/timer`, `#session/skills`, `#timer` und `#skills` werden
+im Fitness-Standalone auf `vos-6pack.web.app` bzw. `vos-skills.web.app`
+weitergeleitet. VitalOS fängt dieselben IDs am Shell-Adapter ab und öffnet
+seine lokalen SixPack-/Skills-Wrapper. Das Eintragen abgeschlossener
+App-Workouts ins Fitness-Tageslog bleibt eine Funktion des VitalOS-Shell-
+Adapters.

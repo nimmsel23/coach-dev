@@ -1,0 +1,17 @@
+muscle_id: pectoralis_major
+wger_id: 4
+latin: Musculus pectoralis major
+name_en: Chest
+is_front: true
+origin: 'Pars clavicularis: vordere Fläche des medialen Drittels der Clavicula. Pars
+  sternocostalis: Vorderfläche des Sternums und Knorpel der 2.-6. Rippe. Pars abdominalis:
+  vorderes Blatt der Rektusscheide.'
+insertion: Crista tuberculi majoris des Humerus (Außenlippe des Sulcus intertubercularis).
+innervation: Nervus pectoralis lateralis (C5-C7), Nervus pectoralis medialis (C8-Th1).
+function: Primärer Agonist für die horizontale Adduktion des Arms, d.h. das Drücken
+  der Hantel nach oben und zur Körpermitte, sowie für die Flexion des Arms im Schultergelenk.
+exercises:
+  bench_press:
+    function_in_exercise: Primärer Agonist für die horizontale Adduktion des Arms,
+      d.h. das Drücken der Hantel nach oben und zur Körpermitte, sowie für die Flexion
+      des Arms im Schultergelenk.

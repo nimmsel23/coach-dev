@@ -1,0 +1,138 @@
+exercise_id: cable_row
+description: Expert details for Sitzendes Kabelrudern
+approved_at: '2026-10-17T21:05:50.391299+00:00'
+exercises:
+- exercise_id: cable_row
+  wger_id: 1442
+  id: cable_row
+  name: Sitzendes Kabelrudern
+  display_name: Sitzendes Kabelrudern
+  german: Sitzendes Kabelrudern
+  english: Seated Cable Row
+  category: pull
+  type: compound
+  movements:
+  - horizontal
+  - shoulder_extension
+  - scapular_retraction
+  - elbow_flexion
+  equipment:
+  - cable
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 202b_trapezius_middle
+  - 205_rhomboids
+  secondary_muscles:
+  - 207_teres_major
+  - 303_posterior_deltoid
+  - 402_biceps_brachii
+  - 403_brachialis
+  - 404_brachioradialis
+  stabilizers:
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  - 507_multifidus
+  coaching_notes:
+  - Aufrecht sitzen und den Brustkorb anheben, sodass die Wirbelsaeule waehrend der
+    ganzen Wiederholung neutral bleibt.
+  - 'Ziehe den Griff zuerst ueber die Schulterbewegung ein: Schulterblaetter nach
+    hinten unten fuehren, dann die Ellbogen dicht am Koerper nach hinten ziehen.'
+  - Fuehre den Zug zur unteren Rippenkante oder knapp zum Bauchnabel, ohne die Schultern
+    nach vorn kippen zu lassen.
+  - Halte am Endpunkt kurz Spannung im oberen Ruecken, ohne ins Hohlkreuz zu fallen
+    oder den Brustkorb uebertrieben herauszuschieben.
+  - Lasse das Gewicht kontrolliert nach vorn zurueck, bis die Schulterblaetter sauber
+    protruieren, ohne die Spannung komplett zu verlieren.
+  - Waehle ein Gewicht, bei dem du den Griff mit konstantem Tempo bewegen kannst statt
+    den Oberkoerper nach hinten zu reissen.
+  common_errors:
+  - Den Oberkoerper stark nach hinten lehnen und die Wiederholung mit Schwung statt
+    mit Rueckenmuskulatur einleiten.
+  - Die Schultern am Endpunkt nach oben ziehen statt die Schulterblaetter nach hinten
+    unten zu kontrollieren.
+  - Den Griff zu hoch zur Brust ziehen, wodurch die Ellbogen auffaechern und der Zug
+    unsauber wird.
+  - In der exzentrischen Phase die Spannung verlieren und die Gewichte nach vorn ziehen
+    lassen.
+  - Mit rundem unteren Ruecken sitzen oder aus der Lendenwirbelsaeule in Flexion und
+    Extension arbeiten.
+  - Zu viel Gewicht waehlen, sodass der Bewegungsumfang verkuerzt wird und die Schulterblaetter
+    kaum noch arbeiten.
+  tags:
+  - back
+  - compound
+  - horizontal_pull
+  - cable
+  - strength
+  aliases:
+  - Rudern am Kabelzug
+  - Kabelrudern
+  - Sitzendes Kabelrudern
+  - Cable Row
+  - Seated Cable Row
+  - Seated Cable Row Machine
+  variations: []
+  source: expert
+  search_aliases:
+  - Sitzendes Kabelrudern
+  - Rudern am Kabelzug
+  - Kabelrudern
+  - Seated Cable Row
+  - Cable Row
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '1442'
+      yuhonas:
+      - Upright_Cable_Row
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-17T21:05:50.391299+00:00'
+  approved_at: '2026-10-17T21:05:50.391299+00:00'
+  yuhonas_id: Upright_Cable_Row
+  external_ids:
+    wger:
+    - 1442
+    yuhonas:
+    - Upright_Cable_Row
+  original_description:
+  - 'Beginne,
+
+    indem du den Aufsatz hoch an der Kabelstation positionierst und etwa 1 m vom Aufsatz
+    zurücktrittst. Greife
+
+    den Griff des Kabelzugs mit der linken Hand auf etwa Kopfhöhe, mit leicht gebeugtem
+    Ellbogen. Tritt mit dem linken Fuß zurück.
+
+    Ziehe
+
+    dein Ellbogengelenk zum Oberkörper hin, während du dich leicht drehst, und führe
+    ein
+
+    einarmiges Rudern aus. Aktiviere den Latissimus, während du dich drehst.
+
+    Kehre
+
+    mit Kabelzug und linkem Fuß in die Ausgangsposition zurück und greife den Griff
+    des Kabelzugs mit der
+
+    rechten Hand. Wiederhole diese Bewegung auf der gegenüberliegenden Seite, mit
+    dem rechten Fuß nach hinten gestellt.'
+  instructions:
+  - Grasp a straight bar cable attachment that is attached to a low pulley with a
+    pronated (palms facing your thighs) grip that is slightly less than shoulder width.
+    The bar should be resting on top of your thighs. Your arms should be extended
+    with a slight bend at the elbows and your back should be straight. This will be
+    your starting position.
+  - 'Use your side shoulders to lift the cable bar as you exhale. The bar should be
+    close to the body as you move it up. Continue to lift it until it nearly touches
+    your chin. Tip: Your elbows should drive the motion. As you lift the bar, your
+    elbows should always be higher than your forearms. Also, keep your torso stationary
+    and pause for a second at the top of the movement.'
+  - Lower the bar back down slowly to the starting position. Inhale as you perform
+    this portion of the movement.
+  - Repeat for the recommended amount of repetitions.

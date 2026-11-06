@@ -1,0 +1,163 @@
+exercise_id: clean_snatch
+description: Expert details for Reißen
+approved_at: '2026-10-16T15:49:54.304930+00:00'
+exercises:
+- exercise_id: clean_snatch
+  wger_id: 599
+  id: clean_snatch
+  name: Snatch
+  display_name: Reißen
+  german: Reißen
+  english: Snatch
+  category: pull
+  type: compound
+  movements:
+  - olympic_pull
+  - triple_extension
+  - hip_extension
+  - knee_extension
+  - ankle_plantarflexion
+  - rapid_pull_under
+  - overhead_catch
+  - deep_squat
+  - shoulder_abduction
+  - scapular_upward_rotation
+  - overhead_stability
+  equipment:
+  - barbell
+  primary_muscles:
+  - 601_quadriceps_femoris
+  - 603_gluteus_maximus
+  - 202a_trapezius_upper
+  - 701_gastrocnemius
+  secondary_muscles:
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
+  - 206_erector_spinae
+  - 201_latissimus_dorsi
+  - 301_anterior_deltoid
+  - 302_lateral_deltoid
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  stabilizers:
+  - 304_rotator_cuff
+  - 105_serratus_anterior
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 504_transverse_abdominis
+  - 507_multifidus
+  - 608_gluteus_medius
+  - 609_gluteus_minimus
+  coaching_notes:
+  - 'Starte mit dem ganzen Fuß im Druck und halte den Oberkörper über dem ersten Zug
+    ruhig: Die Hüfte und Schultern steigen zunächst gemeinsam, damit der Rückenwinkel
+    bis knapp über das Knie stabil bleibt.'
+  - Führe die Stange im ersten und zweiten Zug eng am Körper nach oben. Aktive Lat-Spannung
+    hält die Bahn vertikal und verhindert, dass die Hantel nach vorn wegschwingt.
+  - Beschleunige nicht zu früh mit den Armen. Erst wenn Hüfte, Knie und Sprunggelenk
+    explosiv gestreckt sind, folgt der aktive Zug nach oben und unmittelbar danach
+    das schnelle Untertauchen unter die Stange.
+  - Denke beim Umsetzen unter die Hantel nicht an 'hochziehen', sondern an 'schnell
+    nach unten'. Der erfolgreiche Snatch wird vor allem durch präzises Timing und
+    aggressives Unterziehen entschieden, nicht durch Armkraft.
+  - Fange die Hantel mit aktivem Lockout, nach oben rotierenden Schulterblättern und
+    stabilem Rumpf. Die Achseln zeigen leicht nach vorn, damit Schultergürtel und
+    Rotatorenmanschette die Überkopfposition sicher verriegeln.
+  - Im Catch sofort Spannung in Rumpf und Hüfte halten und die Tiefe kontrolliert
+    annehmen. Eine stabile tiefe Überkopfkniebeuge ist Teil der Zielposition, nicht
+    nur das Ende des Abfangens.
+  - Stehe aus der tiefen Position erst auf, wenn die Hantel vollständig kontrolliert
+    über dem Mittelfuß balanciert ist. Priorität hat Stabilität über der Körpermitte,
+    nicht das übereilte Aufrichten.
+  common_errors:
+  - Die Hüfte schießt direkt vom Boden nach oben, während die Schultern zurückbleiben.
+    Dadurch verlierst du den Beindruck im ersten Zug und die Stange driftet früh nach
+    vorn.
+  - Zu frühes Armziehen vor der vollständigen Beinstreckung nimmt der Bewegung Explosivität.
+    Der Snatch wird dann ein Armzug statt einer kraftvollen Ganzkörperstreckung.
+  - Die Stange wird im zweiten Zug vom Körper weggeschlagen. Das verlängert den Hebel,
+    verschlechtert den Lockout über Kopf und macht den Catch instabil.
+  - Es wird nach oben gesprungen, aber nicht aktiv unter die Hantel gezogen. Das Resultat
+    ist ein zu hoher Catch, fehlende Tiefe und häufig ein Nachdrücken oder Verlieren
+    nach vorn.
+  - 'Im Catch fehlt aktiver Schultergürtel-Einsatz: Ellbogen bleiben weich, die Schulterblätter
+    rotieren nicht sauber nach oben und die Hantel sinkt hinter oder vor die stabile
+    Linie.'
+  - Das Gewicht verlagert sich im Empfang auf die Zehen oder Fersen statt über den
+    Mittelfuß. Dadurch wird die Überkopfkniebeuge wackelig und die Hantelbahn schwer
+    kontrollierbar.
+  - Der Blick geht zu früh hoch oder der Brustkorb kollabiert in der tiefen Position.
+    Beides verschlechtert die Rumpfspannung und destabilisiert die Hantel über Kopf.
+  tags:
+  - olympic_lift
+  - explosive
+  - power
+  - full_body
+  - strength
+  - weightlifting
+  - posterior_chain
+  - legs
+  - olympic_pull
+  - unreviewed
+  aliases:
+  - Olympic Snatch
+  - Full Snatch
+  - Squat Snatch
+  - Reissen
+  variations: []
+  source: expert
+  search_aliases:
+  - Reißen
+  - Reissen
+  - Snatch
+  - Olympic Snatch
+  - Full Snatch
+  - Squat Snatch
+  - Clean Snatch
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '599'
+      yuhonas:
+      - Snatch
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-16T15:49:54.304930+00:00'
+  approved_at: '2026-10-16T15:49:54.304930+00:00'
+  yuhonas_id: Snatch
+  external_ids:
+    wger:
+    - 599
+    yuhonas:
+    - Snatch
+  original_description:
+  - Stelle dich mit hüftbreitem Stand und den Schienbeinen an der Stange auf. Greife
+    die Stange im doppelten Schulterbreiten-Abstand und drücke, während du den unteren
+    Rücken gerade hältst, die Fersen in den Boden, um die Stange anzuheben. Wenn sie
+    über deinen Knien ist, streckst du explosiv die Hüfte und ziehst die Schultern
+    hoch. Lass den Schwung das Gewicht über den Kopf tragen.
+  instructions:
+  - Place your feet at a shoulder width stance with the barbell resting right above
+    the connection between the toes and the rest of the foot.
+  - With a palms facing down grip, bend at the knees and keeping the back flat grab
+    the bar using a wider than shoulder width grip. Bring the hips down and make sure
+    that your body drops as if you were going to sit on a chair. This will be your
+    starting position.
+  - Start pushing the floor as if it were a moving platform with your feet and simultaneously
+    start lifting the barbell keeping it close to your legs.
+  - As the bar reaches the middle of your thighs, push the floor with your legs and
+    lift your body to a complete extension in an explosive motion.
+  - Lift your shoulders back in a shrugging movement as you bring the bar up while
+    lifting your elbows out to the side and keeping them above the bar for as long
+    as possible.
+  - Now in a very quick but powerful motion, you have to get your body under the barbell
+    when it has reached a high enough point where it can be controlled and drop while
+    locking your arms and holding the barbell overhead as you assume a squat position.
+  - Finalize the movement by rising up out of the squat position to finish the lift.
+    At the end of the lift both feet should be on line and the arms fully extended
+    holding the barbell overhead.

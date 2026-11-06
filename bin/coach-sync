@@ -1,0 +1,3 @@
+#!/bin/sh
+# coach-sync — Coach-Seite des Firestore-Syncs (siehe fitness/coach/sync.py). Läuft in der fitness-agent uv-venv.
+exec "$HOME/.local/share/uv/tools/fitness-agent/bin/python3" -m fitness.coach.sync "$@"

@@ -4,7 +4,8 @@ Kontext: `../docs/CLAUDE.md` (Backend-Server-Rollen-Übersicht),
 `../fitness/CLAUDE.md` (Python-Prod-Backend, Port 9150).
 
 Aktueller Stand: API-Autodoc- und Zod-Validierungs-Schicht, eingebaut am
-2026-08-31 in `server.mjs` (Node/Hono, Port 9100).
+2026-08-31 und seit 2026-09-24 nach `server/routes/` aufgeteilt
+(Node/Hono, Port 9100).
 
 ---
 
@@ -43,7 +44,7 @@ mit dieser Methode und diesen Pfad-Parametern".
 Drop-in-Ersatz, alle bestehenden `app.get(...)`/`app.post(...)`-Aufrufe
 konnten schrittweise auf `app.openapi(createRoute({...}), handler)`
 gehoben werden. Stand 2026-08-31 laufen jetzt praktisch alle echten
-API-Routen in `server.mjs` über Zod; Plain-Hono geblieben sind nur die
+API-Routen in `server/routes/` über Zod; Plain-Hono geblieben sind nur die
 Sonderfälle `GET /openapi.json`, `GET /docs` und der SPA-Fallback
 `GET *`.
 
@@ -63,10 +64,10 @@ Die benannten Kernrouten bleiben als explizite Einzel-Schemas bestehen:
 
 | Route | Schema-Datei-Ort | Besonderheit |
 |-------|-------------------|--------------|
-| `GET /exercises/search` | `server.mjs`, `exerciseSearchRoute` | `limit` via `z.coerce.number()` (Query-Params kommen immer als String an) |
-| `GET /fitness/plan` | `server.mjs`, `fitnessPlanRoute` | Alle vier Query-Parameter optional mit `.default("")` |
-| `POST /session` | `server.mjs`, `sessionSaveRoute` | Body-Schema `.loose()` (siehe unten) |
-| übrige JSON-Routen | `server.mjs`, `defineJsonRoute()` | gemeinsamer Helfer für Query-/Param-/Body-Schemas und Standard-Responses |
+| `GET /exercises/search` | `server/routes/exercises.mjs`, `exerciseSearchRoute` | `limit` via `z.coerce.number()` (Query-Params kommen immer als String an) |
+| `GET /fitness/plan` | `server/routes/fitness-misc.mjs`, `fitnessPlanRoute` | Alle vier Query-Parameter optional mit `.default("")` |
+| `POST /session` | `server/routes/session.mjs`, `sessionSaveRoute` | Body-Schema `.loose()` (siehe unten) |
+| übrige JSON-Routen | `server/routes/*.mjs`, `defineJsonRoute()` aus `server/lib/routes.mjs` | gemeinsamer Helfer für Query-/Param-/Body-Schemas und Standard-Responses |
 
 Diese Routen bekommen dadurch **echte Request-Validierung**, nicht nur
 Doku: ein ungültiger Wert (z. B. `limit=abc`) führt jetzt zu `400` mit

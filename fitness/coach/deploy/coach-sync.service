@@ -1,0 +1,21 @@
+# coach-sync — Coach-Seite des Firestore-Syncs (coachCommands/coachInbox, Inbox-/KB-Listener, Enrichment).
+# Ersetzt die Coach-Teile des :9150-Lifespans (fitness-api.service). Läuft ohne API-Server.
+# Installation: cp fitness/coach/deploy/coach-sync.service ~/.config/systemd/user/ && systemctl --user daemon-reload
+#               systemctl --user enable --now coach-sync.service
+# Doku: fitness/coach/sync.py (Docstring), docs/COACH_APP.md
+[Unit]
+Description=Coach Sync (Coach-App-Befehle, Inbox-/KB-Listener, Gemini-Enrichment) — ohne API-Server
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/fitness-dev
+Environment=PYTHONUNBUFFERED=1
+ExecStart=%h/.local/share/uv/tools/fitness-agent/bin/python3 -m fitness.coach.sync run
+Restart=on-failure
+RestartSec=10
+KillSignal=SIGTERM
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target

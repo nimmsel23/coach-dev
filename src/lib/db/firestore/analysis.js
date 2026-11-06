@@ -3,12 +3,23 @@
  */
 
 import {
-  collection, doc, setDoc, getDoc, getDocs,
-  query, where, serverTimestamp,
+  collection,
+  doc,
+  query,
+  where,
+  serverTimestamp,
 } from "firebase/firestore";
+import { setDoc, getDoc, getDocs } from "./offline.js";
 
 import { db } from "../../../firebase.js";
-import { num, todayISO } from "../shared/utils.js";
+import { todayISO } from "../shared/utils.js";
+import {
+  addDaysISO, toISODate, rollingDatesISO, isoWeekDatesForSelector, isoWeekSelectorForDate, sessionsInRollingWindow,
+} from "../shared/dates.js";
+import { buildKbMap, findKbExercise, augmentKbMapWithMirror } from "../shared/kbLookup.js";
+import { buildReportRecoveryIndex, reportRecoveryHours } from "../shared/reportRecovery.js";
+import { calculateProgressTrend } from "../shared/progressTrend.js";
+import { DAILY_WINDOW_DAYS, sumDailyScores, dailyScoresFromSessions } from "../shared/coverageWindow.js";
 import {
   ACTIVITY_MUSCLE_MAPPING, muscleToGroupIds,
   getMuscleGroupsForGaps, buildMuscleBalanceInsights,
@@ -25,12 +36,14 @@ import {
   getMuscleCoverage as getLocalMuscleCoverage,
 } from "../local/analysis.js";
 import { getProgressTrend as getLocalProgressTrend } from "../local/sessions.js";
-import { computeMuscleScores } from "../../superkompensation.js";
+import { computeMuscleScores, RECOVERY_ANALYSIS_VERSION } from "../../superkompensation.js";
 import { muscleToRegion } from "../shared/muscle.js";
+import { ACTIVITY_WEIGHT, GAP_THRESHOLD, effortFactor, blockComplexMuscles } from "../shared/scoring.js";
 
 export { ACTIVITY_MUSCLE_MAPPING, muscleToGroupIds };
 
 const pendingWeeklyRefreshes = new Map();
+const WEEKLY_REPORT_VERSION = 2;
 
 const ROLE_W = { primary: 1, secondary: 0.5, stabilizer: 0.2 };
 
@@ -50,20 +63,25 @@ const ROLE_W = { primary: 1, secondary: 0.5, stabilizer: 0.2 };
 // funktionsfähig, nur ohne Fallback).
 function normalizedSessionHits(session, kbMap = null) {
   const rows = [];
+  const eff = effortFactor(session);
   for (const ex of (Array.isArray(session.exercises) ? session.exercises : [])) {
     const exName = ex.name || ex.exercise_id || "";
-    const kbEx = kbMap?.get(exName.toLowerCase());
+    const kbEx = findKbExercise(kbMap, ex);
     const primary = (ex.primaryMuscles?.length ? ex.primaryMuscles : null) || kbEx?.primary_muscles || kbEx?.primaryMuscles || [];
     const secondary = (ex.secondaryMuscles?.length ? ex.secondaryMuscles : null) || kbEx?.secondary_muscles || kbEx?.secondaryMuscles || [];
     const stabilizers = (ex.stabilizers?.length ? ex.stabilizers : null) || kbEx?.stabilizers || [];
-    primary.forEach((m) => rows.push([m, exName, ROLE_W.primary]));
-    secondary.forEach((m) => rows.push([m, exName, ROLE_W.secondary]));
-    stabilizers.forEach((m) => rows.push([m, exName, ROLE_W.stabilizer]));
+    primary.forEach((m) => rows.push([m, exName, ROLE_W.primary * eff]));
+    secondary.forEach((m) => rows.push([m, exName, ROLE_W.secondary * eff]));
+    stabilizers.forEach((m) => rows.push([m, exName, ROLE_W.stabilizer * eff]));
   }
   const actPrimary = new Set(session.activity?.primaryMuscles || []);
   (session.activity?.muscles || []).forEach((m) =>
-    rows.push([m, null, actPrimary.has(m) ? ROLE_W.primary : ROLE_W.secondary])
+    rows.push([m, null, (actPrimary.has(m) ? ROLE_W.primary : ROLE_W.secondary) * ACTIVITY_WEIGHT])
   );
+  // Nur Split-Chip, keine Übungen: ganzer Komplex pauschal als primary.
+  if (!(Array.isArray(session.exercises) && session.exercises.length)) {
+    blockComplexMuscles(session.block).forEach((m) => rows.push([m, null, ROLE_W.primary * eff]));
+  }
   const best = new Map();
   for (const [m, exName, w] of rows) {
     const cur = best.get(m);
@@ -73,24 +91,66 @@ function normalizedSessionHits(session, kbMap = null) {
 }
 
 // ── Analytics cache doc ───────────────────────────────────────────────────────
+//
+// `analytics/dashboard` speichert PRO KALENDERTAG die Region-Scores
+// (`daily_region_scores`), nicht nur fertige Fenster-Summen. Ein eingefrorenes
+// "rolling_7_days" zeigte Tage nach dem letzten Speichern weiter Sessions, die
+// längst aus dem Fenster gefallen waren (auch für die Erinnerungs-Pushes der
+// Cloud Function). Aus den Tageswerten lässt sich jedes Fenster zu jedem
+// Zeitpunkt korrekt aufsummieren. Die rolling_*-Felder bleiben als
+// Kompatibilität für ältere Leser erhalten, werden aber nur noch genutzt,
+// wenn sie heute geschrieben wurden.
+
+// Sessions + KB-Lookup für ein Datumsfenster (eine Range-Query).
+async function loadCoverageInputs(startStr, endStr) {
+  const [q, kbExercises] = await Promise.all([
+    getDocs(query(
+      collection(db, "fitness", getUid(), "sessions"),
+      where("date", ">=", startStr),
+      where("date", "<=", endStr),
+    )),
+    getAllExercises(),
+  ]);
+  const sessions = q.docs.map((d) => d.data());
+  const kbMap = buildKbMap(kbExercises);
+  await augmentKbMapWithMirror(kbMap, sessions);
+  return { sessions, kbMap };
+}
+
+function dailyRegionScores(sessions, kbMap) {
+  return dailyScoresFromSessions(
+    sessions,
+    (session) => normalizedSessionHits(session, kbMap),
+    (muscle, exName) => muscleToGroupIds(muscle, exName),
+  );
+}
+
+async function loadDailyRegionScores(days = DAILY_WINDOW_DAYS) {
+  const dates = rollingDatesISO(days);
+  const { sessions, kbMap } = await loadCoverageInputs(dates[0], dates[dates.length - 1]);
+  return dailyRegionScores(sessions, kbMap);
+}
 
 export async function updateAnalyticsDoc() {
   if (!hasAuthSession()) return null;
   try {
-    const [s7, s14, s21, r7, r14, r28] = await Promise.all([
-      getMuscleCoverage(7),
-      getMuscleCoverage(14),
-      getMuscleCoverage(21),
+    const [daily, r7, r14, r28] = await Promise.all([
+      loadDailyRegionScores(DAILY_WINDOW_DAYS),
       buildRecoveryAnalyticsData(7),
       buildRecoveryAnalyticsData(14),
       buildRecoveryAnalyticsData(28),
     ]);
+    const now = new Date().toISOString();
+    const rolling = (n) => ({ body_region_scores: sumDailyScores(daily, rollingDatesISO(n)), updated_at: now });
     await setDoc(
       doc(db, "fitness", getUid(), "analytics", "dashboard"),
       {
-        rolling_7_days:  { body_region_scores: s7,  updated_at: new Date().toISOString() },
-        rolling_14_days: { body_region_scores: s14, updated_at: new Date().toISOString() },
-        rolling_21_days: { body_region_scores: s21, updated_at: new Date().toISOString() },
+        daily_region_scores: daily,
+        daily_window_days: DAILY_WINDOW_DAYS,
+        daily_updated_at: now,
+        rolling_7_days:  rolling(7),
+        rolling_14_days: rolling(14),
+        rolling_21_days: rolling(21),
         recovery_7_days: r7,
         recovery_14_days: r14,
         recovery_28_days: r28,
@@ -101,20 +161,51 @@ export async function updateAnalyticsDoc() {
   }
 }
 
+// Wurde der Cache (ISO-Zeitstempel) heute geschrieben? Für alles, was NICHT aus
+// Tageswerten abgeleitet werden kann (Recovery-/Legacy-Rolling-Felder).
+function writtenToday(isoTimestamp) {
+  const t = Date.parse(isoTimestamp || "");
+  return Number.isFinite(t) && toISODate(new Date(t)) === todayISO();
+}
+
+// Einmal pro Tag und Nutzer: fehlt der Tageswerte-Cache (Konto vor diesem
+// Umbau oder Cache nie geschrieben), nachziehen — sonst bliebe die Cloud
+// Function auf dem alten, eingefrorenen Stand, bis der Nutzer wieder speichert.
+const ensuredDailyCache = new Set();
+async function ensureDailyCache() {
+  if (!hasAuthSession()) return;
+  const key = `${getUid()}:${todayISO()}`;
+  if (ensuredDailyCache.has(key)) return;
+  ensuredDailyCache.add(key);
+  try {
+    const snap = await getDoc(doc(db, "fitness", getUid(), "analytics", "dashboard"));
+    if (!snap.exists() || !snap.data()?.daily_region_scores) await updateAnalyticsDoc();
+  } catch (e) {
+    ensuredDailyCache.delete(key);
+    console.warn("analytics cache check failed", e);
+  }
+}
+
 export async function getDashboardAnalytics(days = 21) {
   if (!hasAuthSession()) return getLocalDashboardAnalytics(days);
   try {
     const snap = await getDoc(doc(db, "fitness", getUid(), "analytics", "dashboard"));
     if (snap.exists()) {
       const data = snap.data();
-      if (days <= 7  && data.rolling_7_days)  return data.rolling_7_days;
-      if (days <= 14 && data.rolling_14_days) return data.rolling_14_days;
-      if (data.rolling_21_days) return data.rolling_21_days;
+      if (data.daily_region_scores && days <= DAILY_WINDOW_DAYS) {
+        return {
+          body_region_scores: sumDailyScores(data.daily_region_scores, rollingDatesISO(days)),
+          updated_at: data.daily_updated_at || null,
+        };
+      }
+      // Legacy-Felder nur bei exakt passender Fenstergröße UND heute geschrieben.
+      const legacy = { 7: data.rolling_7_days, 14: data.rolling_14_days, 21: data.rolling_21_days }[days];
+      if (legacy && writtenToday(legacy.updated_at)) return legacy;
     }
   } catch (e) {
     console.error("Failed to fetch dashboard analytics", e);
   }
-  // Fallback: compute locally from sessions
+  // Fallback: live aus den Sessions rechnen
   const scores = await getMuscleCoverage(days);
   return { body_region_scores: scores };
 }
@@ -123,34 +214,13 @@ export async function getDashboardAnalytics(days = 21) {
 
 export async function getMuscleCoverage(days = 7) {
   if (!hasAuthSession()) return getLocalMuscleCoverage(days);
-  const today = new Date();
-  const startDate = new Date();
-  startDate.setDate(today.getDate() - (days - 1));
-  const startStr = startDate.toISOString().slice(0, 10);
-  const todayStr = today.toISOString().slice(0, 10);
-
-  const [q, kbExercises] = await Promise.all([
-    getDocs(query(
-      collection(db, "fitness", getUid(), "sessions"),
-      where("date", ">=", startStr),
-      where("date", "<=", todayStr),
-    )),
-    getAllExercises(),
-  ]);
-  const kbMap = new Map();
-  kbExercises.forEach((ex) => kbMap.set((ex.display_name || ex.name || "").toLowerCase(), ex));
-
-  const hits = {};
-  for (const d of q.docs) {
-    const session = d.data();
-    for (const [m, exName, w] of normalizedSessionHits(session, kbMap)) {
-      muscleToGroupIds(m, exName).forEach((g) => { hits[g] = (hits[g] || 0) + w; });
-    }
-  }
-  return hits;
+  const dates = rollingDatesISO(days);
+  const { sessions, kbMap } = await loadCoverageInputs(dates[0], dates[dates.length - 1]);
+  ensureDailyCache();
+  return sumDailyScores(dailyRegionScores(sessions, kbMap), dates);
 }
 
-export async function getCoverageGaps(days = 7, threshold = 1.0) {
+export async function getCoverageGaps(days = 7, threshold = GAP_THRESHOLD) {
   if (!hasAuthSession()) return getLocalCoverageGaps(days, threshold);
   const hits = await getMuscleCoverage(days);
   return getMuscleGroupsForGaps()
@@ -196,17 +266,14 @@ async function buildRecoveryAnalyticsData(days = 28) {
       exercises: Array.isArray(session.exercises) ? session.exercises : [],
     }))
     : [];
-  const kbMap = new Map();
-  (Array.isArray(kbExercises) ? kbExercises : []).forEach((exercise) => {
-    kbMap.set((exercise.display_name || exercise.name || "").toLowerCase(), exercise);
-  });
+  const kbMap = buildKbMap(kbExercises);
+  await augmentKbMapWithMirror(kbMap, safeSessions);
 
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - days);
-  const cutoffStr = cutoff.toISOString().slice(0, 10);
-  const sessionsInRange = safeSessions.filter((session) => session.date && session.date >= cutoffStr);
+  const cutoffStr = addDaysISO(todayISO(), -(days - 1));
+  const sessionsInRange = sessionsInRollingWindow(safeSessions, days);
   return {
     ok: true,
+    analysis_version: RECOVERY_ANALYSIS_VERSION,
     days,
     cutoff_date: cutoffStr,
     updated_at: new Date().toISOString(),
@@ -216,59 +283,46 @@ async function buildRecoveryAnalyticsData(days = 28) {
   };
 }
 
+// Recovery-Werte hängen an "jetzt" (ACWR, Tage seit letztem Reiz) und lassen
+// sich nicht aus Tageswerten ableiten — der Cache gilt deshalb nur am Tag seines
+// Schreibens. Danach live rechnen; kurz gememoized, damit mehrere Views beim
+// Öffnen nicht jeweils KB + Historie neu laden.
+const RECOVERY_LIVE_TTL_MS = 2 * 60 * 1000;
+const recoveryLive = new Map();
+
 export async function getRecoveryAnalytics(days = 28) {
   if (!hasAuthSession()) return getLocalRecoveryAnalytics(days);
   try {
     const snap = await getDoc(doc(db, "fitness", getUid(), "analytics", "dashboard"));
     if (snap.exists()) {
       const data = snap.data() || {};
-      const field = days <= 7 ? "recovery_7_days" : days <= 14 ? "recovery_14_days" : "recovery_28_days";
-      if (data[field]) return data[field];
+      const field = { 7: "recovery_7_days", 14: "recovery_14_days", 28: "recovery_28_days" }[days];
+      const cached = field && data[field];
+      if (cached?.analysis_version === RECOVERY_ANALYSIS_VERSION && cached.days === days && writtenToday(cached.updated_at)) return cached;
     }
   } catch (e) {
     console.warn("Failed to fetch cached recovery analytics", e);
   }
-  return buildRecoveryAnalyticsData(days);
+  const key = `${getUid()}:${days}:${todayISO()}`;
+  const hit = recoveryLive.get(key);
+  if (hit && Date.now() - hit.at < RECOVERY_LIVE_TTL_MS) return hit.promise;
+  const promise = buildRecoveryAnalyticsData(days);
+  recoveryLive.set(key, { at: Date.now(), promise });
+  promise.catch(() => recoveryLive.delete(key));
+  return promise;
 }
 
 // ── Weekly report ─────────────────────────────────────────────────────────────
 
+// "current" = die letzten 7 Tage bis heute (rollend, Firebase-Verhalten);
+// "YYYY-Www" = die ISO-Kalenderwoche Mo–So.
 function getWeekBounds(selector = "current") {
-  let d = new Date();
-  if (selector === "current") {
-    const dates = [];
-    for (let i = 0; i < 7; i++) {
-      const x = new Date();
-      x.setDate(d.getDate() - (6 - i));
-      dates.push(x.toISOString().slice(0, 10));
-    }
-    return dates;
-  }
-  const [year, week] = selector.split("-W");
-  d = new Date(Number(year), 0, 1 + (parseInt(week) - 1) * 7);
-  const off = (d.getDay() + 6) % 7;
-  const start = new Date(d);
-  start.setDate(d.getDate() - off);
-  const dates = [];
-  for (let i = 0; i < 7; i++) {
-    const x = new Date(start);
-    x.setDate(start.getDate() + i);
-    dates.push(x.toISOString().slice(0, 10));
-  }
-  return dates;
+  if (selector === "current") return rollingDatesISO(7);
+  return isoWeekDatesForSelector(selector);
 }
 
 function getWeekSelectorFromDate(date = todayISO()) {
-  const source = new Date(`${date}T12:00:00`);
-  const day = (source.getDay() + 6) % 7;
-  source.setDate(source.getDate() - day + 3);
-  const isoYear = source.getFullYear();
-  const firstThursday = new Date(isoYear, 0, 4);
-  const firstDay = (firstThursday.getDay() + 6) % 7;
-  firstThursday.setDate(firstThursday.getDate() - firstDay + 3);
-  const diffDays = Math.round((source - firstThursday) / 86400000);
-  const isoWeek = 1 + Math.floor(diffDays / 7);
-  return `${isoYear}-W${String(isoWeek).padStart(2, "0")}`;
+  return isoWeekSelectorForDate(date);
 }
 
 function resolveWeekSelector(selector = "current") {
@@ -279,38 +333,47 @@ function weeklyReportDocRef(selector = "current") {
   return doc(db, "fitness", getUid(), "analytics", `weekly_${resolveWeekSelector(selector)}`);
 }
 
+// Sessions je Tag aus dem bereits geladenen Verlauf (getSessionHistory(120))
+// statt einer Query pro Tag (Wochenbericht 7×, Monatsbericht 28×). Nur Tage
+// älter als das Verlaufsfenster (alte Wochen-Selektoren) fragen weiter einzeln ab.
+const HISTORY_WINDOW_DAYS = 120;
+async function sessionsByDateFromHistory(history, dates) {
+  const from = addDaysISO(todayISO(), -(HISTORY_WINDOW_DAYS - 2));
+  const byDate = new Map();
+  for (const s of history) {
+    if (!s?.date) continue;
+    if (!byDate.has(s.date)) byDate.set(s.date, []);
+    byDate.get(s.date).push(s);
+  }
+  const out = new Map();
+  for (const date of dates) {
+    out.set(date, date >= from
+      ? (byDate.get(date) || []).slice().sort((a, b) => String(a.saved_at).localeCompare(String(b.saved_at)))
+      : await listSessionsForDate(date));
+  }
+  return out;
+}
+
 async function buildWeeklyReportData(selector = "current") {
   const dates = getWeekBounds(selector);
   const [kbExercises, history] = await Promise.all([
     getAllExercises(),
     getSessionHistory(120),
   ]);
-  const kbMap = new Map();
-  kbExercises.forEach((ex) => kbMap.set((ex.display_name || ex.name || "").toLowerCase(), ex));
+  const kbMap = buildKbMap(kbExercises);
 
   const safeHistory = Array.isArray(history)
     ? history.filter(Boolean).map((s) => ({ ...s, exercises: Array.isArray(s.exercises) ? s.exercises : [] }))
     : [];
+  await augmentKbMapWithMirror(kbMap, safeHistory);
 
-  const historyWithMuscles = safeHistory.map((s) => {
-    const groups = new Set();
-    for (const ex of (s.exercises || [])) {
-      const primary = ex.primaryMuscles || [];
-      const secondary = ex.secondaryMuscles || [];
-      const exName = ex.name || ex.exercise_id || "";
-      let hasMapped = false;
-      [...primary, ...secondary].forEach((m) => {
-        muscleToGroupIds(m, exName).forEach((gid) => { groups.add(gid); hasMapped = true; });
-      });
-      if (!hasMapped && exName) muscleToGroupIds("", exName).forEach((gid) => groups.add(gid));
+  const historyWithMuscles = buildReportRecoveryIndex(safeHistory, (s) => {
+    const hits = normalizedSessionHits(s, kbMap);
+    if (!s.activity?.muscles?.length) {
+      for (const muscle of ACTIVITY_MUSCLE_MAPPING[s.activity?.type]?.muscles || []) hits.push([muscle, null, ACTIVITY_WEIGHT]);
     }
-    if (s.activity && ACTIVITY_MUSCLE_MAPPING[s.activity.type]) {
-      ACTIVITY_MUSCLE_MAPPING[s.activity.type].muscles.forEach((m) => {
-        muscleToGroupIds(m).forEach((gid) => groups.add(gid));
-      });
-    }
-    return { date: s.date, groups: [...groups] };
-  }).sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    return hits;
+  }, muscleToGroupIds);
 
   const sessions = [];
   let entriesCount = 0;
@@ -335,15 +398,19 @@ async function buildWeeklyReportData(selector = "current") {
   // Trainingstage (inkl. aller Muskelgruppen) aus dem Weekly Report verschwanden.
   // listSessionsForDate() nutzt eine Query auf das "date"-Feld und findet alle
   // Sessions eines Tages, unabhängig von der Dokument-ID.
+  const weekSessionsByDate = await sessionsByDateFromHistory(safeHistory, dates);
   for (const date of dates) {
-    const daySessions = await listSessionsForDate(date);
+    const daySessions = weekSessionsByDate.get(date) || [];
 
     for (const sess of daySessions) {
     let hasDoneExercises = false;
     const sessGroupsCount = {};
 
     for (const ex of (Array.isArray(sess.exercises) ? sess.exercises : [])) {
-      const primary = ex.primaryMuscles || [], secondary = ex.secondaryMuscles || [], stabilizers = ex.stabilizers || [];
+      const kbEx = findKbExercise(kbMap, ex);
+      const primary = (ex.primaryMuscles?.length ? ex.primaryMuscles : null) || kbEx?.primary_muscles || kbEx?.primaryMuscles || [];
+      const secondary = (ex.secondaryMuscles?.length ? ex.secondaryMuscles : null) || kbEx?.secondary_muscles || kbEx?.secondaryMuscles || [];
+      const stabilizers = (ex.stabilizers?.length ? ex.stabilizers : null) || kbEx?.stabilizers || [];
       const exName = ex.name || ex.exercise_id || "";
       hasDoneExercises = true; entriesCount++;
       allExercises.push({ name: exName, primaryMuscles: primary });
@@ -352,16 +419,16 @@ async function buildWeeklyReportData(selector = "current") {
         muscleToGroupIds(m, exName).forEach((gid) => { sessGroupsCount[gid] = (sessGroupsCount[gid] || 0) + 1; hasMapped = true; });
       });
       for (const m of primary) {
-        muscleToGroupIds(m, exName).forEach((gid) => { muscleScores[m] = (muscleScores[m] || 0) + 1; bodyRegionScores[gid] = (bodyRegionScores[gid] || 0) + 1; hasMapped = true; });
+        muscleToGroupIds(m, exName).forEach((gid) => { muscleScores[m] = (muscleScores[m] || 0) + 1; hasMapped = true; });
       }
       for (const m of secondary) {
-        muscleToGroupIds(m, exName).forEach((gid) => { bodyRegionScores[gid] = (bodyRegionScores[gid] || 0) + 0.7; hasMapped = true; });
+        muscleToGroupIds(m, exName).forEach(() => { hasMapped = true; });
       }
       for (const m of stabilizers) {
-        muscleToGroupIds(m, exName).forEach((gid) => { bodyRegionScores[gid] = (bodyRegionScores[gid] || 0) + 0.4; hasMapped = true; });
+        muscleToGroupIds(m, exName).forEach(() => { hasMapped = true; });
       }
       if (!hasMapped && exName) {
-        muscleToGroupIds("", exName).forEach((gid) => { sessGroupsCount[gid] = (sessGroupsCount[gid] || 0) + 1; bodyRegionScores[gid] = (bodyRegionScores[gid] || 0) + 1; });
+        muscleToGroupIds("", exName).forEach((gid) => { sessGroupsCount[gid] = (sessGroupsCount[gid] || 0) + 1; });
       }
     }
 
@@ -373,31 +440,36 @@ async function buildWeeklyReportData(selector = "current") {
         ACTIVITY_MUSCLE_MAPPING[sess.activity.type].muscles.forEach((m) => {
           muscleToGroupIds(m).forEach((gid) => {
             sessGroupsCount[gid] = (sessGroupsCount[gid] || 0) + 1;
-            bodyRegionScores[gid] = (bodyRegionScores[gid] || 0) + 1;
           });
         });
       }
-      const muscleRecovery = {};
-      for (const gid of Object.keys(sessGroupsCount)) {
-        const lastSessionWithGroup = historyWithMuscles.find((h) => h.date < date && h.groups.includes(gid));
-        if (lastSessionWithGroup) {
-          const d1 = new Date(date), d2 = new Date(lastSessionWithGroup.date);
-          muscleRecovery[gid] = Math.round((d1 - d2) / (1000 * 60 * 60));
-        }
+      // Chip-only: Komplex zählt auch für die Regeneration (muscle_recovery) der Folge-Sessions.
+      if (!(Array.isArray(sess.exercises) && sess.exercises.length)) {
+        blockComplexMuscles(sess.block).forEach((m) => muscleToGroupIds(m).forEach((gid) => { sessGroupsCount[gid] = (sessGroupsCount[gid] || 0) + 1; }));
       }
+      // Score einheitlich über normalizedSessionHits (RPE-skaliert, Cardio leichter,
+      // Split-Chip ohne Übungen = ganzer Komplex), wie Monats-/Rolling-Auswertung.
+      for (const [m, exName, w] of normalizedSessionHits(sess, kbMap)) {
+        muscleToGroupIds(m, exName).forEach((gid) => {
+          bodyRegionScores[gid] = (bodyRegionScores[gid] || 0) + w;
+          sessGroupsCount[gid] = (sessGroupsCount[gid] || 0) + w;
+        });
+      }
+      const muscleRecovery = reportRecoveryHours(date, Object.keys(sessGroupsCount), historyWithMuscles);
       sessions.push({ ...sess, block: autoSplit, exercise_count: sess.exercises?.length || 0, muscle_recovery: muscleRecovery });
     }
     }
   }
 
   const allGroups = getMuscleGroupsForGaps().map((g) => g.id);
-  const gaps = allGroups.filter((g) => (bodyRegionScores[g] || 0) < 1);
+  const gaps = allGroups.filter((g) => (bodyRegionScores[g] || 0) < GAP_THRESHOLD);
 
   const efforts = sessions.map((s) => s.effort).filter((e) => typeof e === "number");
   const avgEffort = efforts.length > 0 ? Math.round((efforts.reduce((a, b) => a + b, 0) / efforts.length) * 10) / 10 : null;
 
   return {
     ok: true,
+    report_version: WEEKLY_REPORT_VERSION,
     week: resolveWeekSelector(selector),
     requested_week: selector,
     week_dates: dates,
@@ -468,25 +540,17 @@ export async function getWeeklyReport(selector = "current") {
 
   try {
     const snap = await getDoc(weeklyReportDocRef(selector));
-    if (snap.exists()) return snap.data();
+    if (snap.exists()) {
+      const cached = snap.data();
+      // "current" ist ein rollendes 7-Tage-Fenster: der Cache stammt vom Tag
+      // des letzten Speicherns und wäre am nächsten Tag um Tage verschoben.
+      if (cached?.report_version === WEEKLY_REPORT_VERSION && cached.requested_week === selector && (selector !== "current" || writtenToday(cached?.updated_at))) return cached;
+    }
   } catch (e) {
     console.warn("Failed to fetch cached weekly report", e);
   }
 
   return updateWeeklyReportDoc(selector);
-}
-
-// Letzte `days` Kalendertage (heute inklusive) — rollendes Fenster statt
-// Kalenderwoche, damit "Monat" nicht an Monatsgrenzen hängt. Spiegel von
-// local/analysis.js::getRollingDates.
-function getRollingDates(days) {
-  const dates = [];
-  for (let i = days - 1; i >= 0; i--) {
-    const x = new Date();
-    x.setDate(x.getDate() - i);
-    dates.push(x.toISOString().slice(0, 10));
-  }
-  return dates;
 }
 
 // Rollendes 28-Tage-Fenster ("Monat" = letzte 28 Tage, nicht Kalendermonat) +
@@ -499,13 +563,12 @@ function getRollingDates(days) {
 export async function getMonthlyReport(days = 28) {
   if (!hasAuthSession()) return getLocalMonthlyReport(days);
 
-  const dates = getRollingDates(days);
+  const dates = rollingDatesISO(days);
   const [kbExercises, history] = await Promise.all([
     getAllExercises(),
     getSessionHistory(120),
   ]);
-  const kbMap = new Map();
-  kbExercises.forEach((ex) => kbMap.set((ex.display_name || ex.name || "").toLowerCase(), ex));
+  const kbMap = buildKbMap(kbExercises);
 
   const safeHistory = Array.isArray(history)
     ? history.filter(Boolean).map((s) => ({ ...s, exercises: Array.isArray(s.exercises) ? s.exercises : [] }))
@@ -519,12 +582,11 @@ export async function getMonthlyReport(days = 28) {
     }
   }
 
-  // Ein listSessionsForDate()-Call pro Tag, das Ergebnis wird für den
+  // Sessions je Tag aus dem Verlauf (siehe sessionsByDateFromHistory), für den
   // Gesamtzeitraum UND die 7-Tage-Wochen-Chunks wiederverwendet.
-  const sessionsByDate = new Map();
-  for (const date of dates) {
-    sessionsByDate.set(date, await listSessionsForDate(date));
-  }
+  const sessionsByDate = await sessionsByDateFromHistory(safeHistory, dates);
+
+  await augmentKbMapWithMirror(kbMap, Array.from(sessionsByDate.values()).flat());
 
   function aggregate(dateSlice) {
     const bodyRegionScores = {};
@@ -558,7 +620,7 @@ export async function getMonthlyReport(days = 28) {
 
   const overall = aggregate(dates);
   const allGroups = getMuscleGroupsForGaps().map((g) => g.id);
-  const gaps = allGroups.filter((g) => (overall.bodyRegionScores[g] || 0) < 1);
+  const gaps = allGroups.filter((g) => (overall.bodyRegionScores[g] || 0) < GAP_THRESHOLD);
 
   const weeks = [];
   for (let start = dates.length - 7; start > -7; start -= 7) {
@@ -571,7 +633,7 @@ export async function getMonthlyReport(days = 28) {
       session_count: wk.sessionCount,
       avg_effort: wk.avgEffort,
       body_region_scores: wk.bodyRegionScores,
-      missing_regions: allGroups.filter((g) => (wk.bodyRegionScores[g] || 0) < 1),
+      missing_regions: allGroups.filter((g) => (wk.bodyRegionScores[g] || 0) < GAP_THRESHOLD),
     });
   }
   // Schleife läuft bereits jüngste→älteste 7-Tage-Chunk zuerst (start zählt
@@ -607,38 +669,8 @@ export async function getMonthlyReport(days = 28) {
 
 // ── Progress trend ────────────────────────────────────────────────────────────
 
-export async function getProgressTrend(exerciseName, lastN = 4) {
-  if (!hasAuthSession()) return getLocalProgressTrend(exerciseName, lastN);
+export async function getProgressTrend(exercise, lastN = 4) {
+  if (!hasAuthSession()) return getLocalProgressTrend(exercise, lastN);
   const history = await getSessionHistory(lastN * 7);
-  const safeHistory = Array.isArray(history)
-    ? history.filter(Boolean).map((s) => ({ ...s, exercises: Array.isArray(s.exercises) ? s.exercises : [] }))
-    : [];
-
-  const sessions = safeHistory
-    .filter((s) => s.exercises.some((ex) => ex.name === exerciseName))
-    .sort((a, b) => b.date.localeCompare(a.date));
-
-  if (sessions.length < 2) return { status: "neutral", message: "Nicht genug Daten" };
-
-  const values = sessions.map((s) => {
-    const ex = s.exercises.find((e) => e.name === exerciseName);
-    if (!ex) return null;
-    if (Array.isArray(ex.setsArray)) {
-      const weights = ex.setsArray.map((s) => num(s.weight)).filter((w) => w !== null);
-      return weights.length > 0 ? Math.max(...weights) : null;
-    }
-    return num(ex.weight);
-  }).filter((v) => v !== null && v > 0);
-
-  if (values.length < 2) return { status: "neutral", message: "Zu wenig Daten" };
-
-  const current = values[0];
-  const previous = values.slice(1, lastN);
-  const avgPrevious = previous.reduce((a, b) => a + b, 0) / previous.length;
-  if (avgPrevious === 0) return { status: "neutral" };
-
-  const pctChange = ((current - avgPrevious) / avgPrevious) * 100;
-  if (pctChange > 2)  return { status: "up",      change: pctChange.toFixed(1) };
-  if (pctChange < -2) return { status: "down",    change: pctChange.toFixed(1) };
-  return                   { status: "neutral", change: pctChange.toFixed(1) };
+  return calculateProgressTrend(history, exercise, lastN);
 }

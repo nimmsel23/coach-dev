@@ -3,6 +3,7 @@
 
 export * from "./firestore/core.js";
 export * from "./firestore/sessions.js";
+export * from "./firestore/workoutIndex.js";
 export * from "./firestore/journal.js";
 export * from "./firestore/kb.js";
 export * from "./firestore/inbox.js";
@@ -22,7 +23,9 @@ export {
 } from "./firestore/routines.js";
 export * from "./firestore/analysis.js";
 export * from "./firestore/user.js";
+export * from "./firestore/devices.js";
 export * from "./firestore/slotTemplates.js";
+export * from "./firestore/tours.js";
 export * from "./firestore/utils.js";
 
 // Shared utilities always available in both modes

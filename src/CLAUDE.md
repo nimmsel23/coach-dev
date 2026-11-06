@@ -16,6 +16,7 @@ Python-Backend-Details: `../fitness/CLAUDE.md` (API/Dispatcher) und
 | `journal` | Journal | `views/Journal/` | Text-Notizen |
 | `review` | Review | `views/WeeklyReview/` | Charts + Wochenrückblick |
 | `learn` | Lernen | `views/Learn/` | Anatomie-Lehre (aus `fitness/catalog/kb/`) |
+| `atlas` | Atlas | `views/Exercises/` | Übersicht über alle lokal gespiegelten Übungs-DBs (siehe unten), unabhängig von Learn |
 | `settings` | Setup | `views/Settings/` | Themes, Split, Nav-Modus etc. |
 
 **Coach-App (`coach.html`, Einstieg `coach-main.jsx`)** läuft seit 2026-10-15 in
@@ -46,6 +47,52 @@ Geplante Umstellung (noch nicht umgesetzt): `App.jsx` auf
 `Habits`/`Journal`-Views nutzen an vielen Stellen hartcodierte Fuel-Branding-
 Klassen (`text-orange-400` etc.) statt `fit-*`-Tokens — unabhängig vom
 Symlink-Thema, muss in `habits-dev`/`journal-dev` selbst gefixt werden.
+
+---
+
+## Übungs-DB-Mirror + Atlas-Tab (2026-10-14)
+
+**Prinzip:** Eine externe Übungs-DB wird nicht über den Catalog umgebaut (der
+YAML-Weg `unreviewed_yuhonas.yml` verliert Felder: `level`/`force`/`mechanic`,
+3 von 876 Einträgen fehlen), sondern **1:1 aus ihrem Git-Repo** auf das
+jeweilige Gerät gespiegelt. Der Catalog (`fitness/catalog/`) bleibt davon
+unberührt als eigenes Projekt.
+
+- `lib/exerciseDbs/sources.js` — Registry. Pro Quelle: `download()` (Rohdaten +
+  Commit-SHA als Version), `latest()` (Update-Check), `normalize()` (Rohform →
+  gemeinsame Anzeigeform). **Neue DB = ein weiterer Registry-Eintrag**, sonst
+  nichts anfassen.
+- `lib/exerciseDbs/idb.js` / `mirror.js` — IndexedDB `fitness-exercise-mirror`
+  (`data` = Rohdaten unverändert, `meta` = Status). "Vom Nutzer verwendet" =
+  auf diesem Gerät geladen. Normalisierung erst beim Lesen.
+- `lib/exerciseDbs/useExerciseMirrors.js` — Hook (Status, Items, Laden/
+  Entfernen, einmaliger Update-Check im Hintergrund).
+- `views/Exercises/` — Atlas-Tab. Liest **nur** aus dem Mirror (offline-fähig),
+  Facetten mit disjunktiven Zählern, Detail-Sheet mit Start-/Endframe. Hängt
+  Catalog-Einträge (kuratiert/Inbox) per `yuhonas_id` an → deutscher Name +
+  Sprung in `ExerciseInsightModal`.
+- **yuhonas:** `raw.githubusercontent.com/yuhonas/free-exercise-db/<sha>/dist/exercises.json`
+  (~1 MB, CORS offen, Unlicense). Version = letzter Commit auf diese Datei
+  (GitHub-API, 60/h/IP — bei Limit Fallback auf `main` ohne Version).
+  Bilder weiter per jsDelivr-CDN (`lib/yuhonasImage.js`), noch nicht offline.
+- **Bilder offline:** `lib/exerciseDbs/images.js` + `useImageMirror.js` legen die
+  Bild-URLs aller geladenen Quellen in die Cache API (`fitness-exercise-images`,
+  fortsetzbar, 6 parallel, Button im Atlas unter „Quellen“). Ausgeliefert vom
+  Service Worker (`public/sw.js`: `IMG_CACHE`/`IMG_HOSTS`, cache-first). ⚠️ Der
+  `activate`-Handler räumt alle Caches außer `CACHE` und `IMG_CACHE` weg —
+  neuer Cache-Name dort ebenfalls ausnehmen. Neue DB mit anderem CDN: Host in
+  `IMG_HOSTS` ergänzen.
+- **Session/Plan nutzen den Mirror statt `unreviewed_yuhonas`:**
+  `searchExercises(q, limit, { mirror: true })` (Session-Overlay, Plan-Suche)
+  entfernt die alten `yuhonas_*`-Bulk-Records des Katalogs (lokal: API-Zeilen,
+  Firebase: `EXERCISE_BULK_DATA`/Firestore-Docs) und mischt Mirror-Treffer per
+  `lib/exerciseDbs/search.js` ein. Exercise-IDs bleiben identisch
+  (`yuhonas_<id lowercase>`, alle 873 verifiziert) → bestehende Sessions/Pläne
+  gültig. Kuratierte Katalog-Drafts mit `yuhonas_*`-ID (Expert/Inbox) behalten
+  Vorrang. `getExercise('yuhonas_*')` liest ebenfalls aus dem Mirror (Rückfall:
+  Katalog-Record, falls Mirror fehlt). Ohne geladenen Mirror zeigt die
+  Session-Suche keine yuhonas-Treffer, sondern einen Hinweis → Atlas.
+  Ohne `mirror`-Flag (Coach-`CatalogBrowser`) bleibt das alte Verhalten.
 
 ---
 
@@ -128,6 +175,43 @@ als ID-Suffix (Standardfall, nicht nur Mehrfach-Sessions), ein Direkt-Lookup auf
 die reine Datums-ID findet das Dokument deshalb nie und fällt still auf den
 leeren Stub `{ exercises: [] }` zurück.
 
+**Muscle-Coverage: Cache, Datum, KB-Lookup (2026-11-01, Firebase-Untersuchung):**
+- **`analytics/dashboard` speichert Tageswerte** (`daily_region_scores`: pro
+  Kalendertag die Region-Scores, 28 Tage), nicht nur fertige Fenster. Fenster
+  (7/14/21/28) werden beim Lesen aus den Tageswerten summiert
+  (`shared/coverageWindow.js`; Cloud Function: `functions/coverageWindow.js`,
+  gleiche Logik). Ein eingefrorenes `rolling_7_days` zeigte Tage später noch
+  längst herausgefallene Sessions (z. B. `core 4.79` statt 0.54) und fütterte
+  damit auch die Coverage-/PPL-Erinnerungs-Pushes. `rolling_*` und `recovery_*`
+  gelten nur noch, wenn sie **heute** geschrieben wurden; die Cloud Function
+  sendet ohne verlässliche Daten lieber keinen Hinweis als einen falschen.
+  Fehlt `daily_region_scores`, zieht `getMuscleCoverage()` es einmal pro Tag nach.
+- **Datum immer lokal**: `shared/dates.js` (`toISODate`, `rollingDatesISO`,
+  `isoWeek*`). Nie `toISOString().slice(0, 10)` für Kalendertage — das ist UTC
+  und liefert in Europa zwischen 00:00 und 01:00/02:00 den Vortag. ISO-Wochen
+  folgen der 4.-Januar-Regel (die alte Formel „1. Jan + 7·(w−1)" lag in Jahren,
+  die nicht an einem Donnerstag beginnen, eine Woche daneben).
+  Bewusst unterschiedlich geblieben: `"current"` ist in Firestore das rollende
+  7-Tage-Fenster, lokal die Kalenderwoche Mo–So.
+- **Muskel-Fallback einer Session-Übung** (`shared/kbLookup.js`): Session-Wert →
+  Katalog per `exercise_id`/`id` → Name (exakt, gefaltet, ohne Klammerzusatz,
+  inkl. `german`/`english`/`aliases`/`search_aliases`) → **Yuhonas-Mirror** als
+  letzter Fallback (nur geladen, wenn noch etwas ungeklärt ist). Der Mirror ist
+  die Standard-Übungs-/Muskel-DB, die den unfertigen Katalog überbrückt; sein
+  Vokabular (`lower back`, `abdominals`, `lats` …) löst `muscleToRegion()` per
+  Freitext-Alias auf. Keine Fuzzy-Raterei: ungeklärte Namen erscheinen einmalig
+  als `console.info("[coverage] Übungen ohne Muskeldaten …")` und gehören als
+  Alias/Eintrag in den Katalog.
+- `buildWeeklyReportData()` hatte `normalizedSessionHits(sess)` ohne `kbMap`
+  aufgerufen (kein KB-Fallback im Weekly-Report) — behoben. Der Weekly-Doc für
+  `"current"` wird nach Tageswechsel neu gebaut.
+- **Offen/Entscheidung:** Region-Scores addieren die Teilmuskeln einer Session
+  (ein Beinbeuger-Satz → `hamstrings` 3.0 durch 3 Köpfe; `core` dominiert).
+  Die Max-pro-Muskel-Normalisierung greift nur je Muskel-ID, nicht je Region.
+  Identisch in `server.mjs`/`coaching.py` — nur gemeinsam ändern.
+- Nach Änderungen an `functions/` ist ein `firebase deploy --only functions`
+  nötig, damit die Reminder die Tageswerte lesen (vorher: Legacy-Verhalten).
+
 **Firebase v9-modulares SDK:** `QueryDocumentSnapshot.ref`, nicht `.reference`
 (das ist die alte v8/Namespaced-API und im v9-Import immer `undefined` —
 Optional-Chaining danach rettet nichts, weil der Crash beim ersten
@@ -188,7 +272,7 @@ sichtbar zu machen.)
 
 ---
 
-## Build-Time-KB-Import statt Hardcoding (`views/Session/sixpackData.js`)
+## Build-Time-KB-Import statt Hardcoding (`src/views/SixPack/sixpackData.js`)
 
 **Architekturentscheidung (2026-08-22):** Der Timer-Tab (`SixPackPromiseCard.jsx`,
 6-Pack-Promise-Programm + Calisthenics-Skills) braucht seine Übungs-/Workout-/
@@ -202,7 +286,7 @@ jeder neuen Übung/Woche.
 
 **Fix:** `scripts/build-sixpack-data.mjs` liest die KB-YAMLs zur Build-/Dev-Zeit
 (kein Firestore, keine Laufzeit-API) und generiert
-`src/views/Session/sixpackData.generated.js` (git-ignored, nie von Hand
+`src/views/SixPack/sixpackData.generated.js` (git-ignored, nie von Hand
 editieren). `sixpackData.js` selbst ist nur noch ein stabiler Re-Export dieser
 generierten Datei — der Import-Pfad für Components bleibt gleich, der Inhalt
 kommt vollständig aus der KB.
@@ -396,8 +480,8 @@ serverseitig) fehlschlägt, weil der lokale Coach-Rechner gerade nicht läuft.
 Der Pfad ist Fitness-eigen: lokaler Coach-Backendpfad zuerst, Browser-/Cloud-
 Fallback nur wenn der lokale Coach-Rechner nicht erreichbar ist.
 
-- `src/firebase.js`: `vertexAI = getAI(app, { backend: new VertexAIBackend() })`
-  — bewusst die aktuelle `firebase/ai`-API.
+- `src/firebase.js`: `vertexAI = getAI(app, { backend: new AgentPlatformBackend("us-central1") })`
+  — `firebase/ai` ≥ 3 (Name `VertexAIBackend` existiert dort nicht mehr; Location explizit, Default ist jetzt `global`).
 - `lib/exerciseAiEnrich.js`: Prompts 1:1 aus
   `fitness/catalog/agent/gemini.py` (`PROMPT_EXERCISE_ENRICH`/`_NEW`)
   portiert, aber mit `responseSchema`/`responseMimeType: "application/json"`

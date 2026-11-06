@@ -1,0 +1,899 @@
+{
+  "version": "1.1",
+  "generated_at": "2026-05-30T11:24:08.800039",
+  "slugs": {},
+  "exercises": {
+    "overhead_triceps_extension": {
+      "id": "overhead_triceps_extension",
+      "name": "Overhead Triceps Extension",
+      "display_name": "Überkopf-Trizepsstrecken",
+      "category": "arms",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "cable_pushdown": {
+      "id": "cable_pushdown",
+      "name": "Cable Pushdown",
+      "display_name": "Trizepsdrücken am Kabel",
+      "category": "arms",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "skull_crusher": {
+      "id": "skull_crusher",
+      "name": "Skull Crusher",
+      "display_name": "French Press",
+      "category": "arms",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "close_grip_bench_press": {
+      "id": "close_grip_bench_press",
+      "name": "Close Grip Bench Press",
+      "display_name": "Enges Bankdrücken",
+      "category": "arms",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "anterior_deltoid",
+          "pectoralis_major",
+          "serratus_anterior"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "barbell_curl": {
+      "id": "barbell_curl",
+      "name": "Barbell Curl",
+      "display_name": "Langhantelcurl",
+      "category": "arms",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "incline_dumbbell_curl": {
+      "id": "incline_dumbbell_curl",
+      "name": "Incline Dumbbell Curl",
+      "display_name": "Schrägbankcurl",
+      "category": "arms",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "hammer_curl": {
+      "id": "hammer_curl",
+      "name": "Hammer Curl",
+      "display_name": "Hammer Curl",
+      "category": "arms",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "preacher_curl": {
+      "id": "preacher_curl",
+      "name": "Preacher Curl",
+      "display_name": "Scott-Curl",
+      "category": "arms",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "pull_up": {
+      "id": "pull_up",
+      "name": "Pull Up",
+      "display_name": "Klimmzug im Obergriff",
+      "category": "back",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "secondary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "chin_up": {
+      "id": "chin_up",
+      "name": "Chin Up",
+      "display_name": "Klimmzug im Untergriff",
+      "category": "back",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "secondary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "lat_pulldown": {
+      "id": "lat_pulldown",
+      "name": "Lat Pulldown",
+      "display_name": "Latzug",
+      "category": "back",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "secondary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "barbell_row": {
+      "id": "barbell_row",
+      "name": "Barbell Row",
+      "display_name": "Langhantelrudern",
+      "category": "back",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "secondary": [
+          "anterior_deltoid",
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "chest_supported_row": {
+      "id": "chest_supported_row",
+      "name": "Chest Supported Row",
+      "display_name": "Brustgestütztes Rudern",
+      "category": "back",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "secondary": [
+          "anterior_deltoid",
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "t_bar_row": {
+      "id": "t_bar_row",
+      "name": "T Bar Row",
+      "display_name": "T-Bar-Rudern",
+      "category": "back",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "secondary": [
+          "anterior_deltoid",
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "bench_press": {
+      "id": "bench_press",
+      "name": "Barbell Bench Press",
+      "display_name": "Bankdrücken mit Langhantel",
+      "category": "chest",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "pectoralis_major",
+          "serratus_anterior",
+          "trapezius"
+        ],
+        "secondary": [
+          "anterior_deltoid",
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "incline_dumbbell_press": {
+      "id": "incline_dumbbell_press",
+      "name": "Incline Dumbbell Press",
+      "display_name": "Schrägbankdrücken mit Kurzhanteln",
+      "category": "chest",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "pectoralis_major",
+          "serratus_anterior"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "dips_chest": {
+      "id": "dips_chest",
+      "name": "Chest Dips",
+      "display_name": "Dips mit Brustfokus",
+      "category": "chest",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "pectoralis_major",
+          "serratus_anterior"
+        ],
+        "secondary": [
+          "anterior_deltoid",
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "cable_fly": {
+      "id": "cable_fly",
+      "name": "Cable Fly",
+      "display_name": "Kabel-Flys",
+      "category": "chest",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "pectoralis_major",
+          "serratus_anterior"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "pec_deck": {
+      "id": "pec_deck",
+      "name": "Pec Deck",
+      "display_name": "Pec Deck",
+      "category": "chest",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "pectoralis_major",
+          "serratus_anterior"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "hanging_leg_raise": {
+      "id": "hanging_leg_raise",
+      "name": "Hanging Leg Raise",
+      "display_name": "Hängendes Beinheben",
+      "category": "core",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "secondary": [],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "cable_crunch": {
+      "id": "cable_crunch",
+      "name": "Cable Crunch",
+      "display_name": "Kabel-Crunch",
+      "category": "core",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "ab_wheel": {
+      "id": "ab_wheel",
+      "name": "Ab Wheel",
+      "display_name": "Ab Wheel",
+      "category": "core",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "plank": {
+      "id": "plank",
+      "name": "Plank",
+      "display_name": "Unterarmstütz",
+      "category": "core",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "pallof_press": {
+      "id": "pallof_press",
+      "name": "Pallof Press",
+      "display_name": "Pallof Press",
+      "category": "core",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "side_plank": {
+      "id": "side_plank",
+      "name": "Side Plank",
+      "display_name": "Seitstütz",
+      "category": "core",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "secondary": [
+          "anterior_deltoid"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "reissen_und_umsetzen": {
+      "id": "reissen_und_umsetzen",
+      "name": "Reissen und Umsetzen",
+      "display_name": "Reißen und Umsetzen",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "anterior_deltoid",
+          "gluteus_maximus",
+          "quadriceps_femoris",
+          "trapezius",
+          "triceps_brachii"
+        ],
+        "secondary": [],
+        "stabilizer": []
+      }
+    },
+    "schulterdruecken_mit_hueftschwung": {
+      "id": "schulterdruecken_mit_hueftschwung",
+      "name": "Schulterdrücken mit Hüftschwung",
+      "display_name": "Schulterdrücken mit Hüftschwung",
+      "category": "shoulders",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "anterior_deltoid",
+          "quadriceps_femoris",
+          "trapezius",
+          "triceps_brachii"
+        ],
+        "secondary": [
+          "gluteus_maximus",
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": []
+      }
+    },
+    "back_squat": {
+      "id": "back_squat",
+      "name": "Back Squat",
+      "display_name": "Kniebeuge mit der Langhantel",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "anterior_deltoid",
+          "gluteus_maximus",
+          "quadriceps_femoris"
+        ],
+        "secondary": [
+          "biceps_femoris",
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "front_squat": {
+      "id": "front_squat",
+      "name": "Front Squat",
+      "display_name": "Frontkniebeuge",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "gluteus_maximus",
+          "quadriceps_femoris"
+        ],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "leg_press": {
+      "id": "leg_press",
+      "name": "Leg Press",
+      "display_name": "Beinpresse",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "leg_extension": {
+      "id": "leg_extension",
+      "name": "Leg Extension",
+      "display_name": "Beinstrecken",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "quadriceps_femoris"
+        ],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": []
+      }
+    },
+    "deadlift": {
+      "id": "deadlift",
+      "name": "Deadlift",
+      "display_name": "Kreuzheben",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_femoris",
+          "gluteus_maximus",
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "quadriceps_femoris",
+          "rectus_abdominis"
+        ],
+        "stabilizer": [
+          "anterior_deltoid"
+        ]
+      }
+    },
+    "romanian_deadlift": {
+      "id": "romanian_deadlift",
+      "name": "Romanian Deadlift",
+      "display_name": "Rumänisches Kreuzheben",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_femoris",
+          "erector_spinae",
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": [
+          "anterior_deltoid"
+        ]
+      }
+    },
+    "leg_curl": {
+      "id": "leg_curl",
+      "name": "Leg Curl",
+      "display_name": "Beinbeuger",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": []
+      }
+    },
+    "hip_thrust": {
+      "id": "hip_thrust",
+      "name": "Hip Thrust",
+      "display_name": "Hip Thrust",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "bulgarian_split_squat": {
+      "id": "bulgarian_split_squat",
+      "name": "Bulgarian Split Squat",
+      "display_name": "Bulgarian Split Squat",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "lunge": {
+      "id": "lunge",
+      "name": "Lunge",
+      "display_name": "Ausfallschritt",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "biceps_femoris",
+          "erector_spinae",
+          "gluteus_maximus",
+          "quadriceps_femoris"
+        ],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "calf_raise": {
+      "id": "calf_raise",
+      "name": "Calf Raise",
+      "display_name": "Wadenheben",
+      "category": "legs",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [],
+        "secondary": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ],
+        "stabilizer": []
+      }
+    },
+    "overhead_press": {
+      "id": "overhead_press",
+      "name": "Overhead Press",
+      "display_name": "Überkopfdrücken",
+      "category": "shoulders",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "anterior_deltoid"
+        ],
+        "secondary": [
+          "biceps_brachii",
+          "brachialis",
+          "obliquus_externus_abdominis",
+          "rectus_abdominis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "dumbbell_shoulder_press": {
+      "id": "dumbbell_shoulder_press",
+      "name": "Dumbbell Shoulder Press",
+      "display_name": "Kurzhantel-Schulterdrücken",
+      "category": "shoulders",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "anterior_deltoid"
+        ],
+        "secondary": [
+          "biceps_brachii",
+          "brachialis",
+          "obliquus_externus_abdominis",
+          "rectus_abdominis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "latissimus_dorsi",
+          "trapezius"
+        ]
+      }
+    },
+    "lateral_raise": {
+      "id": "lateral_raise",
+      "name": "Lateral Raise",
+      "display_name": "Seitheben",
+      "category": "shoulders",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "anterior_deltoid"
+        ],
+        "secondary": [
+          "biceps_brachii",
+          "brachialis",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "face_pull": {
+      "id": "face_pull",
+      "name": "Face Pull",
+      "display_name": "Face Pull",
+      "category": "shoulders",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "anterior_deltoid"
+        ],
+        "secondary": [
+          "biceps_brachii",
+          "brachialis",
+          "latissimus_dorsi",
+          "trapezius",
+          "triceps_brachii"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    },
+    "rear_delt_fly": {
+      "id": "rear_delt_fly",
+      "name": "Rear Delt Fly",
+      "display_name": "Reverse Fly",
+      "category": "shoulders",
+      "rbh_slugs": [],
+      "muscles": {
+        "primary": [
+          "anterior_deltoid"
+        ],
+        "secondary": [
+          "latissimus_dorsi",
+          "trapezius"
+        ],
+        "stabilizer": [
+          "obliquus_externus_abdominis",
+          "rectus_abdominis"
+        ]
+      }
+    }
+  }
+}

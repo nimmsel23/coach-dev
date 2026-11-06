@@ -1,0 +1,81 @@
+name: inbox_wger_206
+description: 'Proactively generated expert draft for: Ausfallschritte im Gehen'
+exercises:
+- exercise_id: wger_206
+  display_name: Ausfallschritte im Gehen
+  category: Beine
+  primary_muscles:
+  - 603_quadriceps
+  - 601_glutes
+  - 604_hamstrings
+  secondary_muscles:
+  - 605_adductors
+  - 701_gastrocnemius
+  - 702_soleus
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 503_transverse_abdominis
+  - 206_erector_spinae
+  - 602_gluteus_medius
+  - 703_tibialis_anterior
+  equipment: null
+  wger_id: null
+  movement_pattern: Unilaterale Knie- und Hüftextension mit Rumpfstabilisation
+  coaching_notes: '1. **Startposition & Haltung:** Beginnen Sie aufrecht stehend,
+    die Füße hüftbreit auseinander. Spannen Sie Ihre Rumpfmuskulatur leicht an, um
+    das Becken zu stabilisieren und eine neutrale Wirbelsäulenposition zu gewährleisten.
+    Der Blick ist nach vorne gerichtet.
+
+    2. **Schrittphase (Exzentrisch):** Machen Sie mit einem Bein einen kontrollierten,
+    großen Schritt nach vorne. Landen Sie zuerst auf der Ferse und rollen Sie dann
+    den Fuß flach ab. Beugen Sie gleichzeitig beide Knie, bis das hintere Knie knapp
+    über dem Boden schwebt. Achten Sie darauf, dass das vordere Knie in einer Linie
+    mit dem Sprunggelenk bleibt und nicht nach innen oder außen knickt (Valgus/Varus-Fehlstellung).
+
+    3. **Tiefe und Ausrichtung:** In der tiefsten Position sollte der Winkel im vorderen
+    Knie etwa 90 Grad betragen und das Schienbein möglichst senkrecht zum Boden stehen.
+    Das hintere Knie zeigt direkt nach unten, und der Oberkörper bleibt aufrecht über
+    den Hüften.
+
+    4. **Abstoßphase (Konzentrisch):** Drücken Sie sich kraftvoll mit der Ferse des
+    vorderen Fußes vom Boden ab, wobei die Gesäß- und Oberschenkelmuskulatur primär
+    aktiviert wird. Nutzen Sie diese Kraft, um sich nach oben und gleichzeitig nach
+    vorne zu bewegen.
+
+    5. **Kontinuierlicher Übergang:** Führen Sie das hintere Bein direkt nach vorne,
+    um nahtlos in den nächsten Ausfallschritt mit dem anderen Bein überzugehen. Die
+    Bewegung sollte fließend und rhythmisch sein, ohne längere Pausen oder ein Absetzen
+    des Fußes zwischen den Schritten.
+
+    6. **Atemtechnik:** Atmen Sie beim Absenken (exzentrische Phase) ein und beim
+    kraftvollen Abstoß und Aufrichten (konzentrische Phase) aus.'
+  common_errors: '1. **Vorderes Knie über die Zehenspitzen:** Ein zu kurzer Schritt
+    oder ein Nach-vorne-Kippen des Oberkörpers kann dazu führen, dass das vordere
+    Knie weit über die Zehenspitzen hinausragt, was unnötigen Stress auf das Kniegelenk
+    ausübt. Achten Sie auf einen ausreichend weiten Schritt.
+
+    2. **Rundrücken oder Überstreckung der Lendenwirbelsäule:** Ein Verlust der Rumpfspannung
+    kann zu einem runden Rücken oder einem übermäßigen Hohlkreuz führen, was die Wirbelsäule
+    kompromittiert. Halten Sie den Rumpf durchgehend stabil und aufrecht.
+
+    3. **Knieknicken nach innen (Valgusstellung):** Wenn das vordere Knie während
+    der Beugung nach innen kippt, deutet dies auf eine Schwäche der Glutealmuskulatur
+    (insbesondere Gluteus Medius) hin und erhöht das Verletzungsrisiko für das Knie.
+    Aktivieren Sie bewusst Ihre Gesäßmuskulatur, um das Knie stabil zu halten.
+
+    4. **Ungenügende Bewegungstiefe:** Ein zu geringer Beugewinkel in Knie und Hüfte
+    reduziert die Effektivität der Übung, insbesondere für die Gesäß- und hintere
+    Oberschenkelmuskulatur. Streben Sie an, das hintere Knie knapp über dem Boden
+    zu führen.
+
+    5. **Verlust der Balance und unkontrollierte Bewegung:** Eine zu schnelle Ausführung
+    oder mangelnde Rumpf- und Hüftstabilität kann zu Wackeln und Stürzen führen. Führen
+    Sie die Bewegung kontrolliert und bewusst aus. Ein Fixpunkt kann helfen.
+
+    6. **Abstoßen nur mit den Zehenspitzen:** Wenn der Abstoß primär von den Zehen
+    ausgeht, wird die Aktivierung der Gesäß- und hinteren Oberschenkelmuskulatur reduziert.
+    Drücken Sie sich kraftvoll über die gesamte Fußfläche, insbesondere die Ferse
+    des vorderen Fußes, ab.'
+  variations: []
+  source: unreviewed

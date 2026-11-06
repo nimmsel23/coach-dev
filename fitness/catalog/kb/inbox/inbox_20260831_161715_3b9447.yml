@@ -1,15 +1,115 @@
 name: inbox_20260831_161715_3b9447
-description: 'Inbox queued for: Yoga Headstand'
-queued_at: '2026-08-31T16:17:15.136911'
+description: 'Proactively generated expert draft for: Yoga Headstand'
+generated_at: '2026-11-01T17:07:27.456731+00:00'
+enriched_at: '2026-11-01T17:07:27.456731+00:00'
 exercises:
-- exercise_id: inbox_yoga_headstand
+- id: inbox_yoga_headstand
   name: Yoga Headstand
-  id: inbox_yoga_headstand
-  display_name: Yoga Headstand
-  schema_version: 2026-08-12.exercise-v1
   origin:
-    type: manual
-    source_refs: {}
+    type: external
+    source_refs:
+      wger:
+      - '1472'
+  exercise_id: inbox_yoga_headstand
+  display_name: Kopfstand
+  german: Kopfstand
+  english: Yoga Headstand
+  category: push
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 504_transverse_abdominis
+  - 301_anterior_deltoid
+  - 302_lateral_deltoid
+  - 303_posterior_deltoid
+  - 206_erector_spinae
+  - 603_gluteus_maximus
+  secondary_muscles:
+  - 601_quadriceps_femoris
+  - 604_hamstrings
+  - 701_gastrocnemius
+  - 702_soleus
+  - 401_triceps_brachii
+  stabilizers:
+  - 304_rotator_cuff
+  - 105_serratus_anterior
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 608_gluteus_medius
+  - 609_gluteus_minimus
+  - 506_diaphragm
+  - 508_pelvic_floor
+  - 507_multifidus
+  - 405_forearm_flexors
+  movements:
+  - vertical_push
+  - isometric_hold
+  - core_stability
+  - inversion
+  - balance_control
+  - shoulder_stability
+  - spinal_stability
+  - hip_extension_stability
+  - knee_extension_stability
+  - ankle_plantar_flexion_stability
+  coaching_notes:
+  - 'Beginne aus dem Vierfüßlerstand: Lege den Scheitelpunkt deines Kopfes sanft auf
+    den Boden, die Hände fassen die Ellbogen und bilden dann ein Dreieck mit den Unterarmen
+    und dem Kopf.'
+  - Drücke deine Unterarme und Handflächen fest in den Boden, um die Schultern zu
+    aktivieren und den Druck vom Nacken zu nehmen.
+  - Spann deinen Rumpf fest an, ziehe den Bauchnabel zur Wirbelsäule, um den unteren
+    Rücken zu schützen und eine gerade Linie zu halten.
+  - Hebe die Knie vom Boden, laufe mit den Füßen langsam näher an den Körper heran,
+    bis das Becken über den Schultern ausgerichtet ist.
+  - Ziehe die Knie zur Brust und strecke die Beine dann langsam und kontrolliert nach
+    oben, während du die Stabilität im Rumpf beibehältst.
+  - Halte die Beine aktiv gestreckt und die Füße geflext oder pointe für eine durchgehende
+    Linie.
+  - Atme ruhig und gleichmäßig. Konzentriere dich auf einen Punkt, um das Gleichgewicht
+    zu halten.
+  - Zum Abstieg beuge langsam die Knie zurück zur Brust und rolle kontrolliert nach
+    unten, bis die Füße wieder auf dem Boden sind. Bleibe kurz in der Kindeshaltung,
+    um den Druck aus dem Kopf zu nehmen.
+  common_errors:
+  - 'Einsinken in den Nacken: Der Druck sollte hauptsächlich auf den Unterarmen und
+    der Krone des Kopfes liegen, nicht auf dem Nacken. Aktiviere die Schultern, indem
+    du die Unterarme fest in den Boden drückst.'
+  - 'Bananenrücken: Ein starkes Hohlkreuz im unteren Rücken, oft durch unzureichende
+    Rumpfspannung. Halte den Rumpf fest angespannt, um den Rücken gerade zu halten
+    und eine neutrale Wirbelsäule zu bewahren.'
+  - 'Biegte Knie oder schlaffe Beine: Inaktive Beine erschweren das Halten des Gleichgewichts
+    und reduzieren die Körperspannung. Halte die Beine aktiv gestreckt und die Muskeln
+    angespannt.'
+  - 'Falsche Hand- und Kopfposition: Ein zu weites oder zu enges Dreieck der Unterarme
+    oder eine falsche Platzierung des Kopfes (nicht der Scheitelpunkt) kann die Stabilität
+    beeinträchtigen und zu Verletzungen führen.'
+  - 'Kontrollverlust beim Auf- und Abstieg: Schnelles oder ruckartiges Bewegen kann
+    zu Stürzen führen. Führe alle Bewegungen langsam und bewusst aus, insbesondere
+    wenn du noch unsicher bist.'
+  - 'Angespannte Schultern: Die Schultern sollten von den Ohren weggezogen und aktiv
+    nach unten gedrückt werden, um den Nacken zu entlasten und Stabilität im Schultergürtel
+    zu gewährleisten.'
+  original_description:
+  - Handstand free standing by pressing arms into the ground and contracting core
+    and glutes
+  wger_id: 1472
+  wger_muscle_ids:
+    primary:
+    - 2
+    secondary: []
+  external_ids:
+    wger:
+    - 1472
+  tags:
+  - unreviewed
+  - wger
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-01T17:07:27.456731+00:00'
+  schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
     ai_reviewed: false
+    enriched_at: '2026-11-01T17:07:27.456731+00:00'

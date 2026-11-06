@@ -1,0 +1,125 @@
+exercise_id: elliptical_trainer
+description: Expert details for Crosstrainer
+approved_at: '2026-10-17T21:09:49.208985+00:00'
+exercises:
+- exercise_id: elliptical_trainer
+  id: elliptical_trainer
+  name: Crosstrainer
+  display_name: Crosstrainer
+  german: Crosstrainer
+  english: Elliptical Trainer
+  category: gait
+  equipment:
+  - elliptical_trainer
+  primary_muscles:
+  - 601_quadriceps_femoris
+  - 603_gluteus_maximus
+  - 604_hamstrings
+  - 701_gastrocnemius
+  - 702_soleus
+  - 201_latissimus_dorsi
+  - 101_pectoralis_major
+  - 301_anterior_deltoid
+  - 303_posterior_deltoid
+  secondary_muscles:
+  - 402_biceps_brachii
+  - 401_triceps_brachii
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  stabilizers:
+  - 206_erector_spinae
+  - 608_gluteus_medius
+  - 609_gluteus_minimus
+  - 202_trapezius
+  - 205_rhomboids
+  - 105_serratus_anterior
+  movements:
+  - hip_flexion
+  - hip_extension
+  - knee_flexion
+  - knee_extension
+  - ankle_plantarflexion
+  - ankle_dorsiflexion
+  - shoulder_flexion
+  - shoulder_extension
+  - elbow_flexion
+  - elbow_extension
+  - horizontal_push
+  - horizontal_pull
+  - gait
+  - balance_control
+  coaching_notes:
+  - Halten Sie eine aufrechte Körperhaltung mit leicht angespanntem Rumpf und schauen
+    Sie geradeaus. Vermeiden Sie ein übermäßiges Nach-vorne-Lehnen.
+  - Der gesamte Fuß sollte stets flächig auf der Trittfläche bleiben, um eine optimale
+    Muskelaktivierung der Beine und Gesäßmuskulatur zu gewährleisten und die Gelenke
+    zu schonen.
+  - Nutzen Sie die Armstangen aktiv, indem Sie abwechselnd eine Drück- und Zugbewegung
+    ausführen, um den Oberkörper effektiv in das Training einzubeziehen.
+  - Variieren Sie Widerstand, Steigung und Trittrichtung (vorwärts/rückwärts), um
+    unterschiedliche Muskelgruppen anzusprechen und neue Reize zu setzen.
+  - Achten Sie auf eine fließende, gleichmäßige Bewegung ohne Ruckeln, um die Gelenke
+    zu schonen und die Trainingseffizienz zu maximieren.
+  - Aktivieren Sie bewusst Ihre Rumpfmuskulatur (Bauch- und untere Rückenmuskulatur),
+    um Stabilität zu gewährleisten und die Kraftübertragung zu optimieren.
+  common_errors:
+  - Sich stark auf die Armstangen zu stützen oder zu lehnen, wodurch der Unterkörper
+    entlastet wird und der Trainingseffekt für Beine und Gesäß reduziert wird.
+  - Eine gebeugte oder gekrümmte Haltung im oberen Rücken einzunehmen, was zu Fehlbelastungen
+    und Verspannungen in Nacken und Schultern führen kann.
+  - Nur die Beine oder nur die Arme zu nutzen und den anderen Körperbereich passiv
+    mitzuführen, was den Ganzkörperaspekt des Trainings vernachlässigt.
+  - Ein zu hoher Widerstand, der eine ruckartige Bewegung erzwingt und die Gelenke
+    unnötig belastet, anstatt eine harmonische Bewegung zu ermöglichen.
+  - Den Blick nach unten auf die Füße oder das Display zu richten, was die Nackenhaltung
+    ungünstig beeinflusst und zu Nackenschmerzen führen kann.
+  original_description:
+  - Er verbessert die Muskelstraffung, stärkt die Beinmuskulatur (vordere Oberschenkelmuskulatur,
+    Gesäßmuskulatur, Waden), fördert die Durchblutung und steigert die Ausdauer. Der
+    Crosstrainer ist außerdem sehr nützlich, wenn du abnehmen möchtest.
+  tags:
+  - unreviewed
+  - wger
+  wger_id: 962
+  wger_muscle_ids:
+    primary:
+    - 8
+    - 10
+    - 9
+    secondary:
+    - 1
+    - 6
+    - 5
+  external_ids:
+    wger:
+    - 962
+  variations: []
+  source: expert
+  enriched_at: '2026-10-12T10:26:46.586778+00:00'
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '962'
+      yuhonas:
+      - Elliptical_Trainer
+  review_state:
+    status: approved
+    ai_reviewed: true
+    enriched_at: '2026-10-12T10:26:46.586778+00:00'
+    approved_at: '2026-10-17T21:09:49.208985+00:00'
+  approved_at: '2026-10-17T21:09:49.208985+00:00'
+  search_aliases:
+  - wger_962
+  - Crosstrainer
+  - Elliptical Trainer
+  yuhonas_id: Elliptical_Trainer
+  instructions:
+  - To begin, step onto the elliptical and select the desired option from the menu.
+    Most ellipticals have a manual setting, or you can select a program to run. Typically,
+    you can enter your age and weight to estimate the amount of calories burned during
+    exercise. Elevation can be adjusted to change the intensity of the workout.
+  - The handles can be used to monitor your heart rate to help you stay at an appropriate
+    intensity.

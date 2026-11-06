@@ -1,0 +1,7 @@
+#!/bin/sh
+# Startet fitness-push aus dem Repo (ohne Installation): python3 -m backend.pusher
+repo="$(dirname "$(readlink -f "$0")")/.."
+# Das uv-Tool-Python bringt h2 (HTTP/2 für FCM) mit; das System-Python nicht.
+py="$HOME/.local/share/uv/tools/fitness-agent/bin/python"
+[ -x "$py" ] || py=python3
+cd "$repo" && exec "$py" -m backend.pusher "$@"

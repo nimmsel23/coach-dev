@@ -1,0 +1,3 @@
+// Shim: Splash liegt jetzt im gemeinsamen Paket @vos/mini-app-shell (vendored unter scripts/mini-app-shell/).
+// Alter Import-Pfad bleibt gültig; CLI: node scripts/mini-app-shell/splash.mjs <html> --name … --accent …
+export * from "./mini-app-shell/splash.mjs";

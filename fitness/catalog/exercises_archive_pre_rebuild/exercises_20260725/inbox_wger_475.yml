@@ -1,0 +1,106 @@
+name: inbox_wger_475
+description: 'Proactively generated expert draft for: Klimmzüge'
+exercises:
+- exercise_id: wger_475
+  display_name: Klimmzüge
+  category:
+  - Krafttraining
+  - Rücken
+  - Körpergewicht
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 401_biceps_brachii
+  - 402_brachialis
+  - 404_brachioradialis
+  secondary_muscles:
+  - 207_teres_major
+  - 205_rhomboids
+  - 203_trapezius_middle
+  - 303_posterior_deltoid
+  - 405_forearm_flexors
+  stabilizers:
+  - 304_rotator_cuff
+  - 105_serratus_anterior
+  - 206_erector_spinae
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 204_trapezius_lower
+  equipment:
+  - Klimmzugstange
+  movement_pattern: Vertikales Ziehen
+  wger_id: null
+  coaching_notes: 'Die Klimmzüge sind eine fundamentale Übung für den Aufbau von Rücken-
+    und Armkraft. Eine korrekte Ausführung ist entscheidend für maximale Effektivität
+    und zur Vermeidung von Verletzungen.
+
+
+    **Ausgangsposition:**
+
+    1.  **Griff:** Greifen Sie die Klimmzugstange etwas breiter als schulterbreit
+    mit einem Oberhandgriff (Handflächen zeigen von Ihnen weg). Die Arme sind vollständig
+    gestreckt, der Körper hängt frei.
+
+    2.  **Schulterengagement:** Aktivieren Sie die Schulterblätter, indem Sie sie
+    leicht nach unten und hinten ziehen (Scapula-Depression und Retraktion). Vermeiden
+    Sie ein passives Hängen in den Schultergelenken.
+
+    3.  **Körperspannung:** Spannen Sie den Rumpf (Bauch und Gesäß) an, um ein Schwingen
+    des Körpers zu verhindern und eine stabile Ausgangsbasis zu schaffen.
+
+
+    **Bewegungsausführung:**
+
+    1.  **Konzentriertes Ziehen:** Leiten Sie die Bewegung ein, indem Sie die Ellenbogen
+    nach unten und hinten ziehen, als wollten Sie sie in Ihre hinteren Hosentaschen
+    stecken. Konzentrieren Sie sich darauf, den Rücken (Lats) die Hauptarbeit leisten
+    zu lassen.
+
+    2.  **Zielpunkt:** Ziehen Sie sich hoch, bis Ihr Kinn über die Stange ragt oder,
+    idealerweise, Ihre obere Brust die Stange berührt.
+
+    3.  **Halten:** Halten Sie die oberste Position für einen Moment, um die Muskelkontraktion
+    zu maximieren.
+
+    4.  **Kontrolliertes Ablassen:** Lassen Sie sich langsam und kontrolliert in die
+    Ausgangsposition zurück. Achten Sie darauf, die negative Phase (das Herablassen)
+    bewusst zu kontrollieren, da dies einen wichtigen Reiz für Muskelwachstum und
+    Kraftentwicklung darstellt. Lassen Sie die Arme wieder vollständig strecken und
+    die Schulterblätter in die leichte Dehnung zurückkehren, bevor Sie die nächste
+    Wiederholung beginnen.
+
+
+    **Atmung:**
+
+    *   **Hochziehen:** Ausatmen (konzentrische Phase).
+
+    *   **Ablassen:** Einatmen (exzentrische Phase).'
+  common_errors:
+  - error: Unvollständiger Bewegungsumfang
+    description: Viele Athleten ziehen sich nicht hoch genug (Kinn erreicht nicht
+      die Stange) oder lassen sich nicht vollständig ab. Dies reduziert die Effektivität
+      der Übung und schränkt die Entwicklung der Kraft und Flexibilität ein. Achten
+      Sie auf volle Streckung der Arme und ein Erreichen der oberen Position.
+  - error: Schwung holen (Kipping)
+    description: Die Verwendung von Beinschwung oder Körperrotation (Kipping) entlastet
+      die Zielmuskulatur erheblich und verlagert die Arbeit auf Schwung und andere
+      Muskelgruppen. Dadurch wird der Trainingseffekt für Rücken und Arme minimiert
+      und das Verletzungsrisiko für Schultern und Wirbelsäule erhöht. Führen Sie die
+      Klimmzüge kontrolliert aus.
+  - error: Schulterhochziehen und Nackenverspannung
+    description: Wenn die Schultern während des Hochziehens aktiv zu den Ohren gezogen
+      werden, überlastet dies den oberen Trapezius und kann zu Nackenverspannungen
+      führen. Konzentrieren Sie sich darauf, die Schulterblätter bewusst nach unten
+      und hinten zu ziehen (Scapula-Depression und Retraktion), um die Rückenmuskulatur
+      effektiv zu aktivieren und die Schultern stabil zu halten.
+  - error: Keine Kontrolle der Negativphase
+    description: Ein schnelles, unkontrolliertes Herunterfallen in die Ausgangsposition
+      beraubt Sie eines Großteils des Trainingseffekts. Die exzentrische Phase ist
+      entscheidend für den Muskelaufbau. Lassen Sie sich bewusst und langsam über
+      2-3 Sekunden ab.
+  - error: Überstreckung des Nackens
+    description: Manche versuchen, mit dem Kopf die Stange zu erreichen, indem sie
+      den Nacken überstrecken. Dies ist ineffizient und kann zu Nackenschmerzen führen.
+      Konzentrieren Sie sich darauf, die Brust zur Stange zu ziehen und den Blick
+      leicht nach oben zu richten, ohne den Nacken zu überstrecken.
+  variations: []
+  source: unreviewed

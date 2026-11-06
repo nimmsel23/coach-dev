@@ -1,0 +1,18 @@
+{
+  "id": "/",
+  "name": "VitalOS Plan",
+  "short_name": "Plan",
+  "description": "Trainingspläne bauen und verwalten",
+  "lang": "de",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#090b10",
+  "theme_color": "#090b10",
+  "icons": [
+    { "src": "/plan-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/plan-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/plan-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

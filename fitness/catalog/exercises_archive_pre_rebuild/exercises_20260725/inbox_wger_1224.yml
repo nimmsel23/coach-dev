@@ -1,0 +1,10 @@
+exercises:
+- id: wger_1224
+  name: Dumbbell Front Squat
+  display_name: Dumbbell Front Squat
+  category: legs
+  movement_pattern: null
+  unreviewed: true
+  coaching_notes:
+  - Auto-generated expert draft based on usage demand.
+  common_errors_explained: {}

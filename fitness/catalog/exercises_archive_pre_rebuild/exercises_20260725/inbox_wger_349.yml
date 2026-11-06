@@ -1,0 +1,71 @@
+name: inbox_wger_349
+description: 'Proactively generated expert draft for: Seitheben am Kabel, Einarmig'
+exercises:
+- exercise_id: wger_349
+  display_name: Seitheben am Kabel, Einarmig
+  category: Shoulders
+  primary_muscles:
+  - 302_lateral_deltoid
+  secondary_muscles:
+  - 301_anterior_deltoid
+  - 305_supraspinatus
+  - 202_trapezius_upper
+  - 105_serratus_anterior
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 503_transverse_abdominis
+  - 203_trapezius_middle
+  - 204_trapezius_lower
+  - 205_rhomboids
+  - 304_rotator_cuff
+  equipment: Cable
+  movement_pattern: Shoulder Abduction
+  coaching_notes:
+  - '**Startposition & Haltung:** Stellen Sie sich seitlich zum Kabelzugturm, etwa
+    einen halben bis ganzen Meter entfernt. Greifen Sie den unteren Griff des Kabelzugs
+    mit der Hand, die weiter vom Turm entfernt ist. Die Füße sind schulterbreit auseinander,
+    der Blick ist nach vorne gerichtet, der Rumpf ist angespannt und stabil. Der Arm,
+    der das Kabel hält, ist leicht gebeugt (ca. 10-20 Grad im Ellenbogen) und hängt
+    locker vor dem Körper. Der nicht arbeitende Arm kann zur Stabilisierung auf die
+    Hüfte gelegt oder zur Seite ausgestreckt werden.'
+  - '**Ausführung der Bewegung:** Heben Sie das Gewicht langsam und kontrolliert seitlich
+    vom Körper weg. Konzentrieren Sie sich darauf, die Bewegung primär aus dem seitlichen
+    Deltamuskel zu initiieren. Der Ellenbogen sollte während der gesamten Bewegung
+    in der leicht gebeugten Position bleiben und die Hand nicht höher als der Ellenbogen
+    geführt werden. Führen Sie den Arm bis etwa auf Schulterhöhe nach oben, sodass
+    der Oberarm parallel zum Boden ist. Am oberen Punkt die Kontraktion kurz halten
+    und den Deltamuskel bewusst spüren.'
+  - '**Kontrolliertes Absenken:** Senken Sie das Gewicht ebenso langsam und kontrolliert
+    in die Ausgangsposition zurück. Lassen Sie das Gewicht nicht einfach fallen, sondern
+    widerstehen Sie dem Zug des Kabels, um die exzentrische Phase optimal zu nutzen.
+    Die Spannung im Deltamuskel sollte während der gesamten Bewegung aufrechterhalten
+    werden.'
+  - '**Atmung:** Atmen Sie während des Anhebens des Arms aus (konzentrische Phase)
+    und während des kontrollierten Absenkens des Arms ein (exzentrische Phase).'
+  - '**Biochemischer Fokus:** Stellen Sie sich vor, Sie gießen aus einem Krug Wasser
+    ein. Diese leichte Innenrotation am höchsten Punkt hilft oft, den lateralen Deltoid
+    optimal anzusprechen, ohne dass andere Muskeln kompensieren.'
+  common_errors:
+  - '**Schwungholen und falsche Lastwahl:** Die häufigste Fehlerquelle ist die Wahl
+    eines zu hohen Gewichts, was dazu führt, dass die Bewegung nicht isoliert aus
+    dem Deltamuskel, sondern durch Schwung aus dem Rumpf oder den Beinen ausgeführt
+    wird. Das reduziert die Effektivität und erhöht das Verletzungsrisiko.'
+  - '**Shrugging (Schulterzucken):** Das Anheben der Schulter (Schulterzucken) während
+    der Aufwärtsbewegung ist ein Zeichen dafür, dass der obere Trapezius (Nackenmuskel)
+    übermäßig arbeitet und der seitliche Deltamuskel nicht optimal isoliert wird.
+    Halten Sie die Schultern bewusst unten und stabil.'
+  - '**Ellenbogenposition:** Ein durchgestreckter Ellenbogen kann die Gelenke unnötig
+    belasten. Ein zu stark gebeugter Ellenbogen verkürzt den Hebelarm erheblich und
+    verringert die Beanspruchung des seitlichen Deltamuskels. Eine leichte Beugung
+    ist ideal.'
+  - '**Veränderung der Ebene:** Wird der Arm zu weit nach vorne oder hinten geführt,
+    verschiebt sich der Fokus von der seitlichen Schulter auf den vorderen oder hinteren
+    Deltamuskel. Ziel ist die Anhebung in der frontalen Ebene oder leicht in der Skapularen
+    Ebene (ca. 30 Grad nach vorne).'
+  - '**Rumpfstabilität vernachlässigt:** Ohne eine feste Rumpfspannung kann der Oberkörper
+    dazu neigen, sich zur Seite zu lehnen oder zu rotieren, um das Gewicht zu bewegen.
+    Dies entlastet die Schulter und kann zu muskulären Dysbalancen führen.'
+  wger_id: null
+  variations: []
+  source: unreviewed

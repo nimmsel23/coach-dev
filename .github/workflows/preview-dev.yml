@@ -1,0 +1,141 @@
+# Preview-Deploy für Fitness: dev-Push → 24h-Channel "dev", PR → eigener PR-Channel.
+#
+# Warum vitalos-Checkout: Die Vite-Configs aliassen Nachbar-Repos
+# (Cross-Repo-Imports) — ein nackter Checkout dieses Repos kann nie bauen
+# (deshalb waren die alten Workflows in workflows.disabled/). Das Meta-Repo
+# vitalos liefert per Submodules alle Nachbarn, danach wird DIESES Submodule
+# auf den gerade gepushten Commit gesetzt und nur dieser Workspace gebaut.
+# Telegram-Link kommt wie bei der lokalen Pipeline (scripts/deploy-preview.mjs).
+
+name: Preview (Fitness dev)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+    paths:
+      - 'src/**'
+      - '.gitmodules'
+      - 'plan'
+      - '6pack'
+      - 'Skills'
+      - 'scripts/build-sixpack-data.mjs'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '!**/*.md'
+      - '!**/*.txt'
+      - '!**/*.bak*'
+      - '!docs/**'
+  pull_request:
+    branches: [vitalos, master, dev]
+    paths:
+      - 'src/**'
+      - '.gitmodules'
+      - 'plan'
+      - '6pack'
+      - 'Skills'
+      - 'scripts/build-sixpack-data.mjs'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '!**/*.md'
+      - '!**/*.txt'
+      - '!**/*.bak*'
+      - '!docs/**'
+
+# Repo-Default fürs GITHUB_TOKEN ist "read". Die Firebase-Hosting-Action legt einen Check-Run an
+# (POST /check-runs → checks: write) und kommentiert den PR-Channel-Link (pull-requests: write);
+# ohne beides scheitert der Schritt "Deploy Preview Channel" nach dem Upload mit 403
+# "Resource not accessible by integration" (Run 40889156257, 2026-10-29).
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  preview:
+    # Dependabot PRs are validated by the Check workflow; they do not receive Firebase deploy credentials.
+    if: github.event_name != 'pull_request' || github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout vitalos (Meta-Repo, liefert Nachbar-Repos)
+        uses: actions/checkout@v7
+        with:
+          repository: nimmsel23/vitalos
+          ref: master
+
+      - name: Private Skills submodule access
+        uses: ./.github/actions/skills-submodule-auth
+        with:
+          deploy-key: ${{ secrets.SKILLS_DEPLOY_KEY }}
+
+      - name: Submodules via HTTPS + Token
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "git@github.com:"
+          git submodule sync
+          git submodule update --init --recursive
+
+      - name: fitness-app auf den ausgelösten Commit setzen
+        run: |
+          cd fitness-app
+          SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+          git fetch origin "$SHA"
+          git checkout "$SHA"
+          git submodule sync --recursive
+          git submodule update --init --recursive
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.3.0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # Bewusst NICHT --frozen-lockfile: dieser Workflow nutzt das Lockfile von
+      # vitalos (master), setzt aber fitness-app auf den dev-Commit. Die
+      # package.json von dev weicht gewollt ab (@vos/cross-app-aliases als
+      # link:../vitalos/... statt workspace:*, siehe c524f9b), das Preview-
+      # Lockfile kann also nie exakt passen. Prod (deploy-vitalos.yml) bleibt
+      # strikt frozen.
+      - name: Install (Workspaces)
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Firebase config bereitstellen (fitness-app/firebase.config.js ist gitignored)
+        run: |
+          if [ -n "$FIREBASE_CONFIG" ]; then
+            echo "$FIREBASE_CONFIG" > fitness-app/firebase.config.js
+          elif [ ! -f fitness-app/firebase.config.js ]; then
+            cp firebase.config.js fitness-app/firebase.config.js
+          fi
+        env:
+          FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+
+      - name: Build Fitness
+        run: pnpm --filter ./fitness-app run build:firebase
+
+      - name: Deploy Preview Channel
+        id: firebase_deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FITNESS_AOS || secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: fitness-aos
+          entryPoint: fitness-app
+          target: client
+          channelId: ${{ github.event_name != 'pull_request' && 'dev' || '' }}
+          expires: 24h
+
+      - name: Telegram-Link senden
+        if: success()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🚀 Preview für Fitness (${{ github.event_name == 'pull_request' && format('PR #{0}', github.event.pull_request.number) || 'dev' }}) gebaut!
+
+            🔗 ${{ steps.firebase_deploy.outputs.details_url }}
+            ⏱️ Gültig 24h.
+
+            Commit: ${{ github.event.pull_request.title || github.event.head_commit.message }}

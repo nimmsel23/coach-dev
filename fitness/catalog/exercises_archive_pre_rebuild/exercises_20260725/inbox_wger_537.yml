@@ -1,0 +1,81 @@
+name: inbox_wger_537
+description: 'Proactively generated expert draft for: Schrägbankdrücken KH'
+exercises:
+- exercise_id: wger_537
+  display_name: Schrägbankdrücken KH
+  category: Brust
+  primary_muscles:
+  - 102_pectoralis_major_clavicular
+  - 301_anterior_deltoid
+  secondary_muscles:
+  - 403_triceps_brachii
+  - 403a_triceps_long_head
+  - 403b_triceps_lateral_head
+  - 403c_triceps_medial_head
+  - 101_pectoralis_major
+  - 103_pectoralis_major_sternal
+  - 105_serratus_anterior
+  stabilizers:
+  - 304_rotator_cuff
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 206_erector_spinae
+  - 405_forearm_flexors
+  equipment:
+  - Kurzhanteln
+  - Schrägbank
+  movement_pattern: Upper Body Push - Incline
+  coaching_notes:
+  - '**Vorbereitung und Startposition:** Stellen Sie die Schrägbank auf eine Neigung
+    von 30-45 Grad ein; eine höhere Neigung verschiebt den Fokus stärker auf die vordere
+    Schulter. Legen Sie sich mit festem Rückenkontakt auf die Bank. Ihre Füße stehen
+    schulterbreit und stabil auf dem Boden, um eine feste Basis zu bilden. Ziehen
+    Sie Ihre Schulterblätter aktiv nach hinten und unten (Retraktion und Depression)
+    und halten Sie diese Position während der gesamten Übung bei. Dies stabilisiert
+    das Schultergelenk und betont die Brustmuskulatur. Der untere Rücken hat einen
+    leichten, natürlichen Bogen, ohne ins Hohlkreuz zu fallen.'
+  - '**Aufnehmen der Hanteln:** Nehmen Sie die Kurzhanteln mit einem neutralen Griff
+    (Handflächen zueinander zeigend) auf und positionieren Sie sie mit gestreckten
+    Armen direkt über Ihrer oberen Brust. Die Ellenbogen sind leicht gebeugt, nicht
+    vollständig durchgestreckt.'
+  - '**Exzentrische Phase (Absenken):** Senken Sie die Kurzhanteln langsam und kontrolliert
+    ab. Führen Sie die Ellenbogen dabei seitlich-abwärts, leicht unterhalb der Linie
+    Ihres Rumpfes. Die Hanteln sollten am tiefsten Punkt etwa auf Höhe Ihrer oberen
+    Brust oder leicht darunter ankommen. Achten Sie darauf, die Kontrolle zu behalten
+    und die Schulterblätter fixiert zu lassen, um eine übermäßige Dehnung im Schultergelenk
+    zu vermeiden. Atmen Sie während dieser Phase ein.'
+  - '**Konzentrische Phase (Hochdrücken):** Drücken Sie die Kurzhanteln explosiv,
+    aber kontrolliert, wieder nach oben in die Ausgangsposition über der Brust. Konzentrieren
+    Sie sich dabei auf die Kontraktion Ihrer oberen Brustmuskulatur. Vermeiden Sie
+    ein vollständiges Durchstrecken der Ellenbogen am oberen Punkt, um die Spannung
+    auf der Muskulatur aufrechtzuerhalten und die Gelenke zu schonen. Atmen Sie während
+    des Hochdrückens kräftig aus.'
+  - '**Fokus:** Konzentrieren Sie sich während der gesamten Bewegung bewusst auf die
+    Aktivierung des oberen Brustbereichs und der vorderen Schulter. Die Bewegung sollte
+    fließend und unter voller Muskelkontrolle erfolgen.'
+  common_errors:
+  - '**Zu hohe Bankneigung:** Eine Bankneigung von über 45 Grad verlagert den Trainingsreiz
+    primär auf die vordere Schultermuskulatur (anteriorer Deltamuskel) und reduziert
+    die effektive Belastung der oberen Brust.'
+  - '**Schultern nicht fixiert / hochgezogen:** Ein häufiger Fehler ist das Hochziehen
+    der Schultern zu den Ohren oder das Vorrollen der Schultern. Dies führt zu einer
+    Überlastung des Nackens und der oberen Trapezmuskulatur und nimmt die Spannung
+    von der Brust.'
+  - '**Ellenbogen zu weit außen:** Werden die Ellenbogen zu weit seitlich vom Körper
+    abgespreizt, erhöht sich die Rotationsbelastung auf das Schultergelenk signifikant,
+    was das Verletzungsrisiko für die Rotatorenmanschette stark erhöht. Halten Sie
+    die Ellenbogen leicht angewinkelt und in einer Linie, die etwa 45-60 Grad zum
+    Oberkörper bildet.'
+  - '**Unkontrollierte oder zu schnelle Bewegung:** Besonders in der exzentrischen
+    (absenkenden) Phase wird oft das Gewicht fallen gelassen. Dies reduziert den Trainingseffekt,
+    da der Muskel nicht effektiv unter Spannung steht, und erhöht das Verletzungsrisiko.'
+  - '**Volles Durchstrecken der Ellenbogen am oberen Punkt:** Ein vollständiges "Lockout"
+    der Ellenbogen entlastet die Zielmuskulatur und verlagert die Last auf die Gelenke
+    und Bänder. Halten Sie eine leichte Beugung der Ellenbogen bei, um die Muskelspannung
+    aufrechtzuerhalten.'
+  - '**Instabile Körperhaltung:** Das Anheben der Füße von Boden oder eine instabile
+    Rumpfhaltung (z.B. starkes Hohlkreuz) reduziert die Kraftübertragung und die Stabilität
+    während der Übung. Eine feste Basis ist essenziell.'
+  wger_id: null
+  variations: []
+  source: unreviewed

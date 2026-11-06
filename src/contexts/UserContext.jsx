@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { watchAuth, signIn, signInEmail, signUpEmail, signOut, getUserProfile } from '@db';
+import { watchAuth, signIn, signInEmail, signUpEmail, signOut, getUserProfile, registerDevice } from '@db';
+import { deferStart } from '../lib/db/firestore/offline.js';
 
 const UserContext = createContext();
 
@@ -8,7 +9,7 @@ export function UserProvider({ children }) {
   const [authLoading, setAuthLoading] = useState(true);
 
   // User Stammdaten
-  const [gender, setGender] = useState(() => localStorage.getItem('fitness-gender') || 'male');
+  const [gender, setGender] = useState(() => localStorage.getItem('fitness-gender') || 'm');
   const [split, setSplit] = useState(() => localStorage.getItem('fitness-split') || 'PPL');
   const [cycleLength, setCycleLength] = useState(() => parseInt(localStorage.getItem('fitness-cycleLength') || '4', 10));
   const [defaultLocation, setDefaultLocation] = useState(() => localStorage.getItem('fitness-defaultLocation') || 'Home');
@@ -87,10 +88,11 @@ export function UserProvider({ children }) {
   useEffect(() => {
     async function fetchProfile() {
       if (!user || !user.uid) return;
+      deferStart(() => registerDevice());
       try {
         const data = await getUserProfile(user.uid);
         if (data) {
-          if (data.gender) setGender(data.gender);
+          if (data.gender) setGender(data.gender === 'male' ? 'm' : data.gender === 'female' ? 'f' : data.gender);
           if (data.split) setSplit(data.split);
           if (data.cycleLength) setCycleLength(data.cycleLength);
           if (data.defaultLocation) setDefaultLocation(data.defaultLocation);

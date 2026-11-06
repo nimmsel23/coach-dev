@@ -1,0 +1,49 @@
+exercise_id: brustpresse
+description: Expert details for brustpresse
+exercises:
+- exercise_id: brustpresse
+  id: brustpresse
+  name: Brustpresse
+  display_name: Brustpresse
+  german: Brustpresse
+  category: chest
+  type: compound
+  movement_pattern: horizontal_press
+  equipment:
+  - machine
+  - dumbbell
+  - barbell
+  primary_muscles:
+  - 101_pectoralis_major
+  secondary_muscles:
+  - 301_anterior_deltoid
+  - 403_triceps_brachii
+  coaching_notes:
+  - Halten Sie die Ellenbogen leicht angewinkelt, um die Schultern zu schonen.
+  - Führen Sie die Bewegung kontrolliert und fließend aus, sowohl beim Hochdrücken
+    als auch beim Ablassen des Gewichts.
+  - Konzentrieren Sie sich darauf, die Brustmuskulatur aktiv zu kontrahieren.
+  - Vermeiden Sie es, die Schultern hochzuziehen; halten Sie sie während der gesamten
+    Bewegung stabil und nach hinten unten gezogen.
+  - Atmen Sie beim Hochdrücken aus und beim Ablassen ein.
+  common_errors:
+  - Zu hohes Gewicht, wodurch die Form leidet und andere Muskeln übermäßig eingesetzt
+    werden.
+  - Vollständiges Durchstrecken der Ellenbogen am oberen Punkt, was die Gelenke unnötig
+    belastet.
+  - Zu schnelles Ablassen des Gewichts ohne Kontrolle.
+  - Hochziehen der Schultern zur Ohren, was zu Nackenverspannungen führen kann.
+  - Zu starkes Hohlkreuz, besonders bei Langhantel- oder Kurzhantelvarianten.
+  tags:
+  - chest
+  - push
+  - strength
+  - upper_body
+  - pressing
+  aliases:
+  - chest_press
+  - 32
+  - bankdrücken
+  - machine_press
+  stabilizers: []
+  source: expert

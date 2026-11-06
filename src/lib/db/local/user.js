@@ -30,7 +30,7 @@ export async function getPushSettings() {
   const data = readJSON(LOCAL_KEYS.push, {
     enabled: false,
     tokens: [],
-    types: {},
+    types: { workout: true, activeWorkout: true, habit: true, coverage: true, pplRatio: true, restday: true },
     reminderTime: "18:00",
   });
   const tokens = Array.from(new Set([
@@ -39,7 +39,7 @@ export async function getPushSettings() {
   ].filter(Boolean)));
   return {
     enabled: false,
-    types: {},
+    types: { workout: true, activeWorkout: true, habit: true, coverage: true, pplRatio: true, restday: true },
     reminderTime: "18:00",
     ...data,
     token: tokens[0] || data?.token || null,
@@ -93,3 +93,10 @@ export async function updateUserProfile(uid, data) {
     return true;
   } catch { return false; }
 }
+
+// Geräteliste (users/{uid}/devices) gibt es nur im Firestore-Build.
+export async function registerDevice(_prefs) {}
+
+// 6Pack-Fortschritt: im lokalen Modus liegt er nur im localStorage der 6Pack-Karte.
+export async function getSixpackProgram() { return null; }
+export async function saveSixpackProgram() { return { ok: true }; }

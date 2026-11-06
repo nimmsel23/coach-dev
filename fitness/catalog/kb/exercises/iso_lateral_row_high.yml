@@ -1,0 +1,99 @@
+exercise_id: iso_lateral_row_high
+description: Expert details for Iso-Lateral High Row
+approved_at: '2026-11-01T17:09:17.523238+00:00'
+exercises:
+- exercise_id: iso_lateral_row_high
+  wger_id: 1448
+  id: iso_lateral_row_high
+  name: High Iso Lateral Row Machine
+  display_name: Iso-Lateral High Row
+  german: Iso-Lateral High Row
+  english: Iso-Lateral High Row
+  category: pull
+  type: compound
+  movements:
+  - shoulder_extension
+  - shoulder_adduction
+  - scapular_retraction
+  - scapular_depression
+  - elbow_flexion
+  - iso_lateral
+  equipment:
+  - machine
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 207_teres_major
+  - 202b_trapezius_middle
+  secondary_muscles:
+  - 205_rhomboids
+  - 202c_trapezius_lower
+  - 303_posterior_deltoid
+  - 402_biceps_brachii
+  - 403_brachialis
+  - 404_brachioradialis
+  stabilizers:
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  - 507_multifidus
+  coaching_notes:
+  - Ziehe zuerst die Schulterblätter nach hinten-unten und beginne dann erst mit den
+    Armen, damit der Zug aus dem oberen Rücken und Lat kommt.
+  - Halte den Brustkorb stabil am Polster, lasse den Nacken lang und vermeide ein
+    Vorschieben des Kopfes in der Endposition.
+  - Führe die Ellbogen in einem leicht nach unten-hinten gerichteten Bogen, statt
+    sie nur nach außen zu reißen, um die Zielmuskulatur sauber zu treffen.
+  - 'Nutze den vollen kontrollierten Bewegungsumfang: vorne die Schulterblätter sauber
+    protruieren lassen, hinten aktiv zusammenziehen ohne Schwung.'
+  - Arbeite seitengetrennt bewusst symmetrisch und kontrolliere Exzentrik und Endposition
+    auf beiden Seiten, um Rechts-Links-Differenzen sichtbar zu machen und auszugleichen.
+  common_errors:
+  - Der Zug wird mit den Armen eingeleitet, bevor die Schulterblätter arbeiten, wodurch
+    Bizeps dominiert und Rückenarbeit verloren geht.
+  - Zu viel Gewicht führt zu verkürztem Bewegungsradius, Schwung aus dem Oberkörper
+    und einer unsauberen Endposition.
+  - Die Schultern wandern nach oben zu den Ohren, statt nach hinten-unten zu arbeiten,
+    was den oberen Trapez überbetont und die Zielmuskeln entlastet.
+  - Der Kopf schiebt nach vorne oder der untere Rücken überstreckt, um die Wiederholung
+    künstlich zu beenden.
+  - Eine Seite wird schneller oder weiter gezogen als die andere, wodurch Rotationen
+    im Rumpf und langfristig Kraftasymmetrien entstehen.
+  tags:
+  - unilateral
+  - row
+  - high_row
+  - machine
+  - back
+  - pull
+  - scapular_retraction
+  - unreviewed
+  aliases:
+  - Iso-Lateral Row
+  - Single-Arm High Row Machine
+  - Hammer Strength Iso-Lateral High Row
+  - High Row Machine
+  variations: []
+  source: expert
+  search_aliases:
+  - Iso-Lateral High Row
+  - High Iso Lateral Row Machine
+  - Hammer Strength Iso-Lateral High Row
+  - High Row Machine
+  - Iso-Lateral Row
+  - wger_1448
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: external
+    source_refs:
+      wger:
+      - '1448'
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-11-01T17:09:17.523238+00:00'
+  external_ids:
+    wger:
+    - 1448
+  approved_at: '2026-11-01T17:09:17.523238+00:00'
+  original_description:
+  - Kneeling down on one leg and pulling cable down while driving elbow into the lats.

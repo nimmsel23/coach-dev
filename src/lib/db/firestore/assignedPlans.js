@@ -1,7 +1,11 @@
 import { db } from '../../../firebase.js'
-import { doc, getDoc, setDoc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore'
-
-// Get all plans assigned to current user (as client)
+import {
+  doc,
+  collection,
+  query,
+  where,
+} from 'firebase/firestore';
+import { getDoc, setDoc, getDocs, updateDoc } from './offline.js';// Get all plans assigned to current user (as client)
 export async function getAssignedPlans(clientUid) {
   try {
     const plansRef = collection(db, 'fitness', clientUid, 'wf_workouts')

@@ -1,0 +1,63 @@
+name: inbox_yoga_headstand
+description: AI generated base entry for Yoga Headstand
+exercises:
+- exercise_id: yoga_headstand
+  id: yoga_headstand
+  name: Yoga Headstand
+  display_name: Kopfstand (Salamba Sirsasana)
+  german: Kopfstand (Salamba Sirsasana)
+  category: core
+  type: compound
+  movement_pattern: static_inversion
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - Core
+  - Shoulders
+  secondary_muscles:
+  - Glutes
+  - Hamstrings
+  - Quadriceps
+  - Neck Stabilizers
+  - Erector Spinae
+  coaching_notes:
+  - 'Beginne mit der korrekten Dreipunktauflage: Krone des Kopfes (nicht die Stirn)
+    und die Hände schulterbreit mit gespreizten Fingern. Bilde ein stabiles Dreieck,
+    bei dem die Ellbogen über den Handgelenken ausgerichtet sind. Achte darauf, dass
+    der Hauptteil des Gewichts auf den Unterarmen und Händen liegt, nicht auf dem
+    Kopf.'
+  - Aktiviere deine Rumpfmuskulatur (Core) stark, um die Wirbelsäule zu stabilisieren
+    und ein Hohlkreuz (sogenannter 'Bananenrücken') zu vermeiden. Ziehe den Bauchnabel
+    zur Wirbelsäule, um die Rumpfspannung zu erhöhen.
+  - Halte den Nacken lang und schütze ihn. Vermeide es, in den Nacken zu kollabieren
+    oder das Gewicht primär auf den Kopf zu legen. Ziehe die Schultern aktiv von den
+    Ohren weg (Schulterblatt-Depression), um den Nacken zu entlasten.
+  - Der Aufstieg sollte kontrolliert und langsam erfolgen. Ideal ist es, zunächst
+    mit angezogenen Knien zur Brust zu gehen, bevor die Beine gestreckt werden. Nutze
+    anfangs eine Wand zur Unterstützung, um Stabilität und Sicherheit zu gewährleisten.
+  - Behalte während der gesamten Übung einen ruhigen Blick auf einen festen Punkt,
+    um die Konzentration und das Gleichgewicht zu fördern.
+  common_errors:
+  - Zu viel Gewicht auf dem Kopf oder Nacken, was zu einer Überlastung und möglichen
+    Verletzungen im Halswirbelsäulenbereich führen kann.
+  - Ein gerundeter Rücken oder eine überstreckte Lendenwirbelsäule (Hohlkreuz / 'Bananenrücken')
+    durch mangelnde Rumpfspannung und -kontrolle.
+  - Unkontrolliertes oder schnelles Hochschnellen in die Position, was das Risiko
+    für Stürze und Verletzungen erhöht und die Balance erschwert.
+  - Schultern, die zu den Ohren hochgezogen werden, anstatt sie stabil und depressiv
+    zu halten, was die Nackenstabilität beeinträchtigt.
+  - Mangelnde Vornutzung einer Wand als Stütze in der Lernphase, was zu Stürzen und
+    einem Gefühl der Unsicherheit führen kann.
+  tags:
+  - yoga
+  - balance
+  - inversion
+  - core_strength
+  - stability
+  - bodyweight
+  - shoulders
+  - mindfulness
+  aliases:
+  - Sirsasana
+  - Kopfstand
+  - Headstand

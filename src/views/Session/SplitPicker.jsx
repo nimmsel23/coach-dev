@@ -7,8 +7,8 @@
  * Wiederverwendung des alten Grid-Stils.
  */
 
-import { useState } from 'react';
-import { ArrowUpCircle, ArrowDownCircle, Footprints, ChevronsUp, ChevronsDown, CircleDot } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ArrowUpCircle, ArrowDownCircle, Footprints, ChevronsUp, ChevronsDown, CircleDot, Triangle, Dumbbell } from 'lucide-react';
 import { blockColor } from './utils';
 
 // SPLITS ist NICHT die einzige Stelle mit Push/Pull/Legs-Vokabular im Repo —
@@ -30,13 +30,49 @@ const SPLITS = [
   { key: 'Upper', icon: ChevronsUp },
   { key: 'Lower', icon: ChevronsDown },
   { key: 'Full',  icon: CircleDot },
+  { key: 'Shoulders', icon: Triangle },
+  { key: 'Arms',  icon: Dumbbell },
 ];
 
-export default function SplitPicker({ block, setBlock }) {
+// Long-Press (≥ LONG_PRESS_MS halten, ohne zu verrutschen) öffnet über
+// `onLongPress(key)` die passenden Plan-Vorlagen (SplitPlanSheet.jsx).
+// Rechtsklick am Desktop macht dasselbe. Der normale Tap bleibt die
+// 1-Klick-Split-Auswahl.
+const LONG_PRESS_MS = 450;
+const MOVE_TOLERANCE_PX = 10;
+
+export default function SplitPicker({ block, setBlock, onLongPress }) {
   const [hovered, setHovered] = useState(null);
+  const pressRef = useRef(null);   // { key, x, y, timer }
+  const firedRef = useRef(false);  // Long-Press ausgelöst → folgenden Click schlucken
+
+  const cancelPress = () => {
+    if (pressRef.current?.timer) clearTimeout(pressRef.current.timer);
+    pressRef.current = null;
+  };
+
+  const startPress = (key, e) => {
+    if (!onLongPress || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    cancelPress();
+    firedRef.current = false;
+    pressRef.current = {
+      key, x: e.clientX, y: e.clientY,
+      timer: setTimeout(() => {
+        firedRef.current = true;
+        pressRef.current = null;
+        navigator.vibrate?.(15);
+        onLongPress(key);
+      }, LONG_PRESS_MS),
+    };
+  };
+
+  const movePress = (e) => {
+    const p = pressRef.current;
+    if (p && Math.hypot(e.clientX - p.x, e.clientY - p.y) > MOVE_TOLERANCE_PX) cancelPress();
+  };
 
   return (
-    <div className="grid grid-cols-6 gap-1.5">
+    <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
       {SPLITS.map(({ key, icon: Icon }) => {
         const isActive = block === key;
         const isHovered = hovered === key && !isActive;
@@ -45,11 +81,28 @@ export default function SplitPicker({ block, setBlock }) {
           <button
             key={key}
             type="button"
-            title={key}
+            aria-pressed={isActive}
+            title={onLongPress ? `${key} · lange drücken für Pläne` : key}
             onMouseEnter={() => setHovered(key)}
             onMouseLeave={() => setHovered(null)}
-            onClick={() => setBlock(isActive ? '' : key)}
-            className="group relative flex flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-1.5 text-[9px] font-bold transition-all duration-200 ease-out active:scale-95"
+            onPointerDown={e => startPress(key, e)}
+            onPointerMove={movePress}
+            onPointerUp={cancelPress}
+            onPointerLeave={cancelPress}
+            onPointerCancel={cancelPress}
+            onContextMenu={e => {
+              if (!onLongPress) return;
+              e.preventDefault();
+              if (firedRef.current) return; // Touch-Long-Press hat schon geöffnet
+              cancelPress();
+              firedRef.current = true; // nächster pointerdown setzt zurück
+              onLongPress(key);
+            }}
+            onClick={() => {
+              if (firedRef.current) { firedRef.current = false; return; }
+              setBlock(isActive ? '' : key);
+            }}
+            className="group relative min-h-11 min-w-0 flex flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-1.5 text-[10px] font-bold transition-all duration-200 ease-out active:scale-95 select-none [-webkit-touch-callout:none]"
             style={{
               background: isActive ? color : isHovered ? `${color}1a` : 'var(--card)',
               color: isActive ? '#000' : isHovered ? color : 'var(--dim)',

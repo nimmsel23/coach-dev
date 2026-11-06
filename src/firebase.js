@@ -1,8 +1,9 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { initializeFirestore, persistentLocalCache, persistentSingleTabManager, getFirestore } from "firebase/firestore";
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, browserLocalPersistence, setPersistence } from "firebase/auth";
 import { getMessaging, isSupported as isMessagingSupported } from "firebase/messaging";
-import { getAI, VertexAIBackend } from "firebase/ai";
+import * as firebaseAI from "firebase/ai";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { config } from "../firebase.config.js";
 
 const alreadyInit = getApps().length > 0;
@@ -18,7 +19,14 @@ let vertexAIInstance = undefined;
 export function getVertexAI() {
   if (vertexAIInstance !== undefined) return vertexAIInstance;
   try {
-    vertexAIInstance = getAI(app, { backend: new VertexAIBackend() });
+    // @firebase/ai >= 3 benennt VertexAIBackend in AgentPlatformBackend um.
+    // Location explizit setzen: der neue Default ist "global", der alte war us-central1.
+    // Namespace-Import: die Vitalos-Shell dedupliziert firebase auf eine Root-Kopie
+    // (11.x, dort heißt die Klasse noch VertexAIBackend) — ein Named Import von
+    // AgentPlatformBackend würde dort mit SyntaxError die ganze App lahmlegen.
+    const Backend = Reflect.get(firebaseAI, "AgentPlatformBackend") ?? Reflect.get(firebaseAI, "VertexAIBackend");
+    if (typeof Backend !== "function") throw new Error("Firebase AI backend is unavailable");
+    vertexAIInstance = firebaseAI.getAI(app, { backend: new Backend("us-central1") });
   } catch (error) {
     console.warn("[firebase] Vertex AI init failed", error);
     vertexAIInstance = null;
@@ -29,12 +37,17 @@ export function getVertexAI() {
 export const db = alreadyInit
   ? getFirestore(app)
   : initializeFirestore(app, {
-      localCache: persistentLocalCache({ tabManager: persistentSingleTabManager() }),
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
       // Ohne dieses Flag wirft setDoc() bei jedem undefined-Feldwert (z.B. eine
       // Übung ohne aufgelöste catalog-id) — Auto-Save fängt das im silent-Modus
       // ab und zeigt keinen Fehler, wodurch ganze Session-Saves lautlos verpuffen.
       ignoreUndefinedProperties: true,
     });
+
+// Region muss mit functions/strava.js (REGION-Konstante) übereinstimmen —
+// sonst 404, weil httpsCallable() sonst auf der Default-Region sucht.
+export const functionsInstance = getFunctions(app, "europe-west1");
+export { httpsCallable };
 
 export const auth = getAuth(app);
 setPersistence(auth, browserLocalPersistence).catch(() => {});

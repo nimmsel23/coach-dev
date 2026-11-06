@@ -1,0 +1,303 @@
+{
+  "biceps_brachii": {
+    "muscle_id": "biceps_brachii",
+    "wger_id": 1,
+    "latin": "Musculus biceps brachii",
+    "name_en": "Biceps",
+    "name_de": "Bizeps",
+    "is_front": true,
+    "file": "muscles/biceps_brachii.yml",
+    "rbh_slugs": [
+      "biceps"
+    ]
+  },
+  "anterior_deltoid": {
+    "muscle_id": "anterior_deltoid",
+    "wger_id": 2,
+    "latin": "Musculus deltoideus, Pars clavicularis",
+    "name_en": "Shoulders",
+    "name_de": "Vorderer Delta-Muskel",
+    "is_front": true,
+    "file": "muscles/anterior_deltoid.yml",
+    "rbh_slugs": [
+      "shoulder-front"
+    ]
+  },
+  "serratus_anterior": {
+    "muscle_id": "serratus_anterior",
+    "wger_id": 3,
+    "latin": "Musculus serratus anterior",
+    "name_en": "",
+    "name_de": "Vorderer Sägemuskel",
+    "is_front": true,
+    "file": "muscles/serratus_anterior.yml",
+    "rbh_slugs": [
+      "serratus-anterior"
+    ]
+  },
+  "pectoralis_major": {
+    "muscle_id": "pectoralis_major",
+    "wger_id": 4,
+    "latin": "Musculus pectoralis major",
+    "name_en": "Chest",
+    "name_de": "Großer Brustmuskel",
+    "is_front": true,
+    "file": "muscles/pectoralis_major.yml",
+    "rbh_slugs": [
+      "chest-lower",
+      "chest-upper"
+    ]
+  },
+  "triceps_brachii": {
+    "muscle_id": "triceps_brachii",
+    "wger_id": 5,
+    "latin": "Musculus triceps brachii",
+    "name_en": "Triceps",
+    "name_de": "Trizeps",
+    "is_front": false,
+    "file": "muscles/triceps_brachii.yml",
+    "rbh_slugs": [
+      "triceps-lateral",
+      "triceps-long"
+    ]
+  },
+  "rectus_abdominis": {
+    "muscle_id": "rectus_abdominis",
+    "wger_id": 6,
+    "latin": "Musculus rectus abdominis",
+    "name_en": "Abs",
+    "name_de": "Gerader Bauchmuskel",
+    "is_front": true,
+    "file": "muscles/rectus_abdominis.yml",
+    "rbh_slugs": [
+      "abs-lower",
+      "abs-upper"
+    ]
+  },
+  "gastrocnemius": {
+    "muscle_id": "gastrocnemius",
+    "wger_id": 7,
+    "latin": "Musculus gastrocnemius",
+    "name_en": "Calves",
+    "name_de": "Zwillingswadenmuskel",
+    "is_front": false,
+    "file": "muscles/gastrocnemius.yml",
+    "rbh_slugs": [
+      "calves-gastroc-lateral",
+      "calves-gastroc-medial"
+    ]
+  },
+  "gluteus_maximus": {
+    "muscle_id": "gluteus_maximus",
+    "wger_id": 8,
+    "latin": "Musculus gluteus maximus",
+    "name_en": "Glutes",
+    "name_de": "Großer Gesäßmuskel",
+    "is_front": false,
+    "file": "muscles/gluteus_maximus.yml",
+    "rbh_slugs": [
+      "gluteus-maximus"
+    ]
+  },
+  "trapezius": {
+    "muscle_id": "trapezius",
+    "wger_id": 9,
+    "latin": "Musculus trapezius",
+    "name_en": "",
+    "name_de": "Trapezmuskel / Kapuzenmuskel",
+    "is_front": false,
+    "file": "muscles/trapezius.yml",
+    "rbh_slugs": [
+      "traps-lower",
+      "traps-mid",
+      "traps-upper",
+      "nape"
+    ]
+  },
+  "quadriceps_femoris": {
+    "muscle_id": "quadriceps_femoris",
+    "wger_id": 10,
+    "latin": "Musculus quadriceps femoris",
+    "name_en": "Quads",
+    "name_de": "Vierköpfiger Oberschenkelmuskel",
+    "is_front": true,
+    "file": "muscles/quadriceps_femoris.yml",
+    "rbh_slugs": [
+      "quads"
+    ]
+  },
+  "biceps_femoris": {
+    "muscle_id": "biceps_femoris",
+    "wger_id": 11,
+    "latin": "Musculus biceps femoris",
+    "name_en": "Hamstrings",
+    "name_de": "Beinbeuger",
+    "is_front": false,
+    "file": "muscles/biceps_femoris.yml",
+    "rbh_slugs": [
+      "hamstrings-lateral",
+      "hamstrings-medial"
+    ]
+  },
+  "latissimus_dorsi": {
+    "muscle_id": "latissimus_dorsi",
+    "wger_id": 12,
+    "latin": "Musculus latissimus dorsi",
+    "name_en": "Lats",
+    "name_de": "Breitester Rückenmuskel",
+    "is_front": false,
+    "file": "muscles/latissimus_dorsi.yml",
+    "rbh_slugs": [
+      "lats-lower",
+      "lats-mid",
+      "lats-upper"
+    ]
+  },
+  "brachialis": {
+    "muscle_id": "brachialis",
+    "wger_id": 13,
+    "latin": "Musculus brachialis",
+    "name_en": "",
+    "name_de": "Armbeuger",
+    "is_front": true,
+    "file": "muscles/brachialis.yml",
+    "rbh_slugs": [
+      "biceps"
+    ]
+  },
+  "obliquus_externus_abdominis": {
+    "muscle_id": "obliquus_externus_abdominis",
+    "wger_id": 14,
+    "latin": "Musculus obliquus externus abdominis",
+    "name_en": "",
+    "name_de": "Äußerer schräger Bauchmuskel",
+    "is_front": true,
+    "file": "muscles/obliquus_externus_abdominis.yml",
+    "rbh_slugs": [
+      "obliques"
+    ]
+  },
+  "soleus": {
+    "muscle_id": "soleus",
+    "wger_id": 15,
+    "latin": "Musculus soleus",
+    "name_de": "Schollenmuskel",
+    "name_en": "",
+    "is_front": false,
+    "file": "muscles/soleus.yml",
+    "rbh_slugs": [
+      "calves-soleus"
+    ]
+  },
+  "erector_spinae": {
+    "muscle_id": "erector_spinae",
+    "wger_id": 16,
+    "latin": "Musculus erector spinae",
+    "name_en": "Lower back",
+    "name_de": "Rückenstrecker",
+    "is_front": false,
+    "file": "muscles/erector_spinae.yml",
+    "rbh_slugs": [
+      "lower-back-erectors",
+      "spine"
+    ]
+  },
+  "lateral_deltoid": {
+    "muscle_id": "lateral_deltoid",
+    "wger_id": null,
+    "latin": "Musculus deltoideus, Pars acromialis",
+    "name_en": "Lateral deltoid",
+    "name_de": "Mittlerer Deltamuskel",
+    "is_front": true,
+    "file": "muscles/lateral_deltoid.yml",
+    "rbh_slugs": [
+      "shoulder-side"
+    ]
+  },
+  "posterior_deltoid": {
+    "muscle_id": "posterior_deltoid",
+    "wger_id": null,
+    "latin": "Musculus deltoideus, Pars spinalis",
+    "name_en": "Rear deltoid",
+    "name_de": "Hinterer Deltamuskel",
+    "is_front": false,
+    "file": "muscles/posterior_deltoid.yml",
+    "rbh_slugs": [
+      "deltoid-rear"
+    ]
+  },
+  "gluteus_medius": {
+    "muscle_id": "gluteus_medius",
+    "wger_id": null,
+    "latin": "Musculus gluteus medius",
+    "name_en": "Gluteus medius",
+    "name_de": "Mittlerer Gesäßmuskel",
+    "is_front": false,
+    "file": "muscles/gluteus_medius.yml",
+    "rbh_slugs": [
+      "gluteus-medius"
+    ]
+  },
+  "tibialis_anterior": {
+    "muscle_id": "tibialis_anterior",
+    "wger_id": null,
+    "latin": "Musculus tibialis anterior",
+    "name_en": "Tibialis anterior",
+    "name_de": "Vorderer Schienbeinmuskel",
+    "is_front": true,
+    "file": "muscles/tibialis_anterior.yml",
+    "rbh_slugs": [
+      "tibialis-anterior"
+    ]
+  },
+  "adductors": {
+    "muscle_id": "adductors",
+    "wger_id": null,
+    "latin": "Musculi adductores",
+    "name_en": "Adductors",
+    "name_de": "Adduktoren",
+    "is_front": true,
+    "file": "muscles/adductors.yml",
+    "rbh_slugs": [
+      "adductors"
+    ]
+  },
+  "forearm_flexors": {
+    "muscle_id": "forearm_flexors",
+    "wger_id": null,
+    "latin": "Musculi flexores antebrachii",
+    "name_en": "Forearm flexors",
+    "name_de": "Unterarmbeuger",
+    "is_front": true,
+    "file": "muscles/forearm_flexors.yml",
+    "rbh_slugs": [
+      "forearm-flexors",
+      "forearm"
+    ]
+  },
+  "forearm_extensors": {
+    "muscle_id": "forearm_extensors",
+    "wger_id": null,
+    "latin": "Musculi extensores antebrachii",
+    "name_en": "Forearm extensors",
+    "name_de": "Unterarmstrecker",
+    "is_front": false,
+    "file": "muscles/forearm_extensors.yml",
+    "rbh_slugs": [
+      "forearm-extensors",
+      "forearm"
+    ]
+  },
+  "quadratus_lumborum": {
+    "muscle_id": "quadratus_lumborum",
+    "wger_id": null,
+    "latin": "Musculus quadratus lumborum",
+    "name_en": "Quadratus lumborum",
+    "name_de": "Quadratischer Lendenmuskel",
+    "is_front": false,
+    "file": "muscles/quadratus_lumborum.yml",
+    "rbh_slugs": [
+      "lower-back-ql"
+    ]
+  }
+}

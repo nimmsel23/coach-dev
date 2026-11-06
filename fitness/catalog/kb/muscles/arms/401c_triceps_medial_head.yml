@@ -1,10 +1,11 @@
 id: 401c_triceps_medial_head
+fma_id: FMA:37693
 display_name: Triceps Brachii (Medial Head)
 label_de: Trizeps (Medialer Kopf)
 label_en: Triceps (Medial Head)
 label_lat: M. triceps brachii (caput mediale)
 wger_id: 5
-aliases: [triceps medial head, medialer kopf]
+aliases: [triceps medial head]
 viz:
   # Kein body_muscles-Eintrag: die body-muscles-Bibliothek kennt nur
   # triceps-long/-lateral als eigene Slugs, keinen separaten medialen Slug.

@@ -1,0 +1,87 @@
+exercise_id: wger_245
+description: Expert details for Frenchpress KH
+approved_at: '2026-10-22T21:05:58.046878+00:00'
+exercises:
+- exercise_id: wger_245
+  id: wger_245
+  name: Frenchpress KH
+  display_name: Frenchpress KH
+  german: Frenchpress KH
+  english: Frenchpress KH
+  category: arms
+  equipment:
+  - bench
+  - dumbbell
+  primary_muscles:
+  - 401_triceps_brachii
+  coaching_notes:
+  - 'Nehme die Hanteln in die Hand, lege dich auf eine Bank und stelle dich so hin,
+    dass ca. 1/4 des Kopfes nicht mehr auf der Bank liegt. Strecke die Arme aus und
+    lasse nun mit einem Bogen die Gewichte runter. Wenn die Hanteln knapp über die
+    Stirn sind, drücke sie wieder nach oben.
+
+    Es ist wichtig die Ellenbogen während der ganzen Übung wenig zu bewegen, damit
+    die Trizeps die Arbeit machen.'
+  original_description:
+  - 'Nehme die Hanteln in die Hand, lege dich auf eine Bank und stelle dich so hin,
+    dass ca. 1/4 des Kopfes nicht mehr auf der Bank liegt. Strecke die Arme aus und
+    lasse nun mit einem Bogen die Gewichte runter. Wenn die Hanteln knapp über die
+    Stirn sind, drücke sie wieder nach oben.
+
+    Es ist wichtig die Ellenbogen während der ganzen Übung wenig zu bewegen, damit
+    die Trizeps die Arbeit machen.'
+  tags:
+  - unreviewed
+  - wger
+  wger_id: 245
+  wger_muscle_ids:
+    primary:
+    - 5
+    secondary: []
+  external_ids:
+    wger:
+    - 245
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '245'
+      yuhonas:
+      - EZ-Bar_Skullcrusher
+  source_snapshot:
+    wger:
+      wger_id: 245
+      wger_muscle_ids:
+        primary:
+        - 5
+        secondary: []
+      original_description:
+      - 'Nehme die Hanteln in die Hand, lege dich auf eine Bank und stelle dich so
+        hin, dass ca. 1/4 des Kopfes nicht mehr auf der Bank liegt. Strecke die Arme
+        aus und lasse nun mit einem Bogen die Gewichte runter. Wenn die Hanteln knapp
+        über die Stirn sind, drücke sie wieder nach oben.
+
+        Es ist wichtig die Ellenbogen während der ganzen Übung wenig zu bewegen, damit
+        die Trizeps die Arbeit machen.'
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-22T21:05:58.046878+00:00'
+  secondary_muscles: []
+  stabilizers: []
+  source: expert
+  approved_at: '2026-10-22T21:05:58.046878+00:00'
+  search_aliases:
+  - wger_245
+  - Frenchpress KH
+  yuhonas_id: EZ-Bar_Skullcrusher
+  instructions:
+  - Using a close grip, lift the EZ bar and hold it with your elbows in as you lie
+    on the bench. Your arms should be perpendicular to the floor. This will be your
+    starting position.
+  - Keeping the upper arms stationary, lower the bar by allowing the elbows to flex.
+    Inhale as you perform this portion of the movement. Pause once the bar is directly
+    above the forehead.
+  - Lift the bar back to the starting position by extending the elbow and exhaling.
+  - Repeat.

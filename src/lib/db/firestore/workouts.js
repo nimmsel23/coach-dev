@@ -11,8 +11,10 @@
  * gesetzt. Kleinerer, aber ehrlicher Funktionsumfang statt stiller Lücke.
  */
 import {
-  collection, doc, getDoc, getDocs, updateDoc, writeBatch,
+  collection,
+  doc,
 } from "firebase/firestore";
+import { getDoc, getDocs, updateDoc, writeBatch } from "./offline.js";
 
 import { db } from "../../../firebase.js";
 import { getUid } from "./core.js";
@@ -141,6 +143,10 @@ export async function createWorkout(body, uidOverride) {
   const workout = {
     routine_id: body.routine_id || null,
     sourceRoutineId: body.routine_id || null,
+    sourcePlanId: body.sourcePlanId || null,
+    sourcePlanRoutineId: body.sourcePlanRoutineId || null,
+    sourcePlanVersion: body.sourcePlanVersion || null,
+    sourceAssignmentId: body.sourceAssignmentId || null,
     name: name || `Workout ${new Date().toLocaleDateString("de-AT", { day: "2-digit", month: "2-digit" })}`,
     started_at: new Date().toISOString(),
     finished_at: null,

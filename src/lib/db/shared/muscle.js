@@ -28,7 +28,16 @@ let _muscleToRegionMap = new Map(); // muscleId -> regionId
 // fälschlich als "nicht trainiert", obwohl Sessions dafür existieren.
 const FREE_TEXT_MUSCLE_ALIASES = {
   chest: "chest", pec: "chest", pectoralis: "chest",
-  back: "back", lat: "back", lats: "back", latissimus: "back", trap: "back", traps: "back", rhomboid: "back",
+  // Original-Vokabular der yuhonas/free-exercise-db (17 Namen, mit Leerzeichen:
+  // "lower back"/"middle back", dazu "abdominals", "lats", "traps", "neck") —
+  // auf die spezifischen KB-Regionen aufgelöst, nicht auf die Sammelregion "back"
+  // (die gewinnt keinen Muskel und taucht in Coverage/Recovery nie auf).
+  back: "middle_back", lat: "middle_back", lats: "middle_back", latissimus: "middle_back",
+  middle_back: "middle_back", lower_back: "lower_back",
+  trap: "upper_back", traps: "upper_back", trapezius: "upper_back", neck: "upper_back",
+  rhomboid: "rhomboids", rhomboids: "rhomboids",
+  abdominals: "core", abdominal: "core",
+  hip_flexors: "iliopsoas", hip_flexor: "iliopsoas",
   shoulders: "shoulders", shoulder: "shoulders", delt: "shoulders", delts: "shoulders", deltoid: "shoulders",
   arms: "arms", arm: "arms", bicep: "arms", biceps: "arms", tricep: "arms", triceps: "arms", forearm: "arms",
   core: "core", abs: "core", ab: "core", obliques: "core",
@@ -142,7 +151,10 @@ export function muscleToRegion(muscle) {
 
   // 3. Freitext-Fallback (nur wenn die aufgelöste Region tatsächlich aus der
   // KB registriert ist — sonst wie bisher unverändert zurückgeben).
-  const alias = FREE_TEXT_MUSCLE_ALIASES[id.toLowerCase()];
+  // Leerzeichen -> Unterstrich: "lower back" -> "lower_back" (Yuhonas-Schreibweise).
+  const key = id.toLowerCase().replace(/\s+/g, "_");
+  if (_kbRegions.has(key)) return key;
+  const alias = FREE_TEXT_MUSCLE_ALIASES[key];
   if (alias && _kbRegions.has(alias)) return alias;
 
   return id;

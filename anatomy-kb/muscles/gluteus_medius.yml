@@ -1,0 +1,17 @@
+muscle_id: gluteus_medius
+wger_id: None
+latin: Musculus gluteus medius
+name_en: Gluteus medius
+is_front: false
+exercises:
+  wger_1225:
+    function_in_exercise: Primärer Stabilisator des Beckens in der Frontalebene; verhindert
+      das Abkippen zur Seite des Spielbeins.
+origin: Außenfläche des Darmbeins (Os ilium) zwischen der Linea glutea anterior und
+  der Linea glutea posterior.
+insertion: Laterale Fläche des großen Rollhügels (Trochanter major) des Oberschenkelknochens
+  (Femur).
+innervation: Nervus gluteus superior (L4-S1)
+function: Der Musculus gluteus medius ist der Hauptabduktor des Hüftgelenks. Er spielt
+  zudem eine wichtige Rolle bei der Stabilisierung des Beckens beim Gehen und ermöglicht
+  die Innen- (bei Hüftflexion) sowie Außenrotation (bei Hüftextension) des Oberschenkels.

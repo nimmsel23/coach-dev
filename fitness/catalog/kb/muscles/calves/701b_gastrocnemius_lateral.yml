@@ -1,10 +1,11 @@
 id: 701b_gastrocnemius_lateral
+fma_id: FMA:45959
 display_name: Gastrocnemius (Lateral Head)
 label_de: Zwillingswadenmuskel (Lateraler Kopf)
 label_en: Calves (Lateral Head)
 label_lat: M. gastrocnemius (caput laterale)
 wger_id: 7
-aliases: [gastrocnemius lateral, lateraler kopf]
+aliases: [gastrocnemius lateral]
 viz:
   body_muscles:
     view: BACK

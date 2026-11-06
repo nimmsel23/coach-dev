@@ -3,8 +3,12 @@
  */
 
 import {
-  doc, setDoc, getDoc, updateDoc, getDocs, writeBatch, serverTimestamp, collectionGroup, collection,
+  doc,
+  serverTimestamp,
+  collectionGroup,
+  collection,
 } from "firebase/firestore";
+import { setDoc, getDoc, updateDoc, getDocs, writeBatch } from "./offline.js";
 
 import { db } from "../../../firebase.js";
 import { LOCAL_FITNESS_API_BASE } from "./core.js";

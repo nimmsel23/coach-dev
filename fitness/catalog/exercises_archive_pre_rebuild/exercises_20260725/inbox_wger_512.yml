@@ -1,0 +1,59 @@
+name: inbox_wger_512
+description: 'Proactively generated expert draft for: Rudern Sitzend, Eng'
+exercises:
+- exercise_id: wger_512
+  display_name: Rudern Sitzend, Eng
+  category: Rücken
+  equipment: Kabelzug
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 205_rhomboids
+  - 203_trapezius_middle
+  - 303_posterior_deltoid
+  secondary_muscles:
+  - 401_biceps_brachii
+  - 402_brachialis
+  - 404_brachioradialis
+  stabilizers:
+  - 206_erector_spinae
+  - 501_rectus_abdominis
+  - 502_obliques
+  - 304_rotator_cuff
+  movement_pattern: Horizontales Ziehen
+  coaching_notes:
+  - '**Startposition:** Setzen Sie sich aufrecht mit leicht angewinkelten Knien und
+    stellen Sie die Füße fest auf die Ablage. Greifen Sie den engen Griff, die Arme
+    sind gestreckt, aber die Schultern nicht nach vorne gerundet.'
+  - '**Körperhaltung:** Halten Sie den Rücken während der gesamten Bewegung gerade
+    und die Brust stolz herausgedrückt. Vermeiden Sie ein Hohlkreuz oder einen Rundrücken.'
+  - '**Zugbewegung:** Beginnen Sie die Bewegung, indem Sie die Schulterblätter nach
+    hinten und unten ziehen. Ziehen Sie den Griff mit den Ellenbogen eng am Körper
+    entlang in Richtung Ihres unteren Bauches oder Nabels. Konzentrieren Sie sich
+    auf die Kontraktion Ihrer Rückenmuskulatur (Latissimus und obere Rückenmuskeln).'
+  - '**Spitzenkontraktion:** Halten Sie die Kontraktion für einen Moment am Ende der
+    Zugbewegung, indem Sie die Schulterblätter aktiv zusammenpressen.'
+  - '**Negative Phase:** Führen Sie das Gewicht kontrolliert und langsam zurück, indem
+    Sie die Arme strecken und die Schultern wieder nach vorne gleiten lassen. Behalten
+    Sie dabei die Spannung im Rücken bei und lassen Sie das Gewicht nicht unkontrolliert
+    zurückschnellen.'
+  - '**Atmung:** Atmen Sie beim Ziehen des Griffs aus und beim kontrollierten Zurückführen
+    ein.'
+  common_errors:
+  - '**Rundrücken:** Ein häufiger Fehler ist das Nach-vorne-Runden des Rückens während
+    der Bewegung, besonders in der exzentrischen Phase. Dies erhöht das Verletzungsrisiko
+    für die Wirbelsäule und reduziert die Effektivität für die Rückenmuskulatur.'
+  - '**Schwungholen mit dem Oberkörper:** Viele neigen dazu, den Oberkörper stark
+    nach vorne und hinten zu bewegen, um Schwung zu holen. Dies nimmt die Spannung
+    von der Zielmuskulatur und verringert die biomechanische Effizienz.'
+  - '**Zu viel Armeinsatz:** Die Bewegung sollte primär aus dem Rücken und den Schulterblättern
+    initiiert werden, nicht durch reines Beugen der Arme. Achten Sie darauf, dass
+    der Bizeps nur assistierend arbeitet.'
+  - '**Schultern zu den Ohren ziehen:** Vermeiden Sie es, die Schultern während des
+    Ziehens nach oben zu den Ohren zu ziehen (Schulterelevation). Die Schultern sollten
+    stattdessen nach hinten unten bewegt werden (Schulterblattretraktion und Depression).'
+  - '**Unkontrollierte Rückführung:** Das Gewicht unkontrolliert zurückschnellen zu
+    lassen, verringert nicht nur den Trainingseffekt der negativen Phase, sondern
+    kann auch zu Verletzungen führen.'
+  wger_id: null
+  variations: []
+  source: unreviewed

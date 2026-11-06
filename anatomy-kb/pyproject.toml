@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anatomy-kb"
+version = "0.1.0"
+description = "Anatomy Intelligence Layer KB"
+requires-python = ">=3.11"
+dependencies = [
+  "typer>=0.9.0",
+  "rich>=13.0.0",
+  "PyYAML>=6.0",
+  "loguru>=0.7.0",
+  "aiohttp>=3.9.0",
+  "httpx>=0.25.0",
+]
+
+[project.scripts]
+anatomy-agent = "anatomy_kb.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["anatomy_kb*"]

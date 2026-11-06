@@ -1,0 +1,16 @@
+[Unit]
+Description=Anatomy KB API Server
+After=network.target
+
+[Service]
+Type=simple
+User=alpha
+WorkingDirectory=/home/alpha/anatomy-kb
+ExecStart=/usr/bin/python3 /home/alpha/anatomy-kb/server.py --port 9200
+Restart=always
+RestartSec=5
+StandardOutput=append:/tmp/anatomy-kb.log
+StandardError=append:/tmp/anatomy-kb.log
+
+[Install]
+WantedBy=multi-user.target

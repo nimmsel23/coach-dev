@@ -1,0 +1,251 @@
+#!/usr/bin/env bash
+# kbctl — anatomy-kb control (:9200)
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")" && pwd)"
+source "$ROOT/scripts/_helpers.sh"
+
+PORT="${ANATOMY_KB_PORT:-9200}"
+HOST="${ANATOMY_KB_HOST:-127.0.0.1}"
+URL="http://${HOST}:${PORT}"
+PIDFILE="/tmp/anatomy-kb-${USER:-alpha}.pid"
+LOGFILE="/tmp/anatomy-kb-${USER:-alpha}.log"
+DAEMON_PIDFILE="/tmp/anatomy-daemon-${USER:-alpha}.pid"
+DAEMON_LOGFILE="/tmp/anatomy-daemon-${USER:-alpha}.log"
+
+usage() {
+  cat <<EOF
+kbctl — anatomy-kb control (Server :${PORT} & Daemon)
+
+  Server:
+    kbctl start          Server starten (background)
+    kbctl stop           Server stoppen
+    kbctl restart        Restart
+    kbctl status         PID + Port + Uptime
+    kbctl health         /health Endpoint prüfen
+    kbctl logs           Server-Log live verfolgen
+
+  Expert Daemon:
+    kbctl daemon-start   Autonome Veredelung starten
+    kbctl daemon-stop    Daemon stoppen
+    kbctl daemon-status  Status prüfen
+    kbctl daemon-logs    Daemon-Log (Refinement & Sync)
+
+  API-Shortcuts:
+    kbctl list           Alle Übungen
+    kbctl resolve QUERY  Alias-/Fuzzy-Resolver
+    kbctl bodymap ID     BodyMap-Regions für eine Übung
+
+Env:
+  ANATOMY_KB_PORT   (default: 9200)
+EOF
+}
+
+# --- Server-Kontrolle --------------------------------------------------------
+
+cmd_start() {
+  if ss -ltn | grep -q ":${PORT} "; then
+    log_warn "Port :${PORT} bereits belegt — Server läuft vermutlich bereits."
+    cmd_status
+    return
+  fi
+  cd "$ROOT"
+  nohup python3 server.py --port "$PORT" >"$LOGFILE" 2>&1 &
+  echo $! >"$PIDFILE"
+  sleep 1
+  if kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+    log_info "Gestartet (PID $(cat "$PIDFILE"), :${PORT})"
+  else
+    die "Start fehlgeschlagen — siehe $LOGFILE"
+  fi
+}
+
+cmd_stop() {
+  local pid=""
+  if [[ -f "$PIDFILE" ]]; then
+    pid=$(cat "$PIDFILE")
+  fi
+  
+  if [[ -z "$pid" ]] || ! kill -0 "$pid" 2>/dev/null; then
+    pid=$(ss -ltnp "sport = :${PORT}" 2>/dev/null | grep -o 'pid=[0-9]*' | head -n1 | cut -d= -f2 || true)
+  fi
+
+  if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
+    kill "$pid" && rm -f "$PIDFILE"
+    log_info "Gestoppt (PID $pid)"
+  else
+    log_warn "Kein laufender Prozess für Port :${PORT} gefunden"
+    rm -f "$PIDFILE"
+  fi
+}
+
+cmd_restart() { cmd_stop; sleep 0.5; cmd_start; }
+
+cmd_status() {
+  local pid="—" uptime="—" port_status="down"
+
+  # 1. Check PID file
+  if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+    pid=$(cat "$PIDFILE")
+    port_status="up"
+  # 2. Check Port if PID file missing/stale
+  elif ss -ltn | grep -q ":${PORT} "; then
+    pid=$(ss -ltnp "sport = :${PORT}" 2>/dev/null | grep -o 'pid=[0-9]*' | head -n1 | cut -d= -f2 || echo "—")
+    port_status="up (ext)"
+  fi
+
+  if [[ "$pid" != "—" ]]; then
+    uptime=$(ps -o etime= -p "$pid" 2>/dev/null | tr -d ' ' || echo "?")
+  fi
+
+  render_table "Service\tPID\tPort\tUptime\tStatus" "anatomy-kb\t$pid\t:${PORT}\t$uptime\t$port_status"
+}
+
+cmd_health() {
+  if command -v http >/dev/null 2>&1; then
+    http --check-status GET "${URL}/health" 2>/dev/null \
+      && log_info "Health OK" \
+      || die "Health check fehlgeschlagen — läuft der Server? (kbctl start)"
+  else
+    curl -fsS "${URL}/health" \
+      && log_info "Health OK" \
+      || die "Health check fehlgeschlagen — läuft der Server? (kbctl start)"
+  fi
+}
+
+cmd_logs() {
+  [[ -f "$LOGFILE" ]] || die "Kein Log-File: $LOGFILE"
+  tail -f "$LOGFILE"
+}
+
+# --- Daemon-Kontrolle --------------------------------------------------------
+
+cmd_daemon_start() {
+  if pgrep -f "$ROOT/daemon.py" >/dev/null; then
+    log_warn "Daemon läuft bereits (systemd oder anderer Prozess)."
+    cmd_daemon_status
+    return
+  fi
+  cd "$ROOT"
+  nohup python3 daemon.py >/dev/null 2>&1 &
+  echo $! >"$DAEMON_PIDFILE"
+  sleep 1
+  if kill -0 "$(cat "$DAEMON_PIDFILE")" 2>/dev/null; then
+    log_info "Daemon gestartet (PID $(cat "$DAEMON_PIDFILE"))"
+  else
+    die "Daemon-Start fehlgeschlagen — siehe $DAEMON_LOGFILE"
+  fi
+}
+
+cmd_daemon_stop() {
+  local pid=""
+  if [[ -f "$DAEMON_PIDFILE" ]]; then
+    pid=$(cat "$DAEMON_PIDFILE")
+  fi
+
+  if [[ -z "$pid" ]] || ! kill -0 "$pid" 2>/dev/null; then
+    pid=$(pgrep -f "$ROOT/daemon.py" | head -n1 || true)
+  fi
+
+  if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
+    kill "$pid" && rm -f "$DAEMON_PIDFILE"
+    log_info "Gestoppt (PID $pid)"
+  else
+    log_warn "Kein laufender Daemon gefunden"
+    rm -f "$DAEMON_PIDFILE"
+  fi
+}
+
+cmd_daemon_status() {
+  local pid="—" uptime="—" status="down"
+  if [[ -f "$DAEMON_PIDFILE" ]] && kill -0 "$(cat "$DAEMON_PIDFILE")" 2>/dev/null; then
+    pid=$(cat "$DAEMON_PIDFILE")
+    status="active"
+  else
+    pid=$(pgrep -f "$ROOT/daemon.py" | head -n1 || echo "—")
+    if [[ "$pid" != "—" ]]; then
+      status="active (ext)"
+    fi
+  fi
+
+  if [[ "$pid" != "—" ]]; then
+    uptime=$(ps -o etime= -p "$pid" 2>/dev/null | tr -d ' ' || echo "?")
+  fi
+  render_table "Service\tPID\tStatus\tUptime" "expert-daemon\t$pid\t$status\t$uptime"
+}
+
+cmd_daemon_logs() {
+  [[ -f "$DAEMON_LOGFILE" ]] || die "Kein Daemon Log: $DAEMON_LOGFILE"
+  tail -f "$DAEMON_LOGFILE"
+}
+
+# --- API-Shortcuts -----------------------------------------------------------
+
+cmd_list() {
+  _require_server
+  if command -v http >/dev/null 2>&1; then
+    http GET "${URL}/api/exercises" | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+rows = [['ID','Name','Muster','Primär']]
+for e in data:
+    rows.append([e['exercise_id'], e.get('german') or e['display_name'],
+                 e.get('movement_pattern',''), ', '.join(e.get('primary_muscles',[])[:3])])
+$(have_gum && echo "
+import subprocess
+lines = ['\\t'.join(r) for r in rows]
+subprocess.run(['gum','table','--print','--separator=\\t'], input='\\n'.join(lines), text=True)
+" || echo "
+for r in rows: print('  '.join(f'{c:<22}' for c in r))
+")
+" 2>/dev/null || curl -fsS "${URL}/api/exercises"
+  fi
+}
+
+cmd_resolve() {
+  _require_server
+  local q="${1:-}"; [[ -n "$q" ]] || die "Usage: kbctl resolve QUERY"
+  if command -v http >/dev/null 2>&1; then
+    http GET "${URL}/api/resolve" "q==$q"
+  else
+    curl -fsS "${URL}/api/resolve?q=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$q")"
+  fi
+}
+
+cmd_bodymap() {
+  _require_server
+  local id="${1:-}"; [[ -n "$id" ]] || die "Usage: kbctl bodymap EXERCISE_ID"
+  if command -v http >/dev/null 2>&1; then
+    http GET "${URL}/api/exercise/${id}/bodymap"
+  else
+    curl -fsS "${URL}/api/exercise/${id}/bodymap"
+  fi
+}
+
+_require_server() {
+  if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then return; fi
+  die "Server nicht erreichbar — starte mit: kbctl start"
+}
+
+# --- Dispatch ----------------------------------------------------------------
+
+cmd="${1:-help}"
+shift || true
+
+case "$cmd" in
+  start)   cmd_start ;;
+  stop)    cmd_stop ;;
+  restart) cmd_restart ;;
+  status)  cmd_status ;;
+  health)  cmd_health ;;
+  logs)    cmd_logs ;;
+  daemon-start)  cmd_daemon_start ;;
+  daemon-stop)   cmd_daemon_stop ;;
+  daemon-status) cmd_daemon_status ;;
+  daemon-logs)   cmd_daemon_logs ;;
+  list)    cmd_list ;;
+  resolve) cmd_resolve "$@" ;;
+  bodymap) cmd_bodymap "$@" ;;
+  help|--help|-h) usage ;;
+  *) log_error "Unbekannter Befehl: $cmd"; usage; exit 1 ;;
+esac

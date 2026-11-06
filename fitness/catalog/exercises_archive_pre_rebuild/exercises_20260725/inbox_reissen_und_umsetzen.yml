@@ -1,0 +1,67 @@
+name: inbox_reissen_und_umsetzen
+description: AI generated base entry for Reissen und Umsetzen
+exercises:
+- exercise_id: reissen_und_umsetzen
+  id: reissen_und_umsetzen
+  name: Reissen und Umsetzen
+  display_name: Reißen und Umsetzen
+  german: Reißen und Umsetzen
+  category: legs
+  type: compound
+  movement_pattern: vertical_pull
+  equipment:
+  - barbell
+  primary_muscles:
+  - Quadriceps
+  - Hamstrings
+  - Glutes
+  - Erector Spinae
+  - Trapezius
+  - Deltoids
+  secondary_muscles:
+  - Forearms
+  - Core
+  - Calves
+  - Latissimus Dorsi
+  coaching_notes:
+  - 'Fokussieren Sie auf die Technik: Vorrang hat immer die saubere Ausführung vor
+    dem verwendeten Gewicht. Beginnen Sie mit leichten Gewichten, um die Bewegungsmuster
+    zu meistern.'
+  - 'Explosive Hüftstreckung: Generieren Sie maximalen Schwung und Kraft durch eine
+    schnelle und vollständige Streckung von Hüfte und Knien. Denken Sie an einen kräftigen
+    Sprung.'
+  - 'Aktives Untertauchen: Nachdem die Stange maximale Höhe erreicht hat, ziehen Sie
+    sich schnell und aktiv unter die Stange, um sie in einer tiefen Kniebeuge zu fangen
+    (Überkopf für Reißen, Front Rack für Umsetzen).'
+  - 'Stabile Rumpfspannung: Halten Sie den Rumpf während der gesamten Bewegung fest
+    und stabil, um die Kraftübertragung zu optimieren und Verletzungen vorzubeugen.'
+  - 'Stange nah am Körper halten: Achten Sie darauf, die Langhantel so nah wie möglich
+    am Körper zu führen, um Effizienz zu maximieren und unnötigen Kraftaufwand zu
+    vermeiden.'
+  common_errors:
+  - 'Zu frühes Armziehen: Die Arme sollten erst eingesetzt werden, nachdem Hüfte und
+    Beine die maximale Streckung erreicht haben. Das primäre Ziehen kommt aus den
+    Beinen und der Hüfte.'
+  - 'Unzureichende Hüftstreckung: Wenn die Hüfte nicht vollständig und explosiv gestreckt
+    wird, fehlt es an Höhe und Kraft, um die Stange effektiv zu fangen.'
+  - 'Rundrücken: Eine unzureichende Rumpfspannung oder schlechte Startposition kann
+    zu einem Rundrücken führen, insbesondere in der ersten Zugphase, was das Verletzungsrisiko
+    erhöht.'
+  - 'Stange vom Körper wegführen: Wenn die Stange zu weit vom Körper entfernt ist,
+    erhöht sich der Hebelarm, was die Bewegung ineffizient macht und mehr Kraft erfordert.'
+  - 'Unsichere Fangposition: Ein instabiler Empfang der Stange (z.B. nicht tief genug
+    gehen, schlechte Überkopf- oder Front-Rack-Position) kann zu Fehlversuchen oder
+    Verletzungen führen.'
+  tags:
+  - Olympic Weightlifting
+  - Explosive
+  - Full Body
+  - Barbell
+  - Strength
+  - Power
+  - Advanced
+  - Technique
+  aliases:
+  - Snatch and Clean
+  - Reißen
+  - Umsetzen

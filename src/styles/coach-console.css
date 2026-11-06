@@ -1,0 +1,483 @@
+/* ==========================================================================
+   Coach Console — "Hidden Chamber" scoped theme (views/Coach/**)
+   1:1 port of the approved standalone prototype (Artifact
+   eb12dd7a-9a12-494a-8abe-dfa257cb9edf, "Hidden Chamber — Coach Console")
+   into the real component tree. Colors/spacing/radii below are copied
+   verbatim from the prototype's inline <style> block, only the selectors
+   are renamed to the cc- / coach-console scoping so they layer onto the
+   app's existing fit- Tailwind cascade instead of a static mock DOM.
+   ========================================================================== */
+
+.coach-console {
+  --bg: #100e0a;
+  --bg2: #171310;
+  --panel: #1c1712;
+  --card: #201a14;
+  --card-hover: #26201a;
+  --line: rgba(255, 180, 84, 0.16);
+  --line-strong: rgba(255, 180, 84, 0.32);
+  --ink: #f3e9d8;
+  --muted: #c9bfae;
+  --dim: #9a8f7c;
+  --dimmer: #645b4d;
+  --accent: #ffb454;
+  --accent-glow: rgba(255, 180, 84, 0.14);
+  --green: #7ef0b3;
+  --red: #ff6b5e;
+  --orange: #ffb454;
+  --glass: rgba(16, 14, 10, 0.75);
+  --glass-border: rgba(255, 180, 84, 0.12);
+  --scrim: rgba(16, 14, 10, 0.72);
+  --surface-selected: color-mix(in srgb, var(--accent) 10%, var(--card));
+  --accent-subtle: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-subtle-hover: color-mix(in srgb, var(--accent) 16%, transparent);
+  --accent-border: var(--line-strong);
+  --phosphor-subtle: rgba(126, 240, 179, 0.14);
+  --danger-subtle: rgba(255, 107, 94, 0.14);
+
+  --cc-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --cc-serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+
+  position: relative;
+  isolation: isolate;
+  color: var(--ink);
+  font-family: var(--cc-mono);
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(ellipse 1200px 800px at 15% -10%, rgba(255, 180, 84, 0.07), transparent 60%),
+    radial-gradient(ellipse 900px 700px at 100% 10%, rgba(126, 240, 179, 0.05), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(255, 180, 84, 0.025) 0px, rgba(255, 180, 84, 0.025) 1px, transparent 1px, transparent 34px),
+    repeating-linear-gradient(90deg, rgba(255, 180, 84, 0.025) 0px, rgba(255, 180, 84, 0.025) 1px, transparent 1px, transparent 34px),
+    var(--bg);
+}
+
+.coach-console::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.06) 0px, rgba(0, 0, 0, 0.06) 1px, transparent 1px, transparent 3px);
+}
+
+.coach-console h1,
+.coach-console h2,
+.coach-console h3 {
+  font-family: var(--cc-serif);
+  font-style: italic;
+  font-weight: 700;
+}
+
+/* .card carries no base rule elsewhere in the app (verified) — safe to own
+   the dossier look here without clashing with a global definition. */
+.coach-console .card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+.coach-console .card:hover {
+  border-color: var(--line-strong);
+}
+
+/* Sharpen the generic soft-rounded card language into the tactical dossier
+   look. Substring selectors are safe here: none of rounded-xl/2xl/3xl is a
+   substring of another Tailwind radius class, rounded-full is untouched so
+   pills/badges/avatars keep their shape. */
+.coach-console [class*="rounded-2xl"],
+.coach-console [class*="rounded-3xl"] {
+  border-radius: 2px !important;
+}
+.coach-console [class*="rounded-xl"] {
+  border-radius: 2px !important;
+}
+
+.coach-console button,
+.coach-console input,
+.coach-console textarea,
+.coach-console select {
+  font-family: inherit;
+}
+
+.coach-console ::selection {
+  background: var(--accent-subtle-hover);
+  color: var(--ink);
+}
+
+@keyframes ccRise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes ccBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+/* ---------- Command bar (Coach/index.jsx header) ---------- */
+.cc-cmdbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  animation: ccRise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.cc-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.85;
+}
+.cc-eyebrow .cc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: ccBlink 2.4s ease-in-out infinite;
+}
+.cc-cmdbar h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 22px var(--accent-glow);
+}
+.cc-cmdbar h1 em,
+.cc-cmdbar h1 .cc-em {
+  color: var(--accent);
+  font-style: italic;
+}
+.cc-readout {
+  text-align: right;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  color: var(--dim);
+  border-left: 1px dashed var(--line-strong);
+  padding-left: 16px;
+}
+.cc-readout b {
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ---------- Switchboard (main tab selector) ---------- */
+.cc-switchboard {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  animation: ccRise 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+}
+.cc-switch {
+  position: relative;
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+  padding: 12px 16px 12px 42px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 3px !important;
+  color: var(--dim);
+  transition: all 0.18s ease;
+}
+.cc-switch::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--dimmer);
+  transition: all 0.2s ease;
+}
+.cc-switch:hover {
+  border-color: var(--line-strong);
+  background: var(--card);
+}
+.cc-switch.active {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--accent-subtle), transparent);
+}
+.cc-switch.active::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+.cc-switch .cc-idx {
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+.cc-switch.active .cc-idx {
+  color: var(--accent);
+  opacity: 1;
+}
+.cc-switch .cc-lbl {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+}
+.cc-switch .cc-cnt {
+  font-size: 10px;
+  color: var(--dim);
+  margin-left: 6px;
+}
+
+/* ---------- Section title (per-panel header, above each sub-tab body) ---------- */
+.cc-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+  animation: ccRise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.cc-section-title h2 {
+  font-size: 20px;
+  margin: 0;
+  color: var(--ink);
+}
+.cc-tag {
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 2px;
+  border: 1px solid var(--line-strong);
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+/* ---------- Dossier cards (exercise inbox, InboxCard.jsx) ---------- */
+.cc-dossier {
+  position: relative;
+}
+.cc-dossier::before,
+.cc-dossier::after,
+.cc-dossier .cc-br1,
+.cc-dossier .cc-br2 {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-color: var(--line-strong);
+  border-style: solid;
+  opacity: 0.9;
+}
+.cc-dossier::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.cc-dossier::after { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+.cc-dossier .cc-br1 { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; position: absolute; }
+.cc-dossier .cc-br2 { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; position: absolute; }
+
+/* Compact grid of dossier cards, matching the prototype's `.grid-cards`
+   auto-fill layout instead of full-width stacked rows. */
+.cc-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+/* Ghost action row at the bottom of a dossier card — replaces the old
+   icon-square buttons (bg-fit-red/5 + tiny icon, illegible on dark bg)
+   with the prototype's full-width color-coded text buttons. */
+.cc-action-row {
+  display: flex;
+  gap: 6px;
+  border-top: 1px dashed var(--line);
+  padding-top: 11px;
+  margin-top: 12px;
+}
+.cc-btn-ghost {
+  flex: 1;
+  font-family: var(--cc-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 8px 6px;
+  border-radius: 2px !important;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--dim);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.cc-btn-ghost:hover { background: var(--card-hover); color: var(--ink); }
+.cc-btn-ghost:disabled { opacity: 0.45; cursor: not-allowed; }
+.cc-btn-ghost.go { color: var(--green); border-color: rgba(126, 240, 179, 0.35); }
+.cc-btn-ghost.go:hover { background: var(--phosphor-subtle); }
+.cc-btn-ghost.no { color: var(--red); border-color: rgba(255, 107, 94, 0.35); }
+.cc-btn-ghost.no:hover { background: var(--danger-subtle); }
+.cc-btn-ghost.mid { color: var(--accent); border-color: rgba(255, 180, 84, 0.35); flex: 0.7; }
+.cc-btn-ghost.mid:hover { background: var(--accent-subtle); }
+
+/* ---------- Roster (ClientsPanel.jsx) ---------- */
+.cc-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.cc-led.client { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.cc-led.friend { background: var(--dimmer); opacity: 1; }
+
+.cc-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  border: 1px solid var(--line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--cc-serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--accent);
+  background: var(--card);
+  flex-shrink: 0;
+}
+
+/* ---------- Panel shells (CatalogBrowser, ClientsPanel outer frames) ---------- */
+.cc-panel {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 2px !important;
+}
+.cc-panel::before,
+.cc-panel::after,
+.cc-panel .cc-br1,
+.cc-panel .cc-br2 {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-color: var(--line-strong);
+  border-style: solid;
+  z-index: 2;
+  pointer-events: none;
+}
+.cc-panel::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.cc-panel::after { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+.cc-panel .cc-br1 { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; position: absolute; }
+.cc-panel .cc-br2 { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; position: absolute; }
+
+.cc-panel-side {
+  background: var(--bg2);
+}
+.cc-panel-head {
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  opacity: 1;
+}
+
+/* ---------- Console-style search inputs (terminal prompt) ---------- */
+.cc-terminal-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 2px !important;
+  padding: 11px 14px;
+}
+.cc-terminal-input .cc-prompt {
+  color: var(--green);
+  font-weight: 700;
+}
+.cc-terminal-input input {
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  outline: none;
+  color: var(--ink);
+  font-family: var(--cc-mono);
+  font-size: 13px;
+  padding: 0 !important;
+}
+.cc-terminal-input input::placeholder { color: var(--dimmer); }
+
+.cc-search {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 2px !important;
+  color: var(--ink);
+}
+.cc-search:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* ---------- Secondary tab strip (ClientsPanel detail tabs) ---------- */
+.cc-tabstrip {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.cc-tab {
+  padding: 9px 14px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.cc-tab:hover { color: var(--ink); }
+.cc-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ---------- List rows (CatalogBrowser search results) ---------- */
+.cc-list-row {
+  border-left: 2px solid transparent;
+  transition: all 0.12s ease;
+}
+.cc-list-row:hover { background: var(--card-hover); }
+.cc-list-row.selected {
+  background: var(--surface-selected);
+  border-left-color: var(--accent);
+}
+
+/* ---------- Progress tracks (habit-cycle bars, coverage bars) ---------- */
+.cc-track {
+  height: 8px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.cc-track-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--green));
+  border-radius: 4px;
+}
+
+@media (max-width: 720px) {
+  .cc-cmdbar { flex-direction: column; align-items: flex-start; }
+  .cc-readout { border-left: none; border-top: 1px dashed var(--line-strong); padding-left: 0; padding-top: 10px; text-align: left; }
+}

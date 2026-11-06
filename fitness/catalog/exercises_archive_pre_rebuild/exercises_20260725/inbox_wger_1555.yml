@@ -1,0 +1,55 @@
+name: inbox_wger_1555
+description: 'Proactively generated expert draft for: Shoulder External Rotation (Cable)'
+exercises:
+- exercise_id: wger_1555
+  wger_id: null
+  display_name: Shoulder External Rotation (Cable)
+  category: Strength
+  equipment:
+  - Cable
+  primary_muscles:
+  - 306_infraspinatus
+  - 307_teres_minor
+  - 303_posterior_deltoid
+  secondary_muscles:
+  - 305_supraspinatus
+  stabilizers:
+  - 205_rhomboids
+  - 203_trapezius_middle
+  - 504_transverse_abdominis
+  biomechanical_movement_pattern: Shoulder External Rotation
+  coaching_notes:
+  - '**Startposition:** Stellen Sie sich seitlich zum Kabelzug, sodass der Arm, der
+    trainiert wird, näher am Gerät ist. Der Kabelzug sollte etwa auf Ellbogenhöhe
+    eingestellt sein. Greifen Sie den Griff mit der entsprechenden Hand und fixieren
+    Sie den Oberarm eng am Körper, wobei der Ellbogen um 90 Grad gebeugt ist.'
+  - '**Ausführung:** Halten Sie den Oberarm unbeweglich und rotieren Sie den Unterarm
+    langsam und kontrolliert vom Körper weg. Konzentrieren Sie sich darauf, die Bewegung
+    mit den Muskeln auf der Rückseite Ihrer Schulter (Rotatorenmanschette) einzuleiten.'
+  - '**Spitzenkontraktion:** Halten Sie die maximale Außenrotation für einen Moment,
+    um die Kontraktion zu intensivieren.'
+  - '**Exzentrische Phase:** Kehren Sie langsam und kontrolliert in die Ausgangsposition
+    zurück, indem Sie dem Widerstand des Kabels entgegenwirken. Achten Sie darauf,
+    dass der Rückweg mindestens doppelt so lange dauert wie die konzentrische Phase.'
+  - '**Atmung:** Atmen Sie während der Außenrotation (konzentrische Phase) aus und
+    während Sie den Arm zurückführen (exzentrische Phase) ein.'
+  - '**Fokus:** Diese Übung ist entscheidend für die Schultergesundheit und Prävention
+    von Verletzungen. Wählen Sie ein Gewicht, das Ihnen eine korrekte und kontrollierte
+    Ausführung über den gesamten Bewegungsumfang ermöglicht, ohne Ausweichbewegungen.'
+  common_errors:
+  - '**Verwendung von zu viel Gewicht:** Dies führt oft dazu, dass größere Muskeln
+    wie die Deltamuskeln oder Rückenmuskulatur die Arbeit übernehmen und die isolierte
+    Belastung der Rotatorenmanschette verloren geht.'
+  - '**Bewegung des Oberarms oder des Ellbogens:** Der Ellbogen sollte während der
+    gesamten Übung eng am Körper bleiben und der Oberarm nicht nach vorne oder hinten
+    schwingen. Eine Bewegung des Oberarms reduziert die Isolation der externen Rotatoren.'
+  - '**Schwung nutzen:** Die Bewegung sollte langsam und kontrolliert erfolgen, ohne
+    Ruckeln oder Schwung. Schwung minimiert die Muskelarbeit und erhöht das Verletzungsrisiko.'
+  - '**Körperrotation oder -neigung:** Eine Rotation des Rumpfes oder ein Ausweichen
+    des Körpers deutet auf eine Überlastung oder mangelnde Rumpfstabilität hin. Der
+    Oberkörper sollte stabil und aufrecht bleiben.'
+  - '**Schultern hochziehen (Schulterzucken):** Dies ist ein Zeichen dafür, dass die
+    oberen Trapezmuskeln übermäßig aktiviert werden. Halten Sie die Schultern entspannt
+    und unten, um die Rotatorenmanschette effektiv zu isolieren.'
+  variations: []
+  source: unreviewed

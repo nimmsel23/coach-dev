@@ -1,15 +1,118 @@
 name: inbox_20260831_161759_cc51fb
-description: 'Inbox queued for: Yoga Headstand'
-queued_at: '2026-08-31T16:17:59.988928'
+description: 'Proactively generated expert draft for: Handstand'
+generated_at: '2026-11-01T20:49:29.872838+00:00'
+enriched_at: '2026-11-01T20:49:29.872838+00:00'
 exercises:
-- exercise_id: inbox_yoga_headstand
-  name: Yoga Headstand
+- name: Yoga Headstand
+  wger_id: 1472
+  external_ids:
+    wger:
+    - 1472
+  exercise_id: inbox_yoga_headstand
+  display_name: Handstand
+  english: Handstand
+  german: Handstand
   id: inbox_yoga_headstand
-  display_name: Yoga Headstand
-  schema_version: 2026-08-12.exercise-v1
   origin:
-    type: manual
-    source_refs: {}
+    type: external
+    source_refs:
+      wger:
+      - '1472'
+  category: push
+  primary_muscles:
+  - 301_anterior_deltoid
+  - 302_lateral_deltoid
+  - 401_triceps_brachii
+  secondary_muscles:
+  - 105_serratus_anterior
+  - 202a_trapezius_upper
+  stabilizers:
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 504_transverse_abdominis
+  - 603_gluteus_maximus
+  - 601_quadriceps_femoris
+  - 206_erector_spinae
+  - 304_rotator_cuff
+  - 405_forearm_flexors
+  - 406_forearm_extensors
+  - 701_gastrocnemius
+  - 702_soleus
+  coaching_notes:
+  - '**Vorbereitung:** Wärmen Sie Handgelenke, Schultern und den Core gründlich auf.
+    Beginnen Sie mit der Wand als Unterstützung, um das Gleichgewicht zu finden und
+    Vertrauen aufzubauen.'
+  - '**Hand- und Armposition:** Pressen Sie die gesamten Handflächen, insbesondere
+    die Fingergrundgelenke und Fingerspitzen, aktiv in den Boden. Die Finger sind
+    leicht gespreizt. Die Arme sind vollständig gestreckt und die Ellenbogen arretiert,
+    die Schultern direkt über den Handgelenken gestapelt.'
+  - '**Schultergürtel-Stabilität:** Schieben Sie die Schultern aktiv von den Ohren
+    weg und nach oben (Protaktion und Elevation der Scapula), um eine maximale Schulterblattstabilität
+    zu erreichen. Die Ohren sollten sich zwischen den Oberarmen befinden.'
+  - '**Core- und Gesäßspannung:** Spannen Sie Bauchmuskeln (insbesondere den Transversus
+    abdominis) und Gesäß fest an, um den Körper in einer geraden, neutralen Linie
+    zu halten und ein Hohlkreuz zu vermeiden. Stellen Sie sich vor, Sie ziehen den
+    Bauchnabel zur Wirbelsäule.'
+  - '**Beine und Füße:** Halten Sie die Beine gestreckt und zusammen. Strecken Sie
+    die Fußspitzen aktiv nach oben (Plantarflexion), als wollten Sie den Himmel berühren,
+    um die Ganzkörperspannung zu maximieren.'
+  - '**Blickrichtung:** Fixieren Sie einen Punkt zwischen oder leicht vor den Händen
+    auf dem Boden, um den Nacken in einer neutralen, verlängerten Position zu halten
+    und die Körperlinie zu unterstützen.'
+  - '**Atmung:** Halten Sie eine ruhige, kontrollierte Atmung aufrecht. Ein leichtes
+    Pressen beim Einatmen kann helfen, die Core-Spannung zu halten, vermeiden Sie
+    jedoch den Valsalva-Effekt über längere Zeiträume.'
+  - '**Progression:** Beginnen Sie mit dem Üben an der Wand (Bauch zur Wand, dann
+    Rücken zur Wand), um Kraft und Balance aufzubauen. Steigern Sie die Haltezeit
+    und versuchen Sie kurze Momente des Loslösens von der Wand, bevor Sie sich an
+    den freien Handstand wagen.'
+  common_errors:
+  - '**Hohlkreuz (Überstreckung des unteren Rückens):** Dies ist der häufigste Fehler
+    und resultiert aus mangelnder Core- und Gesäßspannung. Führt zu Instabilität und
+    erhöht das Verletzungsrisiko im unteren Rücken.'
+  - '**Eingesunkene Schultern (fehlende Schultergürtel-Protaktion):** Die Schultern
+    werden nicht aktiv vom Boden weggeschoben, wodurch die Stabilität des Schultergürtels
+    fehlt und die Gelenke unter unnötigem Stress stehen.'
+  - '**Geknickte Ellenbogen:** Die Arme sind nicht vollständig gestreckt, was die
+    Stützbasis schwächt und die Belastung ungleichmäßig verteilt. Dies kann zu einem
+    Kollaps der Form führen.'
+  - '**Blick nach vorne/oben (Überstreckung des Nackens):** Den Kopf anzuheben, um
+    nach vorne zu schauen, stört die Ausrichtung der Wirbelsäule, belastet den Nacken
+    und erschwert das Halten einer geraden Linie.'
+  - '**Entspannte Beine und Füße:** Lockere, ungespannte Beine und nicht gestreckte
+    Fußspitzen reduzieren die Ganzkörperspannung erheblich, was das Gleichgewicht
+    erschwert und die Kontrolle verringert.'
+  - '**Kollabierende Handgelenke:** Ungenügende Handgelenkskraft, -mobilität oder
+    falsche Handposition (z.B. zu wenig Druck auf die Finger) führen zu Schmerzen
+    und Instabilität an den Handgelenken.'
+  - '**Zu schneller Fortschritt:** Der Versuch, einen freien Handstand zu früh zu
+    erzwingen, ohne die notwendige Kraft, Stabilität und Technik an der Wand aufgebaut
+    zu haben, führt zu Frustration und potenziellen Verletzungen.'
+  movements:
+  - push
+  - vertical_push
+  - shoulder_flexion
+  - elbow_extension
+  - scapular_protraction
+  - core_bracing
+  - balance_control
+  - bodyweight_exercise
+  - isometric
+  original_description:
+  - Handstand free standing by pressing arms into the ground and contracting core
+    and glutes
+  tags:
+  - unreviewed
+  - wger
+  wger_muscle_ids:
+    primary:
+    - 2
+    secondary: []
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-01T20:49:29.872838+00:00'
+  schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
     ai_reviewed: false
+    enriched_at: '2026-11-01T20:49:29.872838+00:00'

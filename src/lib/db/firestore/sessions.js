@@ -4,15 +4,22 @@
  */
 
 import {
-  collection, doc, setDoc, getDoc, getDocs, deleteDoc,
-  query, where, orderBy, limit, serverTimestamp,
+  collection,
+  doc,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp,
 } from "firebase/firestore";
+import { setDoc, getDoc, getDocs, deleteDoc } from "./offline.js";
 
 import { db } from "../../../firebase.js";
 import { todayISO } from "../shared/utils.js";
 import { getUid, hasAuthSession, pingBridge } from "./core.js";
 import { getAllExercises } from "./kb.js";
 import { updateAnalyticsDoc, scheduleWeeklyReportRefreshForDate } from "./analysis.js";
+import { indexUpsert, indexRemove } from "./workoutIndex.js";
 import { clearMonthlyReportCache } from "../../reportCache";
 import {
   getSession as getLocalSession,
@@ -30,6 +37,13 @@ import {
 } from "../local/sessions.js";
 
 // ── Sessions ──────────────────────────────────────────────────────────────────
+
+// Index-Pflege für Sessions älter als 7 Tage (siehe workoutIndex.js). Darf einen
+// Save/Delete nie scheitern lassen — der Index ist abgeleitet und wird bei der
+// nächsten Verdichtung ohnehin repariert.
+function reindex(fn) {
+  Promise.resolve().then(fn).catch((err) => console.warn("[workoutIndex] Update fehlgeschlagen", err));
+}
 
 function hasTrainingSignal(ex) {
   if (!ex || typeof ex !== "object") return false;
@@ -146,7 +160,10 @@ export async function saveSession(date = todayISO(), sessionData, id = null) {
     });
     if (id) {
       await deleteDoc(doc(db, "fitness", getUid(), "sessions", `${date}__${id}`));
+      reindex(() => indexRemove(`${date}__${id}`, date));
     }
+    reindex(() => indexUpsert(date, { ...merged, date }));
+    invalidateHistoryCache();
     pingBridge();
     updateAnalyticsDoc();
     scheduleWeeklyReportRefreshForDate(date).catch(() => {});
@@ -176,6 +193,8 @@ export async function saveSession(date = todayISO(), sessionData, id = null) {
     session_id: id || null,
     saved_at: serverTimestamp(),
   });
+  reindex(() => indexUpsert(targetId, { ...addonCarryOver, ...sessionData, date }));
+  invalidateHistoryCache();
   pingBridge();
   updateAnalyticsDoc(); // fire-and-forget
   scheduleWeeklyReportRefreshForDate(date).catch(() => {});
@@ -201,6 +220,8 @@ export async function deleteActivityAddon(date = todayISO(), index) {
     date,
     saved_at: serverTimestamp(),
   });
+  reindex(() => indexUpsert(date, { ...data, activityAddons: addons, activity: addons[0] || null, date }));
+  invalidateHistoryCache();
   pingBridge();
   updateAnalyticsDoc();
   scheduleWeeklyReportRefreshForDate(date).catch(() => {});
@@ -212,6 +233,8 @@ export async function deleteSession(date = todayISO(), id = null) {
   if (!hasAuthSession()) return deleteLocalSession(date, id);
   const targetId = id ? `${date}__${id}` : date;
   await deleteDoc(doc(db, "fitness", getUid(), "sessions", targetId));
+  reindex(() => indexRemove(targetId, date));
+  invalidateHistoryCache();
   pingBridge();
   updateAnalyticsDoc();
   scheduleWeeklyReportRefreshForDate(date).catch(() => {});
@@ -267,8 +290,36 @@ export async function getLatestSession() {
   return sessions.length > 0 ? sessions[0] : null;
 }
 
+// Kurzlebiger Cache für getSessionHistory(days): Review, Recovery, Wochen-/
+// Monatsbericht und Analytics-Update fragen im selben Moment dasselbe Fenster
+// mehrfach ab (allein updateAnalyticsDoc 3× getSessionHistory(60)). Gleichzeitige
+// Aufrufe teilen sich eine Query; Ergebnisse gelten HISTORY_TTL_MS. Jeder
+// Schreibweg dieser Datei leert den Cache (invalidateHistoryCache).
+const HISTORY_TTL_MS = 60 * 1000;
+const historyCache = new Map(); // `${uid}:${days}` → { at, promise }
+
+export function invalidateHistoryCache() { historyCache.clear(); }
+
+function copyHistory(list) {
+  return list.map((s) => ({ ...s, exercises: [...s.exercises] }));
+}
+
 export async function getSessionHistory(days = 90) {
   if (!hasAuthSession()) return getLocalSessionHistory(days);
+  const key = `${getUid()}:${days}`;
+  const hit = historyCache.get(key);
+  if (hit && Date.now() - hit.at < HISTORY_TTL_MS) return copyHistory(await hit.promise);
+  const promise = fetchSessionHistory(days);
+  historyCache.set(key, { at: Date.now(), promise });
+  try {
+    return copyHistory(await promise);
+  } catch (err) {
+    if (historyCache.get(key)?.promise === promise) historyCache.delete(key);
+    throw err;
+  }
+}
+
+async function fetchSessionHistory(days) {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - days);
   const cutoffISO = cutoff.toISOString().slice(0, 10);

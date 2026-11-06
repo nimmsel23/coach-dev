@@ -1,0 +1,55 @@
+data_sources:
+  version: "0.1.0"
+
+  priority_order:
+    - custom_yaml
+    - manual_user_override
+    - wger_local
+    - yuhonas_free_exercise_db
+    - fallback_inference
+
+  source_roles:
+    custom_yaml:
+      role: "semantic_source_of_truth"
+      use_for:
+        - canonical_exercise_id
+        - coaching_notes
+        - movement_pattern
+        - primary_muscles
+        - secondary_muscles
+        - stabilizers
+        - programming_logic
+
+    wger_local:
+      role: "tracking_backend_and_app_bridge"
+      use_for:
+        - exercise_logs
+        - routine_storage
+        - app_body_highlighter_if_available
+        - local_user_history
+        - workout_execution
+
+    yuhonas_free_exercise_db:
+      role: "external_exercise_media_and_raw_muscle_tags"
+      use_for:
+        - images
+        - additional exercise variants
+        - alternative names
+        - muscle tag comparison
+        - fallback lookup
+
+    fallback_inference:
+      role: "last_resort"
+      use_for:
+        - estimating muscle groups if no source contains mapping
+      warning: "Mark inferred mappings as unverified."
+
+  conflict_resolution:
+    muscle_mapping:
+      rule: "custom_yaml wins unless manually overridden"
+    display_name:
+      rule: "prefer German custom name for user display"
+    media:
+      rule: "prefer local/media source with known license"
+    wger_id:
+      rule: "store as external reference, never replace canonical_id"
