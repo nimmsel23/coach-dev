@@ -78,13 +78,6 @@ jobs:
           path: .fitness-dev
           token: ${{ secrets.GH_SUBMODULE_TOKEN || secrets.GITHUB_TOKEN }}
 
-      # build-sixpack-data.mjs erwartet ein 6pack-Nachbar-Checkout (REPO_ROOT/../6pack-{app,dev});
-      # actions/checkout verweigert Pfade außerhalb des Workspace, daher direkter Klon.
-      - name: sixpack-dev auschecken (KB-Daten)
-        run: |
-          git clone --depth 1 --branch master https://github.com/nimmsel23/6pack-dev.git ../6pack-dev
-          pnpm --dir ../6pack-dev install --frozen-lockfile --ignore-scripts
-
       - name: FITNESS_ROOT setzen
         run: echo "FITNESS_ROOT=$GITHUB_WORKSPACE/.fitness-dev" >> "$GITHUB_ENV"
 
@@ -95,6 +88,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      # build-sixpack-data.mjs erwartet ein 6pack-Nachbar-Checkout (REPO_ROOT/../6pack-{app,dev});
+      # actions/checkout verweigert Pfade außerhalb des Workspace, daher direkter Klon.
+      - name: sixpack-dev auschecken (KB-Daten)
+        run: |
+          git clone --depth 1 --branch master https://github.com/nimmsel23/6pack-dev.git ../6pack-dev
+          pnpm --dir ../6pack-dev install --frozen-lockfile --ignore-scripts
 
       - name: Install
         run: |
