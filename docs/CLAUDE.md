@@ -40,7 +40,7 @@ dieser Doku steht noch aus.
   ("Refusing to write through symlink") — immer `docs/CLAUDE.md` editieren.
 - **Release-Weg seit 2026-10-29: `dev` → `master` → `vitalos`.** Erst
   `dev` pushen (CI promotet nach grünem `Check` automatisch nach `master` und deployt live), dann `fitness-release` für `master` →
-  `vitalos`. Direkte Pushes auf `master` nur für Hotfixes (`dev` zieht die Automatik nach); `master` wird
+  `vitalos`. Direkte Pushes auf `master` vermeiden (Divergenz, Workflow läuft rot): auch Hotfixes über `dev`; `master` wird
   lokal nie ausgecheckt. Die Beschreibung des Skripts direkt darunter stammt
   teils noch aus der Zeit vor dem PR-Schritt: es mergt jetzt `origin/master`
   (nicht `dev`) nach `vitalos`, mergt vor dem Parent-Push `origin/master` ein
