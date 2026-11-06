@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, LogOut, Palette, RefreshCw, Shield } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink, LogOut, Palette, RefreshCw, Shield } from 'lucide-react'
 import { NAV_ITEMS } from './NavigationItems.js'
 
 // Desktop-Navigation — Fork von ~/vitalos/src/shell/layout/Sidebar.jsx.
@@ -49,6 +49,18 @@ export default function CoachSidebar({ active, onNavigate, counts = {}, pinned, 
         <div className={`mt-auto space-y-2.5 border-t border-fit-line/30 pt-3 ${!pinned ? 'flex w-full flex-col items-center' : ''}`}>
           {pinned && user?.email && <div className="truncate px-2 text-[12px] text-fit-dim">{user.email}</div>}
           <div className={`flex gap-1.5 ${!pinned ? 'flex-col' : ''}`}>
+            {/* VitalOS-Shell — der Pin im Submodule vitalos/ (Branch coach) ist der
+                zugeordnete Stand; der Link oeffnet die geshellte PWA. */}
+            <a
+              href="https://vitalos.web.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="VitalOS öffnen (vitalos.web.app)"
+              aria-label="VitalOS öffnen"
+              className="vos-press vos-fill flex h-9 w-9 items-center justify-center rounded-full text-fit-dim hover:text-fit-accent"
+            >
+              <ExternalLink size={16} />
+            </a>
             {[
               { key: 'theme', title: 'Theme', Icon: Palette, onClick: onTheme },
               { key: 'refresh', title: 'Neu laden', Icon: RefreshCw, onClick: onRefresh },
