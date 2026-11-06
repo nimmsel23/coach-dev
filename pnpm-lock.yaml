@@ -137,6 +137,106 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0(vite@6.4.5(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(terser@5.51.2)(yaml@2.9.1))(workbox-build@7.4.1(@types/babel__core@7.20.5))(workbox-window@7.4.1)
 
+  modules/plan:
+    dependencies:
+      '@dnd-kit/core':
+        specifier: ^6.3.1
+        version: 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/sortable':
+        specifier: ^8.0.0
+        version: 8.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/utilities':
+        specifier: ^3.2.2
+        version: 3.2.2(react@18.3.1)
+      '@tanstack/react-query':
+        specifier: ^5.101.0
+        version: 5.104.4(react@18.3.1)
+      '@we-gold/gpxjs':
+        specifier: ^1.2.0
+        version: 1.2.1
+      body-muscles:
+        specifier: ^1.0.0
+        version: 1.0.0
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
+      date-fns:
+        specifier: ^4.4.0
+        version: 4.4.0
+      firebase:
+        specifier: ^11.10.0
+        version: 11.10.0
+      fit-file-parser:
+        specifier: ^5.2.1
+        version: 5.2.1
+      js-yaml:
+        specifier: ^4.1.1
+        version: 4.3.2
+      lucide-react:
+        specifier: ^0.453.0
+        version: 0.453.0(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-body-highlighter:
+        specifier: ^2.0.5
+        version: 2.0.5(react@18.3.1)
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-is:
+        specifier: ^19.2.7
+        version: 19.3.1
+      react-muscle-highlighter:
+        specifier: ^1.2.0
+        version: 1.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      recharts:
+        specifier: ^3.8.1
+        version: 3.10.1(react-dom@18.3.1(react@18.3.1))(react-is@19.3.1)(react@18.3.1)(redux@5.0.1)
+      zustand:
+        specifier: ^5.0.14
+        version: 5.0.15(immer@11.1.21)(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1))
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.39.4
+        version: 9.39.5
+      '@firebase/rules-unit-testing':
+        specifier: ^6.0.0
+        version: 6.0.0(firebase@11.10.0)
+      '@tailwindcss/postcss':
+        specifier: ^4.3.3
+        version: 4.3.4
+      '@vitejs/plugin-react':
+        specifier: ^4.3.2
+        version: 4.7.0(vite@6.4.5(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(terser@5.51.2)(yaml@2.9.1))
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.6.1(postcss@8.5.31)
+      eslint:
+        specifier: ^9.39.4
+        version: 9.39.5(jiti@2.7.0)
+      eslint-plugin-react:
+        specifier: ^7.37.5
+        version: 7.37.5(eslint@9.39.5(jiti@2.7.0))
+      globals:
+        specifier: ^17.6.0
+        version: 17.13.0
+      nodemon:
+        specifier: ^3.1.10
+        version: 3.1.14
+      postcss:
+        specifier: ^8.4.47
+        version: 8.5.31
+      tailwindcss:
+        specifier: ^4.3.3
+        version: 4.3.4
+      vite:
+        specifier: ^6.4.5
+        version: 6.4.5(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(terser@5.51.2)(yaml@2.9.1)
+      vite-plugin-pwa:
+        specifier: ^1.3.0
+        version: 1.3.0(vite@6.4.5(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(terser@5.51.2)(yaml@2.9.1))(workbox-build@7.4.1(@types/babel__core@7.20.5))(workbox-window@7.4.1)
+
 packages:
 
   '@alloc/quick-lru@5.3.0':
@@ -1095,6 +1195,12 @@ packages:
     peerDependencies:
       '@firebase/app': 0.x
 
+  '@firebase/rules-unit-testing@6.0.0':
+    resolution: {integrity: sha512-BsBqAoClN55cj9rVIruzA1vHzxl2WyS2+G/r93hjp7wM0UatlVHblvp5SPLCKylWBFMHWL4/JdFnFnYwrLdJjg==}
+    engines: {node: '>=24.12.0'}
+    peerDependencies:
+      firebase: ^13.0.0
+
   '@firebase/storage-compat@0.3.24':
     resolution: {integrity: sha512-XHn2tLniiP7BFKJaPZ0P8YQXKiVJX+bMyE2j2YWjYfaddqiJnROJYqSomwW6L3Y+gZAga35ONXUJQju6MB6SOQ==}
     engines: {node: '>=18.0.0'}
@@ -1696,6 +1802,9 @@ packages:
   '@vue/shared@3.5.44':
     resolution: {integrity: sha512-H82XLH0DjmSOdbEwO15x3QTo1f5PWEtv237eLpYKc0mqLu+B8hnq16lFWmuBmNurkeiG3wr+oM1FhOll/YVFRg==}
 
+  '@we-gold/gpxjs@1.2.1':
+    resolution: {integrity: sha512-0jDS6NC3SC7+xWFqT3IouqvGlGGZIkSKBiEUePlenNaAKBkLljzGkkl1duTHfCu52RiKorDoXD2OvAaSIJiiIA==}
+
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
     engines: {node: '>=6.5'}
@@ -1875,6 +1984,9 @@ packages:
 
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
+
+  buffer@6.0.3:
+    resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
   call-bind-apply-helpers@1.0.2:
     resolution: {integrity: sha512-Sp1ablJ0ivDkSzjcaJdxEunN5/XvksFJ2sMBFfq6x0ryhQV/2b/KwFe21cMpmHtPOSij8K99/wSfoEuTObmuMQ==}
@@ -2282,6 +2394,9 @@ packages:
 
   firebase@11.10.0:
     resolution: {integrity: sha512-nKBXoDzF0DrXTBQJlZa+sbC5By99ysYU1D6PkMRYknm0nCW7rJly47q492Ht7Ndz5MeYSBuboKuhS1e6mFC03w==}
+
+  fit-file-parser@5.2.1:
+    resolution: {integrity: sha512-7KBHcY9I6GmfpYDq4iL/ESxmMSl5da4MOWBKKXYIZwsK5TLgX7hNAce2O/5ZzHKdSEL58hfDhuEnraXndoWEbQ==}
 
   flat-cache@4.0.1:
     resolution: {integrity: sha512-f7ccFPK3SXFHpx15UIGyRJ/FJQctuKZ0zVuN3frBo4HnK3cay9VEW0R6yPYFHC0AgqhukPzKjq22t5DmAyqGyw==}
@@ -4970,6 +5085,10 @@ snapshots:
       '@firebase/util': 1.12.1
       tslib: 2.8.1
 
+  '@firebase/rules-unit-testing@6.0.0(firebase@11.10.0)':
+    dependencies:
+      firebase: 11.10.0
+
   '@firebase/storage-compat@0.3.24(@firebase/app-compat@0.4.2)(@firebase/app-types@0.9.3)(@firebase/app@0.13.2)':
     dependencies:
       '@firebase/app-compat': 0.4.2
@@ -5536,6 +5655,8 @@ snapshots:
 
   '@vue/shared@3.5.44': {}
 
+  '@we-gold/gpxjs@1.2.1': {}
+
   abort-controller@3.0.0:
     dependencies:
       event-target-shim: 5.0.1
@@ -5749,6 +5870,11 @@ snapshots:
   buffer-from@1.1.2: {}
 
   buffer@5.7.1:
+    dependencies:
+      base64-js: 1.5.1
+      ieee754: 1.2.1
+
+  buffer@6.0.3:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
@@ -6327,6 +6453,10 @@ snapshots:
       '@firebase/util': 1.12.1
     transitivePeerDependencies:
       - '@react-native-async-storage/async-storage'
+
+  fit-file-parser@5.2.1:
+    dependencies:
+      buffer: 6.0.3
 
   flat-cache@4.0.1:
     dependencies:
