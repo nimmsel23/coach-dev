@@ -12,6 +12,8 @@ Type=simple
 WorkingDirectory=%h/dev/coach-dev
 Environment=PYTHONUNBUFFERED=1
 Environment=FITNESS_AGENT_KB=%h/dev/coach-dev/fitness/catalog/kb
+# Engine: Coach-Tree vor dem fitness-dev-Editable des uv-Tools (fitness_agent.pth)
+Environment=PYTHONPATH=%h/dev/coach-dev:%h/dev/fitness-dev/anatomy-kb
 ExecStart=%h/.local/share/uv/tools/fitness-agent/bin/python3 -m fitness.coach.sync run
 Restart=on-failure
 RestartSec=10
