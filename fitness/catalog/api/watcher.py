@@ -92,6 +92,22 @@ def _load_existing_draft_exercise(target_file: Path) -> dict | None:
         return None
 
 
+def _is_complete_draft(data) -> bool:
+    """Mindestmaß an Entscheidungsdaten für die Review-Karte.
+
+    Ein Draft gilt als komplett, wenn die KI die drei Review-relevanten
+    Blöcke geliefert hat: Ausführung (coaching_notes), Beteiligung
+    (primary_muscles) und typische Fehler (common_errors). Spätere Felder
+    (Anker, Metadaten) prüft die Maschine selbst, nicht das Review.
+    """
+    if not isinstance(data, dict):
+        return False
+    notes = data.get("coaching_notes") or []
+    muscles = data.get("primary_muscles") or []
+    errors = data.get("common_errors") or []
+    return len(notes) >= 3 and len(muscles) >= 1 and len(errors) >= 1
+
+
 def process_inbox_file(file_path: Path, api_key: str | None):
     try:
         data = json.loads(file_path.read_text(encoding="utf-8"))
@@ -152,6 +168,27 @@ def process_inbox_file(file_path: Path, api_key: str | None):
         )
 
         enriched_data = call_gemini(name, safe_name, api_key, existing_data=existing_data)
+
+        # Komplett-Gate: duenne Gemini-Ergebnisse bekommen genau einen
+        # Wiederholungsversuch mit Vorgabe — ein Draft ohne Ausfuehrung,
+        # Muskeln und Fehler ist fuer das Review unbrauchbar (\"nur ein paar
+        # Rohdaten\"). Backend fuer die Review-Karte.
+        if enriched_data and not _is_complete_draft(enriched_data):
+            logger.warning(f"Enrichment unvollstaendig fuer {name} — ein Wiederholungsversuch mit Vorgabe.")
+            retry = call_gemini(
+                name,
+                safe_name,
+                api_key,
+                existing_data=existing_data,
+                feedback=(
+                    "Der Entwurf ist unvollstaendig. Liefere mindestens "
+                    "3 Ausfuehrungs-Hinweise (coaching_notes), die beteiligten "
+                    "Muskeln (primary_muscles) und mindestens einen typischen "
+                    "Fehler (common_errors)."
+                ),
+            )
+            if retry and _is_complete_draft(retry):
+                enriched_data = retry
 
         if enriched_data:
             uid, doc_id = _firestore_inbox_ref(file_path)
