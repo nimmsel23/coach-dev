@@ -1,3 +1,45 @@
+# 2026-11-06 — Fitness-Vollmerge, Katalog-Ownership zu coach-dev, Komplett-Drafts
+
+Nachtsession: Upstream-Merge von fitness-dev (1022 Commits seit Fork), Tailwind-4-
+Upgrade, CI-Reparatur mit Live-Deploy — und danach die Rekonzeption des Katalogs:
+Owner ist jetzt coach-dev (Engine, KB, Worker, Pipeline). Alle 13 Inbox-Drafts sind
+komplett veredelt.
+
+-   **Merge `ada15895` (dev)**: Vollmerge fitness-dev/dev. Fitness-App-Basis
+    komplett zurueck (476 Isolations-Reste aus `1f860950` im Upstream-Stand),
+    Digest-Index-System funktional (workoutDoc.js aus 6pack-dev als loesbares
+    Modul), Plan-Importe der Session auf `@plan/views/Plan` umgebogen,
+    Coach-Views bleiben eingecheckt (src/views/Plan, AssignPlan-Referenzen).
+    Barrels/themes.js/deploy.sh/functions auf Coach-Stand.
+-   **Reste entsorgt**: alembic/, eingebettetes anatomy-kb/ (Duplikat des
+    separat gepflegten Checkouts), exercises_archive_pre_rebuild/ — 44 567
+    Zeilen weniger (Commit `b92c50e2`; solo-icons bleibt, Icon-SSOT fuer Stamps).
+-   **Tailwind v4**: `@tailwindcss/postcss`/`tailwindcss` 4.3.4, postcss.config.cjs
+    auf Upstream-Stand, Style-Einstieg `@import "tailwindcss"` + `@config`-Legacy-
+    JS-Config (content/safelist/theme bleiben in tailwind.config.cjs), Lockfile
+    regeneriert (Merge-Commit).
+-   **CI repariert + Live**: deploy-coach.yml checkt 6pack-dev als Nachbar-Klon
+    mit eigenem Lockfile (build-sixpack-data brauchte Sibling; latent kaputt,
+    weil zuletzt nur Docs-Pushes liefen), Schritt hinter pnpm-Setup sortiert.
+    Production verifiziert: vos-coach.web.app @ `28f9b3d6`.
+-   **Katalog-Ownership hierher**: KB von fitness-dev gespiegelt inkl. Approvals
+    (`f3c6e600`), coach-sync-Worker auf `WorkingDirectory=coach-dev` +
+    `FITNESS_AGENT_KB=coach-Baum` (`2acc2cc0`), Engine via `PYTHONPATH` auf den
+    Coach-Tree vor das fitness-dev-Editable des uv-Tools (`1ea6689f`);
+    Enrichment-/Approval-Auto-Commits landen ab jetzt in coach-dev.
+-   **Pipeline Komplett-Drafts**: Komplett-Gate in process_inbox_file
+    (`e7fe5d43`) — duenne Gemini-Ergebnisse bekommen einen Wiederholungsversuch
+    mit Vorgabe; Bestandsveredelung aller 13 Inbox-Drafts per
+    `batch-reenrich` gegen die Coach-KB, 13/13 komplett, Identitaeten durch
+    REENRICH_OVERLAY_FIELDS erhalten (`b14cb6c0`). Runtime-KB (~/.aos/fitness/kb)
+    geseedet, fitness-preview neu, Health 200.
+-   **Katalog-Korrekturen**: Kopfstand (yoga_kopfstand, origin: expert,
+    ankerfrei) und Handstand (wger 1472) als getrennte Identitaeten; Muskel-
+    Rollen-Splits (Schulterguertel primaer, Koerperlinie stabilizers);
+    Klimmzug 020 vom Yuhonas-Pullups-Anker entkoppelt; Anzeigenamen konsequent
+    "Yoga Kopfstand (Sirsasana)".
+
+---
 # 2026-11-05 — Lokales Planstudio: Modul-Workouts, Klienten-Link-Karte, grüner Browsertest
 
 Begleitarbeit zur Weiterentwicklung von plan-dev zur Trainingsplan-App: in coach-dev
