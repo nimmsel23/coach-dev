@@ -21,3 +21,4 @@
 ## Gemini CI-Agent follow-up
 
 - [ ] Observe one genuine code-related red Coach CI run through repair and a green rerun. Production remains a manual release decision.
+- [ ] Coach-Pages-Deploy nach dem neuen Docs-Commit verifizieren und die neue Seite `/README.html` prüfen.
