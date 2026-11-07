@@ -1,5 +1,7 @@
 # NEXT (coach-dev)
 
+- [ ] GitHub Pages nach Entfernung des lokalen `klienten-dev`-Gitlinks erneut prüfen; `README.md` und `index.html` sind bereits vorhanden.
+
 -   **Review-Karte (Inbox-UI)**: Entscheidungsoberflaeche statt 40-Felder-Editor —
     Identitaet, 2-Satz-Was, Muskeln (primae), 3 Coaching-Highlights, Herkunft als ein
     Text + Freigeben/Loeschen/Verbessern. Braucht: Frontend-Serve-Umstellung (Katalog-

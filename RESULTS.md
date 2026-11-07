@@ -1,3 +1,9 @@
+# 2026-11-07 — GitHub Pages checkout repariert
+
+- Root `README.md` und `index.html` waren bereits vorhanden. Pages scheiterte vorher beim rekursiven Submodule-Checkout, bevor es eine Indexdatei verarbeiten konnte.
+- Aus dem öffentlichen `coach-dev/dev`-Tree wurden der nicht klonbare lokale `klienten-dev`-Gitlink und sein `.gitmodules`-Eintrag entfernt. Die anderen Submodule bleiben unverändert.
+- Root `index.html` bleibt der Pages-Einstieg und leitet zu `local.html` weiter.
+
 # 2026-11-06 — Fitness-Vollmerge, Katalog-Ownership zu coach-dev, Komplett-Drafts
 
 Nachtsession: Upstream-Merge von fitness-dev (1022 Commits seit Fork), Tailwind-4-
