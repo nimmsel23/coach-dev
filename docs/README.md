@@ -1,6 +1,6 @@
 ---
 title: Coach Documentation
-permalink: /index.html
+permalink: /README.html
 ---
 
 # Coach
@@ -9,6 +9,6 @@ Standalone trainer-facing product for coaching, training plans, Fitness workflow
 
 ## Documentation
 
-- [Architecture](COACH-ARCHITECTURE.md)
+- [Architecture](COACH-ARCHITECTURE.html)
 - [Repository README](../README.md)
 - [Source repository](https://github.com/nimmsel23/coach-dev)
