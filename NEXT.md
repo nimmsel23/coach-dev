@@ -13,3 +13,8 @@
 -   **Systemd-Quelle**: coach-sync.service wird noch aus
     fitness/coach/deploy/coach-sync.service installiert (jetzt Coach-Stand im
     Coach-Baum); Pfad in der Unit-DokuSnapshots aktuell.
+
+
+## Gemini CI-Agent follow-up
+
+- [ ] Observe one genuine code-related red Coach CI run through repair and a green rerun. Production remains a manual release decision.
