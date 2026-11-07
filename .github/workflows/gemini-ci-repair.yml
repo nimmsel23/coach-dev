@@ -1,0 +1,103 @@
+name: Gemini CI Agent
+
+on:
+  workflow_run:
+    workflows:
+      - Deploy Coach
+    types: [completed]
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
+concurrency:
+  group: gemini-ci-agent-${{ github.event.workflow_run.head_sha || github.event.pull_request.head.sha }}
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    if: >-
+      (github.event_name == 'workflow_run' && contains(fromJSON('["success","failure"]'), github.event.workflow_run.conclusion)) ||
+      (github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+      pull-requests: write
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          token: ${{ secrets.SYNC_TOKEN || github.token }}
+          persist-credentials: false
+      - id: setup_node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Fehler analysieren und Reparatur vorbereiten
+        id: repair
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN || github.token }}
+          CI_AGENT_HAS_SYNC_TOKEN: ${{ secrets.SYNC_TOKEN != '' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node .github/ci-agent/repair.mjs
+      - id: publish
+        name: Reparatur committen und Branch aktualisieren
+        if: steps.repair.outputs.action == 'repair' || steps.repair.outputs.action == 'merge'
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN || github.token }}
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN || github.token }}
+          CI_BRANCH: ${{ steps.repair.outputs.branch }}
+          CI_BASE: ${{ steps.repair.outputs.base }}
+          CI_TARGET: ${{ steps.repair.outputs.target_branch }}
+          CI_IS_MERGE: ${{ steps.repair.outputs.is_merge }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "$CI_IS_MERGE" = true ]; then
+            git commit -m "merge($CI_BASE): CI conflict repair [ci-agent]"
+          else
+            git commit -m "fix(ci): source repair [ci-agent]"
+          fi
+          header="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$SYNC_TOKEN" | base64 -w0)"
+          if [ -n "$CI_TARGET" ]; then
+            git -c "http.https://github.com/.extraheader=$header" push origin "HEAD:refs/heads/$CI_BRANCH"
+            gh pr create --repo "$GITHUB_REPOSITORY" --base "$CI_TARGET" --head "$CI_BRANCH" \
+              --title "fix(ci): repair failed $CI_TARGET check" \
+              --body "Automated Gemini CI repair. This PR merges only after the repository Check succeeds."
+          else
+            git -c "http.https://github.com/.extraheader=$header" push origin "HEAD:refs/heads/$CI_BRANCH"
+          fi
+      - name: CI-Agent Bericht (strukturierte Diagnose)
+        if: always()
+        env:
+          REPORT_ACTION: ${{ steps.repair.outputs.action || 'agent_step_failed' }}
+          REPORT_REASON: ${{ steps.repair.outputs.reason || (steps.checkout.outcome == 'failure' && 'Checkout fehlgeschlagen; Details im Checkout-Schritt des Runs.') || (steps.setup_node.outcome == 'failure' && 'Node-Setup fehlgeschlagen; Details im Setup-Schritt des Runs.') || (steps.repair.outcome == 'failure' && 'Diagnose/Reparatur fehlgeschlagen; Details im Reparaturschritt des Runs.') || (steps.publish.outcome == 'failure' && 'Commit/Push fehlgeschlagen; Details im Publish-Schritt des Runs.') || 'Agent beendet, ohne Diagnoseausgabe.' }}
+          SOURCE_NAME: ${{ github.event.workflow_run.name || github.event.pull_request.title || 'Pull-Request-Konflikt' }}
+          SOURCE_BRANCH: ${{ github.event.workflow_run.head_branch || github.event.pull_request.head.ref || 'unknown' }}
+          SOURCE_SHA: ${{ github.event.workflow_run.head_sha || github.event.pull_request.head.sha || 'unknown' }}
+          SOURCE_URL: ${{ github.event.workflow_run.html_url || github.event.pull_request.html_url || github.server_url }}
+          REPOSITORY: ${{ github.repository }}
+          CHECKOUT_RESULT: ${{ steps.checkout.outcome || 'not-run' }}
+          SETUP_RESULT: ${{ steps.setup_node.outcome || 'not-run' }}
+          REPAIR_RESULT: ${{ steps.repair.outcome || 'not-run' }}
+          PUBLISH_RESULT: ${{ steps.publish.outcome || 'not-run' }}
+          SOURCE_RUN_ID: ${{ github.event.workflow_run.id || 'n/a' }}
+        run: |
+          {
+            echo "## Gemini CI Agent"
+            echo
+            echo "- Repo: $REPOSITORY"
+            echo "- Auslöser: $SOURCE_NAME"
+            echo "- Branch / Commit: \`$SOURCE_BRANCH\` / \`${SOURCE_SHA:0:8}\`"
+            echo "- Entscheidung: $REPORT_ACTION"
+            echo "- Diagnose: $REPORT_REASON"
+            echo "- Stufen: checkout=$CHECKOUT_RESULT, node=$SETUP_RESULT, diagnose=$REPAIR_RESULT, publish=$PUBLISH_RESULT"
+            echo "- Quell-Run-ID: $SOURCE_RUN_ID"
+            echo "- Run: $SOURCE_URL"
+            echo "- Report-Run-ID: $GITHUB_RUN_ID"
+          } >> "$GITHUB_STEP_SUMMARY"
