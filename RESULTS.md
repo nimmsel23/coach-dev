@@ -1,3 +1,9 @@
+## 2026-11-07 — CI-Agent-Fix: gh pr list Feld korrigiert
+
+- Journal-Run 42416606547 scheiterte vor Gemini: GitHub CLI meldete `Unknown JSON field: baseRepository`; `gh pr list` beendete den Analyse-Step mit Exit 1. Kein Gemini-API-Key-Fehler.
+- `.github/ci-agent/repair.mjs` sucht PRs jetzt mit unterstützten JSON-Feldern und dem Head-Filter `nimmsel23:<branch>`. Fix auf `dev` in allen acht Modul-/Coach-Repos.
+- CI-Checks der Reparaturcommits grün; Modul-Promotion/Live-Deploy grün, Journals Live-Deploy war beim Eintrag noch in Arbeit. Ein echter roter Gemini-Reparaturlauf bleibt als Abnahme offen.
+
 ## 2026-11-07 — Veralteten Fitness-Preview-Workflow aus Coach entfernt
 
 - `.github/workflows/preview-dev.yml` war eine Fitness-Pipeline-Kopie in `coach-dev`. Sie setzte den Coach-Commit-SHA als Fitness-App-Ref und scheiterte so bei Coach-Änderungen (Run [42409360631](https://github.com/nimmsel23/coach-dev/actions/runs/42409360631)).
