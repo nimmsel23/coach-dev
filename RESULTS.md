@@ -1,3 +1,7 @@
+## 2026-11-07 — GitHub-Pages-Doku vorbereitet
+
+- `docs/README.md` als Jekyll-Landingpage ergänzt. Coach nutzt den bestehenden Docs-Pages-Workflow; die bestehende Startseite `docs/index.md` bleibt erhalten und die neue README wird separat unter `/README.html` ausgegeben.
+
 # 2026-11-07 — Pages auf gezielten Docs-Build umgestellt
 
 - Ursache war rekursiver Checkout der Gitlinks: zuerst ein rein lokaler `klienten-dev`-Pfad, danach ein veralteter Commit im historischen `vitalos`-Submodul. Root-`README.md` und `index.html` existierten bereits.
