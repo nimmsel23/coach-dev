@@ -22,3 +22,4 @@
 
 - [ ] Observe one genuine code-related red Coach CI run through repair and a green rerun. Production remains a manual release decision.
 - [ ] Coach-Pages-Deploy nach dem neuen Docs-Commit verifizieren und die neue Seite `/README.html` prüfen.
+- [ ] Gemini-Reparaturpfad nach dem Feld-Fix anhand eines isolierten roten Checks verifizieren: Diagnose, Commit, Check-Neustart und nachgelagerter Deploy.
