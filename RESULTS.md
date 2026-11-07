@@ -1862,3 +1862,11 @@ Klienten-/Kontakt-UIDs und liefert Nutzungszähler ohne UID oder Workout-Inhalte
 Build und Runtime-Aktivierung bleiben offen; der Fitness-Tracker-Commit ist
 lokal auf `fitness-dev/dev`, aber Cloud-Nutzung setzt den vorgesehenen
 Fitness-/Rules-Release voraus.
+
+
+# 2026-11-07 — Coach Gemini CI-Agent
+
+- Added `.github/ci-agent/repair.mjs` and a repo-scoped `Gemini CI Agent` workflow listening to `Deploy Coach` and same-repository PR updates. The agent uses `GITHUB_TOKEN` for scoped Git operations; `GEMINI_API_KEY` is stored as an Actions secret.
+- Coach `master` exists at `42faa43a4e9a`; the default branch remains `dev`.
+- Verified Coach preview deploy [42406055686](https://github.com/nimmsel23/coach-dev/actions/runs/42406055686) and agent no-op [42406146086](https://github.com/nimmsel23/coach-dev/actions/runs/42406146086) succeeded. The preview build and Hosting deploy were green; the agent correctly did not call Gemini for a successful deploy.
+- Production remains manually dispatched. A red code-repair path has not yet been exercised.
