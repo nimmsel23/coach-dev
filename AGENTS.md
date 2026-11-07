@@ -41,3 +41,34 @@ Fitness-Owner-Regel. Regeln gehören VitalOS; App-Veröffentlichung setzt deren
 autorisierten Release voraus. Kein Versand an reale Konten als Entwicklungstest.
 Planbezug ist eine Referenz, keine Planfreigabe. Keine Nachrichten durch
 `coach-sync`, Enrichment oder eine zusätzliche Klienten-Registry leiten.
+
+## Org-Taskwarrior (global) — gilt fuer alle Agenten der VitalOS-Org
+
+Verbindlich fuer alle Agenten (Vibe, Claude, Codex, Gemini) in Org-Kontexten
+(Owner-Weisung 2026-11-07):
+
+1. EINE globale Org-Task-DB — KEINE eigenen Rollen- oder Repo-DBs mehr:
+   `TASKRC=~/.local/state/vitalos-org/taskrc` (DB liegt daneben in `task/`).
+   Alte Repo-DBs sind archiviert unter `~/.local/state/vitalos-org/archive-repodb/`.
+2. Daniels private Taskwarrior-DB (`~/.task`, u. a. Hotlist `+hot`) bleibt
+   TABU fuer Schreibzugriffe — nur lesend (CEO-Runde: Task `status:pending +hot`).
+3. Rolle = Tag: Jeder Agent taggt seine eigenen Aufgaben mit seiner Rolle:
+   `+ceo`, `+cto`, `+al`, `+pm`, `+alpha`, `+betta` …
+4. Abteilung/Repo = project: `project:fitness-dev`, `project:journal-dev`,
+   `project:vitalos-prod`, `project:dotfiles`, `project:aos` …
+5. Prio-Encoder (in der Org-taskrc verankert):
+   - `+hit` und `+br` sind EIN Tier (Hits = Big Rocks, Koeffizient 8.0) —
+     hoechste Dringlichkeit, `+hit` = `+br`.
+   - `+lr` 2.0 (Little Rocks).
+   - `+hot` 1.0 — NUR Potential/Sichtbarkeit, wird NIE automatisch ausgefuehrt;
+     ob ein Potential jetzt anfaellt, entscheidet der Door War (Sonntagsrunde).
+   - `+s` -1.0 (Sand, Zeitverschwendungsroutine).
+   - `+go` ist KEINE Prioritaet und bewirkt nichts — Freigaben laufen ueber
+     die Rollen (CTO-Freigabeprozess), nicht ueber Urgency.
+6. Aufgaben IMMER per UUID anfassen (`task <uuid> modify|done|info`), NIE per
+   ID — IDs renummerieren sich nach jedem `done` (Fehltreffer-Gefahr).
+7. Guard: orgsh und die Runner verweigern den Lauf, wenn die Org-taskrc fehlt —
+   kein stiller Rueckfall auf die Privat-DB.
+8. Uebersicht/Rang: `TASKRC=~/.local/state/vitalos-org/taskrc \
+   ~/.org/venv/bin/python ~/aos/bin/aos door plan quadrants --json`
+   (Eisenhower-Sicht Q1–Q4).
