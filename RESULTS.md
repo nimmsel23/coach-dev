@@ -1,3 +1,8 @@
+## 2026-11-07 — Veralteten Fitness-Preview-Workflow aus Coach entfernt
+
+- `.github/workflows/preview-dev.yml` war eine Fitness-Pipeline-Kopie in `coach-dev`. Sie setzte den Coach-Commit-SHA als Fitness-App-Ref und scheiterte so bei Coach-Änderungen (Run [42409360631](https://github.com/nimmsel23/coach-dev/actions/runs/42409360631)).
+- Workflow aus `coach-dev/dev` entfernt; die zuständige Fitness-Pipeline bleibt in `fitness-dev`. Coach nutzt seine eigene `Deploy Coach`-Pipeline.
+
 ## 2026-11-07 — GitHub-Pages-Doku vorbereitet
 
 - `docs/README.md` als Jekyll-Landingpage ergänzt. Coach nutzt den bestehenden Docs-Pages-Workflow; die bestehende Startseite `docs/index.md` bleibt erhalten und die neue README wird separat unter `/README.html` ausgegeben.
