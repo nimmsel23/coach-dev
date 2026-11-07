@@ -1,6 +1,7 @@
 # NEXT (coach-dev)
 
-- [ ] GitHub Pages nach Entfernung des lokalen `klienten-dev`-Gitlinks erneut prüfen; `README.md` und `index.html` sind bereits vorhanden.
+- [ ] Den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy verifizieren.
+
 
 -   **Review-Karte (Inbox-UI)**: Entscheidungsoberflaeche statt 40-Felder-Editor —
     Identitaet, 2-Satz-Was, Muskeln (primae), 3 Coaching-Highlights, Herkunft als ein

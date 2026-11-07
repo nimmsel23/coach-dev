@@ -1,3 +1,9 @@
+# 2026-11-07 — Pages auf gezielten Docs-Build umgestellt
+
+- Ursache war rekursiver Checkout der Gitlinks: zuerst ein rein lokaler `klienten-dev`-Pfad, danach ein veralteter Commit im historischen `vitalos`-Submodul. Root-`README.md` und `index.html` existierten bereits.
+- Pages Source auf GitHub Actions umgestellt. Neuer Workflow checkt ohne Submodule aus und veröffentlicht nur `docs/`; `docs/index.md` ist der Einstieg.
+- Nach dem ersten Fix verschwand der `klienten-dev`-Fehler, der nächste Pages-Lauf deckte den defekten verschachtelten `vitalos`-Gitlink auf. Der nicht-rekursive Pages-Workflow umgeht beide historischen Checkouts, ohne Produkt-Gitlinks zu ändern.
+
 # 2026-11-07 — GitHub Pages checkout repariert
 
 - Root `README.md` und `index.html` waren bereits vorhanden. Pages scheiterte vorher beim rekursiven Submodule-Checkout, bevor es eine Indexdatei verarbeiten konnte.
