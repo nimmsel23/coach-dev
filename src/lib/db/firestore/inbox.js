@@ -10,6 +10,7 @@ import {
 import { db } from "../../../firebase.js";
 import { getUid, LOCAL_FITNESS_API_BASE } from "./core.js";
 import { normalizeExerciseRecord } from "../shared/exercise.js";
+import { isGithubInboxItem, listGithubInboxPrs } from "./githubInbox.js";
 
 const FIREBASE_COACH = import.meta.env.MODE === "coach";
 
@@ -23,6 +24,7 @@ const COMMAND_TIMEOUT_MS = 190000;  // so lange wartet die UI auf ein laufendes 
 const COACH_ERROR_TEXT = {
   coach_worker_offline: "Coach-Rechner offline – Befehl nicht gesendet",
   coach_command_timeout: "Keine Antwort vom Coach-Rechner – Ergebnis unklar, Liste neu laden",
+  github_pr_close_on_github: "GitHub-PR bitte auf github.com/nimmsel23/fitness schließen",
 };
 
 function coachError(code, message) {
@@ -174,8 +176,21 @@ export async function getInbox() {
 
 export async function getGlobalInbox() {
   if (FIREBASE_COACH) {
+    // Übergang: GitHub-PRs (KB-SOT) zuerst, Firestore coachInbox als Cache/Altbestand.
+    let prs = [];
+    try {
+      prs = await listGithubInboxPrs();
+    } catch (e) {
+      console.warn("github inbox prs unavailable", e);
+    }
     const snap = await getDocs(collection(db, "coachInbox"));
-    return snap.docs.map((entry) => ({ ...entry.data(), file_id: entry.id }));
+    const firestoreItems = snap.docs.map((entry) => ({
+      ...entry.data(),
+      file_id: entry.id,
+      cache_source: entry.data()?.cache_source || "firestore_cache",
+    }));
+    const prIds = new Set(prs.map((p) => p.file_id));
+    return [...prs, ...firestoreItems.filter((item) => !prIds.has(item.file_id))];
   }
   try {
     return await fetchLocalInbox();
@@ -215,6 +230,10 @@ export async function approveInbox(id, userId, ex = null) {
   }
 
   const currentData = exercise ? normalizeExerciseRecord(exercise) : null;
+  if (FIREBASE_COACH && isGithubInboxItem({ file_id: id, ...(ex || {}) })) {
+    if (ex?.html_url && typeof window !== "undefined") window.open(ex.html_url, "_blank", "noopener");
+    return { ok: true, deferred: "github_pr", url: ex?.html_url || null };
+  }
   if (FIREBASE_COACH) return coachCommand("approve", id, targetUid, { current_data: currentData });
   try {
     const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}/approve`, {
@@ -241,6 +260,11 @@ export async function reenrichInbox(id, userId, ex) {
   const targetUid = userId || getUid();
   const data = ex?.exercises?.[0] || ex?.enriched || ex || {};
   const feedback = ex?.coachFeedback || ex?.feedback || null;
+  if (FIREBASE_COACH && isGithubInboxItem({ file_id: id, ...(ex || {}) })) {
+    // Cloud-Fallback: Enrich-Inbox workflow; UI öffnet den PR zur Kontrolle.
+    if (ex?.html_url && typeof window !== "undefined") window.open(ex.html_url, "_blank", "noopener");
+    return { ok: true, deferred: "github_pr_enrich", url: ex?.html_url || null };
+  }
   if (FIREBASE_COACH) return coachCommand("reenrich", id, targetUid, {
     exercise_id: data.exercise_id || data.id,
     display_name: data.display_name || data.name || data.german,
@@ -268,6 +292,9 @@ export async function reenrichInbox(id, userId, ex) {
 
 export async function deleteInbox(id, userId) {
   const targetUid = userId || getUid();
+  if (FIREBASE_COACH && isGithubInboxItem({ file_id: id })) {
+    return { ok: false, error: "github_pr_close_on_github" };
+  }
   if (FIREBASE_COACH) return coachCommand("delete", id, targetUid);
   try {
     const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/${id}`, { method: "DELETE" });
