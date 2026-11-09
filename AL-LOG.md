@@ -21,3 +21,19 @@ _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen sta
 - Erledigt: Org-Task 1753b885 (+al): CEO-Entscheidung zu Task 93 in ABTEILUNG.md dokumentiert — Ziel bleibt direkte serverseitige Enrichment-API, lokale coach-sync-Worker-Architektur als Übergang akzeptiert, kein Refactor/Bau jetzt. Task done. Kein Code; einziger Commit ist dieser AL-LOG-Eintrag.
 - Offen/Weiter: Guide-Aufgaben 2 (Review-Karte Inbox-UI, braucht Owner-Feedback) und 3 (Katalog-Konsistenz vs. fitness-dev) unverändert offen, kein +hit. origin/dev weitergelaufen bis 3d3ec70c (u. a. 07f2878f stale Fitness-Preview-Workflow entfernt), CI auf master grün/skipped (03:17Z). Working tree: docs/CLAUDE.md mod, vitalos-Submodule mod, website untracked (fremd, nicht angefasst).
 - Blocker: Keine.
+
+## 2026-11-09 (Montag) — Abteilungsleiter-Lauf
+
+_Automatik (vos-al-log Vorlage 2026-11-09):_
+- Commits seit 2026-11-08: f6c1b3b2 roadmap: drilldown-sync 2026-11-08 — M1-RC-Nachtlauf gespiegelt (Client-Kette gruen, SmartLog-500-Letzblocker Org-Task 5f09bbb1), M2-APK-Vorbereitung beauftragt, Dependabot-Major-Befund
+ead30626 docs(al-log): AL-Lauf 2026-11-08 — CEO-Entscheidung Task 93 dokumentiert
+- Offene PRs: 10	ci: Merge-Agent für automatische PR-Merges (kein Abweisen von PRs)	vibe/pr-merge-agent-aac181	DRAFT	2026-11-07T16:56:12Z
+- CI (letzte Läufe): completed	success	Gemini CI Agent	Gemini CI Agent	dev	workflow_run	42416161155	11s	2026-11-07T21:30:18Z
+completed	success	docs: keep Coach Pages landing routes distinct	Pages Docs	dev	push	42416102107	41s	2026-11-07T21:29:35Z
+completed	success	Gemini CI Agent	Gemini CI Agent	dev	workflow_run	42416057177	12s	2026-11-07T21:28:58Z
+- Arbeitsbaum: 3 uncommittete Pfade
+
+_Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
+- Erledigt: Owner-Klarstellung 2026-11-09 — AL ohne CEO-+hit-Sperre; Repo-Queues `FIRE.md` (Vorrang) → `TODO.md`, Potential `HOT.md`. Guides coach-dev/skills-dev + `~/ABTEILUNGEN.md` nachgezogen. agy-Lauf 06:10 Credits-leer (kein Code).
+- Offen/Weiter: FIRE Hit Review-Karte (Inbox-UI); TODO Deploy-Seed + systemd-Pfad; Branch divergiert (lokal voraus/hinter origin/dev).
+- Blocker: Keine für Queue-Arbeit; Merge/Rebase mit origin/dev vor Push klären.
