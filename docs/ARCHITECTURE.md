@@ -32,10 +32,10 @@ fitness-dev PWA  ←→  Coach hostet Plan (modules/plan Pin)
 - **Catalog = KB:** eine Expert-DB in `kb/exercises` (+ muscles). Gate = Coach-Inbox
   (Bulk aus wger+yuhonas erst nach Enhance/Approve). Apps verbauen freigegebene KB
   beim Build als JS — Catalog ist Coach-Werkzeug, nicht App-Kern.
-- **Atlas:** Frontend zeigt die **aktive Übungs-DB** und lädt sie auf dem Gerät in
-  **IndexedDB** (Mirror). Default jetzt: Original-Yuhonas (Pin/CDN) als Verbandspflaster
-  — zu grob fürs Expert-Brain (z. B. keine vorderen/hinteren Schultern).
-  wger+yuhonas-Summe war zu viel at once.
+- **App-Default Übungen:** Original-Yuhonas wie auf Git (Pin/CDN) = Verbandspflaster
+  für stabilen Betrieb, bis Expert-KB (`kb/exercises`) feature-dicht ist — zu grob fürs
+  volle Brain (z. B. keine vorderen/hinteren Schultern). wger+yuhonas-Summe war zu viel
+  at once.
 - Kopien (`fitness-cli`, `fitness-backend`, kaputte plan-dev-Catalog-Links) → Archiv.
   Karte: `~/dev/coach-dev/docs/OWNERSHIP-MAP.md`.
 

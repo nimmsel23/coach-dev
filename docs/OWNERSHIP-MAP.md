@@ -17,14 +17,12 @@ Es gibt nur **eine** coach-approved DB: `kb/exercises` (plus `kb/muscles`).
 | Schicht | Rolle |
 |---|---|
 | **Bulk-Rohstoff** | Summe **wger + yuhonas** (einmaliger Import) — zu viel auf einmal fürs Expert-Gate |
-| **Atlas (Frontend)** | Tab/Fläche, die **welche DB auch immer aktiv ist** anzeigt und auf dem Mobilgerät in **IndexedDB** lädt (Geräte-Mirror). Quelle ≠ Expert-Brain. |
-| **Atlas-Default (jetzt)** | **Original-Yuhonas wie auf Git** — Verbandspflaster als aktive Mirror-DB, bis die KB feature-dicht ist |
+| **App-Default (jetzt)** | **Original-Yuhonas wie auf Git** (Pin) — Verbandspflaster für stabilen Übungsbetrieb, bis die KB feature-dicht ist |
 | **Gate** | **Exercise-Inbox** — nur Coach; Bulk wird erst `approved`, wenn enhanced und **app-feature-gerecht** |
 | **Expert-Brain** | Freigegebene Einträge in `kb/exercises` — Build verbaut sie als JS in die Apps |
 
 Beispiel warum Yuhonas allein nicht reicht: keine vorderen/hinteren Schultern → zu grob
-für feinere App-Features. Atlas kann später andere Quellen spiegeln; Yuhonas ist nur
-der aktuelle Default-Mirror. Catalog/KB = Coach-Werkzeug, nicht App-Kern
+für feinere App-Features. Catalog/KB = Coach-Werkzeug, nicht Kern der Fitness-/Coach-App
 (Apps Firestore-nativ; freigegebene KB über Build/JS).
 
 ## Was wo hingehört (SOT)

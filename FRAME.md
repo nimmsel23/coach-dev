@@ -24,7 +24,7 @@ Stand: 2026-11-09. Ehrliche Bestandsaufnahme (Repo + App), kein Wunschdenken.
 |---|---|
 | Catalog = KB (Exercises+Muscles) | Submodul `fitness/catalog/kb`; Gate = Inbox; Build → JS in Apps |
 | Catalog-CLI / Enrichment | `fitness/catalog/` — `coach catalog` (Werkzeug, nicht App-Kern) |
-| Atlas | Frontend: aktive DB anzeigen + IndexedDB-Mirror am Gerät; Default = Yuhonas |
+| App-Default Übungen | Yuhonas-Pin als Pflaster; Expert-KB = Inbox → `kb/exercises` → Build-JS |
 | FastAPI Sessions/Workouts/Inbox | `fitness/api/` gemountet in `server.py` |
 | Klienten-Python | `klienten-python/` in-tree; UI noch `~/dev/klienten-dev` |
 | Praxis-CLIs | `coach praxis` / `klientenctl` / `konsolectl` → `~/dev/praxis-dev` |
