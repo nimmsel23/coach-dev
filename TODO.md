@@ -11,6 +11,9 @@ nachziehen. Optional später: `FOCUS.md` / `FREEDOM.md` / `FRAME.md`.
 
 ## Offen
 
+- [ ] **Frontend-Serve Katalog-UI:** Coach-Dist (`dist-catalog` / `COACH_CATALOG_DIR`)
+      statt Fitness-Dist auf 8100-Staging — Scope-Fragen → Org-Task `+ceo`
+      (aus FIRE 2026-11-09 ausgegliedert).
 - [ ] **Deploy-Formalisierung:** `~/.aos/fitness/kb`-Seed geschah manuell (rsync);
       `deploy.sh`-Seed-Pfad auf coach-dev umstellen.
 - [ ] **Systemd-Quelle:** `coach-sync.service` wird noch aus
