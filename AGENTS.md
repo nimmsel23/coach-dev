@@ -20,6 +20,10 @@ UI build still comes from sibling `~/dev/klienten-dev` (`KLIENTEN_UI_ROOT`) unti
 that surface is fully absorbed into Coach. `workspace` is context only, not a
 public static root.
 
+Praxis-/Klienten-CLIs über den Coach-Dispatcher (nicht mehr nur als lose Binaries):
+`coach praxis`, `coach klientenctl` (Alias `coach klienten`), `coach konsolectl`
+(Alias `coach konsole`). Braucht Sibling `~/dev/praxis-dev` (`PRAXIS_DEV_ROOT`).
+
 ## Plan source ownership (2026-10-30)
 
 Plan owns training-plan/program authoring, workout-template editors and plan

@@ -18,11 +18,17 @@ class CoachDispatcherTest(unittest.TestCase):
         self.assertEqual(one[-4:], ['clients', 'client with spaces', '--days', '7'])
 
     def test_domain_imports_are_lazy_and_tool_help_is_forwarded(self):
-        for name in coach_cli.COMMANDS:
+        for name, spec in coach_cli.COMMANDS.items():
             argv = coach_cli.command_argv([name, '--help'])
             self.assertEqual(argv[-1], '--help')
+            if spec.owner == 'klienten':
+                self.assertIn('klienten_manager', ' '.join(argv))
+            else:
+                self.assertIn(str(coach_cli.FITNESS_ROOT), argv)
         self.assertEqual(coach_cli.command_argv(['inbox', 'list'])[-2:], ['inbox', 'list'])
         self.assertIn('backend.notifier.cli', coach_cli.command_argv(['fitness-inbox', '--help']))
+        self.assertEqual(coach_cli.ALIASES['klienten'], 'klientenctl')
+        self.assertEqual(coach_cli.ALIASES['konsole'], 'konsolectl')
 
     def test_arguments_are_passed_verbatim_without_a_shell_or_cwd_change(self):
         with patch('coach_cli.os.execv') as execute:
