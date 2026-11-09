@@ -28,10 +28,10 @@ Praxis-/Klienten-CLIs über den Coach-Dispatcher (nicht mehr nur als lose Binari
 
 ## Catalog / former fitness-agent (2026-11-09)
 
-Python catalog + FastAPI live under `fitness/` in this repo (SOT). Entry:
-`coach catalog` (Alias `coach agent`). Node under `~/dev/backend` is **not**
-the catalog. Ownership, lineage and archived orphans:
-[docs/OWNERSHIP-MAP.md](docs/OWNERSHIP-MAP.md).
+YAML-KB-Daten-SOT: `~/dev/fitness`. Python catalog + FastAPI live under
+`fitness/` in this repo (`catalog/kb/` = Live-Spiegel). Entry: `coach catalog`
+(Alias `coach agent`). Node under `~/dev/backend` is **not** the catalog.
+Ownership: [docs/OWNERSHIP-MAP.md](docs/OWNERSHIP-MAP.md).
 
 ## Plan source ownership (2026-10-30)
 
