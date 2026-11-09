@@ -35,9 +35,9 @@ vorbereitet. Der stabile Checkout `~/vitalos` bleibt Produktions-/Integrationsst
 Coach ist kein VitalOS-App-Submodul. Sein eigener `vitalos/`-Pin wird durch diese
 Nachrichtenimplementierung nicht angehoben. Plan benötigt dafür keinen Pointer-Bump.
 
-Nachrichten benutzen weder `coach-sync.service` noch `coachCommands`, den lokalen
-Gateway auf 9150 oder den Fitness-Upstream auf 8100. Der Laptop muss für diesen
-Austausch nicht eingeschaltet sein. Klienten-Registry, lokale Trainingspläne,
+Nachrichten benutzen weder `coach-sync.service` noch `coachCommands` noch den
+lokalen Gateway auf 9150. Der Laptop muss für diesen Austausch nicht
+eingeschaltet sein. Klienten-Registry, lokale Trainingspläne,
 Session-Logs und Katalog-YAMLs werden nicht als weiterer Nachrichtenspeicher benutzt.
 
 ## Bedienung

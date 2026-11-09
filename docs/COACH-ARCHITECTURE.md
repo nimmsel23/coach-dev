@@ -101,17 +101,13 @@ Coach imports `PlanDocument` and `clientView` from pinned `modules/plan` for
 local authoring previews and A4 printing. Published snapshots remain distinct
 from coach drafts; assigning or delivering a plan stays explicit.
 
-Catalog actions in Hosting remain Firestore commands consumed by `coach-sync`
-in Fitness. Heartbeat means worker liveness, not successful commands or HTTP
-upstream readiness. The status chip now shows failures since worker start and
-the last failure message. The Fitness domain API is separately served on 8100
-by `fitness-preview.service`, upstream of Coach 9150. Both worker and API use
-`~/dev/fitness-dev` and its catalog. No second catalog or enrichment implementation.
-
-Audit: a manual Yoga Headstand draft had no external catalog match, triggering
-`None.get` during pipeline restart. Fixed at Fitness source, with regression
-coverage. The stopped Fitness upstream was restored using the repo-owned unit;
-its existing user-data sync ownership is retained. See Fitness `docs/COACH_APP.md`.
+Catalog actions in Hosting remain Firestore commands consumed by `coach-sync`.
+Heartbeat means worker liveness, not successful commands or HTTP readiness.
+The status chip shows failures since worker start and the last failure message.
+Inbox/Catalog/Enrichment APIs run in-process on Coach `:9150`
+(`fitness_api: local`); the old `:8100` `fitness-preview` upstream is gone.
+Worker and API share `coach-dev/fitness/` (SOT). See `docs/OWNERSHIP-MAP.md`
+and `docs/COACH_APP.md`.
 
 ## Source correction (2026-10-31)
 
