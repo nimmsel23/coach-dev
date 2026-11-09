@@ -1,3 +1,8 @@
+## 2026-11-09 — AL 18:10: Catchup-Push-Hit geschlossen
+
+- Org-Task `7cd93f79` done: `9da51ea1`+3 Docs bereits Ancestor von `origin/dev` `c6689342`.
+- Check-Beleg: Deploy Coach `42655793637`, Pages Docs `42655793652` (success).
+
 ## 2026-11-09 — Funnel-Base `/fitness` (kein Doppelpfad) + CORS
 
 - `FUNNEL_FITNESS_API_BASE` → `…/fitness` (Funnel proxyt schon auf `:9150/fitness/`).
