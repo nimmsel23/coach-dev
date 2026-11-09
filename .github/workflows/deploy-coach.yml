@@ -81,17 +81,25 @@ jobs:
       - name: FITNESS_ROOT setzen
         run: echo "FITNESS_ROOT=$GITHUB_WORKSPACE/.fitness-dev" >> "$GITHUB_ENV"
 
-      # fitness/catalog/kb ist lokal ein SSH-Submodul (fitness.git) — in Actions kein SSH.
-      # build-sixpack-data erwartet den Pfad relativ zum Repo; KB liegt im fitness-dev-Checkout.
-      - name: Fitness-KB aus fitness-dev verlinken
+      # fitness/catalog/kb ist lokal SSH-Submodul (fitness.git). SOT: nimmsel23/fitness
+      # (nicht mehr aus fitness-dev — dort wurde das Paket entfernt).
+      - name: Checkout fitness KB (SOT)
+        uses: actions/checkout@v4
+        with:
+          repository: nimmsel23/fitness
+          ref: main
+          path: fitness-kb
+
+      - name: Fitness-KB einhängen
         run: |
           mkdir -p fitness/catalog
           # Checkout legt fitness/catalog/kb als leeres Submodul-Verzeichnis an;
           # ln -sfn würde sonst eine Link-Datei *innerhalb* anlegen.
           rm -rf fitness/catalog/kb
-          ln -sfn "$GITHUB_WORKSPACE/.fitness-dev/fitness/catalog/kb" fitness/catalog/kb
+          ln -sfn "$GITHUB_WORKSPACE/fitness-kb" fitness/catalog/kb
           test -d fitness/catalog/kb/exercises/6pack
           echo "FITNESS_KB_DIR=$GITHUB_WORKSPACE/fitness/catalog/kb" >> "$GITHUB_ENV"
+          echo "KB @ $(git -C fitness-kb rev-parse --short HEAD)"
 
       - uses: pnpm/action-setup@v4
         with:
