@@ -1,6 +1,6 @@
-## 2026-11-09 — Deploy-Coach: Fitness-KB-Submodule in CI init
+## 2026-11-09 — Deploy-Coach: Fitness-KB aus fitness-dev verlinken
 
-- `deploy-coach.yml`: `git submodule update --init fitness/catalog/kb` — ohne das scheitert `build-sixpack-data` an `exercises/6pack` (ENOENT seit mehreren Dev-Pushes heute).
+- CI kann das SSH-Submodul `fitness/catalog/kb` nicht klonen. Nach `.fitness-dev`-Checkout: Symlink `fitness/catalog/kb` → `.fitness-dev/fitness/catalog/kb` (für build-sixpack-data).
 
 ## 2026-11-09 — vitalos-Pin a092508 + @kb-Alias für Plan-Submodul
 

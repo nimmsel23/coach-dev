@@ -51,11 +51,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Initialize pinned Plan + Fitness-KB sources
-        run: |
-          git submodule update --init modules/plan
-          # build-sixpack-data.mjs liest fitness/catalog/kb/exercises/{6pack,calisthenics}
-          git submodule update --init fitness/catalog/kb
+      - name: Initialize pinned Plan source
+        run: git submodule update --init modules/plan
 
       # plan-dev hält nur noch das Plan-Eigene; Gemeinsames kommt per Overlay aus fitness-dev
       # (modules/plan/vite-fitness-overlay.mjs). Stand: modules/plan/fitness.ref (Branch oder SHA).
@@ -83,6 +80,14 @@ jobs:
 
       - name: FITNESS_ROOT setzen
         run: echo "FITNESS_ROOT=$GITHUB_WORKSPACE/.fitness-dev" >> "$GITHUB_ENV"
+
+      # fitness/catalog/kb ist lokal ein SSH-Submodul (fitness.git) — in Actions kein SSH.
+      # build-sixpack-data erwartet den Pfad relativ zum Repo; KB liegt im fitness-dev-Checkout.
+      - name: Fitness-KB aus fitness-dev verlinken
+        run: |
+          mkdir -p fitness/catalog
+          ln -sfn "$GITHUB_WORKSPACE/.fitness-dev/fitness/catalog/kb" fitness/catalog/kb
+          test -d fitness/catalog/kb/exercises/6pack
 
       - uses: pnpm/action-setup@v4
         with:
