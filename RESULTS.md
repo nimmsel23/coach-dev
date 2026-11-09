@@ -1,3 +1,11 @@
+## 2026-11-09 — Praxis-/Klienten-CLIs im Coach-Dispatcher
+
+- `coach praxis`, `coach klientenctl` (`klienten`), `coach konsolectl` (`konsole`)
+  starten über `klienten-python/.venv` + `~/dev/praxis-dev`.
+- `praxis_db.py`: `PRAXIS_DEV_ROOT` Default `~/dev/praxis-dev` (alter
+  Parent-Walk zeigte fälschlich auf `~/praxis-dev`).
+- Shims in `~/dev/klienten-dev/bin` zeigen auf coach-dev; `test_coach_cli` grün.
+
 ## 2026-11-09 — klienten-python nach coach-dev gezogen
 
 - `~/klienten-python` → `~/dev/coach-dev/klienten-python` (eigenes Git + `.venv`,
