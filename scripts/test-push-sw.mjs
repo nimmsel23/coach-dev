@@ -19,14 +19,21 @@ function loadSw(file, windows) {
     registration: {
       showNotification: async (title, options) => {
         shown.push({ title, options })
-        open.splice(0, open.length, ...open.filter((n) => n.tag !== options.tag), { tag: options.tag, data: options.data })
+        open.splice(0, open.length, ...open.filter((n) => n.tag !== options.tag), {
+          tag: options.tag,
+          data: options.data,
+        })
       },
       getNotifications: async ({ tag }) => open.filter((n) => n.tag === tag),
     },
-    addEventListener: (type, fn) => { listeners[type] = fn },
+    addEventListener: (type, fn) => {
+      listeners[type] = fn
+    },
     clients: {
       matchAll: async () => self.windows || [],
-      openWindow: async (url) => { self.opened = url },
+      openWindow: async (url) => {
+        self.opened = url
+      },
     },
   }
   const context = {
@@ -35,7 +42,11 @@ function loadSw(file, windows) {
     URL,
     firebase: {
       initializeApp: () => {},
-      messaging: () => ({ onBackgroundMessage: (fn) => { onBackground = fn } }),
+      messaging: () => ({
+        onBackgroundMessage: (fn) => {
+          onBackground = fn
+        },
+      }),
     },
   }
   vm.runInNewContext(readFileSync(join(root, file), 'utf8'), context, { filename: file })
@@ -49,7 +60,13 @@ function loadSw(file, windows) {
       const waits = []
       let closed = false
       await listeners.notificationclick({
-        action, notification: { data, close: () => { closed = true } },
+        action,
+        notification: {
+          data,
+          close: () => {
+            closed = true
+          },
+        },
         waitUntil: (p) => waits.push(p),
       })
       await Promise.all(waits)
@@ -59,13 +76,27 @@ function loadSw(file, windows) {
 }
 
 const wk = (sid, extra = {}) => ({
-  type: 'clientWorkout', title: 'Matthias: Workout eingegangen', body: 'Kraft · 45 min',
-  tag: 'client-workout-U1', clientUid: 'U1', clientName: 'Matthias', sid, link: '/#/coach?client=U1', ...extra,
+  type: 'clientWorkout',
+  title: 'Matthias: Workout eingegangen',
+  body: 'Kraft · 45 min',
+  tag: 'client-workout-U1',
+  clientUid: 'U1',
+  clientName: 'Matthias',
+  sid,
+  link: '/#/coach?client=U1',
+  ...extra,
 })
 
 for (const file of files) {
   console.log(`\n${file}`)
-  const t = (name, fn) => fn().then(() => console.log(`  ✔ ${name}`), (e) => { console.error(`  ✘ ${name}\n`, e); process.exitCode = 1 })
+  const t = (name, fn) =>
+    fn().then(
+      () => console.log(`  ✔ ${name}`),
+      (e) => {
+        console.error(`  ✘ ${name}\n`, e)
+        process.exitCode = 1
+      },
+    )
 
   await t('Klienten-Workout: Buttons, Tag pro Klient, Link', async () => {
     const sw = loadSw(file)
@@ -73,7 +104,10 @@ for (const file of files) {
     const { title, options } = sw.shown[0]
     assert.equal(title, 'Matthias: Workout eingegangen')
     assert.equal(options.tag, 'client-workout-U1')
-    assert.deepEqual(Array.from(options.actions, (a) => a.action), ['open', 'seen'])
+    assert.deepEqual(
+      Array.from(options.actions, (a) => a.action),
+      ['open', 'seen'],
+    )
     assert.equal(options.data.link, '/#/coach?client=U1')
     assert.equal(options.renotify, false)
   })
@@ -102,7 +136,9 @@ for (const file of files) {
   await t('andere Klienten bleiben getrennt', async () => {
     const sw = loadSw(file)
     await sw.push(wk('s1'))
-    await sw.push(wk('s9', { tag: 'client-workout-U2', clientUid: 'U2', clientName: 'Jakob', title: 'Jakob: Workout eingegangen' }))
+    await sw.push(
+      wk('s9', { tag: 'client-workout-U2', clientUid: 'U2', clientName: 'Jakob', title: 'Jakob: Workout eingegangen' }),
+    )
     assert.equal(sw.shown[1].title, 'Jakob: Workout eingegangen')
     assert.equal(sw.shown[1].options.data.count, 1)
   })
@@ -127,10 +163,27 @@ for (const file of files) {
 }
 
 const COACH = 'https://vos-coach.web.app/#/clients/U1?date=2026-10-15'
-const win = (url) => ({ url, navigatedTo: null, focused: false, focus() { this.focused = true }, async navigate(u) { this.navigatedTo = u } })
+const win = (url) => ({
+  url,
+  navigatedTo: null,
+  focused: false,
+  focus() {
+    this.focused = true
+  },
+  async navigate(u) {
+    this.navigatedTo = u
+  },
+})
 for (const file of files) {
   console.log(`\n${file} (Coach-Site)`)
-  const t = (name, fn) => fn().then(() => console.log(`  ✔ ${name}`), (e) => { console.error(`  ✘ ${name}\n`, e); process.exitCode = 1 })
+  const t = (name, fn) =>
+    fn().then(
+      () => console.log(`  ✔ ${name}`),
+      (e) => {
+        console.error(`  ✘ ${name}\n`, e)
+        process.exitCode = 1
+      },
+    )
 
   await t('fremde Origin ohne offenes Coach-Fenster: neues Fenster, App-Fenster bleibt unberührt', async () => {
     const app = win('https://fitness-aos.web.app/')

@@ -1,3 +1,9 @@
+## 2026-11-09 — Node Tooling (Biome/knip/engines/smoke)
+
+- `engines.node: >=22.13`, Scripts `tooling:biome|knip|check`.
+- Check.yml: Biome format auf `scripts/`; knip report (continue-on-error).
+- SSOT-Vorlagen: `~/vitalos/tooling/`.
+
 ## 2026-11-09 — Bulk-Build: Yuhonas aus Vendor, kein YAML-Dump
 
 - `scripts/build-exercise-bulk-data.mjs` wie fitness-dev: wger-YAML + `vendor/free-exercise-db/dist/exercises.json`.

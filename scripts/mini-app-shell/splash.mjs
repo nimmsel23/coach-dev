@@ -7,31 +7,31 @@
 //  - blockiert nie dauerhaft: Failsafe nach failsafeMs
 // Nutzung:  import { injectSplash } from "@vos/mini-app-shell/splash.mjs"
 //           node splash.mjs <html> --name "Plan" --accent "#5b8cff" --icon "./icon-192.png"
-import { readFileSync, writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { readFileSync, writeFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
-const START = "<!-- vos-splash:start -->";
-const END = "<!-- vos-splash:end -->";
+const START = '<!-- vos-splash:start -->'
+const END = '<!-- vos-splash:end -->'
 
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
 export const SPLASH_DEFAULTS = {
-  bg: "#090b10",
-  fg: "#e8e9ee",
-  icon: "./icon-192.png",
-  rootId: "root",
+  bg: '#090b10',
+  fg: '#e8e9ee',
+  icon: './icon-192.png',
+  rootId: 'root',
   minMs: 200, // Nur kurz anzeigen, damit ein schneller Start nicht künstlich verzögert wird
   failsafeMs: 12000, // spätestens dann weg, egal ob #root gemountet ist
   updateWindowMs: 10000, // Update-Loader nur in dieser Frist nach dem Start
-  updateText: "Update wird geladen …",
-};
+  updateText: 'Update wird geladen …',
+}
 
 export function splashSnippets(opts) {
   const { name, accent, bg, fg, icon, rootId, minMs, failsafeMs, updateWindowMs, updateText } = {
     ...SPLASH_DEFAULTS,
     ...opts,
-  };
-  if (!name || !accent) throw new Error("splashSnippets: name und accent sind Pflicht");
+  }
+  if (!name || !accent) throw new Error('splashSnippets: name und accent sind Pflicht')
   const head = `${START}
     <style>
       #vos-splash{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(ellipse at 50% 38%,color-mix(in srgb,${accent} 8%,${bg}),${bg} 65%);color:${fg};transition:opacity .18s ease;font-family:system-ui,-apple-system,sans-serif}
@@ -45,7 +45,7 @@ export function splashSnippets(opts) {
       @keyframes vos-slide{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
       @media (prefers-reduced-motion:reduce){#vos-splash{transition:none}#vos-splash img,#vos-splash .bar::after{animation:none}}
     </style>
-    ${END}`;
+    ${END}`
   const body = `${START}
     <div id="vos-splash" role="status" aria-label="${esc(name)} lädt">
       <img src="${esc(icon)}" alt="" />
@@ -102,33 +102,40 @@ export function splashSnippets(opts) {
         }
       })();
     </script>
-    ${END}`;
-  return { head, body };
+    ${END}`
+  return { head, body }
 }
 
 // Idempotent in eine HTML-Quelle einsetzen: vorhandene Blöcke (head + body) werden an Ort und
 // Stelle ersetzt, sonst neu eingefügt — wiederholtes Stempeln ändert die Datei nicht mehr.
 export function injectSplash(html, opts) {
-  const { head, body } = splashSnippets(opts);
-  const block = new RegExp(`${START}[\\s\\S]*?${END}`, "g");
+  const { head, body } = splashSnippets(opts)
+  const block = new RegExp(`${START}[\\s\\S]*?${END}`, 'g')
   if ((html.match(block) || []).length === 2) {
-    let i = 0;
-    return html.replace(block, () => (i++ === 0 ? head : body).trim());
+    let i = 0
+    return html.replace(block, () => (i++ === 0 ? head : body).trim())
   }
-  const strip = (s) => s.replace(new RegExp(`\\s*${START}[\\s\\S]*?${END}`, "g"), "");
-  let out = strip(html);
-  out = out.replace(/<\/head>/i, () => `    ${head}\n  </head>`);
-  out = out.replace(/<body([^>]*)>/i, (m) => `${m}\n    ${body}`);
-  return out;
+  const strip = (s) => s.replace(new RegExp(`\\s*${START}[\\s\\S]*?${END}`, 'g'), '')
+  let out = strip(html)
+  out = out.replace(/<\/head>/i, () => `    ${head}\n  </head>`)
+  out = out.replace(/<body([^>]*)>/i, (m) => `${m}\n    ${body}`)
+  return out
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const [file, ...rest] = process.argv.slice(2);
-  const arg = (k) => (rest.includes(`--${k}`) ? rest[rest.indexOf(`--${k}`) + 1] : undefined);
-  if (!file || !arg("name") || !arg("accent")) {
-    console.error('Aufruf: node splash.mjs <html> --name "Plan" --accent "#5b8cff" [--icon "./icon-192.png"]');
-    process.exit(1);
+  const [file, ...rest] = process.argv.slice(2)
+  const arg = (k) => (rest.includes(`--${k}`) ? rest[rest.indexOf(`--${k}`) + 1] : undefined)
+  if (!file || !arg('name') || !arg('accent')) {
+    console.error('Aufruf: node splash.mjs <html> --name "Plan" --accent "#5b8cff" [--icon "./icon-192.png"]')
+    process.exit(1)
   }
-  writeFileSync(file, injectSplash(readFileSync(file, "utf8"), { name: arg("name"), accent: arg("accent"), ...(arg("icon") && { icon: arg("icon") }) }));
-  console.log(`✨ Splash in ${file} eingesetzt`);
+  writeFileSync(
+    file,
+    injectSplash(readFileSync(file, 'utf8'), {
+      name: arg('name'),
+      accent: arg('accent'),
+      ...(arg('icon') && { icon: arg('icon') }),
+    }),
+  )
+  console.log(`✨ Splash in ${file} eingesetzt`)
 }

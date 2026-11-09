@@ -11,5 +11,5 @@
 // If you want UI-parity sync of just the views (not lib/db), write a new
 // script that explicitly lists view directories and refuses to touch lib/.
 
-console.error("sync-views.mjs is permanently disabled. See header comment.");
-process.exit(1);
+console.error('sync-views.mjs is permanently disabled. See header comment.')
+process.exit(1)

@@ -6,17 +6,17 @@
 // laufen aber unabhängig voneinander (kein gemeinsamer State). Ein npm-Command
 // dafür statt zwei einzelner `&&`-verketteter Aufrufe in build:kb-data.
 // Einzeln bleiben sie über `build:bulk-data`/`build:ppl-data` weiter aufrufbar.
-import { spawnSync } from 'node:child_process';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const STEPS = ['build-exercise-bulk-data.mjs', 'build-ppl-data.mjs'];
+const STEPS = ['build-exercise-bulk-data.mjs', 'build-ppl-data.mjs']
 
 for (const step of STEPS) {
-  const result = spawnSync(process.execPath, [join(__dirname, step)], { stdio: 'inherit' });
+  const result = spawnSync(process.execPath, [join(__dirname, step)], { stdio: 'inherit' })
   if (result.status !== 0) {
-    process.exit(result.status ?? 1);
+    process.exit(result.status ?? 1)
   }
 }

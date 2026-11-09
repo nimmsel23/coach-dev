@@ -1,0 +1,34 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "scripts/**/*.{js,mjs,cjs}",
+    "vite.config.*",
+    "vitest.config.*"
+  ],
+  "project": [
+    "scripts/**/*.{js,mjs,cjs}",
+    "src/**/*.{js,jsx,mjs,cjs}"
+  ],
+  "ignore": [
+    "**/dist/**",
+    "**/dist-*/**",
+    "**/*.generated.js",
+    "**/android/**",
+    "**/ios/**",
+    "**/.cache/**",
+    "**/functions/**"
+  ],
+  "ignoreDependencies": [
+    "firebase-tools",
+    "@vitejs/plugin-react",
+    "vite",
+    "tailwindcss",
+    "autoprefixer",
+    "postcss"
+  ],
+  "ignoreBinaries": [
+    "firebase",
+    "cap",
+    "vos-release"
+  ]
+}

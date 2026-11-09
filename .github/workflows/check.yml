@@ -104,6 +104,14 @@ jobs:
           sed -i 's/^          //' pnpm-workspace.yaml
           pnpm install --frozen-lockfile --ignore-scripts --config.minimumReleaseAge=0
 
+      - name: Tooling (Biome format scripts/)
+        run: pnpm run tooling:biome
+
+      - name: Tooling (knip report)
+        continue-on-error: true
+        run: pnpm run tooling:knip
+
+
 
       - name: KB-Daten generieren
         run: pnpm run build:kb-data

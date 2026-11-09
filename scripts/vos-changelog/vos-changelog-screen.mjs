@@ -1,31 +1,48 @@
 // Shared, dependency-free release dialog. Works with React and other app shells.
-export function showVosChangelogScreen({ release, appId, appName = appId, accent = '#6ee7b7', storageKey = `${appId}:seen-release` } = {}) {
-  if (!appId || typeof release?.id !== 'string' || typeof document === 'undefined') return null;
+export function showVosChangelogScreen({
+  release,
+  appId,
+  appName = appId,
+  accent = '#6ee7b7',
+  storageKey = `${appId}:seen-release`,
+} = {}) {
+  if (!appId || typeof release?.id !== 'string' || typeof document === 'undefined') return null
   // The shell owns its single combined dialog; embedded apps stay silent.
-  if (appId !== 'vitalos' && (document.documentElement.dataset.vosShell === 'true' || window.self !== window.top)) return null;
+  if (appId !== 'vitalos' && (document.documentElement.dataset.vosShell === 'true' || window.self !== window.top))
+    return null
 
   const hasSeenRelease = () => {
-    try { if (localStorage.getItem(storageKey) === release.id) return true; } catch { /* Try session storage below. */ }
-    try { return sessionStorage.getItem(storageKey) === release.id; } catch { return false; }
-  };
-  if (hasSeenRelease() || document.getElementById('vos-changelog-screen')) return null;
+    try {
+      if (localStorage.getItem(storageKey) === release.id) return true
+    } catch {
+      /* Try session storage below. */
+    }
+    try {
+      return sessionStorage.getItem(storageKey) === release.id
+    } catch {
+      return false
+    }
+  }
+  if (hasSeenRelease() || document.getElementById('vos-changelog-screen')) return null
 
   const groups = (Array.isArray(release.sections) && release.sections.length ? release.sections : [release])
-    .map(section => ({
+    .map((section) => ({
       appName: section.appName || appName,
       repository: section.repository,
-      commits: Array.isArray(section.commits) ? section.commits.filter(commit => typeof commit?.message === 'string') : [],
+      commits: Array.isArray(section.commits)
+        ? section.commits.filter((commit) => typeof commit?.message === 'string')
+        : [],
     }))
-    .filter(section => section.commits.length);
-  if (!groups.length) return null;
+    .filter((section) => section.commits.length)
+  if (!groups.length) return null
 
-  let previousFocus;
-  const dialog = document.createElement('dialog');
-  dialog.id = 'vos-changelog-screen';
-  dialog.setAttribute('aria-labelledby', 'vos-changelog-title');
-  dialog.setAttribute('aria-describedby', 'vos-changelog-description');
-  dialog.style.setProperty('--vos-accent', accent);
-  const style = document.createElement('style');
+  let previousFocus
+  const dialog = document.createElement('dialog')
+  dialog.id = 'vos-changelog-screen'
+  dialog.setAttribute('aria-labelledby', 'vos-changelog-title')
+  dialog.setAttribute('aria-describedby', 'vos-changelog-description')
+  dialog.style.setProperty('--vos-accent', accent)
+  const style = document.createElement('style')
   style.textContent = `
     #vos-changelog-screen { box-sizing:border-box; display:flex; flex-direction:column; width:min(38rem,calc(100% - 1.25rem)); max-height:min(82dvh,48rem); margin:auto; padding:0; border:1px solid color-mix(in srgb,var(--vos-accent) 24%,transparent); border-radius:1.5rem; background:linear-gradient(155deg,#151c22 0%,#0b0e14 78%); color:#f3f7f5; box-shadow:0 28px 90px #000b; font:14px/1.5 system-ui,-apple-system,sans-serif; overflow:hidden; }
     #vos-changelog-screen:not([open]) { display:none; }
@@ -62,118 +79,147 @@ export function showVosChangelogScreen({ release, appId, appName = appId, accent
     @media(max-width:420px) { #vos-changelog-screen { width:calc(100% - .75rem); max-height:88dvh; border-radius:1.15rem; } #vos-changelog-screen header { padding:1.2rem 1.1rem .85rem; } #vos-changelog-screen main { padding:.65rem .7rem; } #vos-changelog-screen footer { padding:.75rem 1rem calc(.75rem + env(safe-area-inset-bottom,0px)); } }
     @keyframes vos-update-enter { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
     @media(prefers-reduced-motion:reduce) { #vos-changelog-screen[open] { animation:none; } #vos-changelog-screen button { transition:none; } }
-  `;
-  dialog.append(style);
+  `
+  dialog.append(style)
   const element = (tag, text, parent) => {
-    const node = document.createElement(tag);
-    node.textContent = text;
-    parent.append(node);
-    return node;
-  };
+    const node = document.createElement(tag)
+    node.textContent = text
+    parent.append(node)
+    return node
+  }
   const repositoryUrl = (value) => {
     try {
-      const url = new URL(value);
-      if (url.protocol === 'https:' && !url.username && !url.password) return url.origin + url.pathname.replace(/\/$/, '');
-    } catch { /* Missing/invalid repository: display notes without links. */ }
-    return null;
-  };
-  const link = (text, href, parent, className = '') => {
-    const node = element('a', text, parent);
-    node.href = href;
-    node.target = '_blank';
-    node.rel = 'noopener noreferrer';
-    if (className) node.className = className;
-    return node;
-  };
-
-  const header = document.createElement('header');
-  const brand = element('div', '', header);
-  brand.className = 'vos-brand';
-  if (appId === 'vitalos') {
-    const icon = document.createElement('img');
-    icon.src = '/icon-192.png';
-    icon.alt = '';
-    brand.append(icon);
+      const url = new URL(value)
+      if (url.protocol === 'https:' && !url.username && !url.password)
+        return url.origin + url.pathname.replace(/\/$/, '')
+    } catch {
+      /* Missing/invalid repository: display notes without links. */
+    }
+    return null
   }
-  element('span', appName, brand);
-  element('p', 'Frisch aktualisiert', header).className = 'vos-label';
-  element('h2', 'Was ist neu?', header).id = 'vos-changelog-title';
-  element('p', `${groups.length} ${groups.length === 1 ? 'Bereich wurde' : 'Bereiche wurden'} aktualisiert.`, header).id = 'vos-changelog-description';
-  header.lastElementChild.className = 'vos-description';
-  dialog.append(header);
+  const link = (text, href, parent, className = '') => {
+    const node = element('a', text, parent)
+    node.href = href
+    node.target = '_blank'
+    node.rel = 'noopener noreferrer'
+    if (className) node.className = className
+    return node
+  }
 
-  const main = document.createElement('main');
+  const header = document.createElement('header')
+  const brand = element('div', '', header)
+  brand.className = 'vos-brand'
+  if (appId === 'vitalos') {
+    const icon = document.createElement('img')
+    icon.src = '/icon-192.png'
+    icon.alt = ''
+    brand.append(icon)
+  }
+  element('span', appName, brand)
+  element('p', 'Frisch aktualisiert', header).className = 'vos-label'
+  element('h2', 'Was ist neu?', header).id = 'vos-changelog-title'
+  element(
+    'p',
+    `${groups.length} ${groups.length === 1 ? 'Bereich wurde' : 'Bereiche wurden'} aktualisiert.`,
+    header,
+  ).id = 'vos-changelog-description'
+  header.lastElementChild.className = 'vos-description'
+  dialog.append(header)
+
+  const main = document.createElement('main')
   for (const group of groups) {
-    const card = document.createElement('section');
-    card.className = 'vos-push';
-    const head = document.createElement('div');
-    head.className = 'vos-push-head';
-    element('h3', group.appName, head);
-    const count = group.commits.length;
-    element('span', `${count} ${count === 1 ? 'Änderung' : 'Änderungen'}`, head).className = 'vos-count';
-    card.append(head);
+    const card = document.createElement('section')
+    card.className = 'vos-push'
+    const head = document.createElement('div')
+    head.className = 'vos-push-head'
+    element('h3', group.appName, head)
+    const count = group.commits.length
+    element('span', `${count} ${count === 1 ? 'Änderung' : 'Änderungen'}`, head).className = 'vos-count'
+    card.append(head)
 
-    const repository = repositoryUrl(group.repository);
-    const newest = group.commits.at(-1);
-    const lead = element('p', newest.message, card);
-    lead.className = 'vos-lead';
+    const repository = repositoryUrl(group.repository)
+    const newest = group.commits.at(-1)
+    const lead = element('p', newest.message, card)
+    lead.className = 'vos-lead'
 
-    const older = group.commits.slice(0, -1);
+    const older = group.commits.slice(0, -1)
     if (older.length) {
-      const details = document.createElement('details');
-      const summary = element('summary', `${older.length} weitere ${older.length === 1 ? 'Änderung' : 'Änderungen'} anzeigen`, details);
-      summary.setAttribute('aria-label', `${older.length} weitere Änderungen für ${group.appName} anzeigen`);
-      const list = document.createElement('ul');
+      const details = document.createElement('details')
+      const summary = element(
+        'summary',
+        `${older.length} weitere ${older.length === 1 ? 'Änderung' : 'Änderungen'} anzeigen`,
+        details,
+      )
+      summary.setAttribute('aria-label', `${older.length} weitere Änderungen für ${group.appName} anzeigen`)
+      const list = document.createElement('ul')
       for (const commit of older) {
-        const item = element('li', commit.message, list);
+        const item = element('li', commit.message, list)
         if (repository && /^[a-f0-9]{7,64}$/i.test(commit.sha)) {
-          item.append(document.createTextNode(' '));
-          link(commit.sha.slice(0, 7), `${repository}/commit/${commit.sha}`, item, 'vos-sha');
+          item.append(document.createTextNode(' '))
+          link(commit.sha.slice(0, 7), `${repository}/commit/${commit.sha}`, item, 'vos-sha')
         }
       }
-      details.append(list);
-      card.append(details);
+      details.append(list)
+      card.append(details)
     }
     if (repository && /^[a-f0-9]{7,64}$/i.test(newest.sha)) {
-      link('Änderung auf GitHub', `${repository}/commit/${newest.sha}`, card, 'vos-all-commits');
+      link('Änderung auf GitHub', `${repository}/commit/${newest.sha}`, card, 'vos-all-commits')
     }
-    main.append(card);
+    main.append(card)
   }
-  dialog.append(main);
+  dialog.append(main)
 
-  const footer = document.createElement('footer');
-  element('p', 'Einmal pro Update', footer).className = 'vos-footnote';
-  const button = element('button', 'Los geht’s', footer);
-  button.type = 'button';
-  button.autofocus = true;
-  button.addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => {
-    dialog.remove();
-    if (previousFocus?.isConnected) previousFocus.focus();
-  }, { once: true });
-  dialog.append(footer);
-  document.body.append(dialog);
-  if (typeof dialog.showModal !== 'function') { dialog.remove(); return null; }
-  const splash = document.getElementById('vos-splash');
-  let observer;
+  const footer = document.createElement('footer')
+  element('p', 'Einmal pro Update', footer).className = 'vos-footnote'
+  const button = element('button', 'Los geht’s', footer)
+  button.type = 'button'
+  button.autofocus = true
+  button.addEventListener('click', () => dialog.close())
+  dialog.addEventListener(
+    'close',
+    () => {
+      dialog.remove()
+      if (previousFocus?.isConnected) previousFocus.focus()
+    },
+    { once: true },
+  )
+  dialog.append(footer)
+  document.body.append(dialog)
+  if (typeof dialog.showModal !== 'function') {
+    dialog.remove()
+    return null
+  }
+  const splash = document.getElementById('vos-splash')
+  let observer
   const open = () => {
     // Also supports previously generated splash scripts that hide instead of remove.
-    if (splash?.isConnected && getComputedStyle(splash).display !== 'none') return;
-    document.removeEventListener('vos-splash-hidden', open);
-    observer?.disconnect();
-    if (!dialog.isConnected) return;
-    previousFocus = document.activeElement;
-    try { dialog.showModal(); }
-    catch { dialog.remove(); return; }
+    if (splash?.isConnected && getComputedStyle(splash).display !== 'none') return
+    document.removeEventListener('vos-splash-hidden', open)
+    observer?.disconnect()
+    if (!dialog.isConnected) return
+    previousFocus = document.activeElement
+    try {
+      dialog.showModal()
+    } catch {
+      dialog.remove()
+      return
+    }
     // Only acknowledge once visible, never while still waiting behind the splash.
-    try { localStorage.setItem(storageKey, release.id); }
-    catch { try { sessionStorage.setItem(storageKey, release.id); } catch { /* Storage can be unavailable. */ } }
-  };
+    try {
+      localStorage.setItem(storageKey, release.id)
+    } catch {
+      try {
+        sessionStorage.setItem(storageKey, release.id)
+      } catch {
+        /* Storage can be unavailable. */
+      }
+    }
+  }
   if (splash?.isConnected && getComputedStyle(splash).display !== 'none') {
-    document.addEventListener('vos-splash-hidden', open);
-    observer = new MutationObserver(open);
-    observer.observe(splash, { attributes: true, attributeFilter: ['style'] });
-    observer.observe(splash.parentNode, { childList: true });
-  } else open();
-  return dialog;
+    document.addEventListener('vos-splash-hidden', open)
+    observer = new MutationObserver(open)
+    observer.observe(splash, { attributes: true, attributeFilter: ['style'] })
+    observer.observe(splash.parentNode, { childList: true })
+  } else open()
+  return dialog
 }
