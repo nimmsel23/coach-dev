@@ -1,7 +1,7 @@
 /**
  * GatePortalGrid — Schnelleinstieg des Session-Gates.
  *
- * Alle Ziele der App (Session-Bereiche, Review, Lernen, Atlas, Radtouren, Setup,
+ * Alle Ziele der App (Session-Bereiche, Review, Lernen, Atlas, Setup,
  * "Gestern nachtragen") in einem Raster mit Suche, Tastaturkürzeln (1–9, "/" für
  * die Suche, Enter öffnet den ersten Treffer) und "Zuletzt genutzt" (localStorage,
  * rein komfortabel — fehlt der Speicher, funktioniert alles ohne).
@@ -10,7 +10,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   CalendarDays, ClipboardList, TimerReset, Sparkles, BookOpen, BarChart3, Brain,
-  LayoutGrid, Bike, Settings2, History, Search, ChevronUp,
+  LayoutGrid, Settings2, History, Search, ChevronUp,
 } from 'lucide-react';
 import { localToday } from '@utils';
 import { IS_SOLO } from '../../constants/NavigationItems.js';
@@ -42,7 +42,6 @@ export function buildPortalEntries() {
     { id: 'review', label: 'Review', hint: 'Bericht & Muskeln', Icon: BarChart3, kind: 'hash', hash: '#review', keywords: 'bericht woche muskeln readiness' },
     { id: 'learn', label: 'Lernen', hint: 'Übungen & Anatomie', Icon: Brain, kind: 'hash', hash: '#learn', keywords: 'anatomie quiz übungen' },
     { id: 'atlas', label: 'Atlas', hint: 'Übungs-Datenbanken', Icon: LayoutGrid, kind: 'hash', hash: '#atlas', keywords: 'datenbank katalog' },
-    { id: 'touren', label: 'Radtouren', hint: 'Cardio & Touren', Icon: Bike, kind: 'hash', hash: '#touren', keywords: 'rad tour cardio' },
     { id: 'settings', label: 'Setup', hint: 'Einstellungen', Icon: Settings2, kind: 'hash', hash: '#settings', keywords: 'einstellungen konto' },
   ];
 }

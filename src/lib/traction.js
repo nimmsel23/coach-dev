@@ -2,7 +2,7 @@ import { collectionGroup, doc, increment, onSnapshot, query, serverTimestamp, se
 import { db } from '@db';
 
 const VALID_SECTIONS = new Set([
-  'session', 'review', 'learn', 'atlas', 'touren', 'settings', 'focus', 'anamnese', 'inbox', 'gate',
+  'session', 'review', 'learn', 'atlas', 'settings', 'focus', 'anamnese', 'inbox', 'gate',
   'today', 'timer', 'skills', 'plan', 'history', 'logbuch', 'muscles', 'readiness', 'verlauf',
   'protokoll', 'exercises', 'anatomy', 'quiz', 'strength',
 ]);

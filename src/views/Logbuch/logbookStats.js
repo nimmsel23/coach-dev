@@ -76,7 +76,7 @@ export const LOGBOOK_DIGEST_SCHEMA = 2;
  * je Übung). Das Ergebnis ist selbst wieder ein gültiger buildLogbook-Input —
  * dadurch rechnet das Logbuch aus dem Digest exakt dasselbe wie aus den
  * vollen Sessions. Neben dem Logbuch lesen auch Trainingsprotokoll (duration,
- * trainingsart, sessionGate) und Touren (activity, activityAddons) daraus.
+ * trainingsart, sessionGate) und Cardio-Activity (activity, activityAddons) daraus.
  * Schema-Änderung → LOGBOOK_DIGEST_SCHEMA erhöhen.
  */
 export function sessionToDigest(s) {

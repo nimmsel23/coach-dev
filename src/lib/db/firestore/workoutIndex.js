@@ -265,7 +265,7 @@ export function refreshLogbookDigest() {
 }
 
 /**
- * Digest-Sessions (Eingabe für buildLogbook, Trainingsprotokoll, Touren):
+ * Digest-Sessions (Eingabe für buildLogbook, Trainingsprotokoll):
  * Monats-Digests bis zum Index-Cutoff (≈ 1 Read pro Monat statt pro Session)
  * + die letzten 7 Tage live. `sinceDate` ("YYYY-MM-DD") begrenzt auf einen
  * Zeitraum, ohne sinceDate kommt die komplette Historie. Solange kein Digest

@@ -75,7 +75,7 @@ def _source_muscle_ids(wger_entry: dict[str, Any] | None, yuhonas_entry: dict[st
 
 
 def run_source_consistency_audit() -> SourceConsistencyResult:
-    """Nutzt die rohen unreviewed_wger.yml/unreviewed_yuhonas.yml-Eintraege als
+    """Nutzt die rohen unreviewed_wger.yml- und Vendor-Yuhonas-Eintraege als
     Source-of-Truth und prueft, ob primary_muscles/secondary_muscles eines
     unreviewten Katalog-/Inbox-Records auf REGIONS-Ebene (Brust/Ruecken/
     Schultern/Arme/Core/Beine/Waden) durch mindestens eine der beiden

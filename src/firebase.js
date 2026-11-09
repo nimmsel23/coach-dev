@@ -44,8 +44,7 @@ export const db = alreadyInit
       ignoreUndefinedProperties: true,
     });
 
-// Region muss mit functions/strava.js (REGION-Konstante) übereinstimmen —
-// sonst 404, weil httpsCallable() sonst auf der Default-Region sucht.
+// Callables liegen in europe-west1 (Backend-Codebase fitness).
 export const functionsInstance = getFunctions(app, "europe-west1");
 export { httpsCallable };
 

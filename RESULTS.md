@@ -1,8 +1,34 @@
-## 2026-11-09 — AL: Dependabot→dev + /fitness/ Katalog-UI
+## 2026-11-09 — Bulk-Build: Yuhonas aus Vendor, kein YAML-Dump
 
-- `dependabot.yml`: `target-branch: dev` für actions/npm/pip; `check.yml` + `automerge-pr.yml` (Check (Coach)).
-- `/fitness/` dient Catalog-Dist (`COACH_CATALOG_DIR`/`dist-catalog`); Legacy-SPA nur mit `COACH_FITNESS_FRONTEND_DIR`.
-- Org-Hits: Dependabot-AutoMerge + Frontend-Serve geschlossen.
+- `scripts/build-exercise-bulk-data.mjs` wie fitness-dev: wger-YAML + `vendor/free-exercise-db/dist/exercises.json`.
+- `unreviewed_yuhonas.yml` wird nirgends mehr gelesen (Build/PPL-Filter).
+
+## 2026-11-09 — Touren/Strava aus Coach entfernt
+
+- Radtouren-Tab, `lib/tours`, DB-Barrel-Exports und Link aus ActivitySection weg.
+- `functions/` geleert → `MIGRATED.md` (SOT `~/dev/backend/functions/fitness`).
+- Strava bleibt Fitness-PWA-only.
+
+## 2026-11-09 — `/k/<id>/files` Client-Workspaces
+
+- `/k/<id>/` + Deep-Links → Klientenschmiede (SPA-Fallback).
+- `/k/<id>/files/` → Datei-Browser auf `~/.local/Klienten/<id>/`.
+- `/workspace/` und `/arbeitsplatz/` → `~/workspace` (local-only).
+
+## 2026-11-09 — Klientenschmiede + Coachkonsole an :9150
+
+- `klienten-ui/{schmiede,konsole}`; Routes `/schmiede/`, `/konsole/`.
+- `coach_klienten_ui.py`; `/{client}/` öffnet weiterhin die Schmiede-Akte.
+
+## 2026-11-09 — klienten-dev archiviert
+
+- Checkout `~/dev/klienten-dev` → `~/dev/_archive/2026-11-09-klienten-dev`.
+- PATH-Eintrag `klienten-dev/bin` entfernt; Shims/Docs auf Coach umgestellt.
+
+## 2026-11-09 — anatomy-kb Korrektur: shared Backend
+
+- SOT ist `~/dev/backend/fitness/anatomy-kb/` (nicht coach-dev-Root).
+- `coach-dev/anatomy-kb` nur noch Symlink; PYTHONPATH/Skills/OWNERSHIP angepasst.
 
 ## 2026-11-09 — anatomy-kb → Coach-Backend; Skills live
 

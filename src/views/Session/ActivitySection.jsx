@@ -5,7 +5,6 @@
  * Activity types cover the main endurance/sport disciplines.
  */
 
-import { Bike, ArrowUpRight } from 'lucide-react';
 import {
   ACTIVITY_MUSCLE_DEFAULTS,
   ACTIVITY_MUSCLE_GROUPS,
@@ -265,12 +264,6 @@ export default function ActivitySection({ activity, setActivity }) {
               </span>
             </div>
           </div>
-          <a
-            href="#touren"
-            className="col-span-2 flex items-center justify-center gap-2 py-3 rounded-2xl border border-fit-orange/30 bg-fit-orange/5 text-fit-orange text-xs font-black uppercase tracking-widest hover:bg-fit-orange/10 transition-all"
-          >
-            <Bike size={14} /> Alle Radtouren ansehen <ArrowUpRight size={13} />
-          </a>
         </div>
       )}
 

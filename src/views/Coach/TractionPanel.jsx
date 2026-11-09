@@ -9,7 +9,7 @@ const LABELS = {
   session: 'Training', today: 'Training heute', timer: '6Pack', skills: 'Skills', plan: 'Plan',
   history: 'History', logbuch: 'Logbuch', review: 'Review', muscles: 'Muskeln', readiness: 'Readiness',
   verlauf: 'Verlauf', protokoll: 'Protokoll', learn: 'Lernen', exercises: 'Übungen', anatomy: 'Anatomie',
-  quiz: 'Quiz', strength: 'Stärke', atlas: 'Atlas', touren: 'Radtouren', settings: 'Setup',
+  quiz: 'Quiz', strength: 'Stärke', atlas: 'Atlas', settings: 'Setup',
   focus: 'Fokus', anamnese: 'Anamnese', inbox: 'Inbox', gate: 'Start', other: 'Sonstiges',
 };
 

@@ -63,7 +63,7 @@ Umdatieren und Löschen bleiben dort; das Logbuch ist rein lesend und öffnet Se
   `rebuildLogbookDigest()` läuft (gleiche Einschränkung wie der Index). Die Rules decken
   `fitness/{uid}/**` bereits ab.
 - Nächste Abnehmer für das gleiche Pool-Muster: Review (`TrainingProtocol`, Monatsbericht),
-  Recovery/Superkompensation, `getExerciseHistory`, Touren.
+  Recovery/Superkompensation, `getExerciseHistory`.
 
 ### Weitere Abnehmer (2026-11-04, gleicher Tag)
 
@@ -71,7 +71,6 @@ Umdatieren und Löschen bleiben dort; das Logbuch ist rein lesend und öffnet Se
   Reader `getDigestSessions({ sinceDate })` (`workoutIndex.js`), `getLogbookSessions()` ist der
   Alias für die komplette Historie.
 - **Trainingsprotokoll** (`WeeklyReview/TrainingProtocol.jsx`): `getLogbookSessions()` statt `getSessionHistory(2000)`.
-- **Touren** (`firestore/tours.js`): Digest-Monate im Fenster statt jeder Session (ohne Login weiter alter Pfad).
 - **Wochen-/Monatsbericht** (`firestore/analysis.js`): Sessions je Tag kommen aus dem schon geladenen
   `getSessionHistory(120)` (`sessionsByDateFromHistory`) statt einer Query pro Tag (7× bzw. 28×);
   nur Tage älter als das Fenster (alte Wochen-Selektoren) fragen einzeln ab.

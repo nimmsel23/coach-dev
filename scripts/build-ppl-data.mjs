@@ -1,14 +1,10 @@
 #!/usr/bin/env node
 /* eslint-env node */
 // Generiert push.generated.js / pull.generated.js / legs.generated.js aus den
-// expert-approved Exercises (kb/exercises/**/*.yml, ohne unreviewed_wger.yml/
-// unreviewed_yuhonas.yml) — Muster wie build-exercise-bulk-data.mjs, siehe
-// fitness/catalog/kb/AGENTS.md. "expert" wird hier wie im Python-Resolver
-// (resolver.py::build_exercise_index) rein über die Datei-Herkunft vergeben
-// (jede Datei in kb/exercises/ außer den beiden unreviewed_*.yml-Dumps zählt
-// als approved) — keine wger/yuhonas-Merge-Logik nötig, weil approved Files
-// bereits fertige Einzel-Records sind, kein Cross-Referencing über mehrere
-// Quellen wie beim Bulk-Import.
+// expert-approved Exercises (kb/exercises/**/*.yml, ohne unreviewed_wger.yml).
+// Yuhonas kommt nicht mehr als YAML-Dump (vendor/exercises.json + Runtime-Mirror).
+// "expert" wie im Python-Resolver: jede Datei in kb/exercises/ außer dem
+// wger-Dump zählt als approved.
 import { readFileSync, readdirSync, writeFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,7 +15,7 @@ const REPO_ROOT = join(__dirname, '..');
 const EXERCISES_DIR = join(REPO_ROOT, 'fitness/catalog/kb/exercises');
 const OUT_DIR = join(REPO_ROOT, 'src/lib/db/firestore');
 
-const UNREVIEWED_FILES = new Set(['unreviewed_wger.yml', 'unreviewed_yuhonas.yml']);
+const UNREVIEWED_FILES = new Set(['unreviewed_wger.yml']);
 
 // Kategorie -> Split-Bucket. Alles andere (core, strength, stretching, ...)
 // gehört zu keinem der drei Split-Tage und wird ausgelassen.
@@ -91,7 +87,7 @@ for (const file of walkYamlFiles(EXERCISES_DIR)) {
 
 const banner = `// AUTO-GENERATED — nicht manuell editieren.
 // Quelle: fitness/catalog/kb/exercises/**/*.yml (expert-approved, alles außer
-// unreviewed_wger.yml/unreviewed_yuhonas.yml), gruppiert nach category.
+// expert exercises (ohne unreviewed_wger.yml), gruppiert nach category.
 // Neu erzeugen: npm run build:ppl-data (läuft automatisch via build:kb-data).
 `;
 

@@ -6,7 +6,6 @@ import Session from './views/Session/index.jsx'
 import { useTodayGateWatcher } from './views/Session/useTodayGateWatcher.js'
 const Learn = lazy(() => import('@learn/views/Learn/index.jsx'))
 const WeeklyReview = lazy(() => import('./views/WeeklyReview/index.jsx'))
-const Touren = lazy(() => import('./views/Touren/index.jsx'))
 const Exercises = lazy(() => import('./views/Exercises/index.jsx'))
 const Settings = lazy(() => import('./views/Settings/index.jsx'))
 const Anamnese = lazy(() => import('./views/Anamnese/index.jsx'))
@@ -656,7 +655,6 @@ export default function App() {
                       {!sheetMode && (<>
                       {tab === 'review'   && <WeeklyReview onOpenSession={openSession} onInspectExercise={inspectExercise} muscleLanguage={muscleLanguage} taxonomy={taxonomy} gender={gender} recentDays={recentDays} subTab={subTab} onSubNav={navigateSub} />}
                       {tab === 'learn'    && <Learn subTab={subTab} />}
-                      {tab === 'touren'   && <Touren onOpenSession={openSession} />}
                       {tab === 'atlas'    && <Exercises onInspectExercise={inspectExercise} />}
                       {tab === 'inbox'    && (user ? <Inbox /> : (
                         <div className="card mx-auto max-w-2xl p-6 text-center">
@@ -686,7 +684,6 @@ export default function App() {
           <Suspense fallback={null}>
                       {tab === 'review'   && <WeeklyReview onOpenSession={openSession} onInspectExercise={inspectExercise} muscleLanguage={muscleLanguage} taxonomy={taxonomy} gender={gender} recentDays={recentDays} subTab={subTab} onSubNav={navigateSub} />}
                       {tab === 'learn'    && <Learn subTab={subTab} />}
-                      {tab === 'touren'   && <Touren onOpenSession={openSession} />}
                       {tab === 'atlas'    && <Exercises onInspectExercise={inspectExercise} />}
                       {tab === 'inbox'    && (user ? <Inbox /> : (
                         <div className="card mx-auto max-w-2xl p-6 text-center">
