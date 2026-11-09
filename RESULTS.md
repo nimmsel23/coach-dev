@@ -1,3 +1,8 @@
+## 2026-11-09 — AL: Review-Karte Inbox-UI
+
+- FIRE-Hit Review-Karte: `InboxCard` zeigt Entscheidungssurface (Identität, 2-Satz-Was, Primärmuskeln, 3 Coaching-Highlights, Herkunft-Text, Freigeben/Löschen/Verbessern); `SourceEditor` nur noch im Detail-Modal.
+- Frontend-Serve (Coach-Dist vs. Fitness-Dist :8100) nach `TODO.md` + Org-Task `+ceo` ausgegliedert. `FIRE.md`/`ARCHITECTURE.md`/`AUDIT.md` nachgezogen.
+
 ## 2026-11-07 — CI-Agent-Fix: gh pr list Feld korrigiert
 
 - Journal-Run 42416606547 scheiterte vor Gemini: GitHub CLI meldete `Unknown JSON field: baseRepository`; `gh pr list` beendete den Analyse-Step mit Exit 1. Kein Gemini-API-Key-Fehler.
