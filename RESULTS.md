@@ -10,6 +10,12 @@
   Fälschliches `STALE.md` entfernt; README + `OWNERSHIP-MAP` nachgezogen.
 - Python/API-SOT bleibt `coach-dev/fitness/` (`coach catalog`).
 
+## 2026-11-09 — FREEDOM: nutzbare Coach-App
+
+- `FREEDOM.md`: Horizon — App muss Klientenbetreuung und Fortschrittsüberwachung
+  ermöglichen. FOCUS/FIRE/README/AGENTS und historische `docs/VISION.md`
+  darauf ausgerichtet.
+
 ## 2026-11-09 — Ein Coach-Server (SOT = coach-dev)
 
 - FOCUS/FIRE: Monatsmission „ein Server“; Fitness/`fitness.api` + Relax lokal,
