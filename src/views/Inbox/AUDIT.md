@@ -1,5 +1,12 @@
 # Audit: Nachrichten (2026-11-01)
 
+## Update 2026-11-09 — Review-Karte (Übungsanfragen)
+
+`InboxCard.jsx` (Coach-Subtab Übungsanfragen) ist Default-Entscheidungssurface:
+Identität, 2-Satz-Was, Primärmuskeln, ≤3 Coaching-Highlights, Herkunft als ein
+Text, Freigeben/Löschen/Verbessern/Details. Inline-`SourceEditor` entfernt —
+Quellenkorrektur nur noch im Detail-Modal. Nachrichten-Pfad (`asMessage`) unverändert.
+
 Die frühere Inbox war eine statische Roadmap mit einem unzutreffend pauschalen
 "Keine neuen Mitteilungen". Sie ist durch echte Coach/Klienten-Unterhaltungen
 ersetzt. Kein automatischer Versand an echte Konten während der Entwicklung.

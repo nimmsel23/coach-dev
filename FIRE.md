@@ -8,8 +8,9 @@ kein CEO-`+hit`-Gate). Erledigt abhaken; Folgen nach `TODO.md` oder hier.
 
 ## Hits
 
-- [ ] **Review-Karte (Inbox-UI):** Entscheidungsoberfläche statt 40-Felder-Editor —
+- [x] **Review-Karte (Inbox-UI):** Entscheidungsoberfläche statt 40-Felder-Editor —
       Identität, 2-Satz-Was, Muskeln (primär), 3 Coaching-Highlights, Herkunft als ein
-      Text + Freigeben/Löschen/Verbessern. Frontend-Serve-Umstellung (Katalog-UI aus
-      Coach-Dist statt Fitness-Dist auf 8100-Staging); Default-Kartenform pragmatisch
-      wählen (Scope-Fragen → `+ceo`).
+      Text + Freigeben/Löschen/Verbessern. Default-Kartenform pragmatisch gewählt;
+      Quelleneditor nur noch unter Details. (2026-11-09 AL)
+- [ ] **Frontend-Serve Katalog-UI:** Katalog-UI aus Coach-Dist statt Fitness-Dist
+      auf 8100-Staging — Scope/Entscheidung (`+ceo`, Org-Task).

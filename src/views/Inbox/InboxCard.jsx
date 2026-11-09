@@ -1,5 +1,4 @@
 import { sourceIds } from '../../lib/db/shared/catalogSources.js';
-import SourceEditor from './SourceEditor.jsx';
 import { CheckCircle2, Trash2, Info, AlertTriangle, Sparkles, User, RefreshCw, MessageSquare, Brain } from 'lucide-react';
 
 function sourceRefs(data) {
@@ -20,7 +19,47 @@ function buildInspectPayload(ex, data) {
   };
 }
 
-export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenrich, onSourcesChanged, onInspect, mergeCandidate, showUserId = false, asMessage = false }) {
+function asText(value) {
+  if (Array.isArray(value)) return value.filter(Boolean).join(' ').trim();
+  return String(value || '').trim();
+}
+
+/** Zwei Sätze für die Review-Karte — Beschreibung, sonst Original/Instructions. */
+function twoSentenceWhat(data) {
+  const raw = asText(
+    data.description
+    || data.original_description
+    || data.instructions
+    || data.trainer_explanation?.simple
+    || data.trainer_explanation?.client_friendly,
+  );
+  if (!raw) return 'Noch keine Kurzbeschreibung — Details öffnen oder Verbessern.';
+  const parts = raw.split(/(?<=[.!?])\s+/).filter(Boolean);
+  return parts.slice(0, 2).join(' ');
+}
+
+function coachingHighlights(data, limit = 3) {
+  const notes = Array.isArray(data.coaching_notes) ? data.coaching_notes : [];
+  return notes.map(asText).filter(Boolean).slice(0, limit);
+}
+
+/** Herkunft als ein Text; Quelleneditor bleibt im Detail-Modal. */
+function originLine(data, refs) {
+  const bits = [];
+  if (refs.wger.length) bits.push(`wger ${refs.wger.join(', ')}`);
+  if (refs.yuhonas.length) bits.push(`yuhonas ${refs.yuhonas.join(', ')}`);
+  const originLabel = asText(
+    typeof data.origin === 'string'
+      ? data.origin
+      : data.origin?.label || data.origin?.name || data.source,
+  );
+  if (originLabel && !bits.some((bit) => bit.includes(originLabel))) bits.unshift(originLabel);
+  if (data.source_review_required) bits.push('Quellenkorrektur — KI-Inhalt erneut prüfen');
+  if (!bits.length) return 'Herkunft unklar — unter Details zuordnen';
+  return bits.join(' · ');
+}
+
+export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenrich, onInspect, mergeCandidate, showUserId = false, asMessage = false }) {
   // Unterstützt beide Backend-Shapes: { exercises: [data] } und { enriched: data } und flach
   const data     = ex.exercises?.[0] || ex.enriched || ex;
   const fileId   = ex.file_id;
@@ -30,6 +69,9 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
   const isPendingEnrichment = ex.status === 'pending' || ex.status === 'pending_review';
   const busy = actioning === fileId;
   const refs = sourceRefs(data);
+  const highlights = coachingHighlights(data);
+  const what = twoSentenceWhat(data);
+  const origin = originLine(data, refs);
 
   if (asMessage) {
     let icon = <MessageSquare className="text-fit-dim" size={20} />;
@@ -111,69 +153,76 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
     );
   }
 
+  // Review-Karte: Entscheidungssurface statt 40-Felder-Editor (SourceEditor nur im Detail-Modal).
   return (
-    <div className="card p-4 flex flex-col">
-
+    <article className="card p-4 flex flex-col gap-3" aria-label={`Review ${data.display_name || data.name || 'Übung'}`}>
       {showUserId && userId && (
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2">
           <User size={12} className="text-fit-dim" />
           <span className="text-[10px] font-bold text-fit-dim uppercase tracking-widest">{userId}</span>
         </div>
       )}
 
-      <div className="flex items-start justify-between gap-2 mb-2.5">
-        <h3 className="text-[13.5px] font-bold uppercase tracking-wide text-fit-ink leading-snug">{data.display_name || data.name}</h3>
-        {data.category && <span className="vos-tag shrink-0">{data.category}</span>}
-      </div>
+      <header className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h3 className="text-[13.5px] font-bold uppercase tracking-wide text-fit-ink leading-snug">
+            {data.display_name || data.name}
+          </h3>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {data.category && <span className="vos-tag shrink-0">{data.category}</span>}
+            {!showUserId && (
+              isProactive
+                ? <span className="flex items-center gap-1 text-[9px] font-black px-2 py-0.5 bg-blue/10 text-blue rounded-full border border-blue/20 uppercase tracking-tighter"><Sparkles size={10} /> Proaktiv</span>
+                : <span className="text-[9px] font-black px-2 py-0.5 bg-fit-green/10 text-fit-green rounded-full border border-fit-green/20 uppercase tracking-tighter">Klient</span>
+            )}
+            {isPendingEnrichment && (
+              <span className="text-[9px] font-black px-2 py-0.5 bg-fit-orange/15 text-fit-orange rounded-full border border-fit-orange/25 uppercase tracking-tighter animate-pulse">
+                Wartet auf KI
+              </span>
+            )}
+            {ex.status === 'ai_enriched' && (
+              <span className="text-[9px] font-black px-2 py-0.5 bg-fit-accent/15 text-fit-accent rounded-full border border-fit-accent/25 uppercase tracking-tighter">
+                Freigabe offen
+              </span>
+            )}
+            {ex.status === 'failed_enrichment' && (
+              <span className="text-[9px] font-black px-2 py-0.5 bg-fit-red/15 text-fit-red rounded-full border border-fit-red/25 uppercase tracking-tighter">
+                KI-Fehler
+              </span>
+            )}
+            {mergeCandidate && (
+              <span className="text-[9px] font-black px-2 py-0.5 bg-fit-bg2 rounded-full border border-fit-line text-fit-dim uppercase tracking-tighter">
+                Merge-Vorschlag
+              </span>
+            )}
+          </div>
+        </div>
+      </header>
 
-      <div className="flex flex-wrap gap-1.5 mb-2.5">
-        {!showUserId && (
-          isProactive
-            ? <span className="flex items-center gap-1 text-[9px] font-black px-2 py-0.5 bg-blue/10 text-blue rounded-full border border-blue/20 uppercase tracking-tighter"><Sparkles size={10} /> Proaktiv</span>
-            : <span className="text-[9px] font-black px-2 py-0.5 bg-fit-green/10 text-fit-green rounded-full border border-fit-green/20 uppercase tracking-tighter">Klient</span>
-        )}
-        {isPendingEnrichment && (
-          <span className="text-[9px] font-black px-2 py-0.5 bg-fit-orange/15 text-fit-orange rounded-full border border-fit-orange/25 uppercase tracking-tighter animate-pulse">
-            Wartet auf KI-Anreicherung
-          </span>
-        )}
-        {ex.status === 'ai_enriched' && (
-          <span className="text-[9px] font-black px-2 py-0.5 bg-fit-accent/15 text-fit-accent rounded-full border border-fit-accent/25 uppercase tracking-tighter">
-            Wartet auf Freigabe
-          </span>
-        )}
-        {ex.status === 'failed_enrichment' && (
-          <span className="text-[9px] font-black px-2 py-0.5 bg-fit-red/15 text-fit-red rounded-full border border-fit-red/25 uppercase tracking-tighter">
-            KI-Fehler
-          </span>
-        )}
-      </div>
+      <p className="text-xs text-fit-ink leading-relaxed">{what}</p>
 
-      <div className="flex flex-wrap gap-1.5 mb-2.5">
-        {data.primary_muscles?.map(m => (
-          <span key={m} className="text-[9px] font-bold px-2 py-0.5 bg-fit-accent/5 text-fit-accent rounded-md border border-fit-accent/10">{m}</span>
-        ))}
-      </div>
-
-      {(refs.wger.length > 0 || refs.yuhonas.length > 0) && (
-        <div className="flex flex-wrap gap-1.5 mb-2.5">
-          {refs.wger.map((id) => (
-            <span key={`wger-${id}`} className="text-[9px] font-black px-2 py-0.5 bg-fit-bg2 rounded-full border border-fit-line text-fit-dim uppercase tracking-tighter">
-              wger {id}
-            </span>
-          ))}
-          {refs.yuhonas.map((id) => (
-            <span key={`yuhonas-${id}`} className="text-[9px] font-black px-2 py-0.5 bg-fit-bg2 rounded-full border border-fit-line text-fit-dim uppercase tracking-tighter">
-              yuhonas {id}
-            </span>
+      {data.primary_muscles?.length > 0 && (
+        <div className="flex flex-wrap gap-1.5" aria-label="Primäre Muskeln">
+          {data.primary_muscles.map((m) => (
+            <span key={m} className="text-[9px] font-bold px-2 py-0.5 bg-fit-accent/5 text-fit-accent rounded-md border border-fit-accent/10">{m}</span>
           ))}
         </div>
       )}
 
-      <SourceEditor id={fileId} exercise={data} candidates={mergeCandidate} onSaved={onSourcesChanged} />
+      {highlights.length > 0 ? (
+        <ul className="space-y-1.5 text-xs text-fit-dim leading-relaxed">
+          {highlights.map((note, i) => (
+            <li key={i} className="line-clamp-2">• {note.replace(/^\*\*[^*]+\*\*:?\s*/, '')}</li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-xs text-fit-muted italic">Keine Coaching-Highlights — Verbessern oder Details.</p>
+      )}
+
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-fit-muted">{origin}</p>
 
       {warnings.length > 0 && (
-        <div className="mb-2.5 p-3 bg-fit-red/5 border border-fit-red/10 rounded-xl space-y-1">
+        <div className="p-3 bg-fit-red/5 border border-fit-red/10 rounded-xl space-y-1">
           {warnings.map((w, i) => (
             <div key={i} className="flex items-start gap-2 text-fit-red text-[10px] font-bold uppercase leading-tight">
               <AlertTriangle size={12} className="shrink-0 mt-0.5" />
@@ -183,15 +232,11 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
         </div>
       )}
 
-      <p className="text-xs text-fit-dim line-clamp-2 leading-relaxed opacity-70 italic flex-1">
-        "{data.coaching_notes?.[0] || 'Keine Notizen generiert.'}"
-      </p>
-
-      <div className="vos-action-row">
+      <div className="vos-action-row mt-auto">
         <button
           onClick={() => onInspect?.({ ...buildInspectPayload(ex, data), mergeCandidate })}
           className="vos-btn"
-          title="Details"
+          title="Vollansicht / Quellen"
         >
           <Info size={13} /> Details
         </button>
@@ -210,7 +255,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
             className="vos-btn mid"
             title="Neu anreichern (Gemini)"
           >
-            <RefreshCw size={13} className={busy ? 'animate-spin' : ''} />
+            <RefreshCw size={13} className={busy ? 'animate-spin' : ''} /> Verbessern
           </button>
         )}
         {onApprove && (
@@ -223,6 +268,6 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
           </button>
         )}
       </div>
-    </div>
+    </article>
   );
 }

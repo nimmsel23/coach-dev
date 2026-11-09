@@ -19,7 +19,7 @@ dafür den entsprechenden Rules-Fragment.
 | `AssignPlan.jsx` | 4. Sub-Tab: Klient wählen, Plan bauen + an Klient pushen, zugewiesene Pläne + Fortschritt anzeigen | 235 |
 
 ## Sub-Tabs
-1. **Übungsanfragen** (`activeSubTab === 'exercises'`) — nutzt `useInbox({ global: true })` (Hook aus `../Inbox/useInbox`, geteilt mit `Inbox.jsx`) + `InboxCard`-Komponente. Approve/Delete direkt aus dem Hook, keine eigene Logik hier.
+1. **Übungsanfragen** (`activeSubTab === 'exercises'`) — nutzt `useInbox({ global: true })` + `InboxCard` als Review-Karte (Entscheidungssurface; Details → Insight-Modal). Approve/Delete/Reenrich aus dem Hook.
 2. **Klienten-Workouts** (`activeSubTab === 'journals'`) — `getGlobalJournalFeed()` (collectionGroup über sessions/journal/habitJournals, max. 50 Items) + `getAllUserProfiles()` für Klarnamen. Seit 2026-07-22: Filter-Leiste (Dropdown nach Klient, Toggle nach Typ Workout/Habit, Reset-Button) — vorher ungefiltert und bei vielen Klienten unübersichtlich.
 3. **Katalog Browser** (`activeSubTab === 'catalog'`) — eigene Komponente `CatalogBrowser.jsx`, nutzt `searchExercises()` (liefert bei leerem Query bewusst `[]` — "erst tippen, dann suchen" ist Absicht, kein Bug), `getAnatomy()`, `saveExercise()`.
 4. **Plan-Zuweisung** (`activeSubTab === 'plans'`) — eigene Komponente `AssignPlan.jsx`. Bis 2026-08-01 reine Stub-Funktionen (`getCoachAssignedPlans`/`assignPlanToClient`/`getClientPlanProgress` in `src/lib/db/index.js` gaben immer `[]`/`false`/`null` zurück, ohne Backend-Anbindung); jetzt echte Implementierung in `src/lib/db/{local,firestore}/assignedPlans.js`. Klienten-Auswahl per Dropdown aus `getAllUserProfiles()` (vorher: manuelle UID-Texteingabe).

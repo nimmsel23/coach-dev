@@ -34,6 +34,6 @@ completed	success	Gemini CI Agent	Gemini CI Agent	dev	workflow_run	42416057177	1
 - Arbeitsbaum: 3 uncommittete Pfade
 
 _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
-- Erledigt: Owner-Klarstellung 2026-11-09 — AL ohne CEO-+hit-Sperre; Repo-Queues `FIRE.md` (Vorrang) → `TODO.md`, Potential `HOT.md`. Guides coach-dev/skills-dev + `~/ABTEILUNGEN.md` nachgezogen. agy-Lauf 06:10 Credits-leer (kein Code).
-- Offen/Weiter: FIRE Hit Review-Karte (Inbox-UI); TODO Deploy-Seed + systemd-Pfad; Branch divergiert (lokal voraus/hinter origin/dev).
-- Blocker: Keine für Queue-Arbeit; Merge/Rebase mit origin/dev vor Push klären.
+- Erledigt: FIRE Review-Karte — `InboxCard` Entscheidungssurface (Was/Muskeln/3 Highlights/Herkunft + Freigeben/Löschen/Verbessern); SourceEditor nur Details. Queues auto `5beaf2ea`/`c67ccdd6`/`dd662259` + dieser Commit; Vorgänger Queue-Docs `573db226`.
+- Offen/Weiter: TODO Frontend-Serve Katalog-UI Org-Task `b6d56a4a` (+ceo +al +lr) + Deploy-Seed + systemd-Pfad; KB-Drift beobachten. Basis `d4a07396`.
+- Blocker: Keine für Card-UI; Serve-Scope wartet auf CEO (`b6d56a4a`).

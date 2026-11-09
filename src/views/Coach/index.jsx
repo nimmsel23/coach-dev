@@ -12,7 +12,7 @@ import TractionPanel from './TractionPanel.jsx';
 export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCount, onUnreadCount }) {
   const unread = useCoachUnreadCounts();
   useEffect(() => { onUnreadCount?.(unread.total); }, [unread.total, onUnreadCount]);
-  const { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich, reload } = useInbox({ global: true });
+  const { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich } = useInbox({ global: true });
 
   useEffect(() => {
     onInboxCount?.(exercises.length);
@@ -44,7 +44,6 @@ export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCou
                 onApprove={approve}
                 onDelete={remove}
                 onReenrich={reenrich}
-                onSourcesChanged={reload}
                 onInspect={onInspectExercise}
                 mergeCandidate={mergeCandidates[ex.exercises?.[0]?.exercise_id || ex.enriched?.exercise_id || ex.exercise_id]}
                 showUserId
