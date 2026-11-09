@@ -1,6 +1,16 @@
 # Ownership-Map: Fitness-Agent → Catalog → Coach/Plan
 
-Stand 2026-11-09. Korrigiert die alte Annahme „Catalog liegt unter `~/dev/backend/fitness`“.
+Stand 2026-11-09. **Einstieg für Agenten** — bei Zweifel diese Datei zuerst.
+
+| Was | Wo |
+|---|---|
+| Coach-HTTP `:9150` | `~/dev/coach-dev/server.py` |
+| Package `fitness.*` (API/Catalog-CLI) | `~/dev/coach-dev/fitness` |
+| Sessions-Python `/fitness-api` | `~/dev/backend/fitness/backend` |
+| Node/Hono + Functions | `~/dev/backend` |
+| Fuel Node + shared + Python | `~/dev/backend/fuel` (+ `fuel/backend`) |
+| Fitness PWA | `~/dev/fitness-dev` (kein `fitness/`-Package mehr) |
+| KB YAML | `~/dev/fitness` |
 
 ## Herkunft (kurz)
 

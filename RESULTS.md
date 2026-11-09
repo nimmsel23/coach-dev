@@ -1,3 +1,7 @@
+## 2026-11-09 — Ownership-Map Einstiegstabelle
+
+- Kurztabelle oben; Docs an Mount/`fitness.*`-SOT angeglichen.
+
 ## 2026-11-09 — einzige fitness.*-SOT bestätigt
 
 - `fitness-dev/fitness` entfernt (Duplikat). Plan ohne Python-fitness.

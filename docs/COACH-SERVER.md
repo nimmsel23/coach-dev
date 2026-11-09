@@ -96,7 +96,7 @@ Environment overrides:
 
 `build:catalog-ui` reuses the existing source from `catalog-ui/`, `vitalos/fitness-app/catalog-ui`, or sibling `../fitness-dev/catalog-ui`. `COACH_CATALOG_SOURCE` selects another existing checkout. Its own frontend dependencies must be installed. Output is always Coach's ignored `dist-catalog/`; source files and runtime data are not copied or rewritten.
 
-Catalog build lookup: `dist-catalog`, `catalog-ui/dist`, `vitalos/fitness-app/fitness/catalog/dist`, then `../fitness-dev/fitness/catalog/dist`. Build the Fitness UI in `~/dev/fitness-dev/frontend` with `VITE_API_BASE=/fitness-api pnpm exec vite build`; output stays in its ignored `frontend/dist/`. `npm run build:firebase:coach` builds the separate Firebase Coach UI in `dist-coach`.
+Catalog build lookup: `dist-catalog`, `catalog-ui/dist`, `vitalos/fitness-app/fitness/catalog/dist`, then Coach `fitness/catalog/dist`. Build the Fitness UI in `~/dev/fitness-dev` (PWA) with `VITE_API_BASE=/fitness-api`; Python-`fitness.*` kommt aus diesem Repo, nicht aus fitness-dev. `npm run build:firebase:coach` builds the separate Firebase Coach UI in `dist-coach`.
 
 `npm run dev` remains the Firebase Coach Vite workflow on `5902`; its API proxy points at Coach `9150`. Firebase Hosting releases do not run Python. `workspace` is a context link only; the server never exposes it as a static directory. Legacy UI assets come from `KLIENTEN_UI_ROOT`, not from a nested coach copy.
 
