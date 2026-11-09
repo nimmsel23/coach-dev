@@ -1,13 +1,14 @@
+## 2026-11-09 — KB-Daten-SOT = ~/dev/fitness (STALE korrigiert)
+
+- `~/dev/fitness` ist die YAML-KB-SOT; Coach `catalog/kb/` = Live-Spiegel.
+  Fälschliches `STALE.md` entfernt; README + `OWNERSHIP-MAP` nachgezogen.
+- Python/API-SOT bleibt `coach-dev/fitness/` (`coach catalog`).
+
 ## 2026-11-09 — Ownership-Map + :8100-Unit archiviert
 
-- `docs/OWNERSHIP-MAP.md`: Lineage fitness-agent → catalog; SOT =
-  `coach-dev/fitness/` (nicht `~/dev/backend`). `coach catalog` / Alias `agent`.
-- Orphans `~/dev/fitness-cli` + `~/dev/fitness-backend` →
-  `~/dev/_archive/2026-11-09-fitness-orphans/`. Disabled `fitness-dev.service`
-  WD → `fitness-dev`. `~/dev/fitness` (KB-Git) als Near-Duplikat markiert.
-- Tote `fitness-preview.service` (:8100) → `archive/obsolete-units-2026-11-09/`;
-  Stale-Hinweise in `COACH_APP` / `COACH-ARCHITECTURE` / `COACH-COMMUNICATION`
-  und `CATALOG_ARCHITECTURE` nachgezogen.
+- Erste Ownership-Map + Orphan-Archiv (`fitness-cli`/`fitness-backend`) und
+  tote `fitness-preview.service` (:8100). KB-Zuordnung korrigiert im Eintrag
+  darüber.
 
 ## 2026-11-09 — Praxis-/Klienten-CLIs im Coach-Dispatcher
 
