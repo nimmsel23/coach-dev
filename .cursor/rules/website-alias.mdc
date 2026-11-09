@@ -1,0 +1,14 @@
+---
+description: website/ means daniel-vitaltrainer-firebase (Vitaltrainer site)
+alwaysApply: true
+---
+
+# website/ alias
+
+When Daniel says **website/** he means repo `nimmsel23/daniel-vitaltrainer-firebase`.
+
+- Checkout SOT in Coach: submodule `coach-dev/website/` (`.gitmodules` path `website`)
+- Historical path: `public-coach/website` was the same remote (no longer present as checkout)
+- Related vault tree: `~/Vitaltrainer/website/` (ChatGPT/CPO sync, includes `vitalos-dashboard`)
+- Private dashboard Sites: https://vitalos-development-hub.nimmdaniel.chatgpt.site
+- Do **not** confuse with VitalOS app/meta repos (`vitalos`, `vitalos-prod`, fitness-dev, …)

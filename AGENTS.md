@@ -17,6 +17,15 @@ inbox/`fitness.api`, embedded Relax, and Coach UI. Proxied domains only via
 upstream to loop back to Coach. Do not treat `~/dev/backend` / former
 `fitness-backend` / Node `:9100` as this API’s home. Freedom: [FREEDOM.md](FREEDOM.md). Focus: [FOCUS.md](FOCUS.md).
 
+## `website/` alias (Owner 2026-11-09)
+
+Wenn Daniel **„website/“** sagt, meint er immer das Repo
+`nimmsel23/daniel-vitaltrainer-firebase` — Checkout hier als Submodul
+`coach-dev/website/` (früher auch unter `public-coach/website`, dasselbe Remote).
+Nicht mit VitalOS-App-Repos verwechseln. Verwandt: Vault
+`~/Vitaltrainer/website/` (u. a. `vitalos-dashboard`, CPO/ChatGPT wöchentlich;
+privat https://vitalos-development-hub.nimmdaniel.chatgpt.site).
+
 `klienten-python/` lives inside this repo (own git tree + `.venv`, gitignored).
 Default `KLIENTEN_PYTHON_ROOT` is `~/dev/coach-dev/klienten-python`;
 `~/klienten-python` remains a compatibility symlink. Legacy ClientForge/Konsole
