@@ -5,7 +5,7 @@
 > **Coach-Server-SOT (2026-11-09):** Laufzeit + Ownership der Coach-API =
 > `~/dev/coach-dev/server.py` auf **`:9150`** (`coach-api.service`). Ein Prozess:
 > Catalog/Inbox/`fitness.api`, embedded Relax, Coach-SPA. Details:
-> [COACH-SERVER.md](COACH-SERVER.md), Monatsmission [FOCUS.md](../FOCUS.md).
+> [COACH-SERVER.md](COACH-SERVER.md), Quartals-FOCUS [FOCUS.md](../FOCUS.md).
 > `~/dev/backend` (Node/Hono + Cloud Functions) ist **kein** Coach-:9150-Zuhause
 > und kein Ersatz für `server.py`. Historische Verweise auf `fitness-backend`
 > / Node-`:9100` als Coach-API sind falsch — `:9100` war Fitness-Hono-Dev, nicht
