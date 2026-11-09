@@ -1,3 +1,8 @@
+## 2026-11-09 — vitalos-Pin a092508 + @kb-Alias für Plan-Submodul
+
+- Shell-Pin `vitalos` → `a092508` (esbuild/Vite-8-Vorbeuge).
+- `vite.config.js`: `@kb` → `fitness/catalog/kb` (Plan-Pin 1b4ddc93 nutzt @kb/*; ohne Alias bricht Coach-Build).
+
 ## 2026-11-09 — modules/plan Pin auf origin/dev (Vite-8 Browserliste)
 
 - Submodule `modules/plan` → plan-dev `1b4ddc93` (inkl. build.target-Browserliste).

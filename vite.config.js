@@ -47,6 +47,8 @@ export default defineConfig(async ({ mode }) => {
         '@cloud/firebase.js':  resolve(__dirname, './src/firebase.js'),
         '@firebase-config':    resolve(__dirname, './firebase.config.js'),
         '@aliase':             resolve(__dirname, './fitness/catalog/kb/aliases.yml'),
+        // Plan-Submodul (ab 1b4ddc93) importiert @kb/* statt Relativpfade — Alias wie in plan-dev.
+        '@kb':                 resolve(__dirname, './fitness/catalog/kb'),
         '@fitness/components': resolve(__dirname, './src/components'),
         '@fitness/constants':  resolve(__dirname, './src/constants'),
         '@fitness':            resolve(__dirname, './src'),
