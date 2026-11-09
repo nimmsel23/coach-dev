@@ -34,6 +34,6 @@ completed	success	Gemini CI Agent	Gemini CI Agent	dev	workflow_run	42416057177	1
 - Arbeitsbaum: 3 uncommittete Pfade
 
 _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
-- Erledigt: CTO-Nachtauftrag/Org-Hit `7cd93f79` — Catchup `9da51ea1`+`5beaf2ea`/`c67ccdd6`/`dd662259` schon auf `origin/dev` (Tip `c6689342`); Check Deploy Coach `42655793637` + Pages Docs `42655793652` success; Task done.
-- Offen/Weiter: FIRE/TODO Frontend-Serve Katalog-UI Org-Task `b6d56a4a` (+ceo +al +lr); Deploy-Seed; systemd-Pfad; KB-Drift beobachten.
-- Blocker: Serve-Scope wartet auf CEO (`b6d56a4a`); sonst keine.
+- Erledigt: Dependabot-Hit `2b7f9de8` + Serve `b6d56a4a` — `752b474d` (`target-branch:dev`, `check.yml`, `automerge-pr.yml`; `/fitness/`→Catalog-Dist). Tests ok.
+- Offen/Weiter: TODO Deploy-Seed; systemd-Pfad `coach-sync`; KB-Drift beobachten; optional Fuel-Upstream.
+- Blocker: Keine.
