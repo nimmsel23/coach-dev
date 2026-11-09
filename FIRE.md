@@ -12,6 +12,10 @@ kein CEO-`+hit`-Gate). Erledigt abhaken; Folgen nach `TODO.md` oder hier.
       Identität, 2-Satz-Was, Muskeln (primär), 3 Coaching-Highlights, Herkunft als ein
       Text + Freigeben/Löschen/Verbessern. Default-Kartenform pragmatisch gewählt;
       Quelleneditor nur noch unter Details. (2026-11-09 AL)
+- [x] **Ein Coach-Server / Upstream-Ablösung (Docs + Keepers):** SOT =
+      `coach-dev/server.py` `:9150`; Fitness/`fitness.api` + Relax lokal; `:8100`
+      tot; Fuel bewusst Proxy → VitalOS `:8000`. Kein Tree-Move. FOCUS 2026-11.
+      (2026-11-09)
 - [ ] **Frontend-Serve Katalog-UI:** Katalog-UI aus Coach-Dist statt Legacy-
       Fitness-SPA unter `/fitness/` — Scope/Entscheidung (`+ceo`, Org-Task).
       Inbox-API lokal; `fitness-preview` (:8100) archiviert (2026-11-09).

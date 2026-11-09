@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Coach backend on port 9150: domain APIs, Catalog UI and Coach SPA."""
+"""Coach backend on port 9150: one-process SOT for Coach keepers + SPA.
+
+Runtime ownership: this file under ~/dev/coach-dev (coach-api.service).
+fitness.api + Relax are in-process; only coach-backends.json entries are proxied
+(today: Fuel → VitalOS :8000). Not the Node/Hono tree under ~/dev/backend.
+"""
 from __future__ import annotations
 
 import argparse
@@ -150,7 +155,7 @@ def configured_backends(overrides: dict[str, str] | None = None) -> dict[str, ht
         if url.host in ("localhost", "127.0.0.1", "::1", "0.0.0.0") and url.port == int(os.environ.get("COACH_PORT", "9150")):
             raise ValueError(f"Backend {name} points back to Coach; choose a separate domain worker port")
         urls[name] = url
-    # fitness-Upstream (:8100 Preview) ist optional/obsolet — Coach-API = ehemalige fitness-api.
+    # Proxied domains only (see coach-backends.README.md). Fitness/Relax are local.
     return urls
 
 

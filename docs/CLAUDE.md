@@ -2,17 +2,24 @@
 
 # CLAUDE.md
 
-> **Node-Backend ausgelagert (2026-11-04):** `server.mjs` und Server-Code liegen in `~/dev/fitness-backend`. Dev-Scripts (`dev`/`start`) rufen `../fitness-backend/server.mjs` auf; Server-Doku in dessen `CLAUDE.md`. Dependencies dort pflegen, nicht hier.
+> **Coach-Server-SOT (2026-11-09):** Laufzeit + Ownership der Coach-API =
+> `~/dev/coach-dev/server.py` auf **`:9150`** (`coach-api.service`). Ein Prozess:
+> Catalog/Inbox/`fitness.api`, embedded Relax, Coach-SPA. Details:
+> [COACH-SERVER.md](COACH-SERVER.md), Monatsmission [FOCUS.md](../FOCUS.md).
+> `~/dev/backend` (Node/Hono + Cloud Functions) ist **kein** Coach-:9150-Zuhause
+> und kein Ersatz für `server.py`. Historische Verweise auf `fitness-backend`
+> / Node-`:9100` als Coach-API sind falsch — `:9100` war Fitness-Hono-Dev, nicht
+> dieser Server.
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-⚠️ **Diese Datei ist größtenteils 1:1 aus `~/fitness-dev/CLAUDE.md` kopiert**
+⚠️ **Unterhalb des Banners ist vieles 1:1 aus `~/fitness-dev/CLAUDE.md` kopiert**
 und beschreibt fälschlich "fitness-dev" statt "coach-dev" — Inhalt nicht
 blind übernehmen. Fakten, die stimmen: `coach-dev` ist ein **eigenständiges**
 Repo (`git@github.com:nimmsel23/coach-dev.git`), `fitness-dev` ist nur als
-zusätzlicher Git-Remote verknüpft (gemeinsame Historie/Fork-Basis). Backend
-(`server.mjs`) nutzt **Hono**, wie fitness-dev. Vollständige Neufassung
-dieser Doku steht noch aus.
+zusätzlicher Git-Remote verknüpft (gemeinsame Historie/Fork-Basis). Die
+Coach-HTTP-API ist Python/`server.py` `:9150`, nicht Hono/`server.mjs`.
+Vollständige Neufassung dieser Doku steht noch aus.
 
 **Sub-Docs (lies mit, je nach Bereich):**
 - `../fitness/CLAUDE.md` — Python-Backend (Prod-API :9150, Dispatcher, Alembic, Packages)
@@ -220,7 +227,14 @@ dort liegt auch der Hash-Router. Details, Datenfluss, Deploy-Stand: `docs/PUSH-N
 
 ## Backend — Server-Rollen
 
-Der Node-Dev-Server (`server.mjs`, Hono, :9100, Swagger/Zod-Autodoc, Session-Storage) liegt in `~/dev/fitness-backend` (Doku dort in `CLAUDE.md`). Prod-Backend bleibt `fitness/api/main.py` (:9150, Python/FastAPI). Rollen-Tabelle und Datenpfade stehen im Backend-Repo.
+| Rolle | Ort | Port |
+|-------|-----|------|
+| **Coach-API (SOT)** | `~/dev/coach-dev/server.py` + `fitness/api` | **9150** |
+| Node/Hono + Cloud Functions | `~/dev/backend` (historisch auch als fitness-backend) | optional Dev `:9100` — **nicht** Coach-Laufzeit |
+| Fuel (fremd, Proxy) | VitalOS Docker `vitalos_api` | `:8000/api/fuel` via `coach-backends.json` |
+
+Coach-Edits nur in coach-dev. `~/dev/backend` nicht als zweites Coach-API-Zuhause
+nutzen. Siehe [COACH-SERVER.md](COACH-SERVER.md).
 
 ## Commands
 

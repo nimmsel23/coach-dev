@@ -11,10 +11,11 @@ und Local-API sind kein zweites Fitness-Backend mehr, sondern klar getrennt:
 | Rolle | Repo | Verantwortung |
 |---|---|---|
 | **KB-Daten** (YAML only) | `~/dev/fitness` (`nimmsel23/fitness`) | Exercises, Inbox, Muscles, Rules — Daten-SOT |
-| **Python/API** | `~/dev/coach-dev/fitness/` | `coach catalog` (+ Alias `agent`), FastAPI `:9150`, Enrichment |
+| **Coach-Server (SOT)** | `~/dev/coach-dev/server.py` | Ein Prozess `:9150` — Keepers + SPA; siehe FOCUS / COACH-SERVER |
+| **Python/API** | `~/dev/coach-dev/fitness/` | `coach catalog` (+ Alias `agent`), `fitness.api` in-process, Enrichment |
 | **Plan-Brücke** | `~/dev/plan-dev` | Geteilter Editor-/Vertrags-Code („Fitness-Code für Coach“) |
 | **Klient** | `~/dev/fitness-dev` | PWA: loggen, lesen, ausführen — **kein** Coach-Code, **kein** Catalog-Python pflegen |
-| **Node** | `~/dev/backend` | Hono/Functions — **kein** Python-Catalog |
+| **Node/Functions** | `~/dev/backend` | Hono/Functions — **kein** Coach-:9150-SOT (Pointer dort) |
 
 **Laufzeit-Fluss**
 

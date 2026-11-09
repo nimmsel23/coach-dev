@@ -10,6 +10,14 @@
   Fälschliches `STALE.md` entfernt; README + `OWNERSHIP-MAP` nachgezogen.
 - Python/API-SOT bleibt `coach-dev/fitness/` (`coach catalog`).
 
+## 2026-11-09 — Ein Coach-Server (SOT = coach-dev)
+
+- FOCUS/FIRE: Monatsmission „ein Server“; Fitness/`fitness.api` + Relax lokal,
+  Fuel bewusst Proxy → VitalOS `:8000`; kein Tree-Move.
+- Docs: `COACH-SERVER`, `CLAUDE` Banner, `AGENTS`, OWNERSHIP/ARCHITECTURE,
+  `coach-backends.README.md`. Pointer in `~/dev/backend`, `plan-backend`,
+  `fuel-backend` („nicht Coach-:9150-SOT“). Kein Unit-Restart.
+
 ## 2026-11-09 — Ownership-Map + :8100-Unit archiviert
 
 - Erste Ownership-Map + Orphan-Archiv (`fitness-cli`/`fitness-backend`) und

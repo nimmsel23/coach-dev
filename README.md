@@ -1,6 +1,16 @@
-# Fitness Centre
+# Coach (`coach-dev`)
+
+**Laufzeit-SOT der Coach-API:** `server.py` auf **`:9150`** (`coach-api.service`).
+Ein Server für Catalog/Inbox, embedded Relax, Coach-SPA. Docs:
+[FOCUS.md](./FOCUS.md), [docs/COACH-SERVER.md](./docs/COACH-SERVER.md),
+[docs/OWNERSHIP-MAP.md](./docs/OWNERSHIP-MAP.md).
+
+---
+
+# Fitness Centre (historischer Fork-Kopf)
 
 Workout-Tracking PWA und CLI für Krafttraining — Pflichtaufgaben-Werkzeug der Diplom Präventiver Vitaltrainer Ausbildung (Fitnesstrainer-Modul, Health Personal Fitness Trainer, Prävention).
+Der Node-`:9100`-Pfad unten ist **nicht** die Coach-API.
 
 **Ziel:**
 - Praktisches Werkzeug zur Unterstützung der Ausbildung: Trainingspläne erstellen, Logs führen, Anatomie-Lehre dokumentieren

@@ -2,9 +2,10 @@
 
 Siehe ausführlich `docs/ARCHITECTURE.md` (Abschnitt Backend-Breakthrough).
 
-Kurz: KB-Daten `~/dev/fitness` · Python/API `coach-dev` · Plan-Brücke `plan-dev` ·
-Klient `fitness-dev` · Node `~/dev/backend`. Plan ohne Local-Backend; Coach
-hostet Schmiede + `:9150`.
+Kurz: Coach-Server-SOT `coach-dev/server.py` `:9150` · KB-Daten `~/dev/fitness` ·
+Python/API in coach-dev · Plan-Brücke `plan-dev` · Klient `fitness-dev` ·
+Node/Functions `~/dev/backend` (kein Coach-API-Zuhause). Plan ohne Local-Backend;
+Coach hostet Schmiede + Keepers.
 
 ---
 

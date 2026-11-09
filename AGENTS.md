@@ -10,10 +10,12 @@ Use pnpm. Commit scoped completed changes; push completed work to `dev` (CI prom
 
 Coach owns Hosting preview/production via `.github/workflows/deploy-coach.yml` and `bin/coach-release`. Rules are owned by VitalOS. Coach owns `firestore.rules.part`; VitalOS imports a committed copy through `scripts/import-coach-rules.mjs` and composes/deploys the shared ruleset. Do not deploy Firestore rules from Coach.
 
-Coach is the backend repo plus a specialized coach frontend. Shared API on
-port 9150 (`server.py`, `coach-api.service`). Domain APIs dispatch through
-`coach-backends.json`; preserve existing domain data ownership and legacy
-Fitness routes. Never configure a domain upstream to loop back to Coach.
+Coach is the backend repo plus a specialized coach frontend. **Coach-API-SOT:**
+`server.py` on port 9150 (`coach-api.service`) — one process for catalog/
+inbox/`fitness.api`, embedded Relax, and Coach UI. Proxied domains only via
+`coach-backends.json` (today: Fuel → VitalOS `:8000`). Never configure a domain
+upstream to loop back to Coach. Do not treat `~/dev/backend` / former
+`fitness-backend` / Node `:9100` as this API’s home. Focus: [FOCUS.md](FOCUS.md).
 
 `klienten-python/` lives inside this repo (own git tree + `.venv`, gitignored).
 Default `KLIENTEN_PYTHON_ROOT` is `~/dev/coach-dev/klienten-python`;

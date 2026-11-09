@@ -1,21 +1,48 @@
 # Coach backend — port 9150
 
-`server.py` owns the shared Coach HTTP entrypoint at `http://127.0.0.1:9150`: Fitness, Fuel, Relax and additional Coach domains. The local-mode Fitness app is served directly at `/fitness/`; Catalog UI is at `/`; the built Firebase Coach UI is at `/coach/`.
+**SOT:** `~/dev/coach-dev/server.py` (`coach-api.service`) owns the shared Coach
+HTTP entrypoint at `http://127.0.0.1:9150`. One listening process: Fitness/
+Catalog/`fitness.api`, Fuel proxy, embedded Relax, Coach domains, Catalog UI
+(`/` / `/catalog-ui/`), local-mode Fitness SPA (`/fitness/`), Firebase Coach UI
+(`/coach/`).
 
-Coach dispatches to existing domain workers. Domain implementations, databases, client identities and files remain with their current owners. No second catalog or data migration is introduced.
+Monatsmission: [FOCUS.md](../FOCUS.md). Ownership: [OWNERSHIP-MAP.md](OWNERSHIP-MAP.md).
 
-## Domain APIs
+Domain **data** (DBs, client files, YAML-KB repo) stay with their owners. No
+second catalog implementation and no mandatory tree-move of `~/dev/backend`
+into this repo.
 
-| Coach route | Owner | Notes |
+## Domain APIs (Keeper-Audit 2026-11-09)
+
+| Coach route | Mode | Notes |
 | --- | --- | --- |
-| `/fitness/inbox/*`, `/session`, `/exercises`, … | Same process — former fitness-python-backend (`fitness.api`) | Coach-API **is** that API (service rename). No `:8100` hop. |
-| `/fitness-api/*` | Optional local-mode Fitness app from `fitness-dev/backend` | Sessions/UI fork under `/fitness-api` |
-| `/api/fuel/*` or `/fuel-api/*` | VitalOS unified API `127.0.0.1:8000/api/fuel` | `/api/fuel/nutrition` → `/api/fuel/nutrition` |
-| `/api/relax/*` or `/relax-api/*` | Relax FastAPI in the same process | `/relax-api/techniques` → Relax route |
+| `/fitness/inbox/*`, `/session`, `/exercises`, … | **local** — `fitness.api` in-process | Former fitness-python-backend; service rename only. No `:8100` hop. |
+| `/fitness-api/*` | **local** — optional `fitness-dev/backend` mount | Sessions/UI fork under `/fitness-api`, not the inbox API |
+| `/api/relax/*`, `/relax-api/*` | **local** — `relax-dev/server.py` embedded | Same process; no Relax worker required |
+| `/api/fuel/*`, `/fuel-api/*` | **proxy** → VitalOS `:8000/api/fuel` | Only remaining entry in `coach-backends.json`. Fuel source/SQLite stay Fuel-owned (`vitalos_api` Docker). |
 
-Catalog/Inbox/Enrichment on the laptop live here (`:9150`). Firebase Coach UI talks via `coachCommands`/`coachInbox`; `coach-sync.service` executes the same `fitness.api` inbox modules. `/fitness/` may still serve a built Fitness SPA for local preview; its API for coach work is this process, not a dead preview worker on `:8100`.
+Catalog/Inbox/Enrichment on the laptop live here (`:9150`). Firebase Coach UI
+talks via `coachCommands`/`coachInbox`; `coach-sync.service` executes the same
+`fitness.api` inbox modules. `/fitness/` may still serve a built Fitness SPA for
+local preview; its coach-work API is this process.
 
-`/health` and `/_coach/health` report Coach liveness and build availability. `/_coach/backends` checks all configured workers and reports readiness separately per domain. `/api/fitness/health` and `/api/fuel/health` return their workers’ original responses; Relax is served in-process at `/relax-api/health`. An unavailable domain returns 502 without taking down the other domains or static UI.
+`/health` and `/_coach/health` report Coach liveness (`fitness_api: local`,
+`relax_api: local`, configured backends). `/_coach/backends` probes workers;
+local fitness/relax are marked ready without HTTP hop. An unavailable domain
+returns 502 without taking down other domains or static UI.
+
+### Was nicht mehr proxied wird
+
+- Fitness/`fitness.api` / Inbox → früher tot nach `:8100` (`fitness-preview`) —
+  **entfernt**; Router hängen in `attach_fitness_api()`.
+- Relax → früher eigener Worker — **embedded**.
+- Node-Hono `:9100` / `~/dev/fitness-backend` → **kein** Coach-Upstream und kein
+  Edit-SOT für diese API.
+
+### Bewusst offen (Upstream bleibt)
+
+- **Fuel** → `http://127.0.0.1:8000/api/fuel` bis ein eigener Cutover Fuel in-process
+  oder anders bindet. Nicht durch Tree-Move „lösen“.
 
 ## Start and manage
 
@@ -36,11 +63,21 @@ bin/coach-server logs
 bin/coach-server restart
 ```
 
-The installer links the project-owned units into the user systemd directory and enables `coach-api.service`. Relax is loaded from `~/dev/relax-dev/server.py` into the Coach process, so no Relax worker is started. Fuel's unified VitalOS API (`8000`) remains a separate service. The old Fitness preview on `:8100` is obsolete — `fitness-api.service` is an alias for `coach-api.service` on `:9150`. Stopping/restarting Coach also takes its Relax routes offline. The unit defaults to loopback, sets `PYTHONPATH` for the coach-dev tree, and optionally reads `~/.config/coach/backend.env`.
+The installer links the project-owned units into the user systemd directory and
+enables `coach-api.service`. Relax is loaded from `~/dev/relax-dev/server.py`
+into the Coach process. Fuel stays on VitalOS `:8000`. `fitness-api.service` is
+a compatibility alias for `coach-api.service` on `:9150`. Stopping/restarting
+Coach also takes its Relax routes offline. The unit defaults to loopback, sets
+`PYTHONPATH` for the coach-dev tree, and optionally reads
+`~/.config/coach/backend.env`. **No unit restart without explicit freigabe.**
 
 ## Add a domain or change workers
 
-`coach-backends.json` contains the domain-to-origin registry. Adding an entry adds `/api/<domain>/*` and `/<domain>-api/*` without changing server routing code. Start/manage the corresponding worker separately, then restart Coach.
+`coach-backends.json` is the domain→origin registry for **proxied** domains only
+(today: `fuel`). Local keepers (fitness API, relax) are not listed there.
+Adding an entry adds `/api/<domain>/*` and `/<domain>-api/*` without changing
+server routing code. Start/manage the corresponding worker separately, then
+restart Coach (with freigabe).
 
 Environment overrides:
 
