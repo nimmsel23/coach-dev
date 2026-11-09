@@ -387,11 +387,48 @@ def list_workouts(request: Request):
     ]}
 
 
+def _target_key(item: dict[str, Any] | None) -> str | None:
+    if not item:
+        return None
+    return (
+        item.get("sourcePlanRoutineId")
+        or item.get("routine_id")
+        or item.get("sourceRoutineId")
+        or item.get("sourceAssignmentId")
+    )
+
+
+def _conflicts_with_active(workout: dict[str, Any], body: dict[str, Any]) -> bool:
+    want = _target_key(body)
+    if want is None and body.get("routine_snapshot") is not None:
+        want = f"snapshot:{body.get('name') or ''}"
+    have = _target_key(workout)
+    if want is None and have is None:
+        return False
+    return want != have
+
+
+def _find_unfinished(workouts: list[dict]) -> dict[str, Any] | None:
+    return next((w for w in workouts if w and not w.get("finished_at")), None)
+
+
 @router.post("/workouts")
 async def create_workout(request: Request):
     uid = _uid_from_request(request)
     body: dict[str, Any] = await request.json()
     workouts = _read_workouts(uid)
+    unfinished = _find_unfinished(workouts)
+    if unfinished is not None:
+        if _conflicts_with_active(unfinished, body):
+            raise HTTPException(
+                409,
+                detail={
+                    "code": "ACTIVE_WORKOUT",
+                    "active": {"id": unfinished.get("id"), "name": unfinished.get("name") or "Workout"},
+                    "message": "Es läuft bereits ein anderes Workout.",
+                },
+            )
+        return {"id": unfinished["id"], "updatedAt": unfinished.get("updatedAt")}
     exercises: list[dict] = []
     name = body.get("name")
     routine_id = body.get("routine_id")
@@ -410,18 +447,19 @@ async def create_workout(request: Request):
             for i, e in enumerate(ordered)
         ]
 
+    started_at = datetime.now().isoformat()
     workout = {
         "id": _new_id(), "routine_id": routine_id, "sourceRoutineId": routine_id,
         "sourcePlanId": body.get("sourcePlanId"), "sourcePlanRoutineId": body.get("sourcePlanRoutineId"),
         "sourceAssignmentId": body.get("sourceAssignmentId"),
         "name": name or f"Workout {datetime.now().strftime('%d.%m.')}",
-        "started_at": datetime.now().isoformat(), "finished_at": None, "sessionState": "work",
+        "started_at": started_at, "updatedAt": started_at, "finished_at": None, "sessionState": "work",
         "protocolMeta": {"moduleId": body.get("moduleId"), "protocolType": body.get("protocolType"), "requiresReview": True},
         "eventLog": [], "exercises": exercises,
     }
     workouts.append(workout)
     _write_workouts(uid, workouts)
-    return {"id": workout["id"]}
+    return {"id": workout["id"], "updatedAt": started_at}
 
 
 @router.get("/workouts/{workout_id}")
@@ -447,11 +485,22 @@ async def patch_workout(workout_id: str, request: Request):
     workout = next((w for w in workouts if w.get("id") == workout_id), None)
     if not workout:
         raise HTTPException(404, detail="not_found")
-    workout.update(body)
+    if "expectedUpdatedAt" in body and body.get("expectedUpdatedAt") != workout.get("updatedAt"):
+        raise HTTPException(
+            409,
+            detail={
+                "code": "WORKOUT_CONFLICT",
+                "message": "Dieses Workout wurde auf einem anderen Gerät geändert.",
+            },
+        )
+    patch = {k: v for k, v in body.items() if k != "expectedUpdatedAt"}
+    workout.update(patch)
     if isinstance(body.get("exercises"), list):
         workout["exercises"] = [_normalize_workout_exercise(e, i) for i, e in enumerate(body["exercises"])]
+    updated_at = datetime.now().isoformat()
+    workout["updatedAt"] = updated_at
     _write_workouts(uid, workouts)
-    return {"ok": True}
+    return {"ok": True, "updatedAt": updated_at}
 
 
 @router.delete("/workouts/{workout_id}")
