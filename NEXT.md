@@ -3,6 +3,8 @@
 - [ ] Den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy verifizieren.
 
 
+-   **Fuel-Upstream-Cutover** (optional): `/api/fuel` → VitalOS `:8000` bleibt
+    bis Fuel/VitalOS-Freigabe; nicht per Directory-Migration „lösen“.
 -   **Frontend-Serve Katalog-UI**: Coach-Dist statt Legacy-Fitness-SPA unter
     `/fitness/` (FIRE-Rest; Scope → `+ceo`). API lokal (`fitness_api: local`);
     Unit `fitness-preview` archiviert — offen bleibt nur der UI-Serve-Pfad.
