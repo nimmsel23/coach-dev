@@ -6,14 +6,14 @@ Coach dispatches to existing domain workers. Domain implementations, databases, 
 
 ## Domain APIs
 
-| Coach route | Current worker | Forwarded path example |
+| Coach route | Owner | Notes |
 | --- | --- | --- |
-| `/api/fitness/*` | Legacy Fitness preview API `127.0.0.1:8100` | `/api/fitness/fitness/inbox` → `/fitness/inbox` |
-| `/fitness-api/*` | Fitness local-mode FastAPI app, mounted in-process | `/fitness-api/api/health` → `/api/health` |
+| `/fitness/inbox/*`, `/session`, `/exercises`, … | Same process — former fitness-python-backend (`fitness.api`) | Coach-API **is** that API (service rename). No `:8100` hop. |
+| `/fitness-api/*` | Optional local-mode Fitness app from `fitness-dev/backend` | Sessions/UI fork under `/fitness-api` |
 | `/api/fuel/*` or `/fuel-api/*` | VitalOS unified API `127.0.0.1:8000/api/fuel` | `/api/fuel/nutrition` → `/api/fuel/nutrition` |
-| `/api/relax/*` or `/relax-api/*` | Relax FastAPI mounted in-process | `/relax-api/techniques` → Relax route |
+| `/api/relax/*` or `/relax-api/*` | Relax FastAPI in the same process | `/relax-api/techniques` → Relax route |
 
-The Fitness worker is currently the existing staging instance; Coach does not claim that it is a dedicated production worker. `/fitness/` serves `~/dev/fitness-dev/frontend/dist` directly, with its service worker scoped to that path. Its `/fitness-api/*` calls are handled by the new `fitness-dev/backend` app in-process, so no second API server is needed. Older Fitness API paths (`/fitness/session`, `/exercise`, `/workouts`, `/api/workouts`, etc.) still forward to the `8100` staging worker for compatibility. Domain routes are registered first so Fuel/Relax requests never fall into that legacy Fitness dispatcher.
+Catalog/Inbox/Enrichment on the laptop live here (`:9150`). Firebase Coach UI talks via `coachCommands`/`coachInbox`; `coach-sync.service` executes the same `fitness.api` inbox modules. `/fitness/` may still serve a built Fitness SPA for local preview; its API for coach work is this process, not a dead preview worker on `:8100`.
 
 `/health` and `/_coach/health` report Coach liveness and build availability. `/_coach/backends` checks all configured workers and reports readiness separately per domain. `/api/fitness/health` and `/api/fuel/health` return their workers’ original responses; Relax is served in-process at `/relax-api/health`. An unavailable domain returns 502 without taking down the other domains or static UI.
 
@@ -36,7 +36,7 @@ bin/coach-server logs
 bin/coach-server restart
 ```
 
-The installer links the project-owned units into the user systemd directory and enables `coach-api.service`. Relax is loaded from `~/dev/relax-dev/server.py` into the Coach process, so no Relax worker is started. Fitness preview (`8100`) and Fuel's unified VitalOS API (`8000`) remain separate services and are not restarted by Coach. The inactive old `fitness-api.service` unit is archived locally under `.worktrees/legacy-services`; its unit name becomes an alias for `coach-api.service`, preventing a second server from claiming `9150`. Stopping/restarting Coach also takes its in-process Relax routes offline. The unit defaults to loopback and optionally reads `~/.config/coach/backend.env`.
+The installer links the project-owned units into the user systemd directory and enables `coach-api.service`. Relax is loaded from `~/dev/relax-dev/server.py` into the Coach process, so no Relax worker is started. Fuel's unified VitalOS API (`8000`) remains a separate service. The old Fitness preview on `:8100` is obsolete — `fitness-api.service` is an alias for `coach-api.service` on `:9150`. Stopping/restarting Coach also takes its Relax routes offline. The unit defaults to loopback, sets `PYTHONPATH` for the coach-dev tree, and optionally reads `~/.config/coach/backend.env`.
 
 ## Add a domain or change workers
 

@@ -8,6 +8,7 @@ WorkingDirectory=%h/dev/coach-dev
 ExecStart=/usr/bin/python3 %h/dev/coach-dev/server.py
 Environment=COACH_HOST=127.0.0.1
 Environment=COACH_PORT=9150
+Environment=PYTHONPATH=%h/dev/coach-dev:%h/dev/fitness-dev/anatomy-kb
 EnvironmentFile=-%h/.config/coach/backend.env
 Restart=on-failure
 RestartSec=5

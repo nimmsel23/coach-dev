@@ -55,6 +55,7 @@ def fitness_frontend_dist() -> Path:
 
 
 def load_fitness_app():
+    """Optional local-mode Fitness app (sessions/UI) under /fitness-api — not the coach inbox API."""
     source_root = Path(os.environ.get(
         "COACH_FITNESS_BACKEND_ROOT",
         Path.home() / "dev" / "fitness-dev",
@@ -70,6 +71,40 @@ def load_fitness_app():
     if not module_path.is_relative_to(source_root):
         raise RuntimeError(f"Fitness backend import resolved outside {source_root}: {module_path}")
     return module.create_app()
+
+
+def attach_fitness_api(app: FastAPI) -> bool:
+    """Former fitness-python-backend (:9150) — same routers, same service as coach-api.
+
+    Coach-Laptop-Arbeit (Inbox/Katalog/Enrichment-Routen). Kein Proxy nach :8100;
+    coach-sync nutzt dieselben Module. Watcher bleiben bei coach-sync.service.
+    """
+    root = str(ROOT)
+    if root not in sys.path:
+        sys.path.insert(0, root)
+    try:
+        from fitness.api.routers.sessions import router as sessions_router
+        from fitness.api.routers.journal import router as journal_router
+        from fitness.api.routers.exercises import router as exercises_router
+        from fitness.api.routers.coaching import router as coaching_router
+        from fitness.api.routers.coach_plans import router as coach_plans_router
+        from fitness.api.routers.macrocycles import router as macrocycles_router
+        from fitness.api.routers.workouts import router as workouts_router
+        from fitness.api.routers.system import router as system_router
+        from fitness.api.routers.coaching_notes import router as coaching_notes_router
+        from fitness.anatomy.router import router as anatomy_router
+        from fitness.api.routers.sixpack_photos import router as sixpack_photos_router
+    except Exception:
+        return False
+    for router in (
+        sessions_router, journal_router, exercises_router, coaching_router,
+        coach_plans_router, macrocycles_router, workouts_router, system_router,
+        coaching_notes_router, anatomy_router, sixpack_photos_router,
+    ):
+        app.include_router(router)
+    app.include_router(macrocycles_router, prefix="/api")
+    app.include_router(workouts_router, prefix="/api")
+    return True
 
 
 def end_to_end_headers(headers) -> list[tuple[str, str]]:
@@ -115,15 +150,14 @@ def configured_backends(overrides: dict[str, str] | None = None) -> dict[str, ht
         if url.host in ("localhost", "127.0.0.1", "::1", "0.0.0.0") and url.port == int(os.environ.get("COACH_PORT", "9150")):
             raise ValueError(f"Backend {name} points back to Coach; choose a separate domain worker port")
         urls[name] = url
-    if "fitness" not in urls:
-        raise ValueError("The fitness backend is required for legacy Catalog UI routes")
+    # fitness-Upstream (:8100 Preview) ist optional/obsolet — Coach-API = ehemalige fitness-api.
     return urls
 
 
 def create_app(*, catalog_directory: Path | None = None, coach_directory: Path | None = None,
                fitness_directory: Path | None = None,
                upstream_url: str | None = None, backend_urls: dict[str, str] | None = None,
-               transport=None) -> FastAPI:
+               transport=None, include_fitness_api: bool = True) -> FastAPI:
     catalog = (catalog_directory or catalog_dist()).resolve()
     coach = (coach_directory or Path(os.environ.get("COACH_UI_DIR", ROOT / "dist-coach"))).resolve()
     fitness_ui = (fitness_directory or fitness_frontend_dist()).resolve()
@@ -152,7 +186,9 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     app = FastAPI(title="Coach backend", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 
     app.state.backends = backends
+    app.state.fitness_api_local = False
     fitness_app = load_fitness_app()
+    app.state.fitness_frontend_app = fitness_app is not None
     if fitness_app is not None:
         app.mount("/fitness-api", fitness_app, name="fitness-api")
 
@@ -182,13 +218,20 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
         return FileResponse(ROOT / "website/coach/retire-root-sw.js", media_type="application/javascript",
                             headers={"Cache-Control": "no-store", "Service-Worker-Allowed": "/"})
 
+    # Coach /health vor fitness.api system_router — sonst überschattet dessen /health die Coach-Identität.
     @app.get("/health")
     @app.get("/_coach/health")
     async def health():
+        fitness_api_local = app.state.fitness_api_local
+        fitness_mode = (
+            "local" if fitness_api_local
+            else ("worker" if "fitness" in backends else ("frontend-api" if app.state.fitness_frontend_app else "unavailable"))
+        )
         return {"ok": True, "service": "coach", "port": int(os.environ.get("COACH_PORT", "9150")),
                 "backends": {name: str(url) for name, url in backends.items()},
-                "fitness_api": "in-process" if fitness_app is not None else ("worker" if "fitness" in backends else "unavailable"),
-                "relax_api": "in-process" if relax_app is not None else ("worker" if "relax" in backends else "unavailable"),
+                "fitness_api": fitness_mode,
+                "fitness_frontend_api": "local" if app.state.fitness_frontend_app else "unavailable",
+                "relax_api": "local" if relax_app is not None else ("worker" if "relax" in backends else "unavailable"),
                 "fitness_frontend_ready": (fitness_ui / "index.html").is_file(),
                 "catalog_ready": (catalog / "index.html").is_file(),
                 "coach_ready": (coach / "index.html").is_file()}
@@ -204,11 +247,17 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
             except httpx.RequestError:
                 return name, {"ready": False, "status": None}
         statuses = dict(await asyncio.gather(*(check(name, origin) for name, origin in backends.items())))
-        if fitness_app is not None:
-            statuses["fitness_api"] = {"ready": True, "status": 200, "mode": "in-process"}
+        if app.state.fitness_api_local:
+            statuses["fitness"] = {"ready": True, "status": 200, "mode": "local"}
+        if app.state.fitness_frontend_app:
+            statuses["fitness_frontend_api"] = {"ready": True, "status": 200, "mode": "local"}
         if relax_app is not None:
-            statuses["relax"] = {"ready": True, "status": 200, "mode": "in-process"}
+            statuses["relax"] = {"ready": True, "status": 200, "mode": "local"}
         return {"ok": all(value["ready"] for value in statuses.values()), "backends": statuses}
+
+    # Catalog/Inbox-API (ehem. fitness-python-backend) — nach /health, vor UI-Catch-alls.
+    app.state.fitness_api_local = attach_fitness_api(app) if include_fitness_api else False
+    fitness_api_local = app.state.fitness_api_local
 
     async def proxy(request: Request, backend: str, strip_segments: int = 0):
         upstream = backends[backend]
@@ -237,10 +286,13 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     @app.api_route("/fitness/{path:path}", methods=["GET", "HEAD"])
     async def fitness_ui_route(path: str, request: Request):
-        if path.partition("/")[0] in {*API_PREFIXES, "health", "notify", "inbox"}:
-            # Keep older Fitness URLs working while the local-mode app uses
-            # the explicit /fitness-api namespace.
-            return await proxy(request, "fitness", strip_segments=1)
+        head = path.partition("/")[0]
+        if head in {*API_PREFIXES, "health", "notify", "inbox"}:
+            # Lokale fitness.api-Routen greifen zuerst. Nur noch optionaler
+            # Upstream (nicht :9150 selbst) — der alte :8100-Preview-Weg ist tot.
+            if "fitness" in backends and not fitness_api_local:
+                return await proxy(request, "fitness", strip_segments=1)
+            return JSONResponse({"detail": "Not found"}, status_code=404)
         if not (fitness_ui / "index.html").is_file():
             return JSONResponse({
                 "detail": "Fitness frontend build missing",
@@ -275,16 +327,18 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     # Explicit domains precede the compatibility /api catch-all.
     for name in backends:
         for prefix in (f"/api/{name}", f"/{name}-api"):
-            if name == "fitness" and prefix == "/fitness-api" and fitness_app is not None:
+            if name == "fitness" and (prefix == "/fitness-api" and fitness_app is not None or fitness_api_local):
                 continue
             endpoint = domain_proxy(name, prefix.count("/"))
             app.add_api_route(prefix, endpoint, methods=METHODS)
             app.add_api_route(f"{prefix}/{{path:path}}", endpoint, methods=METHODS)
 
-    for prefix in API_PREFIXES:
-        endpoint = domain_proxy("fitness")
-        app.add_api_route(f"/{prefix}", endpoint, methods=METHODS)
-        app.add_api_route(f"/{prefix}/{{path:path}}", endpoint, methods=METHODS)
+    # Legacy Fitness-Pfad-Proxies nur wenn kein lokales fitness.api und ein Upstream gesetzt ist.
+    if "fitness" in backends and not fitness_api_local:
+        for prefix in API_PREFIXES:
+            endpoint = domain_proxy("fitness")
+            app.add_api_route(f"/{prefix}", endpoint, methods=METHODS)
+            app.add_api_route(f"/{prefix}/{{path:path}}", endpoint, methods=METHODS)
 
     @app.api_route("/clientforge", methods=["GET", "HEAD"])
     @app.api_route("/clientforge/", methods=["GET", "HEAD"])

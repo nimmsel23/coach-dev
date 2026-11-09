@@ -12,5 +12,6 @@ kein CEO-`+hit`-Gate). Erledigt abhaken; Folgen nach `TODO.md` oder hier.
       Identität, 2-Satz-Was, Muskeln (primär), 3 Coaching-Highlights, Herkunft als ein
       Text + Freigeben/Löschen/Verbessern. Default-Kartenform pragmatisch gewählt;
       Quelleneditor nur noch unter Details. (2026-11-09 AL)
-- [ ] **Frontend-Serve Katalog-UI:** Katalog-UI aus Coach-Dist statt Fitness-Dist
-      auf 8100-Staging — Scope/Entscheidung (`+ceo`, Org-Task).
+- [ ] **Frontend-Serve Katalog-UI:** Katalog-UI aus Coach-Dist statt totem
+      `:8100`-Preview — Scope/Entscheidung (`+ceo`, Org-Task). Inbox-API selbst
+      läuft lokal in coach-api (2026-11-09).

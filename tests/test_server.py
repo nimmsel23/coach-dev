@@ -25,12 +25,14 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
         self.requests = []
 
     @asynccontextmanager
-    async def client(self, handler=None, backend_urls=None):
+    async def client(self, handler=None, backend_urls=None, include_fitness_api=False, upstream_url="http://catalog.test:9150"):
         def backend(request):
             self.requests.append(request)
             return handler(request) if handler else httpx.Response(200, stream=httpx.ByteStream(b'{"ok":true}'))
+        # Gateway-Tests default ohne lokales fitness.api, damit Proxy-Fixtures greifen.
         app = create_app(catalog_directory=self.catalog, coach_directory=self.coach,
-                         upstream_url="http://catalog.test:9150", backend_urls=backend_urls, transport=httpx.MockTransport(backend))
+                         upstream_url=upstream_url, backend_urls=backend_urls,
+                         transport=httpx.MockTransport(backend), include_fitness_api=include_fitness_api)
         # Gateway tests use synthetic workspaces and must not start the real local scheduler.
         with patch.dict("os.environ", {"COACH_TASKWARRIOR_SCHEDULER": "0"}):
             async with app.router.lifespan_context(app):
@@ -117,12 +119,21 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual((await client.get("/health")).json()["service"], "coach")
 
     async def test_relax_is_mounted_in_process_when_no_worker_is_configured(self):
-        async with self.client(backend_urls={}) as client:
+        async with self.client(backend_urls={}, upstream_url=None) as client:
             health = (await client.get("/health")).json()
-            self.assertEqual(health.get("relax_api"), "in-process")
+            self.assertEqual(health.get("relax_api"), "local")
             readiness = (await client.get("/_coach/backends")).json()
             self.assertTrue(readiness["backends"]["relax"]["ready"])
-            self.assertEqual(readiness["backends"]["relax"]["mode"], "in-process")
+            self.assertEqual(readiness["backends"]["relax"]["mode"], "local")
+
+    async def test_local_fitness_api_serves_inbox_without_upstream(self):
+        async with self.client(backend_urls={}, upstream_url=None, include_fitness_api=True) as client:
+            health = (await client.get("/health")).json()
+            self.assertEqual(health.get("fitness_api"), "local")
+            response = await client.get("/fitness/inbox")
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(response.json().get("ok"))
+            self.assertIn("items", response.json())
 
     async def test_registry_can_add_a_domain_without_server_code_changes(self):
         async with self.client(backend_urls={"skills": "http://skills.test:9300"}) as client:
