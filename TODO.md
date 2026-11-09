@@ -11,8 +11,10 @@ nachziehen. Optional später: `FOCUS.md` / `FREEDOM.md` / `FRAME.md`.
 
 ## Offen
 
+- [ ] **Fuel-Upstream-Cutover (optional):** `/api/fuel` noch Proxy → VitalOS
+      `:8000`; in-process erst nach Fuel/VitalOS-Freigabe — nicht per Tree-Move.
 - [ ] **Frontend-Serve Katalog-UI:** Coach-Dist (`dist-catalog` / `COACH_CATALOG_DIR`)
-      statt Fitness-Dist auf 8100-Staging — Scope-Fragen → Org-Task `+ceo`
+      statt Legacy-Fitness-SPA unter `/fitness/` — Scope-Fragen → Org-Task `+ceo`
       (aus FIRE 2026-11-09 ausgegliedert).
 - [ ] **Deploy-Formalisierung:** `~/.aos/fitness/kb`-Seed geschah manuell (rsync);
       `deploy.sh`-Seed-Pfad auf coach-dev umstellen.
