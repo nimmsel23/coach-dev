@@ -1,3 +1,7 @@
+## 2026-11-09 — modules/plan Pin auf origin/dev (Vite-8 Browserliste)
+
+- Submodule `modules/plan` → plan-dev `1b4ddc93` (inkl. build.target-Browserliste).
+
 ## 2026-11-09 — Vite-8-Vorbeuge: esbuild-Tests + build.target
 
 - `scripts/test-sixpack-selection.mjs`: `transformWithEsbuild` → `esbuild.transform`, Dev-Dep `esbuild ^0.27.7`.
