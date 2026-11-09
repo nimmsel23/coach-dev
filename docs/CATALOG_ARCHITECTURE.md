@@ -19,8 +19,13 @@ Um Skalierbarkeit ohne Qualitätsverlust zu garantieren, nutzt das System drei E
 - **Tier 3: Inbox (The "Lab")**:
   - Temporäre Drafts (`inbox_*.yml`) für Neuanfragen oder KI-veredelte Wiki-Daten.
 
-## 2. Der Autonome Expert-Daemon (`fitness-agent watch`)
-Der `fitness-agent` agiert als intelligenter Hintergrundprozess mit folgenden proaktiven Zyklen:
+## 2. Der Autonome Expert-Daemon (`coach catalog` / Enricher)
+
+Historisch: `fitness-agent watch`. Heute: Catalog-CLI unter
+`coach-dev/fitness/catalog/` (`coach catalog`, Alias `coach agent`) plus
+Enrichment-Daemon. Standort-SOT: [OWNERSHIP-MAP.md](OWNERSHIP-MAP.md).
+
+Der Daemon agiert als intelligenter Hintergrundprozess mit folgenden proaktiven Zyklen:
 
 ### A. Demand-Driven Refinement (Usage Priorisierung)
 - **Log-Ingestion**: Der Daemon importiert synchronisierte Sessions in eine lokale SQLite-Historie.

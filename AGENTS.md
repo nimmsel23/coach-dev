@@ -1,5 +1,7 @@
 # Coach repository
 
+Scoped fertige Arbeit: **immer committen** (nicht auf explizites „commit“ warten).
+
 Coach is the standalone coach-facing product on `dev`. The `vitalos/` submodule is a local checkout used only as historical context and, where needed, for Git merges. It is not a Coach build or Hosting dependency. Do not directly edit files inside this checkout; make changes in their owning source repository and bring them in through the intended Git merge. See `docs/COACH-ARCHITECTURE.md` for checkout and release instructions. Do not add Coach beneath VitalOS or restore the former `vitalos/coach-app` release path.
 
 Source-code edits belong only in `~/vitalos/src` or `~/dev/*-dev/src`, only on a `dev` branch, and must always be committed. Every `*-app` checkout is for intended Git merges/integration only and must not be edited directly.
@@ -23,6 +25,13 @@ public static root.
 Praxis-/Klienten-CLIs über den Coach-Dispatcher (nicht mehr nur als lose Binaries):
 `coach praxis`, `coach klientenctl` (Alias `coach klienten`), `coach konsolectl`
 (Alias `coach konsole`). Braucht Sibling `~/dev/praxis-dev` (`PRAXIS_DEV_ROOT`).
+
+## Catalog / former fitness-agent (2026-11-09)
+
+Python catalog + FastAPI live under `fitness/` in this repo (SOT). Entry:
+`coach catalog` (Alias `coach agent`). Node under `~/dev/backend` is **not**
+the catalog. Ownership, lineage and archived orphans:
+[docs/OWNERSHIP-MAP.md](docs/OWNERSHIP-MAP.md).
 
 ## Plan source ownership (2026-10-30)
 
