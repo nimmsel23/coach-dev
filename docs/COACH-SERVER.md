@@ -52,7 +52,8 @@ Environment overrides:
 - `COACH_FITNESS_FRONTEND_DIR`: explicit directory containing the built local-mode Fitness app; default `~/dev/fitness-dev/frontend/dist`.
 - `COACH_FITNESS_BACKEND_ROOT`: Fitness source checkout containing `backend/api/app.py`; default `~/dev/fitness-dev`.
 - `COACH_UI_DIR`: explicit directory containing the built Coach UI `index.html`.
-- `KLIENTEN_PYTHON_ROOT`: klienten-python source used for the canonical local workspace creator.
+- `KLIENTEN_PYTHON_ROOT`: defaults to `~/dev/coach-dev/klienten-python` (compat symlink `~/klienten-python`).
+- `KLIENTEN_UI_ROOT`: legacy ClientForge/Konsole build, defaults to `~/dev/klienten-dev`.
 
 ## UI ownership
 
@@ -60,7 +61,7 @@ Environment overrides:
 
 Catalog build lookup: `dist-catalog`, `catalog-ui/dist`, `vitalos/fitness-app/fitness/catalog/dist`, then `../fitness-dev/fitness/catalog/dist`. Build the Fitness UI in `~/dev/fitness-dev/frontend` with `VITE_API_BASE=/fitness-api pnpm exec vite build`; output stays in its ignored `frontend/dist/`. `npm run build:firebase:coach` builds the separate Firebase Coach UI in `dist-coach`.
 
-`npm run dev` remains the Firebase Coach Vite workflow on `5902`; its API proxy points at Coach `9150`. Firebase Hosting releases do not run Python. The local `klienten-dev` and `workspace` symlinks are context links; the server never exposes them as static directories.
+`npm run dev` remains the Firebase Coach Vite workflow on `5902`; its API proxy points at Coach `9150`. Firebase Hosting releases do not run Python. `workspace` is a context link only; the server never exposes it as a static directory. Legacy UI assets come from `KLIENTEN_UI_ROOT`, not from a nested coach copy.
 
 ## Checks
 
