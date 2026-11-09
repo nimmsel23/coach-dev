@@ -8,7 +8,17 @@ Use pnpm. Commit scoped completed changes; push completed work to `dev` (CI prom
 
 Coach owns Hosting preview/production via `.github/workflows/deploy-coach.yml` and `bin/coach-release`. Rules are owned by VitalOS. Coach owns `firestore.rules.part`; VitalOS imports a committed copy through `scripts/import-coach-rules.mjs` and composes/deploys the shared ruleset. Do not deploy Firestore rules from Coach.
 
-Coach owns the shared backend on port 9150 (`server.py`, `coach-api.service`). Domain APIs dispatch through `coach-backends.json`; preserve existing domain data ownership and legacy Fitness routes. Never configure a domain upstream to loop back to Coach. Local `klienten-dev` and `workspace` symlinks are context only, not public static roots.
+Coach is the backend repo plus a specialized coach frontend. Shared API on
+port 9150 (`server.py`, `coach-api.service`). Domain APIs dispatch through
+`coach-backends.json`; preserve existing domain data ownership and legacy
+Fitness routes. Never configure a domain upstream to loop back to Coach.
+
+`klienten-python/` lives inside this repo (own git tree + `.venv`, gitignored).
+Default `KLIENTEN_PYTHON_ROOT` is `~/dev/coach-dev/klienten-python`;
+`~/klienten-python` remains a compatibility symlink. Legacy ClientForge/Konsole
+UI build still comes from sibling `~/dev/klienten-dev` (`KLIENTEN_UI_ROOT`) until
+that surface is fully absorbed into Coach. `workspace` is context only, not a
+public static root.
 
 ## Plan source ownership (2026-10-30)
 

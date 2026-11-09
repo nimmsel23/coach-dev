@@ -8,7 +8,7 @@ Setzt den Coach-Gateway (`server.create_app()`: Domain-Proxies, Coach-UI,
 Muss mit dem Python des klienten-python-venvs laufen (psycopg2/sqlalchemy
 werden beim Import von klienten_manager gebraucht), z. B.:
 
-    ~/klienten-python/.venv/bin/python3 -m uvicorn coach_klienten:app \
+    ~/dev/coach-dev/klienten-python/.venv/bin/python3 -m uvicorn coach_klienten:app \
         --app-dir ~/dev/coach-dev --host 127.0.0.1 --port 5200
 
 Reihenfolge: die Klienten-Routen stehen VOR den Coach-Catch-alls
@@ -31,7 +31,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 ROOT = Path(__file__).resolve().parent
-KLIENTEN_PYTHON = Path(os.environ.get("KLIENTEN_PYTHON_ROOT", Path.home() / "klienten-python"))
+KLIENTEN_PYTHON = Path(os.environ.get(
+    "KLIENTEN_PYTHON_ROOT",
+    Path(__file__).resolve().parent / "klienten-python",
+))
 for path in (ROOT, KLIENTEN_PYTHON):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))

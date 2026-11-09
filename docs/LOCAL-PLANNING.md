@@ -43,7 +43,7 @@ Klienten-, CRM-, Praxis- und Buchhaltungsdaten werden nicht umgebaut.
 ## Speicherung und Zugriff
 
 `CLIENTS_ROOT` überschreibt die Klientenwurzel; andernfalls wird sie aus
-`~/klienten-python/klienten_manager/config.py` bezogen (aktuell `~/.local/Klienten`).
+`~/dev/coach-dev/klienten-python/klienten_manager/config.py` bezogen (aktuell `~/.local/Klienten`).
 Native Pläne liegen pro Klient unter:
 
 ```text

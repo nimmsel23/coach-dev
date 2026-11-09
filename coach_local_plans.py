@@ -33,7 +33,10 @@ def load_taskwarrior_module():
 
 
 def load_client_workspace_module():
-    source = Path(os.getenv('KLIENTEN_PYTHON_ROOT', str(Path.home() / 'klienten-python'))).expanduser()
+    source = Path(os.getenv(
+        'KLIENTEN_PYTHON_ROOT',
+        str(Path(__file__).resolve().parent / 'klienten-python'),
+    )).expanduser()
     if not (source / 'klienten_manager/workspace.py').is_file():
         raise FileNotFoundError('klienten-python workspace owner is unavailable')
     if str(source) not in sys.path:
@@ -151,7 +154,10 @@ plans_module = load_plan_module('local_plans')
 
 def clients_root():
     if os.getenv('CLIENTS_ROOT'): return Path(os.environ['CLIENTS_ROOT']).expanduser()
-    source = Path(os.getenv('KLIENTEN_PYTHON_ROOT', str(Path.home() / 'klienten-python'))) / 'klienten_manager/config.py'
+    source = Path(os.getenv(
+        'KLIENTEN_PYTHON_ROOT',
+        str(Path(__file__).resolve().parent / 'klienten-python'),
+    )) / 'klienten_manager/config.py'
     if source.is_file():
         spec = importlib.util.spec_from_file_location('coach_client_config', source)
         config = importlib.util.module_from_spec(spec)

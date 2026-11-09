@@ -53,6 +53,10 @@ dist-catalog/
 # Local context links supplied by the workspace owner
 /workspace
 
+# klienten-python lives inside coach-dev as its own git tree (+ .venv); not part of coach commits
+/klienten-python/
+
 # Rollback-Snapshots vor Deploys/Umbauten (nur lokal, nie committen)
 dist-coach.pre-*/
 *.py.pre-*
+/archive/klienten-dev-rest-*/

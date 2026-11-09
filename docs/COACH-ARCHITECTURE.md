@@ -60,7 +60,7 @@ The commit hook checks Coach HTML/assets, configs, source, generators, KB and th
 Läuft im venv von `klienten-python` (`psycopg2`/`sqlalchemy` werden beim Import gebraucht; das System-Python hat sie nicht):
 
 ```sh
-~/klienten-python/.venv/bin/python3 -m uvicorn coach_klienten:app --app-dir ~/coach-dev --host 127.0.0.1 --port 5200
+~/dev/coach-dev/klienten-python/.venv/bin/python3 -m uvicorn coach_klienten:app --app-dir ~/dev/coach-dev --host 127.0.0.1 --port 5200
 ```
 
 Unit-Vorlage: `systemd/coach-klienten.service` (**nicht installiert**; `coach-api.service` :9150 und `klienten-dev.service` sind unverändert). Getestet wurde nur mit `TestClient` gegen die echten Daten, noch nicht als laufender Dienst.

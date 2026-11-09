@@ -10,11 +10,16 @@ from coach_local_plans import clients_root, local_only, plans_module
 
 
 def legacy_ui():
-    return Path(os.getenv('KLIENTEN_UI_ROOT', str(Path(__file__).resolve().parent.parent / 'klienten-dev'))) / 'dist-klienten'
+    # Legacy ClientForge/Konsole dist sits beside coach-dev until that UI is fully absorbed.
+    root = Path(os.getenv('KLIENTEN_UI_ROOT', str(Path.home() / 'dev' / 'klienten-dev')))
+    return root / 'dist-klienten'
 
 
 def include_legacy_clients(app):
-    source = Path(os.getenv('KLIENTEN_PYTHON_ROOT', str(Path.home() / 'klienten-python')))
+    source = Path(os.getenv(
+        'KLIENTEN_PYTHON_ROOT',
+        str(Path(__file__).resolve().parent / 'klienten-python'),
+    ))
     if not (source / 'klienten_manager/main.py').is_file():
         return False
     if str(source) not in sys.path:
