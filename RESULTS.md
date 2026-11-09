@@ -1,3 +1,15 @@
+## 2026-11-09 — Schmiede: Yuhonas + Ernährung; Konsole: CRM
+
+- Schmiede-Source `klienten-ui/schmiede-src/` → Build `/schmiede/`; Tab **Yuhonas** (876 Übungen, lokal + `/yuhonas/*` API).
+- Ernährungsplan-Tab gehärtet: Nutrition-Search `name__search` + OFF-Fallback, Feld-Mapping kcal/ew/kh/fett.
+- `coach_yuhonas.py` gemountet; Legacy-Mount erweitert um `/api/overview` + `/konsole/api/*`.
+- Konsole-Source `klienten-ui/konsole-src/`: Tabs CRM/Zahlung zuerst, Training → Link zur Schmiede.
+- Agent-Doku: `klienten-ui/AGENTS.md`.
+
+## 2026-11-09 — deps: minor/patch Upgrades
+
+- `npm-check-updates --target minor` + Lockfile; `packageManager` bleibt pnpm@11.3.0; `@firebase/util` ^1.12.1.
+
 ## 2026-11-09 — Node Tooling (Biome/knip/engines/smoke)
 
 - `engines.node: >=22.13`, Scripts `tooling:biome|knip|check`.

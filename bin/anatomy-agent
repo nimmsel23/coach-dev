@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# anatomy-agent — SOT: ~/dev/coach-dev/anatomy-kb
+set -euo pipefail
+COACH="${COACH_DEV:-$HOME/dev/coach-dev}"
+ANATOMY="${ANATOMY_KB_ROOT:-$COACH/anatomy-kb}"
+export PYTHONPATH="${ANATOMY}:${COACH}${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m anatomy_kb.cli "$@"

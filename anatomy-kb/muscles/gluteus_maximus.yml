@@ -1,0 +1,31 @@
+muscle_id: gluteus_maximus
+wger_id: 7
+latin: Musculus gluteus maximus
+name_en: Glutes
+is_front: false
+origin: Facies dorsalis des Os ilium, Os sacrum, Os coccygis.
+insertion: Tractus iliotibialis, Tuberositas glutealis femoris.
+innervation: Nervus gluteus inferior (L5-S2).
+function: Streckung und Außenrotation im Hüftgelenk.
+exercises:
+  back_squat:
+    function_in_exercise: Kraftvolle Streckung der Hüfte, besonders in der unteren
+      Phase der Aufwärtsbewegung.
+  lunge:
+    function_in_exercise: Unterstützt die Hüftstreckung und stabilisiert das Becken.
+  squat:
+    function_in_exercise: Kraftvolle Streckung der Hüfte.
+  schulterdruecken_mit_hueftschwung:
+    function_in_exercise: Unterstützt den Hüftimpuls (Drive) durch schnelle Extension.
+  reissen_und_umsetzen:
+    function_in_exercise: Haupterzeuger des explosiven Hüftstreck-Impulses (Triple
+      Extension).
+  wger_1225:
+    function_in_exercise: Hauptmotor der Hüftextension; stabilisiert das Becken in
+      der Frontalebene gegen das Absinken der Spielbeinseite.
+  wger_1224:
+    function_in_exercise: Hauptmotor der Hüftextension, der die Hüfte beim Aufstehen
+      aus der Hocke streckt.
+  yuhonas_car_deadlift:
+    function_in_exercise: Der Hauptmotor der Hüftextension, verantwortlich für das
+      Aufrichten des Oberkörpers und das Hochdrücken des Gewichts vom Boden.

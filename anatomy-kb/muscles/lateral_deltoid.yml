@@ -1,0 +1,11 @@
+muscle_id: lateral_deltoid
+wger_id: None
+latin: Musculus deltoideus, Pars acromialis
+name_en: Lateral deltoid
+is_front: true
+exercises: {}
+origin: Laterale Kante und obere Fläche des Akromions (Acromion)
+insertion: Tuberositas deltoidea des Oberarmknochens (Tuberositas deltoidea humeri)
+innervation: Nervus axillaris (C5, C6)
+function: Abduktion des Arms im Schultergelenk von ca. 15° bis 90°. Bei fixiertem
+  Arm kann der Muskel das Akromion nach unten ziehen.

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>anatomy-kb</title>
+<link rel="stylesheet" href="/style.css">
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="/app.js"></script>
+</head>
+<body>
+<div class="shell" x-data="app()" x-init="init()">
+
+  <!-- Header -->
+  <div class="hdr">
+    <div>
+      <div class="hdr-title">
+        <span class="dot" :class="health === true ? 'dot-green' : health === false ? 'dot-red' : 'dot-grey'"></span>
+        anatomy-kb
+      </div>
+      <div class="hdr-sub">Knowledge Layer · :9200</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <span x-show="syncMsg" x-text="syncMsg" style="font-size:12px;color:var(--muted)"></span>
+      <button class="btn btn-primary" @click="syncAll()" :disabled="syncing">
+        <span x-show="syncing" class="spin">⟳</span>
+        <span x-show="!syncing">↺</span>
+        Sync
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab" :class="{active: tab==='status'}"  @click="tab='status'">Status</button>
+    <button class="tab" :class="{active: tab==='muscles'}" @click="tab='muscles'; loadMuscles()">Muskeln</button>
+    <button class="tab" :class="{active: tab==='gap'}"     @click="tab='gap'; loadGap()">Gap</button>
+    <button class="tab" :class="{active: tab==='freq'}"    @click="tab='freq'; loadFreq()">Training</button>
+    <button class="tab" :class="{active: tab==='demand'}"  @click="tab='demand'; loadDemand()">Demand</button>
+    <button class="tab" :class="{active: tab==='query'}"   @click="tab='query'">Query</button>
+  </div>
+
+  <!-- STATUS -->
+  <div x-show="tab==='status'">
+    <div class="card" x-show="!statusData && !statusErr">
+      <div class="empty"><span class="spin">⟳</span> Lade…</div>
+    </div>
+    <div class="error" x-show="statusErr" x-text="statusErr"></div>
+    <template x-if="statusData">
+      <div>
+        <div class="stat-grid" style="margin-bottom:12px">
+          <template x-for="[k,v] in Object.entries(statusData.tables || {})" :key="k">
+            <div class="stat">
+              <div class="stat-val" x-text="v"></div>
+              <div class="stat-key" x-text="k"></div>
+            </div>
+          </template>
+        </div>
+        <div class="card">
+          <div class="label">Datenbank</div>
+          <code class="mono" style="color:var(--muted)" x-text="statusData.db"></code>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- MUSKELN -->
+  <div x-show="tab==='muscles'">
+    <div class="card" x-show="musclesLoading">
+      <div class="empty"><span class="spin">⟳</span> Lade…</div>
+    </div>
+    <div class="error" x-show="musclesErr" x-text="musclesErr"></div>
+    <template x-if="!musclesLoading && muscleRows.length">
+      <div class="card" style="padding:0;overflow:hidden">
+        <table>
+          <thead>
+            <tr>
+              <th>Muskel</th>
+              <th>Latein</th>
+              <th>Übungen</th>
+              <th>Score</th>
+              <th>Zuletzt</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template x-for="r in muscleRows" :key="r.muscle_id">
+              <tr>
+                <td>
+                  <span class="mono" style="color:var(--accent)" x-text="r.muscle_id"></span>
+                  <span x-show="r.has_anatomy" class="badge badge-green" style="margin-left:6px;font-size:10px">Expert Verified</span>
+                  <span x-show="!r.has_anatomy" class="badge badge-red" style="margin-left:6px;font-size:10px">Draft / Missing</span>
+                </td>
+                <td style="color:var(--muted)" x-text="r.latin || '—'"></td>
+                <td x-text="r.exercise_count"></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div class="bar-wrap">
+                      <div class="bar-fill" :style="`width:${r.score_rate*100}%;background:${r.score_rate>=.6?'var(--green)':r.score_rate>=.3?'var(--yellow)':'var(--red)'}`"></div>
+                    </div>
+                    <span :style="`color:${r.score_rate>=.6?'var(--green)':r.score_rate>=.3?'var(--yellow)':'var(--red)'}`"
+                          x-text="Math.round(r.score_rate*100)+'%'"></span>
+                  </div>
+                </td>
+                <td style="color:var(--muted);font-size:12px" x-text="r.last_flashcard || '—'"></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </template>
+  </div>
+
+  <!-- GAP -->
+  <div x-show="tab==='gap'">
+    <div class="card" x-show="gapLoading">
+      <div class="empty"><span class="spin">⟳</span> Lade…</div>
+    </div>
+    <div class="error" x-show="gapErr" x-text="gapErr"></div>
+    <template x-if="!gapLoading && gapRows.length === 0 && !gapErr">
+      <div class="card"><div class="empty" style="color:var(--green)">Alle Muskeln über 60% — kein Nachholbedarf.</div></div>
+    </template>
+    <template x-if="!gapLoading && gapRows.length">
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px">
+          <span x-text="gapRows.length"></span> Muskeln unter 60% Score
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead>
+              <tr>
+                <th>Muskel</th>
+                <th>Latein</th>
+                <th>Score</th>
+                <th>Übungen</th>
+                <th>Zuletzt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="r in gapRows" :key="r.muscle_id">
+                <tr>
+                  <td>
+                    <span :class="r.score_rate < .4 ? 'badge badge-red' : 'badge badge-yellow'" x-text="r.muscle_id"></span>
+                  </td>
+                  <td style="color:var(--muted)" x-text="r.latin || '—'"></td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div class="bar-wrap">
+                        <div class="bar-fill" :style="`width:${r.score_rate*100}%;background:${r.score_rate<.4?'var(--red)':'var(--yellow)'}`"></div>
+                      </div>
+                      <span :style="`color:${r.score_rate<.4?'var(--red)':'var(--yellow)'}`"
+                            x-text="Math.round(r.score_rate*100)+'%'"></span>
+                    </div>
+                  </td>
+                  <td x-text="r.exercise_count"></td>
+                  <td style="color:var(--muted);font-size:12px" x-text="r.last_flashcard || '—'"></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- TRAINING FREQ -->
+  <div x-show="tab==='freq'">
+    <div class="card" x-show="freqLoading">
+      <div class="empty"><span class="spin">⟳</span> Lade…</div>
+    </div>
+    <div class="error" x-show="freqErr" x-text="freqErr"></div>
+    <template x-if="!freqLoading && freqRows.length">
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px">
+          Muskeln × Trainings-Sessions — aus training_history.sqlite
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead>
+              <tr>
+                <th>Muskel</th>
+                <th>Rolle</th>
+                <th>Session-Tage</th>
+                <th>Sets gesamt</th>
+                <th>Zuletzt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="r in freqRows" :key="r.muscle_id+r.role">
+                <tr>
+                  <td>
+                    <span class="mono" style="color:var(--ink)" x-text="r.muscle_id"></span>
+                    <div style="font-size:11px;color:var(--muted)" x-text="r.latin"></div>
+                  </td>
+                  <td>
+                    <span :class="r.role==='primary'?'badge badge-accent':r.role==='secondary'?'badge badge-yellow':'badge badge-muted'"
+                          x-text="r.role"></span>
+                  </td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <span style="font-weight:700;color:var(--ink)" x-text="r.session_days"></span>
+                      <div class="freq-bar" :style="`width:${Math.min(r.session_days*8,80)}px`"></div>
+                    </div>
+                  </td>
+                  <td x-text="r.total_sets"></td>
+                  <td style="color:var(--muted);font-size:12px" x-text="r.last_trained || '—'"></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- DEMAND -->
+  <div x-show="tab==='demand'">
+    <div class="card" x-show="demandLoading">
+      <div class="empty"><span class="spin">⟳</span> Lade…</div>
+    </div>
+    <div class="error" x-show="demandErr" x-text="demandErr"></div>
+    <template x-if="!demandLoading && demandRows.length === 0 && !demandErr">
+      <div class="card"><div class="empty" style="color:var(--green)">Kein aktueller Veredelungs-Bedarf.</div></div>
+    </template>
+    <template x-if="!demandLoading && demandRows.length">
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px">
+          Meistgenutzte unreviewed Übungen (Veredelungs-Bedarf)
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead>
+              <tr>
+                <th>Übung</th>
+                <th>ID</th>
+                <th>Sessions</th>
+                <th>Aktion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="r in demandRows" :key="r.exercise_id">
+                <tr>
+                  <td>
+                    <span style="font-weight:700;color:var(--ink)" x-text="r.name"></span>
+                  </td>
+                  <td class="mono" style="font-size:12px;color:var(--muted)" x-text="r.exercise_id"></td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <span style="font-weight:700;color:var(--accent)" x-text="r.usage_count"></span>
+                      <div class="freq-bar" :style="`width:${Math.min(r.usage_count*15,100)}px;background:var(--accent)`"></div>
+                    </div>
+                  </td>
+                  <td>
+                    <code style="font-size:11px;color:var(--muted)">anatomy approve <span x-text="r.exercise_id"></span></code>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- QUERY -->
+  <div x-show="tab==='query'">
+    <div class="card" style="margin-bottom:12px">
+      <div class="label" style="margin-bottom:8px">SQL (nur SELECT)</div>
+      <textarea x-model="sql" rows="4"
+        placeholder="SELECT muscle_id, score_rate FROM muscle_coverage ORDER BY score_rate"></textarea>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary" @click="runQuery()" :disabled="queryLoading || !sql.trim()">
+          <span x-show="queryLoading" class="spin">⟳</span>
+          Ausführen
+        </button>
+        <button class="btn btn-ghost" @click="setSql('SELECT muscle_id, latin, score_rate, exercise_count FROM muscle_coverage ORDER BY score_rate')">Coverage</button>
+        <button class="btn btn-ghost" @click="setSql('SELECT muscle_id, latin, score_rate, last_flashcard, exercise_count FROM weak_muscles')">Gap</button>
+        <button class="btn btn-ghost" @click="setSql('SELECT muscle_id, role, session_days, total_sets, last_trained FROM muscle_training_freq ORDER BY session_days DESC')">Training</button>
+        <button class="btn btn-ghost" @click="setSql('SELECT exercise_id, COUNT(*) as muscles FROM exercise_muscles GROUP BY exercise_id ORDER BY muscles DESC LIMIT 20')">Exercises</button>
+      </div>
+    </div>
+    <div class="error" x-show="queryErr" x-text="queryErr"></div>
+    <template x-if="queryRows.length">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:10px 14px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)">
+          <span x-text="queryRows.length"></span> Zeilen
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <template x-for="col in queryCols" :key="col">
+                  <th x-text="col"></th>
+                </template>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="(row, i) in queryRows" :key="i">
+                <tr>
+                  <template x-for="col in queryCols" :key="col">
+                    <td x-text="row[col] ?? '—'"></td>
+                  </template>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </template>
+    <template x-if="!queryLoading && queryRows.length === 0 && !queryErr && queryDone">
+      <div class="card"><div class="empty">Keine Ergebnisse.</div></div>
+    </template>
+  </div>
+
+</div>
+</body>
+</html>

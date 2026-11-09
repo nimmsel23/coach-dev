@@ -1,0 +1,16 @@
+muscle_id: serratus_anterior
+wger_id: 3
+latin: Musculus serratus anterior
+name_en: ''
+is_front: true
+origin: Äußere Flächen der 1. bis 9. Rippe.
+insertion: Margo medialis der Scapula (vor allem Angulus superior und inferior).
+innervation: Nervus thoracicus longus (C5-C7).
+function: Stabilisiert die Scapula an der Thoraxwand durch Protraktion und Fixation
+  und ermöglicht die Aufwärtsrotation der Scapula, wichtig für eine stabile Schulterachse
+  beim Drücken.
+exercises:
+  bench_press:
+    function_in_exercise: Stabilisiert die Scapula an der Thoraxwand durch Protraktion
+      und Fixation und ermöglicht die Aufwärtsrotation der Scapula, wichtig für eine
+      stabile Schulterachse beim Drücken.

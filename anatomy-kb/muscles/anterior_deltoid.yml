@@ -1,0 +1,22 @@
+muscle_id: anterior_deltoid
+wger_id: 2
+latin: Musculus deltoideus, Pars clavicularis
+name_en: Shoulders
+is_front: true
+origin: Clavicula (lateraler Anteil), Acromion, Spina scapulae
+insertion: Tuberositas deltoidea humeri
+innervation: Nervus axillaris (C5, C6)
+function: Primärer Beweger für die Flexion und Anteversion des Arms im Schultergelenk.
+exercises:
+  back_squat:
+    function_in_exercise: Die posterioren Fasern des Deltoideus, zusammen mit der
+      Spina scapulae, dienen als Ablagefläche für die Langhantel bei der Low Bar Position.
+  bench_press:
+    function_in_exercise: Unterstützt den Pectoralis Major bei der Flexion und horizontalen
+      Adduktion des Arms im Schultergelenk.
+  schulterdruecken_mit_hueftschwung:
+    function_in_exercise: Primärer Beweger für die Elevation des Arms über Kopf nach
+      dem Bein-Impuls.
+  reissen_und_umsetzen:
+    function_in_exercise: Hilft beim Abfangen der Last über Kopf (Catch) und beim
+      Ausstoß (Jerk).
