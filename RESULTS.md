@@ -3,6 +3,12 @@
 - Org-Task `7cd93f79` done: `9da51ea1`+3 Docs bereits Ancestor von `origin/dev` `c6689342`.
 - Check-Beleg: Deploy Coach `42655793637`, Pages Docs `42655793652` (success).
 
+## 2026-11-09 — Inbox-Übergang: GitHub-PRs + CI-Enrichment
+
+- Public KB `nimmsel23/fitness`: Workflow `Enrich Inbox`, `INBOX.md`, `list_inbox_prs.py`.
+- Coach `getGlobalInbox()` (MODE=coach): offene `inbox/**`-PRs zuerst, Firestore danach.
+- Approve/Reenrich auf PR-Items öffnen GitHub (noch kein Merge-Gate in der App).
+
 ## 2026-11-09 — Funnel-Base `/fitness` (kein Doppelpfad) + CORS
 
 - `FUNNEL_FITNESS_API_BASE` → `…/fitness` (Funnel proxyt schon auf `:9150/fitness/`).
