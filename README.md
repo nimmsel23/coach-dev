@@ -1,130 +1,158 @@
 # Coach (`coach-dev`)
 
-**Freedom:** App nutzbar für Klientenbetreuung und Fortschrittsüberwachung —
-[FREEDOM.md](./FREEDOM.md). **Laufzeit-SOT:** `server.py` `:9150`
-(`coach-api.service`). Docs: [FOCUS.md](./FOCUS.md),
-[docs/COACH-SERVER.md](./docs/COACH-SERVER.md),
-[docs/OWNERSHIP-MAP.md](./docs/OWNERSHIP-MAP.md).
+Eigenständiges Coach-Produkt: HTTP-Server, Katalog/Inbox, Anbindung des
+Plan-Editors und Firebase-Hosting für die Coach-Oberfläche. Zielbild:
+[FREEDOM.md](./FREEDOM.md). Quartalsfokus: [FOCUS.md](./FOCUS.md).
+Zuständigkeiten: [docs/OWNERSHIP-MAP.md](./docs/OWNERSHIP-MAP.md).
 
----
+## Was hier liegt
 
-# Fitness Centre (historischer Fork-Kopf)
+| Bereich | Ort im Repo | Rolle |
+| --- | --- | --- |
+| HTTP-Server | [`server.py`](./server.py) | Ein Prozess: Catalog/Inbox (`fitness.api`), optionales `/fitness-api`, Fuel-Proxy, eingebettetes Relax, statische UIs |
+| Katalog-CLI / Inbox | [`fitness/catalog/cli.py`](./fitness/catalog/cli.py) | Typer-CLI (`fitness-catalog`); Inbox-Befehle als Unterkommando `inbox` |
+| Dispatcher | [`bin/coach`](./bin/coach) | `catalog`, `inbox`, `server`, `release` und weitere Werkzeuge |
+| Plan-Editor | [`modules/plan`](./modules/plan) | Gepinntes Submodul; Coach baut ihn ein, besitzt ihn nicht |
+| Coach-UI | `src/`, `coach.html`, `coach-shell.html`, `local.html` | Vite-Build nach `dist-coach/` |
+| Katalog-UI | `catalog-ui/` | Build nach `dist-catalog/` (`pnpm run build:catalog-ui`) |
+| Hosting | [`.firebaserc`](./.firebaserc), [`firebase.json`](./firebase.json) | Target `coach`, Site `vos-coach`, Ausgabeverzeichnis `dist-coach` |
 
-Workout-Tracking PWA und CLI für Krafttraining — Pflichtaufgaben-Werkzeug der Diplom Präventiver Vitaltrainer Ausbildung (Fitnesstrainer-Modul, Health Personal Fitness Trainer, Prävention).
-Der Node-`:9100`-Pfad unten ist **nicht** die Coach-API.
+`server.py` hört standardmäßig auf `127.0.0.1:9150` (`COACH_HOST` / `COACH_PORT`,
+auch `--host` / `--port`). Die Unit [`systemd/coach-api.service`](./systemd/coach-api.service)
+setzt dieselben Werte und trägt den Alias `fitness-api.service`. Zusätzlich
+bindet der Prozess den Alias-Port `8788` (`COACH_ALIAS_PORT`), sofern er nicht
+auf `0` gesetzt ist. Liveness: `GET /health` und `GET /_coach/health`.
 
-**Ziel:**
-- Praktisches Werkzeug zur Unterstützung der Ausbildung: Trainingspläne erstellen, Logs führen, Anatomie-Lehre dokumentieren
-- Offline-fähiges Workout-Logging ohne externe Apps
-- Strukturierte Trainingspläne mit vollständig integriertem wger Backend (lokal) + yuhonas Ergänzung
-- Lokale, file-basierte Speicherung unter `~/.aos/fitness/`
-- Anatomie Teaching Layer für echte Trainer-Ausbildung (Ursprung, Ansatz, Innervation, Coaching-Cues)
-- Firebase PWA unter `fitness-aos.web.app` für mobiles Logging
-
-**Vollständige technische Dokumentation:** [CLAUDE.md](./CLAUDE.md)
-
----
-
-## System: fitness-agent (Prophet) + fitness-dev (Tempel)
-
-**fitness-agent** (Skill) — Katalog-Manager:
-- Liest Fitnesstrainer-Module der Ausbildung
-- Schreibt & erweitert Katalog in `~/fitness-dev/catalog/` (YAML: Exercises, Anatomy Teaching, Rules, Mappings)
-- Schreibt Tickets für fitness-dev-coding-agent wenn Features/Gaps sichtbar werden
-- Silent DB-Manager: Anatomie-Lehre, Katalog-Normalisierung, Quellen-Integration
-
-**fitness-dev** (dieses Repo) — Backend + Frontend, gebaut von fitness-dev-coding-agent:
-- Backend (`server.mjs`, `fitness-runtime.mjs`): API für Session-Logs, Pläne, Coverage-Analyse
-- Frontend (React + Vite): Workout-Logging, Trainingsplanung, Anatomie-Ansicht, Muskelabdeckungs-Analyse
-- Firebase PWA (`pwa/`): mobiles Logging direkt in Firestore, kein lokaler Server
-
----
+Unter `:9150` liegen die gebaute Katalog-UI auf `/` und `/catalog-ui/`, die
+Coach-UI auf `/coach/` und Dateien aus dem Submodul `website/` auf `/website/`.
 
 ## Stack
 
-| Schicht | Technologie | Port |
-|---------|-------------|------|
-| Backend | Node.js (`server.mjs`) | 9100 |
-| Frontend | React + Vite | 5902 (dev) |
-| PWA | Firebase Hosting | fitness-aos.web.app |
-| Exercise DB | wger (lokal, derzeit gestoppt) | 80 |
-| Ergänzung | yuhonas free-exercise-db | — |
+- **Python:** FastAPI und Uvicorn. Server-Abhängigkeiten in
+  [`requirements-server.txt`](./requirements-server.txt). Das Paket `fitness`
+  (Katalog, API-Router, CLIs) steht in [`pyproject.toml`](./pyproject.toml)
+  (Python ≥ 3.11, Poetry).
+- **Frontend:** React 18 und Vite 6 (`package.json`, Paketmanager pnpm 11).
+  Der Dev-Server lauscht auf Port **5902** und proxyt API-Pfade nach
+  `http://localhost:9150`. Der Coach-Build enthält zusätzlich die Vue-Shell
+  `coach-shell.html` neben den React-Seiten `coach.html`, `local.html` und
+  `clientforge.html`.
 
----
+## Submodule
 
-## Python Environment (uv)
+Aus [`.gitmodules`](./.gitmodules):
 
-Dieses Projekt nutzt [uv](https://github.com/astral-sh/uv) für performantes Python-Paketmanagement.
+| Pfad | Remote | Branch im Eintrag |
+| --- | --- | --- |
+| `fitness/catalog/kb` | `git@github.com:nimmsel23/fitness.git` | `main` |
+| `modules/plan` | `https://github.com/nimmsel23/plan-dev.git` | `dev` |
+| `vitalos` | `git@github.com:nimmsel23/vitalos.git` | `coach` |
+| `website` | `git@github.com:nimmsel23/daniel-vitaltrainer-firebase.git` | `main` |
 
-```bash
-uv sync                  # Virtual Environment erstellen & Abhängigkeiten installieren
-uv run fitness-agent     # CLI-Tool ausführen
-uv run ./fitnessctl      # Ecosystem Management (API, UI, Watcher)
+`fitness/catalog/kb` ist die YAML-Wissensbasis. Der Katalog-Python-Code liegt
+im umgebenden Paket `fitness/catalog/` in diesem Repo. `modules/plan` ist der
+Plan-Editor; Vite löst `@plan` dorthin auf. Der Gitlink pinnt einen Commit,
+der Branch-Eintrag `dev` benennt nur die Quelllinie. `website` ist das
+Vitaltrainer-Portal. `vitalos` ist ein optionales, historisches Checkout; der
+Deploy-Workflow [`.github/workflows/deploy-coach.yml`](./.github/workflows/deploy-coach.yml)
+initialisiert es nicht.
+
+```sh
+git submodule update --init modules/plan fitness/catalog/kb website
+# nur bei Bedarf:
+git submodule update --init vitalos
 ```
 
----
+## Schnittstellen
 
-## Commands
+**Catalog / Inbox im selben Prozess.** `attach_fitness_api()` hängt die Router
+aus `fitness.api` direkt an die Coach-App: Sessions, Journal, Exercises,
+Coaching, Pläne, Workouts, Anatomie und die Inbox unter `/fitness/inbox`
+(`exercises.py` bindet `exercises_inbox` ein). Dafür gibt es keinen separaten
+Upstream-Port.
 
-```bash
-npm run dev          # Backend (9100) + Vite DevServer (5902) mit HMR
-npm run ui:dev       # Nur Vite DevServer
-npm run build        # Production-Build → dist/
-npm run build:catalog  # Katalog → ~/.aos/fitness/workouts/catalog.json
+**`/fitness-api` aus dem Backend-Paket.** `load_fitness_app()` importiert
+`backend.api.app` und mountet `create_app()` unter `/fitness-api`. Voraussetzung
+ist die Umgebungsvariable `COACH_FITNESS_BACKEND_ROOT`: ein Verzeichnis, das
+`backend/api/app.py` enthält. Fehlt die Datei, startet Coach ohne diesen Mount
+(`fitness_frontend_api` in `/health` ist dann `unavailable`). Checkout-Pfad und
+Paketlayout des Backends sind hier absichtlich nicht festgeschrieben; die
+Anbindung läuft über diese Variable. `systemd/coach-api.service` setzt sie in
+der lokalen Unit — das ist Maschinenkonfiguration.
 
-python -m catalog.catalog audit       # Katalog-Qualität prüfen
-python -m catalog.catalog kb-sync     # catalog/kb → Firestore
-bin/firestore-sync pull                     # Firestore → ~/.aos/fitness/
+**Fuel-Proxy.** [`coach-backends.json`](./coach-backends.json) enthält als
+einzigen Eintrag `fuel` → `http://127.0.0.1:8000/api/fuel`. Daraus werden
+`/api/fuel` und `/fuel-api` weitergereicht. Ein Upstream auf den eigenen
+Coach-Port wird abgelehnt. Weitere Proxys stehen in derselben Datei bzw. über
+`COACH_<NAME>_API_URL`; siehe [coach-backends.README.md](./coach-backends.README.md).
+
+**Relax**, wenn vorhanden: `src/relax_api.py` lädt eine fremde FastAPI-`app`
+(`COACH_RELAX_API_FILE`, Code-Default `~/dev/relax-dev/server.py`) und mountet
+sie unter `/api/relax` und `/relax-api`. Fehlt die Datei, entfallen die Routen.
+
+## Lokal starten
+
+```sh
+pnpm install
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-server.txt
+
+pnpm run build:catalog-ui    # dist-catalog/; Quelle catalog-ui/ (oder COACH_CATALOG_SOURCE)
+.venv/bin/python server.py   # 127.0.0.1:9150
+
+# liegt FastAPI im aufgerufenen python3:
+pnpm start                    # python3 server.py
+pnpm run server:dev           # python3 server.py --reload
+
+# Frontend, startet den Python-Server nicht:
+pnpm run dev                  # Vite :5902, öffnet /coach.html
+pnpm run ui:dev               # Vite :5902, öffnet /coach-shell.html
 ```
 
----
+User-Unit: `bin/coach-server install|start|status|health|logs`. Vor einem
+zweiten Prozess auf demselben Port den laufenden Dienst stoppen.
+`/fitness-api` erscheint nur, wenn `COACH_FITNESS_BACKEND_ROOT` gesetzt ist
+und das Paket importierbar ist.
 
-## Daten
+Die Katalog-CLI ist `fitness-catalog` (`fitness.catalog.cli:main` in
+`pyproject.toml`). `bin/coach catalog` und `bin/coach inbox` zeigen auf
+dieselbe Typer-App. `coach_cli.py` setzt `FITNESS_ROOT` auf `../fitness-dev`
+und startet das Paket von dort; der Quelltext liegt in diesem Checkout unter
+`fitness/`. Ob der Dispatcher ohne dieses Nachbarverzeichnis startet, ist
+offen. Details: [docs/COACH-CLI.md](./docs/COACH-CLI.md).
 
+## Deploy
+
+Firebase-Projekt `fitness-aos`, nur Hosting-Target `coach` (Site `vos-coach`,
+öffentlich `https://vos-coach.web.app` — diese URL prüft
+[`bin/coach-release`](./bin/coach-release)). Firestore-Regeln stehen nicht in
+`firebase.json` und werden von hier nicht ausgerollt.
+
+```sh
+pnpm run build:firebase:coach   # vite build --mode coach → dist-coach/
+pnpm run firebase               # dieser Build plus firebase deploy --only hosting:coach
 ```
-~/.aos/fitness/
-├── sessions/        YYYY-MM-DD.json — Session-Logs
-├── journal/         YYYY-MM-DD.md — Text-Notizen
-├── body/            YYYY-MM-DD.json — Körpermessungen
-├── plan.json        Aktiver Trainingsplan
-└── theme.json       UI-Präferenz
-```
 
----
+`pnpm run deploy` akzeptiert nur den Modus Firebase und ruft danach
+`npm run firebase` auf. `deploy.sh`, `pnpm run deploy:local` und
+`pnpm run deploy:prod` beenden sich mit dem Hinweis, dass es kein lokales
+Staging-/Prod-Dienst-Deploy gibt.
+
+CI ([`.github/workflows/deploy-coach.yml`](./.github/workflows/deploy-coach.yml)):
+
+- Push auf `dev` (Pfadfilter): Preview-Channel `dev`, 24 Stunden, nur `hosting:coach`.
+- Manuell `workflow_dispatch` mit `production=true`, und nur von `dev`: Live-Deploy.
+- `bin/coach-release` stößt denselben Production-Lauf für den bereits
+  veröffentlichten `origin/dev` an und prüft `release.json` auf
+  `https://vos-coach.web.app`.
 
 ## Dokumentation
 
 | Dokument | Inhalt |
-|----------|--------|
-| [docs/FIREBASE.md](./docs/FIREBASE.md) | Firebase-Live-Release, `vitalos/fitness-app`, lokale `.local -> /opt` Deploy-Kette |
-| [CLAUDE.md](./CLAUDE.md) | API-Referenz, Katalog-Struktur, Session-Format, Design-Patterns |
-| [FIRESTORE.md](./FIRESTORE.md) | Firebase/Firestore Sync-Architektur |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | Technische Architektur, Datenquellen |
-| [VISION.md](./VISION.md) | Richtung, Volume Landmarks, Anatomie Teaching Layer |
-| [ROADMAP.md](./ROADMAP.md) | Feature-Roadmap |
-| [AGENTS.md](./AGENTS.md) | Agent-Workflow |
-
-Kurz zu den Invarianten:
-- localhost/Desktop kommt aus `~/fitness-dev`
-- Firebase-Live-Release kommt aus `vitalos/fitness-app`
-- Die lokale `.local -> /opt`-Kette ist Teil des funktionierenden Setups und kein
-  austauschbares Detail. `@vos/cross-app-aliases` wurde entfernt (2026-11-01):
-  Fitness nutzt nur `@relax` und `@learn`, aufgelöst über die Nachbar-Checkouts
-  (`siblingDir()` in `vite.config.js`).
-
----
-
-## Status
-
-- ✅ Backend + API (Node.js, Port 9100)
-- ✅ Frontend Views (Dashboard, Session, Journal, Muscles, Learn, WeeklyReview)
-- ✅ Firebase PWA (fitness-aos.web.app) — Firestore-basiert, kein lokaler Server
-- ✅ Firestore Sync (on-demand pull via Bridge-Ping, Oneshot beim Boot)
-- ✅ wger Integration vorhanden, aber Stand 2026-08-30 bewusst gestoppt da aktuell nicht als aktives Backend genutzt
-- ✅ yuhonas Integration (Bilder, Varianten)
-- ✅ Katalog-Struktur (Exercises, Anatomy Teaching, Rules, Maps)
-- ✅ BodyMap (react-body-highlighter) — Muskelvisualisierung in Session + Coverage-View
-- ✅ Gmail-Pipeline (`bin/fitness-mail`)
-- ✅ `fitness` CLI (Python/Typer) via `fitnessctl`
-- ⏳ Anatomie-Lehre für alle Übungen
-- ⏳ PWA Offline-Unterstützung
+| --- | --- |
+| [docs/OWNERSHIP-MAP.md](./docs/OWNERSHIP-MAP.md) | Wer welche Quelle besitzt |
+| [docs/COACH-SERVER.md](./docs/COACH-SERVER.md) | Prozess, Routen, Umgebungsvariablen |
+| [docs/COACH-ARCHITECTURE.md](./docs/COACH-ARCHITECTURE.md) | Shell, Releases, Submodule |
+| [docs/COACH-PLAN-WORKFLOW.md](./docs/COACH-PLAN-WORKFLOW.md) | Plan-Editor und Pointer |
+| [docs/COACH-CLI.md](./docs/COACH-CLI.md) | `bin/coach` |
+| [AGENTS.md](./AGENTS.md) | Arbeitsregeln für dieses Repo |
