@@ -3,11 +3,9 @@
 - [ ] Den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy verifizieren.
 
 
--   **Review-Karte (Inbox-UI)**: Entscheidungsoberflaeche statt 40-Felder-Editor —
-    Identitaet, 2-Satz-Was, Muskeln (primae), 3 Coaching-Highlights, Herkunft als ein
-    Text + Freigeben/Loeschen/Verbessern. Braucht: Frontend-Serve-Umstellung (Katalog-
-    UI aus Coach-Dist statt Fitness-Dist auf 8100-Staging) und User-Feedback zur
-    konkreten Kartenform.
+-   **Frontend-Serve Katalog-UI**: Coach-Dist statt Fitness-Dist auf 8100-Staging
+    (aus Review-Karte-Hit ausgegliedert; Scope → `+ceo`). Review-Karte selbst
+    2026-11-09 als Entscheidungssurface in `InboxCard` geliefert.
 -   **fitness-dev-KB-Kopie**: traegt weiter eine divergente KB-Kopie (nur noch
     Konsument). Beim naechsten Upstream-Merge Katalog-Drift beachten; Ausmisten der
     Kopie als separater Schnitt, sobald sicher keine Pipeline mehr dort liest.
