@@ -1,3 +1,9 @@
+## 2026-11-09 — Backend-Breakthrough dokumentiert + KB-Submodul
+
+- `docs/ARCHITECTURE.md` + Root-`ARCHITECTURE.md`: Breakthrough (Rollen,
+  Laufzeit-Fluss). `fitness/catalog/kb` = Submodul `nimmsel23/fitness` @
+  `e1874f2`. OWNERSHIP-MAP nachgezogen.
+
 ## 2026-11-09 — KB-Daten-SOT = ~/dev/fitness (STALE korrigiert)
 
 - `~/dev/fitness` ist die YAML-KB-SOT; Coach `catalog/kb/` = Live-Spiegel.
