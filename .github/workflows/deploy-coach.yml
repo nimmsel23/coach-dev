@@ -51,8 +51,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Initialize pinned Plan source
-        run: git submodule update --init modules/plan
+      - name: Initialize pinned Plan + Fitness-KB sources
+        run: |
+          git submodule update --init modules/plan
+          # build-sixpack-data.mjs liest fitness/catalog/kb/exercises/{6pack,calisthenics}
+          git submodule update --init fitness/catalog/kb
 
       # plan-dev hält nur noch das Plan-Eigene; Gemeinsames kommt per Overlay aus fitness-dev
       # (modules/plan/vite-fitness-overlay.mjs). Stand: modules/plan/fitness.ref (Branch oder SHA).

@@ -1,3 +1,7 @@
+## 2026-11-09 — Deploy-Coach: Fitness-KB-Submodule in CI init
+
+- `deploy-coach.yml`: `git submodule update --init fitness/catalog/kb` — ohne das scheitert `build-sixpack-data` an `exercises/6pack` (ENOENT seit mehreren Dev-Pushes heute).
+
 ## 2026-11-09 — vitalos-Pin a092508 + @kb-Alias für Plan-Submodul
 
 - Shell-Pin `vitalos` → `a092508` (esbuild/Vite-8-Vorbeuge).
