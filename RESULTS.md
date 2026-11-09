@@ -1,3 +1,9 @@
+## 2026-11-09 — Funnel-Base `/fitness` (kein Doppelpfad) + CORS
+
+- `FUNNEL_FITNESS_API_BASE` → `…/fitness` (Funnel proxyt schon auf `:9150/fitness/`).
+- Desktop-Fallback `:6100` → `:9150`. CORSMiddleware auf `server.py` für Firebase→Funnel.
+- Doku `docs/FIREBASE.md` nachgezogen. Live: OPTIONS/GET mit `access-control-allow-origin: *`.
+
 ## 2026-11-09 — Ownership-Map Einstiegstabelle
 
 - Kurztabelle oben; Docs an Mount/`fitness.*`-SOT angeglichen.
