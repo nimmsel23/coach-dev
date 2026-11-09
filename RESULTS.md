@@ -1,3 +1,11 @@
+## 2026-11-09 — Ownership-Map Catalog/Agent + Orphan-Archiv
+
+- `docs/OWNERSHIP-MAP.md`: Lineage fitness-agent → catalog; SOT =
+  `coach-dev/fitness/` (nicht `~/dev/backend`). `coach catalog` / Alias `agent`.
+- Orphans `~/dev/fitness-cli` + `~/dev/fitness-backend` →
+  `~/dev/_archive/2026-11-09-fitness-orphans/`. Disabled `fitness-dev.service`
+  WD → `fitness-dev`. `~/dev/fitness` (KB-Git) als Near-Duplikat markiert.
+
 ## 2026-11-09 — Praxis-/Klienten-CLIs im Coach-Dispatcher
 
 - `coach praxis`, `coach klientenctl` (`klienten`), `coach konsolectl` (`konsole`)
