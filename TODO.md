@@ -7,7 +7,7 @@ Blocker), erst danach diese Liste.
 Arbeitsqueue zweiter Stufe. Steht hier etwas und `FIRE.md` ist leer/blockiert →
 nächster AL-Lauf arbeitet es ab (Owner-Klarstellung 2026-11-09: kein
 CEO-`+hit`-Gate). Erledigt abhaken/streichen; Folgen hier oder in `NEXT.md`
-nachziehen. Optional später: `FOCUS.md` / `FREEDOM.md` / `FRAME.md`.
+nachziehen. `FOCUS.md` / `FREEDOM.md` aktiv; `FRAME.md` optional später.
 
 ## Offen
 
