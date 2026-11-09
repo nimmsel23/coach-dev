@@ -38,13 +38,13 @@ Laufzeit-Zuhause.
 embedded Relax, Legacy-Klienten und Coach-SPA.
 
 - Kein zweites Zuhause unter `vitalos` / `vitalos-prod` für diesen Server.
-- Kein Pflicht-Tree-Move von `~/dev/backend` hierher — Trees dürfen liegen;
-  Edits am Coach-HTTP-Server nur in coach-dev.
-- `~/dev/backend`, `plan-backend`, `fuel-backend` / alte `fitness-backend`-Pfade:
-  Pointer „nicht Coach-:9150-SOT“, keine parallele Coach-API-Entwicklung.
+- Edits am Coach-HTTP-Server nur in coach-dev. Sessions-Python-SOT:
+  `~/dev/backend/fitness/backend` — Coach mountet `/fitness-api` (Default-Root
+  `~/dev/backend/fitness`).
+- Node/Functions in `~/dev/backend`: kein paralleles Coach-Inbox-Zuhause.
 - Upstreams in `coach-backends.json` nur noch für Domänen, die bewusst fremd
-  bleiben (heute: Fuel → VitalOS `:8000`). Fitness/`fitness.api` und Relax sind
-  lokal im selben Prozess.
+  bleiben (heute: Fuel → VitalOS `:8000`). Fitness/`fitness.api`, `/fitness-api`
+  und Relax sind lokal im selben Prozess.
 
 Details: [docs/COACH-SERVER.md](docs/COACH-SERVER.md),
 [docs/OWNERSHIP-MAP.md](docs/OWNERSHIP-MAP.md).

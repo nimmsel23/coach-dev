@@ -1,3 +1,8 @@
+## 2026-11-09 — /fitness-api aus ~/dev/backend/fitness
+
+- `COACH_FITNESS_BACKEND_ROOT` Default → `~/dev/backend/fitness`.
+- Unit + `~/.config/coach/backend.env` gesetzt. Restart braucht Freigabe.
+
 ## 2026-11-09 — Deploy: FITNESS_KB_DIR + Plan-Pin kb-dir
 
 - `deploy-coach.yml`: nach KB-Symlink `FITNESS_KB_DIR` setzen.

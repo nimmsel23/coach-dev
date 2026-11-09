@@ -32,17 +32,19 @@ für feinere App-Features. Catalog/KB = Coach-Werkzeug, nicht Kern der Fitness-/
 | **KB / Catalog-Daten** (Exercises+Muscles, YAML) | `~/dev/fitness` → Submodul `fitness/catalog/kb` | eine Expert-DB; Gate = Inbox |
 | Catalog-**Python** (CLI, Enrichment, Audit, Inbox) | `~/dev/coach-dev/fitness/catalog/` | `coach catalog` — Werkzeug, nicht App-Kern |
 | **Coach-HTTP-Server** (`server.py`, Keepers) | `~/dev/coach-dev` | `coach-api.service` **:9150** — ein Prozess |
-| FastAPI Catalog/Sessions/Workouts (in-process) | `~/dev/coach-dev/fitness/api/` | von `server.py` gemountet; kein `:8100` |
+| FastAPI Catalog/Inbox/Workouts (in-process) | `~/dev/coach-dev/fitness/api/` | von `server.py` gemountet; kein `:8100` |
+| FastAPI Sessions/UI (`/fitness-api`) | `~/dev/backend/fitness/backend` | Coach mountet via `COACH_FITNESS_BACKEND_ROOT` (Default `~/dev/backend/fitness`) |
 | Workout-/Plan-Schmiede UI + Plan-Editor | Plan (`~/dev/plan-dev`) konsumiert von Coach (`modules/plan`) | Plan owns editor; Coach hosts Schmiede |
-| Node/Hono + Cloud Functions | `~/dev/backend` (+ `fuel/`; Kopien: plan-backend) | **kein** Coach-:9150-SOT; siehe Pointer-README dort |
-| Fitness Firebase PWA (Logging, Overlay) | `~/dev/fitness-dev` | Hosting/UI; Python-Tree dort ist **Fork-Rest**, nicht API-SOT |
-| Fuel App | `~/dev/fuel-dev` + Node in `~/dev/backend/fuel` | getrennt von Fitness-Catalog |
+| Node/Hono + Cloud Functions | `~/dev/backend` (+ `fuel/`; Kopien: plan-backend) | **kein** Coach-Inbox-SOT; Python Sessions-API läuft über Coach-Mount |
+| Fitness Firebase PWA (Logging, Overlay) | `~/dev/fitness-dev` | Hosting/UI; kein nested Python-`backend/` mehr |
+| Fuel App | `~/dev/fuel-dev` + Node/Python in `~/dev/backend/fuel` | Fuel Node/Python getrennt; Coach proxied Fuel → `:8000` |
 | Klienten-Python / Praxis-CLIs | `~/dev/coach-dev/klienten-python`, Sibling `~/dev/praxis-dev` | `coach klientenctl`, `coach praxis` |
 
 **Korrektur:** Coach-Laufzeit-SOT ist **coach-dev** (`server.py` :9150).
-`~/dev/backend` darf Node/Functions behalten, ist aber **kein** zweites
-Coach-API-Zuhause (kein Pflicht-Umzug, keine parallele Coach-Entwicklung).
-Python-Tooling liegt in `coach-dev/fitness/`. Die **YAML-KB** gehört dem
+Inbox/Catalog bleiben in `coach-dev/fitness/`. Das Sessions-/Sync-Python-Paket
+liegt unter `~/dev/backend/fitness/backend` und wird von Coach unter
+`/fitness-api` übernommen (kein zweiter Listener). Node/Functions in
+`~/dev/backend` bleiben getrennt. Die **YAML-KB** gehört dem
 Daten-Repo `~/dev/fitness` und ist seit 2026-11-09 als Git-Submodul unter
 `fitness/catalog/kb` angebunden. KB-Edits dort = Working Tree des Daten-Repos
 → in `~/dev/fitness` / dem Submodul committen und den Gitlink in Coach nachziehen.

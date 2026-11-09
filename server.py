@@ -59,11 +59,23 @@ def fitness_frontend_dist() -> Path:
     return Path.home() / "dev" / "fitness-dev" / "frontend" / "dist"
 
 
+def hub_public_dist() -> Path:
+    """Vital Centre HTML (ehem. vital-hub :8788). COACH_HUB_DIR überschreibt."""
+    configured = os.environ.get("COACH_HUB_DIR")
+    if configured:
+        return Path(configured).expanduser().resolve()
+    return Path.home() / ".local" / "vital-hub" / "vitalctx" / "public"
+
+
 def load_fitness_app():
-    """Optional local-mode Fitness app (sessions/UI) under /fitness-api — not the coach inbox API."""
+    """Sessions/UI FastAPI under /fitness-api — SOT: ~/dev/backend/fitness/backend.
+
+    Not the coach inbox API (`fitness.api` via attach_fitness_api). Needs
+    `fitness.*` on sys.path (coach-dev / fitness-dev already provide that).
+    """
     source_root = Path(os.environ.get(
         "COACH_FITNESS_BACKEND_ROOT",
-        Path.home() / "dev" / "fitness-dev",
+        Path.home() / "dev" / "backend" / "fitness",
     )).expanduser().resolve()
     if not (source_root / "backend" / "api" / "app.py").is_file():
         return None
@@ -71,6 +83,10 @@ def load_fitness_app():
     source = str(source_root)
     if source not in sys.path:
         sys.path.insert(0, source)
+    # Prefer this tree's `backend` package over any other checkout on sys.path.
+    for name in list(sys.modules):
+        if name == "backend" or name.startswith("backend."):
+            del sys.modules[name]
     module = importlib.import_module("backend.api.app")
     module_path = Path(module.__file__).resolve()
     if not module_path.is_relative_to(source_root):
@@ -152,7 +168,11 @@ def configured_backends(overrides: dict[str, str] | None = None) -> dict[str, ht
         url = httpx.URL(origin)
         if url.scheme not in ("http", "https") or not url.host or url.query or url.fragment or url.username or url.password:
             raise ValueError(f"Backend {name} must be an HTTP(S) URL without credentials or query")
-        if url.host in ("localhost", "127.0.0.1", "::1", "0.0.0.0") and url.port == int(os.environ.get("COACH_PORT", "9150")):
+        coach_ports = {int(os.environ.get("COACH_PORT", "9150"))}
+        alias = os.environ.get("COACH_ALIAS_PORT", "").strip()
+        if alias.isdigit():
+            coach_ports.add(int(alias))
+        if url.host in ("localhost", "127.0.0.1", "::1", "0.0.0.0") and url.port in coach_ports:
             raise ValueError(f"Backend {name} points back to Coach; choose a separate domain worker port")
         urls[name] = url
     # Proxied domains only (see coach-backends.README.md). Fitness/Relax are local.
@@ -160,12 +180,14 @@ def configured_backends(overrides: dict[str, str] | None = None) -> dict[str, ht
 
 
 def create_app(*, catalog_directory: Path | None = None, coach_directory: Path | None = None,
-               fitness_directory: Path | None = None,
+               fitness_directory: Path | None = None, hub_directory: Path | None = None,
                upstream_url: str | None = None, backend_urls: dict[str, str] | None = None,
                transport=None, include_fitness_api: bool = True) -> FastAPI:
     catalog = (catalog_directory or catalog_dist()).resolve()
     coach = (coach_directory or Path(os.environ.get("COACH_UI_DIR", ROOT / "dist-coach"))).resolve()
     fitness_ui = (fitness_directory or fitness_frontend_dist()).resolve()
+    # hub_directory=None → Defaultpfad; explizit fehlender Ordner = Hub aus (Tests).
+    hub = (hub_directory if hub_directory is not None else hub_public_dist()).resolve()
     overrides = dict(backend_urls or {})
     if upstream_url:
         overrides["fitness"] = upstream_url
@@ -367,21 +389,83 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def catalog_ui(path: str):
         return frontend(catalog, path)
 
-    # Statische Coach-Dateien: public-coach (APKs, Downloads) und das Submodul website/
-    # (website/coach: Portal, Manifest, Icons; website/src/6pack.html). Vorrang vor dem Katalog, wie beim Firebase-Hosting.
-    public_dirs = [ROOT / "public-coach", ROOT / "website" / "coach"]
-    website_pages = {"6pack.html": ROOT / "website" / "src" / "6pack.html"}
+    # Statische Coach-Dateien unter :9150 — früher lag Website-Kram in public-coach/,
+    # damit man ihn lokal ohne Firebase erreicht. Seit dem Submodul gilt:
+    # public-coach = APKs/Entwürfe; website/coach = Portal/Icons; website/src =
+    # Vitaltrainer-Seiten (index/vitalos/6pack/…); optional gebautes Dashboard.
+    # Root = Vital Centre (ehem. vital-hub :8788 public/); Catalog bleibt /catalog-ui/.
+    # Root-Dateien (/vitalos.html) UND Prefix /website/… zeigen auf denselben Stand.
+    public_dirs = [
+        ROOT / "public-coach",
+        ROOT / "website" / "coach",
+        ROOT / "website" / "src",
+        ROOT / "website" / "vitalos-dashboard" / "dist",
+        ROOT / "website" / "vitalos-dashboard",
+    ]
+    if hub.is_dir():
+        public_dirs.insert(0, hub)
+    website_dirs = [
+        ROOT / "website" / "src",
+        ROOT / "website" / "coach",
+        ROOT / "website" / "vitalos-dashboard" / "dist",
+        ROOT / "website" / "vitalos-dashboard",
+        ROOT / "website",
+    ]
 
-    def public_or_catalog(relative: str):
-        for directory in public_dirs:
+    def file_from_dirs(relative: str, directories: list[Path]):
+        for directory in directories:
+            if not directory.is_dir():
+                continue
             base = directory.resolve()
             candidate = (base / relative).resolve()
             if candidate.is_relative_to(base) and candidate.is_file():
                 return FileResponse(candidate, headers={"Cache-Control": "no-cache"})
-        page = website_pages.get(relative)
-        if page is not None and page.is_file():
-            return FileResponse(page, headers={"Cache-Control": "no-cache"})
+        return None
+
+    def public_or_catalog(relative: str):
+        relative = (relative or "").strip("/")
+        # Nur Vital Centre (Hub) darf Catalog auf / verdrängen — nicht website/src.
+        if not relative or relative == "index.html":
+            if hub.is_dir():
+                found = file_from_dirs("index.html", [hub])
+                if found is not None:
+                    return found
+            return frontend(catalog, "" if not relative else relative)
+        found = file_from_dirs(relative, public_dirs)
+        if found is not None:
+            return found
+        if "." not in Path(relative).name:
+            found = file_from_dirs(f"{relative}/index.html", public_dirs)
+            if found is not None:
+                return found
         return frontend(catalog, relative)
+
+    def website_static(relative: str = ""):
+        relative = relative.strip("/")
+        if not relative or relative.endswith("/"):
+            relative = (relative + "index.html").lstrip("/")
+        found = file_from_dirs(relative, website_dirs)
+        if found is not None:
+            return found
+        # SPA/dir fallback: bare path without suffix → index.html in that folder
+        if relative and "." not in Path(relative).name:
+            found = file_from_dirs(f"{relative}/index.html", website_dirs)
+            if found is not None:
+                return found
+        return JSONResponse({
+            "detail": "Website asset missing",
+            "path": relative or "/",
+            "hint": "Submodul website/ (daniel-vitaltrainer-firebase) auschecken",
+        }, status_code=404)
+
+    @app.api_route("/website", methods=["GET", "HEAD"])
+    @app.api_route("/website/", methods=["GET", "HEAD"])
+    async def website_root():
+        return website_static("index.html")
+
+    @app.api_route("/website/{path:path}", methods=["GET", "HEAD"])
+    async def website_path(path: str):
+        return website_static(path)
 
     # Register after reserved routes; never turn unknown slugs into catalog HTML.
     @app.api_route("/k/{client_id}", methods=["GET", "HEAD"])
@@ -392,8 +476,15 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
         # Asset names belong to the static server, not to client identity lookup.
         if "." in client_id:
             return public_or_catalog(client_id)
+        # Vital Centre Ordner (jobs/, klienten/, …) vor Klienten-Lookup.
+        if hub.is_dir():
+            found = file_from_dirs(f"{client_id}/index.html", [hub]) or file_from_dirs(client_id, [hub])
+            if found is not None:
+                return found
         if client_id == "portal":
             return public_or_catalog("portal.html")
+        if client_id == "website":
+            return website_static("index.html")
         from coach_local_plans import local_only, clients_root, plans_module
         local_only(request)
         try:
@@ -422,7 +513,27 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--host", default=os.environ.get("COACH_HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.environ.get("COACH_PORT", "9150")))
+    # Alias default 8788 (ehem. vital-hub); COACH_ALIAS_PORT=0 schaltet ab.
+    parser.add_argument("--alias-port", type=int, default=int(os.environ.get("COACH_ALIAS_PORT", "8788")))
     parser.add_argument("--reload", action="store_true")
     args = parser.parse_args()
     os.environ["COACH_PORT"] = str(args.port)
-    uvicorn.run("server:app", host=args.host, port=args.port, reload=args.reload, app_dir=str(ROOT))
+    alias = args.alias_port if args.alias_port and args.alias_port != args.port else 0
+    if alias:
+        os.environ["COACH_ALIAS_PORT"] = str(alias)
+    else:
+        os.environ.pop("COACH_ALIAS_PORT", None)
+
+    if args.reload or not alias:
+        uvicorn.run("server:app", host=args.host, port=args.port, reload=args.reload, app_dir=str(ROOT))
+    else:
+        # Gleiche App auf :9150 und ehem. Hub-Port :8788 (vital-hub.service aus).
+        async def _serve_both() -> None:
+            app_obj = create_app()
+            servers = [
+                uvicorn.Server(uvicorn.Config(app_obj, host=args.host, port=args.port, log_level="info")),
+                uvicorn.Server(uvicorn.Config(app_obj, host=args.host, port=alias, log_level="info")),
+            ]
+            await asyncio.gather(*(server.serve() for server in servers))
+
+        asyncio.run(_serve_both())

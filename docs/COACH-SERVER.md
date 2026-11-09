@@ -17,7 +17,7 @@ into this repo.
 | Coach route | Mode | Notes |
 | --- | --- | --- |
 | `/fitness/inbox/*`, `/session`, `/exercises`, … | **local** — `fitness.api` in-process | Former fitness-python-backend; service rename only. No `:8100` hop. |
-| `/fitness-api/*` | **local** — optional `fitness-dev/backend` mount | Sessions/UI fork under `/fitness-api`, not the inbox API |
+| `/fitness-api/*` | **local** — `~/dev/backend/fitness/backend` | Sessions/UI FastAPI under `/fitness-api` (Coach mounted); not the inbox API |
 | `/api/relax/*`, `/relax-api/*` | **local** — `relax-dev/server.py` embedded | Same process; no Relax worker required |
 | `/api/fuel/*`, `/fuel-api/*` | **proxy** → VitalOS `:8000/api/fuel` | Only remaining entry in `coach-backends.json`. Fuel source/SQLite stay Fuel-owned (`vitalos_api` Docker). |
 
@@ -87,7 +87,7 @@ Environment overrides:
 - `COACH_HOST`, `COACH_PORT` or `--host` / `--port`: listener settings.
 - `COACH_CATALOG_DIR`: explicit directory containing the built catalog `index.html`.
 - `COACH_FITNESS_FRONTEND_DIR`: explicit directory containing the built local-mode Fitness app; default `~/dev/fitness-dev/frontend/dist`.
-- `COACH_FITNESS_BACKEND_ROOT`: Fitness source checkout containing `backend/api/app.py`; default `~/dev/fitness-dev`.
+- `COACH_FITNESS_BACKEND_ROOT`: Parent of the Python `backend` package (`…/backend/api/app.py`); default `~/dev/backend/fitness`.
 - `COACH_UI_DIR`: explicit directory containing the built Coach UI `index.html`.
 - `KLIENTEN_PYTHON_ROOT`: defaults to `~/dev/coach-dev/klienten-python` (compat symlink `~/klienten-python`).
 - `KLIENTEN_UI_ROOT`: legacy ClientForge/Konsole build, defaults to `~/dev/klienten-dev`.

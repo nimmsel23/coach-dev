@@ -1,6 +1,8 @@
 [Unit]
-Description=Coach backend (Fitness, Fuel, embedded Relax) :9150
+Description=Coach backend (Fitness, Fuel, embedded Relax) :9150 + Hub-Alias :8788
 After=network.target
+# vital-hub.service früher :8788 — jetzt Alias derselben Coach-App
+Conflicts=vital-hub.service vital-hub-konsole.service
 
 [Service]
 Type=simple
@@ -8,6 +10,8 @@ WorkingDirectory=%h/dev/coach-dev
 ExecStart=/usr/bin/python3 %h/dev/coach-dev/server.py
 Environment=COACH_HOST=127.0.0.1
 Environment=COACH_PORT=9150
+Environment=COACH_ALIAS_PORT=8788
+Environment=COACH_FITNESS_BACKEND_ROOT=%h/dev/backend/fitness
 Environment=PYTHONPATH=%h/dev/coach-dev:%h/dev/fitness-dev/anatomy-kb
 EnvironmentFile=-%h/.config/coach/backend.env
 Restart=on-failure
