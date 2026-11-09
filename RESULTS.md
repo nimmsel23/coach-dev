@@ -1,3 +1,9 @@
+## 2026-11-09 — Coach-API: Inbox/Catalog lokal, :8100-Proxy weg
+
+- Ursache: `/fitness/inbox*` proxied tot nach Fitness-Preview `:8100`, obwohl Coach-API (`:9150`) die ehemalige fitness-python-backend ist (gleicher Code, anderer Service-Name).
+- `server.py` hängt `fitness.api`-Router (Inbox/Catalog/…) wieder direkt ein; `coach-backends.json` ohne Fitness-Upstream; Unit mit `PYTHONPATH` für coach-dev.
+- Live: `/health` → `fitness_api: local`; `GET /fitness/inbox` → 200. Tests in `tests/test_server.py` erweitert/grün.
+
 ## 2026-11-09 — AL: Review-Karte Inbox-UI
 
 - FIRE-Hit Review-Karte: `InboxCard` zeigt Entscheidungssurface (Identität, 2-Satz-Was, Primärmuskeln, 3 Coaching-Highlights, Herkunft-Text, Freigeben/Löschen/Verbessern); `SourceEditor` nur noch im Detail-Modal.
