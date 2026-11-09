@@ -91,6 +91,7 @@ jobs:
           rm -rf fitness/catalog/kb
           ln -sfn "$GITHUB_WORKSPACE/.fitness-dev/fitness/catalog/kb" fitness/catalog/kb
           test -d fitness/catalog/kb/exercises/6pack
+          echo "FITNESS_KB_DIR=$GITHUB_WORKSPACE/fitness/catalog/kb" >> "$GITHUB_ENV"
 
       - uses: pnpm/action-setup@v4
         with:

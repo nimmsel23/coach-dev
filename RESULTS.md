@@ -1,3 +1,8 @@
+## 2026-11-09 — Deploy: FITNESS_KB_DIR + Plan-Pin kb-dir
+
+- `deploy-coach.yml`: nach KB-Symlink `FITNESS_KB_DIR` setzen.
+- `modules/plan` auf Tip mit Nested-kb-dir-Fix.
+
 ## 2026-11-09 — Deploy-Coach: Fitness-KB aus fitness-dev verlinken
 
 - CI kann das SSH-Submodul `fitness/catalog/kb` nicht klonen. Nach `.fitness-dev`-Checkout: Symlink `fitness/catalog/kb` → `.fitness-dev/fitness/catalog/kb` (für build-sixpack-data).
