@@ -1,9 +1,0 @@
-label_de: Ischiocrurale Muskulatur
-label_en: Hamstrings
-label_lat: Compartimentum femoris posterius
-aliases: [hams, hamstring, hamstrings, ischios, beinbeuger, oberschenkel hinten, hintere oberschenkelmuskulatur]
-muscles:
-  - 604_hamstrings
-  - 604a_biceps_femoris
-  - 604b_semitendinosus
-  - 604c_semimembranosus

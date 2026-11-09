@@ -1,3 +1,13 @@
+# Architektur — Backend-Breakthrough (2026-11-09)
+
+Siehe ausführlich `docs/ARCHITECTURE.md` (Abschnitt Backend-Breakthrough).
+
+Kurz: KB-Daten `~/dev/fitness` · Python/API `coach-dev` · Plan-Brücke `plan-dev` ·
+Klient `fitness-dev` · Node `~/dev/backend`. Plan ohne Local-Backend; Coach
+hostet Schmiede + `:9150`.
+
+---
+
 # fitness-dev Architektur
 
 Dieses Dokument beschreibt die einfache und klare Architektur der Fitness-App. Der Stack verzichtet auf komplexe, serverseitige Python-Backends oder AlphaOS-Integrationen für das Frontend. 

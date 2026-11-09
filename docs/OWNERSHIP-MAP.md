@@ -13,7 +13,7 @@ Daraus wuchsen organisch Firebase-native Apps. Die Agenten sollten Kataloge
 
 | Domäne | Source of Truth | Einstieg |
 |---|---|---|
-| Exercise-/Anatomy-**KB-Daten** (YAML only) | `~/dev/fitness` (`nimmsel23/fitness`) | Daten-Repo; Konsumenten spiegeln/lesen |
+| Exercise-/Anatomy-**KB-Daten** (YAML only) | `~/dev/fitness` (`nimmsel23/fitness`) | Daten-Repo; in Coach als Submodul `fitness/catalog/kb` |
 | Catalog-**Python** (CLI, Enrichment, Audit, Inbox-Tools) | `~/dev/coach-dev/fitness/catalog/` | `coach catalog`, Alias `coach agent` |
 | FastAPI / Prod-API :9150 (Sessions, Workouts, Body, Sync) | `~/dev/coach-dev/fitness/api/` | `coach-api.service`, WD `~/dev/coach-dev` |
 | Workout-/Plan-Schmiede UI + Plan-Editor | Plan (`~/dev/plan-dev`) konsumiert von Coach (`modules/plan`) | Plan owns editor; Coach hosts Schmiede |
@@ -24,8 +24,9 @@ Daraus wuchsen organisch Firebase-native Apps. Die Agenten sollten Kataloge
 
 **Korrektur:** `~/dev/backend` ist Node-SOT. Python-Tooling/API liegen in
 `coach-dev/fitness/`. Die **YAML-KB** gehört dem Daten-Repo `~/dev/fitness`
-(nicht „stale“). `coach-dev/fitness/catalog/kb/` ist Arbeits-/Live-Spiegel —
-Drift zurück nach `~/dev/fitness` spiegeln, nicht das Daten-Repo als tot behandeln.
+und ist seit 2026-11-09 als Git-Submodul unter `fitness/catalog/kb` angebunden.
+KB-Edits dort = Working Tree des Daten-Repos → in `~/dev/fitness` / dem
+Submodul committen und den Gitlink in Coach nachziehen.
 
 ## Lineage der „Agent“-Namen
 
@@ -40,8 +41,8 @@ Drift zurück nach `~/dev/fitness` spiegeln, nicht das Daten-Repo als tot behand
 
 | Pfad | Status | Aktion |
 |---|---|---|
-| `~/dev/fitness` | **KB-Daten-SOT** | behalten; YAML hier versionieren |
-| `~/dev/coach-dev/fitness/` | **Python/API-SOT**; `catalog/kb/` = Live-Spiegel | Tooling hier; KB-Drift → Daten-Repo |
+| `~/dev/fitness` | **KB-Daten-SOT** | YAML hier versionieren |
+| `~/dev/coach-dev/fitness/` | **Python/API-SOT**; `catalog/kb` = Submodul → fitness | Tooling hier |
 | `~/dev/fitness-dev/fitness/` | divergierte Fork-Kopie (Workouts älter als Coach) | langfristig auf Coach-API verlassen; lokalen Python-Tree nicht weiterpflegen |
 | `~/dev/fitness-cli` | ungenutzte Teilkopie | → `~/dev/_archive/2026-11-09-fitness-orphans/` |
 | `~/dev/fitness-backend` | WD der **disabled** `fitness-dev.service` | → Archiv; Unit WD → `fitness-dev` |
@@ -52,7 +53,8 @@ Drift zurück nach `~/dev/fitness` spiegeln, nicht das Daten-Repo als tot behand
 
 ## Regel für Agenten
 
-1. **YAML-KB** (exercises/inbox/muscles/…): in `~/dev/fitness` committen; Coach-`catalog/kb` danach angleichen (oder als Submodul/Subtree anbinden).
+1. **YAML-KB** (exercises/inbox/muscles/…): im Submodul `fitness/catalog/kb`
+   (= `~/dev/fitness`) committen + pushen; Coach-Gitlink bumpen.
 2. Catalog-**Code**/Enrichment-CLI: unter `coach-dev/fitness/catalog/` (`coach catalog`).
 3. Workout-/Plan-UI: Plan-Repo; Coach-Pointer bewusst bumpen.
 4. Keine neuen Kopien von `fitness/` in plan-dev oder backend anlegen.

@@ -1,3 +1,48 @@
+# Coach — Architektur (Backend-Breakthrough)
+
+Stand: 2026-11-09
+
+## Backend-Breakthrough (2026-11-09)
+
+Fitness und Fuel wuchsen aus Python-„Agent“-Modulen (`fitness-agent` /
+`fuel-agent`) organisch zu Firebase-nativen Apps. Catalog, Workout-Ableitung
+und Local-API sind kein zweites Fitness-Backend mehr, sondern klar getrennt:
+
+| Rolle | Repo | Verantwortung |
+|---|---|---|
+| **KB-Daten** (YAML only) | `~/dev/fitness` (`nimmsel23/fitness`) | Exercises, Inbox, Muscles, Rules — Daten-SOT |
+| **Python/API** | `~/dev/coach-dev/fitness/` | `coach catalog` (+ Alias `agent`), FastAPI `:9150`, Enrichment |
+| **Plan-Brücke** | `~/dev/plan-dev` | Geteilter Editor-/Vertrags-Code („Fitness-Code für Coach“) |
+| **Klient** | `~/dev/fitness-dev` | PWA: loggen, lesen, ausführen — **kein** Coach-Code, **kein** Catalog-Python pflegen |
+| **Node** | `~/dev/backend` | Hono/Functions — **kein** Python-Catalog |
+
+**Laufzeit-Fluss**
+
+```
+~/dev/fitness  (YAML-SOT)
+      ↓ Submodul / Spiegel
+coach-dev/fitness/catalog + api :9150
+      ↓ Firestore / Funnel
+fitness-dev PWA  ←→  Coach hostet Plan (modules/plan Pin)
+```
+
+- Plan bleibt **frei von Local-Backend**; Schmiede + Laptop-Backdoor = Coach.
+- Fitness berührt Coach-Code nicht; Coach konsumiert Plan als Submodul-Pin.
+- Yuhonas Free Exercise DB: gepinnter Commit + jsDelivr-CDN (kein floating `@main`,
+  kein ~200MB Bundle).
+- Kopien (`fitness-cli`, `fitness-backend`, kaputte plan-dev-Catalog-Links) gehören
+  ins Archiv, nicht weiter füttern. Karte: `~/dev/coach-dev/docs/OWNERSHIP-MAP.md`.
+
+
+### Coach-Sicht
+
+Coach besitzt Schmiede, Zuweisung, Local-Backdoor und die Python-Schicht
+(`fitness/api`, `fitness/catalog`). YAML-KB-SOT bleibt `~/dev/fitness`
+(als `fitness/catalog/kb` anbinden). Einstieg Catalog: `coach catalog`.
+Ownership-Karte: `docs/OWNERSHIP-MAP.md`.
+
+---
+
 # fitness-dev — Architektur
 
 Stand: 2026-06-12

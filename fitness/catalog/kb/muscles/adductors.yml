@@ -1,9 +1,0 @@
-label_de: Adduktoren
-label_en: Adductors
-label_lat: Compartimentum femoris mediale
-aliases: [adductor, adductors, adduktor, adduktoren, inner thigh, oberschenkel innen]
-muscles:
-  - 602_adductors
-  - 602a_adductor_magnus
-  - 602b_adductor_longus
-  - 602c_adductor_brevis

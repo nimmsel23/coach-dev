@@ -1,8 +1,0 @@
-label_de: Gesäßmuskulatur
-label_en: Glutes
-label_lat: Regio glutealis
-aliases: [glute, glutes, booty, po, gesäß, hintern]
-muscles:
-  - 603_gluteus_maximus
-  - 608_gluteus_medius
-  - 609_gluteus_minimus

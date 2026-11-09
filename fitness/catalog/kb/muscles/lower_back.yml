@@ -1,7 +1,0 @@
-label_de: Unterer Rücken
-label_en: Lower Back
-label_lat: Regio lumbalis
-aliases: [erectors, lower back, unterer rücken, lendenwirbelsäule, lws]
-muscles:
-  - 206_erector_spinae
-  - 505_quadratus_lumborum

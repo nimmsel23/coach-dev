@@ -1,8 +1,0 @@
-label_de: Mittlerer Rücken
-label_en: Middle Back
-label_lat: Regio infrascapularis
-aliases: [lats, lat, latissimus, rücken breit]
-muscles:
-  - 201_latissimus_dorsi
-  - 207_teres_major
-  - 205_rhomboids
