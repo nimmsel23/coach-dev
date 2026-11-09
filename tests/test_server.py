@@ -30,7 +30,9 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
             self.requests.append(request)
             return handler(request) if handler else httpx.Response(200, stream=httpx.ByteStream(b'{"ok":true}'))
         # Gateway-Tests default ohne lokales fitness.api, damit Proxy-Fixtures greifen.
+        # Hub aus: Tests erwarten Catalog auf / ohne ~/.local/vital-hub.
         app = create_app(catalog_directory=self.catalog, coach_directory=self.coach,
+                         hub_directory=self.root / "no-hub",
                          upstream_url=upstream_url, backend_urls=backend_urls,
                          transport=httpx.MockTransport(backend), include_fitness_api=include_fitness_api)
         # Gateway tests use synthetic workspaces and must not start the real local scheduler.
@@ -167,6 +169,41 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
     async def test_self_proxy_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "points back to Coach"):
             create_app(backend_urls={"fitness": "http://127.0.0.1:9150"})
+
+    async def test_website_src_is_served_like_former_public_coach(self):
+        """website/ submodule is reachable on root and under /website/ (:9150)."""
+        from server import ROOT as coach_root
+        self.assertTrue((coach_root / "website" / "src" / "vitalos.html").is_file())
+        async with self.client() as client:
+            root = await client.get("/vitalos.html")
+            self.assertEqual(root.status_code, 200)
+            self.assertIn("VitalOS", root.text)
+            prefixed = await client.get("/website/vitalos.html")
+            self.assertEqual(prefixed.status_code, 200)
+            self.assertIn("VitalOS", prefixed.text)
+            self.assertEqual((await client.get("/website/")).status_code, 200)
+            self.assertEqual((await client.get("/portal.html")).status_code, 200)
+
+    async def test_vital_hub_public_is_root_when_present(self):
+        """Ehem. :8788 Vital Centre liegt auf /; Catalog bleibt /catalog-ui/."""
+        hub = self.root / "hub"
+        hub.mkdir()
+        (hub / "index.html").write_text("<title>Vital Centre</title>")
+        (hub / "jobs").mkdir()
+        (hub / "jobs" / "index.html").write_text("jobs-hub")
+        def backend(request):
+            self.requests.append(request)
+            return httpx.Response(200, stream=httpx.ByteStream(b'{"ok":true}'))
+        app = create_app(catalog_directory=self.catalog, coach_directory=self.coach,
+                         hub_directory=hub, upstream_url="http://catalog.test:9150",
+                         transport=httpx.MockTransport(backend), include_fitness_api=False)
+        with patch.dict("os.environ", {"COACH_TASKWARRIOR_SCHEDULER": "0"}):
+            async with app.router.lifespan_context(app):
+                async with httpx.AsyncClient(transport=httpx.ASGITransport(app),
+                                             base_url="http://testserver", follow_redirects=True) as client:
+                    self.assertIn("Vital Centre", (await client.get("/")).text)
+                    self.assertEqual((await client.get("/jobs/")).text, "jobs-hub")
+                    self.assertEqual((await client.get("/catalog-ui/")).text, "catalog")
 
 
 if __name__ == "__main__":

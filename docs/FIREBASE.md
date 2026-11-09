@@ -154,27 +154,26 @@ Fitness-Prod-Server:
 
 ```text
 https://ideapad.tail7a15d6.ts.net/fitness/
-  -> http://127.0.0.1:6100/
+  -> http://127.0.0.1:9150/fitness/
 ```
 
-Das heisst: Ein Handy kann den lokalen Prod-Coach-Server grundsaetzlich ueber
-den Funnel erreichen. Die Firebase-App muss dafuer aber diese Base URL verwenden:
+Funnel-Pfad enthaelt bereits das API-Prefix `/fitness/`. Base URL daher **ein**
+`fitness`, nicht zwei:
 
 ```text
-https://ideapad.tail7a15d6.ts.net/fitness/fitness
+https://ideapad.tail7a15d6.ts.net/fitness
 ```
 
-Der doppelte `fitness`-Teil ist kein Tippfehler: Der Funnel-Pfad `/fitness/`
-zeigt auf die Server-Root, und die API-Routen beginnen im Backend ebenfalls mit
-`/fitness/...`.
+(Historisch, als der Funnel noch auf `:6100/` Root zeigte, war
+`/fitness/fitness` korrekt — Stand 2026-11-09 obsolet.)
 
 Aktueller Code-Stand:
 
 ```js
 localStorage["fitness-local-api-base"]
   || import.meta.env.VITE_LOCAL_FITNESS_API_BASE
-  || "https://ideapad.tail7a15d6.ts.net/fitness/fitness" // Firebase Hosting
-  || "http://127.0.0.1:6100/fitness"                     // Desktop fallback
+  || "https://ideapad.tail7a15d6.ts.net/fitness" // Firebase Hosting
+  || "http://127.0.0.1:9150/fitness"             // Desktop fallback
 ```
 
 Das funktioniert dadurch auf dem Desktop ohne weitere Einstellung und auf
@@ -184,7 +183,7 @@ im Browser ueberschrieben werden:
 ```js
 localStorage.setItem(
   "fitness-local-api-base",
-  "https://ideapad.tail7a15d6.ts.net/fitness/fitness"
+  "https://ideapad.tail7a15d6.ts.net/fitness"
 )
 ```
 

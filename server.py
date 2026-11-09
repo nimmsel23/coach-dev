@@ -212,6 +212,16 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     app = FastAPI(title="Coach backend", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 
+    # Firebase Hosting (fitness-aos / vos-coach) → Funnel `:9150` braucht CORS;
+    # attach_fitness_api mountet Router ohne die CORSMiddleware aus fitness.api.main.
+    from fastapi.middleware.cors import CORSMiddleware
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
     app.state.backends = backends
     app.state.fitness_api_local = False
     fitness_app = load_fitness_app()
