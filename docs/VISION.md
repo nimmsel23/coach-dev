@@ -1,4 +1,8 @@
-# VISION.md — fitness-dev
+# VISION.md — fitness-dev (historisch)
+
+> **Coach-Produkt-Horizon:** [FREEDOM.md](../FREEDOM.md) — die App muss nutzbar
+> sein, um als Coach Klienten zu betreuen und ihren Fortschritt zu überwachen.
+> Dieses Dokument bleibt der alte fitness-dev-Tempel-Text (Ausbildung/Volume).
 
 > Was brennt. Was kommen soll. Was diesen Tempel zu mehr macht als einem Workout-Tracker.
 

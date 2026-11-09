@@ -3,14 +3,17 @@
 Quartals-Fokus mit **genau drei Monatsmissionen** — worauf die Abteilung Coach
 ausgerichtet ist. Pro Quartal eine Bahn, drei Monatsschritte.
 
-`FIRE.md` = wöchentliche Hits. `TODO.md` = zweite Stufe. `HOT.md` = Potential.
+Horizon: [FREEDOM.md](FREEDOM.md) — App nutzbar für Klientenbetreuung und
+Fortschrittsüberwachung. `FIRE.md` = wöchentliche Hits. `TODO.md` = zweite
+Stufe. `HOT.md` = Potential.
 
 ---
 
 ## 2026-Q4 (Okt–Dez)
 
-Ein Coach-Betrieb: Server-SOT klar, Keepers hinter `:9150`, Catalog-/Coach-UI
-ohne Legacy-Hops — ohne Tree-Move-Theater.
+Bahn Richtung Freedom: Coach-App im Alltag nutzbar für Betreuung und
+Fortschritt. Server-SOT / Keepers / UI ohne Legacy-Hops sind Mittel dazu —
+kein Tree-Move-Theater.
 
 | Monat | Mission | Status |
 | --- | --- | --- |
@@ -46,13 +49,13 @@ embedded Relax, Legacy-Klienten und Coach-SPA.
 Details: [docs/COACH-SERVER.md](docs/COACH-SERVER.md),
 [docs/OWNERSHIP-MAP.md](docs/OWNERSHIP-MAP.md).
 
-### 2026-12 — Catalog-UI aus Coach-Dist; Rest-Upstreams nur bewusst
+### 2026-12 — Betreuung & Fortschritt ohne Reibung (UI + bewusste Upstreams)
 
-Monatsmission: Catalog-/Coach-Oberfläche aus Coach-Builds unter `:9150`, ohne
-Legacy-Fitness-SPA-Hop. Fuel bleibt Proxy, bis Fuel/VitalOS einen Cutover
-freigibt — nicht per Directory-Migration.
+Monatsmission: Coach-Oberfläche so, dass Betreuung und Fortschrittsblick
+alltagsfähig sind — Catalog-/Coach-UI aus Coach-Builds unter `:9150`, ohne
+Legacy-Fitness-SPA-Hop. Fuel bleibt Proxy bis Domänen-Freigabe.
 
-- FIRE: Frontend-Serve Katalog-UI (Scope `+ceo`).
+- FIRE: Frontend-Serve Katalog-UI (Scope `+ceo`) im Dienst der nutzbaren App.
 - Optional: Fuel-Upstream-Cutover nur mit Domänen-Freigabe.
 - Deploy-/Unit-Quellen (KB-Seed, `coach-sync` Install-Pfad) nachziehen.
 

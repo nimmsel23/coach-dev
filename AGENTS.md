@@ -15,7 +15,7 @@ Coach is the backend repo plus a specialized coach frontend. **Coach-API-SOT:**
 inbox/`fitness.api`, embedded Relax, and Coach UI. Proxied domains only via
 `coach-backends.json` (today: Fuel → VitalOS `:8000`). Never configure a domain
 upstream to loop back to Coach. Do not treat `~/dev/backend` / former
-`fitness-backend` / Node `:9100` as this API’s home. Focus: [FOCUS.md](FOCUS.md).
+`fitness-backend` / Node `:9100` as this API’s home. Freedom: [FREEDOM.md](FREEDOM.md). Focus: [FOCUS.md](FOCUS.md).
 
 `klienten-python/` lives inside this repo (own git tree + `.venv`, gitignored).
 Default `KLIENTEN_PYTHON_ROOT` is `~/dev/coach-dev/klienten-python`;

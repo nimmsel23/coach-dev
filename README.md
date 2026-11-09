@@ -1,8 +1,9 @@
 # Coach (`coach-dev`)
 
-**Laufzeit-SOT der Coach-API:** `server.py` auf **`:9150`** (`coach-api.service`).
-Ein Server für Catalog/Inbox, embedded Relax, Coach-SPA. Docs:
-[FOCUS.md](./FOCUS.md), [docs/COACH-SERVER.md](./docs/COACH-SERVER.md),
+**Freedom:** App nutzbar für Klientenbetreuung und Fortschrittsüberwachung —
+[FREEDOM.md](./FREEDOM.md). **Laufzeit-SOT:** `server.py` `:9150`
+(`coach-api.service`). Docs: [FOCUS.md](./FOCUS.md),
+[docs/COACH-SERVER.md](./docs/COACH-SERVER.md),
 [docs/OWNERSHIP-MAP.md](./docs/OWNERSHIP-MAP.md).
 
 ---
