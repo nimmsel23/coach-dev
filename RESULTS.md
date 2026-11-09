@@ -1,3 +1,8 @@
+## 2026-11-09 — einzige fitness.*-SOT bestätigt
+
+- `fitness-dev/fitness` entfernt (Duplikat). Plan ohne Python-fitness.
+- Dieses Repo bleibt Package-SOT; Sessions-API weiter `~/dev/backend/fitness/backend` unter `/fitness-api`.
+
 ## 2026-11-09 — /fitness-api aus ~/dev/backend/fitness
 
 - `COACH_FITNESS_BACKEND_ROOT` Default → `~/dev/backend/fitness`.

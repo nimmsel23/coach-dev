@@ -63,8 +63,9 @@ Daten-Repo `~/dev/fitness` und ist seit 2026-11-09 als Git-Submodul unter
 | Pfad | Status | Aktion |
 |---|---|---|
 | `~/dev/fitness` | **KB-Daten-SOT** | YAML hier versionieren |
-| `~/dev/coach-dev/fitness/` | **Python/API-SOT**; `catalog/kb` = Submodul → fitness | Tooling hier |
-| `~/dev/fitness-dev/fitness/` | divergierte Fork-Kopie (Workouts älter als Coach) | langfristig auf Coach-API verlassen; lokalen Python-Tree nicht weiterpflegen |
+| `~/dev/coach-dev/fitness/` | **Python/API-SOT** (`fitness.*`); `catalog/kb` = Submodul → fitness | einzige Pflege |
+| `~/dev/fitness-dev/fitness/` | **entfernt 2026-11-09** (war 174/176 bytegleich, Coach neuer) | Archiv `_archive/2026-11-09-fitness-dev-fitness-fork`; Deploy synct aus Coach |
+| `~/dev/plan-dev/fitness/` | **kein** Python-Paket mehr | Fork-Schuld schon archiviert |
 | `~/dev/fitness-cli` | ungenutzte Teilkopie | → `~/dev/_archive/2026-11-09-fitness-orphans/` |
 | `~/dev/fitness-backend` | WD der **disabled** `fitness-dev.service` | → Archiv; Unit WD → `fitness-dev` |
 | `~/dev/backend/fuel` | Fuel Fastify-Node (ehem. fuel-backend) | SOT für Fuel-Server |
