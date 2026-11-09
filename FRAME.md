@@ -22,8 +22,9 @@ Stand: 2026-11-09. Ehrliche Bestandsaufnahme (Repo + App), kein Wunschdenken.
 
 | Domäne | Ort |
 |---|---|
-| Catalog-CLI / Enrichment | `fitness/catalog/` — `coach catalog` (Alias `agent`) |
-| YAML-KB | Submodul `fitness/catalog/kb` → `nimmsel23/fitness` @ `9a850a1` |
+| Catalog = KB (Exercises+Muscles) | Submodul `fitness/catalog/kb`; Gate = Inbox; Build → JS in Apps |
+| Catalog-CLI / Enrichment | `fitness/catalog/` — `coach catalog` (Werkzeug, nicht App-Kern) |
+| Atlas-Pflaster | Original-Yuhonas (Pin); Bulk wger+yuhonas war zu viel at once |
 | FastAPI Sessions/Workouts/Inbox | `fitness/api/` gemountet in `server.py` |
 | Klienten-Python | `klienten-python/` in-tree; UI noch `~/dev/klienten-dev` |
 | Praxis-CLIs | `coach praxis` / `klientenctl` / `konsolectl` → `~/dev/praxis-dev` |

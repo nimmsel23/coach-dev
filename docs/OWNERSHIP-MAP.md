@@ -9,12 +9,29 @@ Daraus wuchsen organisch Firebase-native Apps. Die Agenten sollten Kataloge
 (YAML-KB) und Workout-Ableitungen per Python-Skripten managen. Heute ist der
 **laufende** Pfad Coach-API + Catalog-Package, nicht mehr ein freistehender Agent.
 
+## Catalog = KB = Expert-Brain (eine Wahrheit)
+
+**Catalog und KB sind dasselbe Projekt:** Exercises + Muscles (+ Rules/Notes).
+Es gibt nur **eine** coach-approved DB: `kb/exercises` (plus `kb/muscles`).
+
+| Schicht | Rolle |
+|---|---|
+| **Bulk-Rohstoff** | Summe **wger + yuhonas** (einmaliger Import / Mirror) — zu viel auf einmal fürs Expert-Gate |
+| **Atlas-Standard (jetzt)** | **Original-Yuhonas wie auf Git** — Verbandspflaster für stabilen App-Betrieb (Atlas-Tab), nicht das Expert-Brain |
+| **Gate** | **Exercise-Inbox** — nur Coach; Bulk wird erst `approved`, wenn enhanced und **app-feature-gerecht** |
+| **Expert-Brain** | Freigegebene Einträge in `kb/exercises` — Build verbaut sie als JS in die Apps |
+
+Beispiel warum Yuhonas allein nicht reicht: keine vorderen/hinteren Schultern → zu grob
+für feinere App-Features. Deshalb bleibt Yuhonas Standard nur Pflaster, bis die KB
+nachzieht. Catalog/KB ist stark für Coach-Arbeit, aber **nicht** Kern der Fitness-
+oder Coaching-App-UI (Apps laufen Firestore-nativ; KB kommt über Build/JS).
+
 ## Was wo hingehört (SOT)
 
 | Domäne | Source of Truth | Einstieg |
 |---|---|---|
-| Exercise-/Anatomy-**KB-Daten** (YAML only) | `~/dev/fitness` (`nimmsel23/fitness`) | Daten-Repo; in Coach als Submodul `fitness/catalog/kb` |
-| Catalog-**Python** (CLI, Enrichment, Audit, Inbox-Tools) | `~/dev/coach-dev/fitness/catalog/` | `coach catalog`, Alias `coach agent` |
+| **KB / Catalog-Daten** (Exercises+Muscles, YAML) | `~/dev/fitness` → Submodul `fitness/catalog/kb` | eine Expert-DB; Gate = Inbox |
+| Catalog-**Python** (CLI, Enrichment, Audit, Inbox) | `~/dev/coach-dev/fitness/catalog/` | `coach catalog` — Werkzeug, nicht App-Kern |
 | **Coach-HTTP-Server** (`server.py`, Keepers) | `~/dev/coach-dev` | `coach-api.service` **:9150** — ein Prozess |
 | FastAPI Catalog/Sessions/Workouts (in-process) | `~/dev/coach-dev/fitness/api/` | von `server.py` gemountet; kein `:8100` |
 | Workout-/Plan-Schmiede UI + Plan-Editor | Plan (`~/dev/plan-dev`) konsumiert von Coach (`modules/plan`) | Plan owns editor; Coach hosts Schmiede |

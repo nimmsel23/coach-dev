@@ -29,10 +29,14 @@ fitness-dev PWA  ←→  Coach hostet Plan (modules/plan Pin)
 
 - Plan bleibt **frei von Local-Backend**; Schmiede + Laptop-Backdoor = Coach.
 - Fitness berührt Coach-Code nicht; Coach konsumiert Plan als Submodul-Pin.
-- Yuhonas Free Exercise DB: gepinnter Commit + jsDelivr-CDN (kein floating `@main`,
-  kein ~200MB Bundle).
-- Kopien (`fitness-cli`, `fitness-backend`, kaputte plan-dev-Catalog-Links) gehören
-  ins Archiv, nicht weiter füttern. Karte: `~/dev/coach-dev/docs/OWNERSHIP-MAP.md`.
+- **Catalog = KB:** eine Expert-DB in `kb/exercises` (+ muscles). Gate = Coach-Inbox
+  (Bulk aus wger+yuhonas erst nach Enhance/Approve). Apps verbauen freigegebene KB
+  beim Build als JS — Catalog ist Coach-Werkzeug, nicht App-Kern.
+- **Yuhonas jetzt:** Original-DB wie auf Git (Pin + CDN) = Atlas-Verbandspflaster für
+  stabilen Betrieb; zu grob fürs volle Expert-Brain (z. B. keine vorderen/hinteren
+  Schultern). wger+yuhonas-Summe war zu viel at once.
+- Kopien (`fitness-cli`, `fitness-backend`, kaputte plan-dev-Catalog-Links) → Archiv.
+  Karte: `~/dev/coach-dev/docs/OWNERSHIP-MAP.md`.
 
 
 ### Coach-Sicht
