@@ -104,7 +104,8 @@ export default defineConfig(async ({ mode }) => {
     },
     build: {
       outDir: isCoach ? 'dist-coach' : 'dist',
-      target: 'modules',
+      // Vite 8 (Rolldown) kennt 'modules' nicht mehr ([BUNDLER_INITIALIZE_ERROR]). Browserliste = altes modules-Kuerzel.
+      target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
       rollupOptions: {
         input: isCoach
           ? {

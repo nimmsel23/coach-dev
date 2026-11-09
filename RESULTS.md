@@ -1,3 +1,9 @@
+## 2026-11-09 — Vite-8-Vorbeuge: esbuild-Tests + build.target
+
+- `scripts/test-sixpack-selection.mjs`: `transformWithEsbuild` → `esbuild.transform`, Dev-Dep `esbuild ^0.27.7`.
+- `vite.config.js`: `build.target: 'modules'` → Browserliste (wie fitness `87d349c`), bevor Coach auf Vite 8 geht.
+- Nested `modules/plan` bleibt am plan-Pin; Quelle ist plan-dev.
+
 ## 2026-11-09 — Backend-Breakthrough dokumentiert + KB-Submodul
 
 - `docs/ARCHITECTURE.md` + Root-`ARCHITECTURE.md`: Breakthrough (Rollen,
