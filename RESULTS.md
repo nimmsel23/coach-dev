@@ -1,3 +1,11 @@
+## 2026-11-09 — klienten-python nach coach-dev gezogen
+
+- `~/klienten-python` → `~/dev/coach-dev/klienten-python` (eigenes Git + `.venv`,
+  gitignored). Kompat-Symlink `~/klienten-python` bleibt.
+- Defaults (`KLIENTEN_PYTHON_ROOT`) zeigen auf den Coach-Pfad; Legacy-UI weiter
+  `~/dev/klienten-dev` (`KLIENTEN_UI_ROOT`). Nested Restkopie
+  `coach-dev/klienten-dev` → `archive/klienten-dev-rest-2026-11-09`.
+
 ## 2026-11-09 — Coach-API: Inbox/Catalog lokal, :8100-Proxy weg
 
 - Ursache: `/fitness/inbox*` proxied tot nach Fitness-Preview `:8100`, obwohl Coach-API (`:9150`) die ehemalige fitness-python-backend ist (gleicher Code, anderer Service-Name).
