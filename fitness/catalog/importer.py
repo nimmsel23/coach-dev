@@ -114,14 +114,12 @@ YUHONAS_DIST_JSON_URL = "https://raw.githubusercontent.com/yuhonas/free-exercise
 
 
 def _ensure_yuhonas_json() -> Path | None:
-    """~/fitness/free-exercise-db ist ein voller Git-Klon (~200MB inkl. Bilder)
-    und wurde in der Praxis wiederholt extern geleert (Ursache nicht
-    identifiziert, siehe fitness-dev/CLAUDE.md-Gotcha zu diesem Pfad). Statt bei
-    jedem Reimport an dieser Fragilitaet zu scheitern: die ~1MB dist/exercises.json
-    bei Bedarf direkt von GitHub nachladen und lokal cachen - Bilder selbst
-    kommen ohnehin per CDN (src/lib/yuhonasImage.js), kein voller Klon noetig
-    fuer diesen Pfad.
-    """
+    """Bevorzugt das KB-Submodul vendor/free-exercise-db; sonst Cache/GitHub."""
+    from fitness.catalog.core.source_merge import yuhonas_vendor_json_path
+
+    vendor = yuhonas_vendor_json_path()
+    if vendor is not None:
+        return vendor
     path = Path.home() / "fitness/free-exercise-db/dist/exercises.json"
     if path.exists():
         return path
@@ -356,15 +354,12 @@ def import_external_exercises():
         logger.info(f"Saved {len(unreviewed_wger)} exercises to {target}")
 
     if unreviewed_yuhonas:
-        target = exercises_dir / "unreviewed_yuhonas.yml"
-        wrapper = {
-            "name": "unreviewed_yuhonas",
-            "description": "Bulk imported exercises from yuhonas free-exercise-db",
-            "exercises": unreviewed_yuhonas
-        }
-        with target.open("w", encoding="utf-8") as f:
-            yaml.safe_dump(wrapper, f, allow_unicode=True, sort_keys=False)
-        logger.info(f"Saved {len(unreviewed_yuhonas)} exercises to {target}")
+        # Yuhonas-Bulk lebt im Vendor-Submodul (dist/exercises.json) — keinen
+        # parallelen unreviewed_yuhonas.yml-Dump mehr schreiben.
+        logger.info(
+            f"yuhonas: {len(unreviewed_yuhonas)} Eintraege aus Vendor gelesen "
+            "(kein unreviewed_yuhonas.yml mehr; Build/Merge lesen vendor JSON)."
+        )
 
 def _wger_entry_from_api_item(item: dict[str, Any]) -> dict[str, Any] | None:
     """Baut denselben Entry-Shape wie import_external_exercises()'s wger-Zweig,

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import json
 from copy import deepcopy
+from pathlib import Path
 from typing import Any
 
-from fitness.catalog.core.loader import load_catalog_yaml
+from fitness.catalog.core.loader import DATA_DIR, load_catalog_yaml
 from fitness.catalog.core.non_exercises import is_non_exercise, load_non_exercise_ids
 from fitness.catalog.core.muscle_normalization import normalize_exercise_muscle_list
 from fitness.catalog.core.resolver import normalize_text, GENERIC_FUZZY_TOKENS, fuzzy_candidate_allowed
@@ -18,14 +20,8 @@ except ImportError:
 
 def _entries_from_file(filename: str) -> list[dict[str, Any]]:
     # Bewusst UNGECACHT: find_source_entries() laeuft auch im langlebigen
-    # fitness-api.service-Prozess, ein Prozess-weiter Cache wuerde
-    # Aenderungen an unreviewed_wger.yml/unreviewed_yuhonas.yml (z.B. durch
-    # "fitness sync pull") bis zum naechsten Neustart nie sehen — und
-    # Test-Mocks auf load_catalog_yaml wuerden nach dem ersten Aufruf
-    # ignoriert (echter Regressions-Fund, siehe test_source_merge.py).
-    # Batch-Aufrufer mit vielen Records (z.B. audit/source_consistency.py)
-    # sollen stattdessen einmal selbst laden und ueber find_source_entries()s
-    # wger_entries/yuhonas_entries-Parameter durchreichen.
+    # API-Prozess. Nur noch fuer wger-Bulk (`unreviewed_wger.yml`).
+    # Yuhonas kommt aus dem Vendor-Submodul — siehe load_yuhonas_bulk_entries().
     doc = load_catalog_yaml(f"exercises/{filename}") or {}
     entries = doc.get("exercises") or []
     blocked = load_non_exercise_ids()
@@ -33,6 +29,68 @@ def _entries_from_file(filename: str) -> list[dict[str, Any]]:
         entry for entry in entries
         if isinstance(entry, dict) and not is_non_exercise(entry, blocked)
     ]
+
+
+def yuhonas_vendor_json_path() -> Path | None:
+    """Gepinntes free-exercise-db unter catalog/kb/vendor (fitness-Repo)."""
+    candidates = [
+        DATA_DIR / "vendor" / "free-exercise-db" / "dist" / "exercises.json",
+        Path.home() / "dev" / "fitness" / "vendor" / "free-exercise-db" / "dist" / "exercises.json",
+    ]
+    for path in candidates:
+        if path.is_file():
+            return path
+    return None
+
+
+def yuhonas_item_to_entry(item: dict[str, Any]) -> dict[str, Any] | None:
+    """Roh-JSON (upstream) → Katalog-Bulk-Shape (frueher unreviewed_yuhonas.yml)."""
+    raw_id = item.get("id")
+    name = item.get("name")
+    if not raw_id or not name:
+        return None
+    safe_id = f"yuhonas_{str(raw_id).lower().replace(' ', '_')}"
+    equipment = item.get("equipment")
+    return {
+        "exercise_id": safe_id,
+        "display_name": name,
+        "english": name,
+        "category": item.get("category") or "other",
+        "primary_muscles": list(item.get("primaryMuscles") or []),
+        "secondary_muscles": list(item.get("secondaryMuscles") or []),
+        "equipment": [equipment] if equipment else [],
+        "coaching_notes": list(item.get("instructions") or []),
+        "original_description": list(item.get("instructions") or []),
+        "instructions": list(item.get("instructions") or []),
+        "images": list(item.get("images") or []),
+        "tags": ["bulk_import", "yuhonas"],
+        "yuhonas_id": raw_id,
+        "level": item.get("level"),
+        "force": item.get("force"),
+        "mechanic": item.get("mechanic"),
+    }
+
+
+def load_yuhonas_bulk_entries() -> list[dict[str, Any]]:
+    """Live-Bulk aus vendor/free-exercise-db — ersetzt unreviewed_yuhonas.yml."""
+    path = yuhonas_vendor_json_path()
+    if path is None:
+        return []
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if not isinstance(raw, list):
+        return []
+    blocked = load_non_exercise_ids()
+    out: list[dict[str, Any]] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        entry = yuhonas_item_to_entry(item)
+        if entry and not is_non_exercise(entry, blocked):
+            out.append(entry)
+    return out
 
 
 def _find_wger_entry(entries: list[dict[str, Any]], wger_id: Any) -> dict[str, Any] | None:
@@ -283,30 +341,11 @@ def find_source_entries(
     wger_entries: list[dict[str, Any]] | None = None,
     yuhonas_entries: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Sucht die rohen wger-/yuhonas-Einzeleintraege (aus `unreviewed_wger.yml`
-    / `unreviewed_yuhonas.yml`) fuer eine Uebung, per ID-Hinweis (falls schon
-    ein Katalog-Record existiert) oder Namens-Fuzzy-Match. Liefert beide roh
-    und getrennt zurueck (`{"wger": entry|None, "yuhonas": entry|None}`) —
-    keine Feld-Verschmelzung, das macht ausschliesslich `build_external_seed()`
-    fuer neue Katalog-Seeds. Fuer Anzeige/Attribution ("wger sagt X, yuhonas
-    sagt Y") ist dies die richtige Quelle, nicht `build_external_seed()`.
+    """Sucht die rohen wger-/yuhonas-Einzeleintraege fuer eine Uebung.
+    wger: `unreviewed_wger.yml`; yuhonas: Vendor `free-exercise-db` JSON.
+    Liefert beide roh und getrennt (`{"wger": entry|None, "yuhonas": entry|None}`).
 
-    Zusaetzlich liefert die Rueckgabe `wger_candidate`/`yuhonas_candidate`
-    (entry|None) + `wger_candidate_score`/`yuhonas_candidate_score`
-    (float|None): Nicht-exakte Treffer ab CANDIDATE_MIN_SCORE, die nur
-    als Vorschlag erscheinen,
-    aber fuer eine manuelle Bestaetigung (CLI/Coach-Review) taugen. Nur
-    gesetzt, wenn der jeweilige `wger`/`yuhonas`-Key None ist.
-
-    `record`: optionaler, bereits aufgeloester ExerciseRecord — siehe
-    `_candidate_queries()`, spart Batch-Aufrufern den wiederholten teuren
-    build_exercise_index()-Rebuild.
-
-    `wger_entries`/`yuhonas_entries`: optional bereits geladene Rohlisten —
-    spart Batch-Aufrufern (z.B. audit/source_consistency.py ueber ~40
-    Records) das wiederholte Neu-Laden derselben zwei YAML-Dateien. Ohne
-    Uebergabe unveraendertes Verhalten (frischer Load pro Aufruf, siehe
-    `_entries_from_file()`)."""
+    `wger_entries`/`yuhonas_entries`: optional bereits geladene Rohlisten."""
     wger_entry = None
     yuhonas_entry = None
     wger_candidate: dict[str, Any] | None = None
@@ -318,7 +357,7 @@ def find_source_entries(
     if wger_entries is None:
         wger_entries = _entries_from_file("unreviewed_wger.yml")
     if yuhonas_entries is None:
-        yuhonas_entries = _entries_from_file("unreviewed_yuhonas.yml")
+        yuhonas_entries = load_yuhonas_bulk_entries()
 
     if record is None and exercise_id:
         record = find_by_id(str(exercise_id), build_exercise_index())
@@ -436,7 +475,10 @@ def search_source_entries(source: str, query: str, limit: int = 30) -> list[dict
     query = str(query or "").strip().casefold()
     if not query:
         return []
-    entries = _entries_from_file(f"unreviewed_{source}.yml")
+    if source == "yuhonas":
+        entries = load_yuhonas_bulk_entries()
+    else:
+        entries = _entries_from_file(f"unreviewed_{source}.yml")
     matches = []
     for entry in entries:
         sid = entry.get(f"{source}_id")

@@ -1,3 +1,8 @@
+## 2026-11-09 — Yuhonas-Bulk aus Vendor, kein unreviewed_yuhonas.yml
+
+- Merge/Build/Inbox lesen `vendor/free-exercise-db/dist/exercises.json`.
+- Dump `exercises/unreviewed_yuhonas.yml` aus KB entfernt; wger-Dump bleibt.
+
 ## 2026-11-09 — AL 18:10: Catchup-Push-Hit geschlossen
 
 - Org-Task `7cd93f79` done: `9da51ea1`+3 Docs bereits Ancestor von `origin/dev` `c6689342`.

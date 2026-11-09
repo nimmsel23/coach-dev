@@ -15,8 +15,10 @@ def list_inbox_merge_candidates() -> dict[str, dict[str, Any]]:
     wger/yuhonas") — verlinkt/schreibt nichts, ersetzt keine bestehende
     Anzeige. Manuelle Bestaetigung bleibt `attach-sources --apply` bzw. ein
     spaeterer expliziter Merge-Schritt."""
+    from fitness.catalog.core.source_merge import load_yuhonas_bulk_entries
+
     wger_entries = _entries_from_file("unreviewed_wger.yml")
-    yuhonas_entries = _entries_from_file("unreviewed_yuhonas.yml")
+    yuhonas_entries = load_yuhonas_bulk_entries()
 
     out: dict[str, dict[str, Any]] = {}
     for record in build_exercise_index():

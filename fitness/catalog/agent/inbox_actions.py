@@ -331,14 +331,16 @@ def _source_exercise_for_tombstone(entry: dict[str, Any]) -> dict[str, Any] | No
     exercise_id = entry.get("exercise_id")
     if not exercise_id:
         return None
-    for source_file in ("unreviewed_wger.yml", "unreviewed_yuhonas.yml"):
-        path = exercises_dir() / source_file
-        if not path.exists():
-            continue
+    path = exercises_dir() / "unreviewed_wger.yml"
+    if path.exists():
         doc = load_yaml(path)
         for ex in doc.get("exercises", []) or []:
             if isinstance(ex, dict) and str(ex.get("exercise_id")) == str(exercise_id):
                 return dict(ex)
+    from fitness.catalog.core.source_merge import load_yuhonas_bulk_entries
+    for ex in load_yuhonas_bulk_entries():
+        if str(ex.get("exercise_id")) == str(exercise_id):
+            return dict(ex)
     return None
 
 
@@ -467,10 +469,9 @@ def _find_yuhonas_match(display_name: str, min_score: float = 90.0) -> str | Non
     except ImportError:
         return None
 
-    from fitness.catalog.core.loader import load_catalog_yaml
+    from fitness.catalog.core.source_merge import load_yuhonas_bulk_entries
 
-    doc = load_catalog_yaml("exercises/unreviewed_yuhonas.yml") or {}
-    entries = doc.get("exercises") or []
+    entries = load_yuhonas_bulk_entries()
     choices = {
         e["exercise_id"]: e.get("display_name", "")
         for e in entries

@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 def _source_entry_by_id(source: str, source_id: str):
-    from fitness.catalog.core.source_merge import _entries_from_file
+    from fitness.catalog.core.source_merge import _entries_from_file, load_yuhonas_bulk_entries
 
     if source == "wger":
         for entry in _entries_from_file("unreviewed_wger.yml"):
@@ -20,7 +20,7 @@ def _source_entry_by_id(source: str, source_id: str):
                 return entry
     elif source == "yuhonas":
         wanted = str(source_id or "").casefold()
-        for entry in _entries_from_file("unreviewed_yuhonas.yml"):
+        for entry in load_yuhonas_bulk_entries():
             candidates = [
                 entry.get("yuhonas_id"),
                 entry.get("exercise_id"),

@@ -99,8 +99,10 @@ def run_source_consistency_audit() -> SourceConsistencyResult:
     # Einmal laden, an find_source_entries() durchreichen — sonst laedt
     # jeder der ~40 Records dieselben zwei YAML-Dateien neu (dominierte
     # vorher die Laufzeit, siehe Docstring von find_source_entries()).
+    from fitness.catalog.core.source_merge import load_yuhonas_bulk_entries
+
     wger_entries = _entries_from_file("unreviewed_wger.yml")
-    yuhonas_entries = _entries_from_file("unreviewed_yuhonas.yml")
+    yuhonas_entries = load_yuhonas_bulk_entries()
 
     for record in records:
         if record.source not in CHECKED_SOURCES:

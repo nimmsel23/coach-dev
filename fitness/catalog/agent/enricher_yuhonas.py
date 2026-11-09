@@ -1,53 +1,37 @@
 from __future__ import annotations
 
-import yaml
 from loguru import logger
-from pathlib import Path
 
 from fitness.catalog.core.resolver import build_exercise_index
-from fitness.catalog.core.loader import DATA_DIR
+from fitness.catalog.core.source_merge import load_yuhonas_bulk_entries, yuhonas_vendor_json_path
 
 BASE_IMAGE_URL = "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/"
 
+
 def enrich_yuhonas_images(dry_run: bool = False):
+    """Image-URLs kommen aus dem Vendor-Pin (CDN); kein Schreiben mehr nach
+    unreviewed_yuhonas.yml. Zeigt nur, wie viele Bulk-Eintraege Bilder haben."""
     records = build_exercise_index()
     logger.info(f"Loaded {len(records)} exercise records.")
 
-    matches = 0
-    for record in records:
-        if record.tags and "yuhonas" in record.tags and not record.image_url:
-            pass
-
-    # Better approach: parse the yuhonas file directly
-    yuhonas_file = DATA_DIR / "exercises" / "unreviewed_yuhonas.yml"
-    if not yuhonas_file.exists():
-        logger.error(f"yuhonas file not found at {yuhonas_file}")
+    path = yuhonas_vendor_json_path()
+    if path is None:
+        logger.error("yuhonas vendor JSON not found (vendor/free-exercise-db)")
         return
 
-    with yuhonas_file.open("r", encoding="utf-8") as f:
-        doc = yaml.safe_load(f)
-
-    if not doc or "exercises" not in doc:
-        return
-
-    updated = False
-    for ex in doc["exercises"]:
+    entries = load_yuhonas_bulk_entries()
+    with_images = 0
+    for ex in entries:
         y_id = ex.get("yuhonas_id")
-        if y_id and not ex.get("image_url"):
-            # Construct URL. Note: yuhonas uses spaces in folder names sometimes? 
-            # My earlier test showed Air_Bike worked. 
-            # Let's use the ID directly, it seems to be the folder name.
-            image_url = f"{BASE_IMAGE_URL}{y_id}/0.jpg"
-            ex["image_url"] = image_url
-            matches += 1
-            updated = True
+        images = ex.get("images") or []
+        if y_id and images:
+            with_images += 1
+        elif y_id:
+            # Upstream folders use the id as directory name
+            _ = f"{BASE_IMAGE_URL}{y_id}/0.jpg"
+            with_images += 1
 
-    if updated and not dry_run:
-        with yuhonas_file.open("w", encoding="utf-8") as f:
-            yaml.safe_dump(doc, f, allow_unicode=True, sort_keys=False)
-        logger.info(f"Updated {matches} yuhonas exercises with images.")
-    else:
-        logger.info(f"Dry run or no updates. Matches found: {matches}")
-
-if __name__ == "__main__":
-    enrich_yuhonas_images()
+    logger.info(
+        f"yuhonas vendor {path}: {len(entries)} entries, "
+        f"~{with_images} with image paths (dry_run={dry_run}; no YAML write)."
+    )

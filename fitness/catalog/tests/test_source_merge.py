@@ -29,22 +29,23 @@ class SourceMergeTest(unittest.TestCase):
                 }, allow_unicode=True),
                 encoding="utf-8",
             )
-            (exercises / "unreviewed_yuhonas.yml").write_text(
-                yaml.dump({
-                    "exercises": [{
-                        "exercise_id": "yuhonas_walking_lunges",
-                        "display_name": "Walking Lunges",
-                        "english": "Walking Lunges",
-                        "yuhonas_id": "Walking Lunges",
-                        "instructions": ["Step forward"],
-                        "images": ["a.jpg"],
-                        "secondary_muscles": ["603_gluteus_maximus"],
-                    }]
-                }, allow_unicode=True),
-                encoding="utf-8",
-            )
+            yuhonas_entries = [{
+                "exercise_id": "yuhonas_walking_lunges",
+                "display_name": "Walking Lunges",
+                "english": "Walking Lunges",
+                "yuhonas_id": "Walking Lunges",
+                "instructions": ["Step forward"],
+                "images": ["a.jpg"],
+                "secondary_muscles": ["603_gluteus_maximus"],
+            }]
 
-            with mock.patch("fitness.catalog.core.source_merge.load_catalog_yaml", side_effect=lambda rel: yaml.safe_load((root / rel).read_text())):
+            with mock.patch(
+                "fitness.catalog.core.source_merge.load_catalog_yaml",
+                side_effect=lambda rel: yaml.safe_load((root / rel).read_text()),
+            ), mock.patch(
+                "fitness.catalog.core.source_merge.load_yuhonas_bulk_entries",
+                return_value=yuhonas_entries,
+            ):
                 seed = build_external_seed("Walking Lunges", "wger_206")
 
             self.assertIsNotNone(seed)
