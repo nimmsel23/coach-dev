@@ -34,9 +34,9 @@ für feinere App-Features. Catalog/KB = Coach-Werkzeug, nicht Kern der Fitness-/
 | **Coach-HTTP-Server** (`server.py`, Keepers) | `~/dev/coach-dev` | `coach-api.service` **:9150** — ein Prozess |
 | FastAPI Catalog/Sessions/Workouts (in-process) | `~/dev/coach-dev/fitness/api/` | von `server.py` gemountet; kein `:8100` |
 | Workout-/Plan-Schmiede UI + Plan-Editor | Plan (`~/dev/plan-dev`) konsumiert von Coach (`modules/plan`) | Plan owns editor; Coach hosts Schmiede |
-| Node/Hono + Cloud Functions | `~/dev/backend` (Kopien: plan-backend, fuel-backend) | **kein** Coach-:9150-SOT; siehe Pointer-README dort |
+| Node/Hono + Cloud Functions | `~/dev/backend` (+ `fuel/`; Kopien: plan-backend) | **kein** Coach-:9150-SOT; siehe Pointer-README dort |
 | Fitness Firebase PWA (Logging, Overlay) | `~/dev/fitness-dev` | Hosting/UI; Python-Tree dort ist **Fork-Rest**, nicht API-SOT |
-| Fuel App | `~/dev/fuel-dev` (+ historisch `fuel-backend`) | getrennt von Fitness-Catalog |
+| Fuel App | `~/dev/fuel-dev` + Node in `~/dev/backend/fuel` | getrennt von Fitness-Catalog |
 | Klienten-Python / Praxis-CLIs | `~/dev/coach-dev/klienten-python`, Sibling `~/dev/praxis-dev` | `coach klientenctl`, `coach praxis` |
 
 **Korrektur:** Coach-Laufzeit-SOT ist **coach-dev** (`server.py` :9150).
@@ -65,7 +65,7 @@ Daten-Repo `~/dev/fitness` und ist seit 2026-11-09 als Git-Submodul unter
 | `~/dev/fitness-dev/fitness/` | divergierte Fork-Kopie (Workouts älter als Coach) | langfristig auf Coach-API verlassen; lokalen Python-Tree nicht weiterpflegen |
 | `~/dev/fitness-cli` | ungenutzte Teilkopie | → `~/dev/_archive/2026-11-09-fitness-orphans/` |
 | `~/dev/fitness-backend` | WD der **disabled** `fitness-dev.service` | → Archiv; Unit WD → `fitness-dev` |
-| `~/dev/fuel-backend` | historischer Fuel-Node-WD | lassen bis Fuel-AL aufräumt |
+| `~/dev/backend/fuel` | Fuel Fastify-Node (ehem. fuel-backend) | SOT für Fuel-Server |
 | `plan-dev/catalog`, `plan-dev/fitness_cli` | kaputte Symlinks | → `archive/fitness-fork-schuld-2026-11-09/` |
 | `plan-dev/fitnessctl*` u. ä. | Fork-Schuld | → `plan-dev/archive/` |
 | `fitness/coach/deploy/fitness-preview.service` | tote `:8100`-Upstream-Unit | → `archive/obsolete-units-2026-11-09/` |
