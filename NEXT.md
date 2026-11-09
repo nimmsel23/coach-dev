@@ -3,9 +3,9 @@
 - [ ] Den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy verifizieren.
 
 
--   **Frontend-Serve Katalog-UI**: Coach-Dist statt totem `:8100`-Preview
-    (FIRE-Rest; Scope → `+ceo`). Inbox/Catalog-API läuft seit 2026-11-09 wieder
-    lokal in coach-api (`fitness_api: local`) — Serve-Pfad der Catalog-UI ist offen.
+-   **Frontend-Serve Katalog-UI**: Coach-Dist statt Legacy-Fitness-SPA unter
+    `/fitness/` (FIRE-Rest; Scope → `+ceo`). API lokal (`fitness_api: local`);
+    Unit `fitness-preview` archiviert — offen bleibt nur der UI-Serve-Pfad.
 -   **fitness-dev-KB-Kopie**: traegt weiter eine divergente KB-Kopie (nur noch
     Konsument). Beim naechsten Upstream-Merge Katalog-Drift beachten; Ausmisten der
     Kopie als separater Schnitt, sobald sicher keine Pipeline mehr dort liest.
