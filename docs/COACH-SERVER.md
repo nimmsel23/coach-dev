@@ -3,7 +3,7 @@
 **SOT:** `~/dev/coach-dev/server.py` (`coach-api.service`) owns the shared Coach
 HTTP entrypoint at `http://127.0.0.1:9150`. One listening process: Fitness/
 Catalog/`fitness.api`, Fuel proxy, embedded Relax, Coach domains, Catalog UI
-(`/` / `/catalog-ui/`), local-mode Fitness SPA (`/fitness/`), Firebase Coach UI
+(`/` / `/catalog-ui/`), Katalog-UI unter `/fitness/` (Coach-Dist; Legacy-SPA nur mit `COACH_FITNESS_FRONTEND_DIR`), Firebase Coach UI
 (`/coach/`).
 
 Quartals-FOCUS (3 Monatsmissionen): [FOCUS.md](../FOCUS.md). Ownership: [OWNERSHIP-MAP.md](OWNERSHIP-MAP.md).
@@ -23,8 +23,7 @@ into this repo.
 
 Catalog/Inbox/Enrichment on the laptop live here (`:9150`). Firebase Coach UI
 talks via `coachCommands`/`coachInbox`; `coach-sync.service` executes the same
-`fitness.api` inbox modules. `/fitness/` may still serve a built Fitness SPA for
-local preview; its coach-work API is this process.
+`fitness.api` inbox modules. `/fitness/` serves the Catalog UI from Coach-Dist (`dist-catalog` / `COACH_CATALOG_DIR`); set `COACH_FITNESS_FRONTEND_DIR` only for the legacy Fitness SPA. The coach-work API is this process.
 
 `/health` and `/_coach/health` report Coach liveness (`fitness_api: local`,
 `relax_api: local`, configured backends). `/_coach/backends` probes workers;

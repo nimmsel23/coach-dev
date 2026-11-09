@@ -1,0 +1,92 @@
+# Check für Coach: Build auf jedem PR/dev-Push, ohne Deploy und ohne Firebase-Secrets.
+# Gleiche Build-Kette wie deploy-coach.yml (KB + Plan-Pin + pnpm build:firebase:coach).
+
+name: Check (Coach)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize pinned Plan source
+        run: git submodule update --init modules/plan
+
+      - name: website auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: nimmsel23/daniel-vitaltrainer-firebase
+          ref: main
+          path: website
+          ssh-key: ${{ secrets.WEBSITE_DEPLOY_KEY }}
+
+      - name: fitness-dev-Stand lesen
+        id: fitref
+        run: echo "ref=$(tr -d '[:space:]' < modules/plan/fitness.ref)" >> "$GITHUB_OUTPUT"
+
+      - name: fitness-dev auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: nimmsel23/fitness-dev
+          ref: ${{ steps.fitref.outputs.ref }}
+          path: .fitness-dev
+          token: ${{ secrets.GH_SUBMODULE_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: FITNESS_ROOT setzen
+        run: echo "FITNESS_ROOT=$GITHUB_WORKSPACE/.fitness-dev" >> "$GITHUB_ENV"
+
+      - name: Checkout fitness KB (SOT)
+        uses: actions/checkout@v4
+        with:
+          repository: nimmsel23/fitness
+          ref: main
+          path: fitness-kb
+          submodules: recursive
+
+      - name: Fitness-KB einhängen
+        run: |
+          mkdir -p fitness/catalog
+          rm -rf fitness/catalog/kb
+          ln -sfn "$GITHUB_WORKSPACE/fitness-kb" fitness/catalog/kb
+          test -d fitness/catalog/kb/exercises/6pack
+          echo "FITNESS_KB_DIR=$GITHUB_WORKSPACE/fitness/catalog/kb" >> "$GITHUB_ENV"
+          echo "KB @ $(git -C fitness-kb rev-parse --short HEAD)"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: sixpack-dev auschecken (KB-Daten)
+        run: |
+          git clone --depth 1 --branch master https://github.com/nimmsel23/6pack-dev.git ../6pack-dev
+          pnpm --dir ../6pack-dev install --frozen-lockfile --ignore-scripts
+
+      - name: Install
+        run: |
+          printf 'packages: ["."]\nnodeLinker: hoisted\nverifyDepsBeforeRun: false\nignoreScripts: true\noverrides:\n  "brace-expansion@<1.1.20": ^1.1.20\n  "brace-expansion@>=2.0.0 <2.1.7": ^2.1.7\n  "brace-expansion@>=5.0.0 <5.0.11": ^5.0.11\n  "postcss-selector-parser@<6.1.5": ^6.1.5\n  "glob@<14.0.2": ^14.0.3\n  "minimatch@<11.0.1": ^11.0.4\n  "fast-uri@<3.1.9": ^3.1.9\n  "node-forge@<=1.4.0": ^1.4.3\n  "serialize-javascript@<7.1.3": ^7.1.3\n  "uuid@<11.1.1": ^11.1.1\n  "@grpc/grpc-js@<1.13.6": ^1.14.6\n' > pnpm-workspace.yaml
+          pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: KB-Daten generieren
+        run: pnpm run build:kb-data
+
+      - name: Build (Coach)
+        run: pnpm run build:firebase:coach

@@ -1,3 +1,9 @@
+## 2026-11-09 — AL: Dependabot→dev + /fitness/ Katalog-UI
+
+- `dependabot.yml`: `target-branch: dev` für actions/npm/pip; `check.yml` + `automerge-pr.yml` (Check (Coach)).
+- `/fitness/` dient Catalog-Dist (`COACH_CATALOG_DIR`/`dist-catalog`); Legacy-SPA nur mit `COACH_FITNESS_FRONTEND_DIR`.
+- Org-Hits: Dependabot-AutoMerge + Frontend-Serve geschlossen.
+
 ## 2026-11-09 — anatomy-kb → Coach-Backend; Skills live
 
 - `anatomy-kb/` von fitness-dev nach `~/dev/coach-dev/anatomy-kb/` verschoben; fitness-dev behält Compat-Symlink.

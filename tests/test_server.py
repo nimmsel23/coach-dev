@@ -53,6 +53,22 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
             self.assertTrue((await client.get("/_coach/health")).json()["catalog_ready"])
         self.assertFalse(self.requests)
 
+    async def test_fitness_path_serves_catalog_by_default(self):
+        async with self.client() as client:
+            self.assertEqual((await client.get("/fitness/")).text, "catalog")
+            health = (await client.get("/_coach/health")).json()
+            self.assertTrue(health["fitness_frontend_ready"])
+        self.assertFalse(self.requests)
+
+    async def test_fitness_path_legacy_spa_via_env(self):
+        spa = self.root / "fitness-spa"
+        spa.mkdir()
+        (spa / "index.html").write_text("legacy-spa")
+        with patch.dict("os.environ", {"COACH_FITNESS_FRONTEND_DIR": str(spa)}):
+            async with self.client() as client:
+                self.assertEqual((await client.get("/fitness/")).text, "legacy-spa")
+        self.assertFalse(self.requests)
+
     async def test_proxy_preserves_payload_query_status_and_cookies(self):
         def reply(request):
             return httpx.Response(409, headers=[("set-cookie", "a=1"), ("set-cookie", "b=2")],

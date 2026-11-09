@@ -269,7 +269,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
                 "fitness_api": fitness_mode,
                 "fitness_frontend_api": "local" if app.state.fitness_frontend_app else "unavailable",
                 "relax_api": "local" if relax_app is not None else ("worker" if "relax" in backends else "unavailable"),
-                "fitness_frontend_ready": (fitness_ui / "index.html").is_file(),
+                "fitness_frontend_ready": ((fitness_ui if os.environ.get("COACH_FITNESS_FRONTEND_DIR") else catalog) / "index.html").is_file(),
                 "catalog_ready": (catalog / "index.html").is_file(),
                 "coach_ready": (coach / "index.html").is_file()}
 
@@ -330,17 +330,24 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
             if "fitness" in backends and not fitness_api_local:
                 return await proxy(request, "fitness", strip_segments=1)
             return JSONResponse({"detail": "Not found"}, status_code=404)
-        if not (fitness_ui / "index.html").is_file():
+        # Default: Katalog-UI (Coach-Dist) unter /fitness/. Legacy Fitness-SPA
+        # nur noch mit explizitem COACH_FITNESS_FRONTEND_DIR.
+        legacy_spa = bool(os.environ.get("COACH_FITNESS_FRONTEND_DIR"))
+        ui = fitness_ui if legacy_spa else catalog
+        if not (ui / "index.html").is_file():
             return JSONResponse({
-                "detail": "Fitness frontend build missing",
-                "directory": str(fitness_ui),
-                "build": "cd ~/dev/fitness-dev/frontend && VITE_API_BASE=/fitness-api pnpm exec vite build",
+                "detail": "Fitness frontend build missing" if legacy_spa else "Catalog UI build missing",
+                "directory": str(ui),
+                "build": (
+                    "cd ~/dev/fitness-dev/frontend && VITE_API_BASE=/fitness-api pnpm exec vite build"
+                    if legacy_spa else "npm run build:catalog-ui"
+                ),
             }, status_code=503)
         if path == "sw.js":
-            return frontend(fitness_ui, path)
-        response = frontend(fitness_ui, path)
+            return frontend(ui, path)
+        response = frontend(ui, path)
         if not path or not Path(path).suffix:
-            html = (fitness_ui / "index.html").read_text(encoding="utf-8")
+            html = (ui / "index.html").read_text(encoding="utf-8")
             html = html.replace("navigator.serviceWorker.register('/sw.js')", "navigator.serviceWorker.register('/fitness/sw.js')")
             return HTMLResponse(html, headers={"Cache-Control": "no-cache"})
         return response

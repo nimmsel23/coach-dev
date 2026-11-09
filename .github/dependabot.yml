@@ -11,6 +11,7 @@ updates:
   commit-message:
     prefix: ci
   directory: /
+  target-branch: dev
   groups:
     actions:
       patterns:
@@ -27,6 +28,7 @@ updates:
   directories:
   - /
   - /functions
+  target-branch: dev
   cooldown: &id003
     default-days: 7
   groups: &id004
@@ -41,3 +43,4 @@ updates:
   cooldown: *id003
   groups: *id004
   directory: /
+  target-branch: dev
