@@ -6,7 +6,7 @@ Catalog/`fitness.api`, Fuel proxy, embedded Relax, Coach domains, Catalog UI
 (`/` / `/catalog-ui/`), local-mode Fitness SPA (`/fitness/`), Firebase Coach UI
 (`/coach/`).
 
-Monatsmission: [FOCUS.md](../FOCUS.md). Ownership: [OWNERSHIP-MAP.md](OWNERSHIP-MAP.md).
+Quartals-FOCUS (3 Monatsmissionen): [FOCUS.md](../FOCUS.md). Ownership: [OWNERSHIP-MAP.md](OWNERSHIP-MAP.md).
 
 Domain **data** (DBs, client files, YAML-KB repo) stay with their owners. No
 second catalog implementation and no mandatory tree-move of `~/dev/backend`
