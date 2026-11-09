@@ -1,3 +1,10 @@
+## 2026-11-09 — anatomy-kb → Coach-Backend; Skills live
+
+- `anatomy-kb/` von fitness-dev nach `~/dev/coach-dev/anatomy-kb/` verschoben; fitness-dev behält Compat-Symlink.
+- `config.py` resolved Catalog auf `fitness/catalog/kb`; `exercises` → `anatomy_teaching`.
+- systemd PYTHONPATH (`coach-api`/`coach-sync` + user units) auf Coach-Pfad; Wrapper `bin/anatomy-agent` + `bin/fitness-catalog`.
+- Skills `anatomy-agent` / `fitness-agent` (+ `.agents/source-command-*`) auf Coach-CLIs umgeschrieben; OWNERSHIP-MAP ergänzt.
+
 ## 2026-11-09 — Yuhonas-Bulk aus Vendor, kein unreviewed_yuhonas.yml
 
 - Merge/Build/Inbox lesen `vendor/free-exercise-db/dist/exercises.json`.
