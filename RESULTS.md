@@ -1,3 +1,9 @@
+## 2026-11-10 — Inbox-SubTabs + Push bei neuer Anfrage
+
+- Sidebar: offene Anfragen live als SubTabs unter Anfragen (`watchCoachInbox` → `coachInbox`).
+- Cloud Function `onCoachInbox` + SW `inboxRequest`: Push bei neuem `coachInbox/{id}`; Schalter/Demo in Notifications.
+- Texte in `notifications.yaml`; reine Logik in `inboxRequest.js` (mit Tests).
+
 ## 2026-11-10 — Shell: Klienten-SubTabs + Quick-Menüs
 
 - Sidebar: Klienten-SubTabs (Verlauf/Plan/Chat + Mehr) wenn Klienten aktiv; Rechtsklick → Klienten-Schnellwahl / Anfragen-Liste.
