@@ -1,3 +1,8 @@
+## 2026-11-10 — vos-coach SyntaxError: Vite Preload-Marker-Hash
+
+- Ursache: Rolldown emittiert `__VITE_PRELOAD__<32hex>`; Vite 8.3.x ersetzt nur den Prefix → bare Hex-Identifier (`…mapDeps([])1bd78f6c…`) → Parse-Crash (Shell/Header sichtbar, App tot).
+- Fix: Vite-Plugin `fix-vite-preload-markers` (generateBundle pre) + Safety-Skript nach dem Build.
+
 ## 2026-11-10 — Fuel-CLI + Coach in-process Fuel-API; Dispatcher-Fixes
 
 - `backend/fuel`: Fuelctx-CLI aus fuel-dev integriert; Poetry/uv (`fuel`, `fuel-api`, …); leere/`quoted` `DATABASE_URL` gehärtet.
