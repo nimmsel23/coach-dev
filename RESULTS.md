@@ -1,3 +1,8 @@
+## 2026-11-10 — pnpm: Rolldown 1.2.16 + Workspace ohne Symlink-Module
+
+- CI/local Override `rolldown: 1.2.16` (statt 1.3.0 Preload-Blackscreen).
+- Laptop-`pnpm-workspace.yaml`: nur `.` + `modules/plan` (6pack/skills-Symlinks nicht als Members).
+
 ## 2026-11-10 — Functions: onCoachInbox + onClientMessage live
 
 - Deploy `fitness-aos` / Codebase `fitness`: `onCoachInbox`, `onClientMessage` (europe-west1, 1st Gen) — Create OK.
