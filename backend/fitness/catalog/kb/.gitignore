@@ -1,1 +1,3 @@
-*.bak
+# Nested free-exercise-db was an orphan gitlink in coach (not in root .gitmodules).
+# Real submodule lives in nimmsel23/fitness; do not re-add as coach gitlink.
+vendor/free-exercise-db/
