@@ -1,3 +1,9 @@
+## 2026-11-10 — Katalog: Merge/Pipeline-Rechtsklick + Inbox-Draft API
+
+- `POST /fitness/inbox/draft` (+ Coach-Worker `create-draft`): ID-only Draft ohne Enrichment.
+- Katalog-Rechtsklick: umbenennen, mergen (Telefonbuch), Inbox, erneut durch Pipeline, archivieren/löschen, Coach Sheet.
+- Jefferson-Curl-Pipeline-Test: `inbox_jefferson_curl_pipeline.yml` (kein wger/yuhonas, enrich → bleibt Draft).
+
 ## 2026-11-10 — Coach Sheet: Full-width + Do/Don't statt Fluff
 
 - `ExerciseInsightModal`: volle Desktop-Breite, auto-fit Grids; getrennte wger-/yuhonas-Quellkarten mit Snapshot/Links/Bildern.
