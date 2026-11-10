@@ -1,5 +1,12 @@
 - 2026-11-10: chore(deps) major stack align — React 19 / Vite 8.3.6 / plugin-react 6.2.1 / Firebase 13 (age-safe pins, pnpm-workspace overrides).
 
+## 2026-11-10 — Hub-Routen: /k/ only, Fuel, Vitaltrainer
+
+- Klienten-UI nur noch unter `/k/<slug>/` — Root-Slugs kein Klienten-Lookup mehr.
+- `file_from_dirs` erlaubt Hub-Symlinks (`fuel/` → `.dotfiles/frontends/fuel`).
+- `/vitaltrainer/` und `/website/vitaltrainer` servieren die Landing (kein 302).
+- Tests für `/k/`-only und Website-Alias angepasst.
+
 ## 2026-11-10 — fuel/backend Nesting weg
 
 - `backend/fuel/backend` → flat `backend/fuel/` als Package `fuel`.
