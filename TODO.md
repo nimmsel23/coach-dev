@@ -18,9 +18,9 @@ nachziehen. `FOCUS.md` / `FREEDOM.md` aktiv; `FRAME.md` optional später.
       Legacy nur mit `COACH_FITNESS_FRONTEND_DIR` (2026-11-09 AL).
 - [ ] **Deploy-Formalisierung:** `~/.aos/fitness/kb`-Seed geschah manuell (rsync);
       `deploy.sh`-Seed-Pfad auf coach-dev umstellen.
-- [ ] **Systemd-Quelle:** `coach-sync.service` wird noch aus
-      `fitness/coach/deploy/coach-sync.service` installiert (Coach-Stand im
-      Coach-Baum); Pfad in der Unit-Doku aktuell halten / auf Coach-Pfad ziehen.
+- [x] **Systemd-Quelle:** `coach-sync.service` — Repo-Unit = Coach-SOT
+      (`WorkingDirectory`/`KB`/`PYTHONPATH`/`ExecStart` → `coach-dev` + uv-Tool
+      `fitness`; Install-Kommentar + `docs/COACH_APP.md` nachgezogen). (2026-11-10 AL)
 
 ## Beobachten (kein Bau ohne klaren Drift)
 
