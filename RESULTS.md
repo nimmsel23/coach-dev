@@ -1,3 +1,8 @@
+## 2026-11-10 — Gemini CI: orphan free-exercise-db gitlink
+
+- Checkout-Rot: mode-160000 ohne Eintrag in coach `.gitmodules`.
+- Fix `04dd6366`: Gitlink entfernt, `vendor/free-exercise-db/` ignoriert.
+
 ## 2026-11-10 — pnpm: Rolldown 1.2.16 + Workspace ohne Symlink-Module
 
 - CI/local Override `rolldown: 1.2.16` (statt 1.3.0 Preload-Blackscreen).
