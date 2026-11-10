@@ -1,3 +1,8 @@
+## 2026-11-10 — AL: Systemd-Quelle coach-sync
+
+- Repo-Unit `fitness/coach/deploy/coach-sync.service` an Live-Coach-Pfade angeglichen: `PYTHONPATH` → `coach-dev/backend` + `anatomy-kb`, `ExecStart` → uv-Tool `fitness` (totes `fitness-agent` entfernt).
+- Install-Kommentar + `docs/COACH_APP.md` nennen Coach-Repo-SOT; TODO/NEXT abgehakt. Dienst nicht neu gestartet.
+
 ## 2026-11-10 — Inbox-SubTabs + Push bei neuer Anfrage
 
 - Sidebar: offene Anfragen live als SubTabs unter Anfragen (`watchCoachInbox` → `coachInbox`).
