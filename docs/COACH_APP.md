@@ -221,7 +221,7 @@ Thread vor dem ersten Socket-Accept → `Connection refused` → Befehl endgült
 mitten in der Arbeit blieben Befehle auf `processing` hängen.
 
 **Jetzt:** `fitness/coach/sync.py` (`python -m fitness.coach.sync run`), User-Unit `coach-sync.service`
-(Quelle `fitness/coach/deploy/coach-sync.service`, enabled). Ohne API-Server:
+(Quelle `~/dev/coach-dev/fitness/coach/deploy/coach-sync.service` — Coach-Repo-SOT; `WorkingDirectory`/`FITNESS_AGENT_KB`/`PYTHONPATH`/`ExecStart` auf `coach-dev` + uv-Tool `fitness`, enabled). Ohne API-Server:
 - Befehle transaktional übernehmen (queued → processing mit 5-min-Lease), Inbox-Routen **im Prozess**
   über Starlette-`TestClient` ausführen (kein Port, kein Startrennen), Ergebnis zurückschreiben.
 - Verwaiste `processing`-Befehle → `error` mit klarer Meldung, **nie** blind wiederholen (Approve/Delete/Merge

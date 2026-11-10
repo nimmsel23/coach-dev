@@ -37,3 +37,32 @@ _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen sta
 - Erledigt: Dependabot-Hit `2b7f9de8` + Serve `b6d56a4a` — `752b474d` (`target-branch:dev`, `check.yml`, `automerge-pr.yml`; `/fitness/`→Catalog-Dist). Tests ok.
 - Offen/Weiter: TODO Deploy-Seed; systemd-Pfad `coach-sync`; KB-Drift beobachten; optional Fuel-Upstream.
 - Blocker: Keine.
+
+## 2026-11-10 (Dienstag) — Abteilungsleiter-Lauf
+
+_Automatik (vos-al-log Vorlage 2026-11-10):_
+- Commits seit 2026-11-08: 96246d6d docs: auto-update RESULTS.md
+3f91b653 docs: auto-update NEXT.md
+af14e490 feat(shell): client subtabs in sidebar and bottom-nav long-press
+16c47097 docs: auto-update NEXT.md
+a3a86c6d docs: auto-update RESULTS.md
+dca5238b feat(catalog): right-click merge, archive, and requeue pipeline
+6fea0523 docs: auto-update NEXT.md
+7e5f86bd docs: auto-update RESULTS.md
+a93ef9c5 refactor(coach): sheet on Do/Don't, full-width sources
+2af45504 docs: auto-update NEXT.md
+9bf9f782 docs: auto-update RESULTS.md
+93cb464f chore(public): archive Fitness Centre SPA as v2.html
+aa978db5 chore(coach): slim startup — drop pandas/aiohttp, lazy Firestore
+24ccecee docs: auto-update NEXT.md
+016bb938 docs(inbox): Coach-UI is not the GitHub PR driver
+- Offene PRs: (keine offenen PRs / gh nicht verfuegbar)
+- CI (letzte Läufe): completed	failure	npm_and_yarn in /backend/fuel for fastify - Update #1692218330	Dependabot Updates	dev	dynamic	42758674669	1m1s	2026-11-10T04:53:31Z
+completed	failure	npm_and_yarn in /backend/fuel for @fastify/static - Update #1692218342	Dependabot Updates	dev	dynamic	42758674443	1m11s	2026-11-10T04:53:31Z
+completed	failure	Gemini CI Agent	Gemini CI Agent	dev	workflow_run	42757568926	10s	2026-11-10T04:42:38Z
+- Arbeitsbaum: 22 uncommittete Pfade
+
+_Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
+- Erledigt: TODO Systemd-Quelle — `fitness/coach/deploy/coach-sync.service` + `docs/COACH_APP.md` auf Coach-SOT (`PYTHONPATH`/`ExecStart`=`fitness`); Commit dieses Laufs (Worktree von `96246d6d`).
+- Offen/Weiter: TODO Deploy-Seed; KB-Drift beobachten (fitness-dev vs coach SOT); optional Fuel-Upstream; fremdes WIP Haupt-Checkout (Inbox/Chat-Push, ~22 Pfade) unberührt; Org `fe34e959` Postgres wartet Urgency.
+- Blocker: Keine (Live-Unit war schon Coach-pfadig; Repo-Quelle nachgezogen, kein Dienst-Restart).
