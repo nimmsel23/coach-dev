@@ -63,6 +63,6 @@ completed	failure	Gemini CI Agent	Gemini CI Agent	dev	workflow_run	42757568926	1
 - Arbeitsbaum: 22 uncommittete Pfade
 
 _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
-- Erledigt: Org `49499dfb` Dependabot fuel-rot — Ursache `website` Gitlink orphan SHA `71f101a7` (nicht auf Remote); Pointer → `e5a8fc18`; Runs `42763764350`/`42763764833` = Clone-Fail nicht Package-Fail.
+- Erledigt: Org `49499dfb` Dependabot fuel-rot — `df9c61e6` website `71f101a7`→`e5a8fc18`; Runs `42763764350`/`42763764833` = Clone-Fail nicht Package-Fail.
 - Offen/Weiter: TODO Deploy-Seed; KB-Drift; optional Fuel-Upstream; Org `fe34e959` Postgres wartet Urgency; website lokal unpushed `71f101a` nicht wieder pinnen.
 - Blocker: Keine.
