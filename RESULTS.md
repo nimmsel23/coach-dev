@@ -1,3 +1,9 @@
+## 2026-11-10 — Coach Sheet: Full-width + Do/Don't statt Fluff
+
+- `ExerciseInsightModal`: volle Desktop-Breite, auto-fit Grids; getrennte wger-/yuhonas-Quellkarten mit Snapshot/Links/Bildern.
+- Redundante Snapshot-/Originalquelle-/Review-Ziel-/Lesson-Review-Karten raus; Coach-View führt mit **Do** (Cues) und **Don't** (Fehlerbilder).
+- `public/index.html` = VitalOS Portal aus `public-coach/portal.html.bak` (`v1.html`/`v2.html` bleiben Archive).
+
 ## 2026-11-10 — Coach Slim: pandas/aiohttp weg, Firestore lazy, Fuel-Härtung
 
 - `pandas` und `aiohttp` aus Root-`pyproject`/Lock; Coverage/CSV/Activity-CLI auf stdlib/Rich.
