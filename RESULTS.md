@@ -1,3 +1,10 @@
+## 2026-11-10 — Fuel-CLI + Coach in-process Fuel-API; Dispatcher-Fixes
+
+- `backend/fuel`: Fuelctx-CLI aus fuel-dev integriert; Poetry/uv (`fuel`, `fuel-api`, …); leere/`quoted` `DATABASE_URL` gehärtet.
+- `server.py`: `attach_fuel_api` → `/api/fuel` + `/fuel-api` (neben Fitness/Relax); `coach-backends.json` leer.
+- Dispatcher: `coach_cli` Backend-Root, `fitness.cli` Pfade, `fuel.dispatch` Sub-CLIs via `~/.local/bin`; Praxis `-help`.
+- Hot-Idee: `hot/vitalos-postgres-backend-schicht.md` + Org-Task `fe34e959-4771-40a2-a723-49a7204dd601`.
+
 ## 2026-11-10 — PPL-Export behält expert/approved Marker
 
 - `build-ppl-data.mjs`: `source`/`approved_at`/`review_state` exportieren; Default `source: expert`.
