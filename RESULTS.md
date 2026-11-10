@@ -1,3 +1,8 @@
+## 2026-11-10 — Functions: onCoachInbox + onClientMessage live
+
+- Deploy `fitness-aos` / Codebase `fitness`: `onCoachInbox`, `onClientMessage` (europe-west1, 1st Gen) — Create OK.
+- Hosting/SW für die neuen Push-Typen noch offen.
+
 ## 2026-11-10 — Inbox GitHub-PRs per Link öffnen
 
 - `github_pr`-Karten: „Auf GitHub öffnen“ / Sidebar-Hinweis statt Fake-Approve; Klick öffnet `html_url`.
