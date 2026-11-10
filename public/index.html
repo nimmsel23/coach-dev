@@ -1,0 +1,150 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VitalOS Portal</title><style>
+:root{--bg:#0b0d12;--fg:#e8eaf0;--mut:#8b93a7;--card:#141822;--line:#232a3a}
+@media(prefers-color-scheme:light){:root{--bg:#f5f6fa;--fg:#161a24;--mut:#5d667a;--card:#fff;--line:#dde1ea}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif;padding:24px 16px 48px}
+main{max-width:1000px;margin:0 auto}h1{font-size:22px;margin:0 0 4px}h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:28px 0 10px}
+p.sub{color:var(--mut);margin:0 0 16px}input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+a.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:12px 14px}
+a.card:hover{border-color:var(--accent)}b{display:block}small{color:var(--mut);display:block}a.apk{display:inline-block;margin:6px 2px 0;font-size:11px;color:var(--mut);text-decoration:none;opacity:.7}a.apk:hover{opacity:1;text-decoration:underline}.tag{display:inline-block;font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:0 6px;margin-top:6px}
+a.planned{opacity:.6;border-style:dashed;cursor:default}
+.hide{display:none}</style></head><body><main>
+<h1>VitalOS Portal</h1><p class="sub">34 Apps in 8 Repos. Registry: portal/registry.json (erzeugt, nicht von Hand ändern).</p><input id="q" type="search" placeholder="Suchen …" autocomplete="off">
+<section><h2>fitness-dev</h2><div class="grid"><a class="card" href="https://fitness-aos.web.app" target="_blank" rel="noopener" style="--accent:#e8a020" data-q="fitness centre  fitness-aos fitness-dev">
+  <b>Fitness Centre</b><small>–</small>
+  <span class="tag">fitness-aos</span> <span class="tag">Haupt-App</span>
+</a><a class="apk" href="/fitness-app-debug.apk" download>↓ Android-APK (Debug)</a>
+<a class="card" href="https://vos-training.web.app" target="_blank" rel="noopener" style="--accent:#e8a020" data-q="vitalos training krafttraining loggen — session-tab als eigene app vos-training fitness-dev">
+  <b>VitalOS Training</b><small>Krafttraining loggen — Session-Tab als eigene App</small>
+  <span class="tag">vos-training</span> <span class="tag">Tab session</span>
+</a>
+<a class="card" href="https://vos-logbuch.web.app" target="_blank" rel="noopener" style="--accent:#c084fc" data-q="vitalos logbuch logbuch und chronik der trainingswochen — als eigene app vos-logbuch fitness-dev">
+  <b>VitalOS Logbuch</b><small>Logbuch und Chronik der Trainingswochen — als eigene App</small>
+  <span class="tag">vos-logbuch</span> <span class="tag">Tab session</span>
+</a>
+<a class="card" href="https://vos-review.web.app" target="_blank" rel="noopener" style="--accent:#f472b6" data-q="vitalos review wochenreview, muskeln, readiness — review-tab als eigene app vos-review fitness-dev">
+  <b>VitalOS Review</b><small>Wochenreview, Muskeln, Readiness — Review-Tab als eigene App</small>
+  <span class="tag">vos-review</span> <span class="tag">Tab review</span>
+</a>
+<a class="card" href="https://vos-atlas.web.app" target="_blank" rel="noopener" style="--accent:#35c2c8" data-q="vitalos atlas übungsdatenbank durchsuchen — atlas als eigene app vos-atlas fitness-dev">
+  <b>VitalOS Atlas</b><small>Übungsdatenbank durchsuchen — Atlas als eigene App</small>
+  <span class="tag">vos-atlas</span> <span class="tag">Tab atlas</span>
+</a>
+<a class="card" href="https://vos-touren.web.app" target="_blank" rel="noopener" style="--accent:#34d399" data-q="vitalos radtouren radtouren planen und loggen — als eigene app vos-touren fitness-dev">
+  <b>VitalOS Radtouren</b><small>Radtouren planen und loggen — als eigene App</small>
+  <span class="tag">vos-touren</span> <span class="tag">Tab touren</span>
+</a>
+<a class="card" href="https://vos-setup.web.app" target="_blank" rel="noopener" style="--accent:#94a3b8" data-q="vitalos setup einstellungen — setup-tab als eigene app vos-setup fitness-dev">
+  <b>VitalOS Setup</b><small>Einstellungen — Setup-Tab als eigene App</small>
+  <span class="tag">vos-setup</span> <span class="tag">Tab settings</span>
+</a>
+<a class="card" href="https://vos-anamnese.web.app" target="_blank" rel="noopener" style="--accent:#fb923c" data-q="vitalos anamnese anamnese erfassen — als eigene app vos-anamnese fitness-dev">
+  <b>VitalOS Anamnese</b><small>Anamnese erfassen — als eigene App</small>
+  <span class="tag">vos-anamnese</span> <span class="tag">Tab anamnese</span>
+</a>
+<a class="card" href="https://vos-fokus.web.app" target="_blank" rel="noopener" style="--accent:#facc15" data-q="vitalos fokus fokus-ebenen — als eigene app vos-fokus fitness-dev">
+  <b>VitalOS Fokus</b><small>Fokus-Ebenen — als eigene App</small>
+  <span class="tag">vos-fokus</span> <span class="tag">Tab focus</span>
+</a></div></section>
+<section><h2>fuel-dev</h2><div class="grid"><a class="card" href="https://fuel-os.web.app" target="_blank" rel="noopener" style="--accent:#fb923c" data-q="vitalos fuel  fuel-os fuel-dev">
+  <b>VitalOS Fuel</b><small>–</small>
+  <span class="tag">fuel-os</span> <span class="tag">Haupt-App</span>
+</a>
+<a class="card" href="https://fuel-vos.web.app" target="_blank" rel="noopener" style="--accent:#fb923c" data-q="vitalos fuel  fuel-vos fuel-dev">
+  <b>VitalOS Fuel</b><small>–</small>
+  <span class="tag">fuel-vos</span> <span class="tag">Haupt-App</span>
+</a>
+<a class="card" href="https://vos-fuel-log.web.app" target="_blank" rel="noopener" style="--accent:#fb923c" data-q="vitalos fuel log mahlzeiten loggen, tagessumme und makros — der log-tab von fuel als eigene app vos-fuel-log fuel-dev">
+  <b>VitalOS Fuel Log</b><small>Mahlzeiten loggen, Tagessumme und Makros — der Log-Tab von Fuel als eigene App</small>
+  <span class="tag">vos-fuel-log</span>
+</a>
+<a class="card" href="https://vos-fuel-supplements.web.app" target="_blank" rel="noopener" style="--accent:#a3e635" data-q="vitalos supplements deine supplement-routine: einnahmen, wochenplan und persönlicher katalog vos-fuel-supplements fuel-dev">
+  <b>VitalOS Supplements</b><small>Deine Supplement-Routine: Einnahmen, Wochenplan und persönlicher Katalog</small>
+  <span class="tag">vos-fuel-supplements</span>
+</a>
+<a class="card" href="https://vos-fuel-mikros.web.app" target="_blank" rel="noopener" style="--accent:#f472b6" data-q="vitalos fuel mikros mikronährstoffe als wochenheatmap gegen die dach-referenzwerte — der mikros-tab von fuel als eigene app vos-fuel-mikros fuel-dev">
+  <b>VitalOS Fuel Mikros</b><small>Mikronährstoffe als Wochenheatmap gegen die DACH-Referenzwerte — der Mikros-Tab von Fuel als eigene App</small>
+  <span class="tag">vos-fuel-mikros</span>
+</a>
+<a class="card" href="https://vos-fuel-protokoll.web.app" target="_blank" rel="noopener" style="--accent:#38bdf8" data-q="vitalos fuel protokoll abgabefertiges 7-/14-tage-ernährungsprotokoll mit druck/pdf — der protokoll-tab von fuel als eigene app vos-fuel-protokoll fuel-dev">
+  <b>VitalOS Fuel Protokoll</b><small>Abgabefertiges 7-/14-Tage-Ernährungsprotokoll mit Druck/PDF — der Protokoll-Tab von Fuel als eigene App</small>
+  <span class="tag">vos-fuel-protokoll</span>
+</a></div></section>
+<section><h2>plan-dev</h2><div class="grid"><a class="card" href="https://vos-plan.web.app" target="_blank" rel="noopener" style="--accent:#5b8cff" data-q="vitalos plan trainingspläne bauen und verwalten vos-plan plan-dev">
+  <b>VitalOS Plan</b><small>Trainingspläne bauen und verwalten</small>
+  <span class="tag">vos-plan</span> <span class="tag">Haupt-App</span>
+</a></div></section>
+<section><h2>6pack-dev</h2><div class="grid"><a class="card" href="https://vos-6pack.web.app" target="_blank" rel="noopener" style="--accent:#e5192b" data-q="6pack 6-pack-programm mit workout-runner vos-6pack 6pack-dev">
+  <b>6Pack</b><small>6-Pack-Programm mit Workout-Runner</small>
+  <span class="tag">vos-6pack</span> <span class="tag">Haupt-App</span>
+</a><a class="apk" href="/6pack-app-debug.apk" download>↓ Android-APK (Debug)</a></div></section>
+<section><h2>skills-dev</h2><div class="grid"><a class="card" href="https://vos-skills.web.app" target="_blank" rel="noopener" style="--accent:#c8ff00" data-q="skills calisthenics-skills mit progression und workout-runner vos-skills skills-dev">
+  <b>Skills</b><small>Calisthenics-Skills mit Progression und Workout-Runner</small>
+  <span class="tag">vos-skills</span> <span class="tag">Haupt-App</span>
+</a></div></section>
+<section><h2>learn-dev</h2><div class="grid"><a class="card" href="https://learn-vos.web.app" target="_blank" rel="noopener" style="--accent:#888" data-q="learn-vos  learn-vos learn-dev">
+  <b>learn-vos</b><small>–</small>
+  <span class="tag">learn-vos</span> <span class="tag">Haupt-App</span>
+</a></div></section>
+<section><h2>relax-dev</h2><div class="grid"><a class="card" href="https://relax-vos.web.app" target="_blank" rel="noopener" style="--accent:#888" data-q="relax-vos  relax-vos relax-dev">
+  <b>relax-vos</b><small>–</small>
+  <span class="tag">relax-vos</span> <span class="tag">Haupt-App</span>
+</a></div></section>
+<section><h2>journal-dev</h2><div class="grid"><a class="card" href="https://journal-vos.web.app" target="_blank" rel="noopener" style="--accent:#a78bfa" data-q="journal v1 timeline-journal (v1) mit tabs smart log, habits und door journal-vos journal-dev">
+  <b>Journal v1</b><small>Timeline-Journal (v1) mit Tabs Smart Log, Habits und Door</small>
+  <span class="tag">journal-vos</span> <span class="tag">Tab journal</span>
+</a>
+<a class="card" href="https://vos-journal.web.app" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="journal v2 raster-journal: tag, woche, monat, smart logger; dazu habits v2 (#v2/habits) vos-journal journal-dev">
+  <b>Journal v2</b><small>Raster-Journal: Tag, Woche, Monat, Smart Logger; dazu Habits v2 (#v2/habits)</small>
+  <span class="tag">vos-journal</span> <span class="tag">Tab journal-v2</span>
+</a>
+<a class="card" href="https://vos-door.web.app" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="door v2 door: potential, plan, production, profit im raster-design vos-door journal-dev">
+  <b>Door v2</b><small>Door: Potential, Plan, Production, Profit im Raster-Design</small>
+  <span class="tag">vos-door</span> <span class="tag">Tab door-v2</span>
+</a>
+<a class="card" href="https://vos-voice.web.app" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="voice v2 voice: mental-mastery-sessions vos-voice journal-dev">
+  <b>Voice v2</b><small>Voice: Mental-Mastery-Sessions</small>
+  <span class="tag">vos-voice</span> <span class="tag">Tab voice-v2</span>
+</a>
+<a class="card" href="https://vos-game.web.app" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="game v2 game: frame, freedom, focus, fire maps vos-game journal-dev">
+  <b>Game v2</b><small>Game: Frame, Freedom, Focus, Fire Maps</small>
+  <span class="tag">vos-game</span> <span class="tag">Tab game-v2</span>
+</a>
+<a class="card" href="https://vos-tent.web.app" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="tent v2 general's tent: wöchentlicher review vos-tent journal-dev">
+  <b>Tent v2</b><small>General's Tent: wöchentlicher Review</small>
+  <span class="tag">vos-tent</span> <span class="tag">Tab tent-v2</span>
+</a>
+<a class="card planned" style="--accent:#a78bfa" data-q="habits v1 habit-tracking (v1), bisher tab in journal v1  journal-dev">
+  <b>Habits v1</b><small>Habit-Tracking (v1), bisher Tab in Journal v1</small>
+   <span class="tag">geplant, noch keine eigene Site</span>
+</a>
+<a class="card planned" style="--accent:#a78bfa" data-q="smart log ki-freihand-logging, bisher tab in journal v1  journal-dev">
+  <b>Smart Log</b><small>KI-Freihand-Logging, bisher Tab in Journal v1</small>
+   <span class="tag">geplant, noch keine eigene Site</span>
+</a>
+<a class="card planned" style="--accent:#a78bfa" data-q="door v1 the door framework (v1), bisher tab in journal v1  journal-dev">
+  <b>Door v1</b><small>The Door Framework (v1), bisher Tab in Journal v1</small>
+   <span class="tag">geplant, noch keine eigene Site</span>
+</a>
+<a class="card planned" style="--accent:#1738ff" data-q="habits v2 habits im raster-design, bisher ansicht #v2/habits in journal v2  journal-dev">
+  <b>Habits v2</b><small>Habits im Raster-Design, bisher Ansicht #v2/habits in Journal v2</small>
+   <span class="tag">geplant, noch keine eigene Site</span>
+</a>
+<a class="card" href="https://vos-game.web.app/frame/" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="game frame frame map: das große bild, ausgangslage und richtung (gleiche origin wie game v2) vos-game journal-dev">
+  <b>Game Frame</b><small>Frame Map: das große Bild, Ausgangslage und Richtung (gleiche Origin wie Game v2)</small>
+  <span class="tag">vos-game</span> <span class="tag">Tab game-v2</span>
+</a>
+<a class="card" href="https://vos-game.web.app/freedom/" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="game freedom freedom map: jahres- bis quartalsziele (gleiche origin wie game v2) vos-game journal-dev">
+  <b>Game Freedom</b><small>Freedom Map: Jahres- bis Quartalsziele (gleiche Origin wie Game v2)</small>
+  <span class="tag">vos-game</span> <span class="tag">Tab game-v2</span>
+</a>
+<a class="card" href="https://vos-game.web.app/focus/" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="game focus focus map: monats- bis wochenziele (gleiche origin wie game v2) vos-game journal-dev">
+  <b>Game Focus</b><small>Focus Map: Monats- bis Wochenziele (gleiche Origin wie Game v2)</small>
+  <span class="tag">vos-game</span> <span class="tag">Tab game-v2</span>
+</a>
+<a class="card" href="https://vos-game.web.app/fire/" target="_blank" rel="noopener" style="--accent:#1738ff" data-q="game fire fire map: wochen- bis tagesaufgaben (gleiche origin wie game v2) vos-game journal-dev">
+  <b>Game Fire</b><small>Fire Map: Wochen- bis Tagesaufgaben (gleiche Origin wie Game v2)</small>
+  <span class="tag">vos-game</span> <span class="tag">Tab game-v2</span>
+</a></div></section>
+</main><script>const q=document.getElementById("q");q&&q.addEventListener("input",()=>{const v=q.value.toLowerCase();document.querySelectorAll("a.card").forEach(c=>c.classList.toggle("hide",!c.dataset.q.includes(v)));document.querySelectorAll("section").forEach(s=>s.classList.toggle("hide",!s.querySelector("a.card:not(.hide)")))})</script></body></html>
