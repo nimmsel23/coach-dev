@@ -1,3 +1,9 @@
+## 2026-11-10 — AL: Dependabot fuel-rot = website-Gitlink
+
+- Org `49499dfb`: Runs `42763764350`/`42763764833` — kein Fastify-Update-Fail.
+- Clone bricht an Submodule `website` SHA `71f101a7` (nicht auf Remote); Pointer → `e5a8fc18` (`origin/main`).
+- `backend/fuel` npm nicht in `dependabot.yml`-directories; ohne Lock sekundär.
+
 ## 2026-11-10 — Gemini CI: orphan free-exercise-db gitlink
 
 - Checkout-Rot: mode-160000 ohne Eintrag in coach `.gitmodules`.

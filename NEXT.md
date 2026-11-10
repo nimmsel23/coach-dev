@@ -7,6 +7,7 @@
 - [x] Chat-SubTabs für ungelesene Nachrichten + CF/SW-Push `onClientMessage`.
 - [x] Inbox `github_pr`: Link „Auf GitHub öffnen“ statt Fake-Approve.
 - [x] `firebase deploy` `functions:fitness:onCoachInbox` + `onClientMessage` (europe-west1, 2026-11-10).
+- [ ] website-Submodule: nur Remote-erreichbare SHAs pinnen (Dependabot); lokal unpushed Landing `71f101a` ggf. im website-Repo pushen oder verwerfen.
 - [ ] vos-coach Hosting (neuer SW für clientMessage/inboxRequest).
 - [ ] Coach Sheet nach Do/Don't-Umbau live gegen Inbox-Records mit/ohne `source_snapshot` prüfen; ggf. deploy vos-coach.
 - [ ] Vault-grounded Inbox-Enricher (Vitaltrainer-Corpus in Prompt/CI); Approve bleibt Coach.

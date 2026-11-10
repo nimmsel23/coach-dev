@@ -63,6 +63,6 @@ completed	failure	Gemini CI Agent	Gemini CI Agent	dev	workflow_run	42757568926	1
 - Arbeitsbaum: 22 uncommittete Pfade
 
 _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
-- Erledigt: TODO Systemd-Quelle — `fitness/coach/deploy/coach-sync.service` + `docs/COACH_APP.md` auf Coach-SOT (`PYTHONPATH`/`ExecStart`=`fitness`); Commit `6022be4f` (Worktree; Docs-Autocommits 07c98f64/d09185cc/448d2c57).
-- Offen/Weiter: TODO Deploy-Seed; KB-Drift beobachten (fitness-dev vs coach SOT); optional Fuel-Upstream; fremdes WIP Haupt-Checkout (Inbox/Chat-Push, ~22 Pfade) unberührt; Org `fe34e959` Postgres wartet Urgency.
-- Blocker: Keine (Live-Unit war schon Coach-pfadig; Repo-Quelle nachgezogen, kein Dienst-Restart).
+- Erledigt: Org `49499dfb` Dependabot fuel-rot — Ursache `website` Gitlink orphan SHA `71f101a7` (nicht auf Remote); Pointer → `e5a8fc18`; Runs `42763764350`/`42763764833` = Clone-Fail nicht Package-Fail.
+- Offen/Weiter: TODO Deploy-Seed; KB-Drift; optional Fuel-Upstream; Org `fe34e959` Postgres wartet Urgency; website lokal unpushed `71f101a` nicht wieder pinnen.
+- Blocker: Keine.

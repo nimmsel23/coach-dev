@@ -24,6 +24,9 @@ nachziehen. `FOCUS.md` / `FREEDOM.md` aktiv; `FRAME.md` optional später.
 
 ## Beobachten (kein Bau ohne klaren Drift)
 
+- [ ] **website-Gitlink:** Submodule-SHA muss auf Remote existieren (Dependabot/CI clonen rekursiv). Lokal unpushed `71f101a` nicht pinnen.
+
+
 - [ ] **fitness-dev-KB-Kopie:** fitness-dev trägt weiter eine divergente KB-Kopie
       (nur noch Konsument). Beim nächsten Upstream-Merge Katalog-Drift beachten;
       Ausmisten der Kopie als separater Schnitt, sobald sicher keine Pipeline mehr
