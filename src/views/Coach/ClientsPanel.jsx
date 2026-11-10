@@ -1,6 +1,6 @@
 import ClientMessages from './ClientMessages';
 import { useState, useEffect } from 'react';
-import { MessageSquare, Users, Dumbbell, Layers, RotateCw, Sparkles, Flame } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { getAllUserProfiles, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
 import AssignPlan from './AssignPlan';
@@ -9,27 +9,13 @@ import ClientHabitCycle from './ClientHabitCycle';
 import ClientInsights from './ClientInsights';
 import ClientSixPack from './ClientSixPack';
 import { useCoachRoute } from './useCoachRoute.js';
+import { CLIENT_MORE_IDS, CLIENT_MORE_TABS, CLIENT_PRIMARY_TABS } from './clientSubTabs.js';
 
 const STATUS_OPTIONS = [
   { id: 'client', label: 'Klient', hint: 'Zahlend & committed' },
   { id: 'friend', label: 'Freund/Test', hint: 'Kein aktives Coaching' },
   { id: 'hidden', label: 'Ausgeblendet', hint: 'Nicht in der Liste' },
 ];
-
-// Nur die drei Alltagswege sichtbar — Rest über „Mehr“.
-const PRIMARY_TABS = [
-  { id: 'workouts', label: 'Verlauf', icon: Dumbbell },
-  { id: 'trainingplan', label: 'Plan', icon: Layers },
-  { id: 'messages', label: 'Chat', icon: MessageSquare },
-];
-const MORE_TABS = [
-  { id: 'sixpack', label: '6Pack', icon: Flame },
-  { id: 'habits', label: 'Habits', icon: RotateCw },
-  { id: 'insights', label: 'KI-Insights', icon: Sparkles },
-  { id: 'plan', label: 'Rotation (alt)', icon: Layers },
-];
-
-const MORE_IDS = new Set(MORE_TABS.map((t) => t.id));
 
 export default function ClientsPanel({ unreadCounts = {} }) {
   const [profiles, setProfiles] = useState({});
@@ -137,7 +123,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
   const selectedName = selectedProfile
     ? (selectedProfile.displayName || selectedProfile.email || selectedUid)
     : '';
-  const moreActive = MORE_IDS.has(detailTab);
+  const moreActive = CLIENT_MORE_IDS.has(detailTab);
 
   return (
     <div className="vos-panel h-[calc(100dvh-15rem)] min-h-[480px] flex-col md:flex-row lg:h-[calc(100dvh-9rem)]">
@@ -249,8 +235,9 @@ export default function ClientsPanel({ unreadCounts = {} }) {
               </select>
             </header>
 
-            <nav className="flex shrink-0 flex-wrap items-center gap-1 border-b border-fit-line/30 px-3 py-2" aria-label="Klient-Bereiche">
-              {PRIMARY_TABS.map((tab) => {
+            {/* Desktop: SubTabs leben in der Coach-Sidebar. Mobile behält die Chips. */}
+            <nav className="flex shrink-0 flex-wrap items-center gap-1 border-b border-fit-line/30 px-3 py-2 lg:hidden" aria-label="Klient-Bereiche">
+              {CLIENT_PRIMARY_TABS.map((tab) => {
                 const Icon = tab.icon;
                 const active = detailTab === tab.id;
                 return (
@@ -278,7 +265,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                 }`}
               >
                 <option value="">Mehr…</option>
-                {MORE_TABS.map((tab) => (
+                {CLIENT_MORE_TABS.map((tab) => (
                   <option key={tab.id} value={tab.id}>{tab.label}</option>
                 ))}
               </select>

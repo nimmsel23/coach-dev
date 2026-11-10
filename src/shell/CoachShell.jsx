@@ -16,6 +16,7 @@ import CoachHeader from './CoachHeader.jsx'
 import WorkerChip from './WorkerChip.jsx'
 import ThemeSheet from './ThemeSheet.jsx'
 import { findNavItem } from './NavigationItems.js'
+import { useCoachUnreadCounts } from '../views/Coach/useCoachUnreadCounts.js'
 
 export default function CoachShell() {
   const { user, authLoading, signIn, signInEmail, signUpEmail, signOut } = useUser()
@@ -23,6 +24,7 @@ export default function CoachShell() {
   const { sidebarPinned, setSidebarPinned } = useSettingsStore()
   const pinned = sidebarPinned !== false && sidebarPinned !== 'false'
   const [route, navigateRoute] = useCoachRoute()
+  const unread = useCoachUnreadCounts()
 
   const [navExpanded, setNavExpanded] = useState(true)
   const [themeOpen, setThemeOpen] = useState(false)
@@ -38,6 +40,18 @@ export default function CoachShell() {
   const reportExerciseCount = useCallback((n) => setCounts((prev) => (prev.exercises === n ? prev : { ...prev, exercises: n })), [])
   const reportUnreadCount = useCallback((n) => setCounts((prev) => (prev.clients === n ? prev : { ...prev, clients: n })), [])
   const goTo = (sub) => navigateRoute({ sub, client: '', date: '' })
+  const selectClient = useCallback((uid) => {
+    navigateRoute({ sub: 'clients', client: uid, detail: 'workouts', date: '', planId: '' })
+  }, [navigateRoute])
+  const selectClientDetail = useCallback((detail) => {
+    navigateRoute({
+      sub: 'clients',
+      client: route.client || '',
+      detail,
+      date: '',
+      planId: '',
+    })
+  }, [navigateRoute, route.client])
   const refresh = () => window.location.reload()
 
   async function inspectExercise(exercise) {
@@ -50,6 +64,18 @@ export default function CoachShell() {
       if (lesson) setInspectorExercise((prev) => (prev ? { ...prev, lesson } : prev))
     } catch {}
   }
+
+  const selectInbox = useCallback(async (exercise) => {
+    navigateRoute({ sub: 'exercises', client: '', date: '' })
+    if (!exercise) return
+    setInspectorExercise(exercise)
+    const id = exercise.exercise_id || exercise.id
+    if (!id || exercise.lesson) return
+    try {
+      const lesson = await getAnatomy(id)
+      if (lesson) setInspectorExercise((prev) => (prev ? { ...prev, lesson } : prev))
+    } catch {}
+  }, [navigateRoute])
 
   async function handleAuthSubmit(event) {
     event.preventDefault()
@@ -94,6 +120,11 @@ export default function CoachShell() {
               onTheme={() => setThemeOpen(true)}
               onRefresh={refresh}
               onSignOut={signOut}
+              onSelectClient={selectClient}
+              unreadByClient={unread.byClient}
+              onSelectInbox={selectInbox}
+              clientDetail={route.detail || 'workouts'}
+              onSelectClientDetail={selectClientDetail}
             />
             <div className={`min-w-0 transition-all duration-500 ease-in-out ${pinned ? 'lg:ml-[304px]' : 'lg:ml-[108px]'}`}>
               <CoachHeader title={current.title} subtitle={subtitle} actions={<WorkerChip />} />
@@ -114,6 +145,11 @@ export default function CoachShell() {
               onTheme={() => setThemeOpen(true)}
               onRefresh={refresh}
               onSignOut={signOut}
+              onSelectClient={selectClient}
+              unreadByClient={unread.byClient}
+              onSelectInbox={selectInbox}
+              clientDetail={route.detail || 'workouts'}
+              onSelectClientDetail={selectClientDetail}
             />
           </>
         ) : (
