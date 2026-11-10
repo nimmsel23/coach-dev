@@ -2,6 +2,7 @@
 # NEXT (coach-dev)
 
 - [x] Katalog-Rechtsklick + `POST /fitness/inbox/draft` + Jefferson-Curl Pipeline-Smoke.
+- [x] Shell: Klienten-SubTabs in Sidebar; Bottom-Nav Long-Press/Rechtsklick → SubTabs / Inbox / Mehr.
 - [ ] Coach Sheet nach Do/Don't-Umbau live gegen Inbox-Records mit/ohne `source_snapshot` prüfen; ggf. deploy vos-coach.
 - [ ] Vault-grounded Inbox-Enricher (Vitaltrainer-Corpus in Prompt/CI); Approve bleibt Coach.
 - [ ] Submodul `fitness/catalog/kb` auf fitness-Commit mit Inbox-Rollen-Doku bumpen (GitHub/Agents ≠ Coach-UI).
