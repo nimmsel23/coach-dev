@@ -191,6 +191,13 @@ Eine reine Server-Bind-Aenderung auf `0.0.0.0` reicht dafuer nicht.
 
 ## 7. Coach-Inbox-Fluss
 
+Rollen (Stand 2026-11-10, siehe `~/dev/fitness/INBOX.md`):
+
+- **GitHub App / Agents** arbeiten Drafts als PRs auf `nimmsel23/fitness` (`inbox/`).
+- **Coach-UI** ist das menschliche Expert-Gate auf dem Laptop — sie steuert keine
+  GitHub-PRs und kein `repository_dispatch` als Freigabe-Workflow.
+- Optional darf vos-coach offene Inbox-PRs **read-only** listen; Approve bleibt lokal.
+
 Firestore-Inbox:
 
 ```text

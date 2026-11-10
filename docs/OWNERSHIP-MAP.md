@@ -29,7 +29,8 @@ Es gibt nur **eine** coach-approved DB: `kb/exercises` (plus `kb/muscles`).
 |---|---|
 | **Bulk-Rohstoff** | Summe **wger + yuhonas** (einmaliger Import) — zu viel auf einmal fürs Expert-Gate |
 | **App-Default (jetzt)** | **Original-Yuhonas wie auf Git** (Pin) — Verbandspflaster für stabilen Übungsbetrieb, bis die KB feature-dicht ist |
-| **Gate** | **Exercise-Inbox** — nur Coach; Bulk wird erst `approved`, wenn enhanced und **app-feature-gerecht** |
+| **Agent-/GitHub-Fläche** | Public KB `nimmsel23/fitness`: Drafts als PRs unter `inbox/` (GitHub App, LLM-Webapps, Coding-Agents). **Nicht** von der Coach-UI gesteuert. Siehe `fitness/INBOX.md`. |
+| **Gate** | **Exercise-Inbox auf dem Laptop** — nur Coach (`coach catalog` / Coach-UI / `coach-sync`); Bulk wird erst `approved`, wenn enhanced und **app-feature-gerecht** |
 | **Expert-Brain** | Freigegebene Einträge in `kb/exercises` — Build verbaut sie als JS in die Apps |
 
 Beispiel warum Yuhonas allein nicht reicht: keine vorderen/hinteren Schultern → zu grob
@@ -40,7 +41,7 @@ für feinere App-Features. Catalog/KB = Coach-Werkzeug, nicht Kern der Fitness-/
 
 | Domäne | Source of Truth | Einstieg |
 |---|---|---|
-| **KB / Catalog-Daten** (Exercises+Muscles, YAML) | `~/dev/fitness` → Submodul `fitness/catalog/kb` | eine Expert-DB; Gate = Inbox |
+| **KB / Catalog-Daten** (Exercises+Muscles, YAML) | `~/dev/fitness` → Submodul `fitness/catalog/kb` | Daten-SOT; Agent-PRs auf GitHub; Gate = Laptop-Coach |
 | Catalog-**Python** (CLI, Enrichment, Audit, Inbox) | `~/dev/coach-dev/fitness/catalog/` | `coach catalog` — Werkzeug, nicht App-Kern |
 | **Coach-HTTP-Server** (`server.py`, Keepers) | `~/dev/coach-dev` | `coach-api.service` **:9150** — ein Prozess |
 | FastAPI Catalog/Inbox/Workouts (in-process) | `~/dev/coach-dev/fitness/api/` | von `server.py` gemountet; kein `:8100` |

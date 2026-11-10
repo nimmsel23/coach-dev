@@ -1,6 +1,7 @@
 /**
- * Read-only GitHub PR inbox for the public KB repo (nimmsel23/fitness).
- * Transition path: Firestore coachInbox remains until approve/reenrich move to PRs.
+ * Read-only GitHub PR overview for the public KB repo (nimmsel23/fitness).
+ * GitHub/Agents own draft PRs under inbox/; Coach-UI remains the laptop expert gate
+ * (approve → exercises/). This module does not drive PRs or repository_dispatch.
  */
 
 const FITNESS_KB_REPO = "nimmsel23/fitness";
