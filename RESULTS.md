@@ -2120,3 +2120,5 @@ Fitness-/Rules-Release voraus.
 - Coach `master` exists at `42faa43a4e9a`; the default branch remains `dev`.
 - Verified Coach preview deploy [42406055686](https://github.com/nimmsel23/coach-dev/actions/runs/42406055686) and agent no-op [42406146086](https://github.com/nimmsel23/coach-dev/actions/runs/42406146086) succeeded. The preview build and Hosting deploy were green; the agent correctly did not call Gemini for a successful deploy.
 - Production remains manually dispatched. A red code-repair path has not yet been exercised.
+
+- 2026-11-10: CI override sync re-trigger for major Vite-8 lockfile.
