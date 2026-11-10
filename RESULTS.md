@@ -1,3 +1,8 @@
+## 2026-11-10 — PPL-Export behält expert/approved Marker
+
+- `build-ppl-data.mjs`: `source`/`approved_at`/`review_state` exportieren; Default `source: expert`.
+- Verhindert, dass kuratierte Kraft-Übungen als wger/yuhonas durchfallen (Coach-only-Filter).
+
 ## 2026-11-10 — Clients flach + IDB-Cache + Schmiede Push Firestore
 
 - ClientsPanel: flacher (Verlauf/Plan/Chat, Mehr…), Default-Kraftfeed ohne Klientenwahl.

@@ -44,6 +44,12 @@ const EXPORT_FIELDS = [
   'tags',
   'wger_id',
   'yuhonas_id',
+  // Ohne diese Marker stuft searchExercises/_getExerciseSource kuratierte
+  // YAML-Übungen als wger/yuhonas ein (Tags) — bei Coach-only-Filter
+  // verschwinden dann alle Kraft-Übungen außer speziellen Pfaden (z. B. 6Pack).
+  'source',
+  'approved_at',
+  'review_state',
 ]
 
 function walkYamlFiles(dir) {
@@ -78,6 +84,9 @@ function slim(exercise) {
     }
   }
   out.id = exercise.exercise_id || exercise.id
+  // YAML in kb/exercises/** (außer unreviewed_*) = expert-approved — auch wenn
+  // die Datei noch kein source-Feld trägt.
+  if (!out.source) out.source = 'expert'
   return out
 }
 
