@@ -1,3 +1,9 @@
+## 2026-11-10 — Shell: Klienten-SubTabs + Quick-Menüs
+
+- Sidebar: Klienten-SubTabs (Verlauf/Plan/Chat + Mehr) wenn Klienten aktiv; Rechtsklick → Klienten-Schnellwahl / Anfragen-Liste.
+- Bottom-Nav: Rechtsklick oder Long-Press → Klienten-SubTabs-Sheet, Inbox-Quick-Menü, sonst Mehr-Sheet.
+- Shared `clientSubTabs.js`; ClientsPanel-Chips nur noch mobil (`lg:hidden`); Route über `clientDetail` / `onSelectClientDetail`.
+
 ## 2026-11-10 — Katalog: Merge/Pipeline-Rechtsklick + Inbox-Draft API
 
 - `POST /fitness/inbox/draft` (+ Coach-Worker `create-draft`): ID-only Draft ohne Enrichment.
