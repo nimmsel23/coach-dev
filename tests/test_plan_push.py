@@ -1,4 +1,5 @@
 """coach_plan_push: Umwandlung und Firestore-Sync gegen eine In-Memory-Fake-DB."""
+import pytest
 import coach_plan_push as pp
 
 PLAN = {"einheiten": [{"name": "Push · RPE 5-7", "frequenz": "weekly-1", "abschnitte": [
@@ -100,3 +101,21 @@ def test_foreign_routines_untouched_own_removed():
     pp.sync_routines(db, "U", pp.build_routines({"einheiten": []}), now="t")  # Einheit aus Plan entfernt
     ids = [d.id for d in routines_col(db).stream()]
     assert ids == ["app-made"]
+
+
+def test_env_firebase_uid_preferred_json_fallback(tmp_path, monkeypatch):
+    monkeypatch.setattr(pp, "CLIENTS_ROOT", tmp_path)
+    root = tmp_path / "demo"
+    root.mkdir()
+    (root / "data").mkdir()
+    (root / "data" / "plan.json").write_text('{"einheiten": []}', encoding="utf-8")
+
+    with pytest.raises(SystemExit, match="firebase_uid"):
+        pp.load_client("demo")
+
+    (root / "client.json").write_text('{"firebase_uid": "FROM-JSON"}', encoding="utf-8")
+    assert pp.load_client("demo")[0] == "FROM-JSON"
+
+    (root / "client.env").write_text("FIREBASE_UID=uid-from-env\n", encoding="utf-8")
+    uid, plan = pp.load_client("demo")
+    assert uid == "uid-from-env" and plan == {"einheiten": []}

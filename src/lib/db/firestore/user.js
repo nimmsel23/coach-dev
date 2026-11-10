@@ -191,6 +191,10 @@ export async function updateUserProfile(uid, data) {
         updated_at: serverTimestamp(),
       }, { merge: true });
     }
+    try {
+      const { snapDelete, CACHE_KEYS } = await import("./clientDataIdb.js");
+      await snapDelete(CACHE_KEYS.profiles);
+    } catch {}
     return true;
   } catch (error) {
     console.error("Fehler beim Speichern des Profils:", error);

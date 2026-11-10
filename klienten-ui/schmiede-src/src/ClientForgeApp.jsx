@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { api } from "./api.js";
+import { apiCached } from "./api.js";
 import { PlanEditor } from "./PlanEditor.jsx";
 import { HabitEditor } from "./HabitEditor.jsx";
 import { FuelPlanEditor } from "./FuelEditor.jsx";
@@ -145,25 +145,52 @@ export function ClientForgeApp() {
   }, [ausgewähltId]);
 
   useEffect(() => {
-    api("/api/clients")
-      .then((d) => {
+    return apiCached(
+      "/api/clients",
+      (d) => {
         setKlienten(Array.isArray(d?.clients) ? d.clients : []);
         setStatusText(d?.clients?.length ? `${d.clients.length} Klienten` : "Noch keine Klienten");
-      })
-      .catch((e) => setStatusText(`Fehler: ${e.message}`));
+      },
+      { onError: (e) => setStatusText(`Fehler: ${e.message}`) },
+    );
   }, []);
 
   useEffect(() => {
     if (!ausgewähltId) {
       setPlan(null); setHabits(null); setLoggedHabits(null); setLoggedWorkouts(null); setFuelPlan(null);
-      return;
+      return undefined;
     }
+    // Reset verhindert, dass beim Klientenwechsel kurz fremde Daten stehen.
+    // Cache-Hit aus IDB füllt danach sofort nach.
     setPlan(null); setHabits(null); setLoggedHabits(null); setLoggedWorkouts(null); setFuelPlan(null);
-    api(`/api/client/${ausgewähltId}/plan`).then((d) => setPlan(d?.data || { einheiten: [] })).catch(() => setPlan({ einheiten: [] }));
-    api(`/api/client/${ausgewähltId}/habits/config`).then((d) => setHabits(Array.isArray(d?.habits) ? d.habits : [])).catch(() => setHabits([]));
-    api(`/k/${ausgewähltId}/habits/logs?days=28`).then((d) => setLoggedHabits(Array.isArray(d?.habits) ? d.habits : [])).catch(() => setLoggedHabits([]));
-    api(`/k/${ausgewähltId}/workout/logs?days=28`).then((d) => setLoggedWorkouts(Array.isArray(d?.workouts) ? d.workouts : [])).catch(() => setLoggedWorkouts([]));
-    api(`/k/${ausgewähltId}/plan/fuel`).then((d) => setFuelPlan(d?.data || {})).catch(() => setFuelPlan({}));
+    const stops = [
+      apiCached(
+        `/api/client/${ausgewähltId}/plan`,
+        setPlan,
+        { map: (d) => d?.data || { einheiten: [] }, fallback: { einheiten: [] } },
+      ),
+      apiCached(
+        `/api/client/${ausgewähltId}/habits/config`,
+        setHabits,
+        { map: (d) => (Array.isArray(d?.habits) ? d.habits : []), fallback: [] },
+      ),
+      apiCached(
+        `/k/${ausgewähltId}/habits/logs?days=28`,
+        setLoggedHabits,
+        { map: (d) => (Array.isArray(d?.habits) ? d.habits : []), fallback: [] },
+      ),
+      apiCached(
+        `/k/${ausgewähltId}/workout/logs?days=28`,
+        setLoggedWorkouts,
+        { map: (d) => (Array.isArray(d?.workouts) ? d.workouts : []), fallback: [] },
+      ),
+      apiCached(
+        `/k/${ausgewähltId}/plan/fuel`,
+        setFuelPlan,
+        { map: (d) => d?.data || {}, fallback: {} },
+      ),
+    ];
+    return () => stops.forEach((stop) => stop());
   }, [ausgewähltId]);
 
   useEffect(() => {

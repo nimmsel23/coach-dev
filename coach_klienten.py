@@ -73,8 +73,14 @@ def create_combined_app():
 
     @app.post("/k/{client_id}/plan/push")
     async def plan_push(client_id: str, dry_run: bool = False):
-        """Plan des Klienten manuell nach Firestore (Klienten-App) spiegeln."""
+        """Plan des Klienten manuell nach Firestore (Klienten-App) spiegeln.
+
+        Scheitert hart (4xx), wenn client.env/.env keine FIREBASE_UID hat.
+        """
         code, body = await run_plan_push(client_id, dry_run)
+        err = str(body.get("error") or "")
+        if code != 0 and "FIREBASE_UID" in err:
+            return JSONResponse({"ok": False, **body}, status_code=409)
         return JSONResponse({"ok": code == 0, **body}, status_code=200 if code == 0 else 502)
 
     @app.middleware("http")

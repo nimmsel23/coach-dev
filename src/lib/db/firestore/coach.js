@@ -14,6 +14,7 @@ import { db } from "../../../firebase.js";
 import { LOCAL_FITNESS_API_BASE } from "./core.js";
 import { normalizeRoutineExercise } from "./routines.js";
 import { createWorkout, getWorkout, updateWorkout } from "./workouts.js";
+import { CACHE_KEYS, cachedQuery, snapDelete, snapDeletePrefix } from "./clientDataIdb.js";
 
 // Coach erstellt/liest/patcht ein Workout im Namen eines Klienten (Quick-
 // Complete bei gemeinsam trainierter Session) — dünne Wrapper um die
@@ -90,73 +91,76 @@ export async function deleteClientRoutine(clientUid, routineId) {
 // clientseitiger uid-Filter sie sehen könnte. Für "zeig mir Klient X" muss
 // deshalb gezielt nach diesem einen Klienten gequeried werden.
 export async function getClientJournalFeed(clientUid, limitCount = 100) {
-  const feed = [];
+  return cachedQuery(CACHE_KEYS.feedClient(clientUid, limitCount), async () => {
+    const feed = [];
 
-  try {
-    const snap = await getDocs(collection(db, "fitness", clientUid, "sessions"));
-    for (const d of snap.docs) {
-      const data = d.data();
-      feed.push({
-        id: d.id,
-        userId: clientUid,
-        path: d.ref.path,
-        date: data.date || "Unbekannt",
-        block: data.block || null,
-        exercises: data.exercises || [],
-        effort: data.effort ?? null,
-        mood: data.mood || "",
-        notes: data.notes || "",
-        coachFeedback: data.coachFeedback || "",
-        time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
-        type: "workout",
-      });
+    try {
+      const snap = await getDocs(collection(db, "fitness", clientUid, "sessions"));
+      for (const d of snap.docs) {
+        const data = d.data();
+        feed.push({
+          id: d.id,
+          userId: clientUid,
+          path: d.ref.path,
+          date: data.date || "Unbekannt",
+          block: data.block || data.trainingsart || null,
+          trainingsart: data.trainingsart || null,
+          exercises: data.exercises || [],
+          effort: data.effort ?? null,
+          mood: data.mood || "",
+          notes: data.notes || "",
+          coachFeedback: data.coachFeedback || "",
+          time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
+          type: "workout",
+        });
+      }
+    } catch (e) {
+      console.error("Error in getClientJournalFeed sessions:", e);
     }
-  } catch (e) {
-    console.error("Error in getClientJournalFeed sessions:", e);
-  }
 
-  try {
-    const journalSnap = await getDocs(collection(db, "fitness", clientUid, "journal"));
-    for (const d of journalSnap.docs) {
-      const data = d.data();
-      feed.push({
-        id: d.id,
-        userId: clientUid,
-        path: d.ref.path,
-        date: data.date || "Unbekannt",
-        notes: data.text || "",
-        tags: data.tags || [],
-        coachFeedback: data.coachFeedback || "",
-        time: data.time || data.date || "",
-        type: "journal",
-      });
+    try {
+      const journalSnap = await getDocs(collection(db, "fitness", clientUid, "journal"));
+      for (const d of journalSnap.docs) {
+        const data = d.data();
+        feed.push({
+          id: d.id,
+          userId: clientUid,
+          path: d.ref.path,
+          date: data.date || "Unbekannt",
+          notes: data.text || "",
+          tags: data.tags || [],
+          coachFeedback: data.coachFeedback || "",
+          time: data.time || data.date || "",
+          type: "journal",
+        });
+      }
+    } catch (e) {
+      console.error("Error in getClientJournalFeed journal:", e);
     }
-  } catch (e) {
-    console.error("Error in getClientJournalFeed journal:", e);
-  }
 
-  try {
-    const habitSnap = await getDocs(collection(db, "fitness", clientUid, "habitJournals"));
-    for (const d of habitSnap.docs) {
-      const data = d.data();
-      feed.push({
-        id: d.id,
-        userId: clientUid,
-        path: d.ref.path,
-        habitId: data.habitId || null,
-        date: data.date || "Unbekannt",
-        notes: data.text || "",
-        coachFeedback: data.coachFeedback || "",
-        time: data.date || "",
-        type: "habit_journal",
-      });
+    try {
+      const habitSnap = await getDocs(collection(db, "fitness", clientUid, "habitJournals"));
+      for (const d of habitSnap.docs) {
+        const data = d.data();
+        feed.push({
+          id: d.id,
+          userId: clientUid,
+          path: d.ref.path,
+          habitId: data.habitId || null,
+          date: data.date || "Unbekannt",
+          notes: data.text || "",
+          coachFeedback: data.coachFeedback || "",
+          time: data.date || "",
+          type: "habit_journal",
+        });
+      }
+    } catch (e) {
+      console.error("Error in getClientJournalFeed habitJournals:", e);
     }
-  } catch (e) {
-    console.error("Error in getClientJournalFeed habitJournals:", e);
-  }
 
-  feed.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
-  return feed.slice(0, limitCount);
+    feed.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+    return feed.slice(0, limitCount);
+  });
 }
 
 // Coach beobachtet Habit-Fortschritt eines Klienten (read-only): direkte
@@ -167,107 +171,114 @@ export async function getClientJournalFeed(clientUid, limitCount = 100) {
 // wird im UI-Layer aus beidem berechnet (lib/habitProgress.js), keine
 // exercises-Subcollections nötig.
 export async function getClientRoutinesProgress(clientUid) {
-  try {
-    const [routinesSnap, workoutsSnap] = await Promise.all([
-      getDocs(collection(db, "fitness", clientUid, "routines")),
-      getDocs(collection(db, "fitness", clientUid, "workouts")),
-    ]);
-    return {
-      routines: routinesSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
-      workouts: workoutsSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
-    };
-  } catch (e) {
-    console.error("Error in getClientRoutinesProgress:", e);
-    return { routines: [], workouts: [] };
-  }
+  return cachedQuery(CACHE_KEYS.routinesProgress(clientUid), async () => {
+    try {
+      const [routinesSnap, workoutsSnap] = await Promise.all([
+        getDocs(collection(db, "fitness", clientUid, "routines")),
+        getDocs(collection(db, "fitness", clientUid, "workouts")),
+      ]);
+      return {
+        routines: routinesSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
+        workouts: workoutsSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
+      };
+    } catch (e) {
+      console.error("Error in getClientRoutinesProgress:", e);
+      return { routines: [], workouts: [] };
+    }
+  });
 }
 
 export async function getGlobalJournalFeed(limitCount = 50) {
-  const feed = [];
+  return cachedQuery(CACHE_KEYS.feedGlobal(limitCount), async () => {
+    const feed = [];
 
-  // 1. Workout Sessions
-  try {
-    const snap = await getDocs(collectionGroup(db, "sessions"));
-    for (const d of snap.docs) {
-      const data = d.data();
-      const userId = d.ref.parent?.parent?.id || "unknown";
-      feed.push({
-        id: d.id,
-        userId,
-        path: d.ref.path,
-        date: data.date || "Unbekannt",
-        block: data.block || null,
-        exercises: data.exercises || [],
-        effort: data.effort ?? null,
-        mood: data.mood || "",
-        notes: data.notes || "",
-        coachFeedback: data.coachFeedback || "",
-        time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
-        type: "workout",
-      });
+    // 1. Workout Sessions
+    try {
+      const snap = await getDocs(collectionGroup(db, "sessions"));
+      for (const d of snap.docs) {
+        const data = d.data();
+        const userId = d.ref.parent?.parent?.id || "unknown";
+        feed.push({
+          id: d.id,
+          userId,
+          path: d.ref.path,
+          date: data.date || "Unbekannt",
+          block: data.block || data.trainingsart || null,
+          trainingsart: data.trainingsart || null,
+          exercises: data.exercises || [],
+          effort: data.effort ?? null,
+          mood: data.mood || "",
+          notes: data.notes || "",
+          coachFeedback: data.coachFeedback || "",
+          time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
+          type: "workout",
+        });
+      }
+    } catch (e) {
+      console.error("Error in getGlobalJournalFeed sessions:", e);
     }
-  } catch (e) {
-    console.error("Error in getGlobalJournalFeed sessions:", e);
-  }
 
-  // 2. Daily Journal Entries
-  try {
-    const journalSnap = await getDocs(collectionGroup(db, "journal"));
-    for (const d of journalSnap.docs) {
-      const data = d.data();
-      const userId = d.ref.parent?.parent?.id || "unknown";
-      feed.push({
-        id: d.id,
-        userId,
-        path: d.ref.path,
-        date: data.date || "Unbekannt",
-        notes: data.text || "",
-        tags: data.tags || [],
-        coachFeedback: data.coachFeedback || "",
-        time: data.time || data.date || "",
-        type: "journal",
-      });
+    // 2. Daily Journal Entries
+    try {
+      const journalSnap = await getDocs(collectionGroup(db, "journal"));
+      for (const d of journalSnap.docs) {
+        const data = d.data();
+        const userId = d.ref.parent?.parent?.id || "unknown";
+        feed.push({
+          id: d.id,
+          userId,
+          path: d.ref.path,
+          date: data.date || "Unbekannt",
+          notes: data.text || "",
+          tags: data.tags || [],
+          coachFeedback: data.coachFeedback || "",
+          time: data.time || data.date || "",
+          type: "journal",
+        });
+      }
+    } catch (e) {
+      console.error("Error in getGlobalJournalFeed journal:", e);
     }
-  } catch (e) {
-    console.error("Error in getGlobalJournalFeed journal:", e);
-  }
 
-  // 3. Habit Journal Entries
-  try {
-    const habitSnap = await getDocs(collectionGroup(db, "habitJournals"));
-    for (const d of habitSnap.docs) {
-      const data = d.data();
-      const userId = d.ref.parent?.parent?.id || "unknown";
-      feed.push({
-        id: d.id,
-        userId,
-        path: d.ref.path,
-        habitId: data.habitId || null,
-        date: data.date || "Unbekannt",
-        notes: data.text || "",
-        coachFeedback: data.coachFeedback || "",
-        time: data.date || "",
-        type: "habit_journal",
-      });
+    // 3. Habit Journal Entries
+    try {
+      const habitSnap = await getDocs(collectionGroup(db, "habitJournals"));
+      for (const d of habitSnap.docs) {
+        const data = d.data();
+        const userId = d.ref.parent?.parent?.id || "unknown";
+        feed.push({
+          id: d.id,
+          userId,
+          path: d.ref.path,
+          habitId: data.habitId || null,
+          date: data.date || "Unbekannt",
+          notes: data.text || "",
+          coachFeedback: data.coachFeedback || "",
+          time: data.date || "",
+          type: "habit_journal",
+        });
+      }
+    } catch (e) {
+      console.error("Error in getGlobalJournalFeed habitJournals:", e);
     }
-  } catch (e) {
-    console.error("Error in getGlobalJournalFeed habitJournals:", e);
-  }
 
-  feed.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
-  return feed.slice(0, limitCount);
+    feed.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+    return feed.slice(0, limitCount);
+  });
 }
 
 // Split-Zyklus-Konfiguration (Push/Pull/Legs x10) pro Klient — Pendant zu
 // local/coach.js, hier direkt als Doc statt Datei.
 export async function getClientHabitCycleConfig(clientUid) {
-  try {
-    const snap = await getDoc(doc(db, "fitness", clientUid, "settings", "habitCycle"));
-    return snap.exists() ? { tags: [], targetCycles: 0, ...snap.data() } : { tags: [], targetCycles: 0 };
-  } catch (e) {
-    console.error("Error in getClientHabitCycleConfig:", e);
-    return { tags: [], targetCycles: 0 };
-  }
+  return cachedQuery(CACHE_KEYS.habitCycle(clientUid), async () => {
+    try {
+      const snap = await getDoc(doc(db, "fitness", clientUid, "settings", "habitCycle"));
+      return snap.exists() ? { tags: [], targetCycles: 0, ...snap.data() } : { tags: [], targetCycles: 0 };
+    } catch (e) {
+      console.error("Error in getClientHabitCycleConfig:", e);
+      return { tags: [], targetCycles: 0 };
+    }
+  });
 }
 
 export async function saveClientHabitCycleConfig(clientUid, config) {
@@ -277,6 +288,7 @@ export async function saveClientHabitCycleConfig(clientUid, config) {
       targetCycles: Number(config?.targetCycles) || 0,
       updated_at: serverTimestamp(),
     });
+    await snapDelete(CACHE_KEYS.habitCycle(clientUid));
     return { ok: true };
   } catch (e) {
     console.error("Error in saveClientHabitCycleConfig:", e);
@@ -285,55 +297,57 @@ export async function saveClientHabitCycleConfig(clientUid, config) {
 }
 
 export async function getAllUserProfiles() {
-  const profiles = {};
+  return cachedQuery(CACHE_KEYS.profiles, async () => {
+    const profiles = {};
 
-  try {
-    const snap = await getDocs(collectionGroup(db, "profile"));
-    snap.docs.forEach((d) => {
-      const uid = d.ref.parent?.parent?.id;
-      if (uid) profiles[uid] = { ...profiles[uid], ...d.data() };
-    });
-  } catch {}
-
-  try {
-    const snapSettings = await getDocs(collectionGroup(db, "settings"));
-    snapSettings.docs.forEach((d) => {
-      const uid = d.ref.parent?.parent?.id;
-      if (uid) {
-        const data = d.data();
-        profiles[uid] = {
-          displayName: data.displayName || data.name || profiles[uid]?.displayName || profiles[uid]?.email || uid,
-          email: data.email || profiles[uid]?.email || "",
-          ...profiles[uid],
-          ...data,
-        };
-      }
-    });
-  } catch {}
-
-  // The local Coach console can use its loopback Admin SDK to list Auth-only
-  // accounts too. Hosted Coach has no Auth list permission; it uses the
-  // profile/settings discovery above.
-  if (['localhost', '127.0.0.1', '::1'].includes(globalThis.location?.hostname)) {
     try {
-      const response = await fetch('/api/coach/local/users', { cache: 'no-store' });
-      if (response.ok) {
-        const { users = [] } = await response.json();
-        users.forEach((user) => {
-          if (!user.uid) return;
-          profiles[user.uid] = {
-            ...profiles[user.uid],
-            displayName: profiles[user.uid]?.displayName || user.displayName || user.email || user.uid,
-            email: profiles[user.uid]?.email || user.email || '',
-            knownClient: Boolean(user.knownClient),
-            authUserOnly: !profiles[user.uid] && !user.knownClient,
-          };
-        });
-      }
+      const snap = await getDocs(collectionGroup(db, "profile"));
+      snap.docs.forEach((d) => {
+        const uid = d.ref.parent?.parent?.id;
+        if (uid) profiles[uid] = { ...profiles[uid], ...d.data() };
+      });
     } catch {}
-  }
 
-  return profiles;
+    try {
+      const snapSettings = await getDocs(collectionGroup(db, "settings"));
+      snapSettings.docs.forEach((d) => {
+        const uid = d.ref.parent?.parent?.id;
+        if (uid) {
+          const data = d.data();
+          profiles[uid] = {
+            displayName: data.displayName || data.name || profiles[uid]?.displayName || profiles[uid]?.email || uid,
+            email: data.email || profiles[uid]?.email || "",
+            ...profiles[uid],
+            ...data,
+          };
+        }
+      });
+    } catch {}
+
+    // The local Coach console can use its loopback Admin SDK to list Auth-only
+    // accounts too. Hosted Coach has no Auth list permission; it uses the
+    // profile/settings discovery above.
+    if (['localhost', '127.0.0.1', '::1'].includes(globalThis.location?.hostname)) {
+      try {
+        const response = await fetch('/api/coach/local/users', { cache: 'no-store' });
+        if (response.ok) {
+          const { users = [] } = await response.json();
+          users.forEach((user) => {
+            if (!user.uid) return;
+            profiles[user.uid] = {
+              ...profiles[user.uid],
+              displayName: profiles[user.uid]?.displayName || user.displayName || user.email || user.uid,
+              email: profiles[user.uid]?.email || user.email || '',
+              knownClient: Boolean(user.knownClient),
+              authUserOnly: !profiles[user.uid] && !user.knownClient,
+            };
+          });
+        }
+      } catch {}
+    }
+
+    return profiles;
+  });
 }
 
 export async function saveCoachFeedback(userId, entryId, type, text, habitId = null, date = null) {
@@ -349,6 +363,8 @@ export async function saveCoachFeedback(userId, entryId, type, text, habitId = n
     const ref = doc(db, "fitness", userId, "journal", entryId);
     await setDoc(ref, { coachFeedback: String(text || "").trim() }, { merge: true });
   }
+  await snapDeletePrefix(`feed:client:${userId}:`);
+  await snapDeletePrefix('feed:global:');
   return { ok: true };
 }
 

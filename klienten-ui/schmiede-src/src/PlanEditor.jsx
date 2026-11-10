@@ -204,6 +204,27 @@ export function PlanEditor({ klientId, plan, onGespeichert }) {
     finally { setSpeichert(false); }
   }
 
+  async function pushFirestore() {
+    setSpeichert(true); setStatus("");
+    try {
+      // Lokal speichern, dann explizit nach Firestore (braucht FIREBASE_UID in client.env/.env).
+      await post(`/api/client/${klientId}/plan`, { einheiten });
+      onGespeichert({ einheiten });
+      const res = await fetch(`/k/${klientId}/plan/push`, { method: "POST" });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok || body.ok === false) {
+        const msg = body.error || `${res.status}`;
+        throw new Error(msg);
+      }
+      const n = (body.written || []).length;
+      setStatus(`✓ Firestore: ${n} Routine${n === 1 ? "" : "n"}`);
+    } catch (e) {
+      setStatus(`Push fehlgeschlagen: ${e.message}`);
+    } finally {
+      setSpeichert(false);
+    }
+  }
+
   return (
     <div className="plan-editor">
       <div className="plan-kopf">
@@ -212,8 +233,17 @@ export function PlanEditor({ klientId, plan, onGespeichert }) {
           {status && <span className="plan-status">{status}</span>}
           <WgerRoutineImport klientId={klientId} onImport={routineImportieren} />
           <button type="button" onClick={einheitHinzu}>+ Einheit</button>
-          <button type="button" className="btn-primary" onClick={speichern} disabled={speichert}>
-            {speichert ? "Speichere…" : "Speichern"}
+          <button type="button" onClick={speichern} disabled={speichert}>
+            {speichert ? "…" : "Speichern"}
+          </button>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={pushFirestore}
+            disabled={speichert}
+            title="Speichert lokal und spiegelt nach Firestore. UID: client.env FIREBASE_UID, sonst client.json"
+          >
+            {speichert ? "Pushe…" : "Push Firestore"}
           </button>
         </div>
       </div>

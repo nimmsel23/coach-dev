@@ -35,21 +35,20 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   Tage mit aktiven Nutzern, täglichen Nutzerzahlen, Bereichsaufrufen und
   letzter Aktivität. Die Daten kommen über einen Firestore-
   `collectionGroup("tractionDaily")`-Snapshot. Erfasst werden nur grobe
-  Nutzungsmetadaten, keine Workout-Inhalte. Letzte Aktivitäten verwenden die
-  vorhandenen Coach-Profile für Namen und Freund-/Klient-Rolle. Ausgeblendete
-  oder nicht zugeordnete Konten bleiben in den aggregierten Nutzungszahlen,
-  erscheinen in der Aktivitätsliste aber anonym ohne UID.
+  Nutzungsmetadaten, keine Workout-Inhalte. Coach-Konten werden mitgezählt und
+  als „Coach (eigenes Konto)“ gekennzeichnet (nicht mehr still ausgefiltert —
+  sonst wirkte der Tab leer, solange nur Self-Traffic existiert). Letzte
+  Aktivitäten verwenden Coach-Profile für Namen/Rolle; nicht zugeordnete
+  Konten erscheinen anonym ohne UID. Der Statuschip zeigt die Anzahl geladener
+  Tagesdatensätze statt eines immer-grünen „Live-Verbindung“.
 - **`CatalogBrowser.jsx`**: Interaktiver Katalog-Enhancer zum Suchen, Analysieren (Anatomie-Cues, Biomechanik, Muskelgruppen) und Bearbeiten/Speichern von Übungen in Firestore (`fitness/kb/exercises`).
 - **`ClientsPanel.jsx`** (seit 2026-08-20): Klientenzentrierter Workflow —
   links eine Liste aller User aus `getAllUserProfiles()` (Klick wählt einen
-  Klienten), rechts ein Detail-Bereich mit zwei Sub-Tabs für den gewählten
-  Klienten: `Workouts` (rendert `ClientWorkoutsFeed` mit `clientUid`-Prop)
-  und `Trainingsplan` (rendert `ClientTrainingWorkspace` mit `clientUid` und
-  `clientName`). Ältere Plan-Ansichten bleiben für bestehende Deep-Links.
-  Der `client`/`friend`-Status-Toggle (vorher `ClientManagement.jsx`, jetzt
-  gelöscht) sitzt im Detail-Header. Löst den vorher dokumentierten
-  "kein gemeinsamer State zwischen Tabs"-Punkt: Klientenauswahl passiert
-  jetzt an einer Stelle statt separat pro Tab.
+  Klienten), rechts Detail-Tabs. Auswahl öffnet standardmäßig **Verlauf &
+  Feedback** (`workouts`) — nicht Trainingsplan — damit Sessions sichtbar
+  sind, auch ohne zugewiesenen Cloud-Plan. Trainingsplan / Nachrichten /
+  6Pack folgen in der Tableiste; ältere Plan-Ansichten bleiben per Deep-Link.
+  Status-Toggle (`client`/`friend`/`hidden`) sitzt im Detail-Header.
 - **`ClientWorkoutsFeed.jsx`**: eigenständig nutzbar (Klienten-Dropdown +
   Typ-Filter, `getGlobalJournalFeed()`) **oder** eingebettet mit
   `clientUid`-Prop (kein eigener Dropdown, nutzt stattdessen

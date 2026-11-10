@@ -154,12 +154,41 @@ def sync_routines(db, uid: str, routines: list[dict[str, Any]], now: str | None 
     return summary
 
 
+def _env_firebase_uid(root: Path) -> str | None:
+    """FIREBASE_UID aus client.env (bevorzugt) oder .env — kein Fallback auf client.json."""
+    for name in ("client.env", ".env"):
+        path = root / name
+        if not path.is_file():
+            continue
+        for raw in path.read_text(encoding="utf-8").splitlines():
+            line = raw.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            if key.strip() != "FIREBASE_UID":
+                continue
+            uid = value.strip().strip('"').strip("'")
+            if uid:
+                return uid
+    return None
+
+
 def load_client(client: str) -> tuple[str, dict[str, Any]]:
     root = CLIENTS_ROOT / client
-    info = json.loads((root / "client.json").read_text(encoding="utf-8"))
-    uid = info.get("firebase_uid")
+    if not root.is_dir():
+        raise SystemExit(f"{client}: Klienten-Ordner fehlt unter {CLIENTS_ROOT}")
+    uid = _env_firebase_uid(root)
     if not uid:
-        raise SystemExit(f"{client}: keine firebase_uid in client.json — Plan nicht app-sichtbar")
+        info_path = root / "client.json"
+        info = json.loads(info_path.read_text(encoding="utf-8")) if info_path.is_file() else {}
+        uid = info.get("firebase_uid") or None
+        if not uid and isinstance(info.get("firebase_uids"), list):
+            uid = next((u for u in info["firebase_uids"] if u), None)
+    if not uid:
+        raise SystemExit(
+            f"{client}: keine FIREBASE_UID in client.env/.env und kein firebase_uid "
+            "in client.json — Push abgebrochen"
+        )
     plan_file = root / "data" / "plan.json"
     plan = json.loads(plan_file.read_text(encoding="utf-8")) if plan_file.exists() else {"einheiten": []}
     return uid, plan

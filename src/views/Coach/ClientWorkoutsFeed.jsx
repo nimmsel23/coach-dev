@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Dumbbell, MessageSquare, Brain, Check } from 'lucide-react';
 import { getGlobalJournalFeed, getClientJournalFeed, getAllUserProfiles, saveCoachFeedback } from '@db';
 
-export default function ClientWorkoutsFeed({ clientUid }) {
+export default function ClientWorkoutsFeed({ clientUid, initialTypeFilter = 'all', onSelectClient }) {
   const [journals, setJournals] = useState([]);
   const [loadingJournals, setLoadingJournals] = useState(true);
   const [userProfiles, setUserProfiles] = useState({});
@@ -10,7 +10,7 @@ export default function ClientWorkoutsFeed({ clientUid }) {
   const [commentsText, setCommentsText] = useState({});
   const [toastMessage, setToastMessage] = useState('');
   const [filterUserId, setFilterUserId] = useState('all');
-  const [filterType, setFilterType] = useState('all'); // 'all' | 'workout' | 'habit_journal'
+  const [filterType, setFilterType] = useState(initialTypeFilter); // 'all' | 'workout' | 'habit_journal'
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -18,31 +18,47 @@ export default function ClientWorkoutsFeed({ clientUid }) {
   };
 
   useEffect(() => {
+    let cancelled = false;
     setLoadingJournals(true);
-    // clientUid gesetzt (aus ClientsPanel): gezielte Pro-Klient-Query statt
-    // des global auf 50/100 gedeckelten Feeds — sonst können die Einträge
-    // dieses Klienten durch den globalen Cutoff verschwinden, bevor der
-    // uid-Filter unten sie überhaupt sieht.
-    Promise.all([
-      clientUid ? getClientJournalFeed(clientUid) : getGlobalJournalFeed(),
-      getAllUserProfiles()
-    ]).then(([feed, profiles]) => {
+
+    const applyFeed = (feed, profiles) => {
+      if (cancelled) return;
       setJournals(feed);
       setUserProfiles(profiles);
-
-      // Pre-fill comment inputs with existing feedback
       const initialTexts = {};
-      feed.forEach(j => {
-        if (j.coachFeedback) {
-          initialTexts[j.id] = j.coachFeedback;
-        }
+      feed.forEach((j) => {
+        if (j.coachFeedback) initialTexts[j.id] = j.coachFeedback;
       });
-      setCommentsText(initialTexts);
-    }).catch(() => {
-      triggerToast('Fehler beim Laden des Journal-Feeds');
-    }).finally(() => {
+      setCommentsText((prev) => ({ ...initialTexts, ...prev }));
       setLoadingJournals(false);
+    };
+
+    // clientUid gesetzt: Pro-Klient-Query (IndexedDB-Cache in firestore/coach.js).
+    Promise.all([
+      clientUid ? getClientJournalFeed(clientUid) : getGlobalJournalFeed(),
+      getAllUserProfiles(),
+    ]).then(([feed, profiles]) => applyFeed(feed, profiles)).catch(() => {
+      if (!cancelled) triggerToast('Fehler beim Laden des Journal-Feeds');
+      if (!cancelled) setLoadingJournals(false);
     });
+
+    // Background-Refresh aus IDB-SWR → UI nachziehen
+    const onCache = (event) => {
+      const { key, data } = event.detail || {};
+      if (!key || cancelled) return;
+      if (key.startsWith('feed:')) {
+        if (clientUid && !key.includes(`feed:client:${clientUid}:`)) return;
+        if (!clientUid && !key.startsWith('feed:global:')) return;
+        setJournals(data);
+        setLoadingJournals(false);
+      }
+      if (key === 'profiles:all') setUserProfiles(data);
+    };
+    window.addEventListener('vos-coach-cache', onCache);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('vos-coach-cache', onCache);
+    };
   }, [clientUid]);
 
   async function handleCommentSubmit(item) {
@@ -158,9 +174,19 @@ export default function ClientWorkoutsFeed({ clientUid }) {
                 </div>
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm font-semibold text-fit-ink">{clientName}</span>
+                    {onSelectClient && item.userId ? (
+                      <button
+                        type="button"
+                        onClick={() => onSelectClient(item.userId)}
+                        className="text-sm font-semibold text-fit-ink underline-offset-2 hover:text-fit-accent hover:underline"
+                      >
+                        {clientName}
+                      </button>
+                    ) : (
+                      <span className="text-sm font-semibold text-fit-ink">{clientName}</span>
+                    )}
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${isWorkout ? 'bg-fit-accent/10 border-fit-accent/20 text-fit-accent' : 'bg-blue/10 border-blue/20 text-blue'}`}>
-                      {isWorkout ? 'Workout' : 'Journal'}
+                      {isWorkout ? (item.block || item.trainingsart || 'Workout') : 'Journal'}
                     </span>
                   </div>
                   <span className="text-xs block mt-0.5" style={{ color: 'var(--dim)', opacity: 0.6 }}>{item.date}</span>

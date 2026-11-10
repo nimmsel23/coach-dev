@@ -86,13 +86,16 @@ export default function TractionPanel() {
   }, []);
 
   const stats = useMemo(() => {
-    const clients = records.filter((record) => record.uid && !COACH_UIDS.has(record.uid));
+    // Alle Konten zählen — Coach-UIDs nicht verstecken (sonst wirkt der Tab leer,
+    // obwohl nur Coach-Self-Traffic in tractionDaily liegt).
+    const usable = records.filter((record) => record.uid);
     const latest = new Map();
     const sections = new Map();
     const days = new Map();
     let views = 0;
     let opens = 0;
-    for (const record of clients) {
+    let coachAccounts = 0;
+    for (const record of usable) {
       const previous = latest.get(record.uid);
       if (!previous || millis(record.lastSeenAt) > millis(previous.lastSeenAt)) latest.set(record.uid, record);
       for (const [section, count] of Object.entries(record.sections || {})) {
@@ -104,25 +107,30 @@ export default function TractionPanel() {
       if (!days.has(record.date)) days.set(record.date, new Set());
       days.get(record.date).add(record.uid);
     }
+    for (const uid of latest.keys()) {
+      if (COACH_UIDS.has(uid)) coachAccounts += 1;
+    }
     const latestEntries = [...latest.entries()]
-      .map(([uid, record]) => ({ uid, ...record }))
+      .map(([uid, record]) => ({ uid, ...record, isCoach: COACH_UIDS.has(uid) }))
       .sort((a, b) => millis(b.lastSeenAt) - millis(a.lastSeenAt));
     let anonymousIndex = 0;
     const latestActivity = latestEntries.map((record) => {
       return {
         ...record,
-        anonymousIndex: membership(profiles[record.uid]).visible ? 0 : ++anonymousIndex,
+        anonymousIndex: record.isCoach || membership(profiles[record.uid]).visible ? 0 : ++anonymousIndex,
       };
     });
 
     return {
       active: [...latest.values()].filter((record) => millis(record.lastSeenAt) >= now - 10 * 60000).length,
       users: latest.size,
+      coachAccounts,
       views,
       opens,
       latest: latestActivity,
       sections: [...sections.entries()].sort((a, b) => b[1] - a[1]),
       days: [...days.entries()].sort((a, b) => a[0].localeCompare(b[0])),
+      docs: usable.length,
     };
   }, [records, now, profiles]);
 
@@ -137,7 +145,10 @@ export default function TractionPanel() {
           <h1 className="mt-1 text-2xl font-semibold tracking-tight">Aktivität der Nutzer</h1>
           <p className="mt-1 max-w-2xl text-sm text-fit-muted">Live-Ansicht aus den letzten sieben Tagen, aktualisiert direkt aus Firestore.</p>
         </div>
-        <span className="flex items-center gap-2 rounded-full border border-fit-line px-3 py-2 text-xs text-fit-muted"><span className="h-2 w-2 animate-pulse rounded-full bg-fit-green" /> Live-Verbindung</span>
+        <span className={`flex items-center gap-2 rounded-full border px-3 py-2 text-xs ${error ? 'border-fit-red/40 text-fit-red' : loading ? 'border-fit-line text-fit-muted' : 'border-fit-line text-fit-muted'}`}>
+          <span className={`h-2 w-2 rounded-full ${error ? 'bg-fit-red' : loading ? 'bg-fit-muted' : 'animate-pulse bg-fit-green'}`} />
+          {error ? 'Firestore-Fehler' : loading ? 'Verbindet …' : `${stats.docs} Tagesdatensätze`}
+        </span>
       </header>
 
       {error && <div role="alert" className="flex items-center gap-2 rounded-xl border border-fit-red/30 bg-fit-red/5 p-4 text-sm text-fit-red"><AlertCircle size={17} />{error}</div>}
@@ -145,7 +156,7 @@ export default function TractionPanel() {
         <>
           <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
             <Metric icon={Activity} label="Gerade aktiv" value={stats.active} detail="Aktivität in den letzten 10 Min." />
-            <Metric icon={Users} label="Nutzer, 7 Tage" value={stats.users} detail="eindeutige Konten" />
+            <Metric icon={Users} label="Nutzer, 7 Tage" value={stats.users} detail={stats.coachAccounts ? `${stats.coachAccounts} davon Coach-Konto` : 'eindeutige Konten'} />
             <Metric icon={Eye} label="Bereichsaufrufe" value={stats.views} detail={`${stats.opens} App-Öffnungen`} />
             <Metric icon={Clock3} label="Nutzungstage" value={stats.days.length} detail="mit Aktivität" />
           </div>
@@ -168,16 +179,20 @@ export default function TractionPanel() {
             {stats.latest.length ? <div className="divide-y divide-fit-line">{stats.latest.slice(0, 20).map((record) => {
               const profile = profiles[record.uid];
               const { status, visible } = membership(profile);
-              const name = visible
-                ? (profile.displayName || profile.email || 'Coach-Kontakt')
-                : `Nicht zugeordnetes Konto · ${record.anonymousIndex}`;
-              const relation = visible
-                ? (status === 'client' ? 'Klient' : 'Freund / Kontakt')
-                : profilesLoaded ? 'Nicht in der Coach-Liste' : 'Coach-Zuordnung lädt …';
+              const name = record.isCoach
+                ? (profile?.displayName || profile?.email || 'Coach-Konto')
+                : visible
+                  ? (profile.displayName || profile.email || 'Coach-Kontakt')
+                  : `Nicht zugeordnetes Konto · ${record.anonymousIndex}`;
+              const relation = record.isCoach
+                ? 'Coach (eigenes Konto)'
+                : visible
+                  ? (status === 'client' ? 'Klient' : 'Freund / Kontakt')
+                  : profilesLoaded ? 'Nicht in der Coach-Liste' : 'Coach-Zuordnung lädt …';
               return <div key={record.uid} className="flex items-center justify-between gap-3 px-4 py-3 md:px-5"><div className="min-w-0"><p className="truncate text-sm font-medium">{name}</p><p className="mt-0.5 text-xs text-fit-muted">{relation} · {LABELS[record.lastSection] || record.lastSection || 'Bereich unbekannt'}</p></div><div className="shrink-0 text-right text-xs text-fit-muted">{ago(record.lastSeenAt)}<p className="mt-0.5">{Number(record.sections?.[record.lastSection] || 0)} Aufrufe am {record.date}</p></div></div>;
             })}</div> : <Empty>Im neuen Tracker gibt es noch keine Aktivitäten.</Empty>}
           </section>
-          <p className="text-xs leading-relaxed text-fit-muted">Erfasst werden App-Öffnungen, Bereichsaufrufe und Aktivitätszeitpunkte. Workout-Inhalte, Übungen und Notizen fließen nicht in diese Ansicht ein.</p>
+          <p className="text-xs leading-relaxed text-fit-muted">Erfasst werden App-Öffnungen, Bereichsaufrufe und Aktivitätszeitpunkte — inkl. Coach-Konten, klar gekennzeichnet. Workout-Inhalte, Übungen und Notizen fließen nicht in diese Ansicht ein.</p>
         </>
       )}
     </div>

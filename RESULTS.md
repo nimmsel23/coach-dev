@@ -1,3 +1,9 @@
+## 2026-11-10 — Clients flach + IDB-Cache + Schmiede Push Firestore
+
+- ClientsPanel: flacher (Verlauf/Plan/Chat, Mehr…), Default-Kraftfeed ohne Klientenwahl.
+- vos-coach: IndexedDB-Snapshots (`clientDataIdb`) für Profile/Feeds/Progress (SWR).
+- Schmiede: IDB-GET-Cache; Button „Push Firestore“; UID aus client.env/.env, Fallback client.json.
+
 - 2026-11-10: chore(deps) major stack align — React 19 / Vite 8.3.6 / plugin-react 6.2.1 / Firebase 13 (age-safe pins, pnpm-workspace overrides).
 
 ## 2026-11-10 — Hub-Routen: /k/ only, Fuel, Vitaltrainer
