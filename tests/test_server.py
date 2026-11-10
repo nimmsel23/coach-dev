@@ -167,15 +167,20 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
         (ui/'klienten.html').write_text('<html><head></head><body>Legacy ClientForge</body></html>')
         with patch.dict('os.environ',{'CLIENTS_ROOT':str(clients),'KLIENTEN_UI_ROOT':str(ui.parent)}):
             async with self.client() as client:
-                for path in ['/fixture','/fixture/','/k/fixture','/k/fixture/']:
+                for path in ['/k/fixture', '/k/fixture/']:
                     response=await client.get('http://localhost'+path+'?embed=1&client=wrong',follow_redirects=False)
                     self.assertEqual(response.status_code,200)
                     self.assertIn('Legacy ClientForge',response.text)
                     self.assertIn('<base href="/_klienten/">',response.text)
+                # Root-Slugs sind keine Klienten mehr (nur /k/<slug>/).
+                for path in ['/fixture', '/fixture/', '/missing']:
+                    bare = await client.get('http://localhost' + path, follow_redirects=False)
+                    self.assertEqual(bare.status_code, 404, path)
+                    self.assertNotIn('Legacy ClientForge', bare.text)
+                    self.assertNotIn('Klient nicht gefunden', bare.text)
                 response=await client.get('http://localhost/api/client/fixture/plans')
                 self.assertEqual(response.json(),{'plans':[]})
                 self.assertEqual(response.headers['cache-control'],'no-store')
-                self.assertEqual((await client.get('http://localhost/missing')).status_code,404)
                 legacy=await client.get('http://localhost/k/fixture/plan')
                 self.assertEqual(legacy.status_code,200)
                 self.assertIn('data',legacy.json())
@@ -198,7 +203,11 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(prefixed.status_code, 200)
             self.assertIn("VitalOS", prefixed.text)
             self.assertEqual((await client.get("/website/")).status_code, 200)
-            self.assertEqual((await client.get("/website/vitaltrainer")).status_code, 200)
+            # Eigene Site-URL, kein 302 auf /website/
+            for url in ("/website/vitaltrainer", "/website/vitaltrainer/", "/vitaltrainer/", "/vitaltrainer"):
+                page = await client.get(url, follow_redirects=False)
+                self.assertEqual(page.status_code, 200, url)
+                self.assertIn("Vitaltraining", page.text)
             self.assertEqual((await client.get("/portal.html")).status_code, 200)
 
     async def test_vital_hub_public_is_root_when_present(self):

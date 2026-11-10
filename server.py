@@ -472,12 +472,15 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     ]
 
     def file_from_dirs(relative: str, directories: list[Path]):
+        # Kein resolve()-Containment: Hub-Ordner wie fuel/ sind Symlinks nach außerhalb.
+        rel = Path(relative)
+        if rel.is_absolute() or ".." in rel.parts:
+            return None
         for directory in directories:
             if not directory.is_dir():
                 continue
-            base = directory.resolve()
-            candidate = (base / relative).resolve()
-            if candidate.is_relative_to(base) and candidate.is_file():
+            candidate = directory.joinpath(*rel.parts)
+            if candidate.is_file():
                 return FileResponse(candidate, headers={"Cache-Control": "no-cache"})
         return None
 
@@ -501,10 +504,6 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     def website_static(relative: str = ""):
         relative = relative.strip("/")
-        # Alias: /website/vitaltrainer → Homepage (Repo = daniel-vitaltrainer-firebase,
-        # Datei heißt index.html, nicht vitaltrainer.html).
-        if relative in {"vitaltrainer", "vitaltrainer/", "vitaltrainer/index.html"}:
-            relative = "index.html"
         if not relative or relative.endswith("/"):
             relative = (relative + "index.html").lstrip("/")
         found = file_from_dirs(relative, website_dirs)
@@ -528,26 +527,18 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     @app.api_route("/website/{path:path}", methods=["GET", "HEAD"])
     async def website_path(path: str):
+        # Vitaltrainer-Landing ist eine eigene Site im website/-Baum (neben vitalos/…).
+        # Kein Redirect auf /website/ — Hash bleibt unter /website/vitaltrainer#…
+        if path.strip("/") in {"vitaltrainer", "vitaltrainer/index.html"}:
+            return website_static("index.html")
         return website_static(path)
 
-    # Register after reserved routes; never turn unknown slugs into catalog HTML.
+    # Klienten-UI nur unter /k/<slug>/ — nie als Root-Slug (sonst /fuel/ → „Klient nicht gefunden").
     @app.api_route("/k/{client_id}", methods=["GET", "HEAD"])
     @app.api_route("/k/{client_id}/", methods=["GET", "HEAD"])
-    @app.api_route("/{client_id}", methods=["GET", "HEAD"])
-    @app.api_route("/{client_id}/", methods=["GET", "HEAD"])
     async def client_entry(client_id: str, request: Request):
-        # Asset names belong to the static server, not to client identity lookup.
         if "." in client_id:
-            return public_or_catalog(client_id)
-        # Vital Centre Ordner (jobs/, klienten/, …) vor Klienten-Lookup.
-        if hub.is_dir():
-            found = file_from_dirs(f"{client_id}/index.html", [hub]) or file_from_dirs(client_id, [hub])
-            if found is not None:
-                return found
-        if client_id == "portal":
-            return public_or_catalog("portal.html")
-        if client_id == "website":
-            return website_static("index.html")
+            return JSONResponse({"detail": "Not found"}, status_code=404)
         from coach_local_plans import local_only, clients_root, plans_module
         local_only(request)
         try:
@@ -555,6 +546,21 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
         except plans_module.PlanError as error:
             return JSONResponse({"detail": str(error)}, status_code=error.status)
         return spa_document(legacy_ui(), "klienten.html", "/_klienten/")
+
+    @app.api_route("/{segment}", methods=["GET", "HEAD"])
+    @app.api_route("/{segment}/", methods=["GET", "HEAD"])
+    async def hub_or_public_segment(segment: str):
+        # Asset-Dateien und Hub-Zentren (fuel/, jobs/, …) — kein Klienten-Lookup.
+        if "." in segment:
+            return public_or_catalog(segment)
+        if segment == "portal":
+            return public_or_catalog("portal.html")
+        if segment in {"website", "vitaltrainer"}:
+            return website_static("index.html")
+        found = file_from_dirs(segment, public_dirs) or file_from_dirs(f"{segment}/index.html", public_dirs)
+        if found is not None:
+            return found
+        return JSONResponse({"detail": "Not found"}, status_code=404)
 
     @app.api_route("/{path:path}", methods=["GET", "HEAD"])
     async def index(path: str):
