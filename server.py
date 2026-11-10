@@ -2,8 +2,8 @@
 """Coach backend on port 9150: one-process SOT for Coach keepers + SPA.
 
 Runtime ownership: this file under ~/dev/coach-dev (coach-api.service).
-fitness.api + Relax are in-process; only coach-backends.json entries are proxied
-(today: Fuel → VitalOS :8000). Not the Node/Hono tree under ~/dev/backend.
+fitness.api + fuel.api + Relax are in-process. coach-backends.json is only for
+optional upstream fallbacks (not required when local attach succeeds).
 """
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ import asyncio
 import importlib
 import importlib.util
 import json
+import logging
 import os
 import re
 import sys
@@ -26,6 +27,15 @@ from starlette.background import BackgroundTask
 from coach_sixpack import router as sixpack_router
 
 ROOT = Path(__file__).resolve().parent
+_log = logging.getLogger("uvicorn.error")
+
+
+def coach_backend_root() -> Path:
+    """Domain packages live under …/backend/{fitness,fuel,…}."""
+    return Path(os.environ.get(
+        "COACH_BACKEND_ROOT",
+        os.environ.get("COACH_FITNESS_BACKEND_ROOT", ROOT / "backend"),
+    )).expanduser().resolve()
 API_PREFIXES = (
     "api", "fitness", "exercise", "exercises", "coverage", "blocks", "coaching-notes",
     "export", "firestore", "home", "internal", "journal", "plan", "plans", "routines",
@@ -68,19 +78,8 @@ def hub_public_dist() -> Path:
 
 
 def load_fitness_app():
-    """Sessions/UI FastAPI under /fitness-api — `backend/fitness` package.
-
-    `COACH_BACKEND_ROOT` (alias `COACH_FITNESS_BACKEND_ROOT`) = folder that
-    contains domain packages (`fitness/`, later `fuel/`, …). Default:
-    ~/dev/coach-dev/backend.
-    """
-    source_root = Path(os.environ.get(
-        "COACH_BACKEND_ROOT",
-        os.environ.get(
-            "COACH_FITNESS_BACKEND_ROOT",
-            Path.home() / "dev" / "coach-dev" / "backend",
-        ),
-    )).expanduser().resolve()
+    """Sessions/UI FastAPI under /fitness-api — `backend/fitness` package."""
+    source_root = coach_backend_root()
     if not (source_root / "fitness" / "api" / "app.py").is_file():
         return None
 
@@ -101,13 +100,19 @@ def load_fitness_app():
     return module.create_app()
 
 
-def attach_fitness_api(app: FastAPI) -> bool:
-    """Inbox/Catalog/Workouts from backend/fitness (same process as coach-api)."""
+def _ensure_backend_on_path() -> Path:
+    source_root = coach_backend_root()
     root = str(ROOT)
-    backend_root = str(ROOT / "backend")
-    for path in (backend_root, root):
+    backend = str(source_root)
+    for path in (backend, root):
         if path not in sys.path:
             sys.path.insert(0, path)
+    return source_root
+
+
+def attach_fitness_api(app: FastAPI) -> bool:
+    """Inbox/Catalog/Workouts from backend/fitness (same process as coach-api)."""
+    _ensure_backend_on_path()
     try:
         from fitness.api.routers.sessions import router as sessions_router
         from fitness.api.routers.journal import router as journal_router
@@ -130,6 +135,25 @@ def attach_fitness_api(app: FastAPI) -> bool:
         app.include_router(router)
     app.include_router(macrocycles_router, prefix="/api")
     app.include_router(workouts_router, prefix="/api")
+    return True
+
+
+def attach_fuel_api(app: FastAPI) -> bool:
+    """Nutrition API from backend/fuel (same process as coach-api)."""
+    _ensure_backend_on_path()
+    try:
+        from fuel.api.integration import initialize_fuel_backend, router as fuel_router
+    except Exception as exc:
+        _log.warning("fuel.api attach skipped (import): %s", exc)
+        return False
+    try:
+        initialize_fuel_backend()
+    except Exception as exc:
+        # Router trotzdem mounten — Migration/DB kann später greifen.
+        _log.warning("fuel.api init deferred: %s", exc)
+    # Gleiche Prefixes wie bisheriger Proxy (coach-backends.json / VitalOS).
+    app.include_router(fuel_router, prefix="/api/fuel")
+    app.include_router(fuel_router, prefix="/fuel-api")
     return True
 
 
@@ -187,7 +211,8 @@ def configured_backends(overrides: dict[str, str] | None = None) -> dict[str, ht
 def create_app(*, catalog_directory: Path | None = None, coach_directory: Path | None = None,
                fitness_directory: Path | None = None, hub_directory: Path | None = None,
                upstream_url: str | None = None, backend_urls: dict[str, str] | None = None,
-               transport=None, include_fitness_api: bool = True) -> FastAPI:
+               transport=None, include_fitness_api: bool = True,
+               include_fuel_api: bool = True) -> FastAPI:
     catalog = (catalog_directory or catalog_dist()).resolve()
     coach = (coach_directory or Path(os.environ.get("COACH_UI_DIR", ROOT / "dist-coach"))).resolve()
     fitness_ui = (fitness_directory or fitness_frontend_dist()).resolve()
@@ -229,6 +254,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     app.state.backends = backends
     app.state.fitness_api_local = False
+    app.state.fuel_api_local = False
     fitness_app = load_fitness_app()
     app.state.fitness_frontend_app = fitness_app is not None
     if fitness_app is not None:
@@ -265,13 +291,19 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     @app.get("/_coach/health")
     async def health():
         fitness_api_local = app.state.fitness_api_local
+        fuel_api_local = app.state.fuel_api_local
         fitness_mode = (
             "local" if fitness_api_local
             else ("worker" if "fitness" in backends else ("frontend-api" if app.state.fitness_frontend_app else "unavailable"))
         )
+        fuel_mode = (
+            "local" if fuel_api_local
+            else ("worker" if "fuel" in backends else "unavailable")
+        )
         return {"ok": True, "service": "coach", "port": int(os.environ.get("COACH_PORT", "9150")),
                 "backends": {name: str(url) for name, url in backends.items()},
                 "fitness_api": fitness_mode,
+                "fuel_api": fuel_mode,
                 "fitness_frontend_api": "local" if app.state.fitness_frontend_app else "unavailable",
                 "relax_api": "local" if relax_app is not None else ("worker" if "relax" in backends else "unavailable"),
                 "fitness_frontend_ready": ((fitness_ui if os.environ.get("COACH_FITNESS_FRONTEND_DIR") else catalog) / "index.html").is_file(),
@@ -293,13 +325,17 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
             statuses["fitness"] = {"ready": True, "status": 200, "mode": "local"}
         if app.state.fitness_frontend_app:
             statuses["fitness_frontend_api"] = {"ready": True, "status": 200, "mode": "local"}
+        if app.state.fuel_api_local:
+            statuses["fuel"] = {"ready": True, "status": 200, "mode": "local"}
         if relax_app is not None:
             statuses["relax"] = {"ready": True, "status": 200, "mode": "local"}
         return {"ok": all(value["ready"] for value in statuses.values()), "backends": statuses}
 
-    # Catalog/Inbox-API (ehem. fitness-python-backend) — nach /health, vor UI-Catch-alls.
+    # Domain APIs in-process — nach /health, vor UI-Catch-alls.
     app.state.fitness_api_local = attach_fitness_api(app) if include_fitness_api else False
+    app.state.fuel_api_local = attach_fuel_api(app) if include_fuel_api else False
     fitness_api_local = app.state.fitness_api_local
+    fuel_api_local = app.state.fuel_api_local
 
     async def proxy(request: Request, backend: str, strip_segments: int = 0):
         upstream = backends[backend]
@@ -411,6 +447,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     for name in backends:
         for prefix in (f"/api/{name}", f"/{name}-api"):
             if name == "fitness" and (prefix == "/fitness-api" and fitness_app is not None or fitness_api_local):
+                continue
+            if name == "fuel" and fuel_api_local:
                 continue
             endpoint = domain_proxy(name, prefix.count("/"))
             app.add_api_route(prefix, endpoint, methods=METHODS)

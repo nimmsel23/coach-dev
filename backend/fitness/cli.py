@@ -39,21 +39,17 @@ import typer
 
 from fitness.runtime.cli import app as runtime_user_data_app
 from fitness.coach.cli import app as coach_app
+from fitness.paths import BACKEND_ROOT, REPO_ROOT
 
 # ── Pfade ──────────────────────────────────────────────────────────────────────
-FITNESS_DEV  = Path(__file__).resolve().parent.parent
-
-if str(FITNESS_DEV) not in sys.path:
-    sys.path.insert(0, str(FITNESS_DEV))
-ANATOMY_KB   = FITNESS_DEV / "anatomy-kb"
-KBCTL        = FITNESS_DEV / "anatomy-kb" / "kbctl"
-# bin/fitnessctl → real controller; repo-root fitnessctl is retired stub
-FITNESSCTL   = FITNESS_DEV / "bin" / "fitnessctl"
-
-# "catalog" ist ein Symlink auf fitness/catalog (repo-root, siehe ./catalog).
-# "-m catalog <cmd>" braucht dafür kein extra PYTHONPATH mehr — Python legt bei
-# "-m" automatisch das aktuelle Arbeitsverzeichnis auf sys.path, und FITNESS_DEV
-# (wo der Symlink liegt) ist ohnehin das cwd aller subprocess-Aufrufe unten.
+# Package: …/backend/fitness · Import-Root: …/backend · Repo: …/coach-dev
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
+# Legacy-Name: meinte früher das Checkout-Root
+FITNESS_DEV = REPO_ROOT
+ANATOMY_KB = REPO_ROOT / "anatomy-kb"
+KBCTL = ANATOMY_KB / "kbctl"
+FITNESSCTL = REPO_ROOT / "bin" / "fitnessctl"
 
 DEV_PORT    = int(os.environ.get("FITNESS_PORT", 9100))
 KB_PORT     = int(os.environ.get("ANATOMY_KB_PORT", 9200))
@@ -157,6 +153,7 @@ app = typer.Typer(
     help=__doc__,
     invoke_without_command=True,
     no_args_is_help=True,
+    context_settings={"help_option_names": ["--help", "-h", "-help"]},
 )
 app.add_typer(runtime_user_data_app, name="user-data")
 app.add_typer(coach_app, name="coach")
@@ -303,10 +300,12 @@ def enrich_watch() -> None:
         except (ProcessLookupError, ValueError):
             pidfile.unlink(missing_ok=True)
     env = os.environ.copy()
-    env["PYTHONPATH"] = f"{FITNESS_DEV}{os.pathsep}{env['PYTHONPATH']}" if env.get("PYTHONPATH") else str(FITNESS_DEV)
+    env["PYTHONPATH"] = (
+        f"{BACKEND_ROOT}{os.pathsep}{env['PYTHONPATH']}" if env.get("PYTHONPATH") else str(BACKEND_ROOT)
+    )
     proc = subprocess.Popen(
         [sys.executable, "-m", "fitness.catalog.cli", "watch"],
-        cwd=FITNESS_DEV,
+        cwd=str(REPO_ROOT),
         env=env,
         stdout=open(logfile, "a"),
         stderr=subprocess.STDOUT,

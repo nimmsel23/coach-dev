@@ -1,0 +1,42 @@
+# Einzige Python-seitige Quelle für Nährwert-Keys — muss 1:1 mit den
+# JS-DACH-Keys in src/shared/config/dach.mjs übereinstimmen (dort steckt
+# die eigentliche Quelle inkl. Referenzwerten/Units/Labels). Bei neuen
+# Nährstoffen zuerst dach.mjs erweitern, dann hier nachziehen.
+
+macro_keys:
+  - kcal
+  - protein
+  - carbs
+  - fat
+  - fiber
+
+micro_keys:
+  - vitamin_a_ug
+  - vitamin_d_ug
+  - vitamin_e_mg
+  - vitamin_k_ug
+  - vitamin_c_mg
+  - vitamin_b1_mg
+  - vitamin_b2_mg
+  - vitamin_b3_mg
+  - vitamin_b5_mg
+  - vitamin_b6_mg
+  - vitamin_b7_ug
+  - folate_ug
+  - vitamin_b12_ug
+  - calcium_mg
+  - phosphorus_mg
+  - magnesium_mg
+  - iron_mg
+  - zinc_mg
+  - selenium_ug
+  - iodine_ug
+  - potassium_mg
+  - sodium_mg
+  - boron_mg
+  - omega3_mg
+  - omega3_ala_mg
+  - omega3_epa_mg
+  - omega3_dha_mg
+  - omega3_dpa_mg
+  - omega3_epa_dha_mg

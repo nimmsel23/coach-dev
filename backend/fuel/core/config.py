@@ -24,14 +24,19 @@ _AOS_FUEL_DATA_DIR = Path(
     os.getenv("AOS_FUEL_DATA_DIR", str(Path.home() / ".aos" / "fuel"))
 ).expanduser()
 
+def _database_url() -> str:
+    # Leere Env-Strings (DATABASE_URL="") nicht als gültige URL werten —
+    # sonst scheitert SQLAlchemy schon beim Import von fuel.db.
+    for key in ("FUEL_DATABASE_URL", "DATABASE_URL"):
+        value = os.getenv(key)
+        if value and value.strip():
+            return _expand_sqlite_url(value.strip())
+    return _expand_sqlite_url(f"sqlite:///{_AOS_FUEL_DATA_DIR / 'nutrition' / 'nutrition.db'}")
+
+
 class Config:
     # Database Configuration
-    DATABASE_URL = _expand_sqlite_url(
-        os.getenv(
-            "FUEL_DATABASE_URL",
-            os.getenv("DATABASE_URL", f"sqlite:///{_AOS_FUEL_DATA_DIR / 'nutrition' / 'nutrition.db'}"),
-        )
-    )
+    DATABASE_URL = _database_url()
 
     # Gemini Configuration
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")

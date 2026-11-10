@@ -25,16 +25,19 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
         self.requests = []
 
     @asynccontextmanager
-    async def client(self, handler=None, backend_urls=None, include_fitness_api=False, upstream_url="http://catalog.test:9150"):
+    async def client(self, handler=None, backend_urls=None, include_fitness_api=False,
+                     include_fuel_api=False, upstream_url="http://catalog.test:9150"):
         def backend(request):
             self.requests.append(request)
             return handler(request) if handler else httpx.Response(200, stream=httpx.ByteStream(b'{"ok":true}'))
-        # Gateway-Tests default ohne lokales fitness.api, damit Proxy-Fixtures greifen.
+        # Gateway-Tests default ohne lokale Domain-APIs, damit Proxy-Fixtures greifen.
         # Hub aus: Tests erwarten Catalog auf / ohne ~/.local/vital-hub.
         app = create_app(catalog_directory=self.catalog, coach_directory=self.coach,
                          hub_directory=self.root / "no-hub",
                          upstream_url=upstream_url, backend_urls=backend_urls,
-                         transport=httpx.MockTransport(backend), include_fitness_api=include_fitness_api)
+                         transport=httpx.MockTransport(backend),
+                         include_fitness_api=include_fitness_api,
+                         include_fuel_api=include_fuel_api)
         # Gateway tests use synthetic workspaces and must not start the real local scheduler.
         with patch.dict("os.environ", {"COACH_TASKWARRIOR_SCHEDULER": "0"}):
             async with app.router.lifespan_context(app):
@@ -152,6 +155,16 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertTrue(response.json().get("ok"))
             self.assertIn("items", response.json())
+
+    async def test_local_fuel_api_serves_health_without_upstream(self):
+        async with self.client(backend_urls={}, upstream_url=None, include_fuel_api=True) as client:
+            health = (await client.get("/health")).json()
+            self.assertEqual(health.get("fuel_api"), "local")
+            for path in ("/api/fuel/health", "/fuel-api/health"):
+                response = await client.get(path)
+                self.assertEqual(response.status_code, 200, path)
+                self.assertEqual(response.json().get("status"), "ok")
+            self.assertFalse(self.requests)
 
     async def test_registry_can_add_a_domain_without_server_code_changes(self):
         async with self.client(backend_urls={"skills": "http://skills.test:9300"}) as client:

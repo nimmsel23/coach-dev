@@ -19,6 +19,20 @@ app = FastAPI(
 
 app.include_router(fuel_router)
 
+
+def main() -> None:
+    """CLI entry: `fuel-api` / `python -m fuel.api.main`."""
+    import uvicorn
+
+    host = os.environ.get("FUEL_BACKEND_HOST", "127.0.0.1")
+    port = int(os.environ.get("FUEL_BACKEND_PORT", "4000"))
+    uvicorn.run("fuel.api.main:app", host=host, port=port, reload=False)
+
+
+if __name__ == "__main__":
+    main()
+
+
 # Serve Frontend built assets
 # frontend/ ist ins Nachbar-Repo ~/dev/fuel-frontend gewandert (FUEL_FRONTEND_DIR überschreibt).
 FRONTEND_DIR = os.environ.get("FUEL_FRONTEND_DIR") or os.path.join(

@@ -7,12 +7,16 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-# Fitness-Package liegt im Coach-Repo (nicht mehr in fitness-dev).
+# Fitness-Package: ~/dev/coach-dev/backend/fitness → PYTHONPATH braucht backend/
 FITNESS_ROOT = Path(os.getenv('COACH_DEV', str(ROOT)))
-BACKEND_FITNESS_ROOT = Path(os.getenv(
-    'BACKEND_FITNESS_ROOT',
-    str(ROOT.parent / 'backend' / 'fitness'),
+BACKEND_ROOT = Path(os.getenv(
+    'COACH_BACKEND_ROOT',
+    os.getenv('BACKEND_FITNESS_ROOT', str(ROOT / 'backend')),
 ))
+# Legacy-Alias: früher zeigte BACKEND_FITNESS_ROOT fälschlich auf …/backend/fitness
+# oder sogar ~/dev/backend/fitness. Parent von fitness/ = backend/.
+if BACKEND_ROOT.name == 'fitness':
+    BACKEND_ROOT = BACKEND_ROOT.parent
 KLIENTEN_ROOT = Path(os.getenv('KLIENTEN_PYTHON_ROOT', str(ROOT / 'klienten-python')))
 PRAXIS_DEV_ROOT = Path(os.getenv('PRAXIS_DEV_ROOT', str(ROOT.parent / 'praxis-dev')))
 
@@ -40,8 +44,8 @@ COMMANDS = {
     'data-sync': Command('fitness.sync.cli', 'Fitness-Daten-/KB-Sync: pull, push, watch, kb'),
     'firestore': Command('fitness.firestore.sync_cli', 'Firestore-Sync-Werkzeuge'),
     'user-data': Command('fitness.runtime.cli', 'Runtime-Sessions und History prüfen/bearbeiten', entry='app'),
-    'notifications': Command('backend.notifier.cli', 'Lokale Inbox-Benachrichtigungen (fitness-inbox)'),
-    'push': Command('backend.pusher.cli', 'Push-Nachrichten-Werkzeuge'),
+    'notifications': Command('fitness.notifier.cli', 'Lokale Inbox-Benachrichtigungen (fitness-inbox)'),
+    'push': Command('fitness.pusher.cli', 'Push-Nachrichten-Werkzeuge'),
     'mail': Command('fitness.mail.cli', 'Fitbit-Mail-Pipeline'),
     'activity': Command('fitness.activity.cli', 'Aktivitäten erfassen und verwalten'),
     'fitness': Command('fitness.cli', 'Vollständige bestehende Fitness-CLI'),
@@ -125,8 +129,14 @@ def help_text() -> str:
 
 
 def _fitness_python() -> str:
-    python = Path.home() / '.local/share/uv/tools/fitness-agent/bin/python3'
-    return str(python) if python.is_file() else sys.executable
+    for candidate in (
+        Path.home() / '.local/share/uv/tools/fitness/bin/python',
+        Path.home() / '.local/share/uv/tools/fitness/bin/python3',
+        Path.home() / '.local/share/uv/tools/fitness-agent/bin/python3',
+    ):
+        if candidate.is_file():
+            return str(candidate)
+    return sys.executable
 
 
 def _klienten_python() -> str:
@@ -155,11 +165,12 @@ def command_argv(args: list[str]) -> list[str]:
             str(KLIENTEN_ROOT), str(PRAXIS_DEV_ROOT),
             spec.module, spec.entry, f'coach {name}', *spec.prefix, *rest,
         ]
-    if not (FITNESS_ROOT / 'fitness').is_dir():
-        raise FileNotFoundError(f'Fitness-Quelle fehlt: {FITNESS_ROOT}')
+    fitness_pkg = BACKEND_ROOT / 'fitness'
+    if not fitness_pkg.is_dir() and not (FITNESS_ROOT / 'fitness').is_dir():
+        raise FileNotFoundError(f'Fitness-Quelle fehlt: {fitness_pkg}')
     return [
         _fitness_python(), '-c', RUN_TOOL,
-        str(FITNESS_ROOT), str(BACKEND_FITNESS_ROOT),
+        str(FITNESS_ROOT), str(BACKEND_ROOT),
         spec.module, spec.entry,
         'coach log' if spec.module == 'fitness.log.cli' else f'coach {name}',
         *spec.prefix, *rest,
@@ -168,13 +179,15 @@ def command_argv(args: list[str]) -> list[str]:
 
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
-    if not args or args in (['--help'], ['-h'], ['help']):
+    if not args or args in (['--help'], ['-h'], ['-help'], ['help']):
         print(help_text())
         return 0
     if args[0] == 'help':
         args = [*args[1:], '--help']
     name = ALIASES.get(args[0], args[0])
-    if name in HELP_OVERRIDES and (args[1:] in (['--help'], ['-h']) or (name == 'firestore' and len(args) == 1)):
+    if name in HELP_OVERRIDES and (
+        args[1:] in (['--help'], ['-h'], ['-help']) or (name == 'firestore' and len(args) == 1)
+    ):
         print(HELP_OVERRIDES[name])
         return 0
     if name == 'tui' and len(args) > 1:

@@ -1,27 +1,62 @@
-[project]
-name = "fuel-tracker"
-version = "0.1.0"
-description = "A simple macro tracking journal using Gemini NLP"
-authors = [
-    {name = "Alpha",email = "alpha@alphaos.local"}
-]
-requires-python = ">=3.14"
-dependencies = [
-    "alembic (>=1.18.5,<2.0.0)",
-    "python-dotenv (>=1.2.2,<2.0.0)",
-    "psycopg2-binary (>=2.9.12,<3.0.0)",
-    "sqlalchemy (>=2.0.51,<3.0.0)",
-    "pydantic (>=2.13.4,<3.0.0)",
-    "google-genai (>=2.10.0,<3.0.0)",
-    "fastapi (>=0.139.0,<0.140.0)",
-    "httpx (>=0.27.0,<1.0.0)",
-    "uvicorn[standard] (>=0.51.0,<0.52.0)"
-]
-
-
-[tool.poetry]
-packages = [{ include = "fuel", from = ".." }]
-
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "fuel"
+version = "0.1.0"
+description = "Fuel Centre — Nutrition-Tracking CLI (Catalog-first, Gemini-Fallback)"
+authors = [
+    { name = "Alpha", email = "alpha@alphaos.local" }
+]
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "alembic>=1.11.0,<2.0.0",
+    "python-dotenv>=1.0.0,<2.0.0",
+    "psycopg2-binary>=2.9.0,<3.0.0",
+    "sqlalchemy>=2.0.0,<3.0.0",
+    "pydantic>=2.0.0,<3.0.0",
+    "google-genai>=1.0.0,<3.0.0",
+    "fastapi>=0.115.0,<1.0.0",
+    "httpx>=0.27.0,<1.0.0",
+    "uvicorn[standard]>=0.30.0,<1.0.0",
+    "typer>=0.9.0",
+    "loguru>=0.7.0",
+    "rich>=13.0.0",
+    "wasabi>=1.1.0",
+    "PyYAML>=6.0",
+    "watchdog>=3.0.0",
+]
+
+[project.optional-dependencies]
+cloud = ["firebase-admin>=6.0.0"]
+tui = ["textual>=0.47.0"]
+
+[project.scripts]
+fuel = "fuel.dispatch:main"
+fuel-api = "fuel.api.main:main"
+fuel-meal = "fuel.meal:main"
+fuel-supplement = "fuel.supplement:main"
+fuel-ingredient = "fuel.ingredient:main"
+fuel-week = "fuel.report:week_main"
+fuel-micro = "fuel.report:micro_main"
+fuel-catalog-verify = "fuel.catalog_verify:main"
+
+[tool.poetry]
+# pyproject liegt in backend/fuel/; Package ist dieses Verzeichnis selbst
+packages = [{ include = "fuel", from = ".." }]
+include = [
+    { path = "constants/omega3-rules.txt", format = ["sdist", "wheel"] },
+    { path = "constants/nutrients.yaml", format = ["sdist", "wheel"] },
+]
+exclude = [
+    "src",
+    "tests",
+    "logs",
+    "alembic",
+    "scripts",
+    "node_modules",
+    ".venv",
+    "*.bak",
+    "*.bak*",
+]
