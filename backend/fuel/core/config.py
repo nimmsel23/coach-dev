@@ -24,13 +24,22 @@ _AOS_FUEL_DATA_DIR = Path(
     os.getenv("AOS_FUEL_DATA_DIR", str(Path.home() / ".aos" / "fuel"))
 ).expanduser()
 
+def _clean_url(value: str) -> str:
+    # dotenv/shell oft mit Anführungszeichen: DATABASE_URL="postgresql+…"
+    cleaned = value.strip().strip("\"'")
+    return cleaned.strip() if cleaned else ""
+
+
 def _database_url() -> str:
     # Leere Env-Strings (DATABASE_URL="") nicht als gültige URL werten —
     # sonst scheitert SQLAlchemy schon beim Import von fuel.db.
     for key in ("FUEL_DATABASE_URL", "DATABASE_URL"):
         value = os.getenv(key)
-        if value and value.strip():
-            return _expand_sqlite_url(value.strip())
+        if not value:
+            continue
+        cleaned = _clean_url(value)
+        if cleaned:
+            return _expand_sqlite_url(cleaned)
     return _expand_sqlite_url(f"sqlite:///{_AOS_FUEL_DATA_DIR / 'nutrition' / 'nutrition.db'}")
 
 

@@ -25,7 +25,11 @@ def load_plan_module(name):
 
 
 def load_taskwarrior_module():
-    source = ROOT / 'modules/plan/fitness/plan_tasks.py'
+    # Coach-owned copy — plan-dev removed fitness/plan_tasks.py (b91e309).
+    source = ROOT / 'plan_tasks.py'
+    if not source.is_file():
+        # Legacy fallback while checkouts catch up
+        source = ROOT / 'modules/plan/fitness/plan_tasks.py'
     spec = importlib.util.spec_from_file_location('coach_plan_tasks', source)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

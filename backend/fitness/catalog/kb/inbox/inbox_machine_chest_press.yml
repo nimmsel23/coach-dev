@@ -1,97 +1,137 @@
 name: inbox_machine_chest_press
-description: 'Neu angereichert (manueller Re-Enrich) fuer: Brustmaschine'
-enriched_at: '2026-11-06T02:47:55.277758+00:00'
+description: 'Proactively generated expert draft for: Brustmaschine'
+generated_at: '2026-11-10T03:37:25.805436+00:00'
+enriched_at: '2026-11-10T03:37:25.805436+00:00'
 exercises:
-- source: unreviewed
-  variations: []
-  stabilizers: []
-  secondary_muscles:
-  - 301_anterior_deltoid
-  - 401_triceps_brachii
-  exercise_id: machine_chest_press
-  id: machine_chest_press
-  name: Brustmaschine
-  display_name: Brustmaschine
-  german: Brustmaschine
-  english: Machine Chest Press
-  category: push
-  type: compound
-  movements:
-  - horizontal_press
-  - shoulder_horizontal_adduction
-  - elbow_extension
-  - machine_guided
-  equipment:
-  - machine
-  primary_muscles:
-  - 101_pectoralis_major
-  coaching_notes:
-  - Stellen Sie den Sitz so ein, dass die Griffe auf Höhe der mittleren Brust oder
-    leicht darunter liegen, wenn die Arme ausgestreckt sind, um eine optimale Brustaktivierung
-    zu gewährleisten.
-  - Drücken Sie Ihren unteren Rücken fest gegen die Lehne und halten Sie eine leichte
-    natürliche Krümmung im Lendenbereich. Schulterblätter aktiv nach hinten unten
-    ziehen und fixieren, um die Schultern zu stabilisieren.
-  - Fassen Sie die Griffe mit einem festen, neutralen oder leicht überhandgriff, die
-    Handgelenke bleiben dabei gerade und stabil, um Überlastungen zu vermeiden.
-  - Drücken Sie die Griffe kontrolliert nach vorne, bis die Arme fast vollständig
-    gestreckt sind, ohne die Ellenbogen hart durchzudrücken (Hyperextension vermeiden).
-  - Konzentrieren Sie sich darauf, die Brustmuskulatur bewusst zu kontrahieren. Atmen
-    Sie während der Drückbewegung kräftig aus.
-  - Führen Sie die Griffe langsam und kontrolliert (exzentrische Phase) zurück in
-    die Ausgangsposition, bis eine gute Dehnung in der Brust spürbar ist, ohne dass
-    die Schultern nach vorne rollen oder der Rücken sich von der Lehne löst.
-  - Atmen Sie während der negativen Phase (Zurückführen) kontrolliert ein.
-  common_errors:
-  - Schultern werden während der Bewegung hochgezogen oder nach vorne gerollt, wodurch
-    die vordere Schulter (anterior deltoid) übermäßig beansprucht wird und die Brustisolierung
-    mindert.
-  - Ein starkes Hohlkreuz oder Abheben des unteren Rückens von der Lehne, um mehr
-    Gewicht zu bewegen, was zu einer Überlastung des unteren Rückens und einem Stabilitätsverlust
-    führen kann.
-  - Das Gewicht wird mit Schwung gedrückt und/oder unkontrolliert zurückfallen gelassen,
-    wodurch die Muskeln nicht effektiv unter Spannung gehalten werden und das Verletzungsrisiko
-    steigt.
-  - Die Ellenbogen werden am Ende der Bewegung hart durchgestreckt oder überstreckt,
-    was die Gelenke unnötig belastet und zu Schmerzen oder Verletzungen führen kann.
-  - Abknicken der Handgelenke nach hinten oder vorne, was die Belastung auf die Handgelenksgelenke
-    erhöht und zu Schmerzen oder Verletzungen führen kann.
-  tags:
-  - chest
-  - machine
-  - compound
-  - expert_reviewed
-  aliases:
-  - Brustmaschine
-  - Brustpresse Maschine
-  - Maschinen-Brustpresse
-  - Brustdrücken Maschine
-  - Chest Press Machine
-  - Machine Chest Press
-  search_aliases:
-  - machine_chest_press
-  - brustmaschine
-  - chest_press_machine
-  legacy_ids: []
-  external_ids:
-    wger:
-    - 1478
-    yuhonas:
-    - Leverage_Chest_Press
-  source_check: 'find-source (wger+yuhonas, fuzzy) plus manuelle Suche in unreviewed_wger/unreviewed_yuhonas
-    am 2026-11-01: wger 1478 (Brustdrücken an der Maschine, flach) und yuhonas Leverage_Chest_Press
-    passen; find-source allein fand nur ''Ski-Maschine'' (Score 72, falsch)'
-  schema_version: 2026-08-12.exercise-v1
-  origin:
+- origin:
     type: merged_external
     source_refs:
       wger:
       - '1478'
       yuhonas:
       - Leverage_Chest_Press
+  exercise_id: machine_chest_press
+  name: Brustpresse an der Maschine
+  search_aliases:
+  - machine_chest_press
+  - brustpresse an der maschine
+  - chest_press_machine
+  - leverage chest press
+  german: Brustpresse an der Maschine
+  english: Machine Chest Press
+  id: machine_chest_press
+  display_name: Brustpresse an der Maschine
+  aliases:
+  - Brustpresse an der Maschine
+  - Maschinen-Brustpresse
+  - Brustdrücken an der Maschine
+  - Machine Chest Press
+  - Chest Press Machine
+  - Leverage Chest Press
+  external_ids:
+    wger:
+    - 1478
+    yuhonas:
+    - Leverage_Chest_Press
+  category: push
+  equipment:
+  - machine
+  primary_muscles:
+  - 101_pectoralis_major
+  secondary_muscles:
+  - 401_triceps_brachii
+  - 301_anterior_deltoid
+  stabilizers:
+  - 202b_trapezius_middle
+  - 205_rhomboids
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  movements:
+  - horizontal_push
+  - shoulder_horizontal_adduction
+  - elbow_extension
+  - scapular_protraction
+  instructions:
+  - Load an appropriate weight onto the pins and adjust the seat for your height.
+    The handles should be near the bottom or middle of the pectorals at the beginning
+    of the motion.
+  - Your chest and head should be up and your shoulder blades retracted. This will
+    be your starting position.
+  - Press the handles forward by extending through the elbow.
+  - After a brief pause at the top, return the weight just above the start position,
+    keeping tension on the muscles by not returning the weight to the stops until
+    the set is complete.
+  images:
+  - Leverage_Chest_Press/0.jpg
+  - Leverage_Chest_Press/1.jpg
+  coaching_notes:
+  - '**Einrichtung und Startposition:** Stellen Sie die Sitzhöhe so ein, dass die
+    Griffe in der Startposition auf Höhe Ihrer mittleren Brust (Brustwarzenhöhe) positioniert
+    sind und Ihre Schultern stabil und leicht nach hinten unten gezogen werden können.
+    Halten Sie die Füße fest auf dem Boden, den Rücken stabil an die Lehne gepresst
+    und die Handgelenke gerade.'
+  - '**Ausführung (Konzentrische Phase):** Drücken Sie die Griffe kontrolliert nach
+    vorne, während Sie Ihre Brustmuskulatur bewusst anspannen. Strecken Sie die Arme
+    fast vollständig, aber vermeiden Sie ein vollständiges Durchdrücken der Ellenbogen,
+    um die Gelenke zu schonen und die Muskelspannung aufrechtzuerhalten. Atmen Sie
+    während des Drückens aus.'
+  - '**Rückführung (Exzentrische Phase):** Führen Sie die Griffe langsam und kontrolliert
+    zurück, wobei Sie die Bewegung nicht abbrechen lassen. Dehnen Sie die Brustmuskulatur
+    dabei aktiv und halten Sie die Spannung aufrecht. Atmen Sie während der Rückführung
+    ein. Lassen Sie den Gewichtsstapel nicht vollständig aufsetzen, um eine konstante
+    Muskelspannung zu gewährleisten und den Bewegungsfluss nicht zu unterbrechen.'
+  - '**Fokus:** Konzentrieren Sie sich auf die bewusste Aktivierung Ihrer Brustmuskulatur
+    (Mind-Muscle Connection) – stellen Sie sich vor, Sie drücken Ihre Hände zueinander.
+    Achten Sie auf eine kontrollierte, gleichmäßige Bewegungsausführung über den gesamten
+    Bewegungsumfang.'
+  common_errors:
+  - '**Falsche Sitzeinstellung:** Wenn die Griffe zu hoch oder zu tief eingestellt
+    sind, kann dies zu einer unnatürlichen Belastung der Schultern führen oder die
+    Brustmuskulatur ineffektiv trainieren. Korrektur: Die Griffe sollten in der Startposition
+    auf Höhe der mittleren Brust sein.'
+  - '**Ellenbogen durchdrücken:** Das vollständige Strecken und Blockieren der Ellenbogen
+    am Ende der Bewegung kann die Gelenke überlasten. Korrektur: Eine leichte Beugung
+    im Ellenbogen beibehalten, um die Gelenke zu schützen und die Muskelspannung zu
+    halten.'
+  - '**Schultern hochziehen:** Das Hochziehen der Schultern zu den Ohren während des
+    Drückens verlagert die Belastung unnötig auf Nacken und Schultern. Korrektur:
+    Halten Sie die Schultern aktiv nach unten und hinten gezogen, um die Brust zu
+    isolieren.'
+  - '**Schwung nutzen / Unkontrollierte Bewegung:** Die Bewegung durch Reißen oder
+    zu schnelles Ablassen des Gewichts auszuführen, reduziert die Effektivität und
+    erhöht das Verletzungsrisiko. Korrektur: Wählen Sie ein Gewicht, das eine langsame,
+    kontrollierte Bewegung in beiden Phasen ermöglicht, insbesondere in der exzentrischen
+    Phase.'
+  - '**Hohlkreuz:** Ein starkes Hohlkreuz, um mehr Gewicht bewegen zu können, kann
+    die Lendenwirbelsäule unnötig belasten. Korrektur: Den Rücken flach an die Lehne
+    drücken und die Bauchmuskulatur leicht anspannen, um den Rumpf zu stabilisieren.'
+  original_description:
+  - Load an appropriate weight onto the pins and adjust the seat for your height.
+    The handles should be near the bottom or middle of the pectorals at the beginning
+    of the motion.
+  - Your chest and head should be up and your shoulder blades retracted. This will
+    be your starting position.
+  - Press the handles forward by extending through the elbow.
+  - After a brief pause at the top, return the weight just above the start position,
+    keeping tension on the muscles by not returning the weight to the stops until
+    the set is complete.
+  wger_id: 1478
+  wger_muscle_ids:
+    primary:
+    - 4
+    secondary: []
+  yuhonas_id: Leverage_Chest_Press
+  tags:
+  - unreviewed
+  - wger
+  - bulk_import
+  - yuhonas
+  - merged_external
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-10T03:37:25.805436+00:00'
+  schema_version: 2026-08-12.exercise-v1
   review_state:
     status: draft
-    review_provider: human_expert
     ai_reviewed: false
-    enriched_at: '2026-11-06T02:47:55.277758+00:00'
-  enriched_at: '2026-11-06T02:47:55.277758+00:00'
+    enriched_at: '2026-11-10T03:37:25.805436+00:00'

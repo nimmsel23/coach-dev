@@ -7,10 +7,15 @@ from fitness.api.config import (
     _uid_from_request, _read_json, logger
 )
 from db.schemas import JournalResponse
-from fitness.firestore.mirror import mirror_journal
 from fitness.runtime.journal_store import entries_path, freetext_body, upsert_entry
 
 router = APIRouter()
+
+
+def _mirror_journal(day: str, payload: dict, uid: str) -> None:
+    from fitness.firestore.mirror import mirror_journal
+    mirror_journal(day, payload, uid)
+
 
 def _today() -> str:
     return date.today().isoformat()
@@ -57,7 +62,7 @@ async def journal_post(request: Request, date_: str = Query(None, alias="date"))
     # kann den Freitext so nicht mehr wegräumen und umgekehrt.
     upsert_entry(dir_ / f"{day}.md",
                  {"id": f"freetext-{day}", "source": "freetext", "ts": "", "body": content})
-    asyncio.get_event_loop().run_in_executor(None, mirror_journal, day, {"text": content}, uid)
+    asyncio.get_event_loop().run_in_executor(None, _mirror_journal, day, {"text": content}, uid)
     logger.info(f"journal saved  {uid}/{day}  {len(content)}ch")
     return {"ok": True}
 

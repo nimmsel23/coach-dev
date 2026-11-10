@@ -106,7 +106,7 @@ def unit_active(unit: str) -> str:
 SERVICES = [
     (DEV_PORT,    "fitness-dev (Node)",      "fitness-dev.service"),
     (PYTHON_PORT, "fitness-api (FastAPI)",   "fitness-api.service"),
-    (KB_PORT,     "anatomy-kb (aiohttp)",    None),
+    (KB_PORT,     "anatomy-kb (optional)",   None),
 ]
 
 def _ping(port: int) -> str:

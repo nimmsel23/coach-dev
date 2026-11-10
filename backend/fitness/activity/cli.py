@@ -22,7 +22,6 @@ import urllib.request
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-import pandas as pd
 import typer
 import yaml
 from loguru import logger
@@ -200,7 +199,7 @@ def recent(
     days: int = typer.Option(14, "--days", "-d"),
     uid_override: str = typer.Option(None, "--uid"),
 ):
-    """Letzte N Tage als pandas-Tabelle (Activities + Strength gemischt)."""
+    """Letzte N Tage als Tabelle (Activities + Strength gemischt)."""
     uid = uid_override or detect_uid()
     sess = USERS_DIR / uid / "sessions"
     cutoff = (date.today() - timedelta(days=days)).isoformat()
@@ -240,9 +239,14 @@ def recent(
     if not rows:
         logger.warning(f"Keine Sessions in den letzten {days} Tagen unter {uid}")
         return
-    df = pd.DataFrame(rows).sort_values("date", ascending=False)
-    console.print(f"[bold]{len(df)} Sessions · letzten {days} Tage · uid={uid}[/bold]")
-    console.print(df.to_string(index=False))
+    rows.sort(key=lambda r: r["date"], reverse=True)
+    table = Table(show_header=True)
+    for col in ("date", "kind", "variant", "min", "rpe", "muscles", "exercises", "notes"):
+        table.add_column(col)
+    for r in rows:
+        table.add_row(*(str(r[c]) for c in ("date", "kind", "variant", "min", "rpe", "muscles", "exercises", "notes")))
+    console.print(f"[bold]{len(rows)} Sessions · letzten {days} Tage · uid={uid}[/bold]")
+    console.print(table)
 
 
 @app.command()
@@ -274,14 +278,18 @@ def stats(
     if not rows:
         logger.warning(f"Keine Activity-Sessions in den letzten {days} Tagen")
         return
-    df = pd.DataFrame(rows)
-    agg = df.groupby(["type", "variant"]).agg(
-        sessions=("minutes", "count"),
-        total_min=("minutes", "sum"),
-        avg_min=("minutes", "mean"),
-    ).round(1).reset_index()
+    buckets: dict[tuple[str, str], list[int]] = {}
+    for r in rows:
+        buckets.setdefault((r["type"], r["variant"]), []).append(int(r["minutes"]))
+    table = Table(show_header=True)
+    for col in ("type", "variant", "sessions", "total_min", "avg_min"):
+        table.add_column(col)
+    for (typ, variant), mins in sorted(buckets.items()):
+        total = sum(mins)
+        avg = round(total / len(mins), 1) if mins else 0
+        table.add_row(typ, variant, str(len(mins)), str(total), str(avg))
     console.print(f"[bold]Activity-Aggregat · letzten {days} Tage · uid={uid}[/bold]")
-    console.print(agg.to_string(index=False))
+    console.print(table)
 
 
 if __name__ == "__main__":

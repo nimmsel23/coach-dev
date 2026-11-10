@@ -1,7 +1,6 @@
 import csv
 import io
 import re
-import pandas as pd
 import dataclasses
 import asyncio
 from datetime import date, datetime, timedelta
@@ -19,7 +18,6 @@ from db.schemas import (
 from fitness.catalog import coverage as cov_module
 from fitness.catalog.planner import build_plan
 from fitness.catalog.weekly import build_weekly_coverage
-from fitness.firestore.mirror import mirror_session
 from fitness.data import load_client_registry
 from fitness.log.console.drafts import find_draft_path, list_drafts, mark_status
 from fitness.paths import AOS_USERS
@@ -114,10 +112,10 @@ def _coverage_hits(uid: str, days: int) -> dict[str, float]:
         sess = _read_json(sess_dir / f"{day}.json") if sess_dir.exists() else None
         for m, _role, w in _normalized_session_hits(sess):
             rows.append((m, w))
-    if not rows:
-        return {}
-    df = pd.DataFrame(rows, columns=["muscle", "weight"])
-    return df.groupby("muscle")["weight"].sum().to_dict()
+    hits: dict[str, float] = {}
+    for muscle, weight in rows:
+        hits[muscle] = hits.get(muscle, 0.0) + weight
+    return hits
 
 
 # ── Coach Feed & Profiles ───────────────────────────────────────────────────
@@ -209,7 +207,12 @@ async def coach_feedback(body: CoachFeedbackRequest):
     
     # Mirror feedback to Firestore in background
     day = clean_session_id.split("__")[0]
-    asyncio.get_event_loop().run_in_executor(None, mirror_session, day, data, body.userId)
+
+    def _mirror():
+        from fitness.firestore.mirror import mirror_session
+        mirror_session(day, data, body.userId)
+
+    asyncio.get_event_loop().run_in_executor(None, _mirror)
     
     return {"ok": True}
 
@@ -349,18 +352,28 @@ def coverage_anatomy(request: Request, days: int = Query(7, le=90, ge=1)):
             rows.append({"muscle": m, "name_en": taxonomy.get(m, {}).get("name_en", m), "role": role, "w": w})
     if not rows:
         return {"ok": True, "days": days, "muscles": []}
-    df = pd.DataFrame(rows)
-    pivot = df.pivot_table(index="muscle", columns="role", values="w", aggfunc="sum", fill_value=0).reset_index()
-    pivot.columns.name = None
-    for col in ("primary", "secondary", "stabilizer"):
-        if col not in pivot.columns:
-            pivot[col] = 0.0
-    pivot = pivot.join(df.groupby("muscle")["name_en"].first(), on="muscle")
-    pivot["primaryHits"]   = pivot["primary"].round(2)
-    pivot["secondaryHits"] = pivot["secondary"].round(2)
-    pivot["totalScore"]    = (pivot["primary"] + pivot["secondary"] + pivot["stabilizer"]).round(2)
-    pivot = pivot.sort_values("totalScore", ascending=False)
-    out = pivot[["muscle", "name_en", "primaryHits", "secondaryHits", "totalScore"]].rename(columns={"muscle": "id"}).to_dict("records")
+    agg: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        slot = agg.setdefault(
+            row["muscle"],
+            {"name_en": row["name_en"], "primary": 0.0, "secondary": 0.0, "stabilizer": 0.0},
+        )
+        role = row["role"]
+        if role in ("primary", "secondary", "stabilizer"):
+            slot[role] = float(slot[role]) + float(row["w"])
+    out = [
+        {
+            "id": mid,
+            "name_en": slot["name_en"],
+            "primaryHits": round(float(slot["primary"]), 2),
+            "secondaryHits": round(float(slot["secondary"]), 2),
+            "totalScore": round(
+                float(slot["primary"]) + float(slot["secondary"]) + float(slot["stabilizer"]), 2
+            ),
+        }
+        for mid, slot in agg.items()
+    ]
+    out.sort(key=lambda item: item["totalScore"], reverse=True)
     return {"ok": True, "days": days, "muscles": out}
 
 @router.get("/coverage/gaps", response_model=CoverageGapsResponse)
@@ -435,8 +448,16 @@ def export_pflichtaufgabe(request: Request):
         })
     if not records:
         return {"ok": True, "filename": f"trainingsprotokoll-pflichtaufgabe-{_today()}.csv", "csv": "", "count": 0}
-    csv_str = pd.DataFrame(records).to_csv(index=False)
-    return {"ok": True, "filename": f"trainingsprotokoll-pflichtaufgabe-{_today()}.csv", "csv": csv_str, "count": len(records)}
+    buf = io.StringIO()
+    writer = csv.DictWriter(buf, fieldnames=list(records[0].keys()))
+    writer.writeheader()
+    writer.writerows(records)
+    return {
+        "ok": True,
+        "filename": f"trainingsprotokoll-pflichtaufgabe-{_today()}.csv",
+        "csv": buf.getvalue(),
+        "count": len(records),
+    }
 
 async def _run_export(kind: str, data: dict) -> dict:
     try:

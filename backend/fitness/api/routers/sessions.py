@@ -9,13 +9,18 @@ from fitness.api.config import (
     logger, load_klienten_registry
 )
 from db.schemas import SessionResponse, SyncRequest, SyncResponse
-from fitness.firestore.mirror import mirror_session
 from fitness.catalog.core.session_signal import exercise_has_training_signal
 from fitness.runtime.session_store import (
     parse_session_doc_id, session_order_key, validate_session_date, validate_session_id,
 )
 
 router = APIRouter()
+
+
+def _mirror_session(day: str, session: dict, uid: str) -> None:
+    from fitness.firestore.mirror import mirror_session
+    mirror_session(day, session, uid)
+
 
 def _today() -> str:
     return date.today().isoformat()
@@ -189,7 +194,7 @@ async def session_post(request: Request, date_: str = Query(None, alias="date"),
             if sidecar.exists():
                 sidecar.unlink()
         _sync_session_to_db(day, session, None)
-        asyncio.get_event_loop().run_in_executor(None, mirror_session, day, session, uid)
+        asyncio.get_event_loop().run_in_executor(None, _mirror_session, day, session, uid)
         logger.info(f"session activity merged  {uid}/{day}  activity={body.get('activity', {}).get('type','')}")
         return {"ok": True, "id": None, "merged": True}
 
@@ -226,7 +231,7 @@ async def session_post(request: Request, date_: str = Query(None, alias="date"),
     n_ex = len(session.get("exercises", []))
     _write_json(_session_path(uid, day, id), session)
     _sync_session_to_db(day, session, id)
-    asyncio.get_event_loop().run_in_executor(None, mirror_session, day, session, uid)
+    asyncio.get_event_loop().run_in_executor(None, _mirror_session, day, session, uid)
     asyncio.get_event_loop().run_in_executor(None, _queue_unreviewed_enrichment, session)
     logger.info(f"session saved  {uid}/{day}  block={session.get('block','')}  exercises={n_ex}")
     return {"ok": True, "id": id}
@@ -251,7 +256,7 @@ async def session_delete_activity(request: Request, date_: str = Query(None, ali
     session = _freeze_snapshot({**existing, "saved_at": datetime.utcnow().isoformat()})
     _write_json(canonical, session)
     _sync_session_to_db(day, session, None)
-    asyncio.get_event_loop().run_in_executor(None, mirror_session, day, session, uid)
+    asyncio.get_event_loop().run_in_executor(None, _mirror_session, day, session, uid)
     logger.info(f"session activity addon deleted  {uid}/{day}  index={index}")
     return {"ok": True, "activityAddons": addons}
 

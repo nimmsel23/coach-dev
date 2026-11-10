@@ -1,3 +1,10 @@
+## 2026-11-10 — Coach Slim: pandas/aiohttp weg, Firestore lazy, Fuel-Härtung
+
+- `pandas` und `aiohttp` aus Root-`pyproject`/Lock; Coverage/CSV/Activity-CLI auf stdlib/Rich.
+- Fitness-Router laden `firestore.mirror`/`firebase_admin` erst beim ersten Mirror/Sync/Photo-Auth.
+- Fuel: URL-Quotes strippen; `plan_tasks.py` coach-owned (plan-dev hatte `fitness/` entfernt).
+- Env/Ops: vergiftete `DATABASE_URL` aus fitness.env entfernt; `backend.env` Root → `coach-dev/backend`; `coach-api` mit `fuel_api: local`.
+
 ## 2026-11-10 — vos-coach SyntaxError: Vite Preload-Marker-Hash
 
 - Ursache: Rolldown emittiert `__VITE_PRELOAD__<32hex>`; Vite 8.3.x ersetzt nur den Prefix → bare Hex-Identifier (`…mapDeps([])1bd78f6c…`) → Parse-Crash (Shell/Header sichtbar, App tot).

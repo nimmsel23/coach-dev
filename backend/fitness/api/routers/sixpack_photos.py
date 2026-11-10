@@ -10,8 +10,6 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-import firebase_admin
-from firebase_admin import auth, credentials
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 
@@ -23,6 +21,8 @@ _lock = threading.Lock()
 
 
 def verify_photo_token(token):
+    import firebase_admin
+    from firebase_admin import auth, credentials
     with _lock:
         try:
             app = firebase_admin.get_app('sixpack-photos')
@@ -34,6 +34,7 @@ def verify_photo_token(token):
 
 
 def current_user(request: Request):
+    from firebase_admin import auth
     match = re.fullmatch(r'Bearer ([^\s]+)', request.headers.get('authorization', ''), re.I)
     if not match:
         raise HTTPException(401, 'authentication_required', headers={'Cache-Control': 'no-store'})

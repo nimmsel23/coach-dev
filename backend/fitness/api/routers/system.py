@@ -10,17 +10,28 @@ from fitness.api.config import (
 )
 from db.schemas import HealthResponse, BodyResponse
 
-# ── firestore imports ─────────────────────────────────────────────────────────
-from fitness.firestore.mirror import mirror_session
-from fitness.firestore.mirror import get_status as firestore_status
-try:
-    from fitness.firestore.sync import pull as firestore_pull, pull_workout_logs as firestore_pull_workout_logs
-    _FIRESTORE_PULL_AVAILABLE = True
-except ImportError:
-    _FIRESTORE_PULL_AVAILABLE = False
-
 router = APIRouter()
 _THEME_FILE = RUNTIME / "theme.json"
+
+
+def _firestore_status():
+    from fitness.firestore.mirror import get_status
+    return get_status()
+
+
+def _mirror_session(day: str, sess: dict, uid: str) -> None:
+    from fitness.firestore.mirror import mirror_session
+    mirror_session(day, sess, uid)
+
+
+def _firestore_pull(uid: str):
+    from fitness.firestore.sync import pull
+    return pull(uid=uid)
+
+
+def _firestore_pull_workout_logs(uid: str):
+    from fitness.firestore.sync import pull_workout_logs
+    return pull_workout_logs(uid=uid)
 
 @router.post("/fitness/note-backfill")
 def note_backfill(uid: str | None = None, apply: bool = False):
@@ -114,7 +125,7 @@ async def body_post(request: Request):
 
 @router.get("/firestore/status")
 def fs_status():
-    return firestore_status()
+    return _firestore_status()
 
 @router.post("/firestore/sync")
 def fs_sync(request: Request):
@@ -131,7 +142,7 @@ def fs_sync(request: Request):
             continue
         base = f.name.removesuffix(".json")
         day = base.split("__")[0]
-        mirror_session(day, sess, uid)
+        _mirror_session(day, sess, uid)
         count += 1
     logger.info(f"firestore/sync  {uid}  {count} sessions")
     return {"ok": True, "synced": count}
@@ -139,16 +150,14 @@ def fs_sync(request: Request):
 @router.post("/firestore/pull")
 def fs_pull(request: Request):
     uid = _require_uid(request)
-    status = firestore_status()
+    status = _firestore_status()
     if not status.get("ok"):
         raise HTTPException(503, detail="Firestore nicht verbunden")
-    if not _FIRESTORE_PULL_AVAILABLE:
-        raise HTTPException(503, detail="firestore.sync.pull nicht verfügbar")
     sess_root = RUNTIME / "users"
     sess_dir = sess_root / uid / "sessions"
     sess_dir.mkdir(parents=True, exist_ok=True)
     try:
-        result = firestore_pull(uid=uid)
+        result = _firestore_pull(uid)
         logger.info(f"firestore/pull  {uid}  {result}")
         return {
             "ok": True,
@@ -161,6 +170,8 @@ def fs_pull(request: Request):
             "conflicts": result.get("conflicts", 0),
             "conflict_dates": result.get("conflict_dates", []),
         }
+    except ImportError:
+        raise HTTPException(503, detail="firestore.sync.pull nicht verfügbar")
     except Exception as exc:
         logger.error(f"firestore/pull {uid}: {exc}")
         raise HTTPException(500, detail=str(exc))
@@ -171,15 +182,15 @@ def fs_pull_workout_logs(request: Request):
     """Local-only, metadata-only pull for the selected client's cloud workouts."""
     _require_local_request(request)
     uid = _require_uid(request)
-    status = firestore_status()
+    status = _firestore_status()
     if not status.get("ok"):
         raise HTTPException(503, detail="Firestore nicht verbunden")
-    if not _FIRESTORE_PULL_AVAILABLE:
-        raise HTTPException(503, detail="firestore.sync.pull_workout_logs nicht verfügbar")
     try:
-        result = firestore_pull_workout_logs(uid=uid)
+        result = _firestore_pull_workout_logs(uid)
         logger.info(f"firestore/pull-workout-logs  {uid}  {result}")
         return {"ok": True, **result, "storage": "local-fitness-runtime/cloud-workouts"}
+    except ImportError:
+        raise HTTPException(503, detail="firestore.sync.pull_workout_logs nicht verfügbar")
     except Exception as exc:
         logger.error(f"firestore/pull-workout-logs {uid}: {exc}")
         raise HTTPException(500, detail="Lokale Workout-Projektion konnte nicht aktualisiert werden.")
