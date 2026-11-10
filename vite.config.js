@@ -23,6 +23,26 @@ function websiteFiles() {
   }
 }
 
+// Rolldown uniquifiziert Preload-Marker als __VITE_PRELOAD__<32hex>. Vite 8.3.x
+// ersetzt nur "__VITE_PRELOAD__" und lässt den Hash als Syntaxfehler stehen.
+function fixVitePreloadMarkers() {
+  // Rolldown: __VITE_PRELOAD__<32hex>. Vite ersetzt nur den Prefix → SyntaxError.
+  // Vor vite:build-import-analysis den Hash abschneiden (Safety-Net: scripts/fix-vite-preload-markers.mjs).
+  const HASHED_MARKER = /__VITE_PRELOAD__[0-9a-f]{32}/g
+  return {
+    name: 'fix-vite-preload-markers',
+    generateBundle: {
+      order: 'pre',
+      handler(_opts, bundle) {
+        for (const chunk of Object.values(bundle)) {
+          if (chunk.type !== 'chunk' || !chunk.code.includes('__VITE_PRELOAD__')) continue
+          chunk.code = chunk.code.replace(HASHED_MARKER, '__VITE_PRELOAD__')
+        }
+      },
+    },
+  }
+}
+
 export default defineConfig(async ({ mode }) => {
   const isFirebase = mode === 'firebase' || mode === 'coach'
   const isCoach = mode === 'coach'
@@ -33,7 +53,12 @@ export default defineConfig(async ({ mode }) => {
     // Präfix (z.B. /coach-dev/) fälschlich zur Domain-Wurzel auf (404 →
     // Whitescreen). Core4/Door/Game/Fuel haben denselben Fix schon.
     base: './',
-    plugins: [fitnessOverlay({ planRoot: sharedPlanRoot(), fitnessRoot: sharedFitnessRoot() }), react(), ...(isCoach ? [websiteFiles()] : [])],
+    plugins: [
+      fitnessOverlay({ planRoot: sharedPlanRoot(), fitnessRoot: sharedFitnessRoot() }),
+      react(),
+      fixVitePreloadMarkers(),
+      ...(isCoach ? [websiteFiles()] : []),
+    ],
     resolve: {
       // Resolve pnpm packages from their real directory so transitive Vue imports work.
       preserveSymlinks: false,

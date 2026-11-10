@@ -24,7 +24,7 @@
     "build:ppl-data": "node scripts/build-ppl-data.mjs",
     "build:coaching-notes": "node scripts/build-coaching-notes.mjs",
     "build:firebase": "pnpm run build:firebase:coach",
-    "build:firebase:coach": "node scripts/prepare-shared-plan.mjs && vite build --mode coach --outDir dist-coach && node scripts/prepare-coach-dist.mjs && node scripts/mini-app-shell/cli.mjs stamp dist-coach --app coach",
+    "build:firebase:coach": "node scripts/prepare-shared-plan.mjs && vite build --mode coach --outDir dist-coach && node scripts/fix-vite-preload-markers.mjs dist-coach && node scripts/prepare-coach-dist.mjs && node scripts/mini-app-shell/cli.mjs stamp dist-coach --app coach",
     "stamp:sw": "node scripts/mini-app-shell/cli.mjs stamp dist-coach --app coach",
     "preview:firebase": "firebase hosting:channel:deploy preview --only coach --expires 1h",
     "deploy:firebase": "firebase deploy --only hosting:coach",
