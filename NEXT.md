@@ -3,10 +3,11 @@
 
 - [ ] uv-Tool `fitness` (alte editable `fitness-cli`) bereinigen/neu — globale Bins laufen über `coach-dev/bin/{anatomy-agent,fitness-catalog}`.
 - [ ] Den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy verifizieren.
+- [ ] VitalOS-Postgres allgemeine Backend-Schicht unter Coach — siehe `hot/vitalos-postgres-backend-schicht.md` / Task `fe34e959-…` (warten auf Urgency).
+- [ ] `coach-api` neu laden, damit `attach_fuel_api` live greift (User-Restart); Shell ohne vergiftete `DATABASE_URL` aus fitness.env.
 
 
--   **Fuel-Upstream-Cutover** (optional): `/api/fuel` → VitalOS `:8000` bleibt
-    bis Fuel/VitalOS-Freigabe; nicht per Directory-Migration „lösen“.
+-   **Fuel in-process:** Coach attach ist Code-seitig da; Live-Cutover = Unit-Reload + fuelctl/Deploy-Texte ggf. anpassen (nicht VitalOS-:8000 als Extra-Host weiter ausbauen).
 -   **Frontend-Serve Katalog-UI**: Coach-Dist statt Legacy-Fitness-SPA unter
     `/fitness/` (FIRE-Rest; Scope → `+ceo`). API lokal (`fitness_api: local`);
     Unit `fitness-preview` archiviert — offen bleibt nur der UI-Serve-Pfad.
