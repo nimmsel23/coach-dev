@@ -1,7 +1,10 @@
 const test = require("node:test");
 const { NOTIFICATIONS } = require("./texts.js");
 const assert = require("node:assert/strict");
-const { activeTokens, allowsClientWorkout, buildTestMessage, isQuietNow, testCooldownLeft } = require("./pushPrefs.js");
+const {
+  activeTokens, allowsClientWorkout, allowsClientMessage, allowsInboxRequest,
+  buildTestMessage, isQuietNow, testCooldownLeft,
+} = require("./pushPrefs.js");
 
 // 2026-10-15 ist Sommerzeit (MESZ, UTC+2)
 const at = (hhmmBerlin) => new Date(`2026-10-15T${hhmmBerlin}:00+02:00`);
@@ -55,10 +58,35 @@ test("Test-Nachrichten sind als Test erkennbar und enthalten keine Klientendaten
   assert.equal(w.data.type, "clientWorkout");
   assert.equal(w.data.clientUid, "test");
   assert.match(w.data.sid, /^test-/);
+  const inbox = buildTestMessage("inboxRequest", ["t"], NOTIFICATIONS);
+  assert.match(inbox.data.title, /^Test/);
+  assert.equal(inbox.data.type, "inboxRequest");
+  assert.match(inbox.data.link, /#\/exercises$/);
   const r = buildTestMessage("reminder", ["t"], NOTIFICATIONS);
   assert.match(r.data.title, /^Test/);
   assert.equal(r.data.type, undefined);
   assert.deepEqual(r.tokens, ["t"]);
+});
+
+test("Inbox-Anfrage: Schalter und Ruhezeit", () => {
+  const tag = at("12:00");
+  assert.equal(allowsInboxRequest({ enabled: true }, tag).allow, true);
+  assert.equal(allowsInboxRequest({}, tag).why, "push-aus");
+  assert.equal(allowsInboxRequest({ enabled: true, types: { inboxRequest: false } }, tag).why, "typ-aus");
+  assert.equal(allowsInboxRequest({ enabled: true, quietHours: quiet }, at("23:00")).why, "ruhezeit");
+});
+
+test("Klienten-Nachricht: Schalter, Stumm und Ruhezeit", () => {
+  const tag = at("12:00");
+  const basis = { enabled: true };
+  assert.equal(allowsClientMessage(basis, "U1", tag).allow, true);
+  assert.equal(allowsClientMessage({}, "U1", tag).why, "push-aus");
+  assert.equal(allowsClientMessage({ ...basis, types: { clientMessage: false } }, "U1", tag).why, "typ-aus");
+  assert.equal(allowsClientMessage({ ...basis, mutedClients: ["U1"] }, "U1", tag).why, "klient-stumm");
+  assert.equal(allowsClientMessage({ ...basis, quietHours: quiet }, "U1", at("23:00")).why, "ruhezeit");
+  const demo = buildTestMessage("clientMessage", ["t"], NOTIFICATIONS);
+  assert.equal(demo.data.type, "clientMessage");
+  assert.match(demo.data.title, /^Test/);
 });
 
 test("Test-Cooldown", () => {

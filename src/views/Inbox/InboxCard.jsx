@@ -1,5 +1,5 @@
 import { sourceIds } from '../../lib/db/shared/catalogSources.js';
-import { CheckCircle2, Trash2, Info, AlertTriangle, Sparkles, User, RefreshCw, MessageSquare, Brain } from 'lucide-react';
+import { CheckCircle2, Trash2, Info, AlertTriangle, Sparkles, User, RefreshCw, MessageSquare, Brain, ExternalLink } from 'lucide-react';
 
 function sourceRefs(data) {
   return { wger: sourceIds(data, 'wger'), yuhonas: sourceIds(data, 'yuhonas') };
@@ -72,6 +72,10 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
   const highlights = coachingHighlights(data);
   const what = twoSentenceWhat(data);
   const origin = originLine(data, refs);
+  const githubUrl = typeof ex.html_url === 'string' && ex.html_url.startsWith('https://') ? ex.html_url : null;
+  const isGithubPr = Boolean(
+    githubUrl && (ex.cache_source === 'github_pr' || String(fileId || '').startsWith('pr-')),
+  );
 
   if (asMessage) {
     let icon = <MessageSquare className="text-fit-dim" size={20} />;
@@ -195,6 +199,11 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
                 Merge-Vorschlag
               </span>
             )}
+            {isGithubPr && (
+              <span className="text-[9px] font-black px-2 py-0.5 bg-fit-bg2 rounded-full border border-fit-line text-fit-dim uppercase tracking-tighter">
+                GitHub PR{ex.pr_number ? ` #${ex.pr_number}` : ''}
+              </span>
+            )}
           </div>
         </div>
       </header>
@@ -233,39 +242,62 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
       )}
 
       <div className="vos-action-row mt-auto">
-        <button
-          onClick={() => onInspect?.({ ...buildInspectPayload(ex, data), mergeCandidate })}
-          className="vos-btn"
-          title="Vollansicht / Quellen"
-        >
-          <Info size={13} /> Details
-        </button>
-        <button
-          onClick={() => onDelete(fileId)}
-          disabled={busy}
-          className="vos-btn no"
-          title="Löschen"
-        >
-          <Trash2 size={13} /> Löschen
-        </button>
-        {onReenrich && (
-          <button
-            onClick={() => onReenrich(fileId)}
-            disabled={busy}
-            className="vos-btn mid"
-            title="Neu anreichern (Gemini)"
-          >
-            <RefreshCw size={13} className={busy ? 'animate-spin' : ''} /> Verbessern
-          </button>
-        )}
-        {onApprove && (
-          <button
-            onClick={() => onApprove(fileId)}
-            disabled={busy}
-            className="vos-btn go"
-          >
-            {busy ? 'Warte…' : <><CheckCircle2 size={13} /> Freigeben</>}
-          </button>
+        {isGithubPr ? (
+          <>
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vos-btn go"
+              title="PR auf GitHub öffnen"
+            >
+              <ExternalLink size={13} /> Auf GitHub öffnen
+            </a>
+            <button
+              onClick={() => onInspect?.({ ...buildInspectPayload(ex, data), mergeCandidate })}
+              className="vos-btn"
+              title="Kurzvorschau"
+            >
+              <Info size={13} /> Details
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => onInspect?.({ ...buildInspectPayload(ex, data), mergeCandidate })}
+              className="vos-btn"
+              title="Vollansicht / Quellen"
+            >
+              <Info size={13} /> Details
+            </button>
+            <button
+              onClick={() => onDelete(fileId)}
+              disabled={busy}
+              className="vos-btn no"
+              title="Löschen"
+            >
+              <Trash2 size={13} /> Löschen
+            </button>
+            {onReenrich && (
+              <button
+                onClick={() => onReenrich(fileId)}
+                disabled={busy}
+                className="vos-btn mid"
+                title="Neu anreichern (Gemini)"
+              >
+                <RefreshCw size={13} className={busy ? 'animate-spin' : ''} /> Verbessern
+              </button>
+            )}
+            {onApprove && (
+              <button
+                onClick={() => onApprove(fileId)}
+                disabled={busy}
+                className="vos-btn go"
+              >
+                {busy ? 'Warte…' : <><CheckCircle2 size={13} /> Freigeben</>}
+              </button>
+            )}
+          </>
         )}
       </div>
     </article>

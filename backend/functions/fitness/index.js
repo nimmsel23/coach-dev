@@ -8,6 +8,8 @@ const fs = require("fs");
 const path = require("path");
 const strava = require("./strava.js");
 const clientWorkout = require("./clientWorkout.js");
+const clientMessage = require("./clientMessage.js");
+const inboxRequest = require("./inboxRequest.js");
 const pushPrefs = require("./pushPrefs.js");
 const { shouldNotifyPlanPublished, planPushContent } = require("./planPublished.js");
 const { coverageScoresFromDashboard } = require("./coverageWindow.js");
@@ -544,6 +546,112 @@ exports.onClientWorkout = functions
     return { uid, sid, reason: decision.reason, results };
   });
 
+// ── Neue Übungsanfrage → Push an den Coach ───────────────────────────────
+// coach-sync publiziert lokale inbox_*.yml nach coachInbox/{id}. onCreate =
+// neue Anfrage. Entscheidung + Text: inboxRequest.js.
+exports.onCoachInbox = functions
+  .region("europe-west1")
+  .firestore.document("coachInbox/{id}")
+  .onWrite(async (change, context) => {
+    const { id } = context.params;
+    const before = change.before.exists ? change.before.data() : null;
+    const after = change.after.exists ? change.after.data() : null;
+
+    const decision = inboxRequest.shouldNotify({ before, after });
+    if (!decision.notify) return null;
+
+    const db = getFirestore();
+    const results = [];
+
+    for (const coachUid of inboxRequest.coachUids()) {
+      const pushRef = db.collection("fitness").doc(coachUid).collection("settings").doc("push");
+      const stored = (await pushRef.get()).data() || {};
+      const pushData = stored.apps?.fitness || {};
+      const verdict = pushPrefs.allowsInboxRequest(pushData);
+      if (!verdict.allow) {
+        results.push({ coachUid, skipped: verdict.why });
+        continue;
+      }
+
+      const tokens = normalizeTokens(pushData);
+      if (tokens.length === 0) continue;
+
+      try {
+        const message = inboxRequest.buildMessage({
+          id,
+          item: after,
+          tokens,
+          texts: NOTIFICATIONS.inboxRequest,
+        });
+        const response = await getMessaging().sendEachForMulticast(message);
+        const dead = inboxRequest.deadTokens(tokens, response.responses);
+        if (dead.length > 0) {
+          const cleanup = { apps: { fitness: { tokens: FieldValue.arrayRemove(...dead) } } };
+          if (dead.includes(pushData.token)) cleanup.apps.fitness.token = FieldValue.delete();
+          await pushRef.set(cleanup, { merge: true });
+        }
+        results.push({ coachUid, sent: response.successCount, failed: response.failureCount, removed: dead.length });
+      } catch (error) {
+        console.error(`onCoachInbox: Push an Coach ${coachUid} fehlgeschlagen:`, error);
+        results.push({ coachUid, error: error.message });
+      }
+    }
+    return { id, reason: decision.reason, results };
+  });
+
+// ── Klienten-Chat → Push an den Coach ────────────────────────────────────
+// Pfad: coachConversations/{uid}/messages/{mid}. Nur senderRole=client.
+exports.onClientMessage = functions
+  .region("europe-west1")
+  .firestore.document("coachConversations/{uid}/messages/{mid}")
+  .onCreate(async (snap, context) => {
+    const { uid, mid } = context.params;
+    const after = snap.data() || {};
+    const decision = clientMessage.shouldNotify({ uid, after });
+    if (!decision.notify) return null;
+
+    const db = getFirestore();
+    const clientName = await clientDisplayName(uid);
+    const results = [];
+
+    for (const coachUid of clientMessage.coachUids()) {
+      const pushRef = db.collection("fitness").doc(coachUid).collection("settings").doc("push");
+      const stored = (await pushRef.get()).data() || {};
+      const pushData = stored.apps?.fitness || {};
+      const verdict = pushPrefs.allowsClientMessage(pushData, uid);
+      if (!verdict.allow) {
+        results.push({ coachUid, skipped: verdict.why });
+        continue;
+      }
+
+      const tokens = normalizeTokens(pushData);
+      if (tokens.length === 0) continue;
+
+      try {
+        const message = clientMessage.buildMessage({
+          uid,
+          mid,
+          message: after,
+          clientName,
+          tokens,
+          texts: NOTIFICATIONS.clientMessage,
+        });
+        const response = await getMessaging().sendEachForMulticast(message);
+        const dead = clientMessage.deadTokens(tokens, response.responses);
+        if (dead.length > 0) {
+          const cleanup = { apps: { fitness: { tokens: FieldValue.arrayRemove(...dead) } } };
+          if (dead.includes(pushData.token)) cleanup.apps.fitness.token = FieldValue.delete();
+          await pushRef.set(cleanup, { merge: true });
+        }
+        results.push({ coachUid, sent: response.successCount, failed: response.failureCount, removed: dead.length });
+      } catch (error) {
+        console.error(`onClientMessage: Push an Coach ${coachUid} fehlgeschlagen:`, error);
+        results.push({ coachUid, error: error.message });
+      }
+    }
+    return { uid, mid, reason: decision.reason, results };
+  });
+
 // ── Strava-Live-Import (Radtouren-Tab, Prod/Firebase-PWA) ──────────────────
 // Logik in strava.js — dev-Pendant ist server.mjs/strava-routes.mjs
 // (Node-Backend, nur lokal erreichbar). Setup: docs/STRAVA_SETUP.md.
@@ -566,8 +674,9 @@ exports.sendTestPush = functions
     if (wait > 0) {
       throw new functions.https.HttpsError("resource-exhausted", `Bitte ${Math.ceil(wait / 1000)} s warten.`);
     }
-    // "clientWorkout" nur für den Coach (sonst würde ein Klient eine Coach-Demo sehen)
-    if (kind === "clientWorkout" && !clientWorkout.coachUids().includes(uid)) {
+    // Coach-Demos nur für den Coach (sonst sähe ein Klient Coach-UI-Texte)
+    if ((kind === "clientWorkout" || kind === "inboxRequest" || kind === "clientMessage")
+      && !clientWorkout.coachUids().includes(uid)) {
       throw new functions.https.HttpsError("permission-denied", "Nur für den Coach.");
     }
 

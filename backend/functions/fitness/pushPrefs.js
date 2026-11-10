@@ -5,7 +5,7 @@
 
 const TIME_ZONE = "Europe/Berlin";
 const TEST_COOLDOWN_MS = 10 * 1000;
-const TEST_KINDS = ["reminder", "clientWorkout"];
+const TEST_KINDS = ["reminder", "clientWorkout", "inboxRequest", "clientMessage"];
 
 function toMinutes(text) {
   const match = /^(\d{1,2}):(\d{2})$/.exec(String(text || ""));
@@ -40,6 +40,23 @@ function allowsClientWorkout(pushData = {}, uid, reason, now = new Date()) {
   return { allow: true, why: "ok" };
 }
 
+function allowsInboxRequest(pushData = {}, now = new Date()) {
+  if (!pushData.enabled) return { allow: false, why: "push-aus" };
+  if (pushData.types?.inboxRequest === false) return { allow: false, why: "typ-aus" };
+  if (isQuietNow(pushData.quietHours, now)) return { allow: false, why: "ruhezeit" };
+  return { allow: true, why: "ok" };
+}
+
+function allowsClientMessage(pushData = {}, uid, now = new Date()) {
+  if (!pushData.enabled) return { allow: false, why: "push-aus" };
+  if (pushData.types?.clientMessage === false) return { allow: false, why: "typ-aus" };
+  if (Array.isArray(pushData.mutedClients) && pushData.mutedClients.includes(uid)) {
+    return { allow: false, why: "klient-stumm" };
+  }
+  if (isQuietNow(pushData.quietHours, now)) return { allow: false, why: "ruhezeit" };
+  return { allow: true, why: "ok" };
+}
+
 // Test-Push: bewusst unverwechselbar ("Test"), damit er nie wie echte Klientendaten wirkt.
 // `texts` = ganze notifications.yaml (testReminder / testClientWorkout).
 function buildTestMessage(kind, tokens, texts, coachUrl = "https://vos-coach.web.app") {
@@ -57,6 +74,37 @@ function buildTestMessage(kind, tokens, texts, coachUrl = "https://vos-coach.web
         clientName: "Test",
         sid: `test-${Date.now()}`,
         date: "",
+      },
+      tokens,
+    };
+  }
+  if (kind === "inboxRequest") {
+    return {
+      data: {
+        app: "fitness",
+        type: "inboxRequest",
+        title: texts.testInboxRequest.title,
+        body: texts.testInboxRequest.body,
+        link: `${coachUrl.replace(/\/+$/, "")}/#/exercises`,
+        tag: "inbox-request-test",
+        inboxId: `test-${Date.now()}`,
+        status: "draft",
+      },
+      tokens,
+    };
+  }
+  if (kind === "clientMessage") {
+    return {
+      data: {
+        app: "fitness",
+        type: "clientMessage",
+        title: texts.testClientMessage.title,
+        body: texts.testClientMessage.body,
+        link: `${coachUrl.replace(/\/+$/, "")}/#/clients`,
+        tag: "client-message-test",
+        clientUid: "test",
+        clientName: "Test",
+        mid: `test-${Date.now()}`,
       },
       tokens,
     };
@@ -94,6 +142,8 @@ module.exports = {
   TEST_KINDS,
   activeTokens,
   allowsClientWorkout,
+  allowsClientMessage,
+  allowsInboxRequest,
   buildTestMessage,
   isQuietNow,
   testCooldownLeft,

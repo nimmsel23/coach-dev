@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Shield } from 'lucide-react'
 import Coach from '../views/Coach/index.jsx'
 import { useCoachRoute } from '../views/Coach/useCoachRoute.js'
@@ -8,7 +8,7 @@ import ErrorBoundary from '../components/common/ErrorBoundary.jsx'
 import { useUser } from '../contexts/UserContext.jsx'
 import { useSettingsStore } from '../store/index.js'
 import { useCoachAccess } from '../hooks/useCoachAccess.js'
-import { getAnatomy } from '@db'
+import { getAnatomy, watchCoachInbox } from '@db'
 import { getStaticMuscleTaxonomy } from '../lib/kb/muscles.js'
 import CoachSidebar from './CoachSidebar.jsx'
 import CoachTabBar from './CoachTabBar.jsx'
@@ -29,6 +29,7 @@ export default function CoachShell() {
   const [navExpanded, setNavExpanded] = useState(true)
   const [themeOpen, setThemeOpen] = useState(false)
   const [counts, setCounts] = useState({})
+  const [inboxItems, setInboxItems] = useState([])
   const [authEmail, setAuthEmail] = useState('')
   const [authPassword, setAuthPassword] = useState('')
   const [authError, setAuthError] = useState('')
@@ -43,6 +44,9 @@ export default function CoachShell() {
   const selectClient = useCallback((uid) => {
     navigateRoute({ sub: 'clients', client: uid, detail: 'workouts', date: '', planId: '' })
   }, [navigateRoute])
+  const selectClientChat = useCallback((uid) => {
+    navigateRoute({ sub: 'clients', client: uid, detail: 'messages', date: '', planId: '' })
+  }, [navigateRoute])
   const selectClientDetail = useCallback((detail) => {
     navigateRoute({
       sub: 'clients',
@@ -53,6 +57,24 @@ export default function CoachShell() {
     })
   }, [navigateRoute, route.client])
   const refresh = () => window.location.reload()
+
+  useEffect(() => {
+    if (!allowed) {
+      setInboxItems([])
+      return undefined
+    }
+    let primed = false
+    let prevSig = ''
+    return watchCoachInbox((items) => {
+      const list = Array.isArray(items) ? items : []
+      const sig = list.map((item) => item.file_id || item.id || '').join('|')
+      setInboxItems(list)
+      setCounts((prev) => (prev.exercises === list.length ? prev : { ...prev, exercises: list.length }))
+      if (primed && sig !== prevSig) window.dispatchEvent(new CustomEvent('fitness-inbox-updated'))
+      primed = true
+      prevSig = sig
+    })
+  }, [allowed])
 
   async function inspectExercise(exercise) {
     if (!exercise) return
@@ -68,6 +90,13 @@ export default function CoachShell() {
   const selectInbox = useCallback(async (exercise) => {
     navigateRoute({ sub: 'exercises', client: '', date: '' })
     if (!exercise) return
+    const githubUrl = typeof exercise.html_url === 'string' && exercise.html_url.startsWith('https://')
+      ? exercise.html_url
+      : null
+    if (githubUrl && (exercise.cache_source === 'github_pr' || String(exercise.file_id || '').startsWith('pr-'))) {
+      window.open(githubUrl, '_blank', 'noopener')
+      return
+    }
     setInspectorExercise(exercise)
     const id = exercise.exercise_id || exercise.id
     if (!id || exercise.lesson) return
@@ -121,10 +150,15 @@ export default function CoachShell() {
               onRefresh={refresh}
               onSignOut={signOut}
               onSelectClient={selectClient}
+              onSelectClientChat={selectClientChat}
               unreadByClient={unread.byClient}
+              unreadClients={unread.unreadClients}
               onSelectInbox={selectInbox}
+              inboxItems={inboxItems}
+              activeInboxId={inspectorExercise?.file_id || inspectorExercise?.id || null}
               clientDetail={route.detail || 'workouts'}
               onSelectClientDetail={selectClientDetail}
+              activeClient={route.client || ''}
             />
             <div className={`min-w-0 transition-all duration-500 ease-in-out ${pinned ? 'lg:ml-[304px]' : 'lg:ml-[108px]'}`}>
               <CoachHeader title={current.title} subtitle={subtitle} actions={<WorkerChip />} />
@@ -146,8 +180,11 @@ export default function CoachShell() {
               onRefresh={refresh}
               onSignOut={signOut}
               onSelectClient={selectClient}
+              onSelectClientChat={selectClientChat}
               unreadByClient={unread.byClient}
+              unreadClients={unread.unreadClients}
               onSelectInbox={selectInbox}
+              inboxItems={inboxItems}
               clientDetail={route.detail || 'workouts'}
               onSelectClientDetail={selectClientDetail}
             />

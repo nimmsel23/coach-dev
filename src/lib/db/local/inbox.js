@@ -110,6 +110,22 @@ export function describeCoachError(err, fallback = "Fehlgeschlagen") {
   return err?.message || fallback;
 }
 
+/** Lokaler Fallback: pollt die Inbox, kein Firestore-Listener. */
+export function watchCoachInbox(cb) {
+  let alive = true;
+  const tick = () => {
+    getGlobalInbox()
+      .then((items) => { if (alive) cb(Array.isArray(items) ? items : []); })
+      .catch(() => { if (alive) cb([]); });
+  };
+  tick();
+  const timer = setInterval(tick, 30000);
+  return () => {
+    alive = false;
+    clearInterval(timer);
+  };
+}
+
 export async function queueForEnrichment(ex) {
   if (!ex || ex.source === 'expert') return;
   // Vormals ein fetch() gegen http://localhost:9120 — der archivierte

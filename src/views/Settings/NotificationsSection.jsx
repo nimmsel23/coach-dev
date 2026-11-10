@@ -261,10 +261,22 @@ export default function NotificationsSection({ user }) {
           </Group>
 
           {isCoach && (
-            <Group icon={Users} title="Coach" hint="Meldungen über Workouts deiner Klienten">
+            <Group icon={Users} title="Coach" hint="Workouts, Chat-Nachrichten und Übungsanfragen">
               <CoachClients settings={settings} update={update} busy={busy} />
+              <Row label="Neue Übungsanfragen" hint="Push, sobald eine Anfrage in der Coach-Inbox erscheint">
+                <Switch checked={settings.types?.inboxRequest ?? true} onChange={(v) => update({ types: { ...(settings.types || {}), inboxRequest: v } })} disabled={busy} />
+              </Row>
+              <Row label="Klienten-Nachrichten" hint="Push bei neuer Chat-Nachricht eines Klienten">
+                <Switch checked={settings.types?.clientMessage ?? true} onChange={(v) => update({ types: { ...(settings.types || {}), clientMessage: v } })} disabled={busy} />
+              </Row>
               <button onClick={() => sendTest('clientWorkout')} disabled={busy} className={smallButton}>
                 <Send size={12} /> Demo-Meldung „Klienten-Workout" senden
+              </button>
+              <button onClick={() => sendTest('inboxRequest')} disabled={busy} className={smallButton}>
+                <Send size={12} /> Demo-Meldung „Übungsanfrage" senden
+              </button>
+              <button onClick={() => sendTest('clientMessage')} disabled={busy} className={smallButton}>
+                <Send size={12} /> Demo-Meldung „Nachricht" senden
               </button>
             </Group>
           )}

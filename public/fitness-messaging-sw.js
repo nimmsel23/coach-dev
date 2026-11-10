@@ -73,10 +73,83 @@ async function showReminder(payload) {
   });
 }
 
+// Neue Übungsanfrage (functions/inboxRequest.js). Mehrere offene Anfragen
+// unter dem Sammel-Tag „inbox-requests“ → „N neue Anfragen“.
+async function showInboxRequest(data) {
+  const tag = "inbox-requests";
+  const existing = await self.registration.getNotifications({ tag });
+  const previous = existing[0]?.data || {};
+  const known = Array.isArray(previous.inboxIds) ? previous.inboxIds : [];
+  const isNew = Boolean(data.inboxId) && !known.includes(data.inboxId);
+  const inboxIds = isNew ? [...known, data.inboxId].slice(-MAX_TRACKED_SIDS) : known;
+  const count = Math.max(inboxIds.length, 1);
+
+  await self.registration.showNotification(
+    count > 1 ? `${count} neue Anfragen` : data.title || "Neue Übungsanfrage",
+    {
+      body: count > 1 ? "Offene Übungsanfragen in der Coach-Inbox" : (data.body || "Zur Freigabe bereit"),
+      icon: "/icon-192.png",
+      badge: "/icon-192.png",
+      tag,
+      renotify: isNew && existing.length > 0,
+      actions: [
+        { action: "open", title: "Öffnen" },
+        { action: "seen", title: "Gesehen" },
+      ],
+      data: {
+        type: "inboxRequest",
+        link: data.link || "https://vos-coach.web.app/#/exercises",
+        inboxId: data.inboxId || "",
+        inboxIds,
+        count,
+      },
+    },
+  );
+}
+
+// Klienten-Chat (functions/clientMessage.js): ein Tag pro Klient, mehrere
+// ungelesene Nachrichten werden zu „N neue Nachrichten“ zusammengefasst.
+async function showClientMessage(data) {
+  const tag = data.tag || `client-message-${data.clientUid || "unbekannt"}`;
+  const existing = await self.registration.getNotifications({ tag });
+  const previous = existing[0]?.data || {};
+  const known = Array.isArray(previous.mids) ? previous.mids : [];
+  const isNew = Boolean(data.mid) && !known.includes(data.mid);
+  const mids = isNew ? [...known, data.mid].slice(-MAX_TRACKED_SIDS) : known;
+  const count = Math.max(mids.length, 1);
+  const name = data.clientName || "Klient";
+
+  await self.registration.showNotification(
+    count > 1 ? `${name}: ${count} neue Nachrichten` : data.title || `${name}: Nachricht`,
+    {
+      body: count > 1 ? "Neue Nachrichten im Coach-Chat" : (data.body || "Neue Nachricht"),
+      icon: "/icon-192.png",
+      badge: "/icon-192.png",
+      tag,
+      renotify: isNew && existing.length > 0,
+      actions: [
+        { action: "open", title: "Öffnen" },
+        { action: "seen", title: "Gesehen" },
+      ],
+      data: {
+        type: "clientMessage",
+        link: data.link || DEFAULT_LINK,
+        clientUid: data.clientUid || "",
+        mid: data.mid || "",
+        mids,
+        count,
+      },
+    },
+  );
+}
+
 messaging.onBackgroundMessage((payload) => {
   const data = payload?.data || {};
   if (data.app !== "fitness") return;
-  return data.type === "clientWorkout" ? showClientWorkout(data) : showReminder(payload);
+  if (data.type === "clientWorkout") return showClientWorkout(data);
+  if (data.type === "inboxRequest") return showInboxRequest(data);
+  if (data.type === "clientMessage") return showClientMessage(data);
+  return showReminder(payload);
 });
 
 self.addEventListener("notificationclick", (event) => {

@@ -1,44 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Inbox, Loader2 } from 'lucide-react'
 import { getGlobalInbox } from '@db'
+import { inboxPayload, inboxStatus, inboxStatusTone, inboxTitle } from './inboxPreview.js'
 
-function inboxPayload(ex) {
-  const data = ex?.exercises?.[0] || ex?.enriched || ex || {}
-  return {
-    ...ex,
-    ...data,
-    file_id: ex?.file_id || data.file_id || null,
-    userId: ex?.userId || data.userId || null,
-    status: ex?.status || data.status || null,
-    inbox_status: ex?.status || data.status || null,
-    inbox_entry: ex,
-    enriched: ex?.enriched || data.enriched || null,
-  }
-}
-
-function inboxTitle(ex) {
-  const data = ex?.exercises?.[0] || ex?.enriched || ex || {}
-  return data.display_name || data.name || data.german || data.english || ex?.file_id || 'Anfrage'
-}
-
-function inboxStatus(ex) {
-  return String(ex?.status || ex?.inbox_status || ex?.exercises?.[0]?.review_state?.status || 'draft')
-}
-
-function statusTone(status) {
-  if (status === 'ai_enriched' || status === 'approved') return 'text-fit-accent'
-  if (status === 'pending' || status === 'pending_review' || status === 'failed_enrichment') return 'text-fit-orange'
-  return 'text-fit-dim'
-}
-
-export default function InboxQuickMenu({ menu, onClose, onSelect }) {
+export default function InboxQuickMenu({ menu, onClose, onSelect, items: itemsProp = null }) {
   const menuRef = useRef(null)
-  const [items, setItems] = useState(null)
+  const [items, setItems] = useState(itemsProp)
   const [error, setError] = useState('')
   const [query, setQuery] = useState('')
 
   useEffect(() => {
+    if (itemsProp) setItems(itemsProp)
+  }, [itemsProp])
+
+  useEffect(() => {
     if (!menu) return undefined
+    if (itemsProp) return undefined
     let alive = true
     setError('')
     setQuery('')
@@ -53,7 +30,7 @@ export default function InboxQuickMenu({ menu, onClose, onSelect }) {
     return () => {
       alive = false
     }
-  }, [menu])
+  }, [menu, itemsProp])
 
   useEffect(() => {
     if (!menu) return undefined
@@ -141,8 +118,9 @@ export default function InboxQuickMenu({ menu, onClose, onSelect }) {
                 }}
               >
                 <span className="truncate text-sm font-semibold text-fit-ink">{row.title}</span>
-                <span className={`truncate text-[11px] font-medium ${statusTone(row.status)}`}>
+                <span className={`truncate text-[11px] font-medium ${inboxStatusTone(row.status)}`}>
                   {row.status}{row.source ? ` · ${row.source}` : ''}
+                  {row.payload?.html_url ? ' · GitHub' : ''}
                 </span>
               </button>
             </li>

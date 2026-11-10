@@ -205,6 +205,62 @@ export async function getInbox() {
   return snap.docs.map((d) => markFirestoreCacheItem({ file_id: d.id, ...d.data() }));
 }
 
+function mapCoachInboxDocs(docs) {
+  return docs.map((entry) => ({
+    ...entry.data(),
+    file_id: entry.id,
+    cache_source: entry.data()?.cache_source || "firestore_cache",
+  }));
+}
+
+/**
+ * Live-Liste der Coach-Inbox (Firestore `coachInbox`). Optional mit GitHub-PRs gemerged.
+ * Callback: `cb(items[])`. Gibt Unsubscribe zurück.
+ */
+export function watchCoachInbox(cb, { includeGithub = true } = {}) {
+  let firestoreItems = [];
+  let prs = [];
+  let cancelled = false;
+
+  const emit = () => {
+    if (cancelled) return;
+    const prIds = new Set(prs.map((p) => p.file_id));
+    cb([...prs, ...firestoreItems.filter((item) => !prIds.has(item.file_id))]);
+  };
+
+  const unsub = onSnapshot(
+    collection(db, "coachInbox"),
+    (snap) => {
+      firestoreItems = mapCoachInboxDocs(snap.docs);
+      emit();
+    },
+    () => {
+      firestoreItems = [];
+      emit();
+    },
+  );
+
+  if (includeGithub && FIREBASE_COACH) {
+    listGithubInboxPrs()
+      .then((data) => {
+        if (cancelled) return;
+        prs = Array.isArray(data) ? data : [];
+        emit();
+      })
+      .catch(() => {
+        if (!cancelled) {
+          prs = [];
+          emit();
+        }
+      });
+  }
+
+  return () => {
+    cancelled = true;
+    unsub();
+  };
+}
+
 export async function getGlobalInbox() {
   if (FIREBASE_COACH) {
     // Übergang: GitHub-PRs (KB-SOT) zuerst, Firestore coachInbox als Cache/Altbestand.
@@ -215,11 +271,7 @@ export async function getGlobalInbox() {
       console.warn("github inbox prs unavailable", e);
     }
     const snap = await getDocs(collection(db, "coachInbox"));
-    const firestoreItems = snap.docs.map((entry) => ({
-      ...entry.data(),
-      file_id: entry.id,
-      cache_source: entry.data()?.cache_source || "firestore_cache",
-    }));
+    const firestoreItems = mapCoachInboxDocs(snap.docs);
     const prIds = new Set(prs.map((p) => p.file_id));
     return [...prs, ...firestoreItems.filter((item) => !prIds.has(item.file_id))];
   }

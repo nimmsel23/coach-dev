@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, ExternalLink, LogOut, Palette, RefreshCw, Shield } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink, Inbox, LogOut, MessageSquare, Palette, RefreshCw, Shield } from 'lucide-react'
 import { NAV_ITEMS } from './NavigationItems.js'
 import ClientQuickMenu, { placeContextMenu } from './ClientQuickMenu.jsx'
 import InboxQuickMenu from './InboxQuickMenu.jsx'
 import { CLIENT_MORE_TABS, CLIENT_PRIMARY_TABS } from '../views/Coach/clientSubTabs.js'
+import { INBOX_SIDEBAR_LIMIT, inboxPayload, inboxStatus, inboxStatusTone, inboxTitle } from './inboxPreview.js'
+
+const MESSAGE_SIDEBAR_LIMIT = 6
 
 // Desktop-Navigation — Fork von ~/vitalos/src/shell/layout/Sidebar.jsx.
 // Gleiche Glas-Rail (einklappbar), aber mit den Coach-Bereichen als Hauptnavigation.
@@ -18,16 +21,28 @@ export default function CoachSidebar({
   onRefresh,
   onSignOut,
   onSelectClient = null,
+  onSelectClientChat = null,
   unreadByClient = {},
+  unreadClients = [],
   onSelectInbox = null,
+  inboxItems = [],
+  activeInboxId = null,
   clientDetail = 'workouts',
   onSelectClientDetail = null,
+  activeClient = '',
 }) {
   const [clientMenu, setClientMenu] = useState(null)
   const [inboxMenu, setInboxMenu] = useState(null)
   const [moreOpen, setMoreOpen] = useState(false)
   const clientsActive = active === 'clients'
+  const exercisesActive = active === 'exercises'
   const moreActive = CLIENT_MORE_TABS.some((tab) => tab.id === clientDetail)
+  const inboxPreview = Array.isArray(inboxItems) ? inboxItems.slice(0, INBOX_SIDEBAR_LIMIT) : []
+  const inboxOverflow = Math.max(0, (inboxItems?.length || 0) - inboxPreview.length)
+  const showInboxSubs = Boolean(onSelectInbox && inboxPreview.length > 0)
+  const messagePreview = Array.isArray(unreadClients) ? unreadClients.slice(0, MESSAGE_SIDEBAR_LIMIT) : []
+  const messageOverflow = Math.max(0, (unreadClients?.length || 0) - messagePreview.length)
+  const showMessageSubs = Boolean(onSelectClientChat && messagePreview.length > 0)
 
   return (
     <aside className={`hidden lg:flex flex-col alpha-glass fixed left-3 top-6 bottom-6 z-50 rounded-[2rem] border border-fit-line/70 shadow-2xl shadow-black/20 transition-all duration-500 ease-in-out ${pinned ? 'w-[280px]' : 'w-24'}`}>
@@ -85,9 +100,87 @@ export default function CoachSidebar({
                   {pinned && count > 0 && <span className="vos-tag">{count >= 100 ? '99+' : count}</span>}
                 </button>
 
-                {id === 'clients' && clientsActive && onSelectClientDetail && (
+                {id === 'exercises' && showInboxSubs && (
                   <div className={`mt-1 space-y-0.5 ${pinned ? 'ml-4 border-l border-fit-line/30 pl-2' : 'flex flex-col items-center'}`}>
-                    {CLIENT_PRIMARY_TABS.map((tab) => {
+                    {inboxPreview.map((ex) => {
+                      const key = ex.file_id || inboxTitle(ex)
+                      const title = inboxTitle(ex)
+                      const status = inboxStatus(ex)
+                      const isGithub = Boolean(ex.html_url) && (ex.cache_source === 'github_pr' || String(ex.file_id || '').startsWith('pr-'))
+                      const TabIcon = isGithub ? ExternalLink : Inbox
+                      const tabActive = exercisesActive && activeInboxId && (activeInboxId === ex.file_id || activeInboxId === key)
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          title={isGithub ? `${title} · GitHub öffnen` : `${title} · ${status}`}
+                          onClick={() => onSelectInbox(inboxPayload(ex))}
+                          aria-current={tabActive ? 'page' : undefined}
+                          className={`flex w-full items-center transition-all ${pinned ? 'gap-3 rounded-xl px-3 py-2 text-left' : 'justify-center rounded-xl p-2.5'} ${tabActive ? 'bg-fit-accent/15 font-semibold text-fit-accent' : 'text-fit-dim hover:bg-white/5 hover:text-fit-ink'}`}
+                        >
+                          <TabIcon size={pinned ? 15 : 16} className={tabActive ? 'text-fit-accent' : ''} />
+                          {pinned && (
+                            <span className="min-w-0 flex-1">
+                              <span className="block truncate text-xs">{title}</span>
+                              <span className={`block truncate text-[10px] font-medium ${inboxStatusTone(status)}`}>
+                                {isGithub ? `GitHub${ex.pr_number ? ` #${ex.pr_number}` : ''}` : status}
+                              </span>
+                            </span>
+                          )}
+                        </button>
+                      )
+                    })}
+                    {pinned && inboxOverflow > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => onNavigate('exercises')}
+                        className="w-full rounded-xl px-3 py-2 text-left text-xs text-fit-dim hover:bg-white/5 hover:text-fit-ink"
+                      >
+                        +{inboxOverflow} weitere…
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {id === 'clients' && (showMessageSubs || (clientsActive && onSelectClientDetail)) && (
+                  <div className={`mt-1 space-y-0.5 ${pinned ? 'ml-4 border-l border-fit-line/30 pl-2' : 'flex flex-col items-center'}`}>
+                    {showMessageSubs && messagePreview.map((client) => {
+                      const tabActive = clientsActive && activeClient === client.uid && clientDetail === 'messages'
+                      return (
+                        <button
+                          key={`msg-${client.uid}`}
+                          type="button"
+                          title={`${client.name}: ${client.unread} ungelesen`}
+                          onClick={() => onSelectClientChat(client.uid)}
+                          aria-current={tabActive ? 'page' : undefined}
+                          className={`flex w-full items-center transition-all ${pinned ? 'gap-3 rounded-xl px-3 py-2 text-left' : 'justify-center rounded-xl p-2.5'} ${tabActive ? 'bg-fit-accent/15 font-semibold text-fit-accent' : 'text-fit-dim hover:bg-white/5 hover:text-fit-ink'}`}
+                        >
+                          <MessageSquare size={pinned ? 15 : 16} className={tabActive ? 'text-fit-accent' : ''} />
+                          {pinned && (
+                            <span className="min-w-0 flex-1">
+                              <span className="block truncate text-xs">{client.name}</span>
+                              <span className="block truncate text-[10px] font-medium text-fit-accent">
+                                {client.unread} neu
+                              </span>
+                            </span>
+                          )}
+                          {!pinned && client.unread > 0 && (
+                            <span className="sr-only">{client.unread} ungelesen</span>
+                          )}
+                        </button>
+                      )
+                    })}
+                    {pinned && showMessageSubs && messageOverflow > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => onNavigate('clients')}
+                        className="w-full rounded-xl px-3 py-2 text-left text-xs text-fit-dim hover:bg-white/5 hover:text-fit-ink"
+                      >
+                        +{messageOverflow} weitere Chats…
+                      </button>
+                    )}
+
+                    {clientsActive && onSelectClientDetail && CLIENT_PRIMARY_TABS.map((tab) => {
                       const TabIcon = tab.icon
                       const tabActive = clientDetail === tab.id
                       return (
@@ -104,7 +197,7 @@ export default function CoachSidebar({
                         </button>
                       )
                     })}
-                    {pinned ? (
+                    {clientsActive && onSelectClientDetail && pinned ? (
                       <div className="relative">
                         <button
                           type="button"
@@ -136,23 +229,22 @@ export default function CoachSidebar({
                           </div>
                         )}
                       </div>
-                    ) : (
-                      CLIENT_MORE_TABS.slice(0, 1).map((tab) => {
-                        const TabIcon = tab.icon
-                        const tabActive = CLIENT_MORE_TABS.some((item) => item.id === clientDetail)
-                        return (
-                          <button
-                            key="more-collapsed"
-                            type="button"
-                            title="Mehr Klienten-Bereiche"
-                            onClick={() => onSelectClientDetail(tabActive ? clientDetail : tab.id)}
-                            className={`flex justify-center rounded-xl p-2.5 ${tabActive ? 'bg-fit-accent/15 text-fit-accent' : 'text-fit-dim hover:bg-white/5'}`}
-                          >
-                            <TabIcon size={16} />
-                          </button>
-                        )
-                      })
-                    )}
+                    ) : null}
+                    {clientsActive && onSelectClientDetail && !pinned && CLIENT_MORE_TABS.slice(0, 1).map((tab) => {
+                      const TabIcon = tab.icon
+                      const tabActive = CLIENT_MORE_TABS.some((item) => item.id === clientDetail)
+                      return (
+                        <button
+                          key="more-collapsed"
+                          type="button"
+                          title="Mehr Klienten-Bereiche"
+                          onClick={() => onSelectClientDetail(tabActive ? clientDetail : tab.id)}
+                          className={`flex justify-center rounded-xl p-2.5 ${tabActive ? 'bg-fit-accent/15 text-fit-accent' : 'text-fit-dim hover:bg-white/5'}`}
+                        >
+                          <TabIcon size={16} />
+                        </button>
+                      )
+                    })}
                   </div>
                 )}
               </div>
@@ -168,6 +260,7 @@ export default function CoachSidebar({
         />
         <InboxQuickMenu
           menu={inboxMenu}
+          items={inboxItems}
           onClose={() => setInboxMenu(null)}
           onSelect={onSelectInbox}
         />

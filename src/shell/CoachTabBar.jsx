@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react'
-import { LogOut, MoreHorizontal, Palette, RefreshCw, X } from 'lucide-react'
+import { LogOut, MessageSquare, MoreHorizontal, Palette, RefreshCw, X } from 'lucide-react'
 import { useSwipeToDismiss } from '../hooks/useSwipeToDismiss.js'
 import { NAV_ITEMS } from './NavigationItems.js'
 import ClientQuickMenu, { placeContextMenu } from './ClientQuickMenu.jsx'
@@ -44,8 +44,11 @@ export default function CoachTabBar({
   onRefresh,
   onSignOut,
   onSelectClient = null,
+  onSelectClientChat = null,
   unreadByClient = {},
+  unreadClients = [],
   onSelectInbox = null,
+  inboxItems = [],
   clientDetail = 'workouts',
   onSelectClientDetail = null,
 }) {
@@ -197,6 +200,23 @@ export default function CoachTabBar({
               </button>
             </div>
             <div className="space-y-0.5">
+              {onSelectClientChat && unreadClients.length > 0 && (
+                <>
+                  {unreadClients.slice(0, 8).map((client) => (
+                    <SheetRow
+                      key={`msg-${client.uid}`}
+                      Icon={MessageSquare}
+                      label={client.name}
+                      hint={`${client.unread} ungelesen`}
+                      onClick={() => {
+                        onSelectClientChat(client.uid)
+                        closeClientSubs()
+                      }}
+                    />
+                  ))}
+                  <div className="my-2 border-t border-fit-line/30" />
+                </>
+              )}
               {CLIENT_PRIMARY_TABS.map((tab) => (
                 <SheetRow
                   key={tab.id}
@@ -343,6 +363,7 @@ export default function CoachTabBar({
       />
       <InboxQuickMenu
         menu={inboxMenu}
+        items={inboxItems}
         onClose={() => setInboxMenu(null)}
         onSelect={onSelectInbox}
       />

@@ -63,6 +63,20 @@ clientWorkout:
   minutes: "{minutes} min"
   detailSeparator: " · "
 
+# Neue Übungsanfrage in coachInbox → Push an den Coach (functions/inboxRequest.js).
+# Platzhalter: {name} Übungsname, {status} Inbox-Status.
+inboxRequest:
+  title: "Anfrage: {name}"
+  body: "Neue Übungsanfrage ({status})"
+
+# Klienten-Chat → Push an den Coach (functions/clientMessage.js).
+# Platzhalter: {name} Vorname, {preview} gekürzter Nachrichtentext.
+clientMessage:
+  title: "{name}: Nachricht"
+  body: "{preview}"
+  bodyFallback: "Neue Nachricht"
+  nameFallback: "Klient"
+
 # Test-Meldungen aus dem Notification-Panel (functions/pushPrefs.js, sendTestPush)
 testReminder:
   title: "Test: Reminder"
@@ -72,3 +86,11 @@ testReminder:
 testClientWorkout:
   title: "Test: Workout eingegangen"
   body: "Kraft · 45 min (Demo, kein echter Klient)"
+
+testInboxRequest:
+  title: "Test: Anfrage eingegangen"
+  body: "Demo-Übungsanfrage (kein echter Draft)"
+
+testClientMessage:
+  title: "Test: Nachricht eingegangen"
+  body: "Hallo Coach (Demo, kein echter Chat)"
