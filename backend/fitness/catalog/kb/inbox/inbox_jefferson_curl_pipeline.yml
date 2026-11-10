@@ -1,0 +1,108 @@
+name: inbox_jefferson_curl_pipeline
+description: 'Proactively generated expert draft for: Jefferson Curl'
+generated_at: '2026-11-10T04:26:29.327997+00:00'
+enriched_at: '2026-11-10T04:26:29.327997+00:00'
+exercises:
+- exercise_id: jefferson_curl_pipeline
+  id: jefferson_curl_pipeline
+  name: Jefferson Curl
+  display_name: Jefferson Curl
+  german: Jefferson Curl
+  english: Jefferson Curl
+  category: pull
+  movements:
+  - eccentric_control
+  - end_range_control
+  - hamstring_lengthening
+  - hip_flexion
+  - hip_hinge
+  - loaded_spinal_flexion
+  - segmental_spinal_flexion
+  - spinal_extension
+  - balance_control
+  equipment:
+  - barbell
+  - bodyweight
+  - dumbbell
+  - kettlebell
+  primary_muscles:
+  - 206_erector_spinae
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
+  secondary_muscles:
+  - 603_gluteus_maximus
+  stabilizers:
+  - 504_transverse_abdominis
+  - 505_quadratus_lumborum
+  - 507_multifidus
+  coaching_notes:
+  - Beginne aus einem stabilen Stand, atme ein, spanne den Rumpf leicht an und rolle
+    dann die Wirbelsäule Wirbel für Wirbel von oben nach unten ab.
+  - Führe jede Wiederholung langsam und bewusst aus; der Jefferson Curl ist primär
+    eine Übung zur Kontrollverbesserung und Gewebeverträglichkeit, kein reiner Krafttest.
+  - Lass zuerst das Kinn zur Brust sinken, dann die Brustwirbelsäule und erst zuletzt
+    die Lendenwirbelsäule und die Hüfte folgen, um eine echte segmentale Flexion zu
+    erreichen.
+  - Halte die Last, egal ob Langhantel oder Kettlebell, dicht am Körper und wähle
+    nur so viel Gewicht, dass du die segmentale Bewegung ohne Rucken oder unfreiwillige
+    Schutzspannung kontrollieren kannst.
+  - Gehe nur so tief, wie du Position, Atmung und muskuläre Spannung sauber halten
+    kannst; ein moderater, kontrollierter Stretch der Beinrückseite und des Rückens
+    ist erwünscht, aber stechender Schmerz oder starke Kompression nicht.
+  - Vermeide am tiefsten Punkt eine passive Hängeposition; behalte stattdessen muskuläre
+    Kontrolle über den Rumpf und die hintere Kette bei, um die Spannung aufrechtzuerhalten.
+  - Rolle dich für den Rückweg ebenso segmental wieder auf und stelle dir vor, wie
+    sich die Wirbelsäule von unten nach oben, Wirbel für Wirbel, neu aufstapelt, bis
+    du wieder aufrecht stehst.
+  - Verteile den Druck gleichmäßig über den ganzen Fuß und halte die Knie weich (leicht
+    gebeugt), aber weitgehend ruhig, damit die Bewegung primär aus Wirbelsäule und
+    Hüfte organisiert bleibt.
+  - Starte konservativ und priorisiere Bewegungsqualität sowie die Erhöhung der Toleranz
+    und Gelenkfreiheit im unbelasteten oder sehr leicht belasteten Bereich, bevor
+    du die Last erhöhst.
+  common_errors:
+  - Zu viel Gewicht wählen, was die segmentale Kontrolle beeinträchtigt und die Übung
+    in einen unsauberen Rundrücken-Good-Morning verwandelt, der die Wirbelsäule überlastet.
+  - Statt segmental abzurollen, nur aus der Hüfte nach vorne klappen und die eigentliche
+    Wirbelsäulenarbeit sowie die beabsichtigte Dehnung der Rückenmuskulatur umgehen.
+  - Die Übung zu früh als schwere Kraftübung programmieren, bevor die endgradige Flexionskontrolle
+    und die Belastungsverträglichkeit der Wirbelsäule aufgebaut wurden.
+  - In die Endposition hineinfedern oder mit Schwung tiefer ziehen, obwohl die muskuläre
+    Kontrolle bereits verloren ist, was zu Verletzungen führen kann.
+  - Schmerz, Kribbeln, elektrisierende Symptome oder starken Nervenzug (z.B. in den
+    Beinen) ignorieren und trotzdem weiter in die Tiefe gehen – dies sind klare Warnsignale,
+    die beachtet werden müssen.
+  - Den tiefsten Punkt passiv aushängen lassen, anstatt Rumpf und hintere Kette aktiv
+    unter Spannung zu halten, wodurch der schützende muskuläre Halt fehlt.
+  - Die Knie ständig übermäßig beugen und strecken, um fehlende Beweglichkeit der
+    Wirbelsäule oder der hinteren Kette zu kompensieren.
+  - Beim Aufrollen ruckartig aus der Hüfte hochschießen, anstatt die Wirbelsäule kontrolliert
+    und Wirbel für Wirbel wieder aufzubauen.
+  - Den Kopf früh in den Nacken nehmen oder die Last vom Körper wegdriften lassen,
+    was die Hebelverhältnisse unnötig verschlechtert und den Nacken sowie unteren
+    Rücken überlastet.
+  tags:
+  - bodyweight
+  - expert
+  - flexibility
+  - loaded_spinal_flexion
+  - lower_back
+  - mobility
+  - progressive_stretch
+  - spinal_flexion
+  - stretching
+  - posterior_chain_mobility
+  aliases:
+  - Spine Curl
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-10T04:26:29.327997+00:00'
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs: {}
+  review_state:
+    status: draft
+    ai_reviewed: false
+    enriched_at: '2026-11-10T04:26:29.327997+00:00'

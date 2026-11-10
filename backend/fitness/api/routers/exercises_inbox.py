@@ -189,6 +189,36 @@ async def inbox_link_source(id: str, request: Request):
             "exercise": linked, "draft_path": str(draft_path)}
 
 
+@router.post("/fitness/inbox/draft")
+async def inbox_create_draft(request: Request):
+    """ID-only Inbox-Draft anlegen (wger/yuhonas verlinken, noch nicht enrichen)."""
+    body = await request.json()
+    display_name = str(body.get("display_name") or body.get("name") or "").strip()
+    if not display_name:
+        raise HTTPException(400, detail="missing_display_name")
+    from fitness.catalog.agent.inbox_actions import create_inbox_draft
+
+    try:
+        path = create_inbox_draft(
+            display_name,
+            exercise_id=body.get("exercise_id") or body.get("id"),
+            wger_id=body.get("wger_id"),
+            yuhonas_id=body.get("yuhonas_id"),
+            coaching_notes=body.get("coaching_notes"),
+            force=bool(body.get("force")),
+        )
+    except FileExistsError as exc:
+        raise HTTPException(409, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(400, detail=str(exc)) from exc
+    return {
+        "ok": True,
+        "id": path.stem,
+        "path": str(path),
+        "enriched": False,
+    }
+
+
 @router.post("/fitness/inbox/queue")
 async def inbox_queue(request: Request):
     body = await request.json()

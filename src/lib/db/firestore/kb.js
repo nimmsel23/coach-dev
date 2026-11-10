@@ -104,6 +104,8 @@ export async function searchExercises(query, limit = 12) {
   const superseded = _buildSupersededExternalRefs(_searchCache);
   const pool = _searchCache.filter((ex) => {
     if (_isSupersededExternalExercise(ex, superseded)) return false;
+    const tags = Array.isArray(ex?.tags) ? ex.tags : [];
+    if (ex?.archived || tags.includes("archived")) return false;
     const source = _getExerciseSource(ex);
     return sources[source] !== false;
   });

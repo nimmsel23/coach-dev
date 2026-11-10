@@ -148,6 +148,37 @@ export async function sendToInbox(exerciseData) {
   }
 }
 
+/** ID-only Inbox-Draft (wger/yuhonas verlinken). Enrichment bewusst später. */
+export async function createInboxDraft(payload = {}) {
+  const body = {
+    display_name: payload.display_name || payload.name || "",
+    exercise_id: payload.exercise_id || payload.id || null,
+    wger_id: payload.wger_id ?? null,
+    yuhonas_id: payload.yuhonas_id ?? null,
+    coaching_notes: payload.coaching_notes || null,
+    force: Boolean(payload.force),
+  };
+  if (FIREBASE_COACH) {
+    return coachCommand("create-draft", body.exercise_id || "new", getUid(), body);
+  }
+  const res = await fetch(`${LOCAL_FITNESS_API_BASE}/inbox/draft`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    let detail = `draft_${res.status}`;
+    try {
+      const data = await res.json();
+      detail = data?.detail || detail;
+    } catch {
+      // keep status fallback
+    }
+    throw coachError("create_inbox_draft_failed", String(detail));
+  }
+  return await res.json();
+}
+
 // Neue unbekannte Übungen werden zuerst als lokale Inbox-Drafts erzeugt. Der
 // Firestore-Pfad darunter ist nur Cache/Offline-Warteschlange.
 export async function queueForEnrichment(ex) {

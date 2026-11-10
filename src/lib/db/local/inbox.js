@@ -91,6 +91,25 @@ export async function sendToInbox(exerciseData) {
   }
 }
 
+export async function createInboxDraft(payload = {}) {
+  return api.post("/fitness/inbox/draft", {
+    display_name: payload.display_name || payload.name || "",
+    exercise_id: payload.exercise_id || payload.id || null,
+    wger_id: payload.wger_id ?? null,
+    yuhonas_id: payload.yuhonas_id ?? null,
+    coaching_notes: payload.coaching_notes || null,
+    force: Boolean(payload.force),
+  });
+}
+
+export async function editExerciseSources(id, payload) {
+  return api.post(`/fitness/inbox/${encodeURIComponent(id)}/link-source`, payload);
+}
+
+export function describeCoachError(err, fallback = "Fehlgeschlagen") {
+  return err?.message || fallback;
+}
+
 export async function queueForEnrichment(ex) {
   if (!ex || ex.source === 'expert') return;
   // Vormals ein fetch() gegen http://localhost:9120 — der archivierte

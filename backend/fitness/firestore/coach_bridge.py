@@ -18,7 +18,7 @@ INBOX = "coachInbox"
 STATE = "coachState"
 ALLOWED_ACTIONS = {
     "approve", "reenrich", "delete", "link-source",
-    "duplicates", "merge-duplicates",
+    "duplicates", "merge-duplicates", "create-draft",
 }
 
 
@@ -69,7 +69,9 @@ def _execute_command(command: dict, client=None) -> dict:
     Ausführung im Prozess ohne Port). Ohne Client wie bisher HTTP gegen 127.0.0.1:PORT."""
     action = command.get("action")
     item_id = command.get("item_id")
-    if action not in ALLOWED_ACTIONS or not isinstance(item_id, str) or not item_id or "/" in item_id:
+    if action not in ALLOWED_ACTIONS:
+        raise ValueError("invalid_coach_command")
+    if action != "create-draft" and (not isinstance(item_id, str) or not item_id or "/" in item_id):
         raise ValueError("invalid_coach_command")
     uid = command.get("uid")
     if uid is not None and (not isinstance(uid, str) or "/" in uid):
@@ -96,6 +98,9 @@ def _execute_command(command: dict, client=None) -> dict:
         params = {"uid": uid} if uid else None
     elif action == "merge-duplicates":
         route += "/merge-duplicates"
+    elif action == "create-draft":
+        route = "/fitness/inbox/draft"
+        body = {**payload, "uid": uid}
 
     if client is not None:
         response = client.request(method, route, json=body if method == "POST" else None, params=params)

@@ -32,14 +32,19 @@ async def exercises_search(request: Request, q: str = "", limit: int = 12):
             *(getattr(ex, "search_aliases", None) or []),
             *(ex.tags or []),
         ]
+        tags = list(ex.tags or [])
+        if "archived" in tags or getattr(ex, "archived", False):
+            continue
         if any(qn in f.lower() for f in fields if f):
             row = {
                 "exercise_id": ex.exercise_id,
                 "display_name": ex.display_name or ex.exercise_id,
                 "primary_muscles": ex.primary_muscles or [],
                 "secondary_muscles": ex.secondary_muscles or [],
-                "source": "expert" if "expert" in (ex.tags or []) else "local",
+                "source": "expert" if "expert" in tags else "local",
                 "yuhonas_id": getattr(ex, "yuhonas_id", None),
+                "tags": tags,
+                "wger_id": getattr(ex, "wger_id", None),
             }
             results.append(row)
 
