@@ -1,7 +1,9 @@
 - ~~Vite-8 Vorbeuge~~: esbuild-Tests + build.target Browserliste (modules/plan folgt plan-Pin).
 # NEXT (coach-dev)
 
+- [x] Katalog-Rechtsklick + `POST /fitness/inbox/draft` + Jefferson-Curl Pipeline-Smoke.
 - [ ] Coach Sheet nach Do/Don't-Umbau live gegen Inbox-Records mit/ohne `source_snapshot` prüfen; ggf. deploy vos-coach.
+- [ ] Vault-grounded Inbox-Enricher (Vitaltrainer-Corpus in Prompt/CI); Approve bleibt Coach.
 - [ ] Submodul `fitness/catalog/kb` auf fitness-Commit mit Inbox-Rollen-Doku bumpen (GitHub/Agents ≠ Coach-UI).
 - [ ] Vite/Rolldown Upstream: Preload-Marker `__VITE_PRELOAD__<hash>` vs. Vite-Ersetzung nur Prefix — Workaround lokal; bei Vite-Upgrade prüfen ob Plugin/Skript noch nötig.
 - [ ] uv-Tool `fitness` (alte editable `fitness-cli`) bereinigen/neu — globale Bins laufen über `coach-dev/bin/{anatomy-agent,fitness-catalog}`.
