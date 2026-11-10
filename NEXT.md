@@ -26,9 +26,8 @@
     Kopie als separater Schnitt, sobald sicher keine Pipeline mehr dort liest.
 -   **Deploy-Formalisierung**: ~/.aos/fitness/kb-Seed geschah manuell (rsync);
     deploy.sh-Seed-Pfad auf coach-dev umstellen waere der formale Schritt.
--   **Systemd-Quelle**: coach-sync.service wird noch aus
-    fitness/coach/deploy/coach-sync.service installiert (jetzt Coach-Stand im
-    Coach-Baum); Pfad in der Unit-DokuSnapshots aktuell.
+-   ~~**Systemd-Quelle**~~: Repo-Unit `fitness/coach/deploy/coach-sync.service`
+    = Coach-SOT (2026-11-10 AL); Live-Unit war schon angeglichen.
 
 
 ## Gemini CI-Agent follow-up
