@@ -1,7 +1,19 @@
+<<<<<<< HEAD
 ## 2026-11-10 — AL: Systemd-Quelle coach-sync
 
 - Repo-Unit `fitness/coach/deploy/coach-sync.service` an Live-Coach-Pfade angeglichen: `PYTHONPATH` → `coach-dev/backend` + `anatomy-kb`, `ExecStart` → uv-Tool `fitness` (totes `fitness-agent` entfernt).
 - Install-Kommentar + `docs/COACH_APP.md` nennen Coach-Repo-SOT; TODO/NEXT abgehakt. Dienst nicht neu gestartet.
+=======
+## 2026-11-10 — Chat-SubTabs + Push bei Klienten-Nachricht
+
+- Sidebar/Bottom-Nav: ungelesene Chats als SubTabs unter Klienten → `#/clients/<uid>/messages`.
+- Cloud Function `onClientMessage` + SW `clientMessage` (Sammelmeldung pro Klient); Schalter/Demo in Notifications.
+
+## 2026-11-10 — Chat-SubTabs + Push bei Klienten-Nachricht
+
+- Sidebar/Bottom-Nav: ungelesene Chats als SubTabs unter Klienten → `#/clients/<uid>/messages`.
+- Cloud Function `onClientMessage` + SW `clientMessage` (Sammelmeldung pro Klient); Schalter/Demo in Notifications.
+>>>>>>> c720b400 (docs: auto-update RESULTS.md)
 
 ## 2026-11-10 — Inbox-SubTabs + Push bei neuer Anfrage
 
