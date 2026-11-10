@@ -1,0 +1,125 @@
+exercise_id: cable_crossover
+description: Expert details for Kabel-Crossover
+approved_at: '2026-10-17T21:02:41.280077+00:00'
+exercises:
+- exercise_id: cable_crossover
+  id: cable_crossover
+  name: Cable Crossover
+  display_name: Kabel-Crossover
+  german: Kabel-Crossover
+  english: Cable Crossover
+  category: push
+  type: isolation
+  movements:
+  - shoulder_horizontal_adduction
+  - horizontal_adduction
+  - scapular_protraction
+  - isometric_elbow_flexion
+  - isometric_trunk_stabilization
+  - cable
+  equipment:
+  - cable
+  primary_muscles:
+  - 101_pectoralis_major
+  secondary_muscles:
+  - 301_anterior_deltoid
+  - 105_serratus_anterior
+  stabilizers:
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 507_multifidus
+  coaching_notes:
+  - 'Stelle die Kabel so ein, dass der Zugwinkel zu der Brustregion passt, die du
+    betonen willst: hoch nach tief eher sternal, mittig eher gesamter Brustkorb, tief
+    nach hoch eher clavicular.'
+  - Nimm eine stabile Split- oder Parallelstellung ein und richte Brustbein und Rippen
+    kontrolliert auf, ohne ins Hohlkreuz zu fallen.
+  - Halte die Ellbogen über die ganze Bewegung leicht gebeugt und behalte diesen Winkel
+    konstant; die Bewegung kommt aus dem Schultergelenk, nicht aus aktivem Drücken
+    mit dem Trizeps.
+  - Führe die Griffe in einem weiten Bogen zusammen, als würdest du die Oberarme vor
+    dem Brustkorb umarmen, statt die Hände einfach nur nach vorn zu schieben.
+  - Lass die Brust in der Dehnung arbeiten, aber stoppe bevor die Schulter nach vorn
+    kippt oder du Spannung im vorderen Schultergelenk verlierst.
+  - Bringe die Hände vor dem Körper kontrolliert zusammen und halte die Endposition
+    kurz, ohne die Schultern hochzuziehen oder den Nacken anzuspannen.
+  - Halte den Rumpf ruhig und vermeide Rotation; beide Seiten sollen mit gleicher
+    Bahn und gleicher Geschwindigkeit arbeiten.
+  - Wähle ein Gewicht, bei dem du den Zielmuskel klar spürst und die exzentrische
+    Phase sauber abbremsen kannst.
+  common_errors:
+  - Die Griffe mit Schwung zusammenwerfen, statt die Brust kontrolliert durch den
+    gesamten Bewegungsbogen arbeiten zu lassen.
+  - Die Ellbogen während der Wiederholung stark beugen oder strecken und die Bewegung
+    dadurch in eine Druckübung verwandeln.
+  - In der Dehnung zu weit nach hinten gehen und dabei die Schulter nach vorne ziehen
+    oder das vordere Schultergelenk reizen.
+  - Die Schultern hochziehen und Spannung in Nacken und oberem Trapez übernehmen lassen.
+  - Den Oberkörper nach vorne werfen oder rotieren, um die letzten Zentimeter zu erzwingen.
+  - Zu schwer laden und dadurch den Kontakt zur Brust verlieren, sodass vor allem
+    vordere Schulter und Arme übernehmen.
+  - Die Hände nur vor dem Körper zusammenführen, ohne die Oberarme wirklich horizontal
+    zu adduzieren.
+  - Den Zugwinkel zufällig wählen und dann eine andere Brustregion erwarten, als die
+    eingestellte Seilbahn tatsächlich belastet.
+  tags:
+  - chest_isolation
+  - fly_pattern
+  - cable_exercise
+  - horizontal_adduction
+  - pec_contraction
+  - chest
+  aliases:
+  - Kabelzug-Überkreuzung
+  - Kabel Crossover
+  - Cable Fly
+  - Standing Cable Fly
+  - Überkreuzung am Kabelzug
+  variations: []
+  source: expert
+  search_aliases:
+  - Kabel-Crossover
+  - Kabel Crossover
+  - Kabelzug-Überkreuzung
+  - Cable Crossover
+  - Cable Fly
+  - Standing Cable Fly
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '237'
+      yuhonas:
+      - Cable_Crossover
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-17T21:02:41.280077+00:00'
+  approved_at: '2026-10-17T21:02:41.280077+00:00'
+  wger_id: 237
+  yuhonas_id: Cable_Crossover
+  external_ids:
+    wger:
+    - 237
+    yuhonas:
+    - Cable_Crossover
+  original_description:
+  - cable machine, two steps forward, straight back
+  instructions:
+  - To get yourself into the starting position, place the pulleys on a high position
+    (above your head), select the resistance to be used and hold the pulleys in each
+    hand.
+  - Step forward in front of an imaginary straight line between both pulleys while
+    pulling your arms together in front of you. Your torso should have a small forward
+    bend from the waist. This will be your starting position.
+  - 'With a slight bend on your elbows in order to prevent stress at the biceps tendon,
+    extend your arms to the side (straight out at both sides) in a wide arc until
+    you feel a stretch on your chest. Breathe in as you perform this portion of the
+    movement. Tip: Keep in mind that throughout the movement, the arms and torso should
+    remain stationary; the movement should only occur at the shoulder joint.'
+  - Return your arms back to the starting position as you breathe out. Make sure to
+    use the same arc of motion used to lower the weights.
+  - Hold for a second at the starting position and repeat the movement for the prescribed
+    amount of repetitions.

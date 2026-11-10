@@ -1,3 +1,7 @@
-#!/bin/sh
-# coach-sync — Coach-Seite des Firestore-Syncs (siehe fitness/coach/sync.py). Läuft in der fitness-agent uv-venv.
-exec "$HOME/.local/share/uv/tools/fitness/bin/python3" -m fitness.coach.sync "$@"
+#!/usr/bin/env bash
+# coach-sync — Coach Firestore worker (same as: coach sync)
+set -euo pipefail
+COACH="${COACH_DEV:-$HOME/dev/coach-dev}"
+BACKEND="${BACKEND_FITNESS_ROOT:-$HOME/dev/backend/fitness}"
+export PYTHONPATH="${COACH}:${BACKEND}${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -c 'import sys; from fitness.coach.sync import app; sys.argv[0]="coach-sync"; app()' "$@"

@@ -1,0 +1,48 @@
+exercise_id: jackknifes
+description: Curated 6 Pack Promise entry for Jackknifes.
+exercises:
+- exercise_id: jackknifes
+  id: jackknifes
+  name: Jackknifes
+  display_name: Jackknifes
+  german: Jackknifes
+  english: Jackknifes
+  category: core
+  type: compound
+  movements:
+  - spinal_flexion
+  - hip_flexion
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 607_iliopsoas
+  secondary_muscles:
+  - 504_transverse_abdominis
+  stabilizers:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  coaching_notes:
+  - Heben Sie Arme und Beine gleichzeitig an und treffen Sie sich aus der Bauchspannung in der Mitte.
+  - Bleiben Sie lang in Armen und Beinen, damit die Bewegung nicht in Mini-Crunches zerfällt.
+  - Senken Sie kontrolliert ab und behalten Sie Spannung bis zum Boden.
+  common_errors:
+  - Die Beine schwingen hoch, während der Oberkörper kaum mitarbeitet.
+  - Oben wird nicht aktiv zusammengefaltet, sondern nur kurz berührt.
+  - Unten wird komplett entspannt und die nächste Wiederholung mit Schwung gestartet.
+  tags:
+  - 6pack_promise
+  - core
+  - full_range
+  aliases:
+  - Jackknifes
+  - Jackknife Sit-Up
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

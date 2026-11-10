@@ -1,0 +1,49 @@
+exercise_id: side_plank_lifts
+description: Curated 6 Pack Promise entry for Side Plank Lifts.
+exercises:
+- exercise_id: side_plank_lifts
+  id: side_plank_lifts
+  name: Side Plank Lifts
+  display_name: Side Plank Lifts
+  german: Side Plank Lifts
+  english: Side Plank Lifts
+  category: core
+  type: compound
+  movements:
+  - lateral_flexion
+  - anti_lateral_flexion
+  - shoulder_stability
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  secondary_muscles:
+  - 504_transverse_abdominis
+  - 603_gluteus_maximus
+  stabilizers:
+  - 105_serratus_anterior
+  - 304_rotator_cuff
+  coaching_notes:
+  - Stapeln Sie Schulter, Rippen und Becken sauber übereinander, bevor Sie die Hüfte anheben.
+  - Heben und senken Sie die Hüfte kontrolliert, ohne in der Schulter einzusacken.
+  - Halten Sie Kopf und Brustkorb lang, statt die Bewegung über die Halswirbelsäule zu kompensieren.
+  common_errors:
+  - Die obere Schulter rollt nach vorne und nimmt die Last aus den Schrägbauchmuskeln.
+  - Die Hüfte fällt unten komplett weg und der Rebound übernimmt die Arbeit.
+  - Die Beine werden weich und die Seitlinie verliert Spannung.
+  tags:
+  - 6pack_promise
+  - core
+  - obliques
+  aliases:
+  - Side Plank Lifts
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

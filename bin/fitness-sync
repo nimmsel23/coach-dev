@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# fitness-sync — KB + Firestore data sync (same as: coach data-sync / fitness sync)
+set -euo pipefail
+COACH="${COACH_DEV:-$HOME/dev/coach-dev}"
+export PYTHONPATH="${COACH}${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m fitness.sync.cli "$@"

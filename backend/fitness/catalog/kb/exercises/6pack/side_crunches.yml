@@ -1,0 +1,46 @@
+exercise_id: side_crunches
+description: Curated 6 Pack Promise entry for Side Crunches.
+exercises:
+- exercise_id: side_crunches
+  id: side_crunches
+  name: Side Crunches
+  display_name: Side Crunches
+  german: Side Crunches
+  english: Side Crunches
+  category: core
+  type: isolation
+  movements:
+  - lateral_flexion
+  - trunk_rotation
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  secondary_muscles:
+  - 501_rectus_abdominis
+  stabilizers:
+  - 504_transverse_abdominis
+  coaching_notes:
+  - Ziehen Sie Rippen und Becken auf der arbeitenden Seite bewusst zusammen.
+  - Halten Sie die Bewegung klein und kontraktionsbetont statt mit viel Schwung.
+  - Nutzen Sie die freie Hand höchstens zur leichten Orientierung, nicht zum Ziehen am Kopf.
+  common_errors:
+  - Die Ellbogenbewegung ersetzt die eigentliche Seitbeuge des Rumpfs.
+  - Das Becken kippt weg und nimmt die Spannung aus den Schrägmuskeln.
+  - Jede Wiederholung wird zu schnell und ohne Endkontraktion beendet.
+  tags:
+  - 6pack_promise
+  - core
+  - obliques
+  aliases:
+  - Side Crunches
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

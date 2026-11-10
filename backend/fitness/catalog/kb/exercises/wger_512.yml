@@ -1,0 +1,60 @@
+exercise_id: wger_512
+description: Expert details for Rudern Sitzend, Eng
+approved_at: '2026-11-01T17:08:16.598726+00:00'
+exercises:
+- exercise_id: wger_512
+  id: wger_512
+  name: Rudern Sitzend, Eng
+  display_name: Rudern Sitzend, Eng
+  german: Rudern Sitzend, Eng
+  english: Rudern Sitzend, Eng
+  category: back
+  primary_muscles:
+  - 201_latissimus_dorsi
+  coaching_notes:
+  - beim Einatmen den Haltegriff zum Schwertfortsatz des Brustbeins führen. während
+    der Rücken aufgerichtet und die Ellbogen so weit wie möglich nach hinten gezogen
+    werden
+  original_description:
+  - beim Einatmen den Haltegriff zum Schwertfortsatz des Brustbeins führen. während
+    der Rücken aufgerichtet und die Ellbogen so weit wie möglich nach hinten gezogen
+    werden
+  tags:
+  - unreviewed
+  - wger
+  wger_id: 512
+  wger_muscle_ids:
+    primary:
+    - 12
+    secondary: []
+  external_ids:
+    wger:
+    - 512
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: external
+    source_refs:
+      wger:
+      - '512'
+  source_snapshot:
+    wger:
+      wger_id: 512
+      wger_muscle_ids:
+        primary:
+        - 12
+        secondary: []
+      original_description:
+      - beim Einatmen den Haltegriff zum Schwertfortsatz des Brustbeins führen. während
+        der Rücken aufgerichtet und die Ellbogen so weit wie möglich nach hinten gezogen
+        werden
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-11-01T17:08:16.598726+00:00'
+  secondary_muscles: []
+  stabilizers: []
+  source: expert
+  approved_at: '2026-11-01T17:08:16.598726+00:00'
+  search_aliases:
+  - wger_512
+  - Rudern Sitzend, Eng

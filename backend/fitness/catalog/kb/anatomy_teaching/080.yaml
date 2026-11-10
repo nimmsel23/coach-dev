@@ -1,0 +1,80 @@
+name: deadlift_lesson
+description: Anatomy teaching seed for 080.
+lessons:
+  - exercise_id: 080
+    title: "Deadlift - Hüftstreckung und Ganzkörperkraft"
+    region: legs
+    learning_goal:
+      short: "Hinge, Rückenstabilität und Zug vom Boden verstehen."
+      detailed: "Lern, wie der Deadlift Hüftstreckung, Rumpfspannung und Griffkraft verbindet."
+    movement_pattern:
+      primary: hinge
+      secondary:
+        - hip_extension
+        - floor_pull
+    joint_actions:
+      hip:
+        eccentric:
+          - flexion_control
+        concentric:
+          - extension
+        stabilization:
+          - pelvis_control
+      knee:
+        eccentric:
+          - flexion_control
+        concentric:
+          - extension
+        stabilization:
+          - tracking
+      trunk:
+        stabilization:
+          - anti_flexion
+          - bracing
+    muscle_roles:
+      prime_movers:
+        - legs
+        - back
+      synergists:
+        - glutes
+      stabilizers:
+        - core
+        - upper_back
+    body_highlighter_regions:
+      primary:
+        - thigh_back
+        - glutes
+      secondary:
+        - lower_back
+      light:
+        - forearms
+        - upper_back
+    trainer_explanation:
+      simple: "Der Deadlift ist ein kräftiger Hüftbeuge- und Hüftstrecklift."
+      technical: "Über die Hinge-Position werden Hüft- und Knieextension mit massiver Rumpf- und Rückenstabilität verbunden."
+      client_friendly: "Du sollst Hüfte, Beine und Rücken zusammen als eine starke Kette spüren."
+    feel_cues:
+      - "Spannung im hinteren Oberschenkel."
+      - "Rumpf bleibt fest."
+      - "Stange bleibt eng am Körper."
+    coaching_cues:
+      - "Rumpf vor dem Zug setzen."
+      - "Stange am Bein führen."
+      - "Rücken nicht verlieren."
+    common_errors:
+      - error: "Rücken rund ziehen."
+        anatomical_reason: "Die Wirbelsäule verliert Stabilität und die Last wandert ungünstig."
+        correction: "Rumpf bracen und Last reduzieren."
+        coaching_cue: "Brust nicht kollabieren lassen."
+      - error: "Hüfte zu früh hochschießen lassen."
+        anatomical_reason: "Die Zugkette bricht und der Rücken übernimmt zu viel."
+        correction: "Beine und Hüfte gemeinsam starten."
+        coaching_cue: "Stange und Hüfte zusammen."
+    variations_teach:
+      - variation: "trap bar 080"
+        lesson: "Oft aufrechter und leichter zu coachen."
+      - variation: "block pull"
+        lesson: "Reduzierte Starttiefe für Technik und Belastungssteuerung."
+    quiz:
+      - question: "Was ist das Kernmuster im Deadlift?"
+        answer: "Eine starke Hüftbeuge und Hüftstreckung mit festem Rumpf."

@@ -1,0 +1,17 @@
+label_de: Unterarme
+label_en: Forearms
+label_lat: Antebrachium
+aliases: [forearm, forearms, unterarm, unterarme]
+muscles:
+  - 404_brachioradialis
+  - 405_forearm_flexors
+  - 405a_flexor_digitorum_superficialis
+  - 405b_flexor_carpi_ulnaris
+  - 405c_flexor_carpi_radialis
+  - 405d_palmaris_longus
+  - 406_forearm_extensors
+  - 406a_extensor_digitorum
+  - 406b_extensor_carpi_radialis_longus
+  - 406c_extensor_carpi_radialis_brevis
+  - 406d_extensor_carpi_ulnaris
+  - 407_anconeus

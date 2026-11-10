@@ -1,0 +1,51 @@
+exercise_id: marching_planks
+description: Curated 6 Pack Promise entry for Marching Planks.
+exercises:
+- exercise_id: marching_planks
+  id: marching_planks
+  name: Marching Planks
+  display_name: Marching Planks
+  german: Marching Planks
+  english: Marching Planks
+  category: core
+  type: compound
+  movements:
+  - anti_extension
+  - anti_rotation
+  - shoulder_stability
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  secondary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  stabilizers:
+  - 603_gluteus_maximus
+  - 105_serratus_anterior
+  - 301_anterior_deltoid
+  coaching_notes:
+  - Halten Sie die Plank-Linie stabil und heben Sie jeweils nur einen Fuß wenige Zentimeter vom Boden ab.
+  - Vermeiden Sie sichtbares Beckenpendeln; der Wert der Übung liegt in der Anti-Rotationskontrolle.
+  - Drücken Sie aktiv über Unterarme und Ballen in den Boden, damit der obere Rücken mitarbeitet.
+  common_errors:
+  - Die Hüfte kippt bei jedem Schritt nach links und rechts.
+  - Die Füße werden zu hoch angehoben und die Spannung im Rumpf geht verloren.
+  - Die Schultern sinken zwischen den Armen ein.
+  tags:
+  - 6pack_promise
+  - core
+  - plank
+  - anti_rotation
+  aliases:
+  - Marching Planks
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

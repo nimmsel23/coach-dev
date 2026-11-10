@@ -1,0 +1,105 @@
+name: inbox_pullover_machine
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Pullover-Maschine'
+enriched_at: '2026-11-06T02:48:16.265483+00:00'
+exercises:
+- exercise_id: pullover_machine
+  id: pullover_machine
+  name: Pullover Machine
+  display_name: Pullover-Maschine
+  german: Pullover-Maschine
+  english: Pullover Machine
+  category: pull
+  type: isolation
+  movements:
+  - shoulder_extension
+  - shoulder_adduction
+  - scapular_depression
+  - machine_guided
+  equipment:
+  - machine
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 207_teres_major
+  secondary_muscles:
+  - 401a_triceps_long_head
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  stabilizers:
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  coaching_notes:
+  - Stelle die Maschine so ein, dass die Drehachse des Geräts exakt auf Höhe deiner
+    Schultergelenke liegt. Dies ist entscheidend, um den Latissimus optimal zu isolieren
+    und unnötige Belastung auf das vordere Schulterkapselgelenk zu vermeiden.
+  - Halte während der gesamten Bewegung einen stolzen Brustkorb, aber achte darauf,
+    die Rippen unten zu lassen und den Bauch fest anzuspannen (Brace). Dadurch wird
+    eine übermäßige Lordose der Lendenwirbelsäule verhindert und die Kraftübertragung
+    auf die Zielmuskulatur optimiert.
+  - Beginne aus einer vollständig gedehnten Position mit leicht gebeugten Ellbogen.
+    Der Winkel in den Ellbogengelenken bleibt während des gesamten Satzes konstant
+    fixiert und ändert sich nicht.
+  - Ziehe die Griffe oder Stangen in einem kontrollierten, weiten Bogen nach unten,
+    indem du deine Oberarme aktiv Richtung Hüfte führst und bewusst die Achseln schließt,
+    um den Latissimus zu aktivieren.
+  - Fokussiere dich darauf, die Schulterblätter aktiv nach unten zu ziehen und stabil
+    zu halten (Scapular Depression), anstatt die Schultern hochzuziehen oder nach
+    vorne einrollen zu lassen. Dies sichert eine effiziente Arbeitslinie für den Latissimus.
+  - Nutze den vollen, schmerzfreien Bewegungsbereich. Erreiche oben eine maximale
+    Dehnung im Latissimus und konzentriere dich am unteren Punkt auf eine bewusste
+    und maximale Kontraktion, ohne die Bewegung durch die Hände zu dominieren oder
+    die Arme zu stark einzusetzen.
+  - Wähle ein Gewicht, das eine langsame und kontrollierte Ausführung der exzentrischen
+    Phase erlaubt. Insbesondere die kontrollierte Rückführung in die gedehnte Position
+    ist entscheidend für den optimalen Wachstumsreiz.
+  common_errors:
+  - Die Bewegung durch Beugung im Ellbogengelenk in eine Art Ruder- oder Trizepsübung
+    umwandeln, anstatt die Kraft primär aus dem Schultergelenk und dem Latissimus
+    zu generieren.
+  - Durch eine übermäßige Hohlkreuzposition (Lendenlordose) oder das Aufklappen des
+    Brustkorbs das Gewicht bewegen. Dies verlagert die Spannung von den Zielmuskeln
+    auf die Lendenwirbelsäule und kann zu Schmerzen führen.
+  - Die Schultern nach oben Richtung Ohren ziehen oder nach vorne einrollen lassen
+    (Schulterelevation oder -protraktion). Dies entzieht dem Latissimus die Spannung
+    und aktiviert Nacken- und vordere Schultermuskeln unnötig.
+  - In der oberen Dehnposition über den eigenen individuellen Bewegungsspielraum hinausgehen,
+    was zu einer unnötigen Belastung oder potenziellen Verletzung des Schultergelenks
+    führen kann.
+  - Am unteren Ende der Bewegung das Gewicht nur passiv fallen lassen oder die Griffe
+    nur kurz anschlagen, anstatt eine aktive Endkontraktion im Latissimus zu erzielen.
+  - Zu viel Gewicht verwenden und die konzentrische Phase mit Schwung oder einer Ruckbewegung
+    einleiten, wodurch die effektive Belastung der Zielmuskulatur erheblich reduziert
+    wird.
+  - Den vollen Bewegungsradius, insbesondere die wichtige Dehnposition am oberen Punkt,
+    bewusst verkürzen oder vermeiden, wodurch ein großer Teil des Trainingsreizes
+    ungenutzt bleibt.
+  tags:
+  - isolation
+  - machine
+  - back
+  - latissimus
+  - shoulder_extension
+  - shoulder_adduction
+  - hypertrophy
+  - expert
+  aliases:
+  - Machine Pullover
+  - Maschinen-Pullover
+  - Nautilus Pullover
+  variations: []
+  source: unreviewed
+  search_aliases:
+  - Pullover-Maschine
+  - Maschinen-Pullover
+  - Pullover Machine
+  - Machine Pullover
+  - Nautilus Pullover
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs: {}
+  review_state:
+    status: draft
+    ai_reviewed: false
+    enriched_at: '2026-11-06T02:48:16.265483+00:00'
+  enriched_at: '2026-11-06T02:48:16.265483+00:00'

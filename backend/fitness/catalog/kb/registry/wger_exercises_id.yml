@@ -1,0 +1,827 @@
+name: wger_exercises_id
+description: Mapping of official wger exercise IDs to their names.
+exercises:
+  9: 2 Handed Kettlebell Swing
+  12: Adduktoren-Maschine
+  20: Arnold Press
+  31: Axe Hold
+  41: Barbell Ab Rollout
+  43: Barbell Hack Squats
+  46: Barbell Lunges Standing
+  48: Barbell Reverse Wrist Curl
+  50: Trizepsdrücken KH Über Kopf
+  51: Handgelenkstreckung
+  56: Bauch Stabilisation
+  57: Bear Walk
+  71: Beinstrecker Einbeinig
+  73: Bankdrücken LH
+  75: Bankdrücken KH
+  76: Bankdrücken Eng
+  79: Bent High Pulls
+  81: Rudern Einarmig KH
+  82: Vorgebeugtes Seitheben
+  83: Rudern Vorgebeugt LH
+  84: Rudern Vorgebeugt LH Reverse
+  91: Bizeps LH-Curls
+  92: Bizeps KH-Curls
+  94: Bizeps Curls Mit SZ-Stange
+  95: Bizeps am Kabel
+  112: Body-Ups
+  124: Braced Squat
+  132: Burpees
+  135: Butterfly
+  137: Butterfly Eng
+  139: Butterfly Reverse
+  142: Cable External Rotation
+  145: Cable Woodchoppers
+  146: Wadendrücken an Beinpresse
+  148: Wadenheben an Hackenschmidt
+  152: Chin-ups
+  154: Chin-ups
+  158: Latzug Eng
+  161: Pull-Over KH
+  165: Crunch am TRX Oder Auf Ball
+  167: Crunches
+  171: Crunches an Schrägbank
+  172: Crunches an Maschine
+  173: Crunches am Seil
+  174: Crunches With Legs Up
+  177: Fahrrad fahren
+  178: Deadbug
+  182: Deadhang
+  185: Negativ Bankdrücken
+  186: Negativ Bankdrücken KH
+  188: Negativ Pushups
+  189: Defizit Kreuzheben
+  193: Diagonal Shoulder Press
+  194: Dips
+  197: Dips Zwischen 2 Bänke
+  202: Konzentrations-Curls
+  203: Dumbbell Goblet Squat
+  204: Bizeps KH-Curls Schrägbank
+  205: Ausfallschritte Stehend
+  206: Ausfallschritte im Gehen
+  208: Dumbbells on Scott Machine
+  211: Dumbbell Triceps Extension
+  222: Face Pulls
+  235: Flutter Kicks
+  237: Fly With Cable
+  238: Fliegende KH Flachbank
+  239: Negativ Fliegende Mit KH
+  245: Frenchpress KH
+  246: Frenchpress SZ-Stange
+  254: Frontheben Mit Scheibe
+  256: Frontheben am Kabel
+  257: Front Kniebeuge
+  258: Frontziehen Breit
+  259: Frontziehen Eng
+  260: Full Sit Outs
+  265: Brücke Auf Dem Ball
+  268: Good Mornings
+  272: Hammercurls
+  275: Hammercurls am Seil
+  279: Hand Grip
+  282: Handstand Pushup
+  283: Beinheben im Hang
+  284: Hercules Pillars
+  285: High Knee Jumps
+  289: High Pull
+  291: Hindu Squats
+  292: Hip Raise, Lying
+  294: Beckenheben
+  297: Hollow Hold
+  301: Hyperextensions
+  308: Fliegende KH Schrägbank
+  310: Rudern KH Auf Schrägbank
+  312: Negativ Plank Mit Abwechselnden Fuß-Kontakt
+  313: Incline Push up
+  314: Isometric Wipers
+  319: Joggen
+  320: Hampelmann
+  323: Kabelcross
+  331: Kettlebell Swings
+  341: Kniebeuge an Multipresse - Eng
+  346: Landmine-Press, Einarmig
+  348: Seitheben KH
+  349: Seitheben am Kabel, Einarmig
+  351: Lateral-to-Front Raises
+  354: Lat Pull Down (Leaning Back)
+  355: Lat Pull Down (Straight Back)
+  365: Beinbeuger Liegend
+  366: Leg Curls (sitting)
+  367: Beinbeuger Stehend
+  373: Beinpresse Eng
+  374: Leg Presses (wide)
+  375: Kniebeuge an Hackenschmidtmaschine
+  376: Beine heben
+  377: Beinheben Liegend
+  378: Beinheben Aufrecht
+  379: Leverage Machine Chest Press
+  380: Leverage Machine Iso Row
+  382: L Sit
+  386: Liegestüzten Diamond
+  394: Long-Pulley
+  395: Long-Pulley (eng)
+  397: Low Box Squat - Wide Stance
+  406: Lying Rotator Cuff Exercise
+  418: Military Press mit SZ-Bar
+  423: Muscle up
+  427: Crunches an Negativbank
+  439: Overhand Cable Curl
+  441: Overhead Squat
+  445: Pause Bench
+  448: Pendelay Rows
+  454: Hecht-Liegestütze
+  456: Einbeinige Kniebeuge
+  465: KH an Scottmaschine
+  468: Prone Scapular Retraction - Arms at Side
+  475: Klimmzüge
+  477: Klimmzüge an Maschine
+  484: Rack Deadlift
+  487: Rear Delt Raises
+  490: Renegade Row
+  493: Reverse Bar Curl
+  495: Reverse Curls
+  498: Reverse Grip Bench Press
+  500: Reverse Plank
+  501: Ring Dips
+  505: Beinheben am Roman Chair
+  508: Row
+  510: Rowing, Lying on Bench
+  512: Rudern Sitzend, Eng
+  513: T-Bar Rudern (breit)
+  516: Rückenstrecker im Stehen
+  527: Rennen
+  529: HIIT
+  530: Laufen an Laufband
+  537: Schrägbankdrücken KH
+  538: Schrägbankdrücken LH
+  539: Schrägbankdrücken MP
+  543: Schultermaschine
+  545: Scissors
+  556: Seitliches Oberkörperbeugen am Gerät
+  562: Shotgun Row
+  566: Schulterdrücken LH
+  567: Schulterdrücken KH
+  569: Frontdrücken MP
+  570: Schulterzucken
+  571: Shrugs LH
+  572: Shrugs KH
+  575: Shrugs an der MP
+  576: Side Crunch
+  577: Seitliches Oberkörperbeugen Mit KH
+  578: Side-lying External Rotation
+  583: Side to Side Push Ups
+  584: Single-arm Preacher Curl
+  590: Wadenheben Sitzend
+  591: Sit Ups
+  595: Seilspringen
+  598: Smith Machine Close-grip Bench Press
+  599: Snach
+  604: Speed Deadlift
+  607: Splinter Sit-ups
+  614: Tiefe Hocksprünge
+  615: Kniebeuge
+  616: Hocksprung
+  621: Standing Bicep Curl
+  622: Wadenheben Stehend
+  623: Standing Rope Forearm
+  624: Stationary Bike
+  627: Stiff-legged Deadlifts
+  628: Lat-Ziehen Mit Gesteckten Armen Mit (Stange)
+  629: Lat-Zug am Seil
+  630: Sumo Kreuzheben
+  632: Sumo Kniebeuge
+  636: Superman
+  650: Thruster
+  655: Kick-Backs
+  659: Trizeps Seildrücken
+  660: Trizeps Seildrücken Mit Stange
+  661: Trizepsmaschine
+  672: Trunk Rotation With Cable
+  674: TRX Rudern
+  675: Turkish Get-Up
+  684: Underhand Lat Pull Down
+  688: Upper External Oblique
+  691: Rudern Aufrecht MP
+  693: Rudern Aufrecht ß-Stange
+  694: Upright Row w/ Dumbbells
+  695: V-Bar Pulldown
+  702: Wadenheben, Einbenig
+  711: Handstand Gegen Die Wand
+  713: Wall Pushup
+  716: Wall Slides
+  718: Wall Squat
+  722: Weighted Step-ups
+  723: Latzug Breit
+  801: Dumbbell Push-Up
+  802: Barbell Lunges Walking
+  803: Trizeps Seildrücken Einarmig
+  804: Sloper hängen
+  805: Tricep Pushdown on Cable
+  820: Leisten hängen an 20 mm Kante
+  821: Klimmzug an Leiste
+  822: Cable Rear Delt Fly
+  827: Front Plate Raise
+  828: Incline Bench Reverse Fly
+  829: Rear Delt Raise
+  851: Beinstrecker
+  901: Barbell Hip Thrust
+  907: Handstand Push Up
+  908: Zone 2 Running
+  909: Reverse Nordic Curl
+  910: Nordic Curl
+  911: Incline Skull Crush
+  912: Straight Bar Cable Curls
+  913: Reverse Preacher Curl (Close Grip)
+  914: Reverse EZ Bar Cable Curls
+  915: BUS DRIVERS
+  916: Smith Press
+  917: Straight Bar Cable Front Raise
+  918: Seated Dumbbell Side Lateral
+  921: Seated Cable Rows
+  922: SEATED CABLE MID TRAP SHRUG
+  923: LYING DUMBBELL ROW SS SEATED SHRUG
+  925: SMITH MACHINE SLIGHT INCLINE PRESS
+  926: Machine chest fly
+  927: Suspended crossess
+  957: Quadriped Arm and Leg Raise
+  958: Biceps with TRX
+  959: TRX Rows
+  960: Kettlebell Swing
+  961: Swimming 50m sprints
+  962: Elliptical
+  974: Curl with kettlebell two hands
+  975: one-handed kettlebell curls
+  976: Medicine ball booklet crunch
+  977: Box squat
+  978: Knee Raises
+  979: Leg raises pull up bar
+  980: commando pull-ups
+  981: Steigungen
+  983: Knie hoch
+  984: Ausfallschritte
+  985: Liegestütz-Drehungen
+  986: Seitliche Kniebeugen links
+  987: Seitliche Kniebeugen rechts
+  988: Bulgarische geteilte Kniebeugen links
+  989: Bulgarische geteilte Kniebeugen rechts
+  990: Kniende Rückschläge
+  991: Geteilte Kniebeugen links
+  992: Geteilte Kniebeugen rechts
+  993: 'Seilspringen: Grundsprünge'
+  994: Armkreisen vorwärts
+  995: Armkreisen rückwärts
+  996: Bergsteiger
+  997: Burpees mit 4 Zählzeiten
+  998: Keine Liegestütz-Burpees
+  999: Umgekehrte Ausfallschritte
+  1000: Bodensenken
+  1001: Hohe Planke
+  1002: Kinderpose
+  1003: Kettlebell Kreuzheben
+  1004: Vorwärtsdrehung der Schulter
+  1005: Rückwärtsdrehung der Schulter
+  1006: Schluckübungen
+  1007: Kopf drehen
+  1008: Linke Nackendehnung
+  1009: Rechte Nackendehnung
+  1010: Nackendehnung
+  1011: Nackenstütze vorne
+  1012: Abwechselnde Bizepscurls
+  1013: Dehnung des linken Schulterblattes
+  1014: Dehnung des rechten Schulterblattes
+  1015: Halskreise im Uhrzeigersinn
+  1016: Nackenkreise gegen den Uhrzeigersinn
+  1017: Nacken-Halbkreise
+  1018: Kopf neigen
+  1019: Seitenplanke rechts
+  1020: Einbeinige Kniebeugen rechts
+  1021: Wadenheben rechtes Bein
+  1022: Single Arm Plank to Row
+  1027: Elevated prayer stretch
+  1028: Quadruped thoracic rotation left
+  1029: Quadruped thoracic rotation right
+  1080: Hindu Pushups
+  1081: Shoulder dislocates
+  1082: Bent over row to external rotation
+  1083: YWTs
+  1084: Dumbbell Floor Press
+  1086: Close-grip Press-ups
+  1087: Dumbbell Hang Power Cleans
+  1088: Dumbbell sumo 080
+  1089: Medicine ball twist
+  1090: Vpushup
+  1091: Plank Shoulder Taps
+  1092: Bag training
+  1093: Rudergerät
+  1094: Seated Bench Press
+  1096: Abduktion im Stand
+  1098: Seated rear delt rise
+  1099: Dynamic side hold
+  1100: Wall balls
+  1101: Horizontal traction isometry
+  1102: Alternate back lunges
+  1103: walking bridge
+  1104: Walking
+  1105: Seated Knee Tuck
+  1109: Cable Concentration Curl
+  1111: Push-Ups | Incline
+  1112: Push-Ups | Decline
+  1113: Push-Ups | Parallettes
+  1114: Rest (for timed workouts)
+  1115: 3D 064 warmup
+  1116: Dumbbell farmer's carry
+  1117: Seated Cable Row
+  1119: Remo maquina agarre estrecho
+  1120: Remo maquina agarre estrecho supino
+  1124: Jalón abierto
+  1125: Jalón abierto supino
+  1126: Jalón cerrado
+  1127: Jalón cerrado supino
+  1131: Extensión de gluteos en polea
+  1132: Extensión de gluteo en  máquina
+  1136: JALONES PECHO NEUTRO
+  1137: PULL OVER POLEA ALTA
+  1138: JALON EN BANCO INCLINADO
+  1141: Arabesque
+  1143: Back extensión
+  1185: Triceps Pushdown
+  1186: One Arm Bent Row
+  1188: Flexión lateral
+  1190: Curl de biceps con agarre prono
+  1192: Alternating Biceps Curls With Dumbbell
+  1193: Russian Twist
+  1195: Side Slides + Squats
+  1196: Wall Drills
+  1200: Tibialis raises
+  1201: Dragon squat
+  1202: Side Lying Hip Abduction
+  1203: Calf raises, left leg
+  1204: Cycling cardio session
+  1205: Wrist curl, dumbbells
+  1207: Skorpion-Kick
+  1208: Prisoner Squat
+  1209: Schulterbreite Dreipunkt-Liegestütze
+  1210: Fallschirmspringer in T-Position
+  1214: Front lever tuck
+  1215: Blaze
+  1217: Rope Pullover/row
+  1218: Single arm row
+  1219: Barbell Clean and press
+  1220: Modified pulldown
+  1221: Dumbbell Bent Over Face Pull
+  1222: Doorway Pectoral Stretch
+  1223: Unilateral Cable row
+  1224: Dumbbell Front Squat
+  1225: Kettlebell One Legged Deadlift
+  1226: Dumbbell Hip Thrust
+  1229: Dumbbell Shrug
+  1230: Weighted Crunch
+  1232: Dumbbell Side Bend
+  1233: Dumbbell Rear Lunge
+  1234: Dumbbell Side Squat
+  1235: Machine lateral wise
+  1236: Machine Chest Press Exercise
+  1237: Dumbbell Romanian Deadlift
+  1238: Reverse Snow Angel
+  1239: Recruitment Pulls
+  1240: Finger Pushup
+  1241: knee push-ups
+  1243: Cable Chest Press - Decline
+  1244: Shoulder Dumbbell Pendular Exercise
+  1245: Shoulder External Rotation with Dumbbell
+  1246: Claps over the head
+  1247: Dumbbell drag curls
+  1248: Incline Shoulder Press Up
+  1249: Dumbbell wide bicep curls
+  1250: Neck extension
+  1251: Dumbbell bicep curl to press
+  1252: Dumbbell rear delt row
+  1253: Dumbbell close grip bench press
+  1255: Triceps stretch left
+  1256: Triceps stretch right
+  1257: Standing biceps stretch left
+  1258: Standing biceps stretch right
+  1259: Dumbbell Single-leg Hip Thrust
+  1260: Remo alto polea alta
+  1261: Frog stand
+  1262: Standing Calf Stretch
+  1263: Standing Soleus Stretch
+  1264: Exercise Band Dorsiflexion
+  1265: Exercise Band Plantarflexion
+  1266: Double Leg Calf Raise
+  1267: 'Yoga exercise: Cow-cat'
+  1268: Front Lever
+  1269: TRX roll out
+  1270: Ice Scream maker
+  1271: Front lever pull-up
+  1272: TRX Obliques
+  1273: TRX hammer curl
+  1274: TRX gorilla biceps curl
+  1275: Trx Single Arm Bicep Curl
+  1276: Back bridge
+  1277: TRX Tricep Extension
+  1278: TRX dips
+  1279: Low Pulley Cable Fly
+  1282: Pullover
+  1283: Sitting Calf Stretch (Dorsiflexion)
+  1284: Plantarflexion Stretch with Band
+  1288: Biceps Close Grip Pull Down
+  1289: Isometria trazioni impugnatura inversa
+  1290: Incline Chest-Supported Dumbbell Row
+  1291: Pseudo Planche Push-up
+  1292: Talons fesses
+  1293: Dynamic Planche
+  1294: Reach ups
+  1295: Planche de cote dynamique
+  1296: Seated Dumbbell Curls
+  1297: Reverse Grip Barbell Curls
+  1298: Trazioni impugnatura inversa
+  1299: One armed push-ups
+  1300: Arco femorale una gamba
+  1302: Low-Cable Cross-Over - NB
+  1304: High-Cable Cross Tricep Extention - NB
+  1305: Preacher Curl - Internally Rotated
+  1306: Lat Pulldown - Cross Body Single Arm
+  1307: Cable Chest Press - Incline
+  1308: JM Press
+  1309: Helms Row
+  1310: Meadows Row
+  1311: Cable Triceps Press
+  1312: Cable Tri Extension - Internal Rotation
+  1313: Front Plank
+  1315: Curl  - With Shoulder Elevated
+  1316: Bodyweight Squat HD
+  1317: Lying Leg Raise
+  1318: Hampelmann HD
+  1322: High Knee Skips HD
+  1323: Crunches HD
+  1324: Bench Dips On Floor HD
+  1325: Kopfüber Gewichtaufheben
+  1326: Bodyweight 064 HD
+  1327: Lateral Push Off
+  1328: One Arm Overhead Cable Tricep Extension
+  1330: Leg Swings (Front–Back)
+  1331: Seated Hip Abduction
+  1334: Forearm Curls (underhand grip)
+  1336: Triceps Overhead (Dumbbell)
+  1338: Schoulder Raise (Dumbbell)
+  1340: Wall Angels
+  1341: seated figure four
+  1342: Zottman curl
+  1343: Lower Back Extensions
+  1345: Dumbbell Thruster
+  1346: Dumbbell Hex Press
+  1347: Glute Bridge Single-Arm Press
+  1348: Bear crawl pull through
+  1349: Double Kettlebell Clean and Press
+  1350: Double Kettlebell Front Squat
+  1352: Blackroll
+  1354: Dumbbell Split Squat
+  1355: Dumbbell Deadlift
+  1356: Triceps Dips (Assisted)
+  1357: Boxsprünge
+  1358: Bauch-Twist Gerät
+  1359: Cable Lateral Raises (Single Arm)
+  1360: Recumbent Bike
+  1361: TORSO TWIST
+  1363: Band pull-aparts
+  1364: Upper Back
+  1365: Pullover Machine
+  1366: Hamstring-Kicks
+  1367: Single Leg RDL
+  1368: Toe Touch
+  1369: Elephant Walks
+  1370: Good Morning
+  1371: Single Leg Hamstring Stretch
+  1372: Sit & Reach
+  1373: Crossbody Leg Swings
+  1374: Standing Pancake
+  1375: Hamstring Chokes
+  1376: Roll Down
+  1377: Crossbody Hamstring Stretch
+  1378: Preacher Curl - Externally Rotated
+  1379: Kickstand RDL
+  1380: Plank-to-Elbow Extension
+  1381: Cossack squat
+  1382: Wall-sit
+  1383: Dragon Flag
+  1384: Plank with Alternating Leg Lift
+  1385: Heel Touches
+  1386: bicycle crunches
+  1387: Hack Squats
+  1388: Dumbbell Crunches
+  1389: Biceps Curl Machine
+  1390: Toe Taps
+  1391: Standing Side Crunches
+  1392: Dumbbell Shoulder Rotations
+  1393: Plate Pinch Hold
+  1394: Reverse Wood Chops
+  1395: Lat Pull DB
+  1396: Scapula Pulls
+  1397: Pin Bench Press BB
+  1398: Pin Squat
+  1399: Clean
+  1400: Pin OHP
+  1401: Push OHP
+  1402: Incline OHP DB
+  1403: Kreis Press DB
+  1404: Shoulder Raise Side and Front DB
+  1405: Incline Chest Press DB
+  1406: Jerk OL
+  1407: Clean and Jerk OL
+  1408: Snatch OL
+  1409: Seated W Curl
+  1410: ClimbMill
+  1411: Cobra Stretch
+  1412: Torso rotation stretch
+  1413: Knee to Chest Stretch
+  1414: Towel Superman
+  1415: Cable Press Around
+  1416: Cross-Body Cable Y-Raise
+  1417: No Leg Drive Dumbbell Chest Press
+  1418: punches
+  1419: Dumbbell Underhand Dead Row
+  1420: Pause Hack Squats
+  1421: Spider Curl
+  1422: Calf Raise using Hack Squat Machine
+  1423: Incline Close Grip Barbell Bench Press
+  1424: Floor Skull Crusher
+  1425: Bent over Cable Flye
+  1426: 1-Arm Half-Kneeling Lat Pulldown
+  1427: Kroc Row
+  1428: Cable Shrug-In
+  1429: Reverse Cable Flye
+  1430: W-Raise
+  1431: Black Widow Knee Slides
+  1432: Butterfly Sit Up
+  1433: Seated Corkscrew
+  1434: Levitation Crunch
+  1435: Sit-Ups (Ellenbogen zum Knie)
+  1436: Lying Triceps Extensions
+  1437: Drag Pushdown
+  1438: Dumbbell Cheat Curl
+  1439: Bizeps Curls Trifecta
+  1440: Omni Cable Cross-over
+  1441: Rocking Triceps Pushdown
+  1442: Alternating High Cable Row
+  1443: Hyper Y W Combo
+  1444: Dumbbell Pullover
+  1445: Plank Jacks
+  1446: Lying Triceps Kickback
+  1447: Remada unilateral no cabo
+  1448: High Row
+  1449: Bayesian Curl
+  1451: Push-Up
+  1452: DB Upper Chest Variation
+  1453: DB Underhand bench press
+  1454: Elbows Tucked DB Bench Press
+  1456: DB UCV
+  1457: Alternative DB Gorilla rows
+  1458: DB Cross Body Hammer Curls
+  1459: Dumbbell Frog Press
+  1460: Dumbbell Bradford press
+  1461: Hammercurl mit Kurzhanteln, abwechselnd
+  1462: Cable Fly Middle Chest
+  1463: Cable Fly Upper Chest
+  1464: High-Incline Smith Machine Press
+  1465: Cable Tricep Kickback
+  1466: Neutral Grip Lat Pulldown
+  1467: Kong Curl
+  1468: Drop Curl
+  1469: Overhead Cable Tricep Extension
+  1470: Lateral Walk
+  1471: Leg Press Toe Press
+  1472: Handstand
+  1473: Cable Fly Lower Chest
+  1474: Incline Smith Press
+  1476: Incline Static Hold
+  1477: Pendular hack
+  1478: Flat Machine Press
+  1479: Sled Push
+  1480: Battle Ropes
+  1481: Ball Slams
+  1482: Ski Machine
+  1483: Pendelkniebeube
+  1484: Glute Drive
+  1485: Toes to bar
+  1486: Lying Dumbbell Curls
+  1487: Cable Curls
+  1488: Pull-Ups (Wide Grip)
+  1489: Barbell Row (Overhand)
+  1490: Barbell Row (Underhand)
+  1492: Delt Stretch
+  1493: Pull-up Isometric Hold
+  1494: Barbell Romanian Deadlift (RDL)
+  1495: One-Arm Heavy Row
+  1496: Jalón al pecho con agarre ancho
+  1497: Patadas traseras
+  1498: Wide Pull Up
+  1499: Tuck L-sit
+  1500: Archer Pull Up
+  1501: Larsen Press
+  1502: Bulgarian Squat with Dumbbells
+  1503: Stair Master
+  1505: Elevación lateral polea
+  1506: Butchers Block Stretch
+  1507: Clap Push-UP
+  1508: Sleeper Stretch
+  1509: Devil’s Press
+  1510: Bird Dog
+  1512: Schwimmen
+  1513: Standing Dowel Shoulder press
+  1514: Snap Down
+  1515: Bretzel stretch
+  1516: Hip hinge
+  1517: Bronco
+  1518: Perpendicular Unilateral Landmine Row
+  1519: Trap press
+  1520: Side-laying interior rotation
+  1521: Supine press
+  1522: March or jog in place
+  1523: Estiramiento de piernas y cadera
+  1524: Estiramiento de brazos y cuello
+  1525: Respiración profunda (de pie o sentado)
+  1526: Meditación guiada o libre
+  1527: Smith Machine Split Squat
+  1529: Pull-Ups (Neutral Grip)
+  1530: Reverse Fly Standing
+  1531: Horizontal Shoulder Flexion Stretch
+  1532: Jalon caballero unialteral
+  1533: Dumbbell Scaption
+  1534: Leg curl with elastic
+  1535: Sliding Lateral Lunge
+  1536: Copenhagen Adduction Exercise
+  1537: Arm Raises (T/Y/I)
+  1538: Typewriter Pull-ups
+  1539: Bodyweight Biceps Curl
+  1540: Glute Kickback (Machine)
+  1541: Standing Adduction (Cable)
+  1542: Seated Row (Machine)
+  1543: kettlebell sumo 080
+  1544: rubber band glute kickback
+  1546: Treadmill Cardio
+  1547: Patada de burro con mancuerna
+  1549: Cardio en bicicleta estática
+  1550: Straight-Arm Pulldown (Cable)
+  1551: Seated Dumbbell Calf Raise
+  1552: Unilateral Cable row
+  1553: Side Straight-Arm Pulldown (Cable)
+  1554: Shoulder Internal Rotation (Cable)
+  1555: Shoulder External Rotation (Cable)
+  1556: Side Lateral Raise (Cable)
+  1557: Front Raise (Cable)
+  1558: Face pulls with yellow/green band
+  1559: Isometric Squat to Failure
+  1560: 'Single-Leg Lunge with Kettlebell:'
+  1561: Single-leg side glute press
+  1562: Single-Leg Deadlift with Dumbbell
+  1563: Assisted chin-ups
+  1564: Neutral-grip pull-ups or TRX rows
+  1565: Shrimp Squad
+  1566: Single Leg Glute Bridge
+  1567: L-Sit Pull-ups
+  1568: Back Lever
+  1569: Windshield Wipers
+  1570: Machine Side Lateral Raises
+  1571: Cable Front Raise with a small bar
+  1573: Smith machine squat
+  1574: Machine Hip Abduction
+  1577: Cable pull through
+  1578: Side lateral raise - Front (Cable)
+  1579: Side lateral raise - Back (Cable)
+  1580: 45° lateral raises
+  1581: Shoulder Y-pull cable
+  1587: Unterarmstütz mit Armheben
+  1589: bicep
+  1590: cabel
+  1592: Wrist curl, cable
+  1593: Reverse crunch
+  1594: Legend Incline Bench Press
+  1595: Chair dips
+  1596: Pec deck rear delt fly
+  1599: Deficit Push ups
+  1600: Butterfly Stretch
+  1601: Frog Stretch
+  1602: Supino inclinado
+  1603: Landmine Rotation
+  1606: Supino Inclinado
+  1608: unilateral cross body cable pull down
+  1613: Supino Inclinado
+  1614: Barbell Full Squat
+  1616: Trap Bar Squat
+  1617: ankle dorsiflexion rocks
+  1619: Lat Pull Down
+  1620: Behind the Back Cable Lateral Raise
+  1621: Parallel Bar Hold
+  1622: Reverse Hyperextension
+  1623: Sphinx
+  1624: Open Book
+  1625: Clamshell
+  1626: Dumbell Tate Press
+  1627: Chest-Supported Rear Delt Raise
+  1628: Band pull-apart with external rotation
+  1629: Double-Leg Abdominal Press
+  1630: Abdominal Draw-In
+  1631: Landmine Squat to Press
+  1632: Barbell Step Back Lunge
+  1633: Hammerstrength Decline Chest Press
+  1634: Ring Support Hold
+  1635: Floor Glider Hamstring Curls
+  1636: Trap-3 Raise
+  1637: External Rotation Stretch
+  1638: Banded Shoulder Drills
+  1639: Solo Hip Flexor Stretch
+  1640: Bent-Leg Hamstring Stretch
+  1641: Seated Shoulder Extension Stretch
+  1642: Banded Clamshell
+  1643: Standing Pancake Good Morning
+  1644: Seated Pancake Good Morning
+  1645: Horse Stance (Side Splits)
+  1646: Straddle L-Sit
+  1647: L-sit
+  1648: L-Sit (Foot Supported)
+  1649: Calves foam roller
+  1650: Hamstring Foam roller
+  1651: Foam Roller Anterior tibialis
+  1652: Foam Roller Iliotibial band
+  1653: Foam Roller quadriceps
+  1654: Foam Roller Gluteus
+  1655: Foam Roller Adductors
+  1656: Side stretch
+  1657: Hip Circles
+  1658: Hip Crossover
+  1659: Ankle Roll
+  1660: Banded Ankle Mobility
+  1662: Hip Flexor Stretch
+  1663: Lunge with Twist Stretch
+  1664: Lying Figure Four Stretch
+  1665: Lying Hamstring Stretch with Band
+  1666: Lying Knee to Chest Stretch
+  1667: Pigeon Stretch
+  1668: Quad Stretch
+  1669: Runners Lunge Stretch
+  1670: Standing IT Band Stretch
+  1671: Supported Calf Stretch
+  1672: Schulter-Rückzieher
+  1674: Incline DB Y-Raise
+  1676: DB Wrist Extension
+  1677: High-Cable Lateral Raise
+  1679: Shinbox IR Stretch
+  1680: YTWL Exercise
+  1681: Supine Hip Abduction
+  1682: Decline Bench Leg Raise
+  1683: Overhead Barbell Press
+  1685: Tricep Rope Pushdowns
+  1686: Clean and Press
+  1687: Weighted push-ups
+  1688: Walking Lunges
+  1690: Pullback
+  1691: Hip Bridge
+  1692: Unilateral Lunges
+  1693: Butterfly Superman
+  1694: Leg Wheel
+  1695: Kneeling Superman
+  1696: Cat Plank
+  1697: Core Rotation
+  1698: Unilateral Hip Thrust
+  1699: Isometria alle parallele
+  1700: Quadruped Hip Abduction
+  1701: Tuck planche
+  1703: Legend Chest Press
+  1704: Extreme Pec Stretch
+  1705: Extreme Shoulder Stretch
+  1706: Extreme Lat Stretch
+  1707: Butterfly am Kabelzug
+  1709: 3008 Abdominal Crunch
+  1710: Barbell Silverback Shrug
+  1712: Inverted Lat Pull Down
+  1713: Seated V-Grip Row
+  1714: Assisted Pull-Up
+  1716: Dumbbell Curl
+  1718: Abdominal Crunch
+  1720: Belt Squat
+  1721: Cable Rear-Delt Fly (single arm)
+  1724: Cat-Cow
+  1727: Neck CARs
+  1728: Neck CARs
+  1730: dumbbell snatch
+  1731: 1 Leg Box Squat
+  1732: Diaphragmatic Breathing
+  1734: SMR Glutes (lax ball)
+  1737: Limber 11
+  1738: Foam Roll IT Band
+  1739: Bent-knee Iron Cross
+  1740: Fire Hydrant Circles
+  1741: Seated Piriformis Stretch
+  1742: Foam Roll Adductors
+  1743: Roll-overs into V-sits
+  1745: Rear-foot-elevated Hip Flexor Stretch
+  1746: Step Jack
+  1747: Slow Squat
+  1748: Wide Push-Up
+  1749: Marching High Knees
+  1750: Seated Triceps Press
+  1751: 1/2 Kneeling Thoracic Rotation
+  1752: lento avanti seduto

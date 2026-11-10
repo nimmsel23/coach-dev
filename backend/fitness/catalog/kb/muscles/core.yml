@@ -1,0 +1,14 @@
+label_de: Rumpfstabilisatoren
+label_en: Core
+label_lat: Musculi stabilisatores trunci
+aliases: [core, rumpf, mitte, trunk]
+muscles:
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 504_transverse_abdominis
+  - 505_quadratus_lumborum
+  - 506_diaphragm
+  - 507_multifidus
+  - 508_pelvic_floor
+  - 206_erector_spinae

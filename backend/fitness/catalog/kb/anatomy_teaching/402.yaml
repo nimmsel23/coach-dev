@@ -1,0 +1,67 @@
+name: leg_curl_lesson
+description: Anatomy teaching seed for leg curl.
+lessons:
+  - exercise_id: 402
+    title: "Leg Curl - Kniebeugung im hinteren Oberschenkel"
+    region: legs
+    learning_goal:
+      short: "Hamstrings isoliert über Kniebeugung verstehen."
+      detailed: "Lern, wie der Leg Curl den hinteren Oberschenkel über reine Kniebeugung belastet und das Becken ruhig bleiben muss."
+    movement_pattern:
+      primary: knee_flexion
+      secondary:
+        - hamstring_isolation
+    joint_actions:
+      knee:
+        eccentric:
+          - extension_control
+        concentric:
+          - flexion
+        stabilization:
+          - tracking
+      hip:
+        stabilization:
+          - neutral_hold
+    muscle_roles:
+      prime_movers:
+        - thigh_back
+      synergists:
+        - glutes
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - thigh_back
+      secondary:
+        - glutes
+      light:
+        - lower_back
+    trainer_explanation:
+      simple: "Der Leg Curl ist eine direkte Übung für die hintere Oberschenkelmuskulatur."
+      technical: "Über die Kniebeugung wird der Hamstring isoliert belastet, während Hüfte und Becken möglichst ruhig bleiben."
+      client_friendly: "Du sollst die Rückseite des Oberschenkels spüren, ohne mit der Hüfte zu arbeiten."
+    feel_cues:
+      - "Zug hinten im Bein."
+      - "Hüfte bleibt ruhig."
+      - "Kontrollierte Endposition."
+    coaching_cues:
+      - "Becken fest."
+      - "Sauber beugen."
+      - "Nicht reißen."
+    common_errors:
+      - error: "Becken anheben."
+        anatomical_reason: "Die Spannung wandert aus dem Hamstring in den Hüftbereich."
+        correction: "Hüfte fest auf dem Polster lassen."
+        coaching_cue: "Becken ruhig."
+      - error: "Mit Schwung ziehen."
+        anatomical_reason: "Die Muskelarbeit wird durch Momentum ersetzt."
+        correction: "Tempo verlangsamen."
+        coaching_cue: "Kontrolliert."
+    variations_teach:
+      - variation: "seated leg curl"
+        lesson: "Sitzende Variante mit anderer Längenverteilung."
+      - variation: "lying leg curl"
+        lesson: "Praktische Standardvariante mit klarer Isolierung."
+    quiz:
+      - question: "Was ist beim Leg Curl die Hauptbewegung?"
+        answer: "Die Kniebeugung."

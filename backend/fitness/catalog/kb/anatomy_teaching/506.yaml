@@ -1,0 +1,67 @@
+name: hammer_curl_lesson
+description: Anatomy teaching seed for hammer curl.
+lessons:
+  - exercise_id: 506
+    title: "Hammer Curl - Brachialis und Armkraft"
+    region: arms
+    learning_goal:
+      short: "Neutralen Griff und Armbeuger verstehen."
+      detailed: "Lern, wie der neutrale Griff den Arm anders belastet und warum das für Brachialis und Unterarm nützlich ist."
+    movement_pattern:
+      primary: elbow_flexion
+      secondary:
+        - neutral_grip
+    joint_actions:
+      elbow:
+        eccentric:
+          - flexion_control
+        concentric:
+          - flexion
+        stabilization:
+          - tracking
+      wrist:
+        stabilization:
+          - neutral_hold
+    muscle_roles:
+      prime_movers:
+        - arms
+      synergists:
+        - shoulders
+      stabilizers:
+        - forearms
+    body_highlighter_regions:
+      primary:
+        - upper_arm_front
+      secondary:
+        - forearms
+      light:
+        - shoulders_front
+    trainer_explanation:
+      simple: "Der neutrale Griff macht den Hammer Curl oft angenehm und armkräftig."
+      technical: "Die Ellenbogenflexion bei neutraler Handstellung verschiebt die Last auf Brachialis und Unterarmunterstützung."
+      client_friendly: "Du sollst die Vorderseite des Oberarms und die Unterarme spüren."
+    feel_cues:
+      - "Armbeuger arbeiten konstant."
+      - "Handgelenke bleiben ruhig."
+      - "Schultern bleiben entspannt."
+    coaching_cues:
+      - "Neutraler Griff."
+      - "Ellbogen ruhig."
+      - "Kein Schwung."
+    common_errors:
+      - error: "Schultern hochziehen."
+        anatomical_reason: "Der Zug wandert in den Nacken statt in den Arm."
+        correction: "Schultern unten halten."
+        coaching_cue: "Nacken lang."
+      - error: "Aus dem Oberkörper schwingen."
+        anatomical_reason: "Der Schwung ersetzt die Armarbeit."
+        correction: "Gewicht reduzieren und sauber beugen."
+        coaching_cue: "Arm beugt, Körper bleibt ruhig."
+    variations_teach:
+      - variation: "cross body hammer curl"
+        lesson: "Etwas andere Zuglinie, ähnliche Armfunktion."
+      - variation: "rope hammer curl"
+        lesson: "Kabelvariante mit konstanter Spannung."
+    quiz:
+      - question: "Warum ist der Hammer Curl für viele angenehm?"
+        answer: "Weil der neutrale Griff oft gelenkfreundlich ist und den Armbeuger sauber belastet."

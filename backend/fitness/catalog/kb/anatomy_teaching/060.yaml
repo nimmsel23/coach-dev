@@ -1,0 +1,106 @@
+name: squat_lesson
+description: Anatomy teaching seed for squat.
+lessons:
+- exercise_id: 060
+  title: Kniebeuge — Knie, Hüfte und Beinachse
+  region: legs
+  learning_goal:
+    short: Kniebeuge als kombiniertes Knie-Hüft-Muster verstehen, nicht als reine
+      Beinübung.
+    detailed: Lern wie Quadrizeps, Gluteus maximus und Gluteus medius zusammenarbeiten
+      und warum Dorsalflexion und Beinachse entscheidend sind.
+  movement_pattern:
+    primary: bilateral_squat
+    secondary:
+    - knee_extension
+    - hip_extension
+    - ankle_dorsiflexion
+  joint_actions:
+    hip:
+      eccentric:
+      - flexion_control
+      concentric:
+      - extension
+      stabilization:
+      - pelvis_control
+    knee:
+      eccentric:
+      - flexion_control
+      concentric:
+      - extension
+      stabilization:
+      - valgus_prevention
+    ankle:
+      eccentric:
+      - dorsiflexion
+      concentric:
+      - plantar_flexion_partial
+      stabilization:
+      - arch_support
+    trunk:
+      stabilization:
+      - anti_flexion
+      - bracing
+  muscle_roles:
+    prime_movers:
+    - thigh_front
+    - glutes
+    synergists:
+    - thigh_back
+    - calves
+    stabilizers:
+    - core
+    - glutes
+  body_highlighter_regions:
+    primary:
+    - thigh_front
+    - glutes
+    secondary:
+    - thigh_back
+    light:
+    - calves
+    - core
+  trainer_explanation:
+    simple: Die Kniebeuge ist eine kombinierte Knie- und Hüftbewegung — Quadrizeps
+      und Gluteus maximus arbeiten gleichzeitig.
+    technical: Exzentrisch kontrollieren Quadrizeps (Knie) und Gluteus maximus + Hamstrings
+      (Hüfte) das Absinken. Konzentrisch strecken beide Gelenke gleichzeitig. Gluteus
+      medius stabilisiert das Becken lateral gegen Knie-Valgus.
+    client_friendly: Die Kniebeuge ist nicht nur Beine — der Popo arbeitet genauso.
+  feel_cues:
+  - Gesäß sinkt kontrolliert nach hinten/unten, nicht nur nach unten.
+  - Knie bleiben über den Zehen, kein Einknicken nach innen.
+  - Beim Hochkommen Boden wegdrücken — Gluteus maximus spüren.
+  - Rumpf bleibt aufrecht, keine Vorneige aus der Hüfte.
+  coaching_cues:
+  - Tief einatmen, Bauchpresse aufbauen vor dem Absenken.
+  - Knie aktiv Richtung kleiner Zeh führen (Gluteus medius aktivieren).
+  - Mindesttiefe Oberschenkel parallel — tiefer wenn Mobilität erlaubt.
+  common_errors:
+  - error: Knie fallen nach innen (Knee Valgus).
+    anatomical_reason: Gluteus medius zu schwach für Hüftabduktion/-außenrotation.
+      Femur innenrotiert, Tibia folgt. Oft verstärkt durch Fußpronation.
+    correction: Knie aktiv auseinander drücken. Gluteus medius vor dem Satz aktivieren.
+    coaching_cue: Knie nach außen über kleinen Zeh drücken.
+  - error: Stark nach vorne kippender Oberkörper.
+    anatomical_reason: Eingeschränkte Dorsalflexion im Sprunggelenk oder mangelnde
+      Hüftmobilität — der Rumpf kompensiert. Bei Low Bar anatomisch normal und gewollt.
+    correction: Dorsalflexion testen. Bei High Bar Brust hochhalten, Rückenstrecker
+      aktivieren.
+    coaching_cue: Brust hoch und offen halten.
+  variations_teach:
+  - variation: Weiter Stand
+    lesson: Mehr Hüftbeugung, höherer Gluteus/Adduktoren-Anteil. Weniger Quadrizeps-Dominanz.
+  - variation: Enger Stand
+    lesson: Quadrizeps-Dominanz steigt, weniger Hüftbeugung nötig.
+  - variation: Erhöhte Ferse
+    lesson: Kompensiert mangelnde Dorsalflexion. Mehr Quadrizeps, weniger Hüftbeugungsanforderung.
+  quiz:
+  - question: Warum ist die Kniebeuge eine Hüft- UND Knieübung?
+    answer: Weil Quadrizeps (Kniestreckung) und Gluteus maximus (Hüftstreckung) gleichzeitig
+      konzentrisch arbeiten. Wer nur Quadrizeps will, nimmt Beinpresse. Die Kniebeuge
+      verbindet beide Muster unter axialer Last.
+  - question: Was passiert anatomisch wenn die Knie beim Aufstehen nach innen fallen?
+    answer: 'Femur innenrotiert, Tibia folgt, das Patellofemoralgelenk wird ungünstig
+      belastet. Ursache: Gluteus medius zu schwach oder Fußpronation zieht die Beinachse
+      nach innen.'

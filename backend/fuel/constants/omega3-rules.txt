@@ -1,0 +1,11 @@
+Omega-3-Erkennung:
+- Alle Omega-3-Werte in mg für die angegebene Portion; g mit Faktor 1000 umrechnen.
+- omega3_ala_mg, omega3_epa_mg, omega3_dha_mg und omega3_dpa_mg getrennt erfassen.
+- omega3_mg ist die Gesamtsumme inklusive der Einzelwerte, kein zusätzlicher Beitrag.
+- omega3_epa_dha_mg ist ausschließlich EPA + DHA; ALA und DPA zählen hier nicht mit.
+- ALA (z.B. Leinöl/Chia/Walnüsse) niemals rechnerisch in EPA oder DHA umwandeln.
+- Fischöl-/Algenöl-Gesamtgewicht ist NICHT die Omega-3- oder EPA/DHA-Menge.
+- Bei Supplementen Etikettwerte und Bezugsportion/Kapselzahl verwenden; ohne bekannte Zusammensetzung keine EPA/DHA-Anteile erfinden. Algenöl nicht pauschal als EPA-haltig behandeln.
+- Fehlende oder nicht belegbare Omega-3-Werte weglassen, nicht als 0 ausgeben. Explizite 0 bleibt 0.
+- Unspezifisches 18:3 oder Gesamt-PUFA nicht als gesichertes ALA/Omega-3 zuordnen.
+- Bei Mahlzeiten Quellen/Zutaten und Mengen beachten; keine hohen Werte allein aus einem Gerichtsnamen ableiten.

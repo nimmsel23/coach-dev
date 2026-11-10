@@ -1,0 +1,79 @@
+name: chin_up_lesson
+description: Anatomy teaching seed for chin up.
+lessons:
+  - exercise_id: 021
+    title: "Chin Up - Untergriffzug verstehen"
+    region: back
+    learning_goal:
+      short: "Vertikalen Zug mit mehr Armbezug verstehen."
+      detailed: "Lern, wie der Untergriff die Ellenbogenbeugung und den Rücken zusammen nutzt."
+    movement_pattern:
+      primary: vertical_pull
+      secondary:
+        - elbow_flexion
+        - scapular_depression
+    joint_actions:
+      shoulder:
+        eccentric:
+          - adduction_control
+        concentric:
+          - adduction
+        stabilization:
+          - humeral_head_control
+      elbow:
+        eccentric:
+          - flexion_control
+        concentric:
+          - flexion_assist
+        stabilization:
+          - tracking
+      scapula:
+        stabilization:
+          - depression
+          - mild_retraction
+    muscle_roles:
+      prime_movers:
+        - back
+        - arms
+      synergists:
+        - upper_back
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - lats
+        - upper_arm_front
+      secondary:
+        - upper_back
+      light:
+        - forearms
+        - abdomen_front
+    trainer_explanation:
+      simple: "Der Untergriff macht den Arm etwas wichtiger, der Rücken zieht aber weiter den Hauptteil."
+      technical: "Durch den supinierten Griff steigt die Ellenbogenbeugung und der lat-lastige vertikale Zug bleibt erhalten."
+      client_friendly: "Zieh dich mit Rücken und Armen hoch und lass die Schultern unten."
+    feel_cues:
+      - "Lat und Bizeps arbeiten zusammen."
+      - "Schulterblätter bleiben unten."
+      - "Kontrollierte negative Phase."
+    coaching_cues:
+      - "Brust zur Stange."
+      - "Ellbogen nach unten."
+      - "Kein Schwung."
+    common_errors:
+      - error: "Kinn hochwerfen statt ziehen."
+        anatomical_reason: "Der Nacken kompensiert und die Zugbahn wird unsauber."
+        correction: "Brust und Ellbogen aktiv ziehen."
+        coaching_cue: "Nicht nur Kopf bewegen."
+      - error: "Zu viel Hohlkreuz."
+        anatomical_reason: "Der Rumpf übernimmt die Spannung statt die Zugkette."
+        correction: "Rippen unten und Core fest."
+        coaching_cue: "Rumpf stapeln."
+    variations_teach:
+      - variation: "weighted chin up"
+        lesson: "Mehr Last, gleiche Technik."
+      - variation: "assisted chin up"
+        lesson: "Sauberer Aufbau mit Unterstützung."
+    quiz:
+      - question: "Warum fühlt sich der Chin-Up arm-lastiger an als der Pull-Up?"
+        answer: "Der Untergriff erhöht die Beteiligung der Ellenbogenbeuger."

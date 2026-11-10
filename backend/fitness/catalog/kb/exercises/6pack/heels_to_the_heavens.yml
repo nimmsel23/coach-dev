@@ -1,0 +1,48 @@
+exercise_id: heels_to_the_heavens
+description: Curated 6 Pack Promise entry for Heels to the Heavens.
+exercises:
+- exercise_id: heels_to_the_heavens
+  id: heels_to_the_heavens
+  name: Heels to the Heavens
+  display_name: Heels to the Heavens
+  german: Heels to the Heavens
+  english: Heels to the Heavens
+  category: core
+  type: isolation
+  movements:
+  - posterior_pelvic_tilt
+  - hip_raise
+  - lower_ab_emphasis
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  secondary_muscles:
+  - 607_iliopsoas
+  stabilizers:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  coaching_notes:
+  - Strecken Sie die Beine nach oben und heben Sie das Becken mit einer klaren Einrollbewegung Richtung Decke an.
+  - Denken Sie daran, die Fersen aktiv nach oben zu schicken statt nur die Beine zu wippen.
+  - Senken Sie das Becken kontrolliert ab, ohne die Spannung im unteren Bauch zu verlieren.
+  common_errors:
+  - Das Becken wird nur minimal bewegt und die Übung wird zu reinem Beinhalten.
+  - Schwung aus den Beinen ersetzt die aktive Crunch-Komponente.
+  - Der Nacken presst in den Boden, obwohl die Bewegung aus dem Rumpf kommen soll.
+  tags:
+  - 6pack_promise
+  - core
+  - lower_abs
+  aliases:
+  - Heels to the Heavens
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

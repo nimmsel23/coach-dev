@@ -1,0 +1,47 @@
+exercise_id: crunch_and_twists
+description: Curated 6 Pack Promise entry for Crunch and Twists.
+exercises:
+- exercise_id: crunch_and_twists
+  id: crunch_and_twists
+  name: Crunch and Twists
+  display_name: Crunch and Twists
+  german: Crunch and Twists
+  english: Crunch and Twists
+  category: core
+  type: compound
+  movements:
+  - spinal_flexion
+  - trunk_rotation
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  secondary_muscles:
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  stabilizers:
+  - 607_iliopsoas
+  coaching_notes:
+  - Führen Sie einen sauberen Crunch aus und rotieren Sie oben kontrolliert zur Seite, statt beide Bewegungen zu verschmieren.
+  - Halten Sie die Rippen weich unten und holen Sie die Rotation aus dem Rumpf, nicht nur aus den Ellenbogen.
+  - Jede Wiederholung sollte in der Mitte neu Spannung aufbauen, bevor die nächste Seite kommt.
+  common_errors:
+  - Nur der Ellenbogen wandert zur Gegenseite, während der Oberkörper kaum rotiert.
+  - Das Tempo wird so hoch, dass weder Crunch noch Twist sauber abgeschlossen werden.
+  - Unten wird komplett abgelegt und die Serie verliert durchgehende Spannung.
+  tags:
+  - 6pack_promise
+  - core
+  - rotation
+  aliases:
+  - Crunch and Twists
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

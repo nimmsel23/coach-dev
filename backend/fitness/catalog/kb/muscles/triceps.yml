@@ -1,0 +1,9 @@
+label_de: Trizeps
+label_en: Triceps
+label_lat: Regio brachii posterior
+aliases: [triceps, trizeps, arm back, oberarm hinten]
+muscles:
+  - 401_triceps_brachii
+  - 401a_triceps_long_head
+  - 401b_triceps_lateral_head
+  - 401c_triceps_medial_head

@@ -1,0 +1,8 @@
+[submodule "vendor/free-exercise-db"]
+	path = vendor/free-exercise-db
+	url = https://github.com/yuhonas/free-exercise-db.git
+	branch = main
+[submodule "vendor/fma"]
+	path = vendor/fma
+	url = https://github.com/uw-sig/FMA.git
+	branch = main

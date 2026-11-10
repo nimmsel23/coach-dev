@@ -1,0 +1,207 @@
+name: bench_press_lesson
+description: Anatomy teaching seed for 040.
+lessons:
+- exercise_id: 040
+  title: Bankdrücken — Horizontales Drücken verstehen
+  region: chest
+  learning_goal:
+    short: Pectoralis, vordere Schulter und Trizeps als Drück-Synergie verstehen.
+    detailed: Lern warum Bankdrücken keine reine Brustübung ist und wie Scapula-Setup
+      die Kraftübertragung bestimmt.
+  movement_pattern:
+    primary: horizontal_push
+    secondary:
+    - elbow_extension
+    - shoulder_horizontal_adduction
+  joint_actions:
+    shoulder:
+      concentric:
+      - horizontal_adduction
+      - flexion_partial
+      eccentric:
+      - horizontal_abduction_control
+      stabilization:
+      - glenohumeral_centering
+    elbow:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+    scapula:
+      stabilization:
+      - retraction
+      - depression
+  muscle_roles:
+    prime_movers:
+    - chest
+    - shoulders_front
+    synergists:
+    - upper_arm_back
+    stabilizers:
+    - upper_back
+    - core
+  body_highlighter_regions:
+    primary:
+    - chest
+    secondary:
+    - shoulders_front
+    - upper_arm_back
+    light:
+    - core
+  trainer_explanation:
+    simple: Bankdrücken trainiert Brust, vordere Schulter und Trizeps gleichzeitig.
+    technical: Der Pectoralis major führt horizontale Adduktion und Schulterflexion
+      aus. Der Trizeps brachii streckt den Ellenbogen in der oberen Hälfte. Scapula-Stabilität
+      ist Voraussetzung für effiziente Kraftübertragung.
+    client_friendly: Du drückst nicht nur mit der Brust — Schulter und Trizeps arbeiten
+      immer mit.
+  feel_cues:
+  - Brust spannt beim Herunterführen exzentrisch.
+  - Trizeps übernimmt in der oberen Hälfte des Drückens.
+  - Schulterblätter bleiben aktiv nach hinten/unten gezogen.
+  - Vordere Schulter hilft besonders in der unteren Phase.
+  coaching_cues:
+  - Schulterblätter vor dem Satz retrahieren und deprimieren.
+  - Ellenbogen 45–60° einziehen, nicht auf 90° ausweichen.
+  - Stange zur unteren Brust führen, nicht zur Schulter.
+  common_errors:
+  - error: Ellenbogen weichen auf 90° zur Seite aus.
+    anatomical_reason: Maximale Außenrotation des Humerus impingiert den Supraspinatus
+      und überlädt die vordere Schulterkapsel.
+    correction: Ellenbogen auf 45–60° einziehen, Lat minimal anspannen.
+    coaching_cue: Ellenbogen in Richtung Hüfte, nicht in Richtung Wand.
+  - error: Schulterblätter kippen beim Drücken nach vorne.
+    anatomical_reason: Ohne stabilen Scapula-Anker verliert der Pectoralis major seinen
+      Ursprung — vordere Schulter übernimmt kompensatorisch.
+    correction: Aktiv retrahieren und halten. Scapula-Setup vor jedem Satz neu setzen.
+    coaching_cue: Schulterblätter in die Hosentaschen.
+  variations_teach:
+  - variation: Incline Bench Press
+    lesson: Mehr klavikulärer Pectoralis und vordere Schulter, weniger sternaler Brustanteil.
+  - variation: Close Grip Bench Press
+    lesson: Trizeps-Dominanz steigt, Pectoralis-Beteiligung sinkt bei schmalem Griff.
+  quiz:
+  - question: Warum ist Bankdrücken keine reine Brustübung?
+    answer: Weil Trizeps (Ellenbogenstreckung) und vordere Schulter immer mitarbeiten.
+      Je enger der Griff, desto mehr Trizeps. Je steiler die Bank, desto mehr Schulter.
+  - question: Warum fühlen Anfänger Bankdrücken oft in der Schulter statt in der Brust?
+    answer: Meist fehlendes Scapula-Setup und Ellenbogen-Flare. Ohne stabilen Schulterblatt-Anker
+      fehlt der Kraftursprung für den Pectoralis — die Schulter übernimmt.
+  muscle_anatomy:
+    anterior_deltoid:
+      latin: Anterior deltoid
+      origin: Clavicula (lateraler Anteil), Acromion, Spina scapulae
+      insertion: Tuberositas deltoidea humeri
+      innervation: Nervus axillaris (C5, C6)
+      function_in_exercise: Unterstützt den Pectoralis Major bei der Flexion und horizontalen
+        Adduktion des Arms im Schultergelenk, insbesondere in der unteren Hälfte der
+        Bewegung.
+    pectoralis_major:
+      latin: Pectoralis major
+      origin: 'Pars clavicularis: vordere Fläche des medialen Drittels der Clavicula.
+        Pars sternocostalis: Vorderfläche des Sternums und Knorpel der 2.-6. Rippe.
+        Pars abdominalis: vorderes Blatt der Rektusscheide.'
+      insertion: Crista tuberculi majoris des Humerus (Außenlippe des Sulcus intertubercularis).
+      innervation: Nervus pectoralis lateralis (C5-C7), Nervus pectoralis medialis
+        (C8-Th1).
+      function_in_exercise: Primärer Agonist für die horizontale Adduktion des Arms,
+        d.h. das Drücken der Hantel nach oben und zur Körpermitte, sowie für die Flexion
+        des Arms im Schultergelenk.
+    serratus_anterior:
+      latin: Serratus anterior
+      origin: Äußere Flächen der 1. bis 9. Rippe.
+      insertion: Margo medialis der Scapula (vor allem Angulus superior und inferior).
+      innervation: Nervus thoracicus longus (C5-C7).
+      function_in_exercise: Stabilisiert die Scapula an der Thoraxwand durch Protraktion
+        und Fixation und ermöglicht die Aufwärtsrotation der Scapula, wichtig für
+        eine stabile Schulterachse beim Drücken.
+    trapezius:
+      latin: Trapezius
+      origin: Linea nuchae superior (medialer Anteil), Protuberantia occipitalis externa,
+        Ligamentum nuchae, Processus spinosi der Hals- und Brustwirbel (C1-T12)
+      insertion: Clavicula (laterales Drittel), Acromion, Spina scapulae
+      innervation: Nervus accessorius (CN XI), Plexus cervicalis (C2-C4)
+      function_in_exercise: Stabilisiert die Scapula durch Retraktion (mittlere Fasern)
+        und Depression (untere Fasern) an der Brustwand, wodurch eine stabile Basis
+        für die Bewegung des Humerus geschaffen wird.
+    triceps_brachii:
+      latin: Triceps brachii
+      origin: 'Caput longum: Tuberculum infraglenoidale der Scapula. Caput laterale:
+        Laterale und hintere Fläche des Humerus (proximal des Sulcus nervi radialis).
+        Caput mediale: Posteriore Fläche des Humerus (distal des Sulcus nervi radialis).'
+      insertion: Olecranon der Ulna.
+      innervation: Nervus radialis (C6-C8).
+      function_in_exercise: Primärer Agonist für die Extension des Unterarms im Ellenbogengelenk,
+        entscheidend für das Ausstrecken der Arme gegen den Widerstand beim Hochdrücken
+        der Hantel.
+  simple_explanation: 'Bankdrücken zeigt dir, wie Brust, vordere Schulter und Trizeps
+    beim horizontalen Drücken zusammenarbeiten. Der Pectoralis major führt die Bewegung,
+    der Trizeps streckt den Ellenbogen durch, die vordere Schulter unterstützt besonders
+    in der unteren und mittleren Phase.
+
+    '
+  detailed_explanation: 'Der Pectoralis major ist der primäre Krafterzeuger: Er zieht
+    den Oberarm von außen unten zur Körpermitte (horizontale Adduktion) und addiert
+    Schulterflexionsanteile. Der Trizeps brachii übernimmt die Ellenbogen- extension
+    von der Mitte bis zur vollen Streckung. Der Musculus deltoideus pars clavicularis
+    (vordere Schulter) leistet in der ersten Bewegungshälfte den größten Synergisten-Beitrag.
+    Die Scapula muss stabil retrahiert und deprimiert bleiben — das ist Aufgabe von
+    Trapezius (mittlerer/unterer Anteil) und Rhomboiden.
+
+    '
+  quiz_prompts:
+  - question: Warum ist Bankdrücken keine reine Brustübung?
+    answer: 'Weil Trizeps (Ellenbogenstreckung) und vordere Schulter (horizontale
+      Flexionsanteile) immer mitarbeiten. Je enger der Griff, desto mehr Trizeps.
+      Je steiler die Bank, desto mehr Schulter.
+
+      '
+  - question: Warum fühlen Anfänger Bankdrücken oft mehr in der Schulter als in der
+      Brust?
+    answer: 'Meist fehlende Scapula-Stabilität und/oder Ellenbogen-Flare. Wenn die
+      Schulterblätter nicht gesetzt sind, fehlt der stabile Ursprung für den Pectoralis
+      major — die Schulter übernimmt kompensatorisch.
+
+      '
+  - question: Was passiert anatomisch beim Incline Bankdrücken?
+    answer: 'Der klavikulare Anteil des Pectoralis major und der vordere Deltamuskel
+      werden stärker rekrutiert, weil der Winkel mehr Schulterflexion beinhaltet.
+      Der sternale Brustanteil verliert etwas Beteiligung.
+
+      '
+  common_errors_explained:
+    shoulder_flare:
+      description: Ellenbogen weichen auf 90° zur Seite aus.
+      anatomical_reason: 'Bei 90° Ellenbogen-Flare liegt der Oberarmknochen in maximaler
+        Außenrotation. Das impingiert den Supraspinatus im Schultergelenk und überlädt
+        die vordere Schulterkapsel.
+
+        '
+      correction: Ellenbogen auf 45–60° einziehen, Lat minimal anspannen.
+      teaches:
+      - rotator_cuff
+      - shoulder_impingement
+      - glenohumeral_mechanics
+    scapula_instability:
+      description: Schulterblätter kippen nach vorne/heben ab.
+      anatomical_reason: 'Wenn Serratus anterior und mittlerer Trapezius die Scapula
+        nicht stabilisieren, verliert der Pectoralis major seinen stabilen Ursprung
+        und die Kraftübertragung bricht zusammen.
+
+        '
+      correction: Vor dem Satz aktiv retrahieren und deprimieren. Halten.
+      teaches:
+      - scapulohumeral_rhythm
+      - serratus_anterior_function
+      - force_transfer_principle
+    bar_path_deviation:
+      description: Stange wird zur Schulter statt zur unteren Brust geführt.
+      anatomical_reason: 'Zu hohe Stangen-Bahn bedeutet mehr Schulterflexion und weniger
+        horizontale Adduktion — der Pectoralis major verliert ROM, vordere Schulter
+        übernimmt.
+
+        '
+      correction: Stange Richtung Brustnippel/untere Brust absenken.
+      teaches:
+      - moment_arm_principles
+      - pectoralis_major_fiber_orientation

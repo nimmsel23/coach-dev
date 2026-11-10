@@ -57,7 +57,11 @@ class CoachDispatcherTest(unittest.TestCase):
             package.mkdir()
             (package / '__init__.py').write_text('')
             (package / 'fixture.py').write_text('import os,sys\ndef main():\n print(os.getcwd())\n print(repr(sys.argv[1:]))\n raise SystemExit(23)\n')
-            argv = [sys.executable, '-c', coach_cli.RUN_TOOL, str(root), 'fitness.fixture', 'main', 'coach fixture', 'a b', '--flag']
+            argv = [
+                sys.executable, '-c', coach_cli.RUN_TOOL,
+                str(root), '', 'fitness.fixture', 'main', 'coach fixture',
+                'a b', '--flag',
+            ]
             result = subprocess.run(argv, cwd=root, capture_output=True, text=True)
             self.assertEqual(result.returncode, 23)
             self.assertIn(str(root), result.stdout)

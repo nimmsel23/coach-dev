@@ -1,0 +1,50 @@
+exercise_id: tuck_planks
+description: Curated 6 Pack Promise entry for Tuck Planks.
+exercises:
+- exercise_id: tuck_planks
+  id: tuck_planks
+  name: Tuck Planks
+  display_name: Tuck Planks
+  german: Tuck Planks
+  english: Tuck Planks
+  category: core
+  type: compound
+  movements:
+  - anti_extension
+  - anti_rotation
+  - hip_flexion
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  secondary_muscles:
+  - 607_iliopsoas
+  - 502_obliquus_externus
+  stabilizers:
+  - 503_obliquus_internus
+  - 105_serratus_anterior
+  coaching_notes:
+  - Ziehen Sie aus der Plank-Position ein Knie kontrolliert Richtung Brust und halten Sie den Rest des Körpers ruhig.
+  - Wenn die App links und rechts einzeln zählt, behandeln Sie beide Seiten als dieselbe Übung mit Seitenwechsel.
+  - Halten Sie Schulterdruck und Bauchspannung konstant, statt im Tuck einzusacken.
+  common_errors:
+  - Das Becken rotiert stark zur arbeitenden Seite.
+  - Der Zug kommt aus dem Schritt und nicht aus der Bauchwand.
+  - Die Schulterlinie bricht ein, sobald das Knie anzieht.
+  tags:
+  - 6pack_promise
+  - core
+  - plank
+  aliases:
+  - Tuck Planks
+  - Tuck Planks (opposite side)
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

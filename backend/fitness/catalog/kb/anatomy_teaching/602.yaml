@@ -1,0 +1,83 @@
+name: cable_crunch_lesson
+description: Anatomy teaching seed for 602.
+lessons:
+- exercise_id: '602'
+  title: Kabel-Crunch — Rippen zur Hüfte und aktive Wirbelsäulenflexion
+  region: core
+  learning_goal:
+    short: Verstehen wie der Kabelzug konstante Spannung auf den Rectus abdominis bringt — und warum Rumpfflexion nicht Hüftbeugung ist.
+    detailed: Lern den Unterschied zwischen echter Wirbelsäulenflexion (Rectus abdominis) und Hüftbeugung (Iliopsoas) beim Crunch und wie der Kabelzug das verhindert.
+  movement_pattern:
+    primary: trunk_flexion
+    secondary:
+    - spinal_flexion
+  joint_actions:
+    lumbar:
+      concentric:
+      - flexion
+      eccentric:
+      - extension_control
+      stabilization:
+      - controlled_flexion
+    hip:
+      stabilization:
+      - fixed_kneeling_position
+  muscle_roles:
+    prime_movers:
+    - rectus_abdominis
+    synergists:
+    - obliques
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - abdomen_front
+    secondary:
+    - obliques
+    light:
+    - core
+  trainer_explanation:
+    simple: Das Kabel bringt Widerstand von oben — der Bauch muss die Rippen aktiv nach unten zum Schambein ziehen.
+    technical: Der Kabelzug von oben erzeugt konstante Spannung über die gesamte Rumpfflexions-ROM. Das ist der Vorteil gegenüber Boden-Crunches wo die Gravitation in der Endposition abfällt. Hüftposition muss stabil bleiben — nur die Wirbelsäule flektiert.
+    client_friendly: Zieh die Rippen Richtung Knie — nicht die Hände zum Boden.
+  feel_cues:
+  - Rippen aktiv nach unten Richtung Schambein ziehen.
+  - Hüfte bleibt während der gesamten Bewegung fixiert.
+  - Ausatmen bei der Kontraktion — Bauch einziehen.
+  coaching_cues:
+  - Setup: Knie am Boden, Rope-Aufsatz am Kopf.
+  - Kontraktion aus dem Bauch — nicht mit den Armen ziehen.
+  - Kontrolliertes Aufrichten (eccentric) — zurück ohne Schwung.
+  common_errors:
+  - error: Mit den Armen am Seil ziehen.
+    anatomical_reason: Wenn der Widerstand durch Schulterflexion überwunden wird, übernimmt der Deltoid und Triceps die Arbeit — nicht der Rectus abdominis.
+    correction: Hände halten das Seil an einer fixen Position neben den Ohren — keine Armarbeit.
+    coaching_cue: Die Hände sind nur Haken — nur der Bauch zieht.
+  - error: Hüfte beugen und strecken statt Wirbelsäule runden.
+    anatomical_reason: Wenn das Becken nach vorne kippt (Hüftbeugung), übernimmt der Iliopsoas. Die Wirbelsäule bleibt gerade — kein Rectus abdominis.
+    correction: Hüfte fixieren, Bewegung kommt nur aus der Rumpfflexion.
+    coaching_cue: Stell dir vor du hast ein Brett als Rücken — nur der obere Teil knickt.
+  variations_teach:
+  - variation: Kniend mit Rope-Aufsatz
+    lesson: Standardvariante — gute Hüftfixierung durch Kniehöhe.
+  - variation: Stehend an der Kabelmaschine
+    lesson: Höhere Stabilitätsanforderungen, weniger Hüftfixierung — für Fortgeschrittene.
+  quiz:
+  - question: Warum hat der Kabel-Crunch einen Vorteil gegenüber dem Boden-Crunch?
+    answer: Der Kabelzug erzeugt konstante Zugkraft über die gesamte ROM — auch in der Endposition (maximale Kontraktion). Beim Boden-Crunch fällt der Gravitations-Widerstand in der verkürzten Position gegen null. Konstante Spannung = besserer Hypertrophie-Reiz.
+  - question: Wie unterscheidet sich Rumpfflexion von Hüftbeugung anatomisch?
+    answer: Rumpfflexion = M. rectus abdominis beugt die Wirbelsäule (Rippen Richtung Schambein). Hüftbeugung = M. iliopsoas beugt die Hüfte (Oberschenkel Richtung Brustkorb). Beim Crunch soll der Bauch die Wirbelsäule beugen — die Hüfte bleibt stabil.
+  simple_explanation: "Der Kabel-Crunch bringt konstanten Widerstand auf die Rumpfflexion — der Rectus abdominis zieht die Rippen aktiv Richtung Schambein. Der Kabelzug von oben erhält die Spannung auch in der verkürzten Position. Hüfte bleibt während der Bewegung fixiert — nur die Wirbelsäule flektiert. Mit den Armen ziehen ist der häufigste Fehler.\n"
+  detailed_explanation: "Der M. rectus abdominis verläuft von den Rippen 5-7 und dem Processus xiphoideus zum Os pubis. Er führt Wirbelsäulenflexion (Rumpfflexion) und Posterior Pelvic Tilt aus. Der Kabelzug von oben schafft eine Kraftlinie die optimal zur Rumpfflexions-Richtung passt. Der entscheidende Vorteil: Konstante Spannung über die gesamte ROM — auch in der Endposition (maximale Rumpfflexion) wenn die Rippen maximal Richtung Schambein gezogen sind. Bei Boden-Crunches fällt der effektive Widerstand gegen null sobald man aufrecht ist.\n"
+  quiz_prompts:
+  - question: Warum ist die Position der Hüfte beim Kabel-Crunch so wichtig?
+    answer: "Wenn die Hüfte nicht fixiert ist, kann der Iliopsoas durch Hüftflexion kompensieren — er zieht dann den Oberkörper nach unten. Das reduziert die Rectus-Abdominis-Aktivierung drastisch. Fixierte Hüfte = erzwungene Wirbelsäulenflexion.\n"
+  common_errors_explained:
+    pulling_with_arms:
+      description: Mit den Armen am Seil ziehen statt mit dem Bauch.
+      anatomical_reason: "M. deltoideus anterior und M. triceps übernehmen die Last wenn die Hände aktiv ziehen. Der Rectus abdominis ist nicht der Krafterzeuger mehr — er stabilisiert nur passiv.\n"
+      correction: Handposition fixieren (an Ohren/Schläfen), dann Bauch zieht.
+      teaches:
+      - rectus_abdominis_isolation
+      - trunk_flexion_mechanics
+      - constant_tension_principle

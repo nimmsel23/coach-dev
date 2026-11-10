@@ -10,7 +10,7 @@ authors = [
     { name = "Alpha OS team" }
 ]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.14"
 dependencies = [
     "PyYAML>=6.0",
     "fastapi>=0.115.0",
@@ -34,31 +34,38 @@ dependencies = [
 ]
 
 [project.scripts]
-fitness              = "fitness.cli:main"
-fitness-log          = "fitness.log.cli:main"
-fitness-tui          = "fitness.tui.cli:main"
-fitness-inbox        = "backend.notifier.cli:main"
-fitness-push         = "backend.pusher.cli:main"
-fitness-activity     = "fitness.activity.cli:main"
-fitness-mail         = "fitness.mail.cli:main"
-fitness-sync         = "fitness.sync.cli:main"
-firestore-sync       = "fitness.firestore.sync_cli:main"
-fitness-catalog      = "fitness.catalog.cli:main"
-fitness-catalog-api  = "fitness.api.main:main"
-fitness-api          = "fitness.api.main:main"
-anatomy-agent        = "anatomy_kb.cli:main"
+fitness = "fitness.cli:main"
+fitness-log = "fitness.log.cli:main"
+fitness-tui = "fitness.tui.cli:main"
+fitness-inbox = "fitness.notifier.cli:main"
+fitness-push = "fitness.pusher.cli:main"
+fitness-activity = "fitness.activity.cli:main"
+fitness-mail = "fitness.mail.cli:main"
+fitness-sync = "fitness.sync.cli:main"
+firestore-sync = "fitness.firestore.sync_cli:main"
+fitness-catalog = "fitness.catalog.cli:main"
+fitness-catalog-api = "fitness.api.main:main"
+fitness-api = "fitness.api.main:main"
+anatomy-agent = "anatomy_kb.cli:main"
 
 [tool.poetry]
+# Package liegt unter backend/fitness (Sammelordner backend/{fitness,fuel,…})
 packages = [
-    # Dateiglobs verhindern, dass Poetry Laufzeit-Symlinks im Katalog verfolgt.
-    { include = "fitness/**/*.py" },
-    { include = "backend" },
+    { include = "fitness", from = "backend" },
     { include = "db" },
     { include = "anatomy_kb", from = "anatomy-kb" },
 ]
 include = [
-    { path = "fitness/catalog/config.yml", format = ["sdist", "wheel"] },
-    { path = "fitness/catalog/data_source_priority.yml", format = ["sdist", "wheel"] },
-    { path = "fitness/catalog/py.typed", format = ["sdist", "wheel"] },
+    { path = "backend/fitness/catalog/config.yml", format = ["sdist", "wheel"] },
+    { path = "backend/fitness/catalog/data_source_priority.yml", format = ["sdist", "wheel"] },
+    { path = "backend/fitness/catalog/py.typed", format = ["sdist", "wheel"] },
 ]
-exclude = ["fitness/catalog/state", "fitness/catalog/kb", "backend/tests", "backend/notifier/bin"]
+exclude = [
+    "backend/fitness/catalog/state",
+    "backend/fitness/catalog/kb",
+    "backend/fitness/tests",
+    "backend/fitness/notifier/bin",
+    "backend/fuel",
+    "backend/functions",
+    "backend/node",
+]

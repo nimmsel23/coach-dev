@@ -1,0 +1,104 @@
+# yuhonas/free-exercise-db: primaryMuscles/secondaryMuscles-Labels → Katalog-Muskel-ID → FMA.
+#
+# Quelle: github.com/yuhonas/free-exercise-db, dist/exercises.json (Stand 2026-10-22,
+# 876 Übungen, 17 verschiedene Labels). Die Labels sind freie Gruppen-Namen, keine
+# Muskel-IDs. Die tatsächliche Auflösung läuft über muscle_index.yml → string_aliases
+# (siehe core/muscle_normalization.py::canonicalize_muscle_id). Diese Datei ist die
+# lesbare Übersicht derselben Zuordnung plus FMA-Bezug; bei Änderungen beide Dateien
+# synchron halten (Test: tests/test_yuhonas_muscle_labels.py).
+#
+# status:
+#   direct  — Label entspricht genau einem Muskel-Konzept (fma_id vorhanden)
+#   group   — Label ist eine Muskelgruppe, Ziel ist die Gruppen-ID (kein FMA-Whole-Muscle)
+#   context — Label wird erst über den Übungsnamen aufgelöst (refine_generic_region_labels)
+#   none    — kein Katalog-Muskel vorhanden, bewusst nicht gemappt
+labels:
+  - label: abdominals
+    count: 152
+    target: 501_rectus_abdominis
+    fma_id: FMA:9628
+    status: direct
+  - label: abductors
+    count: 43
+    target: 608_gluteus_medius
+    fma_id: FMA:22315
+    status: group
+    note: Hüftabduktoren umfassen auch Gluteus minimus (609); Ziel ist der größte Anteil.
+  - label: adductors
+    count: 54
+    target: 602_adductors
+    fma_id: null
+    status: group
+  - label: biceps
+    count: 127
+    target: 402_biceps_brachii
+    fma_id: FMA:37670
+    status: direct
+  - label: calves
+    count: 209
+    target: 701_gastrocnemius
+    fma_id: null
+    status: group
+  - label: chest
+    count: 147
+    target: 101_pectoralis_major
+    fma_id: FMA:9627
+    status: direct
+  - label: forearms
+    count: 119
+    target: 405_forearm_flexors
+    fma_id: null
+    status: group
+  - label: glutes
+    count: 242
+    target: 603_gluteus_maximus
+    fma_id: FMA:22314
+    status: direct
+  - label: hamstrings
+    count: 280
+    target: 604_hamstrings
+    fma_id: null
+    status: group
+  - label: lats
+    count: 94
+    target: 201_latissimus_dorsi
+    fma_id: FMA:13357
+    status: direct
+  - label: lower back
+    count: 131
+    target: 206_erector_spinae
+    fma_id: null
+    status: group
+  - label: middle back
+    count: 100
+    target: 205_rhomboids
+    fma_id: null
+    status: group
+  - label: neck
+    count: 9
+    target: null
+    fma_id: null
+    status: none
+    note: Kein Halsmuskel in der Muskel-Taxonomie; bleibt unkanonisiert.
+  - label: quadriceps
+    count: 230
+    target: 601_quadriceps_femoris
+    fma_id: null
+    status: group
+  - label: shoulders
+    count: 339
+    target: null
+    fma_id: null
+    status: context
+    note: Bewusst kein Alias (siehe muscle_index.yml). Auflösung je nach Übungsname auf Deltoid-Kopf.
+  - label: traps
+    count: 99
+    target: 202_trapezius
+    fma_id: FMA:9626
+    status: direct
+    note: Trapezius-Teile (202a–c) haben kein eigenes FMA-Whole-Muscle-Konzept; Ziel ist das Gesamt-Konzept.
+  - label: triceps
+    count: 221
+    target: 401_triceps_brachii
+    fma_id: FMA:37688
+    status: direct

@@ -1,0 +1,91 @@
+name: low_to_high_cable_fly_lesson
+description: Anatomy teaching seed for 102.
+lessons:
+- exercise_id: '102'
+  title: Kabel-Flys von unten nach oben — Oberer Pectoralis und Serratus
+  region: chest
+  learning_goal:
+    short: Verstehen wie die aufsteigende Kraftlinie den klavikulären Anteil des Pectoralis betont — den Bereich der am häufigsten vernachlässigt wird.
+    detailed: Lern warum der Kabelzug von unten den oberen Pec effektiver trainiert als Schrägbankdrücken und welche Rolle der Serratus anterior bei der Scapula-Stabilisierung spielt.
+  movement_pattern:
+    primary: horizontal_adduction_incline
+    secondary:
+    - shoulder_flexion
+    - scapular_protraction
+  joint_actions:
+    shoulder:
+      concentric:
+      - horizontal_adduction
+      - flexion
+      eccentric:
+      - extension_control
+      - horizontal_abduction_control
+      stabilization:
+      - glenohumeral_centering
+    scapula:
+      concentric:
+      - protraction
+      - upward_rotation
+      eccentric:
+      - retraction_control
+    elbow:
+      stabilization:
+      - slight_flexion_fixed
+  muscle_roles:
+    prime_movers:
+    - pectoralis_major_clavicular_head
+    synergists:
+    - anterior_deltoid
+    - serratus_anterior
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - chest_front
+    secondary:
+    - shoulders_front
+    light:
+    - core
+  trainer_explanation:
+    simple: Das Kabel von unten nach oben zieht den Arm von unten-außen nach oben-innen — genau die Funktion des oberen Pec-Anteils.
+    technical: Die Pars clavicularis des M. pectoralis major führt Flexion, Horizontaladdduktion und Innenrotation des Humerus aus. Der aufsteigende Kraftvektor (Kabel unten → Hände oben) entspricht exakt dieser anatomischen Funktion.
+    client_friendly: Zieh die Hände von unten zusammen — so als ob du jemanden umarmen würdest, der über dir steht.
+  feel_cues:
+  - Hände treffen sich vor dem Gesicht/oberer Brust.
+  - Ellbogen konstant leicht gebeugt halten.
+  - Brustkorb hoch, kein Rundrücken.
+  coaching_cues:
+  - Kabel an der untersten Position befestigen.
+  - Bogen-Bewegung — keine reine Vertikale.
+  - Oberkörper leicht nach vorne für bessere Kraftlinie.
+  common_errors:
+  - error: Hände werden zu weit über den Kopf geführt.
+    anatomical_reason: Über Kopfhöhe übernimmt der Anterior-Deltoid die Hauptarbeit — der Pec verlässt seinen optimalen Arbeitsbereich.
+    correction: Endpunkt bei Augen/Stirn-Höhe setzen.
+    coaching_cue: Hände treffen sich bei Augenhöhe — nicht über dem Kopf.
+  - error: Rücken rundet sich (Rundrücken).
+    anatomical_reason: Mangelnde Core-Spannung und Brustkorb-Elevation führen zur Kyphose unter Last.
+    correction: Brustkorb aktiv anheben, Schulterblätter leicht zusammenziehen als Setup.
+    coaching_cue: Brust hoch halten, als würdest du eine Medaille tragen.
+  variations_teach:
+  - variation: High-to-Low Cable Fly (Umkehrung)
+    lesson: Kabel oben → Kraftlinie von oben nach unten → betont unteren/mittleren Pec.
+  quiz:
+  - question: Warum betont der Low-to-High Cable Fly den oberen Pec besser als Schrägbankdrücken?
+    answer: Der Kraftvektor beim Low-to-High Fly entspricht der anatomischen Zugrichtung des M. pectoralis major (Pars clavicularis) — von unten-außen nach oben-innen. Beim Schrägbankdrücken ist die Last vertikal (Gravitation), was bei geneigter Bank nicht optimal zur klavikulären Faserverlauf passt.
+  - question: Welche Rolle spielt der Serratus anterior bei dieser Übung?
+    answer: Der M. serratus anterior protrahiert und rotiert die Scapula nach oben wenn die Hände nach oben-innen geführt werden. Er hält die Scapula am Thorax und ermöglicht optimale Schultergelenk-Positionierung.
+  simple_explanation: "Der Low-to-High Cable Fly zieht den Arm von unten-außen nach oben-innen — genau die Funktion des klavikulären (oberen) Anteils des M. pectoralis major. Dieser Pec-Anteil wird bei horizontalen Drücken (Bankdrücken) oft nicht ausreichend trainiert. Das Kabel bietet konstante Spannung über die gesamte Bewegung.\n"
+  detailed_explanation: "Der M. pectoralis major besteht aus zwei Hauptanteilen: Die Pars sternocostalis (unterer/mittlerer Anteil) führt horizontale Adduktion aus. Die Pars clavicularis (oberer Anteil) führt zusätzlich Schulterflexion aus — zieht den Arm von unten nach oben-innen. Der Low-to-High Cable Fly entspricht exakt dieser Funktion: Der aufsteigende Kraftvektor stimuliert die Pars clavicularis maximal. Der M. serratus anterior stabilisiert die Scapula durch Protraction und Aufwärtsrotation. Der anteriore Deltoideus assistiert als Synergist bei der Schulterflexion.\n"
+  quiz_prompts:
+  - question: Wann ist der Low-to-High Fly dem Schrägbank-Drücken vorzuziehen?
+    answer: "Bei Schulter-Beschwerden am anterioren Acromion (Impingement-Tendenzen) ist der Fly mit konstanter Spannung und freier Bewegungsbahn schonender. Zudem ermöglicht er maximale Pec-Kontraktion in der Endposition — was beim Drücken nicht der Fall ist.\n"
+  common_errors_explained:
+    too_high_endpoint:
+      description: Hände werden über Kopfhöhe geführt.
+      anatomical_reason: "Über Stirn/Augen-Höhe übernimmt der M. deltoideus anterior die Hauptarbeit. Der M. pectoralis major verlässt seinen optimalen Längen-Spannungs-Bereich — die Übung verliert ihren Pec-Fokus.\n"
+      correction: Endpunkt bei Augenhöhe definieren und einhalten.
+      teaches:
+      - pectoralis_functional_anatomy
+      - deltoid_vs_pec_activation
+      - range_of_motion_optimization

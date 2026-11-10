@@ -1,0 +1,25 @@
+id: 604_hamstrings
+display_name: Hamstrings
+label_de: Ischiocrurale Muskulatur
+label_en: Hamstrings
+label_lat: Musculi ischiocrurales
+wger_id: 11
+aliases: [hamstrings, ischiocrurale muskulatur, beinbeuger, kniebeuger]
+viz:
+  body_muscles:
+    view: BACK
+    ids:
+    - hamstrings-medial-left
+    - hamstrings-lateral-left
+    - hamstrings-medial-right
+    - hamstrings-lateral-right
+origin: 'Tuberositas ischiadica (alle Köpfe außer Caput breve des M. biceps femoris).
+  Caput breve M. biceps femoris: Linea aspera femoris.'
+insertion: Tibia (medialer Kondylus für Semimembranosus, pes anserinus für Semitendinosus)
+  und Fibula (Caput fibulae für Biceps Femoris).
+innervation: Nervus ischiadicus (tibialer und fibularer Anteil) (L4, L5, S1, S2)
+function: Die Hamstrings (M. biceps femoris, M. semitendinosus, M. semimembranosus)
+  wirken synergistisch mit den Gluteen als Hüftextensoren und unterstützen die
+  Kniestabilisierung. Sie sind besonders aktiv bei der Hüftextension in Squats mit
+  stärkerer Rumpfvorlage (Low Bar) und wirken der Kniehyperextension entgegen
+  (siehe 604a/604b/604c für Detail pro Kopf).

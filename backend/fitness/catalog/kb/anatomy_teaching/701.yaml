@@ -1,0 +1,64 @@
+name: calf_raise_lesson
+description: Anatomy teaching seed for calf raise.
+lessons:
+  - exercise_id: 701
+    title: "Calf Raise - Wadenfunktion und Fußkontrolle"
+    region: legs
+    learning_goal:
+      short: "Wadenarbeit und Fußstreckung verstehen."
+      detailed: "Lern, wie die Wadenmuskulatur den Fuß in Streckung bringt und warum saubere ROM hier wichtig ist."
+    movement_pattern:
+      primary: plantar_flexion
+      secondary:
+        - ankle_control
+    joint_actions:
+      ankle:
+        eccentric:
+          - dorsiflexion_control
+        concentric:
+          - plantar_flexion
+        stabilization:
+          - foot_arch_control
+    muscle_roles:
+      prime_movers:
+        - calves
+      synergists:
+        - foot_intrinsics
+      stabilizers:
+        - tibialis_anterior
+    body_highlighter_regions:
+      primary:
+        - calves
+      secondary:
+        - feet
+      light:
+        - shin_front
+    trainer_explanation:
+      simple: "Wadenheben trainiert die Fußstreckung und damit die Wadenmuskulatur."
+      technical: "Über die Plantarflexion arbeiten Gastrocnemius und Soleus als primäre Plantarflexoren, während der Fußbogen stabil bleibt."
+      client_friendly: "Du sollst die Wade oben hart anspannen und unten kontrolliert dehnen."
+    feel_cues:
+      - "Dehnung unten."
+      - "Harter Peak oben."
+      - "Fuß bleibt stabil."
+    coaching_cues:
+      - "Ganz hoch."
+      - "Ganz runter."
+      - "Nicht wippen."
+    common_errors:
+      - error: "Zu kurze Bewegung."
+        anatomical_reason: "Die Wade bekommt keinen vollen Längenreiz."
+        correction: "Volle ROM nutzen."
+        coaching_cue: "Oben und unten sauber."
+      - error: "Mit Schwung hüpfen."
+        anatomical_reason: "Die Spannung geht in den Körperimpuls statt in die Wade."
+        correction: "Tempo verlangsamen."
+        coaching_cue: "Ruhig heben."
+    variations_teach:
+      - variation: "standing calf raise"
+        lesson: "Mehr Gastrocnemius-Fokus."
+      - variation: "seated calf raise"
+        lesson: "Mehr Soleus-Betonung."
+    quiz:
+      - question: "Was ist der Hauptzweck beim Calf Raise?"
+        answer: "Die Waden über saubere Plantarflexion zu belasten."

@@ -1,0 +1,159 @@
+# Cloud fallback for KB inbox enrichment (laptop coach-sync remains primary).
+# Trigger manually, via repository_dispatch, or when inbox YAMLs change on main.
+name: Enrich Inbox
+
+on:
+  workflow_dispatch:
+    inputs:
+      file:
+        description: "Optional inbox path (e.g. inbox/inbox_foo.yml). Empty = first N."
+        required: false
+        default: ""
+      limit:
+        description: "Max inbox files when file is empty"
+        required: false
+        default: "1"
+      feedback:
+        description: "Optional coach feedback for re-enrich"
+        required: false
+        default: ""
+      dry_run:
+        description: "If true, call model but do not open a PR"
+        required: false
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+  repository_dispatch:
+    types: [enrich-inbox]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: enrich-inbox
+  cancel-in-progress: false
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install --quiet pyyaml
+
+      - name: Resolve inputs
+        id: args
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_FILE: ${{ github.event.inputs.file || '' }}
+          INPUT_LIMIT: ${{ github.event.inputs.limit || '1' }}
+          INPUT_FEEDBACK: ${{ github.event.inputs.feedback || '' }}
+          INPUT_DRY: ${{ github.event.inputs.dry_run || 'false' }}
+          DISPATCH_FILE: ${{ github.event.client_payload.file || '' }}
+          DISPATCH_LIMIT: ${{ github.event.client_payload.limit || '1' }}
+          DISPATCH_FEEDBACK: ${{ github.event.client_payload.feedback || '' }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "repository_dispatch" ]; then
+            FILE="$DISPATCH_FILE"
+            LIMIT="$DISPATCH_LIMIT"
+            FEEDBACK="$DISPATCH_FEEDBACK"
+            DRY="false"
+          else
+            FILE="$INPUT_FILE"
+            LIMIT="$INPUT_LIMIT"
+            FEEDBACK="$INPUT_FEEDBACK"
+            DRY="$INPUT_DRY"
+          fi
+          echo "file=$FILE" >> "$GITHUB_OUTPUT"
+          echo "limit=$LIMIT" >> "$GITHUB_OUTPUT"
+          echo "dry_run=$DRY" >> "$GITHUB_OUTPUT"
+          # feedback may be multiline — use env file
+          {
+            echo "feedback<<EOF"
+            printf '%s\n' "$FEEDBACK"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Enrich inbox YAML
+        id: enrich
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-2.5-flash
+          FILE: ${{ steps.args.outputs.file }}
+          LIMIT: ${{ steps.args.outputs.limit }}
+          FEEDBACK: ${{ steps.args.outputs.feedback }}
+          DRY: ${{ steps.args.outputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GEMINI_API_KEY:-}" ]; then
+            echo "::error::GEMINI_API_KEY secret missing on nimmsel23/fitness"
+            echo "Without it, use .github/prompts/enrich-inbox.md via an LLM GitHub connector."
+            exit 1
+          fi
+          args=(--limit "$LIMIT")
+          if [ -n "$FILE" ]; then
+            args=(--file "$FILE")
+          fi
+          if [ -n "$FEEDBACK" ]; then
+            args+=(--feedback "$FEEDBACK")
+          fi
+          if [ "$DRY" = "true" ]; then
+            args+=(--dry-run)
+          fi
+          python3 scripts/enrich_inbox.py "${args[@]}" | tee enrich.log
+          grep '^ENRICHED_FILES=' enrich.log | tail -1 >> "$GITHUB_OUTPUT"
+
+      - name: Open enrichment PR
+        if: steps.args.outputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FILES: ${{ steps.enrich.outputs.ENRICHED_FILES }}
+        run: |
+          set -euo pipefail
+          if [ -z "${FILES:-}" ]; then
+            echo "No files reported; skip PR"
+            exit 0
+          fi
+          if git diff --quiet -- $FILES; then
+            echo "No content changes; skip PR"
+            exit 0
+          fi
+          branch="ci/enrich-inbox-$(date -u +%Y%m%d-%H%M%S)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -- $FILES
+          git commit -m "chore(inbox): CI enrichment fallback
+
+          Files: $FILES
+          "
+          git push -u origin HEAD
+          body=$(printf '%s\n' \
+            "## CI inbox enrichment (cloud fallback)" \
+            "" \
+            "Laptop \`coach-sync\` remains the primary path. This PR is the" \
+            "offline/cloud fallback against the public KB." \
+            "" \
+            "**Files:** \`$FILES\`" \
+            "" \
+            "- Stays in \`inbox/\` — does **not** approve into \`exercises/\`" \
+            "- Review coaching_notes / muscles / category before merge" \
+            "- After merge, bump the \`fitness/catalog/kb\` submodule in coach-dev" \
+            "" \
+            "Prompt for manual LLM webapps: \`.github/prompts/enrich-inbox.md\`")
+          if ! gh pr create --base main --head "$branch" \
+            --title "chore(inbox): CI enrichment — $FILES" \
+            --body "$body"; then
+            echo "::warning::gh pr create blocked (enable Actions → Allow GitHub Actions to create PRs)."
+            echo "Branch pushed: $branch"
+            echo "Open: https://github.com/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"
+          fi

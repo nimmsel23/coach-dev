@@ -119,11 +119,16 @@ export default defineConfig(async ({ mode }) => {
             }
           : undefined,
         output: {
-          manualChunks: {
-            react: ['react', 'react-dom'],
-            charts: ['recharts'],
-            icons: ['lucide-react'],
-            bodymap: ['react-body-highlighter'],
+          // Vite 8/Rolldown: manualChunks must be a function (object form throws).
+          manualChunks(id) {
+            const m = id.match(/[\\/]node_modules[\\/](?:\.pnpm[\\/][^\\/]+[\\/]node_modules[\\/])?((?:@[^\\/]+[\\/])?[^\\/]+)/)
+            if (!m) return undefined
+            const pkg = m[1].split('\\').join('/')
+            if (pkg === 'react' || pkg === 'react-dom' || pkg === 'scheduler') return 'react'
+            if (pkg === 'lucide-react') return 'icons'
+            if (pkg === 'react-body-highlighter') return 'bodymap'
+            if (pkg === 'recharts' || pkg.startsWith('d3-') || pkg === 'victory-vendor') return 'charts'
+            return undefined
           },
         },
       },

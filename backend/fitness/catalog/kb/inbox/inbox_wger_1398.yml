@@ -1,0 +1,159 @@
+name: inbox_wger_1398
+description: 'Neu angereichert (manueller Re-Enrich) fuer: Pin Squat'
+enriched_at: '2026-11-06T02:49:04.781509+00:00'
+exercises:
+- exercise_id: wger_1398
+  id: wger_1398
+  name: Pin Squat
+  display_name: Pin Squat
+  german: Pin Squat
+  english: Pin Squat
+  category: squat
+  equipment:
+  - barbell
+  - power_rack_or_squat_rack_with_safety_pins
+  primary_muscles:
+  - 601_quadriceps_femoris
+  - 603_gluteus_maximus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
+  secondary_muscles:
+  - 602_adductors
+  stabilizers:
+  - 206_erector_spinae
+  - 202a_trapezius_upper
+  - 202b_trapezius_middle
+  - 202c_trapezius_lower
+  - 205_rhomboids
+  - 501_rectus_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 504_transverse_abdominis
+  - 608_gluteus_medius
+  - 609_gluteus_minimus
+  - 701_gastrocnemius
+  - 702_soleus
+  movements:
+  - hip_extension
+  - knee_extension
+  - hip_flexion
+  - knee_flexion
+  - ankle_dorsiflexion
+  - spinal_stabilization
+  - core_bracing
+  - scapular_retraction
+  - hip_abduction_adduction_control
+  - isometric_hold
+  coaching_notes:
+  - Stelle die Sicherheitsablagen im Power Rack auf die gewünschte Höhe ein. Diese
+    sollte typischerweise deinen Sticking Point oder den tiefsten Punkt deines Squats,
+    kurz vor dem Umkehrpunkt, markieren. Die Stange sollte beim Ablassen sanft darauf
+    aufliegen, ohne die Spannung zu verlieren.
+  - Platziere die Langhantel auf deinem oberen Rücken (High Bar) oder im Bereich der
+    hinteren Schulter (Low Bar), wie bei einem normalen Kniebeugen-Setup. Die Hände
+    greifen die Stange eng genug, um die obere Rückenmuskulatur zu spannen, aber weit
+    genug, um die Schultern nicht überzustrecken.
+  - Stelle dich schulterbreit oder etwas weiter hin, mit den Fußspitzen leicht nach
+    außen gedreht. Achte auf eine gleichmäßige Gewichtsverteilung über den gesamten
+    Fuß, von der Ferse bis zu den Ballen.
+  - 'Baue eine maximale Rumpfspannung auf: Atme tief in den Bauch ein (Valsalva-Manöver),
+    spanne die Bauch- und Rückenmuskulatur rundum an (360-Grad-Bracing), um eine stabile
+    und neutrale Wirbelsäulenposition zu gewährleisten.'
+  - Beginne die Abwärtsbewegung, indem du Hüfte und Knie gleichzeitig beugst, als
+    würdest du dich auf einen Stuhl setzen. Halte die Brust aufrecht und den Blick
+    neutral nach vorne oder leicht nach unten gerichtet.
+  - Senke die Langhantel kontrolliert ab, bis sie sanft auf den Sicherheitsablagen
+    aufliegt. Es ist entscheidend, die volle Körper- und Muskelspannung beizubehalten
+    und nicht auf den Pins 'zusammenzufallen' oder zu entspannen.
+  - Verweile für 1 bis 3 Sekunden auf den Ablagen. Diese Pause eliminiert den Stretch-Reflex
+    (Dehnungs-Verkürzungs-Zyklus) der Muskeln und trainiert die Fähigkeit, Kraft aus
+    einem statischen, 'toten' Punkt zu generieren. Die Spannung muss während dieser
+    Phase aktiv aufrechterhalten werden.
+  - Leite die Aufwärtsbewegung mit maximaler explosiver Kraft ein. Konzentriere dich
+    darauf, Hüfte und Schultern gleichzeitig nach oben zu bewegen, um eine effiziente
+    Bewegung (keine 'Good Morning'-Bewegung) zu gewährleisten.
+  - Drücke die Knie während der gesamten Bewegung, insbesondere beim Aufstehen, aktiv
+    nach außen, um eine stabile Knieposition über den Fußspitzen zu halten und einen
+    Knievalgus zu vermeiden.
+  - Diese Übung ist hervorragend geeignet, um spezifische Sticking Points im Squat
+    zu überwinden, die explosive konzentrische Kraft zu steigern und die Fähigkeit
+    zur Krafterzeugung aus einem 'toten' Punkt zu verbessern.
+  common_errors:
+  - 'Spannungsverlust auf den Pins: Der häufigste und gravierendste Fehler ist das
+    Entspannen oder Absacken des Oberkörpers, sobald die Stange die Ablagen berührt.
+    Die Spannung im Rumpf und den Beinen muss während der gesamten Pause aufrechterhalten
+    werden.'
+  - 'Falsche Pin-Höhe: Wenn die Ablagen zu hoch eingestellt sind, wird der volle Bewegungsumfang
+    oder der eigentliche Sticking Point nicht effektiv trainiert. Sind sie zu niedrig,
+    kann die Aufwärtsbewegung zu lang oder ineffektiv werden.'
+  - 'Rundrücken (Verlust der neutralen Wirbelsäule): Insbesondere beim Ablassen der
+    Stange auf die Pins, während der Pause oder beim Aufstehen kann der untere Rücken
+    rund werden. Dies erhöht das Verletzungsrisiko und verringert die Kraftübertragung.
+    Halte den Rücken stets gerade und die Brust oben.'
+  - 'Knie kollabieren nach innen (Knievalgus): Dies deutet auf eine Schwäche der Abduktoren
+    oder eine ineffiziente Technik hin. Achte darauf, die Knie aktiv nach außen über
+    die Fußspitzen zu drücken.'
+  - 'Hüfte steigt zu schnell (Good Morning Squat): Wenn die Hüfte signifikant schneller
+    als die Schultern ansteigt, wird die Last übermäßig auf den unteren Rücken verlagert
+    und der Zweck der Kniebeuge verfehlt.'
+  - 'Abprallen von den Pins: Ein kurzes, federndes Berühren der Pins negiert den Hauptzweck
+    der Übung, nämlich die Eliminierung des Stretch-Reflexes und die Entwicklung statischer
+    Startkraft. Die Pause muss bewusst und ohne Rückfederung erfolgen.'
+  - 'Unzureichendes Bracing: Eine mangelnde oder inkonstante Rumpfspannung beeinträchtigt
+    die Stabilität der Wirbelsäule und die Effizienz der Kraftübertragung. Sorge vor
+    jeder Wiederholung für ein festes, 360-Grad-Bracing.'
+  - 'Falsche Lastverteilung: Das Abheben der Fersen oder der Zehen deutet auf eine
+    Ungleichgewichtung hin. Die Last sollte stets über dem Mittelfußpunkt gehalten
+    werden.'
+  original_description:
+  - 'Stelle die Sicherheitsablagen ungefähr auf die Höhe deines Sticking Points ein
+
+    Senke die Stange ab, lasse sie 2 s auf den Ablagen ruhen und halte dabei die Spannung
+
+    Stehe mit maximaler Kraft auf'
+  tags:
+  - unreviewed
+  - wger
+  wger_id: 1398
+  wger_muscle_ids:
+    primary:
+    - 11
+    - 8
+    - 10
+    secondary:
+    - 6
+  external_ids:
+    wger:
+    - 1398
+  variations: []
+  source: unreviewed
+  enriched_at: '2026-11-06T02:49:04.781509+00:00'
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: external
+    source_refs:
+      wger:
+      - '1398'
+  source_snapshot:
+    wger:
+      wger_id: 1398
+      wger_muscle_ids:
+        primary:
+        - 11
+        - 8
+        - 10
+        secondary:
+        - 6
+      original_description:
+      - 'Stelle die Sicherheitsablagen ungefähr auf die Höhe deines Sticking Points
+        ein
+
+        Senke die Stange ab, lasse sie 2 s auf den Ablagen ruhen und halte dabei die
+        Spannung
+
+        Stehe mit maximaler Kraft auf'
+  review_state:
+    status: draft
+    ai_reviewed: false
+    enriched_at: '2026-11-06T02:49:04.781509+00:00'

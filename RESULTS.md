@@ -1,3 +1,50 @@
+- 2026-11-10: chore(deps) major stack align — React 19 / Vite 8.3.6 / plugin-react 6.2.1 / Firebase 13 (age-safe pins, pnpm-workspace overrides).
+
+## 2026-11-10 — fuel/backend Nesting weg
+
+- `backend/fuel/backend` → flat `backend/fuel/` als Package `fuel`.
+- `fuel.omega3` aus fuel-dev reinvendored. Import: `PYTHONPATH=…/backend`.
+
+## 2026-11-10 — fitness per Poetry + uv installiert
+
+- `pyproject.toml` auf `backend/fitness` verdrahtet; `requires-python = >=3.11,<3.14`.
+- Poetry: lock + install (venv 3.13 unter `~/.cache/pypoetry/virtualenvs/fitness-…`).
+- uv: `uv tool install -e .` → globale CLIs in `~/.local/bin` (fitness, fitness-catalog, …).
+
+## 2026-11-10 — ~/dev/backend Domains → coach-dev/backend/
+
+- `fuel/`, `functions/`, Node-Runtime nach `~/dev/coach-dev/backend/{fuel,functions,node}/`.
+- `~/dev/backend` nur noch Pointer. Layout: fitness/ + fuel/ + functions/ + node/.
+
+## 2026-11-10 — backend/ = Sammelordner, fitness-Paket darin
+
+- Layout: `coach-dev/backend/fitness/` (+ später `fuel/` …).
+- `import fitness` über `PYTHONPATH=…/backend`. Symlinks `fitness` → `backend/fitness`.
+- Kein Dienst-Restart.
+
+## 2026-11-10 — backend/ als normaler Ordner
+
+- `fitness-backend/` weg; Sessions-Code = `~/dev/coach-dev/backend/`.
+- `COACH_FITNESS_BACKEND_ROOT` Default = `~/dev/coach-dev`. Kein Dienst-Restart.
+
+## 2026-11-09 — Schmiede UI-Upgrade (mobil / a11y)
+
+- Shell: Skip-Link, Klienten-Drawer unter 1080px, Tablist mit Pfeiltasten.
+- Touch-Targets ≥44px, Fokus-Ringe, Teal-Akzent, Studio-CSS entfernt.
+- Willkommen-CTA öffnet die Liste; Konsole bleibt CRM-only.
+
+## 2026-11-09 — Planstudio deprecated → Schmiede
+
+- `/clientforge/` und `/coach/clientforge.html` leiten auf `/schmiede/` (flach, kein Embed-Frame).
+- Konsole-Links „ClientForge“ → „Schmiede“; AGENTS: Studio nicht wieder einbauen.
+
+## 2026-11-09 — Sessions-Python + anatomy-kb zurück nach Coach
+
+- `~/dev/backend/fitness/backend` → `~/dev/coach-dev/fitness-backend/backend` (eigener Root, kein `http`-Shadowing durch `fitness/http.py`).
+- `anatomy-kb` real unter `~/dev/coach-dev/anatomy-kb/`; fitness-dev nur Symlink.
+- `COACH_FITNESS_BACKEND_ROOT` Default + Unit → `~/dev/coach-dev/fitness-backend`.
+- Import-Check: `backend.api.app`, `attach_fitness_api`, stdlib `http.client` OK. **Kein** coach-api-Restart.
+
 ## 2026-11-09 — Schmiede: Yuhonas + Ernährung; Konsole: CRM
 
 - Schmiede-Source `klienten-ui/schmiede-src/` → Build `/schmiede/`; Tab **Yuhonas** (876 Übungen, lokal + `/yuhonas/*` API).

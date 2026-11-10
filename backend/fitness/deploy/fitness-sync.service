@@ -1,0 +1,21 @@
+# VORSCHLAG — nicht installiert/aktiviert. Siehe README.md in diesem Ordner.
+# Ersetzt fitness-firestore-daemon.service. Genau EIN Sync-Prozess darf auf denselben Daten schreiben:
+# Conflicts= stoppt den alten Daemon beim Start, zusätzlich verhindert ein Lockfile eine zweite Instanz.
+[Unit]
+Description=Fitness Sync (Firestore → lokal, mit Desktop-Meldung für eingehende Klienten-Workouts)
+Conflicts=fitness-firestore-daemon.service
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/coach-dev
+Environment=PYTHONUNBUFFERED=1
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus
+ExecStart=/usr/bin/python3 -m backend sync run --notify
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=15
+
+[Install]
+WantedBy=default.target

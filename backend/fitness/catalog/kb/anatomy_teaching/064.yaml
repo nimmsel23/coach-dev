@@ -1,0 +1,143 @@
+name: lunge_lesson
+description: Anatomy teaching seed for 064.
+lessons:
+- exercise_id: 064
+  title: Lunge - Beinachse, Hüfte und Balance
+  region: legs
+  learning_goal:
+    short: Ausfallschritt als kontrollierte Bein- und Beckenarbeit verstehen.
+    detailed: Lern, wie Lunge Knie, Hüfte und Fuß zusammenbringt und warum Balance
+      und Achse entscheidend sind.
+  movement_pattern:
+    primary: 064
+    secondary:
+    - unilateral_squat_pattern
+  joint_actions:
+    hip:
+      eccentric:
+      - flexion_control
+      concentric:
+      - extension
+      stabilization:
+      - pelvic_control
+    knee:
+      eccentric:
+      - flexion_control
+      concentric:
+      - extension
+      stabilization:
+      - valgus_control
+    ankle:
+      stabilization:
+      - balance_control
+  muscle_roles:
+    prime_movers:
+    - legs
+    - glutes
+    synergists:
+    - thigh_back
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - thigh_front
+    - glutes
+    secondary:
+    - thigh_back
+    light:
+    - calves
+    - abdomen_front
+  trainer_explanation:
+    simple: Der Ausfallschritt lehrt Kontrolle über Knie, Hüfte und Balance.
+    technical: Als einbeinige Kniebeugevariante fordert die Lunge die Beinachse, Beckenstabilität
+      und kontrollierte Kraftentwicklung im Standbein.
+    client_friendly: Du sollst dich auf dem vorderen Bein stabil fühlen und das Knie
+      sauber führen.
+  feel_cues:
+  - Vorderes Bein trägt.
+  - Becken bleibt stabil.
+  - Knie folgt dem Fuß.
+  coaching_cues:
+  - Lang und stabil treten.
+  - Knie sauber führen.
+  - Oberkörper kontrolliert.
+  common_errors:
+  - error: Knie nach innen fallen.
+    anatomical_reason: Hüfte und Fuß stabilisieren die Beinachse nicht genug.
+    correction: Stand breiter und Fuß aktiv.
+    coaching_cue: Knie folgt den Zehen.
+  - error: Zu kurze Schritte.
+    anatomical_reason: Die Last landet zu sehr auf dem vorderen Knie.
+    correction: Schritt länger setzen.
+    coaching_cue: Mehr Platz im Stand.
+  variations_teach:
+  - variation: walking 064
+    lesson: Dynamischer und koordinativ anspruchsvoller.
+  - variation: reverse 064
+    lesson: Oft knie-freundlicher und leichter zu kontrollieren.
+  quiz:
+  - question: Was lernt man am meisten aus der Lunge?
+    answer: Beinachse, Balance und kontrollierte Hüft- und Kniearbeit.
+  simple_explanation: 'Der Ausfallschritt ist die Kniebeuge in der Einbeinvariante.
+    Er zeigt dir Beinachsen-Kontrolle, Beckenstabilität und die unabhängige Arbeit
+    beider Beinseiten. Weil nur ein Bein gleichzeitig trägt, werden Schwächen im Gluteus
+    medius und in der Fußstabilität sofort sichtbar.
+
+    '
+  detailed_explanation: 'Das vordere Bein übernimmt die Haupt-Kraftentwicklung: Quadrizeps
+    streckt das Knie konzentrisch, Gluteus maximus streckt die Hüfte. Das hintere
+    Bein stabilisiert und hilft in der konzentrischen Phase mit. Entscheidend ist
+    die Lateralstabilität des Beckens: Gluteus medius auf der Standseite verhindert
+    das seitliche Absacken des Beckens. Die Adduktoren führen den Oberschenkel in
+    der Längsachse. Das Sprunggelenk muss Dorsalflexion erlauben (vorderes Bein) für
+    korrekten Knieweg über Zehen.
+
+    '
+  quiz_prompts:
+  - question: Warum zeigt der Ausfallschritt Schwächen, die die Kniebeuge verbirgt?
+    answer: 'Bei der bilateralen Kniebeuge kann das stärkere Bein das schwächere kompensieren.
+      Im Ausfallschritt trägt jedes Bein unabhängig — Defizite in Kraft, Stabilität
+      und Mobilität werden sofort sichtbar. Besonders Gluteus medius Schwäche zeigt
+      sich im unilateralen Standbein-Muster.
+
+      '
+  - question: Warum ist der Ausfallschritt funktioneller als die Beinpresse?
+    answer: 'Der Ausfallschritt erfordert dynamische Balance, Beckenstabilität und
+      Koordination zwischen mehreren Gelenken. Die Beinpresse fixiert den Rumpf —
+      sie isoliert Quadrizeps/Gluteus maximus, aber trainiert keine Lateralstabilität,
+      keine Propriozeption und keine Beinachsen-Kontrolle.
+
+      '
+  vault_tags:
+  - beintraining
+  - funktionell
+  - 064
+  - quadrizeps
+  - unilateral
+  common_errors_explained:
+    knie_valgus_kollaps:
+      description: Vorderes Knie fällt nach innen.
+      anatomical_reason: Schwäche des M. gluteus medius und fehlende Ansteuerung der
+        Außenrotatoren der Hüfte führen zu einer Instabilität der kinetischen Kette.
+      correction: Knie aktiv nach außen über die Fußspitze schieben; Fokus auf Fußgewölbe-Stabilität.
+      teaches:
+      - kniegelenk_stabilität
+      - aktivierung_der_hüftabduktoren
+    vorwaerts_kippen_oberkoerper:
+      description: Der Torso neigt sich zu stark nach vorne.
+      anatomical_reason: Mangelnde Core-Stabilität oder verkürzte Hüftbeuger, die
+        den Oberkörper in eine Vorneigung zwingen, um das Gleichgewicht zu halten.
+      correction: Core fest anspannen, Brustbein anheben, Fokus auf vertikale Bewegung
+        statt Vorwärtsneigung.
+      teaches:
+      - core_stabilität
+      - haltungsaufrichtung
+    gewicht_auf_fussspitze:
+      description: Die Ferse hebt beim vorderen Bein ab.
+      anatomical_reason: Verlagerung des Schwerpunkts nach vorne führt zu einer Überlastung
+        der Patellasehne und fehlender Aktivierung der posterioren Kette (Gluteus).
+      correction: Gewicht bewusst in die Ferse verlagern, gesamter Fuß bleibt vollflächig
+        am Boden.
+      teaches:
+      - druckpunktverteilung
+      - posteriore_kettenaktivierung

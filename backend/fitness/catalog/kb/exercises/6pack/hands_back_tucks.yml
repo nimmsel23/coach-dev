@@ -1,0 +1,49 @@
+exercise_id: hands_back_tucks
+description: Curated 6 Pack Promise entry for Hands Back Tucks.
+exercises:
+- exercise_id: hands_back_tucks
+  id: hands_back_tucks
+  name: Hands Back Tucks
+  display_name: Hands Back Tucks
+  german: Hands Back Tucks
+  english: Hands Back Tucks
+  category: core
+  type: isolation
+  movements:
+  - spinal_flexion
+  - hip_flexion
+  - lower_ab_emphasis
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 607_iliopsoas
+  secondary_muscles:
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  stabilizers:
+  - 503_obliquus_internus
+  - 603_gluteus_maximus
+  coaching_notes:
+  - Sitzen Sie aufrecht an, stützen Sie die Hände leicht hinter dem Körper und ziehen Sie die Knie kontrolliert zur Brust.
+  - Rollen Sie das Becken aktiv nach hinten ein, damit der Zug aus dem unteren Bauch und nicht aus Schwung entsteht.
+  - Strecken Sie die Beine nur so weit, wie Sie die Lendenwirbelsäule unter Kontrolle halten können.
+  common_errors:
+  - Das Zurücklehnen wird mit Schulterzug statt mit Rumpfspannung gehalten.
+  - Die Beine werden mit Schwung hineingeworfen und nicht kontrolliert getuckt.
+  - Der untere Rücken fällt beim Ausstrecken ins Hohlkreuz.
+  tags:
+  - 6pack_promise
+  - core
+  - lower_abs
+  aliases:
+  - Hands Back Tucks
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

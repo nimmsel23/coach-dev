@@ -1,0 +1,100 @@
+name: dumbbell_shoulder_press_lesson
+description: Anatomy teaching seed for 023.
+lessons:
+- exercise_id: '023'
+  title: Kurzhantel-Schulterdrücken — Unabhängige Schulterführung und Stabilisierung
+  region: shoulders
+  learning_goal:
+    short: Verstehen warum Kurzhanteln mehr Rotatorenmanschetten-Aktivität fordern als die Langhantel.
+    detailed: Lern wie die freie Bewegungsbahn beider Arme mehr Stabilisierungsarbeit im Schultergelenk erzwingt und welche Griffvariante die Schulter am schonendsten belastet.
+  movement_pattern:
+    primary: vertical_press
+    secondary:
+    - shoulder_flexion
+    - elbow_extension
+    - scapular_upward_rotation
+  joint_actions:
+    shoulder:
+      concentric:
+      - flexion
+      - abduction
+      eccentric:
+      - extension_control
+      stabilization:
+      - glenohumeral_centering
+      - rotator_cuff_cocontraction
+    scapula:
+      concentric:
+      - upward_rotation
+      eccentric:
+      - downward_rotation_control
+    elbow:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+  muscle_roles:
+    prime_movers:
+    - anterior_deltoid
+    - lateral_deltoid
+    synergists:
+    - triceps
+    - upper_trapezius
+    stabilizers:
+    - rotator_cuff
+    - core
+  body_highlighter_regions:
+    primary:
+    - shoulders
+    secondary:
+    - arms
+    light:
+    - upper_back
+    - core
+  trainer_explanation:
+    simple: Das Kurzhantel-Schulterdrücken trainiert dieselben Muskeln wie der OHP — fordert aber mehr Schulter-Stabilisierung weil beide Arme unabhängig geführt werden.
+    technical: Durch die unabhängigen Bewegungsbahnen muss die Rotatorenmanschette (insb. M. infraspinatus, M. supraspinatus) aktiv den Humeruskopf zentrieren. Das erhöht den koordinativen Anspruch und die Stabilisierungsarbeit gegenüber der Langhantel.
+    client_friendly: Fühl wie jede Schulter selbst arbeiten muss — es gibt keine Stange die beiden hilft.
+  feel_cues:
+  - Ellbogen leicht nach vorne — nicht komplett seitlich (T-Form vermeiden).
+  - Hanteln auf Ohrhöhe absenken, volle ROM.
+  - Kein Zusammenschlagen der Hanteln oben.
+  coaching_cues:
+  - Neutrale oder leicht gedrehte Griffe reduzieren Schulterbelastung.
+  - Kern anspannen — kein Ausweichen mit dem Rücken.
+  - Gleichmäßige Bewegung beider Arme.
+  common_errors:
+  - error: Ellbogen zu weit seitlich ausgestellt (T-Position).
+    anatomical_reason: Maximale Abduktion mit Außenrotation im Schultergelenk verengt das Subacromial-Fenster und erhöht das Impingement-Risiko des M. supraspinatus.
+    correction: Ellbogen leicht nach vorne führen (ca. 30° vor der Frontalebene).
+    coaching_cue: Ellbogen leicht schräg — nicht ganz seitlich ausgestellt.
+  - error: Unterer Rücken kippt ab (Hohlkreuz).
+    anatomical_reason: "Wie beim OHP: Core-Deaktivierung führt zur lumbalen Hyperextension."
+    correction: Bauch anspannen, Rippen nach unten halten.
+    coaching_cue: Sitz aufrecht, Rippen nach unten.
+  variations_teach:
+  - variation: Neutraler Griff (Hammer-Grip)
+    lesson: Reduziert Innenrotations-Stress im Schultergelenk — schonender für den Supraspinatus.
+  - variation: Arnold Press
+    lesson: Rotationsbewegung beim Drücken aktiviert mehr Deltoid-Anteile durch veränderten Kraftwinkel.
+  quiz:
+  - question: Warum fordern Kurzhanteln mehr Schulter-Stabilisierung als die Langhantel?
+    answer: Weil jede Hand unabhängig geführt wird. Die Rotatorenmanschette muss den Humeruskopf aktiv zentrieren ohne die koordinierende Wirkung der starren Stange.
+  - question: Welcher Ellbogenwinkel ist schultergesund beim Schulterdrücken?
+    answer: Ca. 30–45° vor der Frontalebene (Scapular Plane) — das minimiert Impingement-Risiko und hält das Glenoid optimal ausgerichtet.
+  simple_explanation: "Kurzhantel-Schulterdrücken trainiert Vorder- und Seitendeltoid als Hauptarbeiter, der Triceps streckt den Ellenbogen. Der Unterschied zur Langhantel: Jede Hantel muss eigenständig kontrolliert werden — das fordert die Rotatorenmanschette als Stabilisator stärker. Dadurch ist die Übung koordinativ anspruchsvoller, aber schult die Schulter ganzheitlicher.\n"
+  detailed_explanation: "Die Pars clavicularis (anterior) und Pars acromialis (lateral) des M. deltoideus sind die primären Krafterzeuger. Die Pars spinalis (posterior) hilft bei der Stabilisierung. Da beide Hanteln unabhängig geführt werden, muss die Rotatorenmanschette — besonders M. supraspinatus, M. infraspinatus und M. subscapularis — kontinuierlich den Humeruskopf in der Glenoidfläche zentrieren. Dies entspricht dem Prinzip der geschlossenen vs. offenen kinematischen Kette: mehr Freiheitsgrade = mehr Stabilisierungsbedarf.\n"
+  quiz_prompts:
+  - question: Warum empfehlen viele Trainer Kurzhanteln für Schulter-Rehabilitation?
+    answer: "Weil die freie Bewegungsbahn natürlichere Schultergelenk-Bahnen erlaubt und die Rotatorenmanschette aktiv trainiert wird. Die Langhantel erzwingt eine fixe Bahn die nicht für jede Schulteranatomie optimal ist.\n"
+  - question: Was ist der anatomische Vorteil des 'Scapular Plane Press'?
+    answer: "In der Scapulaebene (ca. 30° vor Frontalebene) steht das Glenoid dem Humerus optimal gegenüber. Das reduziert Kapseldehnung und Supraspinatus-Kompression — physiologischer als die reine Frontalebene.\n"
+  common_errors_explained:
+    t_position_elbows:
+      description: Ellbogen zu weit seitlich ausgestellt.
+      anatomical_reason: "Maximale Abduktion + Außenrotation verengt den Subacromial-Raum. Der M. supraspinatus wird zwischen Acromion und Humeruskopf eingeklemmt.\n"
+      correction: Ellbogen ca. 30° vor der Frontalebene führen.
+      teaches:
+      - subacromial_space
+      - scapular_plane_movement
+      - impingement_prevention

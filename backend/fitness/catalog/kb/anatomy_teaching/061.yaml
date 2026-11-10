@@ -1,0 +1,102 @@
+name: front_squat_lesson
+description: Anatomy teaching seed for 061.
+lessons:
+- exercise_id: '061'
+  title: Frontkniebeuge — Aufrechter Torso und Quad-Dominanz
+  region: legs
+  learning_goal:
+    short: Verstehen warum die Frontrack-Position eine aufrechte Körperhaltung erzwingt und so Quads stärker betont als die Kniebeuge.
+    detailed: Lern wie der Schwerpunkt des Systems (Stange vorne) die Kniebeugung tiefer ermöglicht und die Lendenwirbelsäule besser schützt — wenn die Ellbogen oben bleiben.
+  movement_pattern:
+    primary: squat
+    secondary:
+    - knee_flexion
+    - hip_flexion
+    - ankle_dorsiflexion
+  joint_actions:
+    hip:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+      stabilization:
+      - pelvis_stabilization
+    knee:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+      stabilization:
+      - valgus_control
+    ankle:
+      stabilization:
+      - dorsiflexion_mobility
+    lumbar:
+      stabilization:
+      - anti_flexion
+      - neutral_spine
+  muscle_roles:
+    prime_movers:
+    - quadriceps
+    synergists:
+    - gluteus_maximus
+    - erector_spinae
+    stabilizers:
+    - core
+    - upper_back
+    - anterior_deltoid
+  body_highlighter_regions:
+    primary:
+    - quads
+    secondary:
+    - glutes
+    light:
+    - core
+    - upper_back
+  trainer_explanation:
+    simple: Die Stange vorne erzwingt aufrechten Oberkörper — dadurch treffen Quads mehr Last als bei der normalen Kniebeuge.
+    technical: Durch den anterioren Schwerpunkt (Stange vor dem Körperschwerpunkt) muss der Rumpf aufrechter bleiben um das Gleichgewicht zu halten. Das erhöht den Kniebeugungs-Winkel und die Quad-Belastung, reduziert gleichzeitig den Hüft-Extensionsmoment.
+    client_friendly: Ellbogen hoch — sobald die Ellbogen fallen, fällt die Stange.
+  feel_cues:
+  - Ellbogen die ganze Zeit hoch halten — das ist der Schlüssel.
+  - Knie aktiv nach außen drücken.
+  - Aufrecht bleiben wie ein Turm — keine Vorlage.
+  coaching_cues:
+  - Ellbogen-Höhe ist Priority #1.
+  - Knie über den Zehen, Fersen am Boden.
+  - Volle Tiefe anstreben wenn Mobilität erlaubt.
+  common_errors:
+  - error: Ellbogen fallen während der Bewegung.
+    anatomical_reason: Die Stange rutscht nach vorne wenn die Frontrack-Spannung nachlässt. Der Oberkörper muss sich nach vorne neigen um Gewicht zu fangen — jetzt dominiert Hüftextension statt Knieextension.
+    correction: Handgelenks-Flexibilität verbessern, Ellbogen aktiv nach oben halten.
+    coaching_cue: Ellbogen hoch — immer! Wenn sie fallen, ist das Set vorbei.
+  - error: Oberkörper kippt nach vorne (Good Morning Squat).
+    anatomical_reason: Mangelnde Oberkörper-Aufrichtung durch schwache obere Rückenmuskulatur oder Handgelenk-Immobilität.
+    correction: Sprunggelenk-Mobilität und Handgelenks-Flexibilität trainieren.
+    coaching_cue: Brust hoch, Ellbogen hoch — du bist ein Turm.
+  variations_teach:
+  - variation: Kreuzgriff
+    lesson: Einstieg ohne Handgelenks-Mobilität — erlaubt Frontsquat-Bewegungsmuster zu erlernen.
+  - variation: Goblet Squat
+    lesson: Vorbereitung auf Frontsquat — gleicher aufrechter Torso, geringere Handgelenks-Anforderung.
+  quiz:
+  - question: Warum betont der Frontsquat die Quads stärker als der Back Squat?
+    answer: Der anteriore Schwerpunkt erzwingt aufrechten Torso. Das reduziert den Hüft-Flexionswinkel und erhöht den Knie-Flexionswinkel — mehr Arbeit für Quadrizeps, weniger für Gluteus.
+  - question: Welche Mobilitätsanforderungen sind für einen guten Frontsquat besonders wichtig?
+    answer: Sprunggelenk-Dorsiflexion (damit die Knie weit nach vorne können ohne die Fersen abzuheben) und Handgelenks-Flexion (für die Frontrack-Position).
+  simple_explanation: "Der Frontsquat ist die Kniebeuge mit der Stange vor dem Körper. Weil die Last vorne liegt, muss der Oberkörper aufrecht bleiben — sonst fällt die Stange. Das erzwingt stärkere Kniebeugungs-Tiefe und aktiviert Quads deutlich mehr als der normale Back Squat. Ellbogen oben zu halten ist die technische Grundvoraussetzung.\n"
+  detailed_explanation: "Der anteriore Schwerpunkt (Stange in Front Rack) verlagert das Systemgewicht nach vorne. Um die Balance zu halten, muss der Rumpf aufrechter bleiben — das vergrößert den tibialen Vorlagewinkel und fordert maximale Sprunggelenk-Dorsiflexion. Die Mm. quadriceps femoris (Rectus femoris, Vastus lateralis, medialis, intermedius) sind die primären Krafterzeuger. Der M. gluteus maximus unterstützt die Hüftextension. Der obere Rücken (Trapezius, Rhomboiden) muss aktiv die Ellbogen-Position halten. Kernmuskulatur und Erector spinae stabilisieren die Lendenwirbelsäule gegen Flexion.\n"
+  quiz_prompts:
+  - question: Warum ist der Frontsquat für Gewichtheber besonders relevant?
+    answer: "Der Frontsquat ist direkte Transferbewegung für das Umsetzen (Clean). Die Front-Rack-Position und der aufrechte Torso sind identisch mit der Fangposition beim Clean and Jerk.\n"
+  - question: Wie schützt der Frontsquat verglichen mit dem Back Squat die LWS?
+    answer: "Der aufrechte Torso reduziert das Flexionsmoment auf die LWS erheblich. Allerdings steigen die Anforderungen an die Kniegelenke und Sprunggelenke. Bei LWS-Problemen ist der Frontsquat oft besser verträglich.\n"
+  common_errors_explained:
+    elbows_drop:
+      description: Ellbogen fallen während des Squats.
+      anatomical_reason: "Schwache Handgelenks-Flexion oder mangelnde T-Spine-Extension erlauben keine stabile Front-Rack-Position. Die Stange rollt nach vorne — erzwingt Oberkörpervorlage.\n"
+      correction: Handgelenks-Mobilität und T-Spine-Mobilität gezielt trainieren. Mit Kreuzgriff als Übergangslösung arbeiten.
+      teaches:
+      - front_rack_mechanics
+      - wrist_mobility
+      - thoracic_extension

@@ -1,0 +1,20 @@
+wger_mapping:
+  enabled: true
+  notes: "wger muscle ID → internal catalog muscle ID. IDs aus /api/v2/muscle/ (lokal :8000)."
+  mappings:
+    1:  upper_arm_front   # Biceps brachii
+    2:  shoulders_front   # Anterior deltoid
+    3:  chest             # Serratus anterior (anterior thorax → chest)
+    4:  chest             # Pectoralis major
+    5:  upper_arm_back    # Triceps brachii
+    6:  core              # Rectus abdominis
+    7:  calves            # Gastrocnemius
+    8:  glutes            # Gluteus maximus
+    9:  upper_back        # Trapezius
+    10: thigh_front       # Quadriceps femoris
+    11: thigh_back        # Biceps femoris (Hamstrings)
+    12: lats              # Latissimus dorsi
+    13: upper_arm_front   # Brachialis
+    14: core              # Obliquus externus abdominis
+    15: calves            # Soleus
+    16: lower_back        # Erector spinae

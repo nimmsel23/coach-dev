@@ -1,0 +1,7 @@
+label_de: Bizeps
+label_en: Biceps
+label_lat: Regio brachii anterior
+aliases: [biceps, bizeps, arm front, oberarm vorne]
+muscles:
+  - 402_biceps_brachii
+  - 403_brachialis

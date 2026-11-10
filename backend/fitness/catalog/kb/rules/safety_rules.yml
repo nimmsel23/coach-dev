@@ -1,0 +1,3 @@
+safety_rules:
+  require_warmup: true
+  warn_on_pain: true

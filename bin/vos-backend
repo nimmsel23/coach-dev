@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# thin wrapper — SOT under ~/dev/coach-dev/backend
+set -euo pipefail
+ROOT="${COACH_BACKEND_ROOT:-$HOME/dev/coach-dev/backend}"
+case "${1:-}" in
+  start) cd "$ROOT/node" && exec node server.mjs ;;
+  tc-proxy) exec node "$ROOT/node/scripts/tc-cors-proxy.mjs" ;;
+  *) echo "Usage: vos-backend [start|tc-proxy]" >&2; exit 2 ;;
+esac

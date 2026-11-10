@@ -5,10 +5,11 @@ Stand 2026-11-09. **Einstieg für Agenten** — bei Zweifel diese Datei zuerst.
 | Was | Wo |
 |---|---|
 | Coach-HTTP `:9150` | `~/dev/coach-dev/server.py` |
-| Package `fitness.*` (API/Catalog-CLI) | `~/dev/coach-dev/fitness` |
-| Sessions-Python `/fitness-api` | `~/dev/backend/fitness/backend` |
-| Node/Hono + Functions | `~/dev/backend` |
-| Fuel Node + shared + Python | `~/dev/backend/fuel` (+ `fuel/backend`) |
+| Package `fitness.*` (API/Catalog-CLI) | `~/dev/coach-dev/backend/fitness` |
+| Sessions + Fitness-Package `/fitness-api` | `~/dev/coach-dev/backend/fitness/` |
+| anatomy-kb | `~/dev/coach-dev/anatomy-kb` |
+| Node/Hono + Functions + Fuel | `~/dev/coach-dev/backend/` (`node/`, `functions/`, `fuel/`) |
+| Fuel Node + Python | `~/dev/coach-dev/backend/fuel/` |
 | Fitness PWA | `~/dev/fitness-dev` (kein `fitness/`-Package mehr) |
 | KB YAML | `~/dev/fitness` |
 
@@ -43,19 +44,19 @@ für feinere App-Features. Catalog/KB = Coach-Werkzeug, nicht Kern der Fitness-/
 | Catalog-**Python** (CLI, Enrichment, Audit, Inbox) | `~/dev/coach-dev/fitness/catalog/` | `coach catalog` — Werkzeug, nicht App-Kern |
 | **Coach-HTTP-Server** (`server.py`, Keepers) | `~/dev/coach-dev` | `coach-api.service` **:9150** — ein Prozess |
 | FastAPI Catalog/Inbox/Workouts (in-process) | `~/dev/coach-dev/fitness/api/` | von `server.py` gemountet; kein `:8100` |
-| FastAPI Sessions/UI (`/fitness-api`) | `~/dev/backend/fitness/backend` | Coach mountet via `COACH_FITNESS_BACKEND_ROOT` (Default `~/dev/backend/fitness`) |
+| FastAPI Sessions/UI (`/fitness-api`) | `~/dev/coach-dev/backend/` | Coach: `COACH_FITNESS_BACKEND_ROOT` = Repo mit Ordner `backend/` (Default `~/dev/coach-dev`) |
+| anatomy-kb | `~/dev/coach-dev/anatomy-kb` | Symlink in fitness-dev; Units WD hier |
 | Workout-/Plan-Schmiede UI + Plan-Editor | Plan (`~/dev/plan-dev`) konsumiert von Coach (`modules/plan`) | Plan owns editor; Coach hosts Schmiede |
-| Node/Hono + Cloud Functions | `~/dev/backend` (+ `fuel/`; Kopien: plan-backend) | **kein** Coach-Inbox-SOT; Python Sessions-API läuft über Coach-Mount |
+| Node/Hono + Cloud Functions | `~/dev/backend` (+ `fuel/`) | **kein** Coach-Inbox/Sessions-Python-SOT |
 | Fitness Firebase PWA (Logging, Overlay) | `~/dev/fitness-dev` | Hosting/UI; kein nested Python-`backend/` mehr |
 | Fuel App | `~/dev/fuel-dev` + Node/Python in `~/dev/backend/fuel` | Fuel Node/Python getrennt; Coach proxied Fuel → `:8000` |
 | Klienten-Python / Praxis-CLIs | `~/dev/coach-dev/klienten-python`, Sibling `~/dev/praxis-dev` | `coach klientenctl`, `coach praxis` |
 
 **Korrektur:** Coach-Laufzeit-SOT ist **coach-dev** (`server.py` :9150).
-Inbox/Catalog bleiben in `coach-dev/fitness/`. Das Sessions-/Sync-Python-Paket
-liegt unter `~/dev/backend/fitness/backend` und wird von Coach unter
-`/fitness-api` übernommen (kein zweiter Listener). Node/Functions in
-`~/dev/backend` bleiben getrennt. Die **YAML-KB** gehört dem
-Daten-Repo `~/dev/fitness` und ist seit 2026-11-09 als Git-Submodul unter
+Inbox/Catalog und Sessions-Code (`backend/`, Mount `/fitness-api`)
+liegen in `coach-dev`. Node/Functions in `~/dev/backend` bleiben getrennt
+(`backend/fitness/` = Pointer). Die **YAML-KB** gehört dem Daten-Repo
+`~/dev/fitness` und ist seit 2026-11-09 als Git-Submodul unter
 `fitness/catalog/kb` angebunden. KB-Edits dort = Working Tree des Daten-Repos
 → in `~/dev/fitness` / dem Submodul committen und den Gitlink in Coach nachziehen.
 
@@ -74,6 +75,10 @@ Daten-Repo `~/dev/fitness` und ist seit 2026-11-09 als Git-Submodul unter
 |---|---|---|
 | `~/dev/fitness` | **KB-Daten-SOT** | YAML hier versionieren |
 | `~/dev/coach-dev/fitness/` | **Python/API-SOT** (`fitness.*`); `catalog/kb` = Submodul → fitness | einzige Pflege |
+| `~/dev/coach-dev/backend/` | Sammelordner Domain-Pakete (`fitness/`, bald `fuel/`, …) | `PYTHONPATH` += dieser Ordner |
+| `~/dev/coach-dev/backend/fitness/` | **Fitness-Package** (`fitness.*`, `/fitness-api`) | einzige Fitness-Python-SOT |
+| `~/dev/coach-dev/anatomy-kb/` | **anatomy-kb SOT** | fitness-dev Symlink |
+| `~/dev/backend/fitness/` | Pointer-Docs only | kein Python-Tree |
 | `~/dev/fitness-dev/fitness/` | **entfernt 2026-11-09** (war 174/176 bytegleich, Coach neuer) | Archiv `_archive/2026-11-09-fitness-dev-fitness-fork`; Deploy synct aus Coach |
 | `~/dev/plan-dev/fitness/` | **kein** Python-Paket mehr | Fork-Schuld schon archiviert |
 | `~/dev/fitness-cli` | ungenutzte Teilkopie | → `~/dev/_archive/2026-11-09-fitness-orphans/` |
@@ -89,6 +94,7 @@ Daten-Repo `~/dev/fitness` und ist seit 2026-11-09 als Git-Submodul unter
    (= `~/dev/fitness`) committen + pushen; Coach-Gitlink bumpen.
 2. Catalog-**Code**/Enrichment-CLI: unter `coach-dev/fitness/catalog/` (`coach catalog`).
 3. Workout-/Plan-UI: Plan-Repo; Coach-Pointer bewusst bumpen.
-4. Keine neuen Kopien von `fitness/` in plan-dev oder backend anlegen.
+4. Keine neuen Kopien von `fitness/`-Python in plan-dev oder backend anlegen
+   (`backend/fitness/` bleibt Pointer).
 5. Vor dem Löschen weiterer Bäume: systemd-WDs prüfen
    (`systemctl --user show <unit> -p WorkingDirectory`).

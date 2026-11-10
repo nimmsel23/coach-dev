@@ -1,1 +1,7 @@
-/home/alpha/.local/share/uv/tools/fitness-agent/bin/fitness-inbox
+#!/usr/bin/env bash
+# fitness-inbox — local inbox/notifier TUI (same as: coach notifications)
+set -euo pipefail
+COACH="${COACH_DEV:-$HOME/dev/coach-dev}"
+BACKEND="${BACKEND_FITNESS_ROOT:-$HOME/dev/backend/fitness}"
+export PYTHONPATH="${COACH}:${BACKEND}${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m backend.notifier "$@"

@@ -3,6 +3,7 @@ import {
   Inbox, Search, CheckCircle, Trash2, ChevronRight, RefreshCw, Sparkles, AlertTriangle,
 } from 'lucide-react';
 import { api } from './api';
+import { normalizeInboxItem } from './ids';
 import { DescriptionTabViewer, Loading, ErrorBox } from './Shared';
 
 // Feld-Gewichte für den Vollständigkeits-Score eines Drafts — bestimmen zugleich,
@@ -53,7 +54,7 @@ export default function InboxTab({ showToast }) {
     setLoading(true);
     api('/fitness/inbox')
       .then((d) => {
-        const list = d.items || [];
+        const list = (d.items || []).map(normalizeInboxItem);
         setItems(list);
         setSelectedIds(new Set());
         if (list.length > 0) {
@@ -174,7 +175,7 @@ export default function InboxTab({ showToast }) {
   let visible = enriched.filter(({ it, source }) => {
     if (sourceFilter !== 'all' && source !== sourceFilter) return false;
     if (!q) return true;
-    const hay = `${it.name || ''} ${it.query || ''} ${it.id || ''} ${it.category || ''}`.toLowerCase();
+    const hay = `${it.name || ''} ${it.display_name || ''} ${it.query || ''} ${it.id || ''} ${it.category || ''}`.toLowerCase();
     return hay.includes(q);
   });
   visible = visible.sort((a, b) => {

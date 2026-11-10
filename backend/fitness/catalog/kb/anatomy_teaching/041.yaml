@@ -1,0 +1,78 @@
+name: incline_dumbbell_press_lesson
+description: Anatomy teaching seed for incline dumbbell press.
+lessons:
+  - exercise_id: 041
+    title: "Incline Dumbbell Press - obere Brust verstehen"
+    region: chest
+    learning_goal:
+      short: "Obere Brust, vordere Schulter und Trizeps im Schrägdrücken verstehen."
+      detailed: "Lern, wie die Schrägbank den Druckwinkel verändert und warum der Fokus stärker auf obere Brust und vordere Schulter wandert."
+    movement_pattern:
+      primary: horizontal_press
+      secondary:
+        - shoulder_horizontal_adduction
+        - elbow_extension
+    joint_actions:
+      shoulder:
+        eccentric:
+          - horizontal_abduction_control
+        concentric:
+          - horizontal_adduction
+        stabilization:
+          - humeral_head_control
+      elbow:
+        eccentric:
+          - flexion_control
+        concentric:
+          - extension
+        stabilization:
+          - elbow_tracking
+      scapula:
+        stabilization:
+          - retraction
+          - depression
+    muscle_roles:
+      prime_movers:
+        - chest
+        - shoulders
+      synergists:
+        - arms
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - chest_front
+      secondary:
+        - shoulders_front
+        - upper_arm_back
+      light:
+        - abdomen_front
+    trainer_explanation:
+      simple: "Die Schrägbank verschiebt den Druck etwas nach oben. So arbeitet die obere Brust besonders stark mit."
+      technical: "Durch den veränderten Presswinkel steigt die relative Beteiligung des oberen Pectoralis major und der anterioren Delts bei stabiler Scapula-Position."
+      client_friendly: "Du sollst die Bewegung vor allem in der oberen Brust spüren, während die Schultern stabil bleiben."
+    feel_cues:
+      - "Dehnung in der oberen Brust unten."
+      - "Druck aus Brust und Armen nach oben."
+      - "Schultern bleiben kontrolliert."
+    coaching_cues:
+      - "Brust hoch."
+      - "Schulterblätter stabil."
+      - "Kontrolliert absenken."
+    common_errors:
+      - error: "Zu steile Bank."
+        anatomical_reason: "Der Druck verschiebt sich zu stark in die Schulter."
+        correction: "Bankwinkel moderat halten."
+        coaching_cue: "Nicht zur Schulterpresse machen."
+      - error: "Schultern nach vorne kippen."
+        anatomical_reason: "Die vordere Schulter übernimmt die Last ohne stabile Scapula."
+        correction: "Brust oben lassen und Schulterblätter setzen."
+        coaching_cue: "Nicht in den Schultern hängen."
+    variations_teach:
+      - variation: "barbell incline press"
+        lesson: "Mehr Stabilität, aber ähnlicher Brustwinkel."
+      - variation: "neutral grip dumbbell press"
+        lesson: "Oft schulterfreundlicher bei ähnlichem Reiz."
+    quiz:
+      - question: "Warum fühlt sich die Schrägbank anders an als flaches Drücken?"
+        answer: "Der Winkel verschiebt den Fokus stärker zur oberen Brust und vorderen Schulter."

@@ -68,26 +68,33 @@ def hub_public_dist() -> Path:
 
 
 def load_fitness_app():
-    """Sessions/UI FastAPI under /fitness-api — SOT: ~/dev/backend/fitness/backend.
+    """Sessions/UI FastAPI under /fitness-api — `backend/fitness` package.
 
-    Not the coach inbox API (`fitness.api` via attach_fitness_api). Needs
-    `fitness.*` on sys.path (coach-dev / fitness-dev already provide that).
+    `COACH_BACKEND_ROOT` (alias `COACH_FITNESS_BACKEND_ROOT`) = folder that
+    contains domain packages (`fitness/`, later `fuel/`, …). Default:
+    ~/dev/coach-dev/backend.
     """
     source_root = Path(os.environ.get(
-        "COACH_FITNESS_BACKEND_ROOT",
-        Path.home() / "dev" / "backend" / "fitness",
+        "COACH_BACKEND_ROOT",
+        os.environ.get(
+            "COACH_FITNESS_BACKEND_ROOT",
+            Path.home() / "dev" / "coach-dev" / "backend",
+        ),
     )).expanduser().resolve()
-    if not (source_root / "backend" / "api" / "app.py").is_file():
+    if not (source_root / "fitness" / "api" / "app.py").is_file():
         return None
 
     source = str(source_root)
     if source not in sys.path:
         sys.path.insert(0, source)
-    # Prefer this tree's `backend` package over any other checkout on sys.path.
     for name in list(sys.modules):
-        if name == "backend" or name.startswith("backend."):
+        if name == "fitness" or name.startswith("fitness."):
+            # don't wipe fitness if already loaded from same tree — only force api.app refresh
+            pass
+    for name in list(sys.modules):
+        if name == "fitness.api.app" or name.startswith("fitness.api.app."):
             del sys.modules[name]
-    module = importlib.import_module("backend.api.app")
+    module = importlib.import_module("fitness.api.app")
     module_path = Path(module.__file__).resolve()
     if not module_path.is_relative_to(source_root):
         raise RuntimeError(f"Fitness backend import resolved outside {source_root}: {module_path}")
@@ -95,14 +102,12 @@ def load_fitness_app():
 
 
 def attach_fitness_api(app: FastAPI) -> bool:
-    """Former fitness-python-backend (:9150) — same routers, same service as coach-api.
-
-    Coach-Laptop-Arbeit (Inbox/Katalog/Enrichment-Routen). Kein Proxy nach :8100;
-    coach-sync nutzt dieselben Module. Watcher bleiben bei coach-sync.service.
-    """
+    """Inbox/Catalog/Workouts from backend/fitness (same process as coach-api)."""
     root = str(ROOT)
-    if root not in sys.path:
-        sys.path.insert(0, root)
+    backend_root = str(ROOT / "backend")
+    for path in (backend_root, root):
+        if path not in sys.path:
+            sys.path.insert(0, path)
     try:
         from fitness.api.routers.sessions import router as sessions_router
         from fitness.api.routers.journal import router as journal_router
@@ -359,8 +364,42 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     from coach_local_traction import router as local_traction_router
     app.include_router(local_traction_router)
 
-    from coach_legacy_clients import include_legacy_clients, legacy_ui
+    from coach_legacy_clients import (
+        include_legacy_clients, legacy_ui, schmiede_dir, konsole_dir, spa_document,
+    )
     include_legacy_clients(app)
+    from coach_yuhonas import create_router as create_yuhonas_router
+    app.include_router(create_yuhonas_router())
+
+    @app.api_route("/schmiede", methods=["GET", "HEAD"])
+    @app.api_route("/schmiede/", methods=["GET", "HEAD"])
+    async def schmiede_index(request: Request):
+        from coach_local_plans import local_only
+        local_only(request)
+        return spa_document(schmiede_dir(), "klienten.html", "/_klienten/")
+
+    @app.api_route("/schmiede/{path:path}", methods=["GET", "HEAD"])
+    async def schmiede_assets(path: str, request: Request):
+        from coach_local_plans import local_only
+        local_only(request)
+        if not path or not Path(path).suffix:
+            return spa_document(schmiede_dir(), "klienten.html", "/_klienten/")
+        return frontend(schmiede_dir(), path)
+
+    @app.api_route("/konsole", methods=["GET", "HEAD"])
+    @app.api_route("/konsole/", methods=["GET", "HEAD"])
+    async def konsole_index(request: Request):
+        from coach_local_plans import local_only
+        local_only(request)
+        return spa_document(konsole_dir(), "konsole.html", "/konsole/")
+
+    @app.api_route("/konsole/{path:path}", methods=["GET", "HEAD"])
+    async def konsole_assets(path: str, request: Request):
+        from coach_local_plans import local_only
+        local_only(request)
+        if not path or not Path(path).suffix:
+            return spa_document(konsole_dir(), "konsole.html", "/konsole/")
+        return frontend(konsole_dir(), path)
 
     @app.api_route("/_klienten/{path:path}", methods=["GET", "HEAD"])
     async def legacy_client_assets(path: str, request: Request):
@@ -387,8 +426,11 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     @app.api_route("/clientforge", methods=["GET", "HEAD"])
     @app.api_route("/clientforge/", methods=["GET", "HEAD"])
     async def clientforge_redirect(request: Request):
-        query = request.url.query
-        return RedirectResponse("/coach/clientforge.html" + ("?" + query if query else ""))
+        # Alter Klienten-Pfad-Alias → Schmiede. Coach-Firebase-App (/coach/*) bleibt unangetastet.
+        client = (request.query_params.get("client") or "").strip()
+        if client and all(c.isalnum() or c in "-_" for c in client):
+            return RedirectResponse(f"/schmiede/{client}/", status_code=302)
+        return RedirectResponse("/schmiede/", status_code=302)
 
     @app.api_route("/coach", methods=["GET", "HEAD"])
     async def coach_redirect():
@@ -459,6 +501,10 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
 
     def website_static(relative: str = ""):
         relative = relative.strip("/")
+        # Alias: /website/vitaltrainer → Homepage (Repo = daniel-vitaltrainer-firebase,
+        # Datei heißt index.html, nicht vitaltrainer.html).
+        if relative in {"vitaltrainer", "vitaltrainer/", "vitaltrainer/index.html"}:
+            relative = "index.html"
         if not relative or relative.endswith("/"):
             relative = (relative + "index.html").lstrip("/")
         found = file_from_dirs(relative, website_dirs)
@@ -472,7 +518,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
         return JSONResponse({
             "detail": "Website asset missing",
             "path": relative or "/",
-            "hint": "Submodul website/ (daniel-vitaltrainer-firebase) auschecken",
+            "hint": "Submodul website/ (daniel-vitaltrainer-firebase) auschecken; Homepage unter /website/",
         }, status_code=404)
 
     @app.api_route("/website", methods=["GET", "HEAD"])
@@ -508,11 +554,7 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
             plans_module.LocalPlans(clients_root()).client(client_id)
         except plans_module.PlanError as error:
             return JSONResponse({"detail": str(error)}, status_code=error.status)
-        document = legacy_ui() / 'klienten.html'
-        if not document.is_file():
-            return JSONResponse({"detail": "Klientenoberfläche fehlt. klienten-dev UI bauen."}, status_code=503)
-        html = document.read_text(encoding='utf-8').replace('<head>', '<head><base href="/_klienten/">', 1)
-        return HTMLResponse(html, headers={"Cache-Control": "no-store"})
+        return spa_document(legacy_ui(), "klienten.html", "/_klienten/")
 
     @app.api_route("/{path:path}", methods=["GET", "HEAD"])
     async def index(path: str):

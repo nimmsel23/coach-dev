@@ -1,0 +1,48 @@
+exercise_id: hands_free_tucks
+description: Curated 6 Pack Promise entry for Hands Free Tucks.
+exercises:
+- exercise_id: hands_free_tucks
+  id: hands_free_tucks
+  name: Hands Free Tucks
+  display_name: Hands Free Tucks
+  german: Hands Free Tucks
+  english: Hands Free Tucks
+  category: core
+  type: isolation
+  movements:
+  - hip_flexion
+  - spinal_flexion
+  - lower_ab_emphasis
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 607_iliopsoas
+  secondary_muscles:
+  - 504_transverse_abdominis
+  stabilizers:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  coaching_notes:
+  - Balancieren Sie ohne Handstütze in einer leichten V-Sit-Position und ziehen Sie die Knie kontrolliert zum Oberkörper.
+  - Halten Sie Brustkorb und Becken aktiv gekoppelt, damit die Spannung nicht nur über Hüftbeuger läuft.
+  - Arbeiten Sie mit ruhigem Tempo und klaren Endpunkten statt mit Pendelbewegung.
+  common_errors:
+  - Der Oberkörper kippt zurück und die Übung wird nur durch Balance gerettet.
+  - Die Füße werden nach vorne geschleudert und wieder eingefangen.
+  - Die Hände rudern stark mit, obwohl die Stabilität aus dem Rumpf kommen soll.
+  tags:
+  - 6pack_promise
+  - core
+  - lower_abs
+  aliases:
+  - Hands Free Tucks
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

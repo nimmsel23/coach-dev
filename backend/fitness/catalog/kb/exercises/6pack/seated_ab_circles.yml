@@ -1,0 +1,48 @@
+exercise_id: seated_ab_circles
+description: Curated 6 Pack Promise entry for Seated Ab Circles.
+exercises:
+- exercise_id: seated_ab_circles
+  id: seated_ab_circles
+  name: Seated Ab Circles
+  display_name: Seated Ab Circles
+  german: Seated Ab Circles
+  english: Seated Ab Circles
+  category: core
+  type: isolation
+  movements:
+  - trunk_rotation
+  - anti_extension
+  - hip_flexion
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  secondary_muscles:
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  stabilizers:
+  - 607_iliopsoas
+  coaching_notes:
+  - Lehnen Sie den Oberkörper leicht zurück und halten Sie die Brust stabil, während die Beine einen Kreis zeichnen.
+  - Denken Sie an eine gleichmäßige Kreisbahn statt an hektische Richtungswechsel.
+  - Atmen Sie ruhig weiter und halten Sie die Spannung tief im Bauch, nicht nur vorne sichtbar.
+  common_errors:
+  - Die Kreisbewegung wird fast nur aus den Beinen und nicht aus dem Rumpf gesteuert.
+  - Der Oberkörper kippt bei jeder Runde stark zurück.
+  - Die Füße werden einfach geschleudert, ohne saubere Kontrolle über die Endpunkte.
+  tags:
+  - 6pack_promise
+  - core
+  - rotation
+  aliases:
+  - Seated Ab Circles
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

@@ -1,0 +1,68 @@
+name: cable_fly_lesson
+description: Anatomy teaching seed for cable fly.
+lessons:
+  - exercise_id: 103
+    title: "Cable Fly - horizontale Adduktion fühlen"
+    region: chest
+    learning_goal:
+      short: "Brust zusammenführen statt nur die Hände bewegen."
+      detailed: "Lern, wie die Brust über horizontale Adduktion arbeitet und warum ein ruhiger Schultergürtel den Reiz besser macht."
+    movement_pattern:
+      primary: horizontal_adduction
+      secondary:
+        - shoulder_flexion_component
+    joint_actions:
+      shoulder:
+        eccentric:
+          - horizontal_abduction_control
+        concentric:
+          - horizontal_adduction
+        stabilization:
+          - humeral_head_control
+      scapula:
+        stabilization:
+          - depression
+          - mild_retraction
+    muscle_roles:
+      prime_movers:
+        - chest
+      synergists:
+        - shoulders
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - chest_front
+      secondary:
+        - shoulders_front
+      light:
+        - abdomen_front
+    trainer_explanation:
+      simple: "Beim Cable Fly geht es darum, die Arme vor dem Körper zusammenzuführen und die Brust dabei unter Spannung zu halten."
+      technical: "Die horizontale Adduktion des Humerus betont den Pectoralis major, während die Scapula ruhig genug bleibt, um die Last sauber zu übertragen."
+      client_friendly: "Du sollst die Brust vorne zusammenziehen und nicht mit Schwung arbeiten."
+    feel_cues:
+      - "Brust arbeitet über die ganze Bahn."
+      - "Dehnung außen, Spannung innen."
+      - "Schultern bleiben ruhig."
+    coaching_cues:
+      - "Leichter Ellbogenwinkel."
+      - "Arme in einem großen Bogen führen."
+      - "Nicht in den Schultern ziehen."
+    common_errors:
+      - error: "Zu viel Schwung."
+        anatomical_reason: "Die Spannung geht in den Körpermoment statt in die Brust."
+        correction: "Tempo reduzieren und die Bahn kontrollieren."
+        coaching_cue: "Langsam und sauber."
+      - error: "Schultern übernehmen die Bewegung."
+        anatomical_reason: "Die Schultergelenk-Position kippt und die Brust verliert den klaren Zug."
+        correction: "Schulterblätter stabil halten."
+        coaching_cue: "Brust führt, Schultern bleiben ruhig."
+    variations_teach:
+      - variation: "pec deck"
+        lesson: "Ähnliches Muster an der Maschine mit mehr Führung."
+      - variation: "dumbbell fly"
+        lesson: "Freie Variante mit größerer Stabilisationsanforderung."
+    quiz:
+      - question: "Was ist das Hauptbewegungsmuster beim Cable Fly?"
+        answer: "Horizontale Adduktion der Arme vor dem Körper."

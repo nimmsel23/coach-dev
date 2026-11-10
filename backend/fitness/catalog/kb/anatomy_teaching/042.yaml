@@ -1,0 +1,79 @@
+name: barbell_row_lesson
+description: Anatomy teaching seed for barbell row.
+lessons:
+  - exercise_id: 042
+    title: "Langhantelrudern - kräftiger horizontaler Zug"
+    region: back
+    learning_goal:
+      short: "Rudern mit klarer Hüft- und Rumpfspannung verstehen."
+      detailed: "Lern, wie der freie Oberkörper das Rudern schwerer und technisch anspruchsvoller macht."
+    movement_pattern:
+      primary: horizontal_pull
+      secondary:
+        - hip_hinge_isometric
+    joint_actions:
+      shoulder:
+        eccentric:
+          - extension_control
+        concentric:
+          - extension
+        stabilization:
+          - humeral_head_control
+      elbow:
+        eccentric:
+          - flexion_control
+        concentric:
+          - flexion
+        stabilization:
+          - tracking
+      trunk:
+        stabilization:
+          - hinge_hold
+          - anti_flexion
+    muscle_roles:
+      prime_movers:
+        - back
+      synergists:
+        - arms
+        - shoulders
+      stabilizers:
+        - core
+        - lower_back
+    body_highlighter_regions:
+      primary:
+        - upper_back
+        - lats
+      secondary:
+        - upper_arm_front
+      light:
+        - lower_back
+        - abdomen_front
+    trainer_explanation:
+      simple: "Beim Langhantelrudern arbeiten Rücken und Rumpf gemeinsam."
+      technical: "Die horizontale Zugarbeit trifft den Rücken, während der hip hinge und die Rumpfspannung die Kraftübertragung absichern."
+      client_friendly: "Zieh die Stange zum Körper und bleib mit dem Oberkörper ruhig."
+    feel_cues:
+      - "Rücken zieht kräftig."
+      - "Hüfte bleibt stabil."
+      - "Core hält die Position."
+    coaching_cues:
+      - "Rücken lang."
+      - "Stange zum Bauch."
+      - "Nicht reißen."
+    common_errors:
+      - error: "Rücken rund werden lassen."
+        anatomical_reason: "Die Lendenwirbelsäule verliert Spannung und die Zugbahn kippt."
+        correction: "Hinge sauber setzen und Spannung halten."
+        coaching_cue: "Brust offen, Rücken lang."
+      - error: "Zu viel Schwung."
+        anatomical_reason: "Die Last wird aus dem Oberkörpermoment statt aus dem Rücken erzeugt."
+        correction: "Gewicht reduzieren und Pause oben nutzen."
+        coaching_cue: "Kontrolliert ziehen."
+    variations_teach:
+      - variation: "pendlay row"
+        lesson: "Strenger Start vom Boden mit mehr Explosivität."
+      - variation: "one arm row"
+        lesson: "Einseitige Rückenansteuerung mit mehr ROM."
+    quiz:
+      - question: "Was macht das Barbell Row technisch anspruchsvoll?"
+        answer: "Der freie Oberkörper muss die Zugarbeit mit stabiler Hüfte und Rumpf absichern."

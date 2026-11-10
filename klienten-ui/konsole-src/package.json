@@ -1,0 +1,24 @@
+{
+  "name": "konsole",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Coachkonsole — CRM & Buchhaltung",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.0.0"
+  }
+}

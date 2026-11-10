@@ -1,0 +1,70 @@
+name: cable_pushdown_lesson
+description: Anatomy teaching seed for cable pushdown.
+lessons:
+  - exercise_id: 502
+    title: "Cable Pushdown - saubere Ellbogenextension"
+    region: arms
+    learning_goal:
+      short: "Den Trizeps als reinen Ellenbogenstrecker fühlen."
+      detailed: "Lern, wie du die Oberarme ruhig hältst und die Streckung sauber aus dem Ellbogen erzeugst."
+    movement_pattern:
+      primary: elbow_extension
+      secondary:
+        - shoulder_isometric_hold
+    joint_actions:
+      elbow:
+        eccentric:
+          - flexion_control
+        concentric:
+          - extension
+        stabilization:
+          - elbow_tracking
+      shoulder:
+        stabilization:
+          - neutral_hold
+      scapula:
+        stabilization:
+          - depression_control
+    muscle_roles:
+      prime_movers:
+        - arms
+      synergists:
+        - shoulders
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - upper_arm_back
+      secondary:
+        - forearms
+      light:
+        - abdomen_front
+    trainer_explanation:
+      simple: "Beim Pushdown streckt vor allem der Trizeps den Ellbogen."
+      technical: "Die Schulter bleibt weitgehend statisch, während die Ellenbogenextension unter konstanter Kabelspannung ausgeführt wird."
+      client_friendly: "Du sollst hinten am Oberarm arbeiten, nicht mit dem Oberkörper drücken."
+    feel_cues:
+      - "Starker Zug hinten am Oberarm."
+      - "Oberarme bleiben ruhig."
+      - "Oben kontrolliert lösen."
+    coaching_cues:
+      - "Ellbogen fix."
+      - "Nur der Unterarm bewegt sich."
+      - "Schultern unten."
+    common_errors:
+      - error: "Mit dem Körper nach vorne drücken."
+        anatomical_reason: "Die Last wird aus dem Rumpf statt aus dem Trizeps bewegt."
+        correction: "Aufrecht bleiben und nur den Ellbogen bewegen."
+        coaching_cue: "Nicht schieben, strecken."
+      - error: "Oberarme wandern nach hinten."
+        anatomical_reason: "Die Schulter beteiligt sich zu viel und der Trizeps verliert Isolation."
+        correction: "Oberarme fest neben dem Körper halten."
+        coaching_cue: "Oberarme einfrieren."
+    variations_teach:
+      - variation: "rope pushdown"
+        lesson: "Am Ende auseinanderführen für mehr Kontraktion."
+      - variation: "straight bar pushdown"
+        lesson: "Klarere Führung und einfacher zu coachen."
+    quiz:
+      - question: "Was ist die Hauptaufgabe beim Pushdown?"
+        answer: "Den Ellbogen strecken, während der Oberarm ruhig bleibt."

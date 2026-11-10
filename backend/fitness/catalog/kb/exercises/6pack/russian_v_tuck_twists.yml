@@ -1,0 +1,49 @@
+exercise_id: russian_v_tuck_twists
+description: Curated 6 Pack Promise entry for Russian "V" Tuck Twists.
+exercises:
+- exercise_id: russian_v_tuck_twists
+  id: russian_v_tuck_twists
+  name: Russian "V" Tuck Twists
+  display_name: Russian "V" Tuck Twists
+  german: Russian "V" Tuck Twists
+  english: Russian "V" Tuck Twists
+  category: core
+  type: compound
+  movements:
+  - trunk_rotation
+  - hip_flexion
+  - anti_extension
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  secondary_muscles:
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  stabilizers:
+  - 607_iliopsoas
+  coaching_notes:
+  - Finden Sie zuerst eine stabile V-Sit- oder Tuck-Position und rotieren Sie dann kontrolliert von Seite zu Seite.
+  - Lassen Sie Rippen und Becken gekoppelt, damit die Rotation aus dem Rumpf und nicht aus losem Armwerfen kommt.
+  - Halten Sie den Brustkorb lang und die Füße möglichst ruhig in der Luft.
+  common_errors:
+  - Die Arme schlagen nur von links nach rechts, während der Rumpf kaum mitarbeitet.
+  - Der untere Rücken kollabiert im Tuck.
+  - Die Knie werden unkontrolliert eingezogen und gestreckt, statt eine feste Position zu halten.
+  tags:
+  - 6pack_promise
+  - core
+  - rotation
+  aliases:
+  - Russian "V" Tuck Twists
+  - Russian V Tuck Twists
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

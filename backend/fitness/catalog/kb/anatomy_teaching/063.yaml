@@ -1,0 +1,98 @@
+name: bulgarian_split_squat_lesson
+description: Anatomy teaching seed for 063.
+lessons:
+- exercise_id: '063'
+  title: Bulgarian Split Squat — Unilaterale Quad-Glute-Dominanz
+  region: legs
+  learning_goal:
+    short: Verstehen warum der BSS Asymmetrien aufdeckt und wie Schrittlänge den Fokus zwischen Quad und Glute verschiebt.
+    detailed: Lern die unilaterale Logik des BSS — warum ein Bein gleichzeitig stabilisiert und krafterzeugt und wie das propriozeptive Anforderungen gegenüber bilateralen Kniebeugen erhöht.
+  movement_pattern:
+    primary: unilateral_squat
+    secondary:
+    - hip_extension
+    - knee_extension
+    - hip_flexor_stretch
+  joint_actions:
+    hip:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+      stabilization:
+      - frontal_plane_control
+    knee:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+      stabilization:
+      - valgus_prevention
+    lumbar:
+      stabilization:
+      - neutral_spine
+  muscle_roles:
+    prime_movers:
+    - quadriceps
+    - gluteus_maximus
+    synergists:
+    - hamstrings
+    - adductors
+    stabilizers:
+    - core
+    - erector_spinae
+  body_highlighter_regions:
+    primary:
+    - quads
+    - glutes
+    secondary:
+    - hamstrings
+    light:
+    - core
+  trainer_explanation:
+    simple: Der BSS trainiert jedes Bein einzeln — deckt Kraft-Asymmetrien auf und dehnt gleichzeitig den Hüftbeuger des hinteren Beins.
+    technical: "Das vordere Bein ist Krafterzeuger und Stabilisator gleichzeitig. Schrittlänge steuert: kurz = Quad-dominant, lang = Glute-dominant. Das hintere Bein erhält passiven Hip-Flexor-Stretch."
+    client_friendly: Das vordere Bein macht die Arbeit — das hintere liegt nur oben und wird dabei gedehnt.
+  feel_cues:
+  - Gewicht auf dem vorderen Fuß (Mittelfuß/Ferse).
+  - Vorderes Knie nicht über die Zehenlinie hinaus.
+  - Aufrecht bleiben, nicht nach vorne lehnen.
+  coaching_cues:
+  - Hinterstes Knie kontrolliert Richtung Boden.
+  - Vorderes Knie immer über den Außenzeh drücken.
+  - Tiefer ist besser wenn die Hüfte es erlaubt.
+  common_errors:
+  - error: Zu kurzer Stand (Knie-dominante Belastung vorn).
+    anatomical_reason: Kurze Schrittlänge erhöht Patellasehnen-Stress weil das Knie extrem weit über die Zehen muss. Der Hüft-Extensionsweg ist zu kurz für Glute-Beteiligung.
+    correction: Schrittlänge vergrößern bis Oberschenkel beim Absenken fast parallel zum Boden.
+    coaching_cue: Größerer Schritt — das hintere Knie zeigt nach unten, nicht schräg.
+  - error: Vorderes Knie fällt nach innen.
+    anatomical_reason: Schwache Gluteus medius und externe Hüftrotatoren lassen Knie-Valgus zu.
+    correction: Knie aktiv nach außen stabilisieren.
+    coaching_cue: Knie über den kleinen Zeh — drück ihn nach außen.
+  variations_teach:
+  - variation: Kurze Schrittlänge
+    lesson: Mehr Kniebeugungs-Anteil → Quad-Fokus. Weniger Hüftstreckung.
+  - variation: Lange Schrittlänge
+    lesson: Mehr Hüftstreckung → Glute/Hamstring-Fokus. Besserer Hip-Flexor-Stretch.
+  - variation: Mit Kurzhanteln
+    lesson: Einstieg-Progression, niedrigerer Schwerpunkt als Langhantel.
+  quiz:
+  - question: Warum deckt der BSS Kraft-Asymmetrien zwischen den Beinen auf?
+    answer: Weil jedes Bein alleine arbeitet — Kompensation durch das stärkere Bein ist nicht möglich wie bei bilateralen Übungen. Unterschiede in Kraft, Mobilität und Propriozeption werden sofort sichtbar.
+  - question: Was wird am hinteren Bein beim BSS gedehnt?
+    answer: Der Hüftbeuger (M. iliopsoas, M. rectus femoris) des hinteren Beins wird passiv gedehnt wenn das hintere Knie Richtung Boden abgesenkt wird. Das ist besonders wertvoll bei sitzenden Personen mit verkürzten Hüftbeugern.
+  simple_explanation: "Der Bulgarian Split Squat (BSS) ist eine einseitige Kniebeuge mit dem hinteren Fuß erhöht. Das vordere Bein trägt die gesamte Last und muss gleichzeitig Kraft erzeugen und stabilisieren. Kurze Schrittlänge betont die Quads, lange Schrittlänge betont Glutes und Hamstrings. Gleichzeitig dehnt das hintere Bein passiv die Hüftbeuger — ideal für Personen mit Hüftbeuger-Verkürzung.\n"
+  detailed_explanation: "Der M. quadriceps femoris (primär) und M. gluteus maximus (sekundär) sind die Hauptkrafterzeuger. Schrittlänge und Oberkörperneigung steuern die Lastverteilung: Aufrechter Torso + kurze Schrittlänge = Quad-Fokus (mehr Kniebeugungs-Winkel). Vorgelehnt + lange Schrittlänge = Glute/Hamstring-Fokus (mehr Hüftextensions-Winkel). Das hintere Bein erhält einen passiven Stretch des M. iliopsoas und M. rectus femoris. Da nur ein Bein die Stabilisierung übernimmt, sind Propriozeption und Frontalebenen-Stabilisierung (Gluteus medius) stark gefordert.\n"
+  quiz_prompts:
+  - question: Warum ist der BSS effektiver als die klassische Ausfallschritt-Variante für Hypertrophie?
+    answer: "Die fixierte hintere Position (Fuß erhöht) eliminiert die Balance-Unterbrechung zwischen den Wiederholungen. Das ermöglicht höhere Time-under-Tension und gleichmäßigere mechanische Spannung über das gesamte Set.\n"
+  common_errors_explained:
+    short_stance:
+      description: Zu kurzer Stand — Knie dominant, Glute kaum beteiligt.
+      anatomical_reason: "Bei kurzer Schrittlänge fehlt der Hüft-Extensionsweg. Der Gluteus maximus kann seinen optimalen Arbeitsbereich nicht erreichen. Die gesamte Last liegt auf dem Kniestrecksystem — erhöhtes Patellasehnen-Risiko.\n"
+      correction: Schrittlänge vergrößern bis Oberschenkel fast parallel und Knie bleibt hinter Zehen.
+      teaches:
+      - unilateral_mechanics
+      - glute_activation
+      - hip_flexor_mobility

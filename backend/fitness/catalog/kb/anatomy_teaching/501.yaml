@@ -1,0 +1,70 @@
+name: overhead_triceps_extension_lesson
+description: Anatomy teaching seed for overhead triceps extension.
+lessons:
+  - exercise_id: 501
+    title: "Overhead Triceps Extension - langer Trizepskopf verstehen"
+    region: arms
+    learning_goal:
+      short: "Trizeps über Überkopfposition gezielt verstehen."
+      detailed: "Lern, warum der lange Kopf des Trizeps in Überkopfposition besonders relevant wird und wie du die Ellbogen stabil hältst."
+    movement_pattern:
+      primary: elbow_extension
+      secondary:
+        - shoulder_flexion_position
+    joint_actions:
+      elbow:
+        eccentric:
+          - flexion_control
+        concentric:
+          - extension
+        stabilization:
+          - elbow_tracking
+      shoulder:
+        stabilization:
+          - flexion_hold
+      scapula:
+        stabilization:
+          - upward_rotation_control
+    muscle_roles:
+      prime_movers:
+        - arms
+      synergists:
+        - shoulders
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - upper_arm_back
+      secondary:
+        - shoulders_front
+      light:
+        - abdomen_front
+    trainer_explanation:
+      simple: "Überkopf-Trizepsstrecken belasten den Trizeps besonders deutlich, weil der Arm über dem Kopf bleibt."
+      technical: "Die Schulterflexionsposition verändert die Spannungslage des Trizeps, wodurch die Ellenbogenextension mit besonderem Fokus auf den langen Kopf trainiert wird."
+      client_friendly: "Du sollst die Rückseite des Oberarms spüren, während die Ellenbogen ruhig bleiben."
+    feel_cues:
+      - "Dehnung hinten am Oberarm oben."
+      - "Strecken aus dem Ellbogen."
+      - "Bauch bleibt ruhig."
+    coaching_cues:
+      - "Ellbogen schmal."
+      - "Kein Hohlkreuz."
+      - "Kontrolliert strecken."
+    common_errors:
+      - error: "Ellbogen driften auseinander."
+        anatomical_reason: "Die Last wird unruhig und die Oberarme verlieren Führung."
+        correction: "Ellbogen enger halten."
+        coaching_cue: "Ellbogen bleiben zusammen."
+      - error: "Rücken ins Hohlkreuz bringen."
+        anatomical_reason: "Die Übung wandert aus dem Trizeps in die Lendenwirbelsäule."
+        correction: "Rippen unten und Rumpf fest."
+        coaching_cue: "Rumpf bleibt stapelbar."
+    variations_teach:
+      - variation: "dumbbell overhead extension"
+        lesson: "Freie Variante mit klarer Überkopfposition."
+      - variation: "cable overhead extension"
+        lesson: "Stabilere Zugbahn und gleichmäßige Spannung."
+    quiz:
+      - question: "Warum sind Overhead Extensions besonders sinnvoll für den Trizeps?"
+        answer: "Weil die Überkopfposition den langen Kopf des Trizeps stark mit einbezieht."

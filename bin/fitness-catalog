@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# fitness-catalog — Coach-backend catalog CLI (same as: coach catalog)
+set -euo pipefail
+COACH="${COACH_DEV:-$HOME/dev/coach-dev}"
+export PYTHONPATH="${COACH}:${COACH}/anatomy-kb${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m fitness.catalog.cli "$@"

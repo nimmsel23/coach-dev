@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# fitness-tui — Session/Clients dashboard (Textual). Catalog-TUI: fitness catalog
+set -euo pipefail
+COACH="${COACH_DEV:-$HOME/dev/coach-dev}"
+export PYTHONPATH="${COACH}${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m fitness.tui.cli "$@"

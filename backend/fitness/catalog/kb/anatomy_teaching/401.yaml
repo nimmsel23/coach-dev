@@ -1,0 +1,80 @@
+name: leg_extension_lesson
+description: Anatomy teaching seed for 401.
+lessons:
+- exercise_id: '401'
+  title: Beinstrecken — Quadrizeps-Isolation und Kniegelenks-Kontraktion
+  region: legs
+  learning_goal:
+    short: Verstehen wie das Beinstrecken den Quadrizeps isoliert und warum der Rectus femoris eine besondere Stellung einnimmt.
+    detailed: Lern die Biomechanik des Kniegelenks beim Beinstrecken, warum Sitz-Einstellung entscheidend ist und in welchen Situationen das Beinstrecken sinnvoll ist — und wann nicht.
+  movement_pattern:
+    primary: knee_extension
+    secondary: []
+  joint_actions:
+    knee:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+      stabilization:
+      - patellofemoral_tracking
+    hip:
+      stabilization:
+      - neutral_position
+  muscle_roles:
+    prime_movers:
+    - quadriceps
+    synergists: []
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - quads
+    secondary: []
+    light:
+    - core
+  trainer_explanation:
+    simple: Das Beinstrecken isoliert den Quadrizeps vollständig — kein anderer Muskel hilft. Deshalb ideal für gezielte Quad-Hypertrophie.
+    technical: Die Übung isoliert die Knieextension durch M. quadriceps femoris. Besonders der M. rectus femoris (zweigelenkig — Ursprung an der Spina iliaca) wird aktiv wenn die Hüfte leicht flektiert ist. Die Patellasehne überträgt die Kraft auf die Tibia.
+    client_friendly: Streck das Knie vollständig durch — und spann oben kurz an.
+  feel_cues:
+  - Oben kurz die Kontraktion halten — Quad fühlt sich steinhart an.
+  - Langsam und kontrolliert ablassen (2-3 Sekunden).
+  - Kniegelenk-Achse auf Höhe des Drehpunkts der Maschine.
+  coaching_cues:
+  - Sitz-Einstellung: Kniegelenk auf Maschinendrehpunkt.
+  - Hüfte fest ans Polster — kein Abheben.
+  - Nicht mit Schwung hochreißen.
+  common_errors:
+  - error: Zu schnelles Hochreißen der Gewichte.
+    anatomical_reason: Momentum statt Muskelkontraktion — der Quad arbeitet nur am Anfang der Bewegung, dann fliegt das Gewicht hoch. Peak Contraction geht verloren.
+    correction: Kontrollierte, slow-tempo Ausführung. Besonders in der Endposition verweilen.
+    coaching_cue: Zähl bis 2 oben — Quad anspannen halten.
+  - error: Hüfte hebt vom Sitz ab.
+    anatomical_reason: Zu schweres Gewicht oder schlechte Sitz-Einstellung — die Hüftbeuger helfen kompensatorisch mit. Das reduziert die Isolation des Quads.
+    correction: Gewicht reduzieren, Sitz korrekt einstellen.
+    coaching_cue: Gesäß bleibt am Polster — die ganze Zeit.
+  variations_teach:
+  - variation: Einbeinige Ausführung
+    lesson: Deckt Kraft-Asymmetrien auf, höhere neuromuskuläre Aktivierung pro Bein.
+  - variation: Kurze ROM (nur Endphase)
+    lesson: Maximale VMO-Aktivierung (Vastus medialis oblique) — besonders für Patellatracking relevant.
+  quiz:
+  - question: Warum ist der Rectus femoris beim Beinstrecken in sitzender Position besonders aktiv?
+    answer: Der M. rectus femoris entspringt an der Spina iliaca anterior inferior (Beckenkamm) — er ist zweigelenkig. In sitzender Position ist die Hüfte flektiert, was den Rectus femoris vordehnt und damit in eine längere Ausgangsposition bringt — ideal für maximale Kontraktion.
+  - question: Wann ist das Beinstrecken als Übung kritisch zu sehen?
+    answer: Bei Kniebeschwerden (Patellofemoral-Syndrom, vorderes Kreuzband-Probleme) kann die Scherkraft auf das Kniegelenk am unteren Bewegungsbereich problematisch sein. In solchen Fällen nur obere 60° der Bewegung nutzen oder Alternativen wählen.
+  simple_explanation: "Das Beinstrecken isoliert den Quadrizeps vollständig durch Kniestreckung gegen Widerstand. Die vier Quadrizeps-Köpfe (Rectus femoris, Vastus lateralis, medialis, intermedius) sind die einzigen Krafterzeuger. Peak Contraction oben — kurz halten — gibt maximalen Hypertrophie-Reiz. Langsames Ablassen (eccentric) ist für Muskelaufbau besonders wertvoll.\n"
+  detailed_explanation: "Der M. quadriceps femoris besteht aus vier Köpfen: Rectus femoris (zweigelenkig, Hüfte + Knie), Vastus lateralis, Vastus medialis (wichtig für Patella-Tracking), Vastus intermedius. Alle vier konvergieren in die Patellasehne und strecken das Kniegelenk. In Sitzposition ist der Rectus femoris vordehnt (Hüfte flektiert) — dadurch besonders aktiv. Die Patella fungiert als Hypomochlion (Umlenkrolle) für die Quadrizeps-Sehne. Optimale Maschinensitz-Einstellung (Kniegelenk auf Drehpunkt) ist entscheidend für gleichmäßige Belastung ohne Scherkräfte.\n"
+  quiz_prompts:
+  - question: Warum betont das Beinstrecken den Vastus medialis (VMO) besonders in der Endphase?
+    answer: "In den letzten 10-20° der Knieextension ist der VMO der dominante Krafterzeuger. Er zieht die Patella medial und sichert das patellofemorale Tracking. Deshalb ist die Endphase (und Peak Contraction) für Kniestabilität besonders wertvoll.\n"
+  common_errors_explained:
+    momentum_swinging:
+      description: Zu schnelles Hochreißen mit Schwung.
+      anatomical_reason: "Inertie (Schwungkraft) übernimmt die Arbeit des Quads. Der Muskel ist nur zu Beginn der Bewegung unter Spannung — die wertvolle Peak Contraction und der eccentric Teil werden übersprungen.\n"
+      correction: Kontrollierte Ausführung, 2 Sekunden oben halten, 3 Sekunden ablassen.
+      teaches:
+      - time_under_tension
+      - eccentric_importance
+      - peak_contraction

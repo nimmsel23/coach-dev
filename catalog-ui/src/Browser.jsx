@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Search, ChevronRight, RefreshCw, Sparkles, FileText, Award } from 'lucide-react';
 import { api } from './api';
+import { exerciseId, exerciseName } from './ids';
 import { VisualMuscleMap, DescriptionTabViewer, Field, Loading, ErrorBox } from './Shared';
 
 // ── Browser: Exercise Search & Details side panel ──
@@ -93,18 +94,21 @@ export default function BrowserTab({ selectedExId, setSelectedExId, showToast })
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-1 pr-1">
-          {list.map((ex) => (
+          {list.map((ex) => {
+            const id = exerciseId(ex);
+            const activeId = exerciseId(detail);
+            return (
             <button
-              key={ex.id || ex.canonical_id}
-              onClick={() => openDetail(ex.id || ex.canonical_id)}
+              key={id || exerciseName(ex)}
+              onClick={() => id && openDetail(id)}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 text-left transition-all border ${
-                detail?.id === (ex.id || ex.canonical_id)
+                activeId && activeId === id
                   ? 'bg-primary/10 border-primary/20 text-text font-medium'
                   : 'border-transparent text-text/80'
               }`}
             >
               <div className="min-w-0">
-                <div className="font-mono text-sm font-bold truncate">{ex.name || ex.display_name}</div>
+                <div className="font-mono text-sm font-bold truncate">{exerciseName(ex)}</div>
                 <div className="text-[11px] text-muted truncate mt-1">
                   {Array.isArray(ex.primaryMuscles || ex.primary_muscles)
                     ? (ex.primaryMuscles || ex.primary_muscles).join(', ')
@@ -112,9 +116,10 @@ export default function BrowserTab({ selectedExId, setSelectedExId, showToast })
                   {ex.source ? ` · ${ex.source}` : ''}
                 </div>
               </div>
-              <ChevronRight className={`w-4 h-4 text-muted shrink-0 transition-transform ${detail?.id === (ex.id || ex.canonical_id) ? 'text-primary translate-x-1' : ''}`} />
+              <ChevronRight className={`w-4 h-4 text-muted shrink-0 transition-transform ${activeId && activeId === id ? 'text-primary translate-x-1' : ''}`} />
             </button>
-          ))}
+            );
+          })}
           {list.length === 0 && (
             <div className="text-muted font-mono text-sm p-4 text-center bg-white/5 rounded-xl border border-white/5">
               Keine Treffer in der Datenbank.
@@ -136,7 +141,7 @@ export default function BrowserTab({ selectedExId, setSelectedExId, showToast })
                 <span className="px-2 py-0.5 rounded bg-primary/20 border border-primary/30 text-primary text-[9px] font-mono font-bold tracking-wider uppercase inline-block mb-2">
                   {detail.source_file ? detail.source_file.replace('.yml', '') : 'Catalog'}
                 </span>
-                <h3 className="text-xl font-bold font-mono text-primary leading-tight">{detail.name}</h3>
+                <h3 className="text-xl font-bold font-mono text-primary leading-tight">{exerciseName(detail)}</h3>
               </div>
 
               {/* Visual BodyMap */}
@@ -146,7 +151,7 @@ export default function BrowserTab({ selectedExId, setSelectedExId, showToast })
               />
 
               <div className="space-y-3 bg-white/5 p-4 rounded-xl border border-white/10 text-xs">
-                <Field label="ID" value={detail.id || detail.canonical_id} />
+                <Field label="ID" value={exerciseId(detail)} />
                 <Field label="wger ID" value={detail.wger_id ? `#${detail.wger_id}` : null} />
                 <Field label="yuhonas ID" value={detail.yuhonas_id || null} />
                 <Field label="Pattern" value={detail.movement_pattern || '—'} />
@@ -161,7 +166,7 @@ export default function BrowserTab({ selectedExId, setSelectedExId, showToast })
               <div className="grid grid-cols-2 gap-2 border-t border-white/5 pt-4">
                 <button
                   disabled={exportLoading !== null}
-                  onClick={() => handleExport(detail.id || detail.canonical_id, 'sheet')}
+                  onClick={() => handleExport(exerciseId(detail), 'sheet')}
                   className="bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-text py-2 rounded-lg font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 disabled:opacity-50"
                 >
                   <FileText className="w-3.5 h-3.5" />
@@ -169,7 +174,7 @@ export default function BrowserTab({ selectedExId, setSelectedExId, showToast })
                 </button>
                 <button
                   disabled={exportLoading !== null}
-                  onClick={() => handleExport(detail.id || detail.canonical_id, 'lesson')}
+                  onClick={() => handleExport(exerciseId(detail), 'lesson')}
                   className="bg-primary/20 border border-primary/30 hover:bg-primary/30 text-primary py-2 rounded-lg font-mono text-xs font-bold transition-all flex items-center justify-center gap-1.5 active:scale-95 disabled:opacity-50"
                 >
                   <Award className="w-3.5 h-3.5" />

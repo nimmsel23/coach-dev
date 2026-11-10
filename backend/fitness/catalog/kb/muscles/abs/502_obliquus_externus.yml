@@ -1,0 +1,23 @@
+id: 502_obliquus_externus
+display_name: Obliquus Externus
+label_de: Äußerer schräger Bauchmuskel
+label_en: Obliques (Outer)
+label_lat: M. obliquus externus abdominis
+wger_id: 14
+aliases:
+- obliques
+- obliquus
+viz:
+  body_muscles:
+    view: FRONT
+    ids:
+    - obliques-left
+    - obliques-right
+origin: Außenflächen der 5. bis 12. Rippe (Costae V–XII), verzahnt mit dem Musculus
+  serratus anterior und dem Musculus latissimus dorsi.
+insertion: Labium externum der Beckenkammvorderkante (Crista iliaca), vorderes Blatt
+  der Rektusscheide (Vagina musculi recti abdominis) und Linea alba.
+innervation: Nervi intercostales (Th5–Th12), Nervus iliohypogastricus und Nervus ilioinguinalis.
+function: Bei beidseitiger Kontraktion bewirkt er eine Rumpfbeuge (Flexion) und stabilisiert
+  das Becken. Bei einseitiger Kontraktion führt er zur Seitneigung (Lateralflexion)
+  zur gleichen Seite und zur Drehung (Rotation) des Rumpfes zur Gegenseite.

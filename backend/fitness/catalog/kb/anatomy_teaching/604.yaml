@@ -1,0 +1,89 @@
+name: plank_lesson
+description: Anatomy teaching seed for 604.
+lessons:
+- exercise_id: '604'
+  title: Unterarmstütz (Plank) — Anti-Extension und isometrische Kernstabilisierung
+  region: core
+  learning_goal:
+    short: Verstehen warum der Plank primär Anti-Extension-Stabilisierung trainiert — nicht Rumpfflexion.
+    detailed: "Lern das Konzept der Anti-Extension: Wie der Transversus abdominis, Rectus abdominis und Obliques gemeinsam verhindern, dass die Lendenwirbelsäule in Lordose durchhängt."
+  movement_pattern:
+    primary: anti_extension
+    secondary:
+    - isometric_stabilization
+  joint_actions:
+    lumbar:
+      stabilization:
+      - anti_extension
+      - neutral_spine_maintenance
+    shoulder:
+      stabilization:
+      - glenohumeral_centering
+      - scapular_protraction
+    hip:
+      stabilization:
+      - neutral_pelvis
+  muscle_roles:
+    prime_movers:
+    - transversus_abdominis
+    - rectus_abdominis
+    synergists:
+    - obliques
+    - quadriceps
+    - serratus_anterior
+    stabilizers:
+    - anterior_deltoid
+    - pectoralis_major
+  body_highlighter_regions:
+    primary:
+    - abdomen_front
+    secondary:
+    - core
+    light:
+    - quads
+    - shoulders_front
+  trainer_explanation:
+    simple: Der Plank trainiert nicht das Bauchkneten — er trainiert das Halten gegen das Durchhängen. Das ist Anti-Extension.
+    technical: Der M. transversus abdominis und Rectus abdominis müssen isometrisch kontrahieren um die Lendenwirbelsäule gegen die Gravitationskraft (Durchhängen = Hyperextension) zu halten. Das ist funktionale Kernstabilisierung.
+    client_friendly: Stell dir vor ein Glas Wasser steht auf deinem Rücken — es darf nicht kippen.
+  feel_cues:
+  - Gesäß aktiv anspannen — Hüfte in neutrale Position.
+  - Bauch einziehen und anspannen.
+  - Kopf in Verlängerung der Wirbelsäule.
+  coaching_cues:
+  - Gerade Linie von Fersen bis Kopf.
+  - Keine Hüfte in die Höhe (umgekehrtes V).
+  - Schultern aktiv nach unten — keine hochgezogene Schultern.
+  common_errors:
+  - error: Hüfte durchhängen lassen (Hohlkreuz).
+    anatomical_reason: Schwache Bauchmuskulatur oder Müdigkeit — Transversus und Rectus können nicht genug Gegenspannung erzeugen. Die LWS fällt in Hyperextension unter dem Körpergewicht.
+    correction: Bewusst Gesäß und Bauch anspannen. Plank-Zeit reduzieren wenn Form leidet.
+    coaching_cue: Stell dir vor jemand drückt deine Hüfte hoch — halt dagegen.
+  - error: Schultern zu den Ohren hochziehen.
+    anatomical_reason: Oberer Trapezius übernimmt die Schulter-Stabilisierung. Das erzeugt Nackenverspannung und eine Schulterhebung die nicht zur Übung gehört.
+    correction: Schulterblätter aktiv nach unten schieben.
+    coaching_cue: Schultern weg von den Ohren — lang und breit werden.
+  variations_teach:
+  - variation: High Plank (Hände statt Unterarme)
+    lesson: Mehr Anforderungen an Schulter-Stabilisierung und Serratus anterior.
+  - variation: Plank mit Beinabheben
+    lesson: Erhöhte Anti-Rotations-Komponente durch asymmetrische Last.
+  quiz:
+  - question: Was ist der Unterschied zwischen Anti-Extension-Training (Plank) und Flexions-Training (Crunch)?
+    answer: Anti-Extension = Muskeln verhindern Hyperextension der LWS (Plank). Flexion = Muskeln erzeugen aktiv Rumpfbeugen (Crunch). Beide sind wichtig — aber für unterschiedliche funktionale Anforderungen. Anti-Extension ist für Alltag und Sport relevanter (Laufen, Heben, Stehen).
+  - question: Warum ist der Transversus abdominis beim Plank besonders wichtig?
+    answer: Der M. transversus abdominis ist der tiefste Bauchmuskel und primärer Stabilisator der LWS. Er erzeugt durch Kontraktion einen Kompressionsgürtel um die Wirbelsäule (intraabdominaler Druck). Beim Plank ist er der erste Verteidiger gegen das Durchhängen.
+  simple_explanation: "Der Plank ist keine Bewegungsübung — er trainiert das isometrische Halten der Wirbelsäule gegen das Durchhängen (Anti-Extension). Transversus abdominis, Rectus abdominis und Obliques spannen isometrisch an um die Lendenwirbelsäule neutral zu halten. Gesäß-Anspannung und neutrale Hüfte sind genauso wichtig wie der Bauch.\n"
+  detailed_explanation: "Der Plank ist primär ein Anti-Extension-Übung: Die Schwerkraft zieht Hüfte und Wirbelsäule in Hyperextension (Lordose). Die Bauchmuskulatur muss isometrisch dagegen halten. Primär: M. transversus abdominis (tiefer Kompressionsgürtel), M. rectus abdominis (oberflächliche Flexion). Sekundär: Mm. obliqui (seitliche Stabilisierung), M. quadriceps femoris (Kniestabilisierung). Der M. serratus anterior hält die Scapula am Thorax. Der M. gluteus maximus stabilisiert die Hüfte in neutraler Position. Isometrische Kontraktion der Gesamtmuskulatur erzeugt intraabdominalen Druck — die natürliche Bandscheiben-Entlastung.\n"
+  quiz_prompts:
+  - question: Wann ist die Plank-Zeit als Trainingsmaß sinnvoll — und wann nicht?
+    answer: "Sinnvoll: Als Maß ob genug isometrische Core-Ausdauer vorhanden ist. Nicht sinnvoll: Als Wettkampf. Wenn die Form nach 30-45 Sekunden leidet (Hüfte hängt, Schultern ziehen hoch) ist mehr Zeit kontraproduktiv — Fehlmuster werden trainiert.\n"
+  common_errors_explained:
+    hip_sag:
+      description: Hüfte durchhängt — Hohlkreuz.
+      anatomical_reason: "Wenn Transversus abdominis und Rectus abdominis nicht genug Gegenspannung erzeugen, überwiegt die Schwerkraft. Die LWS geht in Hyperextension — erhöhte Kompressionskräfte auf Facettengelenke und Bandscheiben L4/L5.\n"
+      correction: Plank-Zeit reduzieren, Qualität vor Quantität. Gesäß und Bauch zuerst aktivieren.
+      teaches:
+      - transversus_abdominis_function
+      - anti_extension_concept
+      - neutral_spine

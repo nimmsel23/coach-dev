@@ -1,0 +1,47 @@
+exercise_id: ninety_ninety_crunch
+description: Curated 6 Pack Promise entry for 90/90 Crunch.
+exercises:
+- exercise_id: ninety_ninety_crunch
+  id: ninety_ninety_crunch
+  name: 90/90 Crunch
+  display_name: 90/90 Crunch
+  german: 90/90 Crunch
+  english: 90/90 Crunch
+  category: core
+  type: isolation
+  movements:
+  - spinal_flexion
+  - posterior_pelvic_tilt
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  secondary_muscles:
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  stabilizers:
+  - 503_obliquus_internus
+  coaching_notes:
+  - Halten Sie Hüfte und Knie in etwa 90 Grad, damit der untere Rücken leichter flach bleiben kann.
+  - Rollen Sie Brustbein und Rippen weich nach vorne ein, statt nur den Kopf anzuheben.
+  - Machen Sie jede Wiederholung kurz und sauber, mit klarer Endkontraktion im oberen Bauch.
+  common_errors:
+  - Am Nacken ziehen, statt den Oberkörper über die Bauchwand zu beugen.
+  - Die Beine verlieren die 90/90-Position und übernehmen die Bewegung.
+  - Zu weit hochsitzen und dadurch aus dem Crunch einen Sit-up machen.
+  tags:
+  - 6pack_promise
+  - core
+  - upper_abs
+  aliases:
+  - 90/90 Crunch
+  - Ninety Ninety Crunch
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

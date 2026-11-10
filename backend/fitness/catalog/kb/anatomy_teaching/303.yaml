@@ -1,0 +1,68 @@
+name: rear_delt_fly_lesson
+description: Anatomy teaching seed for rear delt fly.
+lessons:
+  - exercise_id: 303
+    title: "Rear Delt Fly - hintere Schulter isolieren"
+    region: shoulders
+    learning_goal:
+      short: "Hintere Schulter und oberen Rücken klar spüren."
+      detailed: "Lern, wie horizontale Abduktion die hintere Schulter trifft und warum kleine Bewegungen hier besser sind."
+    movement_pattern:
+      primary: horizontal_abduction
+      secondary:
+        - scapular_retraction
+    joint_actions:
+      shoulder:
+        eccentric:
+          - horizontal_adduction_control
+        concentric:
+          - horizontal_abduction
+        stabilization:
+          - humeral_head_control
+      scapula:
+        stabilization:
+          - retraction
+          - depression
+    muscle_roles:
+      prime_movers:
+        - shoulders
+      synergists:
+        - back
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - shoulders_back
+      secondary:
+        - upper_back
+      light:
+        - neck
+    trainer_explanation:
+      simple: "Die hintere Schulter bewegt den Arm nach außen und hinten."
+      technical: "Über horizontale Abduktion entsteht ein klarer Reiz auf die hintere Deltoidregion bei kontrollierter Scapula-Führung."
+      client_friendly: "Du sollst die hintere Schulter spüren, nicht den Rücken reißen."
+    feel_cues:
+      - "Hintere Schulter brennt zuerst."
+      - "Nacken bleibt ruhig."
+      - "Kleine saubere Bahn."
+    coaching_cues:
+      - "Bewegung klein halten."
+      - "Schulterblätter kontrolliert."
+      - "Nicht aus dem Rücken werfen."
+    common_errors:
+      - error: "Zu viel Schwung."
+        anatomical_reason: "Der Zug geht in den Oberkörper statt in die Schulter."
+        correction: "Gewicht reduzieren."
+        coaching_cue: "Sauber und klein."
+      - error: "Rücken übernimmt."
+        anatomical_reason: "Die horizontale Abduktion wird durch den Rücken kompensiert."
+        correction: "Spannung in der hinteren Schulter halten."
+        coaching_cue: "Schulter führt."
+    variations_teach:
+      - variation: "cable rear delt fly"
+        lesson: "Konstantere Spannung und bessere Führung."
+      - variation: "machine rear delt fly"
+        lesson: "Mehr Stabilität für sauberes Lernen."
+    quiz:
+      - question: "Was ist das Ziel beim Rear Delt Fly?"
+        answer: "Die hintere Schulter sauber isoliert zu belasten."

@@ -61,13 +61,17 @@ export function VisualMuscleMap({ primaryMuscles = [], secondaryMuscles = [] }) 
       </div>
 
       <div className="w-full flex justify-center py-2 min-h-[220px]">
-        <Model
-          type={side}
-          data={rbhData}
-          highlightedColors={['#fbbf24', '#f43f5e']} // index 0 is frequency 1 (Amber), index 1 is frequency 2 (Rose)
-          bodyColor="#374151" // slate-700
-          style={{ width: '130px', height: '220px' }}
-        />
+        {rbhData.length === 0 ? (
+          <div className="text-[10px] font-mono text-muted self-center">Keine Body-Map-Daten</div>
+        ) : (
+          <Model
+            type={side}
+            data={rbhData}
+            highlightedColors={['#fbbf24', '#f43f5e']} // index 0 = frequency 1 (Amber), 1 = frequency 2 (Rose)
+            bodyColor="#374151"
+            style={{ width: '130px', height: '220px' }}
+          />
+        )}
       </div>
 
       <div className="flex justify-center gap-4 mt-3 text-[10px] font-mono border-t border-white/5 pt-3 w-full shrink-0">

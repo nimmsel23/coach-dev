@@ -1,0 +1,106 @@
+name: t_bar_row_lesson
+description: Anatomy teaching seed for 044.
+lessons:
+- exercise_id: '044'
+  title: T-Bar-Rudern — Latissimus und mittlerer Rücken in der Horizontalen
+  region: back
+  learning_goal:
+    short: Verstehen wie die fixierte Endposition des T-Bars mehr mittleren Rücken (Rhomboiden, Trapezius) aktiviert als freies Rudern.
+    detailed: Lern wie Griffweite und Ellbogenführung den Fokus zwischen Lat und mittlerem Rücken verschieben und warum die Rumpfstabilisierung bei dieser Übung besonders wichtig ist.
+  movement_pattern:
+    primary: horizontal_pull
+    secondary:
+    - shoulder_extension
+    - scapular_retraction
+    - elbow_flexion
+  joint_actions:
+    shoulder:
+      concentric:
+      - extension
+      - adduction
+      eccentric:
+      - flexion_control
+      stabilization:
+      - glenohumeral_centering
+    scapula:
+      concentric:
+      - retraction
+      - depression
+      eccentric:
+      - protraction_control
+    elbow:
+      concentric:
+      - flexion
+      eccentric:
+      - extension_control
+    lumbar:
+      stabilization:
+      - anti_flexion
+  muscle_roles:
+    prime_movers:
+    - latissimus_dorsi
+    - middle_trapezius
+    - rhomboids
+    synergists:
+    - biceps
+    - posterior_deltoid
+    - erector_spinae
+    stabilizers:
+    - core
+    - gluteus_maximus
+  body_highlighter_regions:
+    primary:
+    - lats
+    - upper_back
+    secondary:
+    - upper_arm_front
+    light:
+    - core
+    - glutes
+  trainer_explanation:
+    simple: T-Bar-Rudern trainiert Lat und mittleren Rücken gleichzeitig — die fixierte Stange ermöglicht höhere Lasten als freies Rudern.
+    technical: Der enge Griff fokussiert den Latissimus (Humerus-Adduktion/Extension), der weite Griff aktiviert stärker Rhomboiden und mittleren Trapezius (Scapula-Retraktion). Die fixierte Stange reduziert Balanceanforderungen und erlaubt maximale Rückenkontraktion.
+    client_friendly: Zieh mit den Ellenbogen zur Hüfte — nicht mit den Händen zu den Schultern.
+  feel_cues:
+  - Schulterblätter aktiv zusammenziehen am Endpunkt.
+  - Brust zur Stange drücken, nicht Stange zur Brust.
+  - Rumpf die ganze Zeit fest gespannt.
+  coaching_cues:
+  - Oberkörper stabil halten — kein Schwingen aus der Hüfte.
+  - Volle Kontraktion am oberen Punkt — kurz halten.
+  - Kontrolliert absenken, volle Streckung nutzen.
+  common_errors:
+  - error: Oberkörper schwingt mit der Bewegung mit.
+    anatomical_reason: Wenn die posteriore Kette (Erector, Gluteus) nicht stabilisiert, nutzt der Trainierende Schwungart. Das Gewicht wird durch Hüftstreckung statt Rückenretraktion bewegt.
+    correction: Isometrische Rumpfspannung aufbauen und halten — Bewegung nur aus Schulter/Arm.
+    coaching_cue: Der Rücken bleibt wie einbetoniert — nur Arme bewegen sich.
+  - error: Kein vollständiges Absenken (halbe ROM).
+    anatomical_reason: Ohne volle Streckung wird der Lat nicht in seiner Längsspannung trainiert. Stretch-mediierte Hypertrophie bleibt aus.
+    correction: Arme vollständig strecken lassen — Schulterblätter protrahieren im unteren Punkt.
+    coaching_cue: Lass den Rücken vollständig aufgehen unten.
+  variations_teach:
+  - variation: Enger Griff
+    lesson: Ellbogen nah am Körper aktiviert mehr Lat durch stärkere Schulterextension.
+  - variation: Weiter Griff (breiter Aufsatz)
+    lesson: Ellbogen weiter ausgestellt aktiviert mehr Rhomboiden und mittleren Trapezius durch stärkere Scapula-Retraktion.
+  quiz:
+  - question: Was ist der Unterschied zwischen Lat-fokussiertem und Rhomboid-fokussiertem Rudern?
+    answer: Ellbogen nah am Körper und Fokus auf Schulterextension = Lat. Ellbogen ausgestellt und Fokus auf Scapula-Retraktion = mittlerer Trapezius und Rhomboiden.
+  - question: Warum schützt Rumpfspannung die Lendenwirbelsäule beim Rudern?
+    answer: Die Beugebelastung (Flexionsmoment) auf die LWS ist im Stützhang enorm. Transversus abdominis und Obliques erzeugen intraabdominalen Druck der die Bandscheiben entlastet.
+  simple_explanation: "T-Bar-Rudern ist ein horizontaler Zugzug mit fixierter Stange. Latissimus dorsi und mittlerer Rücken (Rhomboiden, Trapezius) ziehen den Arm zurück und die Schulterblätter zusammen. Die fixierte Stange erlaubt schwerere Lasten als freies Rudern, weil keine Balance-Koordination nötig ist. Rumpfspannung ist entscheidend — der untere Rücken steht unter starkem Flexionsmoment.\n"
+  detailed_explanation: "Der M. latissimus dorsi führt Extension und Adduktion des Humerus aus. Der mittlere M. trapezius und die Mm. rhomboidei retrahieren die Scapula. Der M. biceps brachii und M. brachialis beugen den Ellenbogen. Die Körperposition (Oberkörper vorgebeugt, ca. 45°) stellt die LWS unter erhebliches Flexionsmoment — die paravertebrale Muskulatur (Erector spinae) und der M. quadratus lumborum müssen isometrisch stabilisieren. Der Gluteus maximus stabilisiert das Becken. Griffbreite verschiebt den Fokus: Enger Griff → Lat (Schulterextension dominant), weiter Griff → Rhomboiden/Trapezius (Scapula-Retraktion dominant).\n"
+  quiz_prompts:
+  - question: Warum ist das T-Bar-Rudern oft effektiver für oberen Rücken-Masse als der Kabelzug?
+    answer: "Die fixierte Stange und die vertikale Kraft-Komponente erlauben schwerere Lasten. Mehr mechanische Spannung im Lat und mittleren Rücken bei gleichem koordinativen Aufwand — optimal für Hypertrophie.\n"
+  - question: Was passiert anatomisch wenn der Trainierende beim T-Bar-Rudern aus der Hüfte schwingt?
+    answer: "Das Gewicht wird durch explosive Hüftextension (Gluteus, Erector) nach oben gehoben — nicht durch Rücken-Retraktion. Die Zielmuskulatur (Lat, Rhomboiden) verliert ihre Spannungskurve und die LWS wird dynamisch statt isometrisch belastet.\n"
+  common_errors_explained:
+    momentum_swinging:
+      description: Oberkörper schwingt mit der Bewegung.
+      anatomical_reason: "Hüftextension durch Gluteus und Erector hebt das Gewicht — nicht Scapula-Retraktion. Die Rückenmuskulatur verliert die Hauptarbeit.\n"
+      correction: Oberkörperposition fixieren, Bewegung nur aus Schultergelenk und Ellenbogen.
+      teaches:
+      - isolation_principle
+      - posterior_chain_stabilization
+      - scapular_mechanics

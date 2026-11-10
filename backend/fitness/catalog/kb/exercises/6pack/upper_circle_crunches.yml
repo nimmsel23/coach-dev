@@ -1,0 +1,46 @@
+exercise_id: upper_circle_crunches
+description: Curated 6 Pack Promise entry for Upper Circle Crunches.
+exercises:
+- exercise_id: upper_circle_crunches
+  id: upper_circle_crunches
+  name: Upper Circle Crunches
+  display_name: Upper Circle Crunches
+  german: Upper Circle Crunches
+  english: Upper Circle Crunches
+  category: core
+  type: isolation
+  movements:
+  - spinal_flexion
+  - trunk_circles
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  secondary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  stabilizers:
+  - 504_transverse_abdominis
+  coaching_notes:
+  - Heben Sie den oberen Rücken in einen Crunch und zeichnen Sie aus dieser Position kleine kontrollierte Kreise.
+  - Lassen Sie die Kreise aus dem Brustkorb und Rumpf kommen, nicht aus Kopf- oder Armbewegungen.
+  - Halten Sie die Bauchspannung oben konstant, statt zwischen den Kreisen abzulegen.
+  common_errors:
+  - Die Kreise werden zu groß und die Crunch-Position geht verloren.
+  - Der Kopf führt die Bewegung statt des Oberkörpers.
+  - Unten wird nach jeder Teilbewegung entspannt.
+  tags:
+  - 6pack_promise
+  - core
+  - upper_abs
+  aliases:
+  - Upper Circle Crunches
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

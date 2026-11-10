@@ -173,6 +173,9 @@ class LocalPlanHTTPTest(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(workout['completedSetCount'],3)
                 self.assertEqual(workout['durationSeconds'],42*60)
                 self.assertEqual(workout['sourcePlanId'],'remote-plan')
+                self.assertEqual(workout['date'], finished.date().isoformat())
+                self.assertEqual(workout['block'], 'Ganzkörper A')
+                self.assertEqual(workout['exerciseNames'], ['Squat', 'Row'])
                 self.assertNotIn('exercises',workout)
                 self.assertNotIn('eventLog',workout)
 

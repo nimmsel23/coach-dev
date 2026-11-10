@@ -1,0 +1,108 @@
+exercise_id: plank
+description: Expert details for Unterarmstütz
+approved_at: '2026-10-16T15:48:47.301358+00:00'
+exercises:
+- exercise_id: plank
+  id: plank
+  name: Plank
+  display_name: Unterarmstütz
+  german: Unterarmstütz
+  english: Plank
+  category: carry
+  type: isolation
+  movements:
+  - anti_extension
+  - bracing
+  - isometric
+  - scapular_protraction
+  - shoulder_flexion
+  - posterior_pelvic_tilt
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  secondary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  - 603_gluteus_maximus
+  stabilizers:
+  - 105_serratus_anterior
+  - 301_anterior_deltoid
+  - 304_rotator_cuff
+  - 206_erector_spinae
+  - 507_multifidus
+  coaching_notes:
+  - Spannen Sie Bauch, Gesäß und Oberschenkel gleichzeitig an, als wollten Sie den
+    Boden mit den Unterarmen nach hinten ziehen und die Füße nach vorne schieben.
+  - Halten Sie Kopf, Brustkorb, Becken und Fersen in einer geraden Linie; das Ziel
+    ist Körperspannung, nicht bloß Zeit auf der Uhr.
+  - Kippen Sie das Becken leicht nach hinten, damit der untere Rücken lang bleibt
+    und die Anti-Extensionsarbeit aus der Rumpfmuskulatur kommt.
+  - Drücken Sie die Unterarme aktiv in den Boden und schieben Sie die Schulterblätter
+    kontrolliert nach vorne, damit der obere Rücken stabil bleibt.
+  - Atmen Sie flach und kontrolliert in den Bauch- und Flankenraum, ohne die Spannung
+    im Rumpf zu verlieren.
+  - Beenden Sie den Satz, sobald die Beckenposition oder Rumpfspannung nicht mehr
+    sauber gehalten werden kann.
+  common_errors:
+  - Das Becken sinkt ab und der untere Rücken fällt ins Hohlkreuz, wodurch die Belastung
+    von der Rumpfmuskulatur auf passive Strukturen verlagert wird.
+  - Das Gesäß wird zu hoch geschoben, sodass die Position eher zu einer Pike als zu
+    einer geraden Plank-Linie wird.
+  - Die Schultern kollabieren zwischen den Oberarmen, weil nicht aktiv in den Boden
+    gedrückt und die Schulterblattspannung verloren wird.
+  - Der Kopf wird angehoben oder fallen gelassen, statt die Halswirbelsäule neutral
+    in Verlängerung der Wirbelsäule zu halten.
+  - Es wird die Luft angehalten, bis die Rumpfspannung zusammenbricht, anstatt unter
+    Spannung kontrolliert weiterzuatmen.
+  - Die Haltedauer wird über Technik priorisiert, obwohl die Übung biomechanisch nur
+    mit sauberer Anti-Extensionskontrolle sinnvoll ist.
+  tags:
+  - core
+  - abs
+  - stability
+  - bodyweight_workout
+  - trunk
+  - anti_extension
+  - isometric
+  aliases:
+  - Plank
+  - Front Plank
+  - Unterarmstütz
+  - Forearm Plank
+  variations: []
+  source: expert
+  search_aliases:
+  - Plank
+  - Front Plank
+  - Forearm Plank
+  - Unterarmstütz
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '458'
+      yuhonas:
+      - Plank
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-16T15:48:47.301358+00:00'
+  approved_at: '2026-10-16T15:48:47.301358+00:00'
+  wger_id: 458
+  yuhonas_id: Plank
+  external_ids:
+    wger:
+    - 458
+    yuhonas:
+    - Plank
+  original_description:
+  - Mit dem Bauch auf den Boden legen und den Körper mit Unterarmen und Zehen abstützen.
+    Beine, Rücken und Kopf sollten eine gerade Linie bilden.
+  instructions:
+  - Get into a prone position on the floor, supporting your weight on your toes and
+    your forearms. Your arms are bent and directly below the shoulder.
+  - Keep your body straight at all times, and hold this position as long as possible.
+    To increase difficulty, an arm or leg can be raised.

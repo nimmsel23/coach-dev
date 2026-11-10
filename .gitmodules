@@ -11,6 +11,6 @@
 	url = git@github.com:nimmsel23/daniel-vitaltrainer-firebase.git
 	branch = main
 [submodule "fitness/catalog/kb"]
-	path = fitness/catalog/kb
+	path = backend/fitness/catalog/kb
 	url = git@github.com:nimmsel23/fitness.git
 	branch = main

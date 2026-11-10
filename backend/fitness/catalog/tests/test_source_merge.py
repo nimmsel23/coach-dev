@@ -1,0 +1,104 @@
+from __future__ import annotations
+
+import tempfile
+import unittest
+from pathlib import Path
+from unittest import mock
+
+import yaml
+
+from fitness.catalog.core.source_merge import build_external_seed, find_source_entries
+from fitness.catalog.agent.inbox_actions import _find_yuhonas_match
+
+
+class SourceMergeTest(unittest.TestCase):
+    def test_build_external_seed_merges_wger_and_yuhonas(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            exercises = root / "exercises"
+            exercises.mkdir()
+            (exercises / "unreviewed_wger.yml").write_text(
+                yaml.dump({
+                    "exercises": [{
+                        "exercise_id": "wger_206",
+                        "display_name": "Ausfallschritte im Gehen",
+                        "german": "Ausfallschritte im Gehen",
+                        "wger_id": 206,
+                        "primary_muscles": ["601_quadriceps_femoris"],
+                        "wger_muscle_ids": {"primary": [10]},
+                    }]
+                }, allow_unicode=True),
+                encoding="utf-8",
+            )
+            yuhonas_entries = [{
+                "exercise_id": "yuhonas_walking_lunges",
+                "display_name": "Walking Lunges",
+                "english": "Walking Lunges",
+                "yuhonas_id": "Walking Lunges",
+                "instructions": ["Step forward"],
+                "images": ["a.jpg"],
+                "secondary_muscles": ["603_gluteus_maximus"],
+            }]
+
+            with mock.patch(
+                "fitness.catalog.core.source_merge.load_catalog_yaml",
+                side_effect=lambda rel: yaml.safe_load((root / rel).read_text()),
+            ), mock.patch(
+                "fitness.catalog.core.source_merge.load_yuhonas_bulk_entries",
+                return_value=yuhonas_entries,
+            ):
+                seed = build_external_seed("Walking Lunges", "wger_206")
+
+            self.assertIsNotNone(seed)
+            self.assertEqual(seed["wger_id"], 206)
+            self.assertEqual(seed["yuhonas_id"], "Walking Lunges")
+            self.assertEqual(seed["instructions"], ["Step forward"])
+            self.assertIn("wger", seed["external_ids"])
+            self.assertIn("yuhonas", seed["external_ids"])
+
+    def test_build_external_seed_uses_canonical_expert_aliases(self) -> None:
+        seed = build_external_seed("Kreuzheben", "080")
+        self.assertIsNotNone(seed)
+        self.assertEqual(seed["exercise_id"], "080")
+        self.assertEqual(seed["wger_id"], 184)
+        self.assertEqual(seed["yuhonas_id"], "Barbell_Deadlift")
+        self.assertEqual(seed["external_ids"]["wger"], [184])
+        self.assertEqual(seed["external_ids"]["yuhonas"], ["Barbell_Deadlift"])
+
+    def test_build_external_seed_uses_exact_external_ids_before_fuzzy_name_match(self) -> None:
+        seed = build_external_seed("Schrägbankdrücken mit Kurzhanteln", "041")
+        self.assertIsNotNone(seed)
+        self.assertEqual(seed["wger_id"], 537)
+        self.assertEqual(seed["yuhonas_id"], "Incline_Dumbbell_Press")
+        self.assertTrue(seed["original_description"])
+        self.assertTrue(seed["instructions"])
+
+    def test_obergriff_does_not_auto_link_chin_up_aliases(self) -> None:
+        """Kein resolve_query-Alias-Erbe: Obergriff ≠ Untergriff/Chin-Up."""
+        found = find_source_entries("Klimmzug im Obergriff", None)
+        yuhonas = found.get("yuhonas")
+        wger = found.get("wger")
+        if yuhonas is not None:
+            self.assertNotEqual(yuhonas.get("yuhonas_id"), "Chin-Up")
+        if wger is not None:
+            self.assertNotEqual(wger.get("wger_id"), 152)
+
+    def test_pull_up_does_not_auto_link_variant(self) -> None:
+        """„Pull-Up" ist nicht exakt „Pullups"/Scapular — kein Auto-Link."""
+        found = find_source_entries("Pull-Up", None)
+        self.assertIsNone(found.get("yuhonas"))
+        self.assertIsNone(_find_yuhonas_match("Pull-Up"))
+
+    def test_klimmzug_an_leiste_does_not_claim_pullups(self) -> None:
+        found = find_source_entries("Klimmzug an Leiste", None)
+        self.assertEqual((found.get("wger") or {}).get("wger_id"), 821)
+        self.assertIsNone(found.get("yuhonas"))
+        self.assertIsNone(_find_yuhonas_match("Klimmzug an Leiste"))
+
+    def test_exact_yuhonas_name_still_auto_links(self) -> None:
+        found = find_source_entries("Pullups", None)
+        self.assertEqual((found.get("yuhonas") or {}).get("yuhonas_id"), "Pullups")
+
+
+if __name__ == "__main__":
+    unittest.main()

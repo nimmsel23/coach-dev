@@ -539,10 +539,21 @@ def create_router(root=None, deliver=None):
                         for entry in (exercise.get('sets') or exercise.get('setsArray') or [])
                         if isinstance(entry, dict) and entry.get('completed') is True
                     )
+                day = finished.date().isoformat()
+                title = str(
+                    workout.get('block')
+                    or workout.get('name')
+                    or workout.get('trainingsart')
+                    or 'Trainingseinheit'
+                )
                 recent.append({
                     'id': str(workout.get('id') or ''),
                     'sourceType': workout.get('sourceType') or 'plan-workout',
-                    'name': str(workout.get('name') or 'Trainingseinheit'),
+                    'date': day,
+                    'name': title,
+                    'block': str(workout.get('block') or title),
+                    'trainingsart': str(workout.get('trainingsart') or workout.get('name') or '') or None,
+                    'location': str(workout.get('location') or '') or None,
                     'started_at': workout.get('started_at'),
                     'finished_at': workout.get('finished_at'),
                     'sessionState': str(workout.get('sessionState') or ''),
@@ -550,8 +561,14 @@ def create_router(root=None, deliver=None):
                     'sourcePlanId': workout.get('sourcePlanId'),
                     'sourcePlanRoutineId': workout.get('sourcePlanRoutineId'),
                     'exerciseCount': len(exercises),
+                    'exerciseNames': [
+                        str(ex.get('name')).strip()
+                        for ex in exercises
+                        if isinstance(ex, dict) and str(ex.get('name') or '').strip()
+                    ][:12],
                     'completedSetCount': completed_sets,
                     'durationSeconds': duration,
+                    'duration': round(duration / 60) if duration else None,
                 })
         for session_path in session_files:
             session = plans_module.read(session_path)
@@ -585,16 +602,27 @@ def create_router(root=None, deliver=None):
                 if started and finished:
                     duration_seconds = max(0, int((finished - started).total_seconds()))
             if duration_seconds is None:
+                raw_duration = session.get('duration')
                 try:
-                    duration_minutes = float(session.get('duration'))
+                    if isinstance(raw_duration, str) and raw_duration.endswith('min'):
+                        duration_minutes = float(raw_duration[:-3].strip())
+                    else:
+                        duration_minutes = float(raw_duration)
                     if duration_minutes > 0:
                         duration_seconds = int(duration_minutes * 60)
                 except (TypeError, ValueError):
                     pass
+            block = str(session.get('block') or '').strip()
+            trainingsart = str(session.get('trainingsart') or '').strip()
+            title = block or trainingsart or 'Fitness-Training'
             recent.append({
                 'id': f"fitness-session:{session.get('session_id') or session_path.stem}",
                 'sourceType': 'fitness-session',
-                'name': str(session.get('trainingsart') or session.get('block') or 'Fitness-Training'),
+                'date': day.isoformat(),
+                'name': title,
+                'block': block or title,
+                'trainingsart': trainingsart or None,
+                'location': str(session.get('location') or '').strip() or None,
                 'started_at': gate.get('startedAt'),
                 'finished_at': gate.get('endedAt') or session.get('saved_at') or day_text,
                 'sessionState': str(gate.get('status') or 'saved'),
@@ -602,8 +630,14 @@ def create_router(root=None, deliver=None):
                 'sourcePlanId': None,
                 'sourcePlanRoutineId': None,
                 'exerciseCount': len(exercises),
+                'exerciseNames': [
+                    str(ex.get('name')).strip()
+                    for ex in exercises
+                    if isinstance(ex, dict) and str(ex.get('name') or '').strip()
+                ][:12],
                 'completedSetCount': completed_sets if completed_sets else None,
                 'durationSeconds': duration_seconds,
+                'duration': round(duration_seconds / 60) if duration_seconds else None,
             })
         recent.sort(key=lambda item: str(item.get('finished_at') or ''), reverse=True)
         return {'workouts': recent[:30], 'available': True, 'reason': None, 'storage': 'local-fitness-runtime'}

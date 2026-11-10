@@ -1,0 +1,68 @@
+name: hip_thrust_lesson
+description: Anatomy teaching seed for hip thrust.
+lessons:
+  - exercise_id: 082
+    title: "Hip Thrust - Gesäß als Hauptmotor"
+    region: legs
+    learning_goal:
+      short: "Hüftextension und Glute-Fokus verstehen."
+      detailed: "Lern, wie der Hip Thrust die Hüfte in Endstreckung bringt und den Gluteus maximus klar betont."
+    movement_pattern:
+      primary: hip_extension
+      secondary:
+        - posterior_chain
+    joint_actions:
+      hip:
+        eccentric:
+          - flexion_control
+        concentric:
+          - extension
+        stabilization:
+          - pelvic_tilt_control
+      trunk:
+        stabilization:
+          - rib_pelvis_stack
+    muscle_roles:
+      prime_movers:
+        - glutes
+      synergists:
+        - thigh_back
+      stabilizers:
+        - core
+        - upper_back
+    body_highlighter_regions:
+      primary:
+        - glutes
+      secondary:
+        - thigh_back
+      light:
+        - lower_back
+    trainer_explanation:
+      simple: "Der Hip Thrust ist ein klarer Glute-Lift."
+      technical: "Die horizontale Lastposition und die Endstreckung der Hüfte betonen den Gluteus maximus bei kontrollierter Beckenposition."
+      client_friendly: "Du sollst das Gesäß oben deutlich anspannen."
+    feel_cues:
+      - "Gesäß arbeitet oben stark."
+      - "Rippen bleiben unten."
+      - "Becken kontrolliert."
+    coaching_cues:
+      - "Kinn leicht einziehen."
+      - "Oben Gesäß fest."
+      - "Kein Hohlkreuz."
+    common_errors:
+      - error: "Hohlkreuz im Lockout."
+        anatomical_reason: "Die Endposition wandert in den unteren Rücken statt in die Hüftstreckung."
+        correction: "Rippen runter und Becken kontrollieren."
+        coaching_cue: "Po oben, Rücken nicht."
+      - error: "Zu wenig Hüftextension."
+        anatomical_reason: "Der Gluteus bekommt keinen klaren Endpunkt."
+        correction: "Volle, saubere Streckung anstreben."
+        coaching_cue: "Oben ganz strecken."
+    variations_teach:
+      - variation: "glute bridge"
+        lesson: "Kürzere Hebel und oft leichter zu lernen."
+      - variation: "banded hip thrust"
+        lesson: "Mehr Endpositionsspannung."
+    quiz:
+      - question: "Was ist das Hauptziel beim Hip Thrust?"
+        answer: "Die Hüfte kraftvoll zu strecken und das Gesäß oben klar anzuspannen."

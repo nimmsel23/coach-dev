@@ -1,0 +1,170 @@
+name: pull_up_lesson
+description: Anatomy teaching seed for 020.
+lessons:
+- exercise_id: 020
+  title: Klimmzug — Lat-Mechanik und Scapula-Kontrolle
+  region: back
+  learning_goal:
+    short: Latissimus als Schultergelenk-Beweger verstehen — nicht als Ellenbogenbeuger.
+    detailed: Lern warum Scapula-Depression der erste Schritt ist und wie Griffvarianten
+      Lat vs Bizeps verschieben.
+  movement_pattern:
+    primary: vertical_pull
+    secondary:
+    - shoulder_adduction
+    - shoulder_extension
+    - scapular_depression
+  joint_actions:
+    shoulder:
+      concentric:
+      - adduction
+      - extension
+      eccentric:
+      - abduction_control
+      - flexion_control
+      stabilization:
+      - glenohumeral_centering
+    scapula:
+      concentric:
+      - depression
+      - retraction
+      eccentric:
+      - elevation_control
+      - protraction_control
+    elbow:
+      concentric:
+      - flexion
+      eccentric:
+      - extension_control
+  muscle_roles:
+    prime_movers:
+    - lats
+    - upper_back
+    synergists:
+    - upper_arm_front
+    stabilizers:
+    - core
+    - upper_back
+  body_highlighter_regions:
+    primary:
+    - lats
+    - upper_back
+    secondary:
+    - upper_arm_front
+    light:
+    - forearms
+    - core
+  trainer_explanation:
+    simple: Der Klimmzug ist nicht einfach Arm ziehen — der Latissimus zieht den Oberarm
+      von oben nach unten zur Körpermitte.
+    technical: Der Latissimus dorsi führt Adduktion und Extension des Humerus aus.
+      Scapula-Depression durch unteren Trapezius und Rhomboiden ist Voraussetzung
+      für optimale Lat-Kontraktion. Ohne Scapula-Setup dominiert der obere Trapezius.
+    client_friendly: Zieh die Ellenbogen Richtung Hüfte, nicht die Hände zur Schulter.
+  feel_cues:
+  - Schulterblätter zuerst aktiv nach unten — dann Arme beugen.
+  - Ellenbogen Richtung Hosentaschen/Hüfte ziehen.
+  - Brust zur Stange, nicht Kinn.
+  - Lat fühlt sich an wie ein breiter Schild der sich zusammenzieht.
+  coaching_cues:
+  - Scapula-Depression vor dem Pull einleiten — Schultern von den Ohren weg.
+  - Volle Extension in der unteren Position für maximalen Lat-Stretch.
+  - Kein Schwung aus der Hüfte.
+  common_errors:
+  - error: Schultern wandern beim Einleiten des Zugs nach oben.
+    anatomical_reason: Oberer Trapezius übernimmt kompensatorisch, wenn unterer Trapezius
+      nicht deprimiert. Der Lat verliert seinen Schulterblatt-Anker.
+    correction: Schulterblätter aktiv nach unten vor dem Zug setzen.
+    coaching_cue: Schultern erst runter, dann ziehen.
+  - error: Nur der Bizeps arbeitet, kein Lat-Engagement spürbar.
+    anatomical_reason: Wenn Scapula-Depression und Schulterextension fehlen, dominiert
+      die Ellenbogenbeugung. Der Lat ist ein Schultergelenk-Beweger, kein Ellenbogengelenk-Beweger.
+    correction: Bewegung mit Ellenbogen-zur-Hüfte initiieren, nicht Hand-zur-Schulter.
+    coaching_cue: Ellenbogen in die Hosentaschen.
+  variations_teach:
+  - variation: Untergriff (Chin-Up)
+    lesson: Supination bringt Bizeps in optimale Mechanik — mehr Bizeps-Beteiligung,
+      gleicher Lat-Mover.
+  - variation: Neutral Grip
+    lesson: Schulterfreundlich, guter Kompromiss Lat/Bizeps. Brachialis stärker beteiligt.
+  quiz:
+  - question: Warum spüren Anfänger Klimmzüge mehr im Bizeps als im Rücken?
+    answer: Weil sie die Scapula nicht deprimieren und den Lat nicht über Schulterextension
+      einleiten. Stattdessen dominiert Ellenbogenbeugung — das ist reine Bizeps-Arbeit.
+  - question: Was passiert anatomisch wenn man beim Klimmzug nicht voll streckt?
+    answer: Der Latissimus wird nicht in seiner vollen Länge trainiert. Das limitiert
+      hypertrophes Potential und Schultermobilität. Stretch-mediierte Hypertrophie
+      erfordert volle ROM.
+  simple_explanation: 'Der Klimmzug ist nicht einfach "Arm ziehen". Der Latissimus
+    zieht den Oberarm nach unten und zur Körpermitte — das ist die Hauptarbeit. Bizeps
+    beugt den Ellenbogen. Die Schulterblätter müssen aktiv deprimieren und retrahieren,
+    sonst übernimmt die obere Schulter und der Lat kann keine Kraft entwickeln.
+
+    '
+  detailed_explanation: 'Der Musculus latissimus dorsi ist der primäre Krafterzeuger:
+    Er adduziert und extendiert den Oberarm (zieht ihn von oben-außen zu Rumpf-unten).
+    Der Bizeps brachii beugt den Ellenbogen. Entscheidend ist die Scapula: Der untere
+    Trapezius und die Rhomboiden müssen die Schulterblätter deprimieren und retrahieren
+    — nur dann kann der Lat aus seiner optimalen Länge heraus Kraft entwickeln. Ohne
+    Scapula-Setup dominiert der obere Trapezius, der Nacken verkürzt und die Schulter
+    wandert nach oben.
+
+    '
+  quiz_prompts:
+  - question: Warum spüren viele Anfänger Klimmzüge mehr im Bizeps als im Rücken?
+    answer: 'Weil sie die Scapula nicht aktiv deprimieren und den Lat nicht über Schulterextension/-adduktion
+      einleiten. Stattdessen dominiert die Ellenbogenbeugung — das ist klassische
+      Bizeps-Arbeit ohne Lat-Beteiligung.
+
+      '
+  - question: Was ändert sich beim Untergriff anatomisch?
+    answer: 'Supination des Unterarms bringt den Bizeps in seine mechanisch günstigste
+      Position (optimale Längen-Spannungs-Kurve). Dadurch leistet der Bizeps mehr
+      Beitrag zur Gesamtkraft. Der Lat bleibt primärer Mover, aber der Untergriff
+      erlaubt oft mehr Wiederholungen.
+
+      '
+  - question: Warum ist Scapula-Depression so wichtig beim Klimmzug?
+    answer: 'Der Latissimus hat seinen proximalen Ursprung am Beckenkamm, Wirbelsäule
+      und unterem Rippenbogen — nicht an der Scapula. Aber er inseriert am Humerus.
+      Für optimale Kraftentwicklung braucht er eine stabile, deprimierte Scapula als
+      indirekten Anker. Ohne das übernimmt der obere Trapezius, der Nacken spannt,
+      und die Lat-Kontraktion bleibt ineffizient.
+
+      '
+  common_errors_explained:
+    shrugging_into_pull:
+      description: Schultern wandern beim Einleiten des Zugs nach oben.
+      anatomical_reason: 'Oberer Trapezius übernimmt kompensatorisch, wenn unterer
+        Trapezius und Serratus nicht aktiv deprimieren. Dadurch verliert der Lat seinen
+        stabilen Schulterblatt-Anker — die Kraft bricht zusammen.
+
+        '
+      correction: Schulterblätter aktiv 'nach unten weg von den Ohren' vor dem Zug.
+      teaches:
+      - scapulohumeral_rhythm
+      - lower_trapezius_function
+      - lat_mechanics
+    pulling_with_arms_only:
+      description: Nur der Bizeps arbeitet, kein Lat-Engagement spürbar.
+      anatomical_reason: 'Wenn Schulterblatt-Depression und Schulterextension fehlen,
+        wird die Ellenbogenbeugung zur Hauptbewegung. Der Lat ist anatomisch jedoch
+        ein Schultergelenk-Beweger, kein Ellenbogengelenk-Beweger.
+
+        '
+      correction: Bewegung mental mit 'Ellenbogen zur Hüfte' initiieren, nicht mit
+        'Hand zur Schulter'.
+      teaches:
+      - latissimus_dorsi_anatomy
+      - proximal_to_distal_principle
+    half_reps:
+      description: Kein vollständiges Strecken in der unteren Position.
+      anatomical_reason: 'Ohne volle Extension (Schulterflexion + Scapula-Elevation)
+        wird der Lat nicht in der Länge trainiert. Das limitiert hypertrophes Potential
+        und die Mobilität im Schultergelenk.
+
+        '
+      correction: Kontrolliertes Absenken bis zur vollen Streckung — dann neu einleiten.
+      teaches:
+      - full_range_of_motion_principle
+      - stretch_mediated_hypertrophy

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Calendar, RefreshCw, Sparkles, FileText } from 'lucide-react';
 import { api } from './api';
+import { exerciseName } from './ids';
 
 // ── Plan Builder Tab ──
 export default function PlanTab({ onSelectExercise, showToast }) {
@@ -148,26 +149,34 @@ export default function PlanTab({ onSelectExercise, showToast }) {
             {/* Plan Slots List */}
             <div className="flex-1 overflow-y-auto py-4 space-y-3 pr-1">
               <h4 className="text-xs font-mono uppercase tracking-wider text-muted font-bold mb-1">Übungen</h4>
-              {plan.slots && plan.slots.map((slot, idx) => (
+              {plan.slots && plan.slots.map((slot, idx) => {
+                const selectedId = slot.selected_exercise;
+                const matched = (plan.exercises || []).find((ex) => (ex.id || ex.exercise_id) === selectedId);
+                const label = matched ? exerciseName(matched) : (selectedId || 'Keine Übung ausgewählt');
+                return (
                 <div key={idx} className="p-4 bg-surface/50 border border-white/5 rounded-xl flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 bg-white/5 border border-white/10 rounded text-muted font-bold">
                       Slot: {slot.name}
                     </span>
-                    <div className="font-mono text-sm font-bold text-text mt-1.5">
-                      {slot.selected_exercise || 'Keine Übung ausgewählt'}
+                    <div className="font-mono text-sm font-bold text-text mt-1.5 truncate" title={selectedId || ''}>
+                      {label}
                     </div>
+                    {selectedId && matched && (
+                      <div className="text-[10px] font-mono text-muted mt-0.5 truncate">{selectedId}</div>
+                    )}
                   </div>
-                  {slot.selected_exercise && (
+                  {selectedId && (
                     <button
-                      onClick={() => onSelectExercise(slot.selected_exercise)}
+                      onClick={() => onSelectExercise(selectedId)}
                       className="px-2.5 py-1.5 border border-white/5 bg-white/5 hover:bg-white/10 rounded-lg text-[10px] font-mono text-muted hover:text-text transition-all active:scale-95 shrink-0"
                     >
                       Ansehen
                     </button>
                   )}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         ) : (

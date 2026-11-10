@@ -1,0 +1,49 @@
+# fitness — VitalOS Exercise Knowledge Base (KB)
+# https://github.com/nimmsel23/fitness
+# Data only (YAML). No app code. German coaching KB.
+
+> Public repo. LLM web apps can read freely; connect GitHub to write/PRs. Start here, then read AGENTS.md and the paths below.
+
+## Entry
+
+- README: https://github.com/nimmsel23/fitness/blob/main/README.md
+- Agent rules: https://github.com/nimmsel23/fitness/blob/main/AGENTS.md
+- This index: https://github.com/nimmsel23/fitness/blob/main/llms.txt
+- File manifest: https://github.com/nimmsel23/fitness/blob/main/MANIFEST.yml
+- Inbox = PRs (target): https://github.com/nimmsel23/fitness/blob/main/INBOX.md
+
+## Layout (repo root = former catalog/kb)
+
+- `exercises/` — coach-approved expert exercises (`*.yml`; numeric ids preferred)
+- `inbox/` — drafts awaiting coach approve (enrichment candidates)
+- `muscles/` — muscle YAMLs + region buckets (ordered large → small)
+- `muscle_index.yml` / `muscle_groups.json` — muscle indexes
+- `anatomy_teaching/` — teaching layers per exercise
+- `coaching_notes/` — short coaching drops
+- `rules/` — catalog rules
+- `registry/` — external id maps (wger / yuhonas), not training logic
+- `vendor/free-exercise-db/` — pinned upstream submodule (yuhonas); SHA in `yuhonas.ref`
+- `vendor/free-exercise-db/dist/exercises.json` — yuhonas live bulk (submodule)
+- `vendor/fma/` — pinned FMA 5.1.0 (uw-sig/FMA); SHA in `fma.ref` — OWL via Git LFS
+- `registry/fma_kb_map.yml` — catalog muscle id ↔ FMA IRI
+- `exercises/unreviewed_wger.yml` — wger bulk source (API snapshot; no git submodule)
+- `activities.yml`, `config.yml`, `wger_mapping.yml`, `external_db_mapping.yml`
+
+## How to use
+
+1. List or search YAML under `exercises/` and `inbox/` via GitHub file API / connector.
+2. Read one file fully before editing; preserve `exercise_id`, external ids, and existing structure.
+3. New or incomplete exercises belong in `inbox/`, not silently into `exercises/`.
+4. Approved expert truth is only `exercises/` after coach gate.
+5. Do not invent a second KB copy; this repo is the data SOT. Catalog Python lives in coach-dev.
+
+## Cloud enrichment fallback
+
+- Manual / LLM prompt: `.github/prompts/enrich-inbox.md`
+- CI: Actions workflow `Enrich Inbox` (`workflow_dispatch` or `repository_dispatch` `enrich-inbox`)
+- Script: `scripts/enrich_inbox.py` (Gemini → PR on `inbox/` only)
+
+## Consumers
+
+- coach-dev submodule path: `fitness/catalog/kb`
+- Local checkout: `~/dev/fitness`

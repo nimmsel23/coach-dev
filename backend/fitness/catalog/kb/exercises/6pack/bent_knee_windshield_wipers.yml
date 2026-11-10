@@ -1,0 +1,48 @@
+exercise_id: bent_knee_windshield_wipers
+description: Curated 6 Pack Promise entry for Bent Knee Windshield Wipers.
+exercises:
+- exercise_id: bent_knee_windshield_wipers
+  id: bent_knee_windshield_wipers
+  name: Bent Knee Windshield Wipers
+  display_name: Bent Knee Windshield Wipers
+  german: Bent Knee Windshield Wipers
+  english: Bent Knee Windshield Wipers
+  category: core
+  type: isolation
+  movements:
+  - trunk_rotation
+  - anti_rotation
+  - pelvic_control
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  secondary_muscles:
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  stabilizers:
+  - 603_gluteus_maximus
+  coaching_notes:
+  - Halten Sie Arme und Schulterblätter breit am Boden, während die gebeugten Beine von Seite zu Seite kippen.
+  - Bremsen Sie den Richtungswechsel aktiv über die Schrägbauchmuskeln ab.
+  - Wählen Sie nur so viel Bewegungsradius, wie Sie ohne Abheben der Rippen kontrollieren können.
+  common_errors:
+  - Die Knie fallen einfach seitlich herunter und werden nicht aktiv zurückgeholt.
+  - Eine Schulter hebt ab und nimmt die Rotationskontrolle aus dem Rumpf.
+  - Das Tempo ist höher als die Fähigkeit, den unteren Rücken sauber zu stabilisieren.
+  tags:
+  - 6pack_promise
+  - core
+  - rotation
+  aliases:
+  - Bent Knee Windshield Wipers
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

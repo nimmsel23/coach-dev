@@ -1,0 +1,84 @@
+name: incline_dumbbell_curl_lesson
+description: Anatomy teaching seed for 505.
+lessons:
+- exercise_id: '505'
+  title: Schrägbankcurl — Long Head Stretch und Peak Contraction
+  region: arms
+  learning_goal:
+    short: Verstehen warum die Schrägbank-Position den Long Head des Bizeps vordehnt und so Stretch-mediierte Hypertrophie maximal stimuliert.
+    detailed: Lern wie die Schulterextension auf der geneigten Bank den zweigelenkigen Long Head in eine vorgedehnte Ausgangsposition bringt — das erzeugt den wertvollsten Bizeps-Trainingsreiz.
+  movement_pattern:
+    primary: elbow_flexion
+    secondary:
+    - forearm_supination
+  joint_actions:
+    elbow:
+      concentric:
+      - flexion
+      eccentric:
+      - extension_control
+      stabilization:
+      - axis_control
+    shoulder:
+      stabilization:
+      - fixed_extension_position
+  muscle_roles:
+    prime_movers:
+    - biceps_brachii_long_head
+    synergists:
+    - brachialis
+    - brachioradialis
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - upper_arm_front
+    secondary:
+    - forearms
+    light:
+    - core
+  trainer_explanation:
+    simple: Der Oberarm hängt senkrecht hinter dem Körper — das dehnt den Bizeps maximal bevor er zu curlen beginnt.
+    technical: Die geneigte Rücklehne positioniert das Schultergelenk in Extension — der Long Head des Bizeps (Caput longum, Ursprung am Schulterblatt) wird dadurch über das Schultergelenk in die Länge gezogen. Das schafft die ideale Vordehnung für maximale Kraftentwicklung.
+    client_friendly: Der Arm hängt ganz runter — lass die Dehnung zu, dann curl hoch.
+  feel_cues:
+  - Volle Dehnung unten aushalten — lass den Streckreiz zu.
+  - Kein Vorwärtsstoß der Ellbogen beim Hochcurlen.
+  - Rücken bleibt die ganze Zeit an der Lehne.
+  coaching_cues:
+  - Ellbogen nach hinten hängen lassen (Schulterextension) — nicht nach vorne stoßen.
+  - Volle Streckung unten ist die wertvollste Position.
+  - Kontrolliert ablassen, nicht fallen lassen.
+  common_errors:
+  - error: Ellbogen stoßen beim Hochgehen nach vorne.
+    anatomical_reason: Wenn der Ellbogen nach vorne schwingt, geht die Schulterextensions-Position verloren. Der Long Head verliert seine Vordehnung — die Übung wird zum normalen Curl.
+    correction: Ellbogen die ganze Zeit senkrecht nach unten hängen lassen.
+    coaching_cue: Ellbogen zeigen immer nach unten — nicht nach vorne.
+  - error: Zu schnell ablassen (Dehnung überspringen).
+    anatomical_reason: Die gedehnte Position (Streckung mit Schulterextension) ist der wertvollste Bereich für Stretch-mediierte Hypertrophie. Zu schnelles Ablassen verkürzt die Time-under-Tension genau dort.
+    correction: 3 Sekunden eccentric — die Dehnung ist der Wert.
+    coaching_cue: Lass ihn langsam runter — die Dehnung ist das Training.
+  variations_teach:
+  - variation: Steep Incline (steilere Bank, ca. 60°)
+    lesson: Weniger Schulterextension → weniger Long Head Stretch, aber einfachere Ausführung.
+  - variation: Sehr flache Schrägbank (ca. 30°)
+    lesson: Maximale Schulterextension → maximaler Long Head Stretch — anspruchsvollste Variante.
+  quiz:
+  - question: Warum ist der Schrägbankcurl für Bizeps-Entwicklung besonders wertvoll?
+    answer: Weil die Schrägbank-Position den Oberarm in Extension bringt. Der Long Head des Bizeps (Caput longum) entspringt am Schulterblatt — in Extension wird er über das Schultergelenk vordehnt. Stretch-mediierte Hypertrophie ist in dieser vorgedehnten Position besonders effektiv.
+  - question: Was unterscheidet den Schrägbankcurl vom normalen stehenden Curl?
+    answer: Beim stehenden Curl hängt der Arm neutral — kein Vordehnung des Long Head über das Schultergelenk. Beim Schrägbankcurl ist der Arm in Extension — der Long Head ist maximal vordehnt. Das erzeugt höhere Spannung in der gedehnten Position und stärkere Hypertrophie-Signale.
+  simple_explanation: "Der Schrägbankcurl positioniert den Arm auf der geneigten Bank in Schulterextension — der zweigelenkige Long Head des Bizeps wird dadurch maximal vordehnt bevor die Beugung beginnt. Diese gedehnte Ausgangsposition ist besonders wertvoll für Hypertrophie-Training. Volle Streckung unten ist die wichtigste Phase — kein schnelles Loslassen.\n"
+  detailed_explanation: "Der M. biceps brachii Caput longum entspringt am Tuberculum supraglenoidale der Scapula — er überquert das Schultergelenk. Wenn der Oberarm auf der Schrägbank in Extension positioniert ist, wird das Caput longum über dieses Schultergelenk in die Länge gezogen (vordehnt). Gemäß der Längen-Spannungs-Kurve und neueren Erkenntnissen zur stretch-mediierte Hypertrophie stimuliert Training in der gedehnten Position besonders starke mTOR-Aktivierung. Der M. brachialis wird unabhängig von der Schulterposition aktiviert. Der M. brachioradialis ist bei leichter Pronation besonders aktiv.\n"
+  quiz_prompts:
+  - question: Welche Bankneigung ist optimal für den Schrägbankcurl?
+    answer: "Ca. 45-50° ergibt einen guten Kompromiss: Genug Schulterextension für Long Head Stretch, aber noch kontrollierbare Ausführung. Flacher (30°) = mehr Stretch, schwieriger. Steiler (60°) = weniger Stretch, einfacher.\n"
+  common_errors_explained:
+    elbow_forward_swing:
+      description: Ellbogen stoßen beim Hochcurlen nach vorne.
+      anatomical_reason: "Das Schultergelenk geht aus der Extension heraus — der Long Head verliert seine Vordehnung. Die Übung degeneriert zum Standard-Curl ohne den spezifischen Stretch-Vorteil der Schrägbank.\n"
+      correction: Ellbogen senkrecht nach unten hängen lassen über das gesamte Set.
+      teaches:
+      - long_head_mechanics
+      - stretch_mediated_hypertrophy
+      - biceps_anatomy

@@ -1,0 +1,48 @@
+exercise_id: scissors
+description: Curated 6 Pack Promise entry for Scissors.
+exercises:
+- exercise_id: scissors
+  id: scissors
+  name: Scissors
+  display_name: Scissors
+  german: Scissors
+  english: Scissors
+  category: core
+  type: isolation
+  movements:
+  - hip_flexion
+  - adduction
+  - anti_extension
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 607_iliopsoas
+  secondary_muscles:
+  - 504_transverse_abdominis
+  stabilizers:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  coaching_notes:
+  - Kreuzen Sie die Beine kontrolliert übereinander, ohne die Lendenposition zu verlieren.
+  - Halten Sie die Bewegung klein genug, damit die Bauchspannung durchgehend sichtbar bleibt.
+  - Wechseln Sie die obere Beinseite rhythmisch und sauber.
+  common_errors:
+  - Die Beine werden zu weit abgesenkt und ziehen den Rücken ins Hohlkreuz.
+  - Das Kreuzen wird hektisch und unsauber.
+  - Der Oberkörper verkrampft, um fehlende Rumpfspannung zu kompensieren.
+  tags:
+  - 6pack_promise
+  - core
+  - lower_abs
+  aliases:
+  - Scissors
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

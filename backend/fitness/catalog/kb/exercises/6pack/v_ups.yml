@@ -1,0 +1,48 @@
+exercise_id: v_ups
+description: Curated 6 Pack Promise entry for V Ups.
+exercises:
+- exercise_id: v_ups
+  id: v_ups
+  name: '"V" Ups'
+  display_name: '"V" Ups'
+  german: '"V" Ups'
+  english: V Ups
+  category: core
+  type: compound
+  movements:
+  - spinal_flexion
+  - hip_flexion
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 607_iliopsoas
+  secondary_muscles:
+  - 504_transverse_abdominis
+  stabilizers:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  coaching_notes:
+  - Heben Sie Arme und Beine gleichzeitig an und bauen Sie die V-Position aus Rumpfspannung auf.
+  - Treffen Sie Hände und Füße nicht mit Schwung, sondern durch aktives Zusammenfalten.
+  - Senken Sie beide Seiten kontrolliert zurück ab.
+  common_errors:
+  - Die Bewegung wird zu einem losen Toe Touch ohne Spannung im unteren Abschnitt.
+  - Die Beine knicken stark ein und verkürzen den Hebel zu früh.
+  - Unten wird komplett entspannt und der nächste Rebound übernimmt.
+  tags:
+  - 6pack_promise
+  - core
+  - upper_abs
+  aliases:
+  - V Ups
+  - '"V" Ups'
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

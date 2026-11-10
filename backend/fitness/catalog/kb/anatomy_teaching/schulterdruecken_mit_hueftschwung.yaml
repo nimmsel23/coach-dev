@@ -1,0 +1,100 @@
+name: push_press_lesson
+description: Anatomy teaching seed for Push Press (Schulterdrücken mit Hüftschwung).
+lessons:
+- exercise_id: schulterdruecken_mit_hueftschwung
+  title: Push Press — Explosive Überkopf-Kraft verstehen
+  region: shoulders
+  learning_goal:
+    short: Die Synergie zwischen Unterkörper-Impuls und Oberkörper-Kraft meistern.
+    detailed: Lern wie der "Dip-Drive" Mechanismus die kinetische Kette nutzt, um maximale Lasten über Kopf zu bewegen.
+  movement_pattern:
+    primary: vertical_push
+    secondary:
+    - knee_extension
+    - hip_extension
+    - elbow_extension
+  joint_actions:
+    shoulder:
+      concentric:
+      - flexion
+      - abduction
+      stabilization:
+      - glenohumeral_centering
+    elbow:
+      concentric:
+      - extension
+    hip:
+      concentric:
+      - extension (drive phase)
+    knee:
+      concentric:
+      - extension (drive phase)
+    scapula:
+      concentric:
+      - upward_rotation
+      - elevation (end phase)
+  muscle_roles:
+    prime_movers:
+    - shoulders_front
+    - quadriceps_femoris
+    - gluteus_maximus
+    synergists:
+    - triceps_brachii
+    - trapezius
+    stabilizers:
+    - rectus_abdominis
+    - upper_back
+  body_highlighter_regions:
+    primary:
+    - shoulders_front
+    secondary:
+    - upper_arm_back
+    - thigh_front
+    light:
+    - glutes
+    - core
+  trainer_explanation:
+    simple: Die Push Press nutzt die Beine, um das Gewicht über die schwierigste Stelle (Stickpoint) zu helfen.
+    technical: Die kinetische Energie wird durch die schnelle Extension von Knie und Hüfte (Drive) erzeugt und über den Rumpf auf den Schultergürtel übertragen.
+    client_friendly: Nutze den Schwung aus den Beinen wie eine Feder, um die Hantel nach oben zu katapultieren.
+  feel_cues:
+  - Fersen bleiben beim Drive am Boden.
+  - Hantel hebt fast von alleine von den Schultern ab.
+  - Rumpf fühlt sich wie ein massiver Block an.
+  coaching_cues:
+  - Kurzer, knackiger Dip — kein Squat.
+  - Ellbogen leicht vor der Stange.
+  - Kopf "aus dem Weg" beim Hochdrücken.
+  common_errors:
+  - error: Zu tiefer Dip.
+    anatomical_reason: Verlangsamt die Dehnungs-Verkürzungs-Zyklus (DVZ) Effizienz und wandelt die Übung in einen Front Squat mit Press um.
+    correction: Nur 10-15cm tief sinken, Fokus auf Reaktivität.
+    coaching_cue: Stell dir vor du springst, statt dich zu setzen.
+  - error: Hohlkreuz beim Lockout.
+    anatomical_reason: Mangelnde Rumpfspannung führt zu einer Hyperlordose der LWS unter axialer Last.
+    correction: Glutes anspannen, Rippen unten halten.
+    coaching_cue: Mach deinen Bauch fest wie ein Brett.
+  quiz:
+  - question: Was ist der Hauptvorteil der Push Press gegenüber dem strikten Drücken?
+    answer: Durch den Bein-Impuls kann der Stickpoint (toter Punkt) überwunden werden, was höhere Lasten und mehr Power ermöglicht.
+  - question: Warum ist ein zu tiefer Dip kontraproduktiv?
+    answer: Ein zu tiefer Dip verbraucht zu viel Zeit und Energie, wodurch die reaktive Kraft des Dehnungs-Verkürzungs-Zyklus verloren geht.
+  muscle_anatomy:
+    anterior_deltoid:
+      latin: Musculus deltoideus (pars clavicularis)
+      origin: Extremitas acromialis claviculae
+      insertion: Tuberositas deltoidea humeri
+      innervation: Nervus axillaris (C5-C6)
+      function_in_exercise: Primärer Beweger für die Elevation des Arms über Kopf.
+    triceps_brachii:
+      latin: Musculus triceps brachii
+      origin: Tuberculum infraglenoidale (Caput longum), Humerusrückseite
+      insertion: Olecranon ulnae
+      innervation: Nervus radialis (C6-C8)
+      function_in_exercise: Streckt den Ellenbogen im oberen Drittel der Bewegung.
+    quadriceps_femoris:
+      latin: Musculus quadriceps femoris
+      origin: Femur und Spina iliaca anterior inferior
+      insertion: Tuberositas tibiae (über Patellarsehne)
+      innervation: Nervus femoralis (L2-L4)
+      function_in_exercise: Erzeugt den initialen Impuls (Drive) durch Kniestreckung.

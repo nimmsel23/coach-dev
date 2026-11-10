@@ -1,0 +1,91 @@
+name: cable_crossover_lesson
+description: Anatomy teaching seed for 101.
+lessons:
+- exercise_id: '101'
+  title: Kabelzug-Überkreuzen — Horizontale Adduktion und Peak Contraction
+  region: chest
+  learning_goal:
+    short: Verstehen wie der Kabelzug konstante Spannung über die gesamte ROM aufrechthält — was Hanteln und Langhantel nicht können.
+    detailed: Lern warum Kabelzug-Flys die Brust in der Endposition (Kontraktion) maximale Spannung geben und wie Griffhöhe den Fokus zwischen unterem, mittlerem und oberem Pectoralis verschiebt.
+  movement_pattern:
+    primary: horizontal_adduction
+    secondary:
+    - shoulder_horizontal_flexion
+  joint_actions:
+    shoulder:
+      concentric:
+      - horizontal_adduction
+      - internal_rotation
+      eccentric:
+      - horizontal_abduction_control
+      stabilization:
+      - glenohumeral_centering
+    scapula:
+      concentric:
+      - protraction
+      eccentric:
+      - retraction_control
+    elbow:
+      stabilization:
+      - slight_flexion_fixed
+  muscle_roles:
+    prime_movers:
+    - pectoralis_major
+    synergists:
+    - anterior_deltoid
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - chest_front
+    secondary:
+    - shoulders_front
+    light:
+    - core
+  trainer_explanation:
+    simple: Das Kabel bleibt die ganze Bewegung gespannt — auch wenn die Hände zusammenkommen. Das ist der Vorteil gegenüber Hanteln.
+    technical: Kabelzüge bieten konstante Zugrichtung und damit konstante mechanische Spannung über die gesamte ROM. Bei Hantelflys fällt die Spannung in der Endposition (Kontraktion) massiv ab. Griffhöhe verschiebt die Kraftlinie und den Pec-Fokus.
+    client_friendly: Fühl die Brust in der Mitte maximal quetschen — das ist der Unterschied zum Bankdrücken.
+  feel_cues:
+  - Brust maximal zusammenziehen wenn die Hände sich treffen.
+  - Ellbogen leicht gebeugt und diese Position halten.
+  - Kleine Kontrollpause am Ende des Zusammenführens.
+  coaching_cues:
+  - Griffe auf Schulter- oder leicht darunter — keine übertriebene Elevation.
+  - Körper leicht nach vorne geneigt für bessere Kraftlinie.
+  - Keine Ausweichbewegung aus dem Rücken.
+  common_errors:
+  - error: Ellbogen werden zu stark gebeugt (wird zum Drücken).
+    anatomical_reason: Starke Ellenbogenbeugung transformiert die Übung von horizontaler Adduktion zu vertikalem Press. Die Pectoralis-Spannung wird durch Triceps-Arbeit ersetzt.
+    correction: Ellbogen auf konstantem leichten Beugungswinkel fixieren — keine Ellenbogen-Bewegung.
+    coaching_cue: Die Ellbogen bewegen sich nicht — nur die Schultern.
+  - error: Schwung aus dem Oberkörper.
+    anatomical_reason: Zu schweres Gewicht wird durch Rumpfrotation statt Pectoralis-Kraft bewegt.
+    correction: Gewicht reduzieren, Körper stabilisieren.
+    coaching_cue: Körper ist ein Fels — nur die Arme bewegen sich.
+  variations_teach:
+  - variation: High-to-Low Cable Fly
+    lesson: Kraftlinie von oben nach unten — betont den unteren Pectoralis.
+  - variation: Low-to-High Cable Fly
+    lesson: Kraftlinie von unten nach oben — betont den oberen (klavikulären) Pectoralis.
+  - variation: Neutral / Schulter-Höhe
+    lesson: Mittlere Pectoralis-Aktivierung, ausgeglichenster Fokus.
+  quiz:
+  - question: Warum hat der Kabelzug gegenüber Hanteln einen Vorteil bei der Brust-Isolation?
+    answer: Kabelzüge bieten konstante Spannung über die gesamte Bewegungsamplitude — auch in der Endposition (Peak Contraction) wenn die Hände zusammenkommen. Bei Hanteln fällt die Spannung in der Endposition ab weil die Gravitationsvektoren zusammenfallen.
+  - question: Wie steuert die Griffhöhe den Pectoralis-Fokus?
+    answer: Hoch (Kabel oben) → Kraftlinie von oben nach unten → unterer Pec. Tief (Kabel unten) → Kraftlinie von unten nach oben → oberer (klavikulärer) Pec. Schulter-Höhe → mittlerer Pec.
+  simple_explanation: "Beim Kabelzug-Überkreuzen zieht der Pectoralis major die Arme vor dem Körper zusammen (horizontale Adduktion). Der Vorteil gegenüber Hanteln: Das Kabel bleibt die gesamte Bewegung gespannt — auch wenn die Hände zusammenkommen. Das maximiert die Peak Contraction der Brust. Griffhöhe und Körperneigung steuern welcher Pec-Anteil am meisten arbeitet.\n"
+  detailed_explanation: "Der M. pectoralis major führt horizontale Adduktion (Arm vor den Körper ziehen) und Innenrotation des Humerus aus. Der anteriore Deltoideus assistiert. Der entscheidende Vorteil des Kabelzugs: Die Kraftlinie bleibt in Richtung Seilzug konstant — dadurch besteht auch in der Peak-Kontraktions-Position (Hände zusammen, Pec maximal verkürzt) mechanische Spannung. Bei freien Gewichten (Hanteln) kollabiert der Gravitationsvektor in der End-Position mit der Bewegungsrichtung — die Spannung fällt auf null. Für maximale muskuläre Spannung über die gesamte ROM ist der Kabelzug daher Hanteln überlegen.\n"
+  quiz_prompts:
+  - question: Warum ist die Peak Contraction beim Kabelzug-Überkreuzen für Hypertrophie wertvoll?
+    answer: "Mechanische Spannung in der verkürzten Position des Muskels stimuliert spezifische Hypertrophie-Signale. Viele Übungen (Bankdrücken) haben kaum Spannung in der verkürzten Muskel-Position — der Kabelzug schließt diese Lücke.\n"
+  common_errors_explained:
+    elbow_bending:
+      description: Ellbogen werden zu stark gebeugt — Übung wird zum Pressing.
+      anatomical_reason: "Wenn der Ellbogenwinkel sich verändert, übernimmt der Triceps Arbeit. Die horizontale Adduktion des Schultergelenks (Pec-Hauptfunktion) wird reduziert zugunsten von Ellenbogenstreckung.\n"
+      correction: Ellbogenwinkel festlegen (ca. 10-20° Beugung) und über das gesamte Set konstant halten.
+      teaches:
+      - joint_isolation
+      - constant_tension_principle
+      - pectoralis_mechanics

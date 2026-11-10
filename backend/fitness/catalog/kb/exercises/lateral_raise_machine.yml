@@ -1,0 +1,168 @@
+exercise_id: lateral_raise_machine
+description: Expert details for Maschinelles Seitheben
+approved_at: '2026-10-16T15:49:07.229272+00:00'
+exercises:
+- exercise_id: lateral_raise_machine
+  id: lateral_raise_machine
+  name: Seithebemaschine
+  display_name: Maschinelles Seitheben
+  german: Maschinelles Seitheben
+  english: Machine Lateral Raise
+  category: push
+  type: isolation
+  movements:
+  - shoulder_abduction
+  - scapular_upward_rotation
+  - scapular_control
+  - machine_guided
+  - open_chain
+  equipment:
+  - machine
+  primary_muscles:
+  - 302_lateral_deltoid
+  secondary_muscles:
+  - 305_supraspinatus
+  - 105_serratus_anterior
+  - 202c_trapezius_lower
+  - 202a_trapezius_upper
+  stabilizers:
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 507_multifidus
+  - 206_erector_spinae
+  coaching_notes:
+  - Stellen Sie den Sitz so ein, dass die Drehachse der Maschine etwa auf Höhe Ihres
+    Schultergelenks liegt. Die Polster sollten stabil an Unterarmen oder Ellenbogen
+    anliegen, damit der Widerstand sauber in die Abduktion übertragen wird.
+  - Nehmen Sie eine aufrechte Sitzposition ein, halten Sie Brustbein und Kopf neutral
+    und erzeugen Sie leichte Spannung in Bauch und Rumpf. Der Oberkörper bleibt ruhig,
+    ohne seitliches Ausweichen oder Rücklage.
+  - Starten Sie aus der Schulter, nicht aus den Händen. Denken Sie daran, die Ellenbogen
+    seitlich nach außen und leicht nach oben zu führen, statt das Gewicht nur irgendwie
+    anzuheben.
+  - Halten Sie die Ellenbogen leicht gebeugt und diesen Winkel während des Satzes
+    möglichst konstant. So bleibt die Spannung auf dem Zielmuskel und unnötiger Stress
+    auf Ellbogen und Handgelenke wird reduziert.
+  - Führen Sie die Arme in der Skapularebene sauber nach außen. Eine neutrale bis
+    leicht außenrotierte Schulterposition ist meist angenehmer für den subakromialen
+    Raum als eine forcierte Innenrotation.
+  - Heben Sie kontrolliert bis ungefähr Schulterhöhe oder knapp darunter, sofern Sie
+    die Spannung auf dem seitlichen Deltamuskel halten können. Die Bewegung soll aus
+    aktiver Schulterabduktion kommen, nicht aus einem Schulterzucken.
+  - Lassen Sie die Schultern bewusst unten und lang, während sich die Schulterblätter
+    natürlich mitbewegen dürfen. Ziel ist kontrollierte Aufwärtsrotation des Schulterblatts
+    ohne dominantes Hochziehen in den Nacken.
+  - Nutzen Sie ein moderates Tempo mit klarer exzentrischer Kontrolle. Gerade das
+    langsame Absenken liefert viel Trainingsreiz und zeigt, ob Sie das Gewicht wirklich
+    beherrschen.
+  - Arbeiten Sie im schmerzfreien Bewegungsbereich. Wenn sich die Endposition vorne
+    im Schulterdach unangenehm anfühlt, reduzieren Sie Bewegungsumfang, Last oder
+    justieren die Sitz- und Armposition.
+  - Atmen Sie beim Anheben aus und beim kontrollierten Absenken ein. Halten Sie den
+    Rumpfdruck konstant, ohne ins Pressen oder Hohlkreuz zu kippen.
+  common_errors:
+  - 'Zu viel Gewicht: Wenn Sie die Last nur mit Schwung, Nackenspannung oder verkürztem
+    Bewegungsradius bewegen können, ist sie zu schwer für saubere laterale Deltoid-Arbeit.'
+  - 'Schultern hochziehen: Ein dominantes Shrugging verlagert die Arbeit vom seitlichen
+    Deltamuskel auf den oberen Trapezius und nimmt der Übung ihren eigentlichen Fokus.'
+  - 'Mit dem Oberkörper mitarbeiten: Seitliches Lehnen, Rücklage oder Rotieren des
+    Rumpfs reduziert die Isolation und erhöht die Wahrscheinlichkeit für eine unsaubere
+    Belastung der Schulter.'
+  - 'Ellbogenwinkel ständig verändern: Starkes Beugen oder Strecken während der Wiederholung
+    macht die Bewegung inkonsistent und verändert den Hebel unnötig.'
+  - 'Zu hoch anheben: Wer deutlich über Schulterhöhe hinausgeht, verliert oft die
+    Spannung im Zielmuskel und kompensiert über Nacken und Schulterblatthebung.'
+  - 'Innenrotation erzwingen: Das klassische ''Wasser ausgießen'' kann bei vielen
+    Trainierenden den Schulterraum ungünstig verengen und die Übung unnötig unangenehm
+    machen.'
+  - 'Absenkphase fallen lassen: Das unkontrollierte Zurückfallen der Arme verschenkt
+    exzentrischen Reiz und erhöht die Gelenkbelastung am Umkehrpunkt.'
+  - 'Falsch eingestellt sitzen: Wenn Sitzhöhe oder Maschinenachse nicht zum Schultergelenk
+    passen, fühlt sich die Bewegung oft unnatürlich an und trifft den Zielmuskel schlechter.'
+  - 'Zu kurzer Bewegungsweg: Sehr kleine Teilwiederholungen aus Bequemlichkeit reduzieren
+    den Trainingsreiz, sofern sie nicht bewusst als Intensitätstechnik eingesetzt
+    werden.'
+  - 'Schmerz ignorieren: Stechender Schmerz an der Vorder- oder Oberseite der Schulter
+    ist kein normales Brennen im Muskel und sollte nicht einfach ''weggedrückt'' werden.'
+  tags:
+  - shoulder_isolation
+  - deltoid
+  - machine_exercise
+  - lateral_deltoid
+  - shoulders
+  - shoulder_abduction
+  - expert_reviewed
+  aliases:
+  - Seithebemaschine
+  - Seitheben an der Maschine
+  - Machine Lateral Raise
+  - Lateral Raise Machine
+  - Machine Side Lateral Raise
+  search_aliases:
+  - wger_1570
+  - Maschinelles Seitheben
+  - Machine Lateral Raise
+  - Seithebemaschine
+  external_ids:
+    wger:
+    - 1570
+  wger_id: 1570
+  wger_muscle_ids:
+    primary:
+    - 2
+    secondary: []
+  variations: []
+  source: expert
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '1570'
+      yuhonas:
+      - Bent_Over_Low-Pulley_Side_Lateral
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-16T15:49:07.229272+00:00'
+  approved_at: '2026-10-16T15:49:07.229272+00:00'
+  yuhonas_id: Bent_Over_Low-Pulley_Side_Lateral
+  original_description:
+  - 'Das Seitheben an der Maschine ist eine Isolationsübung für den seitlichen Anteil
+    des Deltamuskels, die zur Stabilität an einer Maschine ausgeführt wird. Sie beansprucht
+    die äußere Schulter, indem du Polster oder Griffe seitlich auf Schulterhöhe anhebst
+    und dann langsam absenkst, wobei du die Ellbogen leicht gebeugt und den Trapezmuskel
+    nach unten gezogen hältst, um den Fokus auf den Deltamuskel zu legen. Diese Übung
+    hilft, Schulterbreite aufzubauen, indem sie Schwung verhindert und für konstante
+    Spannung sorgt, was sie ideal für Anfänger oder als Abschlussübung macht.
+
+    So führst du das Seitheben an der Maschine aus
+
+    Aufbau: Stelle den Sitz so ein, dass deine Schultern auf einer Linie mit dem Drehpunkt
+    der Maschine sind, deine Brust am Polster anliegt (oder dein Rücken, falls du
+    nach außen gewandt bist) und deine Arme einen 90-Grad-Winkel mit den Polstern/Griffen
+    bilden.
+
+    Ausgangsposition: Umfasse die Griffe mit lockerem Griff, die Ellbogen leicht gebeugt
+    und die Schultern nach unten (weg von den Ohren) gezogen.
+
+    Hebephase: Atme aus und hebe deine Arme seitlich an, wobei du deine Oberarme nach
+    außen bewegst, bis sie parallel zum Boden sind.
+
+    Maximale Kontraktion: Halte oben kurz inne und spanne den seitlichen Deltamuskel
+    an, ohne dabei die Schultern hochzuziehen.
+
+    Senkphase: Atme ein und senke das Gewicht langsam und kontrolliert wieder ab,
+    wobei du dem Gewicht auf dem Weg nach unten Widerstand entgegensetzt.'
+  instructions:
+  - Select a weight and hold the handle of the low pulley with your right hand.
+  - Bend at the waist until your torso is nearly parallel to the floor. Your legs
+    should be slightly bent with your left hand placed on your lower left thigh. Your
+    right arm should be hanging from your shoulder in front of you and with a slight
+    bend at the elbow. This will be your starting position.
+  - Raise your right arm, elbow slightly bent, to the side until the arm is parallel
+    to the floor and in line with your right ear. Breathe out as you perform this
+    step.
+  - Slowly lower the weight back to the starting position as you breathe in.
+  - Repeat for the recommended amount of repetitions and repeat the movement with
+    the other arm.

@@ -1,0 +1,114 @@
+name: overhead_press_lesson
+description: Anatomy teaching seed for 022.
+lessons:
+- exercise_id: '022'
+  title: Überkopfdrücken — Schulter-Mechanik und Core-Stabilisierung
+  region: shoulders
+  learning_goal:
+    short: Den Anterior-Deltoid als primären Drücker verstehen — und warum Core-Spannung die Lendenwirbelsäule schützt.
+    detailed: Lern warum ein übermäßiges Hohlkreuz beim OHP eine direkte Folge mangelnder Core-Anspannung ist und wie die Schultergelenk-Mechanik bei vollständiger Streckung optimal aussieht.
+  movement_pattern:
+    primary: vertical_press
+    secondary:
+    - shoulder_flexion
+    - elbow_extension
+    - scapular_upward_rotation
+  joint_actions:
+    shoulder:
+      concentric:
+      - flexion
+      - abduction
+      eccentric:
+      - extension_control
+      - adduction_control
+      stabilization:
+      - glenohumeral_centering
+    scapula:
+      concentric:
+      - upward_rotation
+      - elevation
+      eccentric:
+      - downward_rotation_control
+    elbow:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+    lumbar:
+      stabilization:
+      - anti_extension
+  muscle_roles:
+    prime_movers:
+    - anterior_deltoid
+    - lateral_deltoid
+    synergists:
+    - triceps
+    - upper_trapezius
+    - serratus_anterior
+    stabilizers:
+    - core
+    - erector_spinae
+  body_highlighter_regions:
+    primary:
+    - shoulders
+    secondary:
+    - arms
+    - upper_back
+    light:
+    - core
+  trainer_explanation:
+    simple: Beim Überkopfdrücken sind beide Deltaköpfe die Hauptarbeiter — der vordere initiiert die Bewegung, der seitliche sorgt für Breite.
+    technical: Der M. deltoideus (Pars clavicularis und acromialis) führt Flexion und Abduktion des Humerus aus. Der Triceps brachii streckt den Ellenbogen. Entscheidend ist die Scapula-Aufwärtsrotation durch Serratus anterior und Trapezius — ohne diese wandert der Humerus in ein enges Subacromial-Fenster.
+    client_friendly: Drück die Stange senkrecht über den Kopf — wie ein Turm. Der Bauch bleibt hart wie eine Wand.
+  feel_cues:
+  - Bauch aktiv anspannen — kein Hohlkreuz!
+  - Stange senkrecht über dem Mittelfuß drücken.
+  - Oben die Schultern aktiv "einrasten" lassen (Traps unterstützen).
+  - Ellbogen leicht nach vorne, nicht ganz seitlich.
+  coaching_cues:
+  - Rippen unten — kein Ausweichen mit dem Rücken.
+  - Stange nah am Gesicht vorbeiführen.
+  - Oben voll strecken und aktiv in die Stange drücken.
+  common_errors:
+  - error: Extremes Hohlkreuz beim Drücken.
+    anatomical_reason: Der Erector spinae überkompensiert wenn der Transversus abdominis nicht stabilisiert. Die Lendenwirbelsäule hyperextendiert um den Bewegungsradius zu verlängern.
+    correction: Rippen aktiv nach unten ziehen, Bauch anspannen vor dem Drücken.
+    coaching_cue: Rippen unten halten — als ob du einen Gürtel zuziehst.
+  - error: Stange zu weit vor dem Gesicht (Hebelarm zu lang).
+    anatomical_reason: Eine zu weit nach vorne verlagerte Stange verlängert den Schultermoment-Arm erheblich und belastet den Rotatorenmanschette-Komplex.
+    correction: Stange nah am Gesicht entlangführen — fast die Nase streifen.
+    coaching_cue: Kinn zurück, Stange an der Stirn vorbei.
+  variations_teach:
+  - variation: Kurzhantel-OHP
+    lesson: Mehr Schulterfreiheit durch unabhängige Bewegungsbahnen — Rotatorenmanschette mehr gefordert.
+  - variation: Push Press
+    lesson: Impulskraft aus den Beinen überwindet den Sticking Point — lehrt explosives Krafttraining.
+  quiz:
+  - question: Warum ist ein Hohlkreuz beim OHP problematisch?
+    answer: Weil es die Lendenwirbelsäule unter axialer Last hyperextendiert. Core-Anspannung (Transversus abdominis, Obliques) schützt die Bandscheiben durch intraabdominalen Druck.
+  - question: Welche Rolle spielt der Serratus anterior beim OHP?
+    answer: Er rotiert die Scapula nach oben und hält sie am Thorax — verhindert so das Subacromial-Impingement beim vollständigen Drücken über Kopf.
+  simple_explanation: "Beim Überkopfdrücken drücken Vorder- und Seiten-Deltoid die Last senkrecht nach oben. Der Triceps streckt den Ellenbogen. Entscheidend: Core-Spannung verhindert das Hohlkreuz, und die Schulterblätter müssen sich beim Drücken mitbewegen (Aufwärtsrotation), damit der Oberarmknochen nicht ins Dach des Schultergelenks stößt.\n"
+  detailed_explanation: "Der M. deltoideus (Pars clavicularis = anterior, Pars acromialis = lateral) sind die primären Krafterzeuger bei Humerus-Flexion und -Abduktion. Der M. triceps brachii streckt den Ellenbogen. Kritisch ist die scapulothorakale Rhythmik: Der M. serratus anterior und der obere Trapezius rotieren die Scapula nach oben (Glenoid zeigt nach oben), was das Subacromial-Fenster öffnet. Ohne diese Rotation droht Impingement des M. supraspinatus. Core-Muskulatur (M. transversus abdominis, M. obliquus externus) schützt die Lendenwirbelsäule durch intraabdominalen Druck gegen Hyperextension.\n"
+  quiz_prompts:
+  - question: Warum schmerzt bei vielen die Schulter beim OHP — obwohl die Last moderat ist?
+    answer: "Häufig fehlt die Scapula-Aufwärtsrotation: Der Serratus anterior ist zu schwach, der Trapezius zu dominant. Das Glenoid zeigt nicht optimal nach oben — der Supraspinatus wird eingeklemmt.\n"
+  - question: Was unterscheidet biomechanisch den OHP vom Push Press?
+    answer: "Beim Push Press erzeugen Knie- und Hüftstreckung kinetische Energie, die den Sticking Point überwindet. Das erlaubt schwerere Lasten — der Deltoid muss nur die Endphase sichern. Beim OHP liegt die gesamte Last auf dem Deltoid-Triceps-System.\n"
+  common_errors_explained:
+    lumbar_hyperextension:
+      description: Extremes Hohlkreuz beim Drücken.
+      anatomical_reason: "Mangelnde Core-Aktivität zwingt den Erector spinae zur Übernahme der Stabilisierung. Die Lendenwirbelsäule hyperextendiert, um Mobilität zu kompensieren und den Bewegungsweg zu verlängern.\n"
+      correction: Rippen unten ziehen, Bauch vor dem Drücken aktivieren.
+      teaches:
+      - core_stabilization
+      - intraabdominal_pressure
+      - lumbar_protection
+    bar_forward_path:
+      description: Stange zu weit vor dem Gesicht — zu langer Hebelarm.
+      anatomical_reason: "Jeder Zentimeter nach vorne multipliziert das Drehmoment auf das Schultergelenk. Die Rotatorenmanschette (insb. Supraspinatus) wird überbelastet.\n"
+      correction: Stange nah am Gesicht (Kinn zurück), senkrechte Bahn erzwingen.
+      teaches:
+      - moment_arm_principle
+      - rotator_cuff_loading
+      - efficient_force_vector

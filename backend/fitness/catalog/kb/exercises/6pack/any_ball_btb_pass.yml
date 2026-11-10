@@ -1,0 +1,52 @@
+exercise_id: any_ball_btb_pass
+description: Curated 6 Pack Promise entry for The "Any Ball" BTB Pass.
+exercises:
+- exercise_id: any_ball_btb_pass
+  id: any_ball_btb_pass
+  name: The "Any Ball" BTB Pass
+  display_name: The "Any Ball" BTB Pass
+  german: The "Any Ball" BTB Pass
+  english: The "Any Ball" BTB Pass
+  category: core
+  type: compound
+  movements:
+  - trunk_rotation
+  - hand_to_hand_transfer
+  - hip_flexion
+  equipment:
+  - bodyweight
+  - ball
+  primary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  secondary_muscles:
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  stabilizers:
+  - 607_iliopsoas
+  coaching_notes:
+  - Halten Sie den Rumpf angehoben und geben Sie den Ball kontrolliert hinter dem Körper von Hand zu Hand.
+  - Rotieren Sie über Brustkorb und Rippen, nicht nur über Schulterkreisen.
+  - Wenn kein Ball da ist, kann derselbe Bewegungsablauf trocken nachgebaut werden.
+  common_errors:
+  - Der Oberkörper fällt zwischen den Übergaben jedes Mal komplett ab.
+  - Die Rotation wird nur aus den Armen gemacht.
+  - Das Tempo steigt, bevor die Übergaben sauber und symmetrisch sind.
+  tags:
+  - 6pack_promise
+  - core
+  - rotation
+  - equipment_optional
+  aliases:
+  - The "Any Ball" BTB Pass
+  - Any Ball BTB Pass
+  - BTB Pass
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

@@ -1,0 +1,49 @@
+exercise_id: mountain_climbers
+description: Curated 6 Pack Promise entry for Mountain Climbers.
+exercises:
+- exercise_id: mountain_climbers
+  id: mountain_climbers
+  name: Mountain Climbers
+  display_name: Mountain Climbers
+  german: Mountain Climbers
+  english: Mountain Climbers
+  category: core
+  type: compound
+  movements:
+  - anti_extension
+  - hip_flexion
+  - gait_pattern
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  secondary_muscles:
+  - 607_iliopsoas
+  - 603_gluteus_maximus
+  stabilizers:
+  - 105_serratus_anterior
+  - 301_anterior_deltoid
+  coaching_notes:
+  - Bleiben Sie in einer starken High-Plank und ziehen Sie die Knie schnell, aber sauber unter den Körper.
+  - Halten Sie Schultern über den Händen und den Oberkörper möglichst ruhig.
+  - Nutzen Sie ein zügiges Tempo nur, wenn Becken und Rumpfposition stabil bleiben.
+  common_errors:
+  - Die Hüfte springt hoch und macht die Übung zu einem Sprint statt zu Core-Arbeit.
+  - Die Schritte sind kurz und hektisch, ohne dass die Knie wirklich unter den Körper kommen.
+  - Die Schulterlinie wandert bei jeder Wiederholung nach hinten weg.
+  tags:
+  - 6pack_promise
+  - core
+  - conditioning
+  aliases:
+  - Mountain Climbers
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

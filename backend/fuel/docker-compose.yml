@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:15
+    container_name: fuel_tracker_db
+    environment:
+      POSTGRES_USER: fuel_user
+      POSTGRES_PASSWORD: fuel_password
+      POSTGRES_DB: fuel_tracker
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

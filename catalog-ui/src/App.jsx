@@ -75,12 +75,12 @@ function App() {
 
         <div className="p-4 border-t border-white/5 text-[11px] text-muted font-mono flex flex-col gap-1 bg-surface/20 rounded-b-2xl">
           <div className="flex items-center justify-between">
-            <span>Stack API:</span>
-            <span className="text-primary">:9150</span>
+            <span>API:</span>
+            <span className="text-primary">same-origin</span>
           </div>
           <div className="flex items-center justify-between">
-            <span>Client:</span>
-            <span className="text-success">:9160</span>
+            <span>UI:</span>
+            <span className="text-success">/catalog-ui/</span>
           </div>
         </div>
       </div>
@@ -90,7 +90,9 @@ function App() {
         <header className="glass-panel mb-4 p-4 px-6 flex items-center justify-between rounded-2xl border-white/5 bg-surface/40 shrink-0">
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-bold font-mono capitalize tracking-wide text-text/90">{activeTab.replace('-', ' ')}</h2>
-            <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[10px] font-mono text-muted">Dev-Server</span>
+            <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[10px] font-mono text-muted">
+              {window.location.port || '9150'}
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <button

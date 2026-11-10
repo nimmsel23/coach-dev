@@ -1,0 +1,17 @@
+# VORSCHLAG — nicht installiert/aktiviert. Siehe README.md in diesem Ordner.
+# Ersetzt fitness-api.service (beide belegen :9150 — nie gleichzeitig laufen lassen).
+[Unit]
+Description=Fitness Backend (FastAPI :9150, nur 127.0.0.1)
+Conflicts=fitness-api.service
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/coach-dev
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 -m backend serve
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

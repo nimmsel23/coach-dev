@@ -1,0 +1,87 @@
+name: skull_crusher_lesson
+description: Anatomy teaching seed for 503.
+lessons:
+- exercise_id: '503'
+  title: French Press / Skull Crusher — Triceps in der Dehnung
+  region: arms
+  learning_goal:
+    short: Verstehen wie der French Press den Triceps in seiner gestreckten Position trainiert — und warum das für den Long Head besonders wertvoll ist.
+    detailed: Lern die dreiköpfige Triceps-Anatomie und warum der Long Head (Caput longum) beim Skull Crusher besonders stark aktiviert wird, weil er über das Schultergelenk verläuft.
+  movement_pattern:
+    primary: elbow_extension
+    secondary:
+    - shoulder_stabilization
+  joint_actions:
+    elbow:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+      stabilization:
+      - axis_alignment
+    shoulder:
+      stabilization:
+      - fixed_position
+      - glenohumeral_centering
+  muscle_roles:
+    prime_movers:
+    - triceps_brachii_long_head
+    - triceps_brachii_lateral_head
+    - triceps_brachii_medial_head
+    synergists: []
+    stabilizers:
+    - core
+    - anconeus
+  body_highlighter_regions:
+    primary:
+    - upper_arm_back
+    secondary: []
+    light:
+    - core
+  trainer_explanation:
+    simple: Der French Press trainiert den Triceps in der gestreckten Position — besonders wertvoll für den Long Head (größter Triceps-Kopf).
+    technical: Der M. triceps brachii caput longum ist zweigelenkig (Schulter + Ellenbogen). Wenn der Oberarm senkrecht steht (wie beim Skull Crusher), ist der Long Head vordehnt — das optimiert seine Längen-Spannungs-Kurve und steigert den Hypertrophie-Reiz.
+    client_friendly: Halt die Ellbogen ganz ruhig oben — nur der Unterarm bewegt sich.
+  feel_cues:
+  - Ellbogen schmal und stabil — keine Bewegung.
+  - Unterarm als einzige bewegliche Einheit.
+  - Tiefes Ablassen bis zur maximalen Dehnung.
+  coaching_cues:
+  - Ellbogen eng halten — nicht nach außen ausstellen.
+  - Kontrolliert ablassen, explosiver strecken.
+  - Oberarm senkrecht oder leicht nach hinten geneigt.
+  common_errors:
+  - error: Ellbogen stellen sich nach außen aus.
+    anatomical_reason: Wenn die Ellbogen seitlich wandern, verschiebt sich die Kraftlinie — der Lateral Head übernimmt mehr, der Long Head verliert seinen optimalen Dehnungswinkel.
+    correction: Ellbogen aktiv nach innen/zusammen halten über das gesamte Set.
+    coaching_cue: Ellbogen zeigen zur Decke — die ganze Zeit.
+  - error: Oberarm bewegt sich mit (wird zum Schulterdrücken).
+    anatomical_reason: Wenn der Oberarm sich nach vorne/hinten bewegt, wird die Übung zu einem Press mit Schulter-Beteiligung — die Triceps-Isolation geht verloren.
+    correction: Oberarm fixieren — komplett stationär. Nur der Unterarm klappt.
+    coaching_cue: Stell dir vor der Oberarm ist in Beton gegossen.
+  variations_teach:
+  - variation: EZ-Bar Skull Crusher
+    lesson: Reduzierte Handgelenks-Belastung durch leichte Supination — schulterfreundlicher.
+  - variation: Kurzhantel-Variante
+    lesson: Unabhängige Bewegungsbahn erlaubt natürlichere Handgelenksrotation.
+  quiz:
+  - question: Warum ist der Long Head des Triceps beim Skull Crusher besonders aktiv?
+    answer: Der M. triceps brachii caput longum entspringt am Schulterblatt (Tuberculum infraglenoidale) — er ist zweigelenkig. In senkrechter Oberarm-Position wird er über das Schultergelenk gedehnt, was ihn in die Länge zieht und seine Kontraktionskraft maximiert.
+  - question: Was ist der Unterschied zwischen Skull Crusher und Triceps-Drücken (Pushdown)?
+    answer: Beim Skull Crusher ist der Oberarm senkrecht — Long Head wird vordehnt und maximal aktiviert. Beim Pushdown ist der Oberarm parallel zum Körper — Long Head ist weniger vordehnt, Lateral/Medial Head dominieren. Beide ergänzen sich.
+  simple_explanation: "Der French Press (Skull Crusher) isoliert den Triceps durch Ellenbogenstreckung mit fixiertem Oberarm. Der große Vorteil: Der Oberarm steht senkrecht — das dehnt den zweigelenkigen Long Head des Triceps über das Schultergelenk vor. Das erzeugt maximale Spannung im Long Head, der mit ca. 60% der Triceps-Masse der größte Kopf ist.\n"
+  detailed_explanation: "Der M. triceps brachii besteht aus drei Köpfen: Caput longum (Ursprung: Tuberculum infraglenoidale scapulae — zweigelenkig), Caput laterale (Corpus humeri, posteriore Fläche — eingelenkig), Caput mediale (Corpus humeri — eingelenkig). Alle drei inserieren an der Olecranon-Spitze der Ulna. Beim Skull Crusher steht der Oberarm senkrecht — das Schultergelenk ist flektiert. Der Long Head wird dadurch über das Schultergelenk in die Länge gezogen (vordehnt). Gemäß der Längen-Spannungs-Kurve arbeitet ein vorgeredehnter Muskel effizienter. Diese Position maximiert den Long-Head-Stimulus und ist deshalb für Triceps-Masse besonders wertvoll.\n"
+  quiz_prompts:
+  - question: Warum gilt der French Press als eine der effektivsten Triceps-Übungen für Masse?
+    answer: "Weil er den Long Head (größter Triceps-Kopf) in seiner gedehnten Position trainiert — Stretch-mediierte Hypertrophie. Isolation der Kniestreckung ohne Schulter-Kompensation erzeugt maximale Time-under-Tension im gesamten Triceps.\n"
+  - question: Was bedeutet 'Stretch-mediierte Hypertrophie' im Kontext des French Press?
+    answer: "Neuere Forschung zeigt dass Training in der gestreckten Muskelposition (Long Head beim Skull Crusher) zu stärkerem Hypertrophie-Signal führt als Training in der verkürzten Position. Der Stretch aktiviert mechanosensitive Signalwege (mTOR-Pathway) besonders effektiv.\n"
+  common_errors_explained:
+    flaring_elbows:
+      description: Ellbogen stellen sich nach außen aus.
+      anatomical_reason: "Wenn die Ellbogen seitlich wandern, verändert sich die Kraft-Richtung auf den Triceps. Der optimale Dehnungswinkel des Long Head geht verloren — Lateral Head dominiert. Außerdem erhöht sich die Belastung auf das mediale Kollateralband des Ellenbogengelenks.\n"
+      correction: Ellbogen aktiv zusammenhalten, nach innen drücken.
+      teaches:
+      - triceps_anatomy
+      - long_head_mechanics
+      - elbow_joint_health

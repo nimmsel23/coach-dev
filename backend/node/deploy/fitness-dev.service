@@ -1,0 +1,14 @@
+[Unit]
+Description=Fitness Dev Frontend-Server + leichte API (Node.js :9100) — liefert das gebaute Frontend aus (Static+SPA), Business-Logik liegt in fitness-api.service (:9150)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/backend
+Environment=NODE_ENV=development
+ExecStart=%h/dev/backend/node_modules/.bin/nodemon --watch server.mjs --watch fitness-runtime.mjs --watch firestore-mirror.mjs --ext mjs --signal SIGTERM server.mjs
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

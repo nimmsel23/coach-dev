@@ -1,0 +1,3 @@
+progression_rules:
+  method: double_progression
+  increment_strategy: small_steps

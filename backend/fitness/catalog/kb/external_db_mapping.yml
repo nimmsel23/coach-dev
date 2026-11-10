@@ -1,0 +1,3 @@
+external_db_mapping:
+  enabled: false
+  notes: "Seed mapping placeholder for optional external exercise sources."

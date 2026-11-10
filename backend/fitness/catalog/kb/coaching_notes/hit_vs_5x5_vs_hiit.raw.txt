@@ -1,0 +1,67 @@
+[13:50, 21.8.2026] Daniel Nimmrichter: Trainierst du etwa nicht ?
+😳
+[15:32, 21.8.2026] Matthias Fitinn3: Ich hab noch nicht eingetragen!
+[15:33, 21.8.2026] Matthias Fitinn3: Und heute geh ich auch wieder, also grundsätzlich geh ich schon.
+[15:35, 21.8.2026] Matthias Fitinn3: Eine Frage: Ich hab am Montag noch einmal Push gemacht, möchte aber heute und ev. am Sonntag noch einmal gehen. Von Montag bis Donnerstag sind wir in Bad Aussee wandern. Jetzt würde ich den leg day heute machen und am Sonntag pull. Dann sollte das ohne Muskelkater beim Wandern gehen.
+[15:36, 21.8.2026] Matthias Fitinn3: Die Frage hab ich mir selbst beantwortet, danke trotzdem 😄
+[19:21, 22.8.2026] Daniel Nimmrichter: Du musst nicht zwingend die Übungen dazu loggen. Wenn du einfach Art des Trainings (Push) loggst ist schon gut
+[19:23, 22.8.2026] Matthias Fitinn3: Wie genau schaust du das an? Weil mein Gedanke der ist, dass du das siehst, dir vielleicht einmal denkst "Wos mocht der do?" und mir das bei wiederkehrenden Mustern rückmeldest 😄
+[19:24, 22.8.2026] Matthias Fitinn3: Ich geh erst heute Abend, gestern war ich nicht mehr. Ich habe mich eines Projekts angenommen, dessen Aufwand ich sehr unterschätzt hab 😄 Jetzt geh ich später und trag dann beides ein.
+[19:27, 22.8.2026] Matthias Fitinn3: Eine grundsätzliche Frage: Ich nehme das Gewicht, mit dem ich ca. 5 Wh. schaffe. Dann mach ich Pause und mach weiter und schaff naturgemäß immer weniger. Ich mach das ja so lange, bis nichts mehr geht. Die Pause dazwischen dauert max. 15 Sekunden. Jetzt schaff ich oft 5x, dann nur mehr 2x und dann war es das. Mach ich etwas falsch oder hab ich am Anfang einfach zu viel Gewicht?
+[19:27, 22.8.2026] Daniel Nimmrichter: ich hab ein terminal am pc
+[19:27, 22.8.2026] Daniel Nimmrichter: da tipp ich ein sowas wie
+[19:27, 22.8.2026] Daniel Nimmrichter: fitness log clients --journal
+[19:27, 22.8.2026] Daniel Nimmrichter: oder fitness log clients matthias-mayer
+[19:28, 22.8.2026] Daniel Nimmrichter: und sehe alles was du in firebase/firestore gespeichert hast was es schon bis zu meinem laptop per sync geschafft hat
+[19:28, 22.8.2026] Daniel Nimmrichter: sieht dann circa so aus nur cooler als hier:
+[19:28, 22.8.2026] Daniel Nimmrichter: ❯ fitness log clients matthias-mayer
+
+── Matthias Mayer ──────────────────────────
+   WM4bgRvDGxXD…
+   Sun 02.08.26   [Push]  Schrägbankdrücken mit Kurzhanteln, Schrägbankdrücken mit Kurzhanteln, Seitheben mit Kurzhanteln, Trizeps Seildrücken…  RPE 8  ⚡+5min
+   Sun 12.07.26   [legs]  Ausfallschritte im Gehen, Leg Presses (wide), Beinbeuger, Beinstrecker  RPE 8  ⚡+5min
+   Sat 04.07.26   [Push]  Schrägbankdrücken KH, Schrägbankdrücken KH, Seitheben KH, Chest…  RPE 8  ⚡+5min
+   Thu 25.06.26   [Pull]  Rudern Sitzend, Eng, Rudern Sitzend, Eng, Lat Pull Down  RPE 8  ⚡+5min
+   Sat 20.06.26   [Push]  Schrägbankdrücken KH, Schrägbankdrücken KH, Incline, Trizeps Seildrücken  RPE 8  ⚡+5min
+   Mon 15.06.26   [Legs]  Ausfallschritte im Gehen, Leg Presses (wide), Beinstre…
+[19:29, 22.8.2026] Daniel Nimmrichter: Ich geh erst heute Abend, gestern war ich nicht mehr. Ich habe mich eines Projekts angenommen, dessen Aufwand ich sehr unterschätzt hab  Jetzt geh ich später und trag dann beides ein.
+me too, du benutzt es zum workout loggen
+[19:30, 22.8.2026] Daniel Nimmrichter: ❯ fitness log clients matthias-mayer --journal
+
+── Matthias Mayer ──────────────────────────
+   WM4bgRvDGxXD…
+   Sun 02.08.26   [Push]  Schrägbankdrücken mit Kurzhanteln, Schrägbankdrücken mit Kurzhanteln, Seitheben mit Kurzhanteln, Trizeps Seildrücken…  RPE 8  ⚡+5min
+   Fri 17.07.26   📓 *2026-07-30T20:48* Urlaub
+   Thu 16.07.26   📓 *2026-07-30T20:47* Urlaub
+   Wed 15.07.26   📓 *2026-07-30T20:47* Urlaub
+   Tue 14.07.26   📓 *2026-07-30T20:47* Urlaub
+   Sun 12.07.26   [legs]  Ausfallschritte im Gehen, Leg Presses (wide), Beinbeuger, Beinstrecker  RPE 8  ⚡+5min
+   Thu 09.07.26   📓 *2026-07-30T20:51* Außendienst Ausland
+   Wed 08.07.26   📓 *2026-07-30T20:50* Außendienst Ausland
+   Tue 07.07.26   📓 *2026-07-30T20:50* Außendienst Ausland
+   Mon 06.07.26   📓…
+[19:34, 22.8.2026] Daniel Nimmrichter: Eine grundsätzliche Frage: Ich nehme das Gewicht, mit dem ich ca. 5 Wh. schaffe. Dann mach ich Pause und mach weiter und schaff naturgemäß immer weniger. Ich mach das ja so lange, bis nichts mehr geht. Die Pause dazwischen dauert max. 15 Sekunden. Jetzt schaff ich oft 5x, dann nur mehr 2x und dann war es das. Mach ich etwas falsch oder hab ich am Anfang einfach zu viel Gewicht?
+das ist grundsätzliche die 5x5 technik zur orientierung um bei krafttraining zu bleiben (5 reps 5 sets, 3-5min pause dazwischen) falls man da mehr schafft als 5x5 war man zu stark für das gewicht und würde von reinem krafttraining in hypertrophie (muskeln schwellen an) übergehen sprich 3x 8-12 reps
+
+Was du allerdings machst ist High Intensity Training
+Das heißt du willst ein Gewicht nehmen welches du grade noch halten kannst basically
+[19:36, 22.8.2026] Daniel Nimmrichter: das heißt wie du sagst ist das gewicht naturgemäß relativ egal. da du schnell schwach werden sollst während der belastung und gleichzeitig alles was du hast dagegenwirken - die paar sekunden dazwischen pause sind grade mal zum luft holen
+[19:37, 22.8.2026] Daniel Nimmrichter: Du willst die Wiederholungen nicht in die Unendlichkeit treiben
+& du willst basically nur EINEN einziges Satz pro Übung/Muskel machen
+[19:38, 22.8.2026] Daniel Nimmrichter: OPTIMAL wäre wenn du es schaffst eine gesamtbelastungsdauer von 90 sekunden zu erreichen ohne die zwischen-pausen zu zählen
+[19:38, 22.8.2026] Daniel Nimmrichter: also die zwischenpausen sind theoretisch der notfall knopf
+[19:39, 22.8.2026] Daniel Nimmrichter: das wasd u mit der 6pack app machst ist ja HIIT (klingt gleich wie HIT) aber ist mehr ausdauer da schon intervall-training
+[19:40, 22.8.2026] Daniel Nimmrichter: und das was du mit den hanteln und den maschinen machst soll kein ausdauer-, also kein intervall-training werden
+[19:40, 22.8.2026] Daniel Nimmrichter: warm up -> super low weight, high reps
+1 min pause
+dann 90 sekunden vollgas mit dem gewicht dass du schaffst
+[19:41, 22.8.2026] Daniel Nimmrichter: egal we viele sekunden du pause machst. insgesamt 90 sekunden musst du schaffen belastung
+[19:42, 22.8.2026] Daniel Nimmrichter: wenns trotz 15-20 sekunden pause nimma geht musst halt gewicht droppen
+[19:42, 22.8.2026] Daniel Nimmrichter: und beim gewicht droppen musst sehr schnell sein da dann eigentlich keine zwischenpause erlaubt
+[19:42, 22.8.2026] Daniel Nimmrichter: dein puls darf bei High INTENSITY Training nicht zu weit runterfallen.
+[19:43, 22.8.2026] Daniel Nimmrichter: weil dein Puls if correct perfectly die ganze zeit hoch ist bei HIT ersetzt es herkömmliches cardio training prima!
+[19:44, 22.8.2026] Daniel Nimmrichter: weil du locker 3x8-12 wiederholungen also 36+ in dem einen Hochintensitätssatz machst ist das genauso gut bzw noch viel besser als herkömmliches Hypertrophietraining was den Muskelpump betrifft.
+[19:44, 22.8.2026] Daniel Nimmrichter: Now go my Son & Rock
+[19:53, 22.8.2026] Matthias Fitinn3: Danke! Jetzt hab ich das gesammelt dastehen und glaube, das auch besser verstanden zu haben 😄
+[19:55, 22.8.2026] Matthias Fitinn3: Gibt es etwas wie eine "Regel", woran ich erkenne, wobei das sinnvoll ist und wobei nicht?
+[19:57, 22.8.2026] Daniel Nimmrichter: Schweiß als würdest du laufen am Laufband

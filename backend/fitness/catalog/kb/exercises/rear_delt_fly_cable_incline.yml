@@ -1,0 +1,123 @@
+exercise_id: rear_delt_fly_cable_incline
+description: Expert details for Vorgebeugtes Kabel Reverse Fly
+approved_at: '2026-10-16T15:48:37.412043+00:00'
+exercises:
+- exercise_id: rear_delt_fly_cable_incline
+  wger_id: 1783
+  id: rear_delt_fly_cable_incline
+  name: Vorgebeugtes Kabel Reverse Fly
+  display_name: Vorgebeugtes Kabel Reverse Fly
+  german: Vorgebeugtes Kabel Reverse Fly
+  english: Bent-Over Cable Rear Delt Fly
+  category: pull
+  type: isolation
+  movements:
+  - horizontal_abduction
+  - shoulder_external_rotation
+  - scapular_retraction
+  equipment:
+  - cable
+  primary_muscles:
+  - 303_posterior_deltoid
+  secondary_muscles:
+  - 205_rhomboids
+  - 202b_trapezius_middle
+  - 306_infraspinatus
+  - 307_teres_minor
+  stabilizers:
+  - 504_transverse_abdominis
+  - 206_erector_spinae
+  - 507_multifidus
+  - 405_forearm_flexors
+  coaching_notes:
+  - Stelle die Kabel tief ein und nimm eine stabile vorgebeugte Position ein, sodass
+    der Oberkörper klar nach vorne geneigt bleibt und der Zug sauber auf den hinteren
+    Delt trifft.
+  - Halte Brustbein lang, Bauch fest und Wirbelsäule neutral; die Bewegung kommt aus
+    dem Schultergelenk, nicht aus Schwung im Rumpf.
+  - Führe die Arme mit leicht gebeugten Ellbogen nach außen hinten und halte diesen
+    Ellbogenwinkel über die ganze Wiederholung konstant.
+  - Denke daran, die Oberarme auseinanderzuziehen, statt die Griffe mit den Händen
+    nach hinten zu reißen; so bleibt die Spannung auf dem hinteren Deltoid.
+  - Ziehe bis ungefähr auf Schulterlinie oder knapp darunter und stoppe dort, wo du
+    den hinteren Delt maximal spürst, ohne ins Hohlkreuz oder Schulterzucken zu fallen.
+  - Lass die Schulterblätter kontrolliert mitarbeiten, aber übertreibe die Retraktion
+    nicht; zuerst soll der hintere Delt die Bewegung einleiten.
+  - Nutze am unteren Punkt die gedehnte Position bewusst und kehre kontrolliert um,
+    ohne die Gewichte aufeinanderprallen zu lassen.
+  - Wähle ein Gewicht, das dir saubere Wiederholungen mit klarer Endposition erlaubt;
+    bei Rear-Delt-Arbeit ist lokale Kontrolle wichtiger als Last.
+  - Halte den Nacken lang und die Schultern weg von den Ohren, damit der obere Trapez
+    nicht die Arbeit des hinteren Deltoids übernimmt.
+  - Atme ruhig, brace den Rumpf vor jeder Wiederholung und halte die Körperposition
+    von der ersten bis zur letzten Wiederholung identisch.
+  common_errors:
+  - Zu aufrechter Oberkörper, wodurch die Übung eher in Richtung oberer Rücken statt
+    hinterer Schulter verschoben wird.
+  - Schwung aus Hüfte oder Rücken holen, um die Griffe zu beschleunigen, statt die
+    Wiederholung muskulär zu kontrollieren.
+  - Die Schultern hochziehen und damit den oberen Trapez dominieren lassen.
+  - Die Ellbogen während der Bewegung stark beugen oder strecken, sodass aus dem Fly
+    eine andere Zugbewegung wird.
+  - Mit den Händen ziehen, statt die Oberarme zu führen; dadurch sinkt die Spannung
+    auf dem hinteren Deltoid.
+  - Zu weit nach hinten ziehen und dabei ins Hohlkreuz gehen oder die Rippen aufklappen.
+  - Die exzentrische Phase fallen lassen und die Spannung am unteren Punkt verlieren.
+  - Zu viel Gewicht wählen und deshalb nur halbe Wiederholungen oder unsaubere Endpositionen
+    erreichen.
+  - Die Schulterblätter sofort maximal zusammenpressen, sodass die Bewegung aus dem
+    Rücken statt aus dem Schultergelenk gestartet wird.
+  - Den Kopf nach vorne schieben oder den Nacken verspannen, anstatt die Halswirbelsäule
+    neutral zu halten.
+  tags:
+  - shoulder
+  - isolation
+  - rear_deltoid
+  - posterior_deltoid
+  - cable_machine
+  - hypertrophy
+  - pull
+  - horizontal_abduction
+  aliases:
+  - Kabel Reverse Fly vorgebeugt
+  - Vorgebeugtes Kabel Rear Delt Fly
+  - Vorgebeugtes Kabel Reverse Flys
+  - Bent-Over Cable Reverse Fly
+  - Cable Rear Delt Fly
+  - Cable Reverse Fly
+  variations: []
+  source: expert
+  search_aliases:
+  - Vorgebeugtes Kabel Reverse Fly
+  - Bent-Over Cable Rear Delt Fly
+  - Cable Rear Delt Fly
+  - Kabel Reverse Fly vorgebeugt
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '1783'
+      yuhonas:
+      - Cable_Rear_Delt_Fly
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-16T15:48:37.412043+00:00'
+  approved_at: '2026-10-16T15:48:37.412043+00:00'
+  yuhonas_id: Cable_Rear_Delt_Fly
+  external_ids:
+    wger:
+    - 1783
+    yuhonas:
+    - Cable_Rear_Delt_Fly
+  original_description:
+  - Rear Delt Fly Machine - imported from Obsidian workout log
+  instructions:
+  - Adjust the pulleys to the appropriate height and adjust the weight. The pulleys
+    should be above your head.
+  - Grab the left pulley with your right hand and the right pulley with your left
+    hand, crossing them in front of you. This will be your starting position.
+  - Initiate the movement by moving your arms back and outward, keeping your arms
+    straight as you execute the movement.
+  - Pause at the end of the motion before returning the handles to the start position.

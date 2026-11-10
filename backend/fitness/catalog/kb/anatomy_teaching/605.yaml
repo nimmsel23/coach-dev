@@ -1,0 +1,91 @@
+name: pallof_press_lesson
+description: Anatomy teaching seed for 605.
+lessons:
+- exercise_id: '605'
+  title: Pallof Press — Anti-Rotation und laterale Kernstabilisierung
+  region: core
+  learning_goal:
+    short: Verstehen was Anti-Rotation bedeutet — und warum der Pallof Press eine der funktionalsten Core-Übungen ist.
+    detailed: Lern wie der Pallof Press die Obliques und den Transversus abdominis als Anti-Rotations-Stabilisatoren trainiert — eine Fähigkeit die im Alltag und Sport entscheidend ist.
+  movement_pattern:
+    primary: anti_rotation
+    secondary:
+    - isometric_stabilization
+  joint_actions:
+    lumbar:
+      stabilization:
+      - anti_rotation
+      - anti_lateral_flexion
+    shoulder:
+      concentric:
+      - horizontal_abduction
+      eccentric:
+      - horizontal_adduction_control
+      stabilization:
+      - glenohumeral_centering
+    hip:
+      stabilization:
+      - frontal_plane_stability
+  muscle_roles:
+    prime_movers:
+    - obliques
+    - transversus_abdominis
+    synergists:
+    - rectus_abdominis
+    - anterior_deltoid
+    stabilizers:
+    - core
+    - gluteus_medius
+  body_highlighter_regions:
+    primary:
+    - abdomen_front
+    secondary:
+    - core
+    light:
+    - shoulders_front
+    - glutes
+  trainer_explanation:
+    simple: Das Kabel zieht von der Seite — der Körper muss widerstehen und sich nicht mitdrehen.
+    technical: "Der Pallof Press trainiert Anti-Rotation: Die Obliques und der Transversus abdominis müssen isometrisch verhindern dass das Kabel den Rumpf zur Seite dreht. Das ist funktionale Rotationsstabilisierung."
+    client_friendly: Steh seitlich zum Kabel — und drück es nach vorne ohne dich zu verdrehen.
+  feel_cues:
+  - Die ganze Körperseite spannt — Obliques bis Hüfte.
+  - Kein Verdrehen des Oberkörpers zur Maschine.
+  - Füße schulterbreit, stabiler Stand.
+  coaching_cues:
+  - Seitlich zur Maschine stehen (90°).
+  - Langsames Aus- und Einziehen des Seils.
+  - Start mit leichtem Gewicht — Anti-Rotation ist anfangs ungewohnt.
+  common_errors:
+  - error: Oberkörper dreht sich zur Maschine.
+    anatomical_reason: Wenn die Obliques nicht genug Gegenspannung aufbauen, folgt der Rumpf dem Rotationsmoment des Kabels — die Übung verliert ihre Anti-Rotations-Wirkung.
+    correction: Gewicht reduzieren, bewusst den Rumpf gegen das Drehen halten.
+    coaching_cue: Brust zeigt immer gerade nach vorne.
+  - error: Zu schweres Gewicht — kein stabiler Stand mehr.
+    anatomical_reason: Wenn das Kabel zu schwer ist, verliert die gesamte Bewegungskette die Stabilität — Gewicht wird durch Körperverlagerung kompensiert.
+    correction: Gewicht reduzieren bis 10 saubere Wiederholungen möglich.
+    coaching_cue: Du solltest nach 10 Reps noch gerade stehen können.
+  variations_teach:
+  - variation: Band Pallof Press
+    lesson: Mobiler Einsatz ohne Kabelmaschine — gleiche Anti-Rotations-Mechanik.
+  - variation: Kniender Pallof Press
+    lesson: Eliminiert Bein-Stabilisierung — höhere Core-Isolation.
+  quiz:
+  - question: Was ist Anti-Rotation und warum ist es für den Alltag wichtig?
+    answer: Anti-Rotation ist die Fähigkeit des Rumpfs, Rotationskräften zu widerstehen ohne sich zu verdrehen. Im Alltag ist das bei allem relevant wo eine Seite mehr Last trägt (Tragen, Einarmiges Heben, Laufen). Schwache Anti-Rotations-Fähigkeit erhöht das LWS-Verletzungsrisiko.
+  - question: Welche Muskeln sind primär für die Anti-Rotations-Stabilisierung verantwortlich?
+    answer: M. obliquus externus und internus abdominis (schräge Bauchmuskeln) sind die Hauptstabilisatoren gegen Rotation. Der M. transversus abdominis stabilisiert durch intraabdominalen Druck. Der M. gluteus medius stabilisiert das Becken in der Frontalebene.
+  simple_explanation: "Beim Pallof Press steht man seitlich zum Kabel und drückt es nach vorne und zurück — dabei muss der Rumpf der seitlichen Rotation durch das Kabel widerstehen. Das ist Anti-Rotation: nicht Bauch-Training durch Beugen, sondern durch aktives Halten gegen ein Drehmoment. Obliques und Transversus abdominis sind die Hauptstabilisatoren.\n"
+  detailed_explanation: "Der Pallof Press erzeugt ein Rotationsmoment auf die Körperlängsachse. Der Kabelzug zieht den Körper zur Seite (zur Maschine) — die Bauchmuskulatur muss dies isometrisch verhindern. Primär: M. obliquus externus und internus abdominis (ipsi- und kontralateral arbeiten zusammen). Sekundär: M. transversus abdominis (Kompressionsgürtel). Der M. gluteus medius stabilisiert das Becken in der Frontalebene gegen Lateralflexion. Die Bewegung (Raus-/Einziehen des Seils) erhöht das Drehmoment am ausgestreckten Arm — das ist der Progressions-Mechanismus.\n"
+  quiz_prompts:
+  - question: Wie kann der Pallof Press progressiv gesteigert werden?
+    answer: "1. Schwereres Gewicht. 2. Weiter vom Kabel entfernt stehen (längerer Hebelarm → mehr Drehmoment). 3. Kniende Position (weniger Bein-Basis). 4. Auf einem Bein stehend (maximale Instabilität).\n"
+  common_errors_explained:
+    trunk_rotation:
+      description: Oberkörper dreht sich zur Maschine.
+      anatomical_reason: "Die Obliques bauen nicht genug Gegenspannung auf — das Rotationsmoment des Kabels überwindet die muskuläre Stabilisierung. Die Übung wird zu einer unkontrollierten Rotationsbewegung statt Anti-Rotation.\n"
+      correction: Gewicht reduzieren bis Rumpf stabil bleibt. Bewusst 'gegen das Drehen ankämpfen'.
+      teaches:
+      - anti_rotation_concept
+      - oblique_function
+      - rotational_stability

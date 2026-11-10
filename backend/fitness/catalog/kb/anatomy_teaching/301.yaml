@@ -1,0 +1,67 @@
+name: lateral_raise_lesson
+description: Anatomy teaching seed for lateral raise.
+lessons:
+  - exercise_id: 301
+    title: "Lateral Raise - seitliche Schulter isolieren"
+    region: shoulders
+    learning_goal:
+      short: "Seitliche Schulter sauber und ohne Schwung belasten."
+      detailed: "Lern, wie Abduktion im Schultergelenk die seitliche Schulter trifft und warum kleine Fehler sofort die Zielmuskeln ändern."
+    movement_pattern:
+      primary: abduction
+      secondary:
+        - slight_external_rotation
+    joint_actions:
+      shoulder:
+        eccentric:
+          - adduction_control
+        concentric:
+          - abduction
+        stabilization:
+          - humeral_head_control
+      scapula:
+        stabilization:
+          - upward_rotation_control
+    muscle_roles:
+      prime_movers:
+        - shoulders
+      synergists:
+        - upper_back
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - shoulders_side
+      secondary:
+        - upper_back
+      light:
+        - neck
+    trainer_explanation:
+      simple: "Seitheben ist eine saubere Hebebewegung für die seitliche Schulter."
+      technical: "Die Abduktion im Glenohumeralgelenk bringt die mittlere Deltoidregion unter Spannung, während die Scapula nur unterstützend mitläuft."
+      client_friendly: "Du sollst die Bewegung an der Seite der Schulter spüren, nicht im Nacken."
+    feel_cues:
+      - "Seite der Schulter arbeitet zuerst."
+      - "Nacken bleibt ruhig."
+      - "Kurze, saubere Bahn."
+    coaching_cues:
+      - "Leicht gebeugte Ellbogen."
+      - "Bis Schulterhöhe kontrollieren."
+      - "Kein Schwung."
+    common_errors:
+      - error: "Zu hoch ziehen."
+        anatomical_reason: "Oberer Trapez und Nacken übernehmen zu viel."
+        correction: "Bei Schulterhöhe stoppen."
+        coaching_cue: "Nicht über Schulterhöhe."
+      - error: "Schwung aus dem Körper holen."
+        anatomical_reason: "Der Impuls kommt nicht aus der Schulter, sondern aus dem Rumpf."
+        correction: "Gewicht reduzieren und kontrollieren."
+        coaching_cue: "Sauber heben, nicht werfen."
+    variations_teach:
+      - variation: "cable lateral raise"
+        lesson: "Konstantere Spannung in der seitlichen Schulter."
+      - variation: "lean-away lateral raise"
+        lesson: "Mehr Spannung in der unteren Position."
+    quiz:
+      - question: "Was soll beim Seitheben die Hauptarbeit leisten?"
+        answer: "Die seitliche Schulter, nicht der Nacken."

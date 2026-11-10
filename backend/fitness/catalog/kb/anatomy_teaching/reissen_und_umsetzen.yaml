@@ -1,0 +1,102 @@
+name: clean_and_jerk_lesson
+description: Anatomy teaching seed for Clean & Jerk (Reissen und Umsetzen).
+lessons:
+- exercise_id: reissen_und_umsetzen
+  title: Clean & Jerk — Die Königsdisziplin der Kraft
+  region: legs
+  learning_goal:
+    short: Maximale Kraftentfaltung über die gesamte kinetische Kette.
+    detailed: Lern die Phasen vom Zug vom Boden über den Catch bis zum finalen Ausstoß (Jerk).
+  movement_pattern:
+    primary: explosive_full_body
+    secondary:
+    - hip_extension
+    - knee_extension
+    - shoulder_flexion
+    - elbow_extension
+  joint_actions:
+    hip:
+      concentric:
+      - powerful_extension
+    knee:
+      concentric:
+      - extension
+    ankle:
+      concentric:
+      - plantar_flexion (triple extension)
+    shoulder:
+      concentric:
+      - flexion
+      - upward_rotation
+    elbow:
+      concentric:
+      - extension (jerk phase)
+  muscle_roles:
+    prime_movers:
+    - gluteus_maximus
+    - quadriceps_femoris
+    - biceps_femoris
+    synergists:
+    - trapezius
+    - shoulders_front
+    - triceps_brachii
+    stabilizers:
+    - rectus_abdominis
+    - lower_back
+    - upper_back
+  body_highlighter_regions:
+    primary:
+    - glutes
+    - thigh_front
+    - thigh_back
+    secondary:
+    - back
+    - shoulders_front
+    light:
+    - core
+    - calves
+  trainer_explanation:
+    simple: Der Clean & Jerk bewegt maximale Lasten vom Boden über Kopf in einer flüssigen Bewegung.
+    technical: Die Übung kombiniert den explosiven Zug (Clean) mit einer Kniebeuge vorne und dem kraftvollen Überkopf-Ausstoß (Jerk).
+    client_friendly: Die ultimative Übung für Power — nutze deinen ganzen Körper, um die Hantel zu bezwingen.
+  feel_cues:
+  - Arme wie "Seile" beim ersten Zug.
+  - Explosiver Hüftkontakt katapultiert die Stange.
+  - Stabiler Stand unter der Stange beim Catch.
+  coaching_cues:
+  - Stange nah am Körper führen.
+  - Ellbogen schnell unter die Stange drehen.
+  - Stabil stehen im Split oder Squat beim Jerk.
+  common_errors:
+  - error: Armzug zu früh.
+    anatomical_reason: Die Armkraft ist weitaus geringer als der Hüftimpuls; frühes Beugen bricht die Kraftübertragung ab.
+    correction: Arme gestreckt lassen, bis die Hüfte voll gestreckt ist.
+    coaching_cue: Stell dir vor, deine Arme sind Seile mit Haken.
+  - error: Vorlage beim Jerk.
+    anatomical_reason: Schwerpunktverlagerung nach vorne führt zu einem instabilen Hebelarm und Überlastung der Schultergelenke.
+    correction: Vertikalen Dip und Drive beibehalten.
+    coaching_cue: Drück dich senkrecht nach oben.
+  quiz:
+  - question: Was versteht man unter der "Triple Extension"?
+    answer: Die gleichzeitige, explosive Streckung von Hüfte, Knie und Sprunggelenk zur maximalen Beschleunigung der Last.
+  - question: Warum werden die Arme erst nach der vollen Streckung gebeugt?
+    answer: Um die maximale Energie aus den großen Muskelgruppen der Beine und Hüfte verlustfrei auf die Stange zu übertragen.
+  muscle_anatomy:
+    gluteus_maximus:
+      latin: Musculus gluteus maximus
+      origin: Facies dorsalis des Os ilium, Os sacrum, Os coccygis
+      insertion: Tractus iliotibialis, Tuberositas glutealis femoris
+      innervation: Nervus gluteus inferior (L5-S2)
+      function_in_exercise: Haupterzeuger des explosiven Hüftstreck-Impulses.
+    quadriceps_femoris:
+      latin: Musculus quadriceps femoris
+      origin: Femur und Spina iliaca anterior inferior
+      insertion: Tuberositas tibiae (über Patellarsehne)
+      innervation: Nervus femoralis (L2-L4)
+      function_in_exercise: Streckt das Knie beim Zug und stabilisiert beim Catch.
+    trapezius:
+      latin: Musculus trapezius
+      origin: Os occipitale, Processus spinosi C1-T12
+      insertion: Clavicula, Acromion, Spina scapulae
+      innervation: Nervus accessorius (XI)
+      function_in_exercise: Zieht die Schultern explosiv nach oben beim Shrug-Anteil des Zugs.

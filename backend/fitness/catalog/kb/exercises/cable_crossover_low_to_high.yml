@@ -1,0 +1,166 @@
+exercise_id: cable_crossover_low_to_high
+description: Expert details for Kabel-Crossover von unten nach oben
+approved_at: '2026-10-17T21:04:24.077177+00:00'
+exercises:
+- primary_muscles:
+  - 102_pectoralis_major_clavicular
+  type: isolation
+  review_state:
+    status: approved
+    ai_reviewed: true
+    approved_at: '2026-10-17T21:04:24.077177+00:00'
+  schema_version: 2026-08-12.exercise-v1
+  aliases:
+  - Cable Fly Low to High
+  - Low Cable Fly
+  - Incline Cable Fly
+  - Low-to-High Cable Fly
+  - Kabel-Flys von unten nach oben
+  - Kabelzug obere Brust
+  - Unterer Kabel-Crossover
+  common_errors:
+  - Zu viel Gewicht, wodurch aus der geführten Fly-Bewegung ein unsauberes Ziehen
+    oder Drücken mit Schwung wird.
+  - Die Ellbogen während der Wiederholung stark beugen oder strecken, wodurch Bizeps
+    und Trizeps unnötig viel Arbeit übernehmen.
+  - Die Schultern zu den Ohren hochziehen, statt die Schulterblätter kontrolliert
+    und ruhig zu halten.
+  - Ins Hohlkreuz ausweichen, um die Griffe höher zu bekommen, anstatt die Spannung
+    in der oberen Brust sauber zu erzeugen.
+  - Die Hände aktiv übereinander schlagen lassen und dadurch vorne die Spannung zu
+    verlieren.
+  - Die exzentrische Phase abkürzen und die Gewichte einfach zurückziehen lassen,
+    statt die Dehnung kontrolliert zu nutzen.
+  - Zu tief oder zu weit hinter den Körper öffnen, obwohl die Schulterposition dabei
+    instabil oder unangenehm wird.
+  - Die Bewegung aus den Händen zu denken, statt die Oberarme diagonal nach innen
+    oben zu führen.
+  - Den Kopf nach vorn schieben oder den Oberkörper stark mitdrehen, wodurch die Übung
+    an Isolation verliert.
+  - Eine zu hohe Kabelposition wählen, wodurch der Zugwinkel eher zu einer normalen
+    Fly-Variante als zur oberen-Brust-Betonung passt.
+  wger_id: 1463
+  stabilizers:
+  - 304_rotator_cuff
+  - 504_transverse_abdominis
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '1463'
+      yuhonas:
+      - Low_Cable_Crossover
+  primaryMuscles:
+  - 102_pectoralis_major_clavicular
+  german: Kabel-Crossover von unten nach oben
+  english: Low-to-High Cable Crossover
+  id: cable_crossover_low_to_high
+  displayName: Kabel-Crossover von unten nach oben
+  display_name: Kabel-Crossover von unten nach oben
+  secondaryMuscles:
+  - 301_anterior_deltoid
+  - 105_serratus_anterior
+  category: push
+  equipment:
+  - cable
+  search_aliases:
+  - Kabel-Crossover von unten nach oben
+  - Kabel-Flys von unten nach oben
+  - Low-to-High Cable Crossover
+  - Low-to-High Cable Fly
+  - Incline Cable Fly
+  - Low Cable Fly
+  exercise_id: cable_crossover_low_to_high
+  variations: []
+  name: Low-to-High Cable Crossover
+  tags:
+  - push
+  - isolation
+  - cable
+  - upper_chest
+  - fly
+  - clavicular_pec
+  - standing
+  movements:
+  - horizontal_adduction
+  - shoulder_flexion
+  - incline
+  - scapular_protraction
+  - anti_extension
+  coaching_notes:
+  - Stelle beide Kabel auf die unterste Position und wähle ein Gewicht, das dir eine
+    saubere Bogenbewegung ohne Schwung erlaubt.
+  - Nimm eine stabile Schrittstellung ein, richte das Brustbein auf und halte den
+    Rumpf aktiv, damit die Bewegung aus dem Schultergelenk und nicht aus dem unteren
+    Rücken kommt.
+  - Greife die Griffe mit leicht gebeugten Ellbogen und behalte diesen Ellbogenwinkel
+    über die gesamte Wiederholung nahezu konstant.
+  - Starte mit den Händen leicht hinter der Körperlinie, um die Brust unter Dehnung
+    zu bringen, ohne die Schulter nach vorn kippen zu lassen.
+  - Führe die Arme in einem weiten Bogen von unten außen nach oben innen, als würdest
+    du die Oberarme vor dem oberen Brustkorb zusammenführen.
+  - Denke daran, die Oberarme zueinander zu bewegen, statt die Griffe mit den Händen
+    nach oben zu ziehen; so bleibt die Zielspannung auf der oberen Brust.
+  - Am Endpunkt dürfen sich die Hände auf Höhe des oberen Brustkorbs oder leicht darunter
+    treffen, ohne dass die Schultern nach oben gezogen werden.
+  - Halte die Endkontraktion kurz, spanne die obere Brust bewusst an und lass die
+    Griffe anschließend kontrolliert in die Dehnung zurücklaufen.
+  - Begrenze die Range of Motion, sobald du vorne nur noch Schultervorschub statt
+    zusätzlicher Brustspannung erzeugst.
+  - Atme beim Zusammenführen aus und beim kontrollierten Zurückführen ein, um Rumpfspannung
+    und Bewegungsrhythmus sauber zu halten.
+  source: expert
+  secondary_muscles:
+  - 301_anterior_deltoid
+  - 105_serratus_anterior
+  approved_at: '2026-10-17T21:04:24.077177+00:00'
+  yuhonas_id: Low_Cable_Crossover
+  external_ids:
+    wger:
+    - 1463
+    yuhonas:
+    - Low_Cable_Crossover
+  original_description:
+  - 'Ausführung
+
+
+
+    Startposition:
+
+
+    Die Arme sind nach unten und leicht hinter dem Körper, die Ellenbogen leicht gebeugt.
+
+    Spüre eine leichte Dehnung in der Brust.
+
+
+
+
+    Bewegung:
+
+
+    Führe deine Hände nach oben und zusammen vor deiner oberen Brust — etwa auf Kinn-
+    bis Schlüsselbeinhöhe.
+
+    Nutze eine flüssige, kontrollierte Bewegung (vermeide Ruckeln).
+
+    Drücke deine Brustmuskulatur oben für 1–2 Sekunden zusammen.
+
+
+
+
+    Rückführung:
+
+
+    Lass die Arme langsam wieder nach unten und zu den Seiten zurückgehen, kontrolliert
+    und unter Spannung.'
+  instructions:
+  - To move into the starting position, place the pulleys at the low position, select
+    the resistance to be used and grasp a handle in each hand.
+  - Step forward, gaining tension in the pulleys. Your palms should be facing forward,
+    hands below the waist, and your arms straight. This will be your starting position.
+  - With a slight bend in your arms, draw your hands upward and toward the midline
+    of your body. Your hands should come together in front of your chest, palms facing
+    up.
+  - Return your arms back to the starting position after a brief pause.

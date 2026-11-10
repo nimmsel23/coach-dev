@@ -1,0 +1,183 @@
+exercise_id: barbell_bench_press_-_medium_grip
+description: Expert details for Bankdrücken LH
+approved_at: '2026-10-16T15:46:38.400570+00:00'
+exercises:
+- exercise_id: barbell_bench_press_-_medium_grip
+  id: barbell_bench_press_-_medium_grip
+  display_name: Bankdrücken LH
+  german: Bankdrücken LH
+  english: Barbell Bench Press - Medium Grip
+  category: push
+  equipment:
+  - barbell
+  - bench
+  primary_muscles:
+  - 101_pectoralis_major
+  secondary_muscles:
+  - 301_anterior_deltoid
+  - 401_triceps_brachii
+  stabilizers:
+  - 105_serratus_anterior
+  - 202b_trapezius_middle
+  - 205_rhomboids
+  - 304_rotator_cuff
+  - 501_rectus_abdominis
+  - 206_erector_spinae
+  movements:
+  - horizontal_push
+  - shoulder_horizontal_adduction
+  - elbow_extension
+  - scapular_retraction_protraction
+  instructions:
+  - Lie back on a flat bench. Using a medium width grip (a grip that creates a 90-degree
+    angle in the middle of the movement between the forearms and the upper arms),
+    lift the bar from the rack and hold it straight over you with your arms locked.
+    This will be your starting position.
+  - From the starting position, breathe in and begin coming down slowly until the
+    bar touches your middle chest.
+  - 'After a brief pause, push the bar back to the starting position as you breathe
+    out. Focus on pushing the bar using your chest muscles. Lock your arms and squeeze
+    your chest in the contracted position at the top of the motion, hold for a second
+    and then start coming down slowly again. Tip: Ideally, lowering the weight should
+    take about twice as long as raising it.'
+  - Repeat the movement for the prescribed amount of repetitions.
+  - When you are done, place the bar back in the rack.
+  coaching_notes:
+  - Lege dich rücklings auf eine Flachbank, wobei die Stange sich direkt über deinen
+    Augen befindet. Positioniere deine Füße fest auf dem Boden, um eine stabile Basis
+    zu gewährleisten, und spanne den gesamten Körper an, um die Rumpfstabilität zu
+    maximieren (Bracing).
+  - Greife die Stange etwas breiter als schulterbreit. Bei einem mittleren Griff sollte
+    im untersten Punkt der Bewegung zwischen Unterarm und Oberarm ein Winkel von etwa
+    90 Grad entstehen, sodass deine Unterarme senkrecht zum Boden stehen. Hebe die
+    Stange aus der Ablage und strecke die Arme vollständig durch – dies ist deine
+    Startposition.
+  - Atme tief ein, ziehe die Schulterblätter aktiv zusammen und nach unten (Schulterblattretraktion
+    und -depression), um die Schultern zu stabilisieren und die Brustmuskeln optimal
+    vorzuspannen. Senke die Stange langsam und kontrolliert ab, bis sie deine mittlere
+    Brust leicht berührt. Halte die Spannung in der Brust während der gesamten Abwärtsbewegung.
+  - Drücke die Stange kraftvoll und explosionsartig nach oben, während du ausatmest.
+    Konzentriere dich darauf, die Kraft primär aus der Brust zu holen. Die Bewegung
+    endet, wenn deine Arme wieder vollständig gestreckt sind, ohne die Ellenbogen
+    zu überstrecken. Halte die Spannung kurz am obersten Punkt und wiederhole die
+    Bewegung.
+  - Ein Spotter wird dringend empfohlen, besonders bei hohen Gewichten, um die Sicherheit
+    zu gewährleisten und ein sicheres Ablegen der Stange im Notfall zu ermöglichen.
+  common_errors:
+  - 'Die Stange von der Brust abprallen lassen: Dies reduziert die Muskelspannung,
+    nutzt Schwung statt Kraft und erhöht das Verletzungsrisiko für Brustbein und Schultern.'
+  - 'Ellenbogen zu stark nach außen spreizen (Flare): Eine übermäßige Abduktion der
+    Schultern kann die Schultergelenke übermäßig belasten und zu Impingement-Problemen
+    führen. Halte die Ellenbogen leicht angewinkelt (ca. 45-60 Grad zum Körper).'
+  - 'Hüften von der Bank abheben: Dies führt zum Verlust der Körperspannung und Stabilität,
+    reduziert die effektive Kraftübertragung und kann den unteren Rücken überlasten.'
+  - 'Unzureichende Schulterblattretraktion und -depression: Die Schulterblätter sollten
+    während der gesamten Übung stabil und nach hinten unten gezogen bleiben, um die
+    Schultern zu schützen, eine breitere Brustbasis zu schaffen und die Brust optimal
+    zu aktivieren.'
+  - 'Unvollständige Bewegungsamplitude: Die Stange sollte die Brust leicht berühren
+    (Touch-and-Go oder kurzes Halten) und die Arme oben vollständig gestreckt werden,
+    um den vollen Nutzen der Übung für Kraft und Muskelaufbau zu erzielen.'
+  - 'Falsche Atmung oder fehlendes Bracing: Eine unkontrollierte Atmung und mangelnde
+    Rumpfspannung beeinträchtigen die Stabilität und Kraftübertragung. Tief einatmen
+    und Spannung aufbauen (Bracing) beim Absenken, kräftig ausatmen beim Hochdrücken.'
+  original_description:
+  - 'Lege dich auf die Bank, die Stange direkt über die Augen, die Knie etwas angewinkelt
+    und die Füße fest auf dem Boden. Greife die Stange breit und lasse sie langsam
+    und kontrolliert runter, dabei sollte die Stange kurz auf Brustwarzenhöhe den
+    Körper berühren. Dann das Gewicht wieder hochdrücken bis die Arme durchgestreckt
+    sind.
+
+    Bei hohem Gewicht, empfielt sich natürlich einen Spotter zu haben, der einen hilft
+    falls man die Stange nicht alleine hochdrücken kann.
+
+    Mit der Breite des Griffs kann außerdem kontrolliert werden, welcher Bereich der
+    Brust stärker belastet wird:
+
+
+    breiter Griff: äußere Brustmuskeln
+
+    enger Griff: innere Brustmuskeln und Trizeps'
+  wger_id: 73
+  wger_muscle_ids:
+    primary:
+    - 4
+    secondary:
+    - 2
+    - 5
+  yuhonas_id: Barbell_Bench_Press_-_Medium_Grip
+  external_ids:
+    wger:
+    - 73
+    yuhonas:
+    - Barbell_Bench_Press_-_Medium_Grip
+  tags:
+  - unreviewed
+  - wger
+  - yuhonas
+  - merged_external
+  name: Bankdrücken LH
+  variations: []
+  source: expert
+  enriched_at: '2026-09-08T13:53:16.050513+00:00'
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '73'
+      yuhonas:
+      - Barbell_Bench_Press_-_Medium_Grip
+  source_snapshot:
+    wger:
+      wger_id: 73
+      wger_muscle_ids:
+        primary:
+        - 4
+        secondary:
+        - 2
+        - 5
+      original_description:
+      - 'Lege dich auf die Bank, die Stange direkt über die Augen, die Knie etwas
+        angewinkelt und die Füße fest auf dem Boden. Greife die Stange breit und lasse
+        sie langsam und kontrolliert runter, dabei sollte die Stange kurz auf Brustwarzenhöhe
+        den Körper berühren. Dann das Gewicht wieder hochdrücken bis die Arme durchgestreckt
+        sind.
+
+        Bei hohem Gewicht, empfielt sich natürlich einen Spotter zu haben, der einen
+        hilft falls man die Stange nicht alleine hochdrücken kann.
+
+        Mit der Breite des Griffs kann außerdem kontrolliert werden, welcher Bereich
+        der Brust stärker belastet wird:
+
+
+        breiter Griff: äußere Brustmuskeln
+
+        enger Griff: innere Brustmuskeln und Trizeps'
+    yuhonas:
+      yuhonas_id: Barbell_Bench_Press_-_Medium_Grip
+      instructions:
+      - Lie back on a flat bench. Using a medium width grip (a grip that creates a
+        90-degree angle in the middle of the movement between the forearms and the
+        upper arms), lift the bar from the rack and hold it straight over you with
+        your arms locked. This will be your starting position.
+      - From the starting position, breathe in and begin coming down slowly until
+        the bar touches your middle chest.
+      - 'After a brief pause, push the bar back to the starting position as you breathe
+        out. Focus on pushing the bar using your chest muscles. Lock your arms and
+        squeeze your chest in the contracted position at the top of the motion, hold
+        for a second and then start coming down slowly again. Tip: Ideally, lowering
+        the weight should take about twice as long as raising it.'
+      - Repeat the movement for the prescribed amount of repetitions.
+      - When you are done, place the bar back in the rack.
+  review_state:
+    status: approved
+    ai_reviewed: true
+    enriched_at: '2026-09-08T13:53:16.050513+00:00'
+    approved_at: '2026-10-16T15:46:38.400570+00:00'
+  approved_at: '2026-10-16T15:46:38.400570+00:00'
+  search_aliases:
+  - wger_73
+  - Barbell_Bench_Press_-_Medium_Grip
+  - Bankdrücken LH
+  - Barbell Bench Press - Medium Grip

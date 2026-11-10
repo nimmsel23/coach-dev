@@ -162,7 +162,7 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
         clients=self.root/'clients'
         (clients/'fixture').mkdir(parents=True)
         (clients/'fixture/client.json').write_text(json.dumps({'name':'Fixture'}))
-        ui=self.root/'legacy-ui'/'dist-klienten'
+        ui=self.root/'legacy-ui'/'schmiede'
         ui.mkdir(parents=True)
         (ui/'klienten.html').write_text('<html><head></head><body>Legacy ClientForge</body></html>')
         with patch.dict('os.environ',{'CLIENTS_ROOT':str(clients),'KLIENTEN_UI_ROOT':str(ui.parent)}):
@@ -198,6 +198,7 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(prefixed.status_code, 200)
             self.assertIn("VitalOS", prefixed.text)
             self.assertEqual((await client.get("/website/")).status_code, 200)
+            self.assertEqual((await client.get("/website/vitaltrainer")).status_code, 200)
             self.assertEqual((await client.get("/portal.html")).status_code, 200)
 
     async def test_vital_hub_public_is_root_when_present(self):

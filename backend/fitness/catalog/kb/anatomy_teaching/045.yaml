@@ -1,0 +1,77 @@
+name: close_grip_bench_press_lesson
+description: Anatomy teaching seed for close grip bench press.
+lessons:
+  - exercise_id: 045
+    title: "Enges Bankdrücken - Trizeps mit Brustbezug"
+    region: arms
+    learning_goal:
+      short: "Mehr Trizepslast im Pressen verstehen."
+      detailed: "Lern, wie ein engerer Griff die Ellenbogenextension betont, ohne die Brust komplett aus der Bewegung zu nehmen."
+    movement_pattern:
+      primary: horizontal_press
+      secondary:
+        - elbow_extension
+    joint_actions:
+      shoulder:
+        eccentric:
+          - horizontal_abduction_control
+        concentric:
+          - horizontal_adduction
+        stabilization:
+          - humeral_head_control
+      elbow:
+        eccentric:
+          - flexion_control
+        concentric:
+          - extension
+        stabilization:
+          - elbow_tracking
+      scapula:
+        stabilization:
+          - retraction
+          - depression
+    muscle_roles:
+      prime_movers:
+        - arms
+        - chest
+      synergists:
+        - shoulders
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - upper_arm_back
+      secondary:
+        - chest_front
+        - shoulders_front
+      light:
+        - abdomen_front
+    trainer_explanation:
+      simple: "Der enge Griff verschiebt mehr Last auf den Trizeps."
+      technical: "Die engere Handposition reduziert die Schulterhebel etwas und erhöht den relativen Beitrag der Ellenbogenextension."
+      client_friendly: "Du sollst den Trizeps stärker spüren, während die Brust weiter mithilft."
+    feel_cues:
+      - "Druck aus Trizeps und Brust."
+      - "Ellbogen bleiben kontrolliert."
+      - "Schulterblätter stabil."
+    coaching_cues:
+      - "Griff enger als Schulterbreite."
+      - "Bar path sauber."
+      - "Nicht auf den Schultern landen."
+    common_errors:
+      - error: "Zu breit greifen."
+        anatomical_reason: "Die Übung wird wieder mehr zur normalen Bankdrückvariante."
+        correction: "Griff enger setzen."
+        coaching_cue: "Eng, aber stabil."
+      - error: "Ellbogen stark ausstellen."
+        anatomical_reason: "Die Schulter übernimmt zu viel und die Trizepslast sinkt."
+        correction: "Ellbogen näher am Körper führen."
+        coaching_cue: "Ellenbogen schmaler."
+    variations_teach:
+      - variation: "close grip dumbbell press"
+        lesson: "Freie Variante mit ähnlichem Trizepsfokus."
+      - variation: "floor press close grip"
+        lesson: "Reduzierte Schultertiefe und oft gut kontrollierbar."
+    quiz:
+      - question: "Was verändert der enge Griff am Bankdrücken?"
+        answer: "Er erhöht den relativen Trizepsanteil im Pressen."

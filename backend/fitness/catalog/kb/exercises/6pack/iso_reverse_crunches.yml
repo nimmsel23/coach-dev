@@ -1,0 +1,49 @@
+exercise_id: iso_reverse_crunches
+description: Curated 6 Pack Promise entry for ISO Reverse Crunches.
+exercises:
+- exercise_id: iso_reverse_crunches
+  id: iso_reverse_crunches
+  name: ISO Reverse Crunches
+  display_name: ISO Reverse Crunches
+  german: ISO Reverse Crunches
+  english: ISO Reverse Crunches
+  category: core
+  type: isolation
+  movements:
+  - posterior_pelvic_tilt
+  - hip_flexion
+  - lower_ab_emphasis
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 504_transverse_abdominis
+  secondary_muscles:
+  - 607_iliopsoas
+  - 502_obliquus_externus
+  stabilizers:
+  - 503_obliquus_internus
+  coaching_notes:
+  - Ziehen Sie die Knie über die Bauchspannung zur Brust und halten Sie die eingerollte Beckenposition kurz fest.
+  - Denken Sie an ein Einrollen des Beckens vom Boden weg statt an bloßes Hochschwingen der Beine.
+  - Senken Sie nur so weit ab, wie die Lendenwirbelsäule Kontakt und Kontrolle behält.
+  common_errors:
+  - Die Bewegung wird mit Schwung aus den Beinen gestartet.
+  - Die Hüfte fällt unten komplett zurück und jede Wiederholung beginnt aus dem Hohlkreuz.
+  - Der Nacken spannt unnötig mit, obwohl die Arbeit im unteren Bauch liegen sollte.
+  tags:
+  - 6pack_promise
+  - core
+  - lower_abs
+  aliases:
+  - ISO Reverse Crunches
+  - Isometric Reverse Crunches
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

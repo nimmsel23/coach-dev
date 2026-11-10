@@ -1,0 +1,86 @@
+name: barbell_curl_lesson
+description: Anatomy teaching seed for 504.
+lessons:
+- exercise_id: '504'
+  title: Langhantelcurl — Bizeps-Isolation und Supinations-Mechanik
+  region: arms
+  learning_goal:
+    short: Verstehen warum der Bizeps primär ein Supinator ist — und wie das den optimalen Curl erklärt.
+    detailed: Lern die zweigelenkige Funktion des Bizeps (Ellenbogen + Schultergelenk) und warum Supination des Unterarms die Bizeps-Kontraktion maximiert.
+  movement_pattern:
+    primary: elbow_flexion
+    secondary:
+    - forearm_supination
+  joint_actions:
+    elbow:
+      concentric:
+      - flexion
+      - supination
+      eccentric:
+      - extension_control
+      stabilization:
+      - axis_control
+    shoulder:
+      stabilization:
+      - fixed_position
+  muscle_roles:
+    prime_movers:
+    - biceps_brachii
+    synergists:
+    - brachialis
+    - brachioradialis
+    stabilizers:
+    - core
+    - anterior_deltoid
+  body_highlighter_regions:
+    primary:
+    - upper_arm_front
+    secondary:
+    - forearms
+    light:
+    - core
+  trainer_explanation:
+    simple: Ellbogen ruhig am Körper, Handrücken nach vorne — und dann kontrolliert nach oben curl.
+    technical: Der M. biceps brachii führt Ellenbogenbeugung und Unterarm-Supination aus. Da er zweigelenkig ist (Schulter + Ellenbogen), ist die Schultergelenk-Position relevant für die optimale Aktivierung. Ellbogen fest am Körper minimiert Deltoid-Kompensation.
+    client_friendly: Ellbogen sind Angeln — die bewegen sich nicht. Nur der Unterarm dreht und klappt hoch.
+  feel_cues:
+  - Ellbogen ruhig und fest am Körper.
+  - Kleiner Finger führt die Bewegung nach oben (Supination).
+  - Oben kurz halten und den Bizeps anspannen.
+  coaching_cues:
+  - Keine Körperschwung — nur Arme.
+  - Kontrolliertes Ablassen (3 Sekunden eccentric).
+  - Volles Strecken unten für maximale Dehnung.
+  common_errors:
+  - error: Schwung aus dem Rücken (Oberkörper pendelt).
+    anatomical_reason: Zu schweres Gewicht — der Erector spinae generiert über Hüftextension Impuls um die Last zu überwinden. Der Bizeps arbeitet weniger.
+    correction: Gewicht reduzieren, Rücken gegen Wand oder fest im Stand fixieren.
+    coaching_cue: Rücken ist eine Wand — pendelt nicht.
+  - error: Handgelenke einknicken (nach vorne beugen).
+    anatomical_reason: Handgelenks-Flexion ist ein Kompensationsmuster bei ermüdendem Bizeps — Flexor carpi radialis/ulnaris kompensieren.
+    correction: Handgelenke neutral und gerade halten über die gesamte Bewegung.
+    coaching_cue: Handgelenke gerade — du trägst ein Tablett, keine Kiste.
+  variations_teach:
+  - variation: EZ-Bar Curl
+    lesson: Leichte Pronation reduziert Unterarm-/Handgelenks-Stress — oft bequemer bei Volumen-Training.
+  - variation: Supinating Dumbbell Curl
+    lesson: Aktive Supination während des Curls maximiert Bizeps-Kontraktion durch optimale Längen-Spannungs-Kurve.
+  quiz:
+  - question: Warum ist der Bizeps primär ein Supinator und erst sekundär ein Ellenbogenbeuger?
+    answer: Der M. biceps brachii hat seine stärkste mechanische Hebelwirkung bei der Supination des Unterarms — nicht bei der Ellenbogenbeugung. In Supination ist der Muskelbauch optimal gedreht für Kraftentwicklung. Das ist warum supinierter Griff den Bizeps stärker aktiviert als pronierter.
+  - question: Welche Muskeln unterstützen den Bizeps beim Ellenbogenbeugen?
+    answer: M. brachialis (stärkster Ellenbogenbeuger, inseriert an der Ulna) und M. brachioradialis (effektiv bei neutralem Griff). Der Brachialis arbeitet unabhängig vom Unterarm-Rotationswinkel — er ist echter Ellenbogenbeuger.
+  simple_explanation: "Der Langhantelcurl isoliert den Bizeps durch Ellenbogenbeugung mit fixierten Ellenbogen. Der Bizeps brachii ist die Hauptarbeitskraft — mit Unterstützung von Brachialis und Brachioradialis. Wichtig: Schwung aus dem Rücken eliminiert den Reiz auf den Bizeps und überlädt die Lendenwirbelsäule. Kontrolliertes Ablassen (eccentric) ist für Muskelmasse mindestens so wichtig wie das Heben.\n"
+  detailed_explanation: "Der M. biceps brachii besteht aus zwei Köpfen: Caput longum (Tuberculum supraglenoidale — zweigelenkig) und Caput breve (Processus coracoideus — zweigelenkig). Beide inserieren an der Tuberositas radii und der Fascia antebrachii. Hauptfunktionen: Supination des Unterarms, Ellenbogenbeugung, leichte Schulterflexion. Der M. brachialis (eingelenkig, unter dem Bizeps) ist der stärkste Ellenbogenbeuger. Er ist supinationsunabhängig. Der M. brachioradialis ist effektiv bei neutralem Griff. Beim Langhantelcurl erzwingt die Stange feste Supinationsposition — dadurch bleibt der Bizeps in optimaler Kontraktion.\n"
+  quiz_prompts:
+  - question: Warum ist die eccentric Phase (Ablassen) für Bizeps-Hypertrophie so wichtig?
+    answer: "Exzentrische Muskelkontraktion erzeugt mehr Mikrotraumata in den Myofibrillen als konzentrische — das ist der stärkere Hypertrophie-Stimulus. Kontrolliertes 3-Sekunden-Ablassen maximiert die Time-under-Tension in der gedehnten Position des Bizeps.\n"
+  common_errors_explained:
+    body_swinging:
+      description: Oberkörper pendelt — Schwung aus dem Rücken.
+      anatomical_reason: "Zu schweres Gewicht aktiviert den Erector spinae und die Hüftextensoren als Impulsgeneratoren. Der Bizeps wird aus der Hauptarbeit verdrängt — der Schwung übernimmt. Gleichzeitig erhöhte LWS-Belastung.\n"
+      correction: Gewicht reduzieren bis saubere Form möglich. Wand hinter dem Rücken als Feedback nutzen.
+      teaches:
+      - isolation_principle
+      - lumbar_protection
+      - progressive_overload_basics

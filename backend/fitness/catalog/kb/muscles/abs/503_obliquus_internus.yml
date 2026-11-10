@@ -1,0 +1,11 @@
+id: 503_obliquus_internus
+display_name: Obliquus Internus
+label_de: Innerer schräger Bauchmuskel
+label_en: Obliques (Inner)
+label_lat: M. obliquus internus abdominis
+wger_id: ~
+aliases: []
+viz:
+  body_muscles:
+    view: FRONT
+    ids: [obliques-left, obliques-right]

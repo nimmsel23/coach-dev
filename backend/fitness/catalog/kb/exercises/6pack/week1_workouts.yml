@@ -1,0 +1,153 @@
+program_id: sixpack_promise_week1
+name: 6 Pack Promise Week 1
+source: user_screenshots
+verified_days:
+  1:
+    total_seconds: 315
+    items:
+    - type: exercise
+      exercise_id: hands_back_tucks
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: marching_planks
+      duration_seconds: 60
+    - type: exercise
+      exercise_id: side_plank_lifts
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: side_plank_lifts
+      duration_seconds: 30
+    - type: rest
+      duration_seconds: 45
+    - type: exercise
+      exercise_id: seated_ab_circles
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: seated_ab_circles
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: ninety_ninety_crunch
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: russian_v_tuck_twists
+      duration_seconds: 30
+  2:
+    total_seconds: 315
+    items:
+    - type: exercise
+      exercise_id: iso_reverse_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: mountain_climbers
+      duration_seconds: 60
+    - type: exercise
+      exercise_id: bent_knee_windshield_wipers
+      duration_seconds: 60
+    - type: rest
+      duration_seconds: 45
+    - type: exercise
+      exercise_id: side_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: side_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: jackknifes
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: standing_ab_twists
+      duration_seconds: 30
+  4:
+    total_seconds: 345
+    items:
+    - type: exercise
+      exercise_id: flutter_kicks
+      duration_seconds: 60
+    - type: exercise
+      exercise_id: v_ups
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: tuck_planks
+      duration_seconds: 30
+      notes: opposite side
+    - type: rest
+      duration_seconds: 45
+    - type: exercise
+      exercise_id: scissors
+      duration_seconds: 60
+    - type: exercise
+      exercise_id: upper_circle_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: upper_circle_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: any_ball_btb_pass
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: any_ball_btb_pass
+      duration_seconds: 30
+  5:
+    total_seconds: 345
+    items:
+    - type: exercise
+      exercise_id: heels_to_the_heavens
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: mountain_climbers
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: side_plank_lifts
+      duration_seconds: 60
+    - type: exercise
+      exercise_id: side_plank_lifts
+      duration_seconds: 60
+    - type: rest
+      duration_seconds: 45
+    - type: exercise
+      exercise_id: side_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: side_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: crunch_and_twists
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: standing_ab_twists
+      duration_seconds: 30
+  6:
+    total_seconds: 285
+    items:
+    - type: exercise
+      exercise_id: iso_reverse_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: hands_free_tucks
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: seated_ab_circles
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: seated_ab_circles
+      duration_seconds: 30
+    - type: rest
+      duration_seconds: 45
+    - type: exercise
+      exercise_id: scissors
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: ninety_ninety_crunch
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: upper_circle_crunches
+      duration_seconds: 30
+    - type: exercise
+      exercise_id: upper_circle_crunches
+      duration_seconds: 30
+rest_days:
+- 3
+- 7
+notes:
+- Week 1 is fully verified from screenshots for workout days 1, 2, 4, 5, and 6.
+- Remaining non-rest Week 1 days should stay app-side fallback data until more screenshots are added.

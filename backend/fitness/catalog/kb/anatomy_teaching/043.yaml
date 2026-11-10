@@ -1,0 +1,76 @@
+name: chest_supported_row_lesson
+description: Anatomy teaching seed for chest supported row.
+lessons:
+  - exercise_id: 043
+    title: "Brustgestütztes Rudern - Rücken ohne unteren Rückenstress"
+    region: back
+    learning_goal:
+      short: "Horizontalen Zug mit wenig Rumpf-Fatigue coachen."
+      detailed: "Lern, wie das Brustpolster den unteren Rücken entlastet und den Fokus auf den mittleren Rücken setzt."
+    movement_pattern:
+      primary: horizontal_pull
+      secondary:
+        - scapular_retraction
+    joint_actions:
+      shoulder:
+        eccentric:
+          - extension_control
+        concentric:
+          - extension
+        stabilization:
+          - humeral_head_control
+      elbow:
+        eccentric:
+          - flexion_control
+        concentric:
+          - flexion
+        stabilization:
+          - tracking
+      scapula:
+        stabilization:
+          - retraction
+          - depression
+    muscle_roles:
+      prime_movers:
+        - back
+      synergists:
+        - arms
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - upper_back
+        - lats
+      secondary:
+        - upper_arm_front
+      light:
+        - abdomen_front
+    trainer_explanation:
+      simple: "Das Brustpolster nimmt den unteren Rücken aus der Gleichung."
+      technical: "Mit stabiler Rumpfposition und klarer Scapula-Retraktion wird die horizontale Zugarbeit auf die Rückenmuskeln fokussiert."
+      client_friendly: "Zieh sauber in den Rücken, ohne mit dem Körper zu wippen."
+    feel_cues:
+      - "Schulterblätter bewegen sich zusammen."
+      - "Brust bleibt am Polster."
+      - "Rücken zieht, nicht der Schwung."
+    coaching_cues:
+      - "Brust am Polster lassen."
+      - "Ellbogen sauber zurück."
+      - "Kontrollierte Endposition."
+    common_errors:
+      - error: "Schwung aus dem Oberkörper."
+        anatomical_reason: "Die Last wird aus dem Rumpf statt aus dem Rücken gezogen."
+        correction: "Brust am Polster halten und Tempo senken."
+        coaching_cue: "Kein Wippen."
+      - error: "Zu kurz ziehen."
+        anatomical_reason: "Der Rücken wird in der Endposition nicht sauber aktiviert."
+        correction: "Volle, kontrollierte Zugbahn."
+        coaching_cue: "Bis in die Schulterblätter."
+    variations_teach:
+      - variation: "chest supported t-bar row"
+        lesson: "Ähnlicher Rückenfokus mit anderer Griff- und Hebelposition."
+      - variation: "machine row"
+        lesson: "Mehr Führung, weniger freie Stabilisation."
+    quiz:
+      - question: "Warum ist das chest supported row so nützlich?"
+        answer: "Weil es den unteren Rücken entlastet und den Fokus auf den Rücken hält."

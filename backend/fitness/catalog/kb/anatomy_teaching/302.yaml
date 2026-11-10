@@ -1,0 +1,69 @@
+name: face_pull_lesson
+description: Anatomy teaching seed for face pull.
+lessons:
+  - exercise_id: 302
+    title: "Face Pull - Schulterbalance und Außenrotation"
+    region: shoulders
+    learning_goal:
+      short: "Rear Delts, obere Rückenmuskeln und Schulterbalance verstehen."
+      detailed: "Lern, wie Face Pulls Außenrotation und Retraktion mit sauberer Schulterführung verbinden."
+    movement_pattern:
+      primary: horizontal_pull
+      secondary:
+        - external_rotation
+    joint_actions:
+      shoulder:
+        eccentric:
+          - horizontal_adduction_control
+        concentric:
+          - horizontal_abduction
+        stabilization:
+          - external_rotation
+      scapula:
+        stabilization:
+          - retraction
+          - depression
+    muscle_roles:
+      prime_movers:
+        - shoulders
+      synergists:
+        - upper_back
+        - arms
+      stabilizers:
+        - core
+    body_highlighter_regions:
+      primary:
+        - shoulders_back
+      secondary:
+        - upper_back
+      light:
+        - neck
+    trainer_explanation:
+      simple: "Face Pulls helfen, die hintere Schulter und die Schulterposition zu verbessern."
+      technical: "Die Kombination aus horizontaler Abduktion und Außenrotation betont Rear Delts und obere Rückenmuskeln bei kontrollierter Scapula-Führung."
+      client_friendly: "Zieh zum Gesicht und halte die Schultern locker und stabil."
+    feel_cues:
+      - "Hintere Schulter und oberer Rücken arbeiten."
+      - "Nacken bleibt entspannt."
+      - "Ellbogen gehen außen nach hinten."
+    coaching_cues:
+      - "Zum Gesicht ziehen."
+      - "Ellbogen außen."
+      - "Nicht in den Nacken ziehen."
+    common_errors:
+      - error: "Zu tief ziehen."
+        anatomical_reason: "Der Fokus wandert weg von Rear Delts und Außenrotation."
+        correction: "Zughöhe auf Augen- bis Stirnhöhe halten."
+        coaching_cue: "Zum Gesicht, nicht zum Bauch."
+      - error: "Nacken verspannen."
+        anatomical_reason: "Der obere Trapez übernimmt zu stark."
+        correction: "Tempo reduzieren und Schultern unten lassen."
+        coaching_cue: "Nacken locker."
+    variations_teach:
+      - variation: "band face pull"
+        lesson: "Einfacher und gut für Warm-ups."
+      - variation: "high cable row"
+        lesson: "Ähnliche Zugidee, mehr Rückenfokus."
+    quiz:
+      - question: "Wofür ist der Face Pull besonders bekannt?"
+        answer: "Für hintere Schulter, obere Rückenbalance und Schulterhygiene."

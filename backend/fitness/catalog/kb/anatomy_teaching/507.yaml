@@ -1,0 +1,81 @@
+name: preacher_curl_lesson
+description: Anatomy teaching seed for 507.
+lessons:
+- exercise_id: '507'
+  title: Scott-Curl — Short Head Isolation und kontrollierte ROM
+  region: arms
+  learning_goal:
+    short: Verstehen wie das Scottbank-Polster Schulter-Kompensation eliminiert und den Short Head des Bizeps maximal isoliert.
+    detailed: Lern warum der Scott-Curl für Bizeps-Peak-Entwicklung (Short Head) ideal ist und warum die unterste Position besonders vorsichtig kontrolliert werden muss.
+  movement_pattern:
+    primary: elbow_flexion
+    secondary: []
+  joint_actions:
+    elbow:
+      concentric:
+      - flexion
+      eccentric:
+      - extension_control
+      stabilization:
+      - axis_fixed_on_pad
+    shoulder:
+      stabilization:
+      - fixed_by_pad
+  muscle_roles:
+    prime_movers:
+    - biceps_brachii_short_head
+    synergists:
+    - brachialis
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - upper_arm_front
+    secondary: []
+    light:
+    - forearms
+  trainer_explanation:
+    simple: Das Polster fixiert den Oberarm — keine Kompensation möglich. Der Bizeps muss alleine arbeiten.
+    technical: Das Scottbank-Polster positioniert den Oberarm in leichter Schulterflexion und fixiert ihn. Das eliminiert jede Möglichkeit der Schulter-Kompensation. Durch die fixierte Schulterflexion ist der Short Head (Caput breve) in optimaler Ausgangsposition.
+    client_friendly: Lass den Arm vollständig oben aufliegen — und beweg nur den Unterarm.
+  feel_cues:
+  - Oberarm die ganze Zeit am Polster.
+  - Kontrolliertes Ablassen — nie fallen lassen.
+  - Spür den Stretch des Bizeps unten.
+  coaching_cues:
+  - Nie mit Schwung — das Polster ist der Gegner des Schwungs.
+  - Unterste Position langsam kontrollieren (Sehnen-Verletzungsrisiko).
+  - Volle Kontraktion oben.
+  common_errors:
+  - error: Ellbogen vom Polster heben um Gewicht zu bewältigen.
+    anatomical_reason: Wenn der Ellbogen sich vom Polster hebt, übernimmt der anteriore Deltoid die Last — die Bizeps-Isolation geht verloren.
+    correction: Gewicht reduzieren. Ellbogen muss die ganze Zeit am Polster bleiben.
+    coaching_cue: Ellbogen am Polster — kleben.
+  - error: Zu schnelles Absenken (Verletzungsgefahr Bizepssehne).
+    anatomical_reason: In der untersten Position (volle Streckung) ist die Bizepssehne (Insertion an Tuberositas radii) unter maximaler Last. Zu schnelles Ablassen erzeugt hohe exzentrische Kraft auf die Sehne — Reißgefahr.
+    correction: Letzten 20° der Streckung extrem langsam und kontrolliert ausführen.
+    coaching_cue: Die letzten Zentimeter ganz langsam — das ist die Gefahrenzone.
+  variations_teach:
+  - variation: EZ-Bar Preacher Curl
+    lesson: Reduzierte Handgelenks-Belastung durch neutralere Griffposition.
+  - variation: Cable Preacher Curl
+    lesson: Konstantere Spannung durch Kabelzug — auch in der oberen Position nicht null.
+  quiz:
+  - question: Warum ist der Scott-Curl für den Bizeps-Peak (Short Head) besonders effektiv?
+    answer: Die Schulterflexions-Position (Arm auf dem Polster nach vorne geneigt) ist die optimale Ausgangsposition für den Short Head (Caput breve, Ursprung am Coracoid). Das Polster eliminiert Schulter-Kompensation vollständig — nur Ellenbogenbeugung ist möglich.
+  - question: Warum ist die unterste Position beim Scott-Curl gefährlich wenn unkontrolliert ausgeführt?
+    answer: In voller Streckung ist die Bizepssehne am Ursprung (Tuberositas radii) unter maximaler Zugkraft. Zu schnelles Ablassen erzeugt plötzliche exzentrische Überlastung — klassisches Muster für Bizepssehnen-Riss.
+  simple_explanation: "Der Scott-Curl (Preacher Curl) fixiert den Oberarm auf einem Schrägpolster. Das eliminiert jede Schulter-Kompensation — nur Ellenbogenbeugung ist möglich. Dadurch ist die Bizeps-Isolation maximal. Der Short Head wird besonders aktiviert. Die unterste Position ist Verletzungs-kritisch: Nie unkontrolliert ablassen.\n"
+  detailed_explanation: "Das Scottbank-Polster positioniert den Oberarm in ca. 40-60° Schulterflexion und fixiert ihn dort. Dadurch ist Schulter-Extension (Kompensation mit Deltoid) nicht möglich. Das Caput breve (Short Head) des M. biceps brachii — Ursprung am Processus coracoideus — ist in dieser Position optimal positioniert. Der M. brachialis ist ebenfalls stark aktiviert (eingelenkiger Ellenbogenbeuger). Kritisch: In der vollen Streckung (untere Position) liegt maximale Last auf der distalen Bizepssehne. Exzentrische Überlastung durch unkontrolliertes Ablassen ist die häufigste Ursache für Bizepssehnen-Rupturen.\n"
+  quiz_prompts:
+  - question: Warum erlaubt die Scottbank höhere Isolations-Qualität als der stehende Curl?
+    answer: "Durch die mechanische Fixierung des Oberarms ist jede Form von Körperschwung und Schulter-Kompensation physisch unmöglich — nicht nur durch Willen des Trainierenden. Das erzwingt maximale Bizeps-Arbeit unabhängig vom Ermüdungsgrad.\n"
+  common_errors_explained:
+    too_fast_descent:
+      description: Zu schnelles Absenken in die Streckung.
+      anatomical_reason: "Die Bizepssehne am Radiusansatz (Tuberositas radii) ist in voller Streckung maximal gespannt. Plötzliche exzentrische Kraft auf die Sehne überschreitet die Sehnen-Zugfestigkeit — Reißrisiko. Besonders bei ermüdetem Muskel am Ende eines Satzes.\n"
+      correction: Letzten 15-20° der Streckung 3-5 Sekunden kontrollieren.
+      teaches:
+      - tendon_mechanics
+      - eccentric_safety
+      - biceps_tendon_anatomy

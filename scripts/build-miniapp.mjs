@@ -1,7 +1,7 @@
 // Baut (und deployt optional) eine Solo-Mini-App aus fitness-dev.
 //   node scripts/build-miniapp.mjs <id> [--deploy]      <id> = Eintrag in scripts/miniapps.json
 // Ablauf wie früher build:training/build:atlas: KB-Daten (gestempelt) -> vite build --mode <id>
-// -> SW versionieren -> stampen (Manifest/Icons/Splash) -> Snapshot. --deploy: firebase deploy --only hosting:<id>.
+// -> SW versionieren -> stampen (Manifest/Icons/Splash). --deploy: firebase deploy --only hosting:<id>.
 import { readFileSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -24,7 +24,6 @@ const steps = [
   `vite build --mode ${id} --outDir ${out}`,
   `node scripts/mini-app-shell/cli.mjs sw ${out} --app fitness`,
   `node scripts/stamp-training.mjs ${out} ${q(app.name)} ${q(app.short)} ${q(app.start)} ${q(app.description)}`,
-  `node scripts/snapshot.mjs ${out}`,
 ]
 if (deploy) steps.push(`firebase deploy --only hosting:${id}`)
 

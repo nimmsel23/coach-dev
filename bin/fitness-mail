@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# fitness-mail — Fitbit Gmail pipeline (same as: coach mail / fitness mail)
+set -euo pipefail
+COACH="${COACH_DEV:-$HOME/dev/coach-dev}"
+export PYTHONPATH="${COACH}${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m fitness.mail.cli "$@"

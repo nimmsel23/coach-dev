@@ -1,0 +1,372 @@
+source: vendor/fma (uw-sig/FMA)
+fma_version: 5.1.0
+fma_commit: c6f70808ba2859b88cb0b8362c34fa9017c6f96a
+license: CC BY 3.0 (see vendor/fma/LICENSE)
+note: Selfmade muscles/ remain expert SSOT; this map links catalog IDs to FMA. Full
+  OWL via git lfs pull in vendor/fma.
+count: 52
+muscles:
+- catalog_id: 501_rectus_abdominis
+  fma_id: FMA:9628
+  fma_iri: http://purl.org/sig/ont/fma/fma9628
+  path: muscles/abs/501_rectus_abdominis.yml
+  label_en: Abs
+  label_de: Gerader Bauchmuskel
+  label_lat: M. rectus abdominis
+- catalog_id: 504_transverse_abdominis
+  fma_id: FMA:15570
+  fma_iri: http://purl.org/sig/ont/fma/fma15570
+  path: muscles/abs/504_transverse_abdominis.yml
+  label_en: Deep Core
+  label_de: Querer Bauchmuskel
+  label_lat: M. transversus abdominis
+- catalog_id: 505_quadratus_lumborum
+  fma_id: FMA:15569
+  fma_iri: http://purl.org/sig/ont/fma/fma15569
+  path: muscles/abs/505_quadratus_lumborum.yml
+  label_en: QL
+  label_de: Quadratischer Lendenmuskel
+  label_lat: M. quadratus lumborum
+- catalog_id: 506_diaphragm
+  fma_id: FMA:13295
+  fma_iri: http://purl.org/sig/ont/fma/fma13295
+  path: muscles/abs/506_diaphragm.yml
+  label_en: Diaphragm
+  label_de: Zwerchfell
+  label_lat: Diaphragma
+- catalog_id: 507_multifidus
+  fma_id: FMA:22827
+  fma_iri: http://purl.org/sig/ont/fma/fma22827
+  path: muscles/abs/507_multifidus.yml
+  label_en: Multifidus
+  label_de: Musculus multifidus
+  label_lat: M. multifidus
+- catalog_id: 401_triceps_brachii
+  fma_id: FMA:37688
+  fma_iri: http://purl.org/sig/ont/fma/fma37688
+  path: muscles/arms/401_triceps_brachii.yml
+  label_en: Triceps
+  label_de: Trizeps
+  label_lat: M. triceps brachii
+- catalog_id: 401a_triceps_long_head
+  fma_id: FMA:37692
+  fma_iri: http://purl.org/sig/ont/fma/fma37692
+  path: muscles/arms/401a_triceps_long_head.yml
+  label_en: Triceps (Long Head)
+  label_de: Trizeps (Langer Kopf)
+  label_lat: M. triceps brachii (caput longum)
+- catalog_id: 401b_triceps_lateral_head
+  fma_id: FMA:37694
+  fma_iri: http://purl.org/sig/ont/fma/fma37694
+  path: muscles/arms/401b_triceps_lateral_head.yml
+  label_en: Triceps (Lateral Head)
+  label_de: Trizeps (Lateraler Kopf)
+  label_lat: M. triceps brachii (caput laterale)
+- catalog_id: 401c_triceps_medial_head
+  fma_id: FMA:37693
+  fma_iri: http://purl.org/sig/ont/fma/fma37693
+  path: muscles/arms/401c_triceps_medial_head.yml
+  label_en: Triceps (Medial Head)
+  label_de: Trizeps (Medialer Kopf)
+  label_lat: M. triceps brachii (caput mediale)
+- catalog_id: 402_biceps_brachii
+  fma_id: FMA:37670
+  fma_iri: http://purl.org/sig/ont/fma/fma37670
+  path: muscles/arms/402_biceps_brachii.yml
+  label_en: Biceps
+  label_de: Bizeps
+  label_lat: M. biceps brachii
+- catalog_id: 403_brachialis
+  fma_id: FMA:37667
+  fma_iri: http://purl.org/sig/ont/fma/fma37667
+  path: muscles/arms/403_brachialis.yml
+  label_en: Brachialis
+  label_de: Armbeuger
+  label_lat: M. brachialis
+- catalog_id: 404_brachioradialis
+  fma_id: FMA:38485
+  fma_iri: http://purl.org/sig/ont/fma/fma38485
+  path: muscles/arms/404_brachioradialis.yml
+  label_en: Brachioradialis
+  label_de: Oberarmspeichenmuskel
+  label_lat: M. brachioradialis
+- catalog_id: 405a_flexor_digitorum_superficialis
+  fma_id: FMA:38469
+  fma_iri: http://purl.org/sig/ont/fma/fma38469
+  path: muscles/arms/405a_flexor_digitorum_superficialis.yml
+  label_en: Flexor Digitorum Superficialis
+  label_de: Oberflächlicher Fingerbeuger
+  label_lat: M. flexor digitorum superficialis
+- catalog_id: 405b_flexor_carpi_ulnaris
+  fma_id: FMA:38465
+  fma_iri: http://purl.org/sig/ont/fma/fma38465
+  path: muscles/arms/405b_flexor_carpi_ulnaris.yml
+  label_en: Flexor Carpi Ulnaris
+  label_de: Ellenseitiger Handbeuger
+  label_lat: M. flexor carpi ulnaris
+- catalog_id: 405c_flexor_carpi_radialis
+  fma_id: FMA:38459
+  fma_iri: http://purl.org/sig/ont/fma/fma38459
+  path: muscles/arms/405c_flexor_carpi_radialis.yml
+  label_en: Flexor Carpi Radialis
+  label_de: Speichenseitiger Handbeuger
+  label_lat: M. flexor carpi radialis
+- catalog_id: 405d_palmaris_longus
+  fma_id: FMA:38462
+  fma_iri: http://purl.org/sig/ont/fma/fma38462
+  path: muscles/arms/405d_palmaris_longus.yml
+  label_en: Palmaris Longus
+  label_de: Langer Hohlhandmuskel
+  label_lat: M. palmaris longus
+- catalog_id: 406a_extensor_digitorum
+  fma_id: FMA:38500
+  fma_iri: http://purl.org/sig/ont/fma/fma38500
+  path: muscles/arms/406a_extensor_digitorum.yml
+  label_en: Extensor Digitorum
+  label_de: Fingerstrecker
+  label_lat: M. extensor digitorum
+- catalog_id: 406b_extensor_carpi_radialis_longus
+  fma_id: FMA:38494
+  fma_iri: http://purl.org/sig/ont/fma/fma38494
+  path: muscles/arms/406b_extensor_carpi_radialis_longus.yml
+  label_en: Extensor Carpi Radialis Longus
+  label_de: Langer speichenseitiger Handstrecker
+  label_lat: M. extensor carpi radialis longus
+- catalog_id: 406c_extensor_carpi_radialis_brevis
+  fma_id: FMA:38497
+  fma_iri: http://purl.org/sig/ont/fma/fma38497
+  path: muscles/arms/406c_extensor_carpi_radialis_brevis.yml
+  label_en: Extensor Carpi Radialis Brevis
+  label_de: Kurzer speichenseitiger Handstrecker
+  label_lat: M. extensor carpi radialis brevis
+- catalog_id: 406d_extensor_carpi_ulnaris
+  fma_id: FMA:38506
+  fma_iri: http://purl.org/sig/ont/fma/fma38506
+  path: muscles/arms/406d_extensor_carpi_ulnaris.yml
+  label_en: Extensor Carpi Ulnaris
+  label_de: Ellenseitiger Handstrecker
+  label_lat: M. extensor carpi ulnaris
+- catalog_id: 407_anconeus
+  fma_id: FMA:37704
+  fma_iri: http://purl.org/sig/ont/fma/fma37704
+  path: muscles/arms/407_anconeus.yml
+  label_en: Anconeus
+  label_de: Knorrenmuskel
+  label_lat: M. anconeus
+- catalog_id: 201_latissimus_dorsi
+  fma_id: FMA:13357
+  fma_iri: http://purl.org/sig/ont/fma/fma13357
+  path: muscles/back/201_latissimus_dorsi.yml
+  label_en: Lats
+  label_de: Breiter Rückenmuskel
+  label_lat: M. latissimus dorsi
+- catalog_id: 202_trapezius
+  fma_id: FMA:9626
+  fma_iri: http://purl.org/sig/ont/fma/fma9626
+  path: muscles/back/202_trapezius.yml
+  label_en: Traps
+  label_de: Trapezmuskel
+  label_lat: M. trapezius
+- catalog_id: 207_teres_major
+  fma_id: FMA:32549
+  fma_iri: http://purl.org/sig/ont/fma/fma32549
+  path: muscles/back/207_teres_major.yml
+  label_en: Teres Major
+  label_de: Großer Rundmuskel
+  label_lat: M. teres major
+- catalog_id: 701a_gastrocnemius_medial
+  fma_id: FMA:45956
+  fma_iri: http://purl.org/sig/ont/fma/fma45956
+  path: muscles/calves/701a_gastrocnemius_medial.yml
+  label_en: Calves (Medial Head)
+  label_de: Zwillingswadenmuskel (Medialer Kopf)
+  label_lat: M. gastrocnemius (caput mediale)
+- catalog_id: 701b_gastrocnemius_lateral
+  fma_id: FMA:45959
+  fma_iri: http://purl.org/sig/ont/fma/fma45959
+  path: muscles/calves/701b_gastrocnemius_lateral.yml
+  label_en: Calves (Lateral Head)
+  label_de: Zwillingswadenmuskel (Lateraler Kopf)
+  label_lat: M. gastrocnemius (caput laterale)
+- catalog_id: 702_soleus
+  fma_id: FMA:22542
+  fma_iri: http://purl.org/sig/ont/fma/fma22542
+  path: muscles/calves/702_soleus.yml
+  label_en: Calves (Lower)
+  label_de: Schollenmuskel
+  label_lat: M. soleus
+- catalog_id: 703_tibialis_anterior
+  fma_id: FMA:22532
+  fma_iri: http://purl.org/sig/ont/fma/fma22532
+  path: muscles/calves/703_tibialis_anterior.yml
+  label_en: Tibialis
+  label_de: Vorderer Schienbeinmuskel
+  label_lat: M. tibialis anterior
+- catalog_id: 101_pectoralis_major
+  fma_id: FMA:9627
+  fma_iri: http://purl.org/sig/ont/fma/fma9627
+  path: muscles/chest/101_pectoralis_major.yml
+  label_en: Chest (Large)
+  label_de: Großer Brustmuskel
+  label_lat: M. pectoralis major
+- catalog_id: 102_pectoralis_major_clavicular
+  fma_id: FMA:34687
+  fma_iri: http://purl.org/sig/ont/fma/fma34687
+  path: muscles/chest/102_pectoralis_major_clavicular.yml
+  label_en: Upper Chest
+  label_de: Oberer Brustmuskel
+  label_lat: M. pectoralis major (pars clavicularis)
+- catalog_id: 103_pectoralis_major_sternal
+  fma_id: FMA:34688
+  fma_iri: http://purl.org/sig/ont/fma/fma34688
+  path: muscles/chest/103_pectoralis_major_sternal.yml
+  label_en: Lower Chest (Sternocostal)
+  label_de: Unterer/Sternaler Brustmuskel
+  label_lat: M. pectoralis major (pars sternocostalis)
+- catalog_id: 104_pectoralis_minor
+  fma_id: FMA:13109
+  fma_iri: http://purl.org/sig/ont/fma/fma13109
+  path: muscles/chest/104_pectoralis_minor.yml
+  label_en: Chest (Small)
+  label_de: Kleiner Brustmuskel
+  label_lat: M. pectoralis minor
+- catalog_id: 105_serratus_anterior
+  fma_id: FMA:13397
+  fma_iri: http://purl.org/sig/ont/fma/fma13397
+  path: muscles/chest/105_serratus_anterior.yml
+  label_en: Serratus
+  label_de: Vorderer Sägemuskel
+  label_lat: M. serratus anterior
+- catalog_id: 601a_rectus_femoris
+  fma_id: FMA:22430
+  fma_iri: http://purl.org/sig/ont/fma/fma22430
+  path: muscles/legs/601a_rectus_femoris.yml
+  label_en: Quads (Rectus)
+  label_de: Gerader Oberschenkelmuskel
+  label_lat: M. rectus femoris
+- catalog_id: 601b_vastus_lateralis
+  fma_id: FMA:22431
+  fma_iri: http://purl.org/sig/ont/fma/fma22431
+  path: muscles/legs/601b_vastus_lateralis.yml
+  label_en: Quads (Outer)
+  label_de: Äußerer breiter Oberschenkelmuskel
+  label_lat: M. vastus lateralis
+- catalog_id: 601c_vastus_medialis
+  fma_id: FMA:22432
+  fma_iri: http://purl.org/sig/ont/fma/fma22432
+  path: muscles/legs/601c_vastus_medialis.yml
+  label_en: Quads (Inner)
+  label_de: Innerer breiter Oberschenkelmuskel
+  label_lat: M. vastus medialis
+- catalog_id: 601d_vastus_intermedius
+  fma_id: FMA:22433
+  fma_iri: http://purl.org/sig/ont/fma/fma22433
+  path: muscles/legs/601d_vastus_intermedius.yml
+  label_en: Quads (Middle)
+  label_de: Mittlerer breiter Oberschenkelmuskel
+  label_lat: M. vastus intermedius
+- catalog_id: 602a_adductor_magnus
+  fma_id: FMA:22443
+  fma_iri: http://purl.org/sig/ont/fma/fma22443
+  path: muscles/legs/602a_adductor_magnus.yml
+  label_en: Adductor Magnus
+  label_de: Großer Adduktorenmuskel
+  label_lat: M. adductor magnus
+- catalog_id: 602b_adductor_longus
+  fma_id: FMA:22441
+  fma_iri: http://purl.org/sig/ont/fma/fma22441
+  path: muscles/legs/602b_adductor_longus.yml
+  label_en: Adductor Longus
+  label_de: Langer Adduktorenmuskel
+  label_lat: M. adductor longus
+- catalog_id: 602c_adductor_brevis
+  fma_id: FMA:22442
+  fma_iri: http://purl.org/sig/ont/fma/fma22442
+  path: muscles/legs/602c_adductor_brevis.yml
+  label_en: Adductor Brevis
+  label_de: Kurzer Adduktorenmuskel
+  label_lat: M. adductor brevis
+- catalog_id: 603_gluteus_maximus
+  fma_id: FMA:22314
+  fma_iri: http://purl.org/sig/ont/fma/fma22314
+  path: muscles/legs/603_gluteus_maximus.yml
+  label_en: Glutes
+  label_de: Großer Gesäßmuskel
+  label_lat: M. gluteus maximus
+- catalog_id: 604a_biceps_femoris
+  fma_id: FMA:22356
+  fma_iri: http://purl.org/sig/ont/fma/fma22356
+  path: muscles/legs/604a_biceps_femoris.yml
+  label_en: Hamstrings (Outer)
+  label_de: Zweiköpfiger Oberschenkelmuskel
+  label_lat: M. biceps femoris
+- catalog_id: 604b_semitendinosus
+  fma_id: FMA:22357
+  fma_iri: http://purl.org/sig/ont/fma/fma22357
+  path: muscles/legs/604b_semitendinosus.yml
+  label_en: Hamstrings (Inner)
+  label_de: Halbsehniger Muskel
+  label_lat: M. semitendinosus
+- catalog_id: 604c_semimembranosus
+  fma_id: FMA:22438
+  fma_iri: http://purl.org/sig/ont/fma/fma22438
+  path: muscles/legs/604c_semimembranosus.yml
+  label_en: Hamstrings (Deep)
+  label_de: Halbmembranöser Muskel
+  label_lat: M. semimembranosus
+- catalog_id: 607_iliopsoas
+  fma_id: FMA:64918
+  fma_iri: http://purl.org/sig/ont/fma/fma64918
+  path: muscles/legs/607_iliopsoas.yml
+  label_en: Hip Flexor
+  label_de: Hüftbeuger
+  label_lat: M. iliopsoas
+- catalog_id: 608_gluteus_medius
+  fma_id: FMA:22315
+  fma_iri: http://purl.org/sig/ont/fma/fma22315
+  path: muscles/legs/608_gluteus_medius.yml
+  label_en: Side Glutes
+  label_de: Mittlerer Gesäßmuskel
+  label_lat: M. gluteus medius
+- catalog_id: 609_gluteus_minimus
+  fma_id: FMA:22317
+  fma_iri: http://purl.org/sig/ont/fma/fma22317
+  path: muscles/legs/609_gluteus_minimus.yml
+  label_en: Glutes (Minor)
+  label_de: Kleiner Gesäßmuskel
+  label_lat: M. gluteus minimus
+- catalog_id: 304_rotator_cuff
+  fma_id: FMA:82650
+  fma_iri: http://purl.org/sig/ont/fma/fma82650
+  path: muscles/shoulders/304_rotator_cuff.yml
+  label_en: Rotator Cuff
+  label_de: Rotatorenmanschette
+  label_lat: Musculi cuffiae musculotendineae
+- catalog_id: 305_supraspinatus
+  fma_id: FMA:9629
+  fma_iri: http://purl.org/sig/ont/fma/fma9629
+  path: muscles/shoulders/305_supraspinatus.yml
+  label_en: Supraspinatus
+  label_de: Obergrätenmuskel
+  label_lat: M. supraspinatus
+- catalog_id: 306_infraspinatus
+  fma_id: FMA:32546
+  fma_iri: http://purl.org/sig/ont/fma/fma32546
+  path: muscles/shoulders/306_infraspinatus.yml
+  label_en: Infraspinatus
+  label_de: Untergrätenmuskel
+  label_lat: M. infraspinatus
+- catalog_id: 307_teres_minor
+  fma_id: FMA:32550
+  fma_iri: http://purl.org/sig/ont/fma/fma32550
+  path: muscles/shoulders/307_teres_minor.yml
+  label_en: Teres Minor
+  label_de: Kleiner Rundmuskel
+  label_lat: M. teres minor
+- catalog_id: 308_subscapularis
+  fma_id: FMA:13413
+  fma_iri: http://purl.org/sig/ont/fma/fma13413
+  path: muscles/shoulders/308_subscapularis.yml
+  label_en: Subscapularis
+  label_de: Unterschulterblattmuskel
+  label_lat: M. subscapularis

@@ -1,0 +1,93 @@
+name: leg_press_lesson
+description: Anatomy teaching seed for 062.
+lessons:
+- exercise_id: '062'
+  title: Beinpresse — Quad-Training mit kontrollierter Kniegelenks-Last
+  region: legs
+  learning_goal:
+    short: Verstehen wie Fußposition und ROM auf der Beinpresse den Fokus zwischen Quads, Glutes und Adduktoren verschiebt.
+    detailed: Lern warum die Beinpresse kein vollständiger Squat-Ersatz ist (kein Freiheits-Gleichgewicht, keine Stabilisatorarbeit) und wie sie dennoch gezielt für Quad-Hypertrophie eingesetzt werden kann.
+  movement_pattern:
+    primary: squat
+    secondary:
+    - knee_extension
+    - hip_extension
+  joint_actions:
+    knee:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+      stabilization:
+      - valgus_control
+    hip:
+      concentric:
+      - extension
+      eccentric:
+      - flexion_control
+    lumbar:
+      stabilization:
+      - anti_flexion
+      - pelvis_neutral
+  muscle_roles:
+    prime_movers:
+    - quadriceps
+    synergists:
+    - gluteus_maximus
+    - adductors
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - quads
+    secondary:
+    - glutes
+    light:
+    - core
+  trainer_explanation:
+    simple: Die Beinpresse isoliert Beinstrecker (Quads) effektiv — ohne Gleichgewichts-Anforderung können höhere Lasten genutzt werden.
+    technical: Da die Bewegung geführt ist, entfällt die Stabilisierungsarbeit der Tiefenmuskulatur (Rotatorenmanschette der Hüfte, Rumpf-Propriozeption). Der Fokus liegt auf Quad-Extension und moderater Glute-Aktivierung. Fußposition steuert den Fokus.
+    client_friendly: Füße mittig auf der Plattform, Knie über den Zehen, Rücken flach ans Polster.
+  feel_cues:
+  - Rücken die ganze Zeit am Polster lassen.
+  - Knie nicht am obersten Punkt einrasten.
+  - Fersen in die Plattform drücken.
+  coaching_cues:
+  - Fußposition bewusst wählen: Mitte = ausgeglichen, hoch = Glutes, tief = Quads.
+  - Knie niemals kollabieren lassen.
+  - ROM vollständig nutzen aber sicher bleiben.
+  common_errors:
+  - error: Becken hebt vom Polster ab (Rundrücken).
+    anatomical_reason: Zu tiefe ROM ohne ausreichende Hüft-Flexibilität kippt das Becken nach hinten (Posteriorer Tilt). Die LWS geht in Flexion unter Last — Bandscheibengefährdung.
+    correction: ROM begrenzen bis das Becken neutral bleibt. Hüftflexibilität gezielt verbessern.
+    coaching_cue: Rücken bleibt das gesamte Set am Polster.
+  - error: Knie kollabieren nach innen (Valgus).
+    anatomical_reason: Schwache Gluteus medius und externe Hüftrotatoren erlauben kein aktives Kniestabilisieren.
+    correction: Knie aktiv nach außen drücken, Fußgewölbe aktivieren.
+    coaching_cue: Knie über den kleinen Zeh drücken.
+  variations_teach:
+  - variation: Hohe Fußposition
+    lesson: Erhöht Hüftflexion — mehr Gluteus maximus Beteiligung.
+  - variation: Tiefe Fußposition
+    lesson: Mehr Kniebeugungs-Winkel — stärkere Quad-Isolierung.
+  - variation: Einbeinige Beinpresse
+    lesson: Beseitigt Asymmetrien zwischen den Seiten, erhöht Stabilisierungsanforderungen.
+  quiz:
+  - question: Warum ist die Beinpresse kein vollständiger Ersatz für Kniebeugen?
+    answer: Weil Kniebeugen Gleichgewicht, Propriozeption und Stabilisierungsarbeit der gesamten Körperkette fordern. Die Beinpresse ist geführt — Tiefenmuskulatur wird kaum aktiviert. Kniebeugen trainieren Bewegungskompetenz, nicht nur Muskelmasse.
+  - question: Wie verschiebt die Fußposition die Muskelaktivierung auf der Beinpresse?
+    answer: Hoch = mehr Hüftflexion → mehr Glutes. Tief = mehr Knieflexion → mehr Quads. Breit = mehr Adduktoren-Beteiligung.
+  simple_explanation: "Die Beinpresse trainiert Quadrizeps und Gluteus maximus in einer geführten Bewegung. Weil kein Gleichgewicht erforderlich ist, können sehr hohe Lasten eingesetzt werden — ideal für Hypertrophie-Training. Die Fußposition auf der Plattform verschiebt den Fokus zwischen Quads (tief) und Glutes (hoch). Der Rücken muss die ganze Zeit am Polster bleiben.\n"
+  detailed_explanation: "Die vier Köpfe des M. quadriceps femoris (Rectus femoris, Vastus lateralis, Vastus medialis, Vastus intermedius) strecken das Knie. Der M. gluteus maximus unterstützt die Hüftextension. Die Mm. adductores helfen bei Hüftextension besonders bei breiter Fußstellung. Da die Bewegungsbahn geführt ist, reduziert sich die Anforderung an Gleichgewicht und propriozeptive Stabilisierung im Vergleich zur freien Kniebeuge erheblich. Das ermöglicht hohe mechanische Spannung aber vermindert neurale Adaptation. Für maximale Quad-Hypertrophie ist die Beinpresse effektiv — als alleinige Beinkraft-Übung aber unvollständig.\n"
+  quiz_prompts:
+  - question: Warum sollte man beim Beinpressen das Knie nie ganz einrasten?
+    answer: "Vollständige Knieextension mit Last transferiert die Kraft auf den passiven Bandapparat (Ligamentum cruciatum anterior, Patellasehne). Das entlastet kurz den Quadrizeps — nimmt aber die Spannung raus und belastet Gelenk-Strukturen unnötig.\n"
+  common_errors_explained:
+    pelvis_lift:
+      description: Becken hebt vom Polster ab.
+      anatomical_reason: "Unzureichende Hüft-Flexibilität bei zu tiefer ROM — das Becken kippt in Posterior Tilt und die LWS flektiert unter Last. Erhöht Discus-Kompression.\n"
+      correction: ROM reduzieren auf sicheres Maß, Hüftflexibilität separat trainieren.
+      teaches:
+      - pelvic_neutral
+      - hip_mobility
+      - lumbar_protection

@@ -1,0 +1,90 @@
+name: side_plank_lesson
+description: Anatomy teaching seed for 606.
+lessons:
+- exercise_id: '606'
+  title: Seitstütz — Anti-Lateral-Flexion und Oblique-Isolation
+  region: core
+  learning_goal:
+    short: Verstehen wie der Seitstütz Obliques und Quadratus lumborum als Anti-Lateral-Flexion-Stabilisatoren trainiert.
+    detailed: Lern warum der Seitstütz die seitliche Kernstabilisierung trainiert — eine Fähigkeit die Rückenbeschwerden vorbeugt und einseitige Belastungen im Alltag abfängt.
+  movement_pattern:
+    primary: anti_lateral_flexion
+    secondary:
+    - isometric_stabilization
+  joint_actions:
+    lumbar:
+      stabilization:
+      - anti_lateral_flexion
+      - neutral_spine
+    hip:
+      stabilization:
+      - frontal_plane
+      - gluteus_medius_activation
+    shoulder:
+      stabilization:
+      - glenohumeral_centering
+      - scapular_stabilization
+  muscle_roles:
+    prime_movers:
+    - obliques
+    - quadratus_lumborum
+    synergists:
+    - transversus_abdominis
+    - gluteus_medius
+    - lateral_deltoid
+    stabilizers:
+    - core
+    - serratus_anterior
+  body_highlighter_regions:
+    primary:
+    - obliques
+    secondary:
+    - core
+    light:
+    - glutes
+    - shoulders_side
+  trainer_explanation:
+    simple: Der Seitstütz trainiert die Seite — Obliques und den tiefen Quadratus lumborum müssen die Hüfte oben halten.
+    technical: "Anti-Lateral-Flexion: Die Seitgravitation zieht die Hüfte nach unten. Obliques, Quadratus lumborum und Gluteus medius müssen isometrisch verhindern dass die Wirbelsäule seitlich abknickt."
+    client_friendly: Hüfte hoch und stabil — stell dir vor du bist ein Brett, nicht ein Bogen.
+  feel_cues:
+  - Hüfte aktiv nach oben drücken — nicht hängen lassen.
+  - Schulter aktiv stützen — kein Einknicken.
+  - Körper von Kopf bis Ferse in einer Linie.
+  coaching_cues:
+  - Füße übereinander oder Knie gebeugt als Einstieg.
+  - Kopf in Verlängerung der Wirbelsäule — nicht hängen.
+  - Atmen weiter — kein Luft anhalten.
+  common_errors:
+  - error: Hüfte sinkt zum Boden ab.
+    anatomical_reason: Obliques und Quadratus lumborum sind zu schwach oder ermüdet — die Schwerkraft zieht die Hüfte in laterale Flexion der Wirbelsäule.
+    correction: Zeit reduzieren bis Form korrekt. Knie gebeugte Variante als Einstieg.
+    coaching_cue: Hüfte oben — schieb sie aktiv zur Decke.
+  - error: In der Stütz-Schulter einknicken.
+    anatomical_reason: Schwacher Serratus anterior und schlechte Schulter-Stabilisierung — die Scapula kippt vom Thorax weg, die Schulter dreht ein.
+    correction: Schulter aktiv nach außen-unten stabilisieren, Serratus aktivieren.
+    coaching_cue: Drück den Boden aktiv weg — Schulter aktiv halten.
+  variations_teach:
+  - variation: Auf den Knien (Knie gebeugt)
+    lesson: Kürzerer Hebelarm — einfacherer Einstieg bei schwacher Rumpfseite.
+  - variation: Mit Beinabheben
+    lesson: Erhöhte Gluteus-medius-Anforderung und Anti-Lateral-Flexion-Intensität.
+  quiz:
+  - question: Was ist Anti-Lateral-Flexion und warum ist sie für Rückengesundheit wichtig?
+    answer: Anti-Lateral-Flexion ist die Fähigkeit, seitliches Abknicken der Wirbelsäule zu verhindern. Sie schützt die LWS bei asymmetrischen Belastungen (Tragen einer Tasche, Einarmiges Gewicht). Schwache laterale Stabilisierung erhöht das Spondylarthrose- und Bandscheiben-Risiko.
+  - question: Welche Muskeln sind beim Seitstütz primär aktiv?
+    answer: M. obliquus externus und internus abdominis (ipsilateral), M. quadratus lumborum (tiefer lateraler Stabilisator), M. gluteus medius (Becken-Lateralstabilisierung), M. serratus anterior (Scapula-Stabilisierung am Stütz-Arm).
+  simple_explanation: "Der Seitstütz trainiert die seitliche Kernstabilisierung — Anti-Lateral-Flexion. Obliques und der tiefe M. quadratus lumborum halten die Hüfte oben gegen die Schwerkraft. Der Gluteus medius stabilisiert das Becken in der Frontalebene. Hüfte hochhalten und Schulter aktiv stützen sind die zwei Schlüsselpunkte.\n"
+  detailed_explanation: "Der Seitstütz ist primär eine Anti-Lateral-Flexion-Übung: Die Schwerkraft zieht die Hüfte nach unten (laterale Flexion der LWS). Die Mm. obliqui externi und interni sowie der M. quadratus lumborum (tiefer seitlicher LWS-Stabilisator, entspringt vom Beckenkamm, inseriert an Rippe 12 und LWK 1-4) müssen isometrisch kontrahieren. Der M. gluteus medius hält das Becken frontaleben-stabil. Der M. serratus anterior hält die Scapula am Thorax (verhindert Schulter-Einknickung am Stützarm). Neuere Forschung zeigt dass der Seitstütz besonders für die Prävention von unilateralen LWS-Beschwerden effektiv ist, da er Muster trainiert die im Alltag permanent benötigt werden.\n"
+  quiz_prompts:
+  - question: Wie kann der Seitstütz für Fortgeschrittene progressiv gesteigert werden?
+    answer: "1. Zeit erhöhen. 2. Mit Beinabheben (erhöhte Gluteus-medius-Last). 3. Mit Gewicht auf der Hüfte. 4. Star Plank (Beine und Arm abspreizen). 5. Dynamische Variante: Hüfte senken und heben.\n"
+  common_errors_explained:
+    hip_dropping:
+      description: Hüfte sinkt zum Boden ab.
+      anatomical_reason: "Obliques oder Quadratus lumborum sind zu schwach für die nötige isometrische Haltearbeit. Die Seitkraft übersteigt die muskuläre Kapazität — die LWS knickt in laterale Flexion. Erhöhte Kompression der ipsilateralen Facettengelenke.\n"
+      correction: Übungsdauer reduzieren, mit Knie-Variante einsteigen, Seitenasymmetrien adressieren.
+      teaches:
+      - lateral_core_stability
+      - quadratus_lumborum_function
+      - gluteus_medius_function

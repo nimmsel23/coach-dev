@@ -71,14 +71,10 @@ Coaching, Pläne, Workouts, Anatomie und die Inbox unter `/fitness/inbox`
 (`exercises.py` bindet `exercises_inbox` ein). Dafür gibt es keinen separaten
 Upstream-Port.
 
-**`/fitness-api` aus dem Backend-Paket.** `load_fitness_app()` importiert
-`backend.api.app` und mountet `create_app()` unter `/fitness-api`. Voraussetzung
-ist die Umgebungsvariable `COACH_FITNESS_BACKEND_ROOT`: ein Verzeichnis, das
-`backend/api/app.py` enthält. Fehlt die Datei, startet Coach ohne diesen Mount
-(`fitness_frontend_api` in `/health` ist dann `unavailable`). Checkout-Pfad und
-Paketlayout des Backends sind hier absichtlich nicht festgeschrieben; die
-Anbindung läuft über diese Variable. `systemd/coach-api.service` setzt sie in
-der lokalen Unit — das ist Maschinenkonfiguration.
+**`/fitness-api` aus dem Ordner `backend/`.** `load_fitness_app()` lädt
+`backend/api/app.py` und mountet unter `/fitness-api`. Default:
+`COACH_FITNESS_BACKEND_ROOT=~/dev/coach-dev` (Repo-Root mit Ordner `backend/`).
+Fehlt die Datei, startet Coach ohne diesen Mount. Die Unit setzt die Variable.
 
 **Fuel-Proxy.** [`coach-backends.json`](./coach-backends.json) enthält als
 einzigen Eintrag `fuel` → `http://127.0.0.1:8000/api/fuel`. Daraus werden

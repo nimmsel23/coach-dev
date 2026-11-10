@@ -1,0 +1,104 @@
+name: lat_pulldown_lesson
+description: Anatomy teaching seed for 201.
+lessons:
+- exercise_id: '201'
+  title: Latzug — Lat-Mechanik als Klimmzug-Progression und -Alternative
+  region: back
+  learning_goal:
+    short: Den Latzug als geführte Klimmzug-Alternative verstehen — gleiche Muskeln, aber kontrolliertere Last und Technik.
+    detailed: Lern wie der Latzug als Klimmzug-Progression verwendet wird und warum die Scapula-Depression vor dem Zug auch hier entscheidend ist.
+  movement_pattern:
+    primary: vertical_pull
+    secondary:
+    - shoulder_adduction
+    - shoulder_extension
+    - scapular_depression
+    - elbow_flexion
+  joint_actions:
+    shoulder:
+      concentric:
+      - adduction
+      - extension
+      eccentric:
+      - abduction_control
+      - flexion_control
+      stabilization:
+      - glenohumeral_centering
+    scapula:
+      concentric:
+      - depression
+      - retraction
+      eccentric:
+      - elevation_control
+    elbow:
+      concentric:
+      - flexion
+      eccentric:
+      - extension_control
+  muscle_roles:
+    prime_movers:
+    - latissimus_dorsi
+    - teres_major
+    synergists:
+    - biceps
+    - lower_trapezius
+    - posterior_deltoid
+    stabilizers:
+    - core
+    - brachialis
+  body_highlighter_regions:
+    primary:
+    - lats
+    - upper_back
+    secondary:
+    - upper_arm_front
+    light:
+    - core
+    - forearms
+  trainer_explanation:
+    simple: Der Latzug ist der geführte Klimmzug — gleiche Muskeln, anpassbare Last, ideal für alle Leistungsstufen.
+    technical: "Latissimus dorsi führt Adduktion und Extension des Humerus aus — identisch zum Klimmzug. Der Vorteil: exakt dosierbare Last erlaubt perfekte Technik-Entwicklung. Scapula-Depression ist genauso wichtig wie beim Klimmzug."
+    client_friendly: Zieh die Stange zur oberen Brust — nicht zum Kinn. Brust raus, Schultern runter.
+  feel_cues:
+  - Schulterblätter vor dem Zug aktiv nach unten.
+  - Brust zur Stange ziehen, nicht Kinn.
+  - Ellbogen Richtung Hüfte führen.
+  coaching_cues:
+  - Setup: Brust raus, leichte Rücklage, Schultern runter.
+  - Volle Streckung der Arme oben — maximaler Lat-Stretch.
+  - Nicht zurücklehnen (wird sonst zum Rudern).
+  common_errors:
+  - error: Oberkörper lehnt zu weit zurück (wird zum Rudern).
+    anatomical_reason: Starke Rücklage aktiviert die horizontale Zugkomponente und entlastet den vertikalen Lat-Zug. Die Übung verliert ihren Charakter als vertikaler Zug.
+    correction: Oberkörper leicht geneigt (ca. 15°), nicht mehr.
+    coaching_cue: Du sitzt — du lehnst nicht. Leicht nach hinten, aber fest.
+  - error: Stange hinter den Kopf ziehen.
+    anatomical_reason: Zug hinter den Kopf erzwingt Halswirbelsäulen-Flexion und Innenrotation im Schultergelenk unter Last — erhöhtes Verletzungsrisiko für HWS und Rotatorenmanschette ohne Vorteile.
+    correction: Stange immer vor den Körper zur oberen Brust ziehen.
+    coaching_cue: Stange zur Brust — nicht hinter den Kopf. Niemals.
+  variations_teach:
+  - variation: Enger Untergriff
+    lesson: Mehr Bizeps-Beteiligung durch optimierte Supinations-Position.
+  - variation: Neutralgriff (V-Bar)
+    lesson: Schulterfreundlich, guter Kompromiss zwischen Lat und Bizeps.
+  quiz:
+  - question: Warum ist Scapula-Depression auch beim Latzug entscheidend?
+    answer: Ohne Scapula-Depression (durch unteren Trapezius und Serratus) kann der Lat keine optimale Kraft entwickeln. Der Schulterblatt-Anker fehlt — oberer Trapezius übernimmt und der Nacken spannt.
+  - question: Was unterscheidet biomechanisch den Latzug vom Klimmzug?
+    answer: "Die Bewegungsrichtung ist umgekehrt: Beim Klimmzug bewegt sich der Körper zur fixen Stange. Beim Latzug bewegt sich die Stange zum fixen Körper. Dieselben Muskeln, aber unterschiedliche propriozeptive Anforderungen und Last-Kontrolle."
+  simple_explanation: "Der Latzug trainiert denselben Latissimus wie der Klimmzug — mit dem Vorteil exakt einstellbarer Last. Latissimus dorsi zieht den Arm von oben-außen nach unten-innen (Adduktion und Extension des Humerus). Scapula-Depression durch unteren Trapezius ist Voraussetzung. Zug immer zur oberen Brust — nicht hinter den Kopf.\n"
+  detailed_explanation: "Der M. latissimus dorsi ist der primäre Krafterzeuger — er führt Adduktion und Extension des Humerus aus. M. teres major unterstützt. M. biceps brachii und M. brachialis beugen den Ellenbogen. Der untere Trapezius und M. serratus anterior deprimieren die Scapula als Voraussetzung für optimale Lat-Aktivierung. Ohne diesen Schritt übernimmt der obere Trapezius die Schulterabsenkung — ineffizient und belastend für den Nacken. Vollständige Streckung der Arme am obersten Punkt ist für maximalen Lat-Stretch und Hypertrophie-Stimulus entscheidend.\n"
+  quiz_prompts:
+  - question: Warum soll die Stange zur oberen Brust gezogen werden und nicht zum Bauch?
+    answer: "Die optimale Kraftlinie des Latissimus ist auf die obere Brust ausgerichtet — das entspricht dem natürlichen Adduktions-/Extensionsweg des Humerus. Zum Bauch ziehen erfordert starkes Zurücklehnen und transformiert den vertikalen Zug in horizontales Rudern.\n"
+  - question: Wann ist der Latzug dem Klimmzug vorzuziehen?
+    answer: "Bei Anfängern die noch keine Klimmzüge schaffen (Last-Anpassung), bei Reha nach Schulter-Verletzungen (kontrolliertes Loading) und zur gezielten Technik-Entwicklung.\n"
+  common_errors_explained:
+    behind_neck_pull:
+      description: Stange hinter den Kopf ziehen.
+      anatomical_reason: "HWS-Flexion unter Last komprimiert die Halswirbelsäule. Gleichzeitig erzwingt die Position starke Innenrotation im Schultergelenk unter maximaler Abduktion — das Subacromial-Fenster verengt sich maximal. Kein Kraft-Vorteil, hohes Verletzungsrisiko.\n"
+      correction: Stange immer zur oberen Brust — HWS neutral halten.
+      teaches:
+      - cervical_spine_safety
+      - subacromial_space
+      - efficient_lat_mechanics

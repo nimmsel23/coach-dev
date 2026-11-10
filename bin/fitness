@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# fitness — Domain-CLI (catalog-TUI, log, kb, sync, …)
+set -euo pipefail
+COACH="${COACH_DEV:-$HOME/dev/coach-dev}"
+BACKEND="${BACKEND_FITNESS_ROOT:-$HOME/dev/backend/fitness}"
+export PYTHONPATH="${COACH}:${BACKEND}${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m fitness.cli "$@"

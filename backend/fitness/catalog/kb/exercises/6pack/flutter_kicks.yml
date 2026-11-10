@@ -1,0 +1,48 @@
+exercise_id: flutter_kicks
+description: Curated 6 Pack Promise entry for Flutter Kicks.
+exercises:
+- exercise_id: flutter_kicks
+  id: flutter_kicks
+  name: Flutter Kicks
+  display_name: Flutter Kicks
+  german: Flutter Kicks
+  english: Flutter Kicks
+  category: core
+  type: isolation
+  movements:
+  - hip_flexion
+  - anti_extension
+  - lower_ab_emphasis
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 501_rectus_abdominis
+  - 607_iliopsoas
+  secondary_muscles:
+  - 504_transverse_abdominis
+  stabilizers:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  coaching_notes:
+  - Halten Sie den unteren Rücken lang am Boden und lassen Sie die Beine klein und schnell gegeneinander arbeiten.
+  - Bleiben Sie mit Brustkorb und Nacken ruhig, damit die Arbeit im unteren Bauch ankommt.
+  - Je tiefer die Beine, desto höher die Anforderung; wählen Sie nur so tief, wie die Beckenposition stabil bleibt.
+  common_errors:
+  - Das Hohlkreuz wird durch zu tiefe Beine erzwungen.
+  - Große Kicks ersetzen konstante Spannung.
+  - Kopf und Schultern verkrampfen unnötig mit.
+  tags:
+  - 6pack_promise
+  - core
+  - lower_abs
+  aliases:
+  - Flutter Kicks
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated

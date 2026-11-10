@@ -1,0 +1,92 @@
+name: hanging_leg_raise_lesson
+description: Anatomy teaching seed for 601.
+lessons:
+- exercise_id: '601'
+  title: Hängendes Beinheben — Rectus Abdominis und Beckenkipp-Kontrolle
+  region: core
+  learning_goal:
+    short: Verstehen warum das Becken kippen (Posterior Tilt) beim Beinheben der entscheidende Unterschied zwischen Hüftbeuger-Training und Bauchmuskel-Training ist.
+    detailed: Lern wie aktive Posterior-Pelvic-Tilt-Einleitung den Rectus abdominis aktiviert und warum einfaches Beineheben ohne Beckenkipp fast nur Hüftbeuger-Arbeit ist.
+  movement_pattern:
+    primary: trunk_flexion
+    secondary:
+    - hip_flexion
+    - posterior_pelvic_tilt
+  joint_actions:
+    lumbar:
+      concentric:
+      - flexion
+      eccentric:
+      - extension_control
+      stabilization:
+      - anti_lordosis
+    hip:
+      concentric:
+      - flexion
+      eccentric:
+      - extension_control
+    shoulder:
+      stabilization:
+      - grip_and_hang
+  muscle_roles:
+    prime_movers:
+    - rectus_abdominis
+    synergists:
+    - obliques
+    - iliopsoas
+    stabilizers:
+    - latissimus_dorsi
+    - forearms
+  body_highlighter_regions:
+    primary:
+    - abdomen_front
+    secondary:
+    - obliques
+    light:
+    - lats
+    - forearms
+  trainer_explanation:
+    simple: Nicht einfach Beine hochheben — das Becken nach hinten kippen (Posterior Tilt) ist der Bauchmuskel-Einsatz.
+    technical: Simples Beineheben aktiviert primär M. iliopsoas (Hüftbeuger). Erst wenn das Becken in Posterior Tilt gebracht wird (Kreuzbein nach hinten-oben), kontrahiert der Rectus abdominis aktiv. Das ist der entscheidende Unterschied.
+    client_friendly: Nicht einfach Beine hoch — stell dir vor du rollst das Becken nach hinten zur Brust.
+  feel_cues:
+  - Becken zuerst nach hinten kippen — dann Beine mitnehmen.
+  - Unten die Lordose nicht wieder einbauen (kontrollieren).
+  - Ausatmen beim Hochheben — Bauch aktiv zusammenziehen.
+  coaching_cues:
+  - Beim Absenken Kontrolle behalten — kein Schwingen.
+  - Knie können leicht gebeugt bleiben (einfacher).
+  - Vollständige Rückkehr zur Startposition ohne Schwung.
+  common_errors:
+  - error: Mit Schwung aus den Beinen hochziehen.
+    anatomical_reason: Momentum übernimmt die Arbeit. Die Bauchmuskeln spannen sich nicht aktiv an — der Iliopsoas initiiert die Bewegung.
+    correction: Bewegung langsam und kontrolliert. Pause unten ohne Schwung.
+    coaching_cue: Beine heben sich, nicht schwingen.
+  - error: Hohlkreuz unten lassen (Lordose im Hang).
+    anatomical_reason: Wenn die LWS in Lordose bleibt, ist das Becken in Anterior Tilt — der Rectus abdominis ist nicht verkürzt und wird kaum aktiviert.
+    correction: Lendenwirbelsäule aktiv abflachen — Becken in Neutral/leichten Posterior Tilt bringen.
+    coaching_cue: Stell dir vor du ziehst den Bauchnabel zur Stange nach oben.
+  variations_teach:
+  - variation: Knieheben (Knee Raise)
+    lesson: Geringere Hebelarm-Länge — einfacherer Einstieg für schwächere Bauchmuskeln.
+  - variation: Straight Leg Raise mit vollständiger Streckung
+    lesson: Maximaler Hebelarm — höchste Anforderung an Rectus und Iliopsoas.
+  quiz:
+  - question: Warum aktiviert einfaches Beineheben mehr Hüftbeuger als Bauch?
+    answer: M. iliopsoas ist der stärkste Hüftbeuger und startet die Beinbewegung. Der Rectus abdominis wird erst aktiv wenn das Becken in Posterior Tilt gebracht wird — das ist die Röllbewegung die den Bauch einbezieht.
+  - question: Warum ist Ausatmen beim Hochheben physiologisch sinnvoll?
+    answer: Ausatmen erhöht den intraabdominalen Druck (Valsalva-Prinzip in Umkehrung) und aktiviert den Transversus abdominis als Stabilisator. Zudem verkürzt der Rectus abdominis besser wenn die Rippen Richtung Becken gezogen werden — was Ausatmen unterstützt.
+  simple_explanation: "Beim hängenden Beinheben ist der Schlüssel nicht das Hochheben der Beine — sondern das aktive Kippen des Beckens nach hinten (Posterior Pelvic Tilt). Erst diese Bewegung aktiviert den Rectus abdominis. Ohne Beckenkipp ist die Übung fast reines Hüftbeuger-Training. Kontrolliertes Absenken ohne Schwingen ist ebenso wichtig wie das Hochheben.\n"
+  detailed_explanation: "Der M. rectus abdominis verläuft vom Processus xiphoideus und Rippen 5-7 zum Schambein (Os pubis). Er beugt die Wirbelsäule (Rumpfflexion) und kippt das Becken in Posterior Tilt. Beim hängenden Beinheben: Simples Anwinkeln der Hüfte aktiviert primär den M. iliopsoas (Hüftbeuger). Der Rectus abdominis wird erst dann voll aktiviert wenn das Becken aktiv in Posterior Tilt gebracht wird — der Schambein-Ansatz bewegt sich Richtung Brustbein. M. obliquus externus und internus unterstützen die Rumpfflexion und -rotation. Der Latissimus dorsi und Unterarmmuskeln stabilisieren den Hang.\n"
+  quiz_prompts:
+  - question: Was ist der anatomische Unterschied zwischen Hüftbeuger-Beinheben und Bauchmuskel-Beinheben?
+    answer: "Hüftbeuger: Iliopsoas hebt den Oberschenkel — Becken bleibt in Anterior Tilt, LWS in Lordose. Bauchmuskel: Rectus abdominis zieht das Becken in Posterior Tilt (Schambein nach oben-vorne) — erst dann rollen die Beine mit. Die Beckenkippung ist der Unterschied.\n"
+  common_errors_explained:
+    swinging_momentum:
+      description: Mit Schwung aus den Beinen hochziehen.
+      anatomical_reason: "Momentum aus dem vorherigen Abschwung übernimmt die konzentrische Arbeit. Der Rectus abdominis wird nicht aktiv belastet — die Übung wird zu reinem Hüftbeuger-Training mit Schwungunterstützung.\n"
+      correction: Pause am unteren Punkt. Bewegung aktiv aus dem Bauch initiieren — nicht aus dem Schwung.
+      teaches:
+      - posterior_pelvic_tilt
+      - rectus_abdominis_function
+      - iliopsoas_vs_abdominal_work

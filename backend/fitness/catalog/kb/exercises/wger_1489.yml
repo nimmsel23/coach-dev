@@ -1,0 +1,154 @@
+exercise_id: wger_1489
+description: Expert details for Langhantelrudern (Obergriff)
+approved_at: '2026-10-16T15:47:31.142347+00:00'
+exercises:
+- exercise_id: wger_1489
+  id: wger_1489
+  name: Langhantelrudern (Obergriff)
+  display_name: Langhantelrudern (Obergriff)
+  german: Langhantelrudern (Obergriff)
+  english: Bent-Over Barbell Row (Overhand Grip)
+  category: pull
+  equipment:
+  - barbell
+  primary_muscles:
+  - 201_latissimus_dorsi
+  - 205_rhomboids
+  - 202b_trapezius_middle
+  - 303_posterior_deltoid
+  - 402_biceps_brachii
+  secondary_muscles:
+  - 403_brachialis
+  - 404_brachioradialis
+  - 207_teres_major
+  - 405_forearm_flexors
+  stabilizers:
+  - 206_erector_spinae
+  - 603_gluteus_maximus
+  - 604a_biceps_femoris
+  - 604b_semitendinosus
+  - 604c_semimembranosus
+  - 504_transverse_abdominis
+  movements:
+  - horizontal_pull
+  - shoulder_extension
+  - scapular_retraction
+  - elbow_flexion
+  - trunk_stabilization
+  - hip_hinge
+  coaching_notes:
+  - '**Startposition:** Greife die Langhantel schulterbreit oder leicht weiter im
+    Obergriff. Stelle dich hüftbreit mit leicht gebeugten Knien hin.'
+  - Beuge den Oberkörper aus der Hüfte nach vorne, bis er annähernd parallel zum Boden
+    ist, oder so weit wie deine Flexibilität es zulässt, ohne den Rücken zu krümmen.
+  - Halte den Rücken gerade, bewahre die natürliche Krümmung der Wirbelsäule, Brust
+    raus und Schultern aktiv zurückziehen. Der Blick ist leicht nach vorne unten gerichtet,
+    um eine neutrale Kopfhaltung zu gewährleisten.
+  - Die Arme sind vollständig zum Boden gestreckt. Spüre eine leichte Vordehnung im
+    Latissimus.
+  - '**Ausführung:** Ziehe die Hantel explosiv, aber kontrolliert zum Bauchnabel oder
+    zur unteren Brust. Die Ellenbogen bleiben eng am Körper und werden nach hinten
+    oben geführt.'
+  - Ziehe die Schulterblätter am oberen Punkt der Bewegung bewusst und aktiv zusammen.
+    Konzentriere dich darauf, die Bewegung primär aus dem Rücken (Latissimus und oberer
+    Rücken) einzuleiten.
+  - Halte am obersten Punkt kurz die Spannung, bevor du die Hantel kontrolliert und
+    langsam wieder in die Ausgangsposition absenkst. Die Arme werden dabei vollständig
+    gestreckt, um den vollen Bewegungsradius zu nutzen.
+  - Der Oberkörperwinkel sollte während der gesamten Übung stabil bleiben und sich
+    nicht aufrichten oder weiter beugen.
+  - '**Atmung:** Atme ein, während du die Hantel absenkst, und atme kraftvoll aus,
+    während du die Hantel nach oben ziehst.'
+  common_errors:
+  - '**Rundrücken:** Ein Krümmen des oberen oder unteren Rückens während der Übung.
+    Dies erhöht das Verletzungsrisiko für die Wirbelsäule. Achte auf eine neutrale
+    Wirbelsäulenposition durch aktive Rumpfspannung.'
+  - '**Schwung holen / Zu viel Gewicht:** Die Hantel wird durch ein starkes Auf- und
+    Abwippen des Oberkörpers hochgerissen, anstatt sie kontrolliert aus der Rückenmuskulatur
+    zu ziehen. Reduziere das Gewicht und konzentriere dich auf die Muskelkontraktion.'
+  - '**Ellenbogen weit vom Körper:** Wenn die Ellenbogen zu weit nach außen gehen,
+    wird die Belastung vom Latissimus auf die Schultern (hintere Deltamuskeln) und
+    den oberen Trapezius verlagert. Halte die Ellenbogen eng am Körper.'
+  - '**Unvollständiger Bewegungsradius:** Die Hantel wird nicht weit genug hochgezogen
+    oder die Arme werden beim Ablassen nicht vollständig gestreckt. Nutze den vollen
+    Bewegungsbereich für maximale Muskelaktivierung.'
+  - '**Schultern hochziehen (Shrug):** Ein aktives Hochziehen der Schultern während
+    der Zugphase überbeansprucht die oberen Fasern des Trapezius und nimmt Spannung
+    vom Latissimus. Die Schultern sollten während der Übung unten und hinten bleiben.'
+  - '**Falsche Kopfhaltung:** Den Kopf stark in den Nacken legen oder übermäßig nach
+    unten beugen kann zu Nackenbeschwerden führen. Halte den Kopf in einer neutralen
+    Position, in Verlängerung der Wirbelsäule.'
+  original_description:
+  - 'Ausführung
+
+
+
+    Startposition:
+
+
+    Halte die Langhantel mit vollständig zum Boden gestreckten Armen.
+
+    Halte die Spannung im Latissimus und in der Rückenmuskulatur.'
+  tags:
+  - unreviewed
+  - wger
+  wger_id: 1489
+  wger_muscle_ids:
+    primary:
+    - 12
+    secondary: []
+  external_ids:
+    wger:
+    - 1489
+  variations: []
+  source: expert
+  enriched_at: '2026-09-08T13:58:24.304745+00:00'
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: merged_external
+    source_refs:
+      wger:
+      - '1489'
+      yuhonas:
+      - Bent_Over_Barbell_Row
+  source_snapshot:
+    wger:
+      wger_id: 1489
+      wger_muscle_ids:
+        primary:
+        - 12
+        secondary: []
+      original_description:
+      - 'Ausführung
+
+
+
+        Startposition:
+
+
+        Halte die Langhantel mit vollständig zum Boden gestreckten Armen.
+
+        Halte die Spannung im Latissimus und in der Rückenmuskulatur.'
+  review_state:
+    status: approved
+    ai_reviewed: true
+    enriched_at: '2026-09-08T13:58:24.304745+00:00'
+    approved_at: '2026-10-16T15:47:31.142347+00:00'
+  approved_at: '2026-10-16T15:47:31.142347+00:00'
+  search_aliases:
+  - wger_1489
+  - Langhantelrudern (Obergriff)
+  - Bent-Over Barbell Row (Overhand Grip)
+  yuhonas_id: Bent_Over_Barbell_Row
+  instructions:
+  - 'Holding a barbell with a pronated grip (palms facing down), bend your knees slightly
+    and bring your torso forward, by bending at the waist, while keeping the back
+    straight until it is almost parallel to the floor. Tip: Make sure that you keep
+    the head up. The barbell should hang directly in front of you as your arms hang
+    perpendicular to the floor and your torso. This is your starting position.'
+  - Now, while keeping the torso stationary, breathe out and lift the barbell to you.
+    Keep the elbows close to the body and only use the forearms to hold the weight.
+    At the top contracted position, squeeze the back muscles and hold for a brief
+    pause.
+  - Then inhale and slowly lower the barbell back to the starting position.
+  - Repeat for the recommended amount of repetitions.

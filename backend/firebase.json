@@ -1,0 +1,14 @@
+{
+  "functions": [
+    {
+      "codebase": "fitness",
+      "source": "functions/fitness",
+      "runtime": "nodejs22"
+    },
+    {
+      "codebase": "journal",
+      "source": "functions/journal",
+      "runtime": "nodejs22"
+    }
+  ]
+}

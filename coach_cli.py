@@ -7,7 +7,12 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-FITNESS_ROOT = ROOT.parent / 'fitness-dev'
+# Fitness-Package liegt im Coach-Repo (nicht mehr in fitness-dev).
+FITNESS_ROOT = Path(os.getenv('COACH_DEV', str(ROOT)))
+BACKEND_FITNESS_ROOT = Path(os.getenv(
+    'BACKEND_FITNESS_ROOT',
+    str(ROOT.parent / 'backend' / 'fitness'),
+))
 KLIENTEN_ROOT = Path(os.getenv('KLIENTEN_PYTHON_ROOT', str(ROOT / 'klienten-python')))
 PRAXIS_DEV_ROOT = Path(os.getenv('PRAXIS_DEV_ROOT', str(ROOT.parent / 'praxis-dev')))
 
@@ -76,10 +81,12 @@ SHORTCUTS = {'status': ('server', 'status'), 'open': ('server', 'open'),
 
 # Import only the selected tool, in its own Python environment. No shell parsing,
 # cwd changes or unconditional domain imports; preserve relative file arguments.
-RUN_TOOL = '''import http.client, importlib, sys
-root, module, entry, label = sys.argv[1:5]
-sys.path.insert(0, root)
-sys.argv = [label, *sys.argv[5:]]
+RUN_TOOL = '''import importlib, sys
+coach_root, backend_root, module, entry, label = sys.argv[1:6]
+for path in (backend_root, coach_root):
+    if path and path not in sys.path:
+        sys.path.insert(0, path)
+sys.argv = [label, *sys.argv[6:]]
 getattr(importlib.import_module(module), entry)()
 '''
 
@@ -151,8 +158,11 @@ def command_argv(args: list[str]) -> list[str]:
     if not (FITNESS_ROOT / 'fitness').is_dir():
         raise FileNotFoundError(f'Fitness-Quelle fehlt: {FITNESS_ROOT}')
     return [
-        _fitness_python(), '-c', RUN_TOOL, str(FITNESS_ROOT), spec.module, spec.entry,
-        'coach log' if spec.module == 'fitness.log.cli' else f'coach {name}', *spec.prefix, *rest,
+        _fitness_python(), '-c', RUN_TOOL,
+        str(FITNESS_ROOT), str(BACKEND_FITNESS_ROOT),
+        spec.module, spec.entry,
+        'coach log' if spec.module == 'fitness.log.cli' else f'coach {name}',
+        *spec.prefix, *rest,
     ]
 
 

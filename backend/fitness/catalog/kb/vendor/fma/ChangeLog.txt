@@ -1,0 +1,4 @@
+This version of the FMA is now coherent under EL reasoning in Protege, that is there
+are no classes that are equivalent to owl:Nothing. The fixes were done by Todd Detwiler,
+and are described by him in more detail  in the included file
+Fixing_reasoning_in_the_FMA.pdf.

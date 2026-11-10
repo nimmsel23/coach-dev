@@ -1,0 +1,184 @@
+name: romanian_deadlift_lesson
+description: Anatomy teaching seed for romanian 080.
+lessons:
+- exercise_id: 081
+  title: Romanian Deadlift - Hamstrings unter Spannung
+  region: legs
+  learning_goal:
+    short: Hinge, Dehnung und kontrollierte Hüftbewegung verstehen.
+    detailed: Lern, wie der RDL den hinteren Oberschenkel unter Zug hält und die Hüfte
+      nach hinten schiebt.
+  movement_pattern:
+    primary: hinge
+    secondary:
+    - hip_extension
+    - hamstring_lengthening
+  joint_actions:
+    hip:
+      eccentric:
+      - flexion_control
+      concentric:
+      - extension
+      stabilization:
+      - pelvis_control
+    knee:
+      stabilization:
+      - slight_flexion_hold
+    trunk:
+      stabilization:
+      - anti_flexion
+      - bracing
+  muscle_roles:
+    prime_movers:
+    - thigh_back
+    - glutes
+    synergists:
+    - back
+    stabilizers:
+    - core
+  body_highlighter_regions:
+    primary:
+    - thigh_back
+    - glutes
+    secondary:
+    - lower_back
+    light:
+    - forearms
+    - upper_back
+  trainer_explanation:
+    simple: Der RDL lädt den hinteren Oberschenkel durch die Hinge-Bewegung stark
+      auf.
+    technical: Durch die Hüfthinterführung bleibt die Hamstring-Länge hoch und die
+      exzentrische Kontrolle in der hinteren Kette steigt.
+    client_friendly: Du sollst die Dehnung hinten im Bein spüren und die Hüfte sauber
+      nach hinten schieben.
+  feel_cues:
+  - Dehnung in den Hamstrings.
+  - Hüfte nach hinten.
+  - Rumpf bleibt fest.
+  coaching_cues:
+  - Knie nur leicht beugen.
+  - Lang und kontrolliert absenken.
+  - Rücken neutral.
+  common_errors:
+  - error: Knie zu stark beugen.
+    anatomical_reason: Der Hinge wird zu einer Kniebeuge und der hintere Oberschenkel
+      verliert Spannung.
+    correction: Knie nur leicht flexieren.
+    coaching_cue: Hüfte zurück, nicht runter.
+  - error: Rumpf verlieren.
+    anatomical_reason: Die Zugspannung endet im unteren Rücken statt in der hinteren
+      Kette.
+    correction: Bracing verstärken.
+    coaching_cue: Bauch fest.
+  variations_teach:
+  - variation: dumbbell rdl
+    lesson: Freie Variante mit ähnlichem Hinge.
+  - variation: single leg rdl
+    lesson: Mehr Stabilität und Einbein-Kontrolle.
+  quiz:
+  - question: Woran erkennst du einen guten RDL?
+    answer: An der kontrollierten Hüftbewegung und der klaren Dehnung im hinteren
+      Oberschenkel.
+  simple_explanation: 'Der RDL ist die reinste Lehrübung für die Hüftgelenksbewegung.
+    Er zeigt dir wie Hamstrings und Gluteus maximus als Hüftstrecker zusammenarbeiten
+    und warum die Wirbelsäule neutral bleiben muss, damit Kraft übertragen wird statt
+    absorbiert. Wer den RDL versteht, versteht das Hip Hinge — das Fundament von Deadlift,
+    Kettlebell Swing und Hüftstreckung im Sport.
+
+    '
+  detailed_explanation: 'Exzentrisch: Der Rumpf neigt sich nach vorne durch Hüftbeugung
+    — nicht durch Kniebeugen oder Rückenrunden. Die Hamstrings werden auf Dehnung
+    gebracht (Dehnung in Ursprung am Sitzbein + Ansatz unter Knie). Gluteus maximus
+    wird exzentrisch gedehnt. Die Wirbelsäule bleibt neutral unter isometrischer Spannung
+    der Rückenstrecker. Konzentrisch: Gluteus maximus und Hamstrings ziehen das Becken
+    in die Streckung (anteriore Kipplage → neutral). Die Hüfte führt die Bewegung,
+    der Rücken folgt passiv. Entscheidend: der RDL trainiert die Hamstrings biartikulär
+    — sie überbrücken Hüft- und Kniegelenk und werden in der langen Position (Hüfte
+    flektiert) besonders stark in die Dehnung gebracht.
+
+    '
+  quiz_prompts:
+  - question: Warum ist der RDL eine bessere Hamstring-Übung als der Beinbeuger?
+    answer: 'Der RDL trainiert die Hamstrings biartikulär in der langen Position:
+      Hüfte flektiert, Knie leicht gebeugt. Das erzeugt den stärksten Dehnungsreiz
+      auf die Muskel-Sehnen-Einheit. Der Beinbeuger isoliert die Hamstrings, aber
+      in einer kürzeren Position und ohne Hüftkomponente. Stretch-mediierte Hypertrophie
+      spricht für Langposition-Training.
+
+      '
+  - question: Was unterscheidet anatomisch Hip Hinge von Squat?
+    answer: 'Hip Hinge: primär Hüftbeugung bei minimaler Knieflexion. Posteriore Kette
+      dominiert (Hamstrings, Gluteus maximus). Squat: kombinierte Hüft- und Kniebewegung.
+      Quadrizeps und Gluteus maximus teilen sich die Arbeit. Im Hip Hinge geht der
+      Rumpf nach vorne, im Squat sinkt der Rumpf nach unten.
+
+      '
+  - question: Warum muss die Wirbelsäule beim RDL neutral bleiben?
+    answer: 'Die Wirbelsäule überträgt die Last von den Beinen/Hüfte zur Stange. In
+      neutraler Position sind die Bandscheiben gleichmäßig belastet und die tiefen
+      Rückenstrecker können die Wirbel stabil halten. In Flexion unter axialer Last:
+      die hintere Annuluslamellen der Bandscheiben werden auf Zug beansprucht — Langzeitbelastung
+      erhöht Diskuspathologie-Risiko.
+
+      '
+  vault_tags:
+  - exzentrik
+  - kreuzheben
+  - posterior-chain
+  - prüfung
+  - rdl
+  - technikschule
+  common_errors_explained:
+    knie_schieben_vor:
+      description: Die Knie beugen sich übermäßig stark und schieben nach vorne, anstatt
+        den Hüftscharnier (Hip-Hinge) zu betonen.
+      anatomical_reason: Übermäßige Kniebeugung reduziert die effektive Dehnung und
+        Spannung auf die Ischiokrurale Muskulatur, da der Abstand zwischen deren Ursprung
+        und Ansatz verkürzt wird. Dies führt zu einer Verlagerung des Schwerpunkts
+        und einem Verlust des Hip-Hinge-Musters, da die primäre Hüftbewegung durch
+        Kniebeugung kompensiert wird. Die Quadrizepse werden unnötig involviert, anstatt
+        die posteriore Kette zu isolieren.
+      correction: Wand-Hinge/Box-Hinge zum Erlernen des Hüftscharniers; Kniewinkel
+        bei ~15-20° fixieren und diese Position beibehalten.
+      teaches:
+      - Hüftscharnier (Hip-Hinge)
+      - Ischiokrurale Muskulatur (Hamstrings) Länge-Spannungs-Beziehung
+      - Aktivierung der posterioren Kette vs. Quadrizeps
+    rundruecken:
+      description: Der untere Rücken (Lendenwirbelsäule) beugt sich während der Bewegung,
+        wodurch die neutrale Wirbelsäulenposition verloren geht.
+      anatomical_reason: Dies ist auf unzureichende isometrische Kraft der Rückenstrecker
+        (Musculi erector spinae) oder fehlende neuromuskuläre Kontrolle zurückzuführen,
+        um die Lendenwirbelsäule gegen die Beugung durch die Last und die Hüftflexion
+        stabil zu halten. Dies erhöht das Schermoment auf Bandscheiben und Bänder
+        der Wirbelsäule, was das Verletzungsrisiko steigert. Es kann auch eine Kompensation
+        für mangelnde Hamstring-Mobilität sein.
+      correction: Bewegungsumfang (ROM) kürzen; nicht tiefer gehen, als eine neutrale
+        Wirbelsäule möglich ist. Tempo verlangsamen (3-1-1), um mehr Zeit für die
+        Kontrolle der Wirbelsäule zu geben.
+      teaches:
+      - Wirbelsäulenstabilisierung
+      - Neutrale Wirbelsäulenposition
+      - Rolle der Musculi erector spinae
+      - Bandscheibenbelastung
+      - Hüftmobilität
+    zu_tief:
+      description: Der Athlet versucht, die Bewegungstiefe (ROM) über den Punkt hinaus
+        zu erzwingen, an dem eine neutrale Wirbelsäule und die Spannung in den Hamstrings
+        aufrechterhalten werden können.
+      anatomical_reason: Dies geschieht oft aufgrund mangelnden Verständnisses der
+        individuellen Mobilitätsgrenzen, insbesondere der Hamstring-Länge. Wenn die
+        Hamstrings ihre maximale Dehnung erreicht haben, ohne dass die Bewegung stoppt,
+        kompensiert der Körper häufig durch eine Beugung der Lendenwirbelsäule (Rundrücken).
+        Dies führt zu denselben Risiken wie der 'Rundrücken'-Fehler und überdehnt
+        die Hamstrings möglicherweise nicht effektiver, sondern verlagert die Belastung
+        auf die Wirbelsäule.
+      correction: End-Range markieren (z.B. mit Straps oder Pins) um eine visuelle
+        oder taktile Grenze zu setzen. Den Cue 'Nur so tief, wie neutral' anwenden.
+      teaches:
+      - Individuelle ROM
+      - Mobilität (insbesondere Hamstring-Länge)
+      - Neutrale Wirbelsäulenposition
+      - Kompensationsmuster
+      - Schutz der Wirbelsäule

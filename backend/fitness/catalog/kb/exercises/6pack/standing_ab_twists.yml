@@ -1,0 +1,50 @@
+exercise_id: standing_ab_twists
+description: Curated 6 Pack Promise entry for Standing Ab Twists.
+exercises:
+- exercise_id: standing_ab_twists
+  id: standing_ab_twists
+  name: Standing Ab Twists
+  display_name: Standing Ab Twists
+  german: Standing Ab Twists
+  english: Standing Ab Twists
+  category: core
+  type: compound
+  movements:
+  - trunk_rotation
+  - gait_pattern
+  - hip_flexion
+  equipment:
+  - bodyweight
+  primary_muscles:
+  - 502_obliquus_externus
+  - 503_obliquus_internus
+  secondary_muscles:
+  - 504_transverse_abdominis
+  - 501_rectus_abdominis
+  stabilizers:
+  - 607_iliopsoas
+  - 603_gluteus_maximus
+  coaching_notes:
+  - Richten Sie sich auf und rotieren Sie Brustkorb und Becken koordiniert gegeneinander in einen aktiven Kniehub.
+  - Halten Sie die Bewegung elastisch, aber vermeiden Sie loses Armfuchteln ohne Rumpfansteuerung.
+  - Nutzen Sie den Standfuß aktiv, damit die Rotation sauber aus dem Körperzentrum übertragen wird.
+  common_errors:
+  - Die Arme schwingen nur quer durch den Raum, während der Rumpf starr bleibt.
+  - Der Standfuß kollabiert und die Bewegung verliert Balance.
+  - Das Tempo steigt, bevor eine saubere Kniehub-Rotation kontrolliert werden kann.
+  tags:
+  - 6pack_promise
+  - core
+  - rotation
+  - standing
+  aliases:
+  - Standing Ab Twists
+  variations: []
+  source: manual
+  schema_version: 2026-08-12.exercise-v1
+  origin:
+    type: manual
+    source_refs:
+      app: [6_pack_promise]
+  review_state:
+    status: curated
