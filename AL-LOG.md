@@ -92,6 +92,6 @@ completed	success	PR-AutoMerge (Dependabot -> dev)	PR-AutoMerge (Dependabot -> d
 - Arbeitsbaum: 1 uncommittete Pfade
 
 _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
-- Erledigt: TODO Deploy-Formalisierung — `66a908a4` (`deploy.sh seed-kb` + `paths.py`-Fallback → coach-dev); Docs `8f5965cb`/`a9f56b8f`/`e4c64e33`; AL-LOG `b30bb273`; Check `42964557888` + Pages `42964557799` success.
-- Offen/Weiter: Guide Katalog-Konsistenz / TODO Beobachten fitness-dev-KB; optional Fuel-Upstream; Org `fe34e959` Postgres wartet Urgency; website lokal unpushed `71f101a` nicht pinnen.
-- Blocker: Keine.
+- Erledigt: Guide Katalog-Konsistenz — fitness-dev KB=Symlink `~/dev/fitness`; Coach Tree statt Gitlink seit `710614d9`; Drift vs. `c1419a7`; Docs `cdd09884`/`ef4a8e71`/`c86f780b`; dieser AL-LOG-Commit.
+- Offen/Weiter: TODO KB-Gitlink-Restore (nach jefferson/020-Klärung) → Pin `c1419a7`+; optional Fuel-Upstream; Org `fe34e959` Postgres wartet Urgency; website `71f101a` nicht pinnen.
+- Blocker: Keine (Restore bewusst nicht im Freeze-Lauf; bidirektionaler Content-Drift).
