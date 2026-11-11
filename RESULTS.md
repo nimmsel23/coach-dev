@@ -1,3 +1,9 @@
+## 2026-11-11 — CI Simplicity: remove Gemini/Merge-Agent
+
+- Removed: gemini-ci-repair.yml merge-agent.yml
+- Spine bleibt: Check → automerge-pr (Dependabot) → automerge (dev→master) → Deploy.
+- Owner: complexity only in vitalos/prod (CI.md Kopf).
+
 ## 2026-11-11 — AL: Katalog-Konsistenz (Beobachtung)
 
 - fitness-dev: `fitness/catalog/kb` → Symlink `~/dev/fitness` (keine divergente Kopie).
