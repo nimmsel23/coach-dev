@@ -92,6 +92,6 @@ completed	success	PR-AutoMerge (Dependabot -> dev)	PR-AutoMerge (Dependabot -> d
 - Arbeitsbaum: 1 uncommittete Pfade
 
 _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
-- Erledigt: TODO Deploy-Formalisierung — `deploy.sh seed-kb` + `paths.py`-Fallback → coach-dev KB-Pin; TODO/NEXT/RESULTS/COACH_APP; Dry-run ok. Commit dieses Laufs (Worktree).
+- Erledigt: TODO Deploy-Formalisierung — `66a908a4` (`deploy.sh seed-kb` + `paths.py`-Fallback → coach-dev); Docs `8f5965cb`/`a9f56b8f`/`e4c64e33`; Dry-run ok; Check `42964557888` gestartet.
 - Offen/Weiter: Guide Katalog-Konsistenz / TODO Beobachten fitness-dev-KB; optional Fuel-Upstream; Org `fe34e959` Postgres wartet Urgency; website lokal unpushed `71f101a` nicht pinnen.
 - Blocker: Keine.
