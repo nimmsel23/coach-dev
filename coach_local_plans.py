@@ -1,4 +1,4 @@
-"""Client-ID Coach HTTP boundary; Plan owns storage, klienten-python owns the registry."""
+"""Client-ID Coach HTTP boundary; Coach owns the local plan runtime (plan_runtime/), klienten-python owns the registry."""
 from __future__ import annotations
 import asyncio
 import hashlib
@@ -15,7 +15,8 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse, Response
 
 ROOT = Path(__file__).resolve().parent
-PLAN_RUNTIME = ROOT / 'modules/plan/runtime'
+# Coach-owned copy of the former plan-dev runtime/ (coach-dev#14).
+PLAN_RUNTIME = ROOT / 'plan_runtime'
 
 def load_plan_module(name):
     spec = importlib.util.spec_from_file_location(f'coach_plan_{name}', PLAN_RUNTIME / f'{name}.py')
@@ -27,9 +28,6 @@ def load_plan_module(name):
 def load_taskwarrior_module():
     # Coach-owned copy — plan-dev removed fitness/plan_tasks.py (b91e309).
     source = ROOT / 'plan_tasks.py'
-    if not source.is_file():
-        # Legacy fallback while checkouts catch up
-        source = ROOT / 'modules/plan/fitness/plan_tasks.py'
     spec = importlib.util.spec_from_file_location('coach_plan_tasks', source)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -152,7 +150,7 @@ def fitness_workout_logs_for_uid(uid):
         known.add(workout_id)
     return workouts, available or bool(session_files), updated_at
 
-# Modules are loaded from the pinned submodule, never the sibling development source.
+# Modules are loaded from Coach's own plan_runtime/, never from modules/plan or a sibling checkout.
 plans_module = load_plan_module('local_plans')
 
 
