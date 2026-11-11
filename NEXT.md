@@ -25,9 +25,8 @@
 -   **Frontend-Serve Katalog-UI**: Coach-Dist statt Legacy-Fitness-SPA unter
     `/fitness/` (FIRE-Rest; Scope → `+ceo`). API lokal (`fitness_api: local`);
     Unit `fitness-preview` archiviert — offen bleibt nur der UI-Serve-Pfad.
--   **fitness-dev-KB-Kopie**: traegt weiter eine divergente KB-Kopie (nur noch
-    Konsument). Beim naechsten Upstream-Merge Katalog-Drift beachten; Ausmisten der
-    Kopie als separater Schnitt, sobald sicher keine Pipeline mehr dort liest.
+-   ~~**fitness-dev-KB-Kopie**~~: Symlink → `~/dev/fitness` (2026-11-11 AL);
+    Restore-Gitlink bleibt unter TODO KB-Gitlink.
 -   ~~**Deploy-Formalisierung**~~: `./deploy.sh seed-kb` aus Coach-KB-Pin
     (2026-11-11 AL); manuelles rsync nicht mehr nötig.
 -   ~~**Systemd-Quelle**~~: Repo-Unit `fitness/coach/deploy/coach-sync.service`
