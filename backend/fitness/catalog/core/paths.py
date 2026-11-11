@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parent
-REPO_ROOT    = PACKAGE_ROOT.parent  # ~/dev/fitness-dev
+REPO_ROOT    = PACKAGE_ROOT.parent  # …/fitness/catalog (Coach-SOT)
 
 
 def _load_env(path: Path) -> None:
@@ -36,8 +36,8 @@ def _resolve_data_dir() -> Path:
     legacy = PACKAGE_ROOT.parent / "kb"
     if legacy.exists():
         return legacy
-    # uv tool install: kb liegt in ~/dev/fitness-dev/catalog/kb/
-    fallback = Path.home() / "dev" / "fitness-dev" / "catalog" / "kb"
+    # uv tool / detached: Coach-KB-Pin unter ~/dev/coach-dev/fitness/catalog/kb/
+    fallback = Path.home() / "dev" / "coach-dev" / "fitness" / "catalog" / "kb"
     return fallback
 
 DATA_DIR = _resolve_data_dir()

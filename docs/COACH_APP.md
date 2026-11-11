@@ -130,6 +130,9 @@ fitness-dev/
 Falls ein harter Move zu gross ist, kann der erste Schritt kleiner sein:
 
 - `fitness/catalog/kb/` bleibt physisch noch liegen.
+- Runtime-Seed: `./deploy.sh seed-kb [--dry-run]` kopiert fehlende Dateien
+  nach `~/.aos/fitness/kb` (`rsync --ignore-existing`); kein Staging/Prod-
+  Service-Deploy aus diesem Skript.
 - Docs und Code behandeln es aber bereits als `kb`-SSOT.
 - Neue generierte Client-Dateien werden konsequent als `catalog` benannt,
   nicht als `kb`.

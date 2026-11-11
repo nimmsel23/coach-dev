@@ -66,3 +66,32 @@ _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen sta
 - Erledigt: Org `49499dfb` Dependabot fuel-rot — `df9c61e6` website `71f101a7`→`e5a8fc18`; Runs `42763764350`/`42763764833` = Clone-Fail nicht Package-Fail.
 - Offen/Weiter: TODO Deploy-Seed; KB-Drift; optional Fuel-Upstream; Org `fe34e959` Postgres wartet Urgency; website lokal unpushed `71f101a` nicht wieder pinnen.
 - Blocker: Keine.
+
+## 2026-11-11 (Mittwoch) — Abteilungsleiter-Lauf
+
+_Automatik (vos-al-log Vorlage 2026-11-11):_
+- Commits seit 2026-11-08: 7a23fbe8 docs(al-log): AL-Lauf 2026-11-10 — Dependabot website-Gitlink Beleg df9c61e6
+df9c61e6 fix(git): point website submodule at reachable remote main
+e29c6eb9 docs: RESULTS — Gemini orphan free-exercise-db gitlink
+04dd6366 fix(git): drop orphan free-exercise-db gitlink
+32aa9ff9 chore(pnpm): rolldown 1.2.16 and lockfile without symlink modules
+898ed83e docs: auto-update RESULTS.md
+d471009c docs: auto-update NEXT.md
+a0be6a07 feat(coach): inbox/chat subtabs, push hooks, open GitHub PRs
+cb0737f6 docs: auto-update RESULTS.md
+077546bb docs: auto-update RESULTS.md
+46a99873 docs: auto-update NEXT.md
+9d7c40c3 docs(al-log): AL-Lauf 2026-11-10 — Systemd-Quelle Beleg-SHA
+6022be4f fix(coach-sync): align unit source with Coach live paths
+448d2c57 docs: auto-update RESULTS.md
+d09185cc docs: auto-update NEXT.md
+- Offene PRs: (keine offenen PRs / gh nicht verfuegbar)
+- CI (letzte Läufe): completed	success	PR-AutoMerge (Dependabot -> dev)	PR-AutoMerge (Dependabot -> dev)	dev	schedule	42933457708	8s	2026-11-11T00:42:29Z
+completed	success	Merge-Agent	Merge-Agent	dev	schedule	42929310451	10s	2026-11-11T00:10:56Z
+completed	success	PR-AutoMerge (Dependabot -> dev)	PR-AutoMerge (Dependabot -> dev)	dev	schedule	42889253150	8s	2026-11-10T19:50:20Z
+- Arbeitsbaum: 1 uncommittete Pfade
+
+_Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
+- Erledigt: TODO Deploy-Formalisierung — `deploy.sh seed-kb` + `paths.py`-Fallback → coach-dev KB-Pin; TODO/NEXT/RESULTS/COACH_APP; Dry-run ok. Commit dieses Laufs (Worktree).
+- Offen/Weiter: Guide Katalog-Konsistenz / TODO Beobachten fitness-dev-KB; optional Fuel-Upstream; Org `fe34e959` Postgres wartet Urgency; website lokal unpushed `71f101a` nicht pinnen.
+- Blocker: Keine.
