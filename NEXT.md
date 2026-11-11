@@ -28,8 +28,8 @@
 -   **fitness-dev-KB-Kopie**: traegt weiter eine divergente KB-Kopie (nur noch
     Konsument). Beim naechsten Upstream-Merge Katalog-Drift beachten; Ausmisten der
     Kopie als separater Schnitt, sobald sicher keine Pipeline mehr dort liest.
--   **Deploy-Formalisierung**: ~/.aos/fitness/kb-Seed geschah manuell (rsync);
-    deploy.sh-Seed-Pfad auf coach-dev umstellen waere der formale Schritt.
+-   ~~**Deploy-Formalisierung**~~: `./deploy.sh seed-kb` aus Coach-KB-Pin
+    (2026-11-11 AL); manuelles rsync nicht mehr nötig.
 -   ~~**Systemd-Quelle**~~: Repo-Unit `fitness/coach/deploy/coach-sync.service`
     = Coach-SOT (2026-11-10 AL); Live-Unit war schon angeglichen.
 
