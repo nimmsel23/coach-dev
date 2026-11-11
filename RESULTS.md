@@ -1,3 +1,12 @@
+## 2026-11-11 — AL: Katalog-Konsistenz (Beobachtung)
+
+- fitness-dev: `fitness/catalog/kb` → Symlink `~/dev/fitness` (keine divergente Kopie).
+- coach-dev: seit `710614d9` vendored Tree unter `backend/fitness/catalog/kb`
+  statt Gitlink; `.gitmodules` deklariert weiter `nimmsel23/fitness`.
+- Content-Drift vs. fitness `c1419a7`: Docs/INBOX-Rollen; Exercises `020.yml` +
+  `approved_from_firebase.yml`; Inbox coach-only `jefferson_curl` vs. fitness-only
+  zwei Drafts. Restore+Bump als TODO Offen — kein Blind-Overwrite (Feature-Freeze).
+
 ## 2026-11-11 — AL: Deploy-Formalisierung KB-Seed
 
 - `./deploy.sh seed-kb [--dry-run]`: seedet `~/.aos/fitness/kb` aus
