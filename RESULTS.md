@@ -1,3 +1,9 @@
+## 2026-11-11 — AL: Deploy-Formalisierung KB-Seed
+
+- `./deploy.sh seed-kb [--dry-run]`: seedet `~/.aos/fitness/kb` aus
+  `fitness/catalog/kb` (`rsync --ignore-existing`); Service-Deploy bleibt Exit 1.
+- `fitness/catalog/core/paths.py`: Fallback-KB → `~/dev/coach-dev/fitness/catalog/kb`.
+
 ## 2026-11-10 — AL: Dependabot fuel-rot = website-Gitlink
 
 - Org `49499dfb`: Runs `42763764350`/`42763764833` — kein Fastify-Update-Fail.
