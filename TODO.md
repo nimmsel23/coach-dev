@@ -13,6 +13,13 @@ nachziehen. `FOCUS.md` / `FREEDOM.md` aktiv; `FRAME.md` optional später.
 
 - [ ] **Fuel-Upstream-Cutover (optional):** `/api/fuel` noch Proxy → VitalOS
       `:8000`; in-process erst nach Fuel/VitalOS-Freigabe — nicht per Tree-Move.
+- [ ] **KB-Gitlink wiederherstellen:** Seit `710614d9` ist `backend/fitness/catalog/kb`
+      ein vendored Tree (040000), obwohl `.gitmodules` weiter Submodul
+      `nimmsel23/fitness` deklariert. Vor Restore: Coach-only Inbox
+      `inbox_jefferson_curl_pipeline.yml` nach `~/dev/fitness` übernehmen oder
+      bewusst verwerfen; dann Gitlink auf `origin/main` (mind. `c1419a7`
+      Inbox-Rollen-Doku) setzen. Kein Blind-rsync — Exercises `020.yml` /
+      `approved_from_firebase.yml` + Inbox divergieren bidirektional.
 - [x] **Frontend-Serve Katalog-UI:** Coach-Dist (`dist-catalog` / `COACH_CATALOG_DIR`)
       statt Legacy-Fitness-SPA unter `/fitness/` — erledigt: Default Katalog-Dist;
       Legacy nur mit `COACH_FITNESS_FRONTEND_DIR` (2026-11-09 AL).
@@ -27,8 +34,6 @@ nachziehen. `FOCUS.md` / `FREEDOM.md` aktiv; `FRAME.md` optional später.
 
 - [ ] **website-Gitlink:** Submodule-SHA muss auf Remote existieren (Dependabot/CI clonen rekursiv). Lokal unpushed `71f101a` nicht pinnen.
 
-
-- [ ] **fitness-dev-KB-Kopie:** fitness-dev trägt weiter eine divergente KB-Kopie
-      (nur noch Konsument). Beim nächsten Upstream-Merge Katalog-Drift beachten;
-      Ausmisten der Kopie als separater Schnitt, sobald sicher keine Pipeline mehr
-      dort liest.
+- [x] **fitness-dev-KB-Kopie:** Beobachtet 2026-11-11 AL — fitness-dev hat keine
+      Dateikopie mehr (`fitness/catalog/kb` → Symlink `~/dev/fitness`). Drift-Ort
+      ist Coach: vendored Tree statt Gitlink (siehe TODO KB-Gitlink).
