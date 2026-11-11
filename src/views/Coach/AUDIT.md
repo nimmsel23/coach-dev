@@ -130,7 +130,7 @@ hinzufügen → Ziel setzen → verifizieren → löschen).
 ## Update 2026-10-15 — Coach-Shell auf VitalOS-Design
 - Die Tabelle/Sub-Tab-Liste oben ist historisch: aktuell 3 Bereiche (Übungsanfragen, Katalog, Klienten), Klienten-Detail-Tabs in `ClientsPanel.jsx`, Routing per Hash (`coachRoute.js`).
 - `index.jsx` enthält keine Navigation/Command-Bar mehr; die liegt in `src/shell/` (Sidebar/Tab-Bar/Header). Der offene-Anfragen-Zähler wird per `onInboxCount` an die Shell gemeldet.
-- `coach-console.css` und alle `cc-*`-Klassen entfernt → `vos-*` (siehe ARCHITECTURE.md). Kernfeature, das erhalten bleiben muss: Auswahl Klient/Detail-Tab/Datum steckt im URL-Hash (Push-Links aus `functions/clientWorkout.js`).
+- `coach-console.css` und alle `cc-*`-Klassen entfernt → `vos-*` (siehe ARCHITECTURE.md). Kernfeature, das erhalten bleiben muss: Auswahl Klient/Detail-Tab/Datum steckt im URL-Hash (Push-Links aus `functions/clientWorkout.js`). Seit 2026-11-11 hebt der Verlauf den `?date=`-Tag hervor (`feedHighlight.js`).
 - `CatalogBrowser` ist mobil als Liste → Detail (mit „Übungen"-Zurück-Button) nutzbar.
 - Nicht visuell im Browser abgenommen (nur Lint/Build/Route-Tests) — bei Gelegenheit auf Handy + Desktop, dunkel + hell prüfen.
 

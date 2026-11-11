@@ -96,8 +96,12 @@ Sub-Tab, Klient und Detail-Tab stehen im URL-Hash (`coachRoute.js` rein, `useCoa
 - Älterer Push-Link `#/coach?client=<uid>&date=…` wird nach `#/clients/<uid>` übersetzt.
 
 Zurück-Taste und Reload bleiben an derselben Stelle. Die Push-Links der Cloud Function `onClientWorkout`
-(fitness-dev, `functions/clientWorkout.js`) zeigen auf dieses Format. `?date=` wird gelesen, der Eintrag aber
-noch nicht hervorgehoben. Test: `node --test src/views/Coach/coachRoute.test.mjs`.
+(fitness-dev, `functions/clientWorkout.js`) zeigen auf dieses Format. Liegt `?date=` auf dem Verlauf,
+markiert `ClientWorkoutsFeed` jeden geladenen Eintrag dieses Kalendertags, scrollt den ersten
+sichtbaren in die Mitte und nennt die Anzahl. Ein Typ-Filter, der den Tag verdeckt, lässt sich
+zurücksetzen. Fehlt der Tag in den geladenen Einträgen (Feed-Limit), sagt die Leiste das, statt
+einen Treffer zu erfinden. „Markierung schließen“ nimmt `date` aus dem Hash.
+Test: `node --test src/views/Coach/coachRoute.test.mjs src/views/Coach/feedHighlight.test.mjs`.
 
 
 ## 2026-10-30: Coach-owned Trainingsprogramme
