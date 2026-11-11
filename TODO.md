@@ -16,8 +16,9 @@ nachziehen. `FOCUS.md` / `FREEDOM.md` aktiv; `FRAME.md` optional später.
 - [x] **Frontend-Serve Katalog-UI:** Coach-Dist (`dist-catalog` / `COACH_CATALOG_DIR`)
       statt Legacy-Fitness-SPA unter `/fitness/` — erledigt: Default Katalog-Dist;
       Legacy nur mit `COACH_FITNESS_FRONTEND_DIR` (2026-11-09 AL).
-- [ ] **Deploy-Formalisierung:** `~/.aos/fitness/kb`-Seed geschah manuell (rsync);
-      `deploy.sh`-Seed-Pfad auf coach-dev umstellen.
+- [x] **Deploy-Formalisierung:** `./deploy.sh seed-kb [--dry-run]` seedet
+      `~/.aos/fitness/kb` aus `fitness/catalog/kb` (`--ignore-existing`);
+      `paths.py`-Fallback → coach-dev. (2026-11-11 AL)
 - [x] **Systemd-Quelle:** `coach-sync.service` — Repo-Unit = Coach-SOT
       (`WorkingDirectory`/`KB`/`PYTHONPATH`/`ExecStart` → `coach-dev` + uv-Tool
       `fitness`; Install-Kommentar + `docs/COACH_APP.md` nachgezogen). (2026-11-10 AL)
