@@ -1,6 +1,8 @@
 node_modules/
 # pnpm install artifacts for local/CI standalone workspace setup
 pnpm-lock.yaml
+# Fuel-Node-Backend ist eigenständig (kein Workspace): Lockfile versioniert für Dependabot/reproduzierbare Installs
+!backend/fuel/pnpm-lock.yaml
 pnpm-workspace.yaml
 dist/
 dist-firebase/

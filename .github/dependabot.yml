@@ -28,6 +28,7 @@ updates:
   directories:
   - /
   - /functions
+  - /backend/fuel
   target-branch: dev
   cooldown: &id003
     default-days: 7
