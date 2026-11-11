@@ -62,7 +62,11 @@ async function click(text) {
 async function checkViewport(width, height, mobile) {
   await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile })
   await new Promise((resolve) => setTimeout(resolve, 150))
-  assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), true, `overflow at ${width}px`)
+  assert.equal(
+    await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'),
+    true,
+    `overflow at ${width}px`,
+  )
 }
 
 try {
@@ -71,8 +75,11 @@ try {
   await wait(has('Anna Beispiel'))
   await wait(has('3 Einträge vom 10. November 2026.'))
   assert.equal(await evaluate("document.querySelectorAll('[data-testid=feed-highlight-card]').length"), 3)
-  assert.equal(await evaluate("document.querySelector('[data-testid=feed-highlight-card]')?.getAttribute('aria-current')"), 'date')
-  assert.equal(await evaluate("document.activeElement?.dataset?.testid"), 'feed-highlight-card')
+  assert.equal(
+    await evaluate("document.querySelector('[data-testid=feed-highlight-card]')?.getAttribute('aria-current')"),
+    'date',
+  )
+  assert.equal(await evaluate('document.activeElement?.dataset?.testid'), 'feed-highlight-card')
   await click('Habits')
   await wait(has('Ein Eintrag vom 10. November 2026 sichtbar. 2 Einträge sind durch den Filter verdeckt.'))
   assert.equal(await evaluate("document.querySelectorAll('[data-testid=feed-highlight-card]').length"), 1)
