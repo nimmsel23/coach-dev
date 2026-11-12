@@ -64,3 +64,16 @@ scrolling reached the final control (540px content, 287px client height).
 The client/messages deep-link remained intact and no runtime exception occurred.
 No credentials were entered. This verifies the deployed layout in emulated
 Chromium sizes; real Safari, authentication and production acceptance remain open.
+
+## Follow-up: inspector save isolation published to preview
+
+Source `acb7d5d501cffec4d3850274f536d235533412c1` passed
+[Check 43204174931](https://github.com/nimmsel23/coach-dev/actions/runs/43204174931)
+and [Deploy 43204174734](https://github.com/nimmsel23/coach-dev/actions/runs/43204174734).
+The preview returned HTTP 200 with that exact commit in release.json
+(builtAt `2026-11-12T10:53:09.997Z`). The local browser fixture verified
+late read/write isolation and negative Notes/Lesson/Approve/Reject adapter
+results; the notes retry extension also verifies that an unsaved draft survives
+a failed save and is adopted only after successful retry. Functional tests
+remain 62/62 passing. This source identity check does not establish a real
+Coach account's write permissions or the shared write queue's server ack.
