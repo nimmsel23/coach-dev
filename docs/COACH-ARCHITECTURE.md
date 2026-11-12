@@ -152,3 +152,22 @@ separate; authenticated Firebase round-trips and real iPhone/iPad Safari
 acceptance are not established by this command. Production release identity
 is observable at `https://vos-coach.web.app/release.json`; a successful local
 command or dev push does not prove production publication.
+
+## Cache invalidation during pending reads (2026-11-12)
+
+`clientDataIdb.js` records an in-memory revision per queried key. Deleting one
+snapshot or a prefix advances the corresponding revisions before accessing
+IndexedDB. A loader started under an older revision must repeat its read;
+its outdated response cannot publish a `vos-coach-cache` event or restore the
+invalidated snapshot. This covers profile writes and Habit/Feed invalidation.
+The revision is checked again after persisting a snapshot to cover invalidation
+while the IndexedDB transaction was pending. Backend loader failures still
+propagate; they do not authorize publishing the obsolete response.
+
+`clientDataIdb.test.mjs` covers individual and prefix invalidation, unrelated
+keys and a failing retry without IndexedDB. It belongs to the required
+`test:coach:functional` command. The existing isolated browser fixture also
+verifies a cache hit followed by invalidation during a delayed refresh against
+real browser IndexedDB: only the fresh retry is stored and published. This
+protects responses after invalidation; it is not a general transaction system
+or proof of server acknowledgement for offline writes.

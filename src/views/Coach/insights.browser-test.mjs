@@ -120,6 +120,38 @@ try {
   await wait(has('Keine offenen Änderungen'));
   assert.equal(await evaluate(`!!document.querySelector('button[aria-label="Pull entfernen"]')`), true);
   for (const [width, height] of [[390, 844], [844, 390], [768, 1024], [1024, 768]]) await checkViewport(width, height, true);
+  assert.deepEqual(await evaluate(`(async () => {
+    const { snapSet, snapGet, snapDelete, cachedQuery } = await import('/src/lib/db/firestore/clientDataIdb.js');
+    const key = 'browser:test:invalidate';
+    await snapSet(key, { value: 'cached' });
+    let release, started;
+    const oldRead = new Promise((resolve) => { release = resolve; });
+    const readStarted = new Promise((resolve) => { started = resolve; });
+    const published = [];
+    let fresh;
+    const refreshed = new Promise((resolve) => { fresh = resolve; });
+    const listener = (event) => {
+      if (event.detail.key !== key) return;
+      published.push(event.detail.data.value);
+      if (event.detail.data.value === 'fresh') fresh();
+    };
+    window.addEventListener('vos-coach-cache', listener);
+    let reads = 0;
+    try {
+      const hit = await cachedQuery(key, () => {
+        if (++reads === 1) { started(); return oldRead; }
+        return { value: 'fresh' };
+      });
+      await readStarted;
+      await snapDelete(key);
+      release({ value: 'stale-network' });
+      await refreshed;
+      return { hit: hit.value, stored: (await snapGet(key)).value, published, reads };
+    } finally {
+      window.removeEventListener('vos-coach-cache', listener);
+      await snapDelete(key);
+    }
+  })()`), { hit: 'cached', stored: 'fresh', published: ['fresh'], reads: 2 });
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);

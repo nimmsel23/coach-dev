@@ -44,7 +44,7 @@
     "tooling:knip": "pnpm dlx knip@6.44.2 --no-progress",
     "tooling:check": "pnpm run tooling:biome && pnpm run tooling:knip",
     "test": "node --test scripts/smoke.test.mjs",
-    "test:coach:functional": "node --test src/lib/db/firestore/offline.test.mjs src/lib/db/insights.test.mjs src/views/Coach/*.test.mjs",
+    "test:coach:functional": "node --test src/lib/db/firestore/*.test.mjs src/lib/db/insights.test.mjs src/views/Coach/*.test.mjs",
     "tooling:biome:lint": "pnpm dlx @biomejs/biome@2.6.6 check --formatter-enabled=true --linter-enabled=true --no-errors-on-unmatched scripts"
   },
   "dependencies": {

@@ -8,6 +8,12 @@ const DB_VERSION = 1
 const STORE = 'snapshots'
 
 let dbPromise = null
+// Laufende Reads dürfen nach einem Write gelöschte Snapshots nicht wiederherstellen.
+const revisions = new Map()
+const revision = (key) => {
+  if (!revisions.has(key)) revisions.set(key, 0)
+  return revisions.get(key)
+}
 
 function openDb() {
   if (dbPromise) return dbPromise
@@ -69,6 +75,7 @@ export async function snapSet(key, data) {
 }
 
 export async function snapDelete(key) {
+  revisions.set(key, revision(key) + 1)
   try {
     await run('readwrite', (s) => s.delete(key))
   } catch {
@@ -77,6 +84,9 @@ export async function snapDelete(key) {
 }
 
 export async function snapDeletePrefix(prefix) {
+  for (const key of revisions.keys()) {
+    if (key.startsWith(prefix)) revisions.set(key, revision(key) + 1)
+  }
   try {
     const all = await run('readonly', (s) => s.getAll())
     const keys = (all || []).map((row) => row.key).filter((k) => typeof k === 'string' && k.startsWith(prefix))
@@ -101,19 +111,22 @@ export const CACHE_KEYS = {
  * Frische Daten → IDB + CustomEvent `vos-coach-cache` { key, data }.
  */
 export async function cachedQuery(key, loader) {
+  const startedAt = revision(key)
   const hit = await snapGet(key)
   const pending = Promise.resolve()
     .then(loader)
     .then(async (data) => {
+      if (revision(key) !== startedAt) return cachedQuery(key, loader)
       const plain = clone(data)
       await snapSet(key, plain)
+      if (revision(key) !== startedAt) return cachedQuery(key, loader)
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('vos-coach-cache', { detail: { key, data: plain } }))
       }
       return plain
     })
 
-  if (hit !== undefined) {
+  if (hit !== undefined && revision(key) === startedAt) {
     pending.catch(() => {})
     return clone(hit)
   }
