@@ -1,5 +1,7 @@
+import { useEffect, useMemo, useRef } from 'react'
 import { Brain, Check, Dumbbell } from 'lucide-react'
 import { formatRestDays, macroLines } from './clientConsoleStats.js'
+import { feedItemsOnDate, formatFeedDate, highlightStatus, normalizeFeedDate } from './feedHighlight.js'
 
 function exerciseSets(exercise) {
   if (Array.isArray(exercise?.setsArray) && exercise.setsArray.length) return exercise.setsArray
@@ -30,7 +32,43 @@ export default function ClientConsoleView({
   onCommentChange,
   onCommentSubmit,
   onRetry,
+  highlightDate = '',
+  onDismissHighlight,
 }) {
+  const workouts = model?.workouts || []
+  const highlightActive = Boolean(normalizeFeedDate(highlightDate))
+  const highlighted = useMemo(() => feedItemsOnDate(workouts, highlightDate), [workouts, highlightDate])
+  const highlightedIds = useMemo(() => new Set(highlighted.map((item) => item.id)), [highlighted])
+  const firstId = highlighted[0]?.id || ''
+  const anchorRef = useRef(null)
+  const scrolledFor = useRef('')
+
+  useEffect(() => {
+    if (loading || !firstId) return
+    const key = `${highlightDate}:${firstId}`
+    if (scrolledFor.current === key) return
+    scrolledFor.current = key
+    const node = anchorRef.current
+    if (!node) return
+    node.scrollIntoView({ block: 'center' })
+    node.focus({ preventScroll: true })
+  }, [loading, highlightDate, firstId])
+
+  const highlightBanner = highlightActive && !loading && !error ? (
+    <div
+      role="status"
+      data-testid="console-highlight-banner"
+      className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-fit-accent/40 bg-fit-accent/10 px-4 py-3 text-xs text-fit-ink"
+    >
+      <p>{highlightStatus({ dateLabel: formatFeedDate(highlightDate), matched: highlighted.length, hidden: 0 })}</p>
+      {onDismissHighlight && (
+        <button type="button" onClick={onDismissHighlight} className="rounded-full border border-fit-line/50 px-3 py-1.5 font-semibold text-fit-ink">
+          Markierung schließen
+        </button>
+      )}
+    </div>
+  ) : null
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20" role="status">
@@ -53,11 +91,11 @@ export default function ClientConsoleView({
     )
   }
 
-  const workouts = model?.workouts || []
   const lines = macroLines(model?.macros)
 
   return (
     <section className="space-y-4" aria-label="Klientenkonsole">
+      {highlightBanner}
       {commentError && <p role="alert" className="text-sm text-fit-red">{commentError}</p>}
       <header className="grid gap-3 sm:grid-cols-3">
         <article className="card p-4">
@@ -104,12 +142,24 @@ export default function ClientConsoleView({
       <div className="space-y-3">
         {workouts.map((log) => {
           const exercises = Array.isArray(log.exercises) ? log.exercises : []
+          const marked = highlightedIds.has(log.id)
           return (
-            <article key={log.id} className="card space-y-3 p-4 sm:p-5">
+            <article
+              key={log.id}
+              ref={log.id === firstId ? anchorRef : undefined}
+              tabIndex={log.id === firstId ? -1 : undefined}
+              data-testid={marked ? 'console-highlight-card' : undefined}
+              aria-current={marked ? 'date' : undefined}
+              className="card space-y-3 p-4 outline-none sm:p-5"
+              style={marked ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent)' } : undefined}
+            >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <h3 className="text-sm font-semibold text-fit-ink">{log.block || log.trainingsart || 'Training'}</h3>
-                  <p className="mt-1 text-xs text-fit-dim">{log.date || 'Ohne Datum'}</p>
+                  <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-fit-dim">
+                    <span>{log.date || 'Ohne Datum'}</span>
+                    {marked && <span className="font-medium text-fit-accent">Dieser Tag</span>}
+                  </p>
                 </div>
                 {log.restDays != null && (
                   <span className="vos-tag text-fit-accent">{formatRestDays(log.restDays)} Ruhe</span>

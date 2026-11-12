@@ -1,8 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Dumbbell, MessageSquare, Brain, Check } from 'lucide-react';
 import { getGlobalJournalFeed, getClientJournalFeed, getAllUserProfiles, saveCoachFeedback } from '@db';
+import { feedItemsOnDate, formatFeedDate, highlightStatus, normalizeFeedDate } from './feedHighlight.js';
 
-export default function ClientWorkoutsFeed({ clientUid, initialTypeFilter = 'all', onSelectClient }) {
+export default function ClientWorkoutsFeed({
+  clientUid,
+  initialTypeFilter = 'all',
+  onSelectClient,
+  highlightDate = '',
+  onDismissHighlight,
+}) {
   const [journals, setJournals] = useState([]);
   const [loadingJournals, setLoadingJournals] = useState(true);
   const [userProfiles, setUserProfiles] = useState({});
@@ -91,6 +98,55 @@ export default function ClientWorkoutsFeed({ clientUid, initialTypeFilter = 'all
     (effectiveFilterUserId === 'all' || j.userId === effectiveFilterUserId) &&
     (filterType === 'all' || j.type === filterType)
   );
+  const highlightActive = Boolean(normalizeFeedDate(highlightDate));
+  const highlighted = useMemo(() => {
+    const pool = clientUid ? journals.filter((item) => item.userId === clientUid) : journals;
+    return feedItemsOnDate(pool, highlightDate);
+  }, [journals, highlightDate, clientUid]);
+  const highlightedIds = useMemo(() => new Set(highlighted.map((item) => item.id)), [highlighted]);
+  const visibleHighlighted = filteredJournals.filter((item) => highlightedIds.has(item.id));
+  const hiddenCount = highlighted.length - visibleHighlighted.length;
+  const firstVisibleId = visibleHighlighted[0]?.id || '';
+  const anchorRef = useRef(null);
+  const scrolledFor = useRef('');
+
+  useEffect(() => {
+    if (loadingJournals || !firstVisibleId) return;
+    const key = `${highlightDate}:${firstVisibleId}`;
+    if (scrolledFor.current === key) return;
+    scrolledFor.current = key;
+    const node = anchorRef.current;
+    if (!node) return;
+    node.scrollIntoView({ block: 'center' });
+    node.focus({ preventScroll: true });
+  }, [loadingJournals, highlightDate, firstVisibleId]);
+
+  function resetFilters() {
+    setFilterUserId('all');
+    setFilterType('all');
+  }
+
+  const highlightBanner = highlightActive && !loadingJournals ? (
+    <div
+      role="status"
+      data-testid="feed-highlight-banner"
+      className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-fit-accent/40 bg-fit-accent/10 px-4 py-3 text-xs text-fit-ink"
+    >
+      <p>{highlightStatus({ dateLabel: formatFeedDate(highlightDate), matched: highlighted.length, hidden: hiddenCount })}</p>
+      <div className="flex flex-wrap gap-2">
+        {hiddenCount > 0 && (
+          <button type="button" onClick={resetFilters} className="rounded-full bg-fit-accent px-3 py-1.5 font-semibold text-fit-bg">
+            Filter zurücksetzen
+          </button>
+        )}
+        {onDismissHighlight && (
+          <button type="button" onClick={onDismissHighlight} className="rounded-full border border-fit-line/50 px-3 py-1.5 font-semibold text-fit-ink">
+            Markierung schließen
+          </button>
+        )}
+      </div>
+    </div>
+  ) : null;
 
   if (loadingJournals) return (
     <div className="flex items-center justify-center py-20">
@@ -99,17 +155,21 @@ export default function ClientWorkoutsFeed({ clientUid, initialTypeFilter = 'all
   );
 
   if (scopedJournals.length === 0) return (
-    <div className="card py-16 flex flex-col items-center justify-center text-center" style={{ opacity: 0.5 }}>
-      <Dumbbell size={40} className="mb-3 text-fit-dim" />
-      <h3 className="text-base font-semibold text-fit-ink">Keine Workouts</h3>
-      <p className="text-xs mt-1" style={{ color: 'var(--dim)' }}>
-        {clientUid ? 'Dieser Klient hat noch nichts geloggt' : 'Es wurden noch keine Workouts geloggt'}
-      </p>
+    <div className="space-y-4">
+      {highlightBanner}
+      <div className="card py-16 flex flex-col items-center justify-center text-center" style={{ opacity: 0.5 }}>
+        <Dumbbell size={40} className="mb-3 text-fit-dim" />
+        <h3 className="text-base font-semibold text-fit-ink">Keine Workouts</h3>
+        <p className="text-xs mt-1" style={{ color: 'var(--dim)' }}>
+          {clientUid ? 'Dieser Klient hat noch nichts geloggt' : 'Es wurden noch keine Workouts geloggt'}
+        </p>
+      </div>
     </div>
   );
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
+      {highlightBanner}
       {/* Filter-Leiste */}
       <div className="flex flex-wrap items-center gap-3">
         {!clientUid && (
@@ -163,9 +223,19 @@ export default function ClientWorkoutsFeed({ clientUid, initialTypeFilter = 'all
         const profile = userProfiles[item.userId] || {};
         const clientName = profile.displayName || profile.email || item.userId;
         const isWorkout = item.type === 'workout';
+        const isHighlighted = highlightedIds.has(item.id);
+        const isAnchor = item.id === firstVisibleId;
 
         return (
-          <div key={item.id} className="card p-5 hover:border-fit-accent/25 transition-all space-y-4">
+          <div
+            key={item.id}
+            ref={isAnchor ? anchorRef : undefined}
+            tabIndex={isAnchor ? -1 : undefined}
+            data-testid={isHighlighted ? 'feed-highlight-card' : undefined}
+            aria-current={isHighlighted ? 'date' : undefined}
+            className={`card space-y-4 p-5 outline-none transition-all ${isHighlighted ? '' : 'hover:border-fit-accent/25'}`}
+            style={isHighlighted ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent)' } : undefined}
+          >
             {/* Item Header */}
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
@@ -189,7 +259,10 @@ export default function ClientWorkoutsFeed({ clientUid, initialTypeFilter = 'all
                       {isWorkout ? (item.block || item.trainingsart || 'Workout') : 'Journal'}
                     </span>
                   </div>
-                  <span className="text-xs block mt-0.5" style={{ color: 'var(--dim)', opacity: 0.6 }}>{item.date}</span>
+                  <span className="mt-0.5 flex flex-wrap items-center gap-2 text-xs" style={{ color: 'var(--dim)', opacity: 0.6 }}>
+                    <span>{item.date}</span>
+                    {isHighlighted && <span className="font-medium text-fit-accent">Dieser Tag</span>}
+                  </span>
                 </div>
               </div>
             </div>

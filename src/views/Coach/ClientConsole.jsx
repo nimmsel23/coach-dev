@@ -3,7 +3,7 @@ import { getClientJournalFeed, getClientNutritionDays, saveCoachFeedback } from 
 import { buildClientConsole } from './clientConsoleStats.js'
 import ClientConsoleView from './ClientConsoleView.jsx'
 
-export default function ClientConsole({ clientUid }) {
+export default function ClientConsole({ clientUid, highlightDate = '', onDismissHighlight }) {
   const [entries, setEntries] = useState([])
   const [nutrition, setNutrition] = useState({ access: 'ok', days: [] })
   const [comments, setComments] = useState({})
@@ -62,6 +62,8 @@ export default function ClientConsole({ clientUid }) {
       onCommentChange={(id, text) => setComments((prev) => ({ ...prev, [id]: text }))}
       onCommentSubmit={submitComment}
       onRetry={() => setReloadKey((value) => value + 1)}
+      highlightDate={highlightDate}
+      onDismissHighlight={onDismissHighlight}
     />
   )
 }
