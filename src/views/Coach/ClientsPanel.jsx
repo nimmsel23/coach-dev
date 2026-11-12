@@ -285,8 +285,8 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                 />
               )}
               {detailTab === 'sixpack' && <ClientSixPack key={selectedUid} clientUid={selectedUid} />}
-              {detailTab === 'insights' && <ClientInsights clientUid={selectedUid} />}
-              {detailTab === 'habits' && <ClientHabitCycle clientUid={selectedUid} />}
+              {detailTab === 'insights' && <ClientInsights key={selectedUid} clientUid={selectedUid} />}
+              {detailTab === 'habits' && <ClientHabitCycle key={selectedUid} clientUid={selectedUid} />}
               {detailTab === 'templates' && (
                 <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />
               )}
