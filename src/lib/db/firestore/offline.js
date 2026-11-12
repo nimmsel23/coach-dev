@@ -11,6 +11,8 @@
  *  - Lesen: Server und Cache laufen parallel. Antwortet der Server innerhalb READ_TIMEOUT_MS, gilt er (frisch).
  *    Sonst kommt der Cache-Stand sofort zurück, die Server-Anfrage läuft im Hintergrund weiter und
  *    füllt den Cache. Nach einem Timeout liest die App SLOW_WINDOW_MS lang cache-zuerst (kein erneutes Warten).
+ *    Sofortige Verbindungsfehler (unavailable/deadline-exceeded) nutzen denselben Cache-Rückfall;
+ *    Berechtigungs- und Konfigurationsfehler bleiben sichtbar.
  *  - Schreiben: Der Schreibvorgang ist lokal sofort angenommen (Firestore-Queue in IndexedDB, sync später).
  *    Das Promise wird nach WRITE_ACCEPT_MS als "lokal angenommen" aufgelöst; schnelle Fehler
  *    (permission-denied, invalid-argument) kommen weiterhin als Exception an, späte werden nur geloggt.
@@ -46,7 +48,14 @@ export function createOfflineFirestore(fs, { readTimeoutMs = READ_TIMEOUT_MS, wr
       } catch { /* Cache-Miss → unten normal weiter */ }
     }
     const pending = track(server());
-    const first = await Promise.race([pending, later(readTimeoutMs)]);
+    let first;
+    try {
+      first = await Promise.race([pending, later(readTimeoutMs)]);
+    } catch (error) {
+      // Ein sofortiger Netzausfall braucht denselben Cache-Fallback wie ein Timeout.
+      if (!['unavailable', 'deadline-exceeded'].includes(error.code)) throw error;
+      first = TIMEOUT;
+    }
     if (first !== TIMEOUT) return first;
     slowUntil = Date.now() + slowWindowMs;
     try {

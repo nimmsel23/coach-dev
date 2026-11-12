@@ -64,3 +64,42 @@ test("addDoc: Referenz sofort (clientseitige ID), batch.commit nicht blockierend
   assert.deepEqual(written, [["neu", { x: 1 }]]);
   await o.writeBatch("db").commit();
 });
+
+for (const code of ['unavailable', 'deadline-exceeded']) {
+  for (const method of ['getDoc', 'getDocs']) {
+    test(`${method}: ${code} nutzt vorhandene Daten aus dem Cache`, async () => {
+      const error = Object.assign(new Error('offline'), { code });
+      const cached = snap(true, { v: 'cached' });
+      const o = createOfflineFirestore({
+        [method]: async () => { throw error; },
+        [`${method}FromCache`]: async () => cached,
+      }, T);
+      assert.equal(await o[method]('r'), cached);
+      assert.ok(o.isNetworkSlow());
+    });
+  }
+}
+
+for (const method of ['getDoc', 'getDocs']) {
+  test(`${method}: ohne Cache bleibt der ursprüngliche Verbindungsfehler erhalten`, async () => {
+    const error = Object.assign(new Error('offline'), { code: 'unavailable' });
+    for (const cache of [async () => snap(false), async () => { throw new Error('cache miss'); }]) {
+      const o = createOfflineFirestore({
+        [method]: async () => { throw error; },
+        [`${method}FromCache`]: cache,
+      }, T);
+      await assert.rejects(o[method]('r'), (actual) => actual === error);
+    }
+  });
+
+  for (const code of ['permission-denied', 'unauthenticated', 'failed-precondition']) {
+    test(`${method}: ${code} wird nicht durch Cache-Daten verdeckt`, async () => {
+      const error = Object.assign(new Error(code), { code });
+      const o = createOfflineFirestore({
+        [method]: async () => { throw error; },
+        [`${method}FromCache`]: async () => { assert.fail('Cache darf hier nicht gelesen werden'); },
+      }, T);
+      await assert.rejects(o[method]('r'), (actual) => actual === error);
+    });
+  }
+}
