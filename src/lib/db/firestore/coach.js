@@ -100,6 +100,21 @@ function nutritionFields(data = {}) {
   };
 }
 
+// Dieselbe Session, die der Coach schon liest. Ohne activity bleibt eine
+// reine Ausdauer-Einheit mit Block in der Kraftliste.
+function activityFields(data = {}) {
+  const activity = data.activity && typeof data.activity === "object" ? data.activity : null;
+  const addons = Array.isArray(data.activityAddons)
+    ? data.activityAddons
+    : Array.isArray(data._activity_addons)
+      ? data._activity_addons
+      : null;
+  return {
+    activity,
+    ...(addons ? { activityAddons: addons } : {}),
+  };
+}
+
 // Direkte Pro-Klient-Query (fitness/{uid}/sessions|journal|habitJournals),
 // keine collectionGroup über alle User. Wichtig: getGlobalJournalFeed()
 // deckelt global auf `limitCount` Items über ALLE Klienten hinweg, bevor
@@ -125,6 +140,7 @@ export async function getClientJournalFeed(clientUid, limitCount = 100) {
           trainingsart: data.trainingsart || null,
           sessionMode: data.sessionMode || null,
           exercises: data.exercises || [],
+          ...activityFields(data),
           effort: data.effort ?? null,
           mood: data.mood || "",
           notes: data.notes || "",
@@ -228,6 +244,7 @@ export async function getGlobalJournalFeed(limitCount = 50) {
           trainingsart: data.trainingsart || null,
           sessionMode: data.sessionMode || null,
           exercises: data.exercises || [],
+          ...activityFields(data),
           ...nutritionFields(data),
           effort: data.effort ?? null,
           mood: data.mood || "",

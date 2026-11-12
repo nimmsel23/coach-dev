@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getClientJournalFeed, getClientNutritionDays, saveCoachFeedback } from '@db'
-import { buildClientConsole } from './clientConsoleStats.js'
+import { buildClientConsole, scopeFeedToClient } from './clientConsoleStats.js'
 import ClientConsoleView from './ClientConsoleView.jsx'
 
 export default function ClientConsole({ clientUid, highlightDate = '', onDismissHighlight }) {
@@ -22,7 +22,7 @@ export default function ClientConsole({ clientUid, highlightDate = '', onDismiss
       getClientNutritionDays(clientUid),
     ]).then(([feed, days]) => {
       if (!alive) return
-      const list = Array.isArray(feed) ? feed : []
+      const list = scopeFeedToClient(feed, clientUid)
       setEntries(list)
       setNutrition(days || { access: 'error', days: [] })
       setComments(Object.fromEntries(list.filter((item) => item.coachFeedback).map((item) => [item.id, item.coachFeedback])))

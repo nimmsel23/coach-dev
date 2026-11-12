@@ -3,8 +3,9 @@
  *
  * Ruhephase: Tage zwischen zwei Kraft-Einheiten desselben Blocks
  * (dieselbe Rechnung wie `fitness-log clients`, „Nd rest“). Cardio und
- * Einheiten ohne Block zählen nicht mit. Satzpausen aus Planvorlagen
- * (rest_seconds) sind keine gemessene Ruhephase.
+ * Einheiten ohne Block zählen nicht mit. Aktivität ohne Übungen ist Cardio,
+ * auch wenn noch ein Block gesetzt ist (`fitness-log clients` / `classify`).
+ * Satzpausen aus Planvorlagen (rest_seconds) sind keine gemessene Ruhephase.
  *
  * Makros: Tageswerte aus den mitgegebenen Einträgen. Ein Nutrition-Tag
  * überschreibt denselben Kalendertag, damit Mahlzeiten nicht doppelt zählen.
@@ -32,21 +33,41 @@ function daysBetween(fromIso, toIso) {
   return Math.round(ms / 86400000)
 }
 
-function hasLoggedWork(log) {
+function hasExercises(log) {
   return (Array.isArray(log?.exercises) ? log.exercises : []).some((exercise) => {
     if (!exercise || typeof exercise !== 'object') return false
+    if (exercise.id || exercise.exercise_id || String(exercise.name || '').trim()) return true
     if (Array.isArray(exercise.setsArray) && exercise.setsArray.length) return true
     if (Array.isArray(exercise.sets) && exercise.sets.length) return true
     return Number(exercise.sets) > 0 || Number(exercise.reps) > 0 || Number(exercise.weight) > 0
   })
 }
 
+function hasActivity(entry) {
+  if (!entry || typeof entry !== 'object') return false
+  if (entry.activity && typeof entry.activity === 'object') return true
+  const addons = Array.isArray(entry.activityAddons)
+    ? entry.activityAddons
+    : Array.isArray(entry._activity_addons)
+      ? entry._activity_addons
+      : null
+  return Boolean(addons?.some((item) => item && typeof item === 'object'))
+}
+
 export function isWorkoutLog(entry) {
   if (!entry || typeof entry !== 'object') return false
   if (entry.type && entry.type !== 'workout' && entry.type !== 'session') return false
   if (entry.sessionMode === 'cardio') return false
-  if (entry.activity && !hasLoggedWork(entry) && !String(entry.block || '').trim()) return false
+  // Aktivität ohne Übungen ist Cardio, unabhängig vom Block.
+  if (hasActivity(entry) && !hasExercises(entry)) return false
   return Boolean(isoDate(entry) || entry.id)
+}
+
+/** Nur der gewählte Klient. Zeilen ohne passende userId fallen weg. */
+export function scopeFeedToClient(entries, clientUid) {
+  const uid = String(clientUid || '')
+  if (!uid) return []
+  return (Array.isArray(entries) ? entries : []).filter((item) => item && item.userId === uid)
 }
 
 function restKey(log) {
