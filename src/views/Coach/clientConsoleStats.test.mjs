@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { buildClientConsole, formatMacroValue, formatRestDays, macroLines } from './clientConsoleStats.js'
+import { buildClientConsole, formatMacroValue, formatRestDays, macroLines, scopeFeedToClient } from './clientConsoleStats.js'
 
 test('Ruhephasen sind der Mittelwert der Abstände im selben Block', () => {
   const model = buildClientConsole([
@@ -41,6 +41,41 @@ test('Cardio und Journal zählen nicht als Kraft-Log', () => {
   ])
   assert.deepEqual(model.workouts.map((log) => log.id), ['push'])
   assert.equal(model.averageRestDays, null)
+})
+
+test('Aktivität ohne Übungen ist Cardio, auch mit Block, und fehlt in der Ruhephase', () => {
+  const model = buildClientConsole([
+    { id: 'push-a', type: 'workout', date: '2026-11-01', block: 'Push', exercises: [{ name: 'Bankdrücken', sets: 3, reps: 8 }] },
+    { id: 'run', type: 'workout', date: '2026-11-04', block: 'Cardio', activity: { type: 'run', duration: 30 }, exercises: [] },
+    { id: 'row', type: 'workout', date: '2026-11-05', block: 'Push', sessionMode: 'strength', activity: { type: 'row' } },
+    { id: 'bike', type: 'workout', date: '2026-11-06', block: 'Cardio', activityAddons: [{ type: 'bike', duration: 20 }] },
+    { id: 'push-b', type: 'workout', date: '2026-11-08', block: 'Push', exercises: [{ name: 'Dips', setsArray: [{ reps: 8 }] }] },
+    { id: 'finisher', type: 'workout', date: '2026-11-10', block: 'Push', activity: { type: 'row' }, exercises: [{ name: 'Schulterdrücken', sets: 3, reps: 10 }] },
+  ])
+
+  assert.deepEqual(model.workouts.map((log) => log.id), ['finisher', 'push-b', 'push-a'])
+  assert.equal(model.restPhases, 2)
+  assert.equal(model.averageRestDays, 4.5)
+  assert.equal(model.workouts.find((log) => log.id === 'push-b').restDays, 7)
+  assert.equal(model.workouts.find((log) => log.id === 'finisher').restDays, 2)
+})
+
+test('der gewählte Klient sieht keine fremden Sessions, Ruhephasen oder Makros', () => {
+  const feed = [
+    { id: 'mine', userId: 'client-a', type: 'workout', date: '2026-11-02', block: 'Pull', exercises: [{ name: 'Rudern', sets: 3 }], kcal: 2100, protein: 150 },
+    { id: 'other', userId: 'client-b', type: 'workout', date: '2026-11-04', block: 'Pull', exercises: [{ name: 'Kreuzheben', sets: 5 }], kcal: 9000, protein: 10 },
+    { id: 'other-run', userId: 'client-b', type: 'workout', date: '2026-11-03', block: 'Cardio', activity: { type: 'run' } },
+    { id: 'untagged', type: 'workout', date: '2026-11-01', block: 'Pull', exercises: [{ name: 'Latzug', sets: 3 }] },
+  ]
+  const scoped = scopeFeedToClient(feed, 'client-a')
+  assert.deepEqual(scoped.map((item) => item.id), ['mine'])
+
+  const model = buildClientConsole(scoped)
+  assert.deepEqual(model.workouts.map((log) => log.id), ['mine'])
+  assert.equal(model.averageRestDays, null)
+  assert.equal(model.macros.kcal.average, 2100)
+  assert.equal(model.macros.protein.average, 150)
+  assert.equal(scopeFeedToClient(feed, '').length, 0)
 })
 
 test('Makros werden gemittelt, wenn sie vorhanden sind, und sonst weggelassen', () => {

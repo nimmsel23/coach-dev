@@ -119,15 +119,43 @@ def _coverage_hits(uid: str, days: int) -> dict[str, float]:
 
 
 # ── Coach Feed & Profiles ───────────────────────────────────────────────────
-@router.get("/fitness/coach/feed", response_model=CoachFeedResponse)
-def coach_feed(limit: int = 100):
+def _feed_uids(only_uid: str | None) -> list[str]:
+    """Ordner, die der Coach-Feed schon ohne uid liest.
+
+    `?uid=` schränkt auf genau einen dieser Ordner ein. Eine uid, die dort
+    nicht liegt, ergibt einen leeren Feed — keinen anderen Klienten und
+    keinen Pfad außerhalb von SESS_ROOT.
+    """
     if not SESS_ROOT.exists():
-        return {"ok": True, "feed": []}
-    
-    uids = [
+        return []
+    only_uid = _require_safe_uid(only_uid)
+    if only_uid:
+        if only_uid in ("default", "kb"):
+            return []
+        folder = SESS_ROOT / only_uid
+        return [only_uid] if folder.is_dir() else []
+    return [
         d.name for d in SESS_ROOT.iterdir()
         if d.is_dir() and d.name not in ("default", "kb")
     ]
+
+
+def _activity_fields(data: dict) -> dict:
+    activity = data.get("activity") if isinstance(data.get("activity"), dict) else None
+    addons = data.get("activityAddons")
+    if not isinstance(addons, list):
+        addons = data.get("_activity_addons") if isinstance(data.get("_activity_addons"), list) else None
+    fields: dict[str, Any] = {"activity": activity}
+    if isinstance(addons, list):
+        fields["activityAddons"] = addons
+    return fields
+
+
+@router.get("/fitness/coach/feed", response_model=CoachFeedResponse)
+def coach_feed(limit: int = 100, uid: str | None = None):
+    uids = _feed_uids(uid)
+    if not uids:
+        return {"ok": True, "feed": []}
     
     feed = []
     for uid in uids:
@@ -155,6 +183,7 @@ def coach_feed(limit: int = 100):
                 "trainingsart": data.get("trainingsart") or None,
                 "sessionMode": data.get("sessionMode") or None,
                 "exercises": data.get("exercises") or [],
+                **_activity_fields(data),
                 "effort": data.get("effort"),
                 "mood": data.get("mood") or "",
                 "notes": data.get("notes") or "",

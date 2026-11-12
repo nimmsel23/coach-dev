@@ -7,7 +7,9 @@ Admin-Ansicht für Coach-seitige Verwaltung — nicht in der Nav, erreichbar per
 
 Der Verlauf-Tab eines gewählten Klienten ist `ClientConsole.jsx` statt des
 eingebetteten Feeds. Die Übersicht ohne Auswahl bleibt `ClientWorkoutsFeed`.
-Die Konsole zeigt Logs, Ø Ruhephase und Ø Makros. Makros kommen nur aus den
+Die Konsole zeigt Logs, Ø Ruhephase und Ø Makros des gewählten Klienten.
+Fremde `userId`s fallen vorher weg. Aktivität ohne Übungen zählt als Cardio,
+auch mit Block, und geht nicht in die Ruhephase ein. Makros kommen nur aus den
 bereits gelesenen Einträgen oder aus `nutrition/{uid}/logs`, wenn die
 bestehenden Rules das für den Coach erlauben. `?date=` markiert die
 Kraft-Logs dieses Tages (`feedHighlight.js`).

@@ -52,10 +52,12 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
 - **`ClientConsole.jsx`** (Verlauf-Tab): Konsole für den gewählten Klienten.
   Liest dieselben freigegebenen Pfade wie der restliche Coach-Tab
   (`getClientJournalFeed` auf `fitness/{uid}/…`, plus `nutrition/{uid}/logs`
-  mit dem angemeldeten Konto). Zeigt die Kraft-Logs, die mittlere Ruhephase
-  (Tage zwischen Einheiten desselben Blocks) und die mittleren Makros, sobald
-  ein Tageswert in diesen Daten liegt. Fehlt die Nutrition-Freigabe, bleibt
-  die Makro-Kachel leer — ohne zweiten Zugriffsweg. Auswertung:
+  mit dem angemeldeten Konto) und behält nur Zeilen mit `userId` dieses
+  Klienten. Zeigt die Kraft-Logs, die mittlere Ruhephase (Tage zwischen
+  Einheiten desselben Blocks) und die mittleren Makros, sobald ein Tageswert
+  in diesen Daten liegt. Aktivität ohne Übungen ist Cardio und geht nicht in
+  die Ruhephase ein, auch mit Block. Fehlt die Nutrition-Freigabe, bleibt die
+  Makro-Kachel leer — ohne zweiten Zugriffsweg. Auswertung:
   `clientConsoleStats.js`.
 - **`ClientWorkoutsFeed.jsx`**: eigenständig nutzbar (Klienten-Dropdown +
   Typ-Filter, `getGlobalJournalFeed()`) **oder** eingebettet mit
@@ -87,9 +89,10 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   keine `collectionGroup`, kein globaler Cutoff. Grund: der globale Feed kann
   bei mehreren aktiven Usern (Coach nutzt die App auch selbst) die Einträge
   eines bestimmten Klienten komplett verdrängen, bevor ein clientseitiger
-  Filter sie sieht. Lokales Pendant: `local/coach.js::getClientJournalFeed()`
-  → `GET /fitness/coach/feed?uid=<x>` (`server.mjs`), liest nur den einen
-  `~/.aos/fitness/users/<uid>/`-Ordner statt aller.
+  Filter sie sieht.   Lokales Pendant: `local/coach.js::getClientJournalFeed()`
+  → `GET /fitness/coach/feed?uid=<x>` (`fitness/api/routers/coaching.py`),
+  liest nur den einen `~/.aos/fitness/users/<uid>/`-Ordner. Fehlt der Ordner
+  oder ist die uid ungültig, bleibt der Feed leer statt andere Klienten zu liefern.
 - **Feedback**: `saveCoachFeedback()` speichert Kommentare direkt in der entsprechenden Klienten-Dokument-Referenz.
 - **Katalog**: `searchExercises()`, `getAnatomy()`, `saveExercise()` arbeiten direkt mit `fitness/kb/exercises` und `fitness/kb/anatomy`.
 - **Plan-Zuweisung**: `assignPlanToClient(coachUid, clientUid, plan)` — Firestore schreibt per `setDoc` (merge) auf `fitness/{clientUid}/wf_workouts/{planId}` (neue ID via `doc(collection(...)).id` falls `plan.id` fehlt); Local-Build ruft `POST /fitness/coach/plans/:clientUid` (`server.mjs`) auf, das nach `~/.aos/fitness/users/<clientUid>/plans/<planId>.json` schreibt. Beide Backends teilen sich dieselbe Funktionssignatur (`src/lib/db/{firestore,local}/assignedPlans.js`). Klienten-seitiges Abarbeiten des zugewiesenen Plans läuft außerhalb dieses View-Ordners in `src/views/Plan/AssignedPlans.jsx` (Training-Tab, kein eigener Coach-Unterpunkt).
