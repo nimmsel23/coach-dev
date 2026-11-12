@@ -61,11 +61,18 @@ export function getAnatomy(id) {
   });
 }
 export const describeCoachError = (error) => error.message;
-export const approveInbox = () => { throw new Error('Unexpected write'); };
-export const deleteInbox = approveInbox;
+function inspectorWrite(kind, id, data) {
+  fixtureState.calls.push([kind, id, data]);
+  return new Promise((resolve, reject) => {
+    fixtureState.inspectorWrites ||= {};
+    fixtureState.inspectorWrites[kind] = {resolve, reject};
+  });
+}
+export const approveInbox = (id) => inspectorWrite('approve', id);
+export const deleteInbox = (id) => inspectorWrite('delete', id);
 export const downloadText = approveInbox;
 export const exportFitnessData = approveInbox;
 export const reenrichInbox = approveInbox;
-export const saveAnatomy = approveInbox;
-export const saveExercise = approveInbox;
+export const saveAnatomy = (id, data) => inspectorWrite('save-anatomy', id, data);
+export const saveExercise = (id, data) => inspectorWrite('save-exercise', id, data);
 export const editExerciseSources = approveInbox;

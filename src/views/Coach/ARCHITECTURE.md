@@ -310,3 +310,23 @@ Vorher konnten zwei weitere Shell-Requests ihre verspätete Antwort an eine
 inzwischen andere Auswahl hängen. Die Browser-Fixture `?inspector` prüft
 verzögerte Antworten A/B, genau einen Request pro Auswahl und Schließen vor
 Antwort C. Dabei werden ausschließlich Fixture-Daten verwendet.
+
+## Übungsinspektor: ausstehende Schreibaktionen (2026-11-12)
+
+Der äußere `ExerciseInsightModal` bindet eine Inspektor-Instanz an
+Benutzer, Inbox-Datei und Katalog-ID. Ein Wechsel oder Schließen entfernt die
+alte Instanz samt Formular- und Ladezuständen. Alle Rückmeldungen an die
+Shell-Auswahl werden funktional gegen das ursprüngliche Auswahlobjekt geprüft;
+eine alte Speicherantwort darf eine neuere Auswahl nicht ersetzen. Bereits
+abgeschickte Schreiboperationen werden dadurch nicht abgebrochen; ihre
+Inbox-Ereignisse betreffen weiterhin den ursprünglichen Eintrag.
+
+Notiz-, Lesson-, Freigabe- und Verwerfen-Aktionen verlangen `ok:true`, bevor
+sie Erfolg anzeigen oder den lokalen Datensatz als geändert darstellen.
+Die Browser-Fixture prüft zwei Inbox-Dateien mit derselben Katalog-ID,
+Speichern über einen Auswahlwechsel hinweg, Schließen vor Speicherantwort,
+negative Adapterantworten in allen vier Aktionen und einen erfolgreichen
+Lesson-Save. Die beiden Save-Buttons haben zugängliche Namen und mindestens
+44px große Touch-Flächen. Firebase-Serverbestätigung bleibt durch die gemeinsame
+Offline-Schreibqueue begrenzt; die Prüfung von `ok:true` ändert diesen Vertrag
+nicht.

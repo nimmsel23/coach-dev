@@ -245,6 +245,50 @@ try {
   await evaluate("window.insightsFixture.anatomyPending['exercise-c'].resolve({summary:'Lesson C'})");
   await new Promise(resolve=>setTimeout(resolve,100));
   assert.equal(await evaluate('window.inspectorExercise'),null);
+  // Saving A must not replace B, including the same catalog ID in another inbox.
+  const inspectorItem = (file) => ({id:'shared-exercise',name:`Inbox ${file}`,file_id:file,userId:'coach-fixture',notes:`Notes ${file}`,lesson:{summary:`Lesson ${file}`}});
+  await evaluate(`window.selectInspectorExercise(${JSON.stringify(inspectorItem('a'))})`);
+  await wait(has('Inbox a'));
+  await evaluate("[...document.querySelectorAll('aside button')].find(b=>b.textContent.trim()==='save').click()");
+  await wait("!!window.insightsFixture.inspectorWrites?.['save-exercise']");
+  await evaluate(`window.selectInspectorExercise(${JSON.stringify(inspectorItem('b'))})`);
+  await wait(has('Inbox b'));
+  assert.equal(await evaluate("[...document.querySelectorAll('textarea')].find(t=>t.placeholder.startsWith('Eigene Coach')).value"),'Notes b');
+  await evaluate("window.insightsFixture.inspectorWrites['save-exercise'].resolve({ok:true})");
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(await evaluate('window.inspectorExercise.file_id'),'b');
+  assert.equal(await evaluate(has('Exercise gespeichert')),false);
+  // Adapter failures remain errors and leave the selected record unchanged.
+  await evaluate("[...document.querySelectorAll('aside button')].find(b=>b.textContent.trim()==='save').click()");
+  await wait("window.insightsFixture.calls.filter(c=>c[0]==='save-exercise').length===2");
+  await evaluate("window.insightsFixture.inspectorWrites['save-exercise'].resolve({ok:false})");
+  await wait(has('Exercise Save fehlgeschlagen'));
+  await click('Freigeben');
+  await wait("!!window.insightsFixture.inspectorWrites.approve");
+  await evaluate("window.insightsFixture.inspectorWrites.approve.resolve({ok:false})");
+  await wait(has('Freigabe fehlgeschlagen'));
+  assert.equal(await evaluate('window.inspectorExercise.status'),undefined);
+  await click('Verwerfen');
+  await wait("!!window.insightsFixture.inspectorWrites.delete");
+  await evaluate("window.insightsFixture.inspectorWrites.delete.resolve({ok:false})");
+  await wait(has('Verwerfen fehlgeschlagen'));
+  assert.equal(await evaluate('window.inspectorExercise.status'),undefined);
+  await evaluate("document.querySelector('[aria-label=\"Coach Sheet speichern\"]').click()");
+  await wait("!!window.insightsFixture.inspectorWrites['save-anatomy']");
+  await evaluate("window.insightsFixture.inspectorWrites['save-anatomy'].resolve({ok:false})");
+  await wait(has('Coach Sheet Save fehlgeschlagen'));
+  assert.equal(await evaluate('window.inspectorExercise.lesson.summary'),'Lesson b');
+  await evaluate("document.querySelector('[aria-label=\"Coach Sheet speichern\"]').click()");
+  await wait("window.insightsFixture.calls.filter(c=>c[0]==='save-anatomy').length===2");
+  await evaluate("window.insightsFixture.inspectorWrites['save-anatomy'].resolve({ok:true,lesson:{summary:'Saved lesson B'}})");
+  await wait("window.inspectorExercise.lesson.summary==='Saved lesson B'");
+  await wait(has('Coach Sheet gespeichert'));
+  await evaluate("document.querySelector('[aria-label=\"Coach-Notizen speichern\"]').click()");
+  await wait("window.insightsFixture.calls.filter(c=>c[0]==='save-exercise').length===3");
+  await evaluate("window.selectInspectorExercise(null)");
+  await evaluate("window.insightsFixture.inspectorWrites['save-exercise'].resolve({ok:true})");
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(await evaluate('window.inspectorExercise'),null);
   const deepLink = '#/clients/client-a/trainingplan?plan=plan-a&date=2026-11-12';
   await send('Page.navigate', { url: `http://coach.localhost:15918/coach-shell.html${deepLink}` });
   await wait("!!document.querySelector('iframe')?.contentDocument?.querySelector('h1')");
@@ -264,5 +308,5 @@ try {
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);
-  console.log('PASS: inspector anatomy responses isolated on switch and close; habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
+  console.log('PASS: inspector read/write responses isolated on switch and close; failed notes/lesson/approve/reject results remain errors; successful lesson save; habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
 } finally { ws.close(); }

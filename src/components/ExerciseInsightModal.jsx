@@ -1,6 +1,6 @@
 import { sourceIds } from '../lib/db/shared/catalogSources.js'
 import SourceEditor from '../views/Inbox/SourceEditor.jsx'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import {
   CheckCircle2,
@@ -485,7 +485,23 @@ const VIEW_OPTIONS = [
   { id: 'raw', label: 'Rohdaten', icon: FileSearch },
 ]
 
-export default function ExerciseInsightModal({ exercise, onClose, onExerciseChange = null, muscleLanguage = 'de', taxonomy = null }) {
+export default function ExerciseInsightModal({ exercise, onExerciseChange, ...props }) {
+  const changeExercise = useCallback((value) => {
+    onExerciseChange?.((current) => {
+      if (current !== exercise) return current
+      return typeof value === 'function' ? value(current) : value
+    })
+  }, [exercise, onExerciseChange])
+  if (!exercise) return null
+  const key = JSON.stringify([
+    exercise.userId || exercise.inbox_entry?.userId || '',
+    exercise.file_id || exercise.inbox_entry?.file_id || '',
+    exercise.exercise_id || exercise.id || exercise.name || '',
+  ])
+  return <ExerciseInspector key={key} {...props} exercise={exercise} onExerciseChange={changeExercise} />
+}
+
+function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage = 'de', taxonomy = null }) {
   const [localExercise, setLocalExercise] = useState(exercise)
   const [lessonDraft, setLessonDraft] = useState(() => buildLessonDraft(exercise, exercise?.lesson))
   const [exerciseNotes, setExerciseNotes] = useState(exercise?.notes || exercise?.description || '')
@@ -593,7 +609,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
     try {
       const payload = lessonDraftToPayload(exerciseId, lessonDraft)
       const result = await saveAnatomy(exerciseId, payload)
-      const nextLesson = result?.lesson || payload
+      if (result?.ok !== true) throw new Error('Coach Sheet Save fehlgeschlagen')
+      const nextLesson = result.lesson || payload
       const next = { ...localExercise, lesson: nextLesson }
       setLocalExercise(next)
       onExerciseChange?.(next)
@@ -617,7 +634,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
         description: exerciseNotes,
         display_name: displayName,
       }
-      await saveExercise(exerciseId, payload)
+      const result = await saveExercise(exerciseId, payload)
+      if (result?.ok !== true) throw new Error('Exercise Save fehlgeschlagen')
       const next = { ...localExercise, ...payload }
       setLocalExercise(next)
       onExerciseChange?.(next)
@@ -646,7 +664,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
         inbox_status: 'approved',
         status: 'approved',
       }
-      await approveInbox(inboxFileId, inboxUserId)
+      const result = await approveInbox(inboxFileId, inboxUserId)
+      if (result?.ok !== true) throw new Error('Freigabe fehlgeschlagen')
       setLocalExercise(next)
       onExerciseChange?.(next)
       publishInboxUpdate('approved')
@@ -703,7 +722,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
     if (!inboxFileId || reviewAction) return
     setReviewAction('reject')
     try {
-      await deleteInbox(inboxFileId, inboxUserId)
+      const result = await deleteInbox(inboxFileId, inboxUserId)
+      if (result?.ok !== true) throw new Error('Verwerfen fehlgeschlagen')
       const next = {
         ...localExercise,
         inbox_status: 'rejected',
@@ -883,7 +903,7 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
                     title="Coach Notes"
                     eyebrow="Exercise Layer"
                     actions={(
-                      <button onClick={handleSaveNotes} disabled={savingNotes} className="rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider" style={{ background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
+                      <button aria-label="Coach-Notizen speichern" onClick={handleSaveNotes} disabled={savingNotes} className="min-h-11 min-w-11 rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider" style={{ background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
                         {savingNotes ? <span className="inline-flex items-center gap-2"><Loader2 size={12} className="animate-spin" /> save</span> : <span className="inline-flex items-center gap-2"><Save size={12} /> save</span>}
                       </button>
                     )}
@@ -926,7 +946,7 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
                   {activeView === 'coach' && (
                     <div className="space-y-5">
                       <div className="flex justify-end">
-                        <button onClick={handleSaveLesson} disabled={savingLesson || loadingLesson} className="rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider" style={{ background: 'rgba(94,234,212,0.14)', border: '1px solid rgba(94,234,212,0.28)', color: 'var(--accent)' }}>
+                        <button aria-label="Coach Sheet speichern" onClick={handleSaveLesson} disabled={savingLesson || loadingLesson} className="min-h-11 min-w-11 rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider" style={{ background: 'rgba(94,234,212,0.14)', border: '1px solid rgba(94,234,212,0.28)', color: 'var(--accent)' }}>
                           {savingLesson ? <span className="inline-flex items-center gap-2"><Loader2 size={12} className="animate-spin" /> save</span> : <span className="inline-flex items-center gap-2"><Save size={12} /> save</span>}
                         </button>
                       </div>
