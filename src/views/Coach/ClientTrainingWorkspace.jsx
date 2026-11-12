@@ -20,9 +20,10 @@ import {
 
 const field = 'w-full rounded-xl border border-fit-line bg-fit-bg px-3 py-2.5 text-sm text-fit-ink';
 
-export default function ClientTrainingWorkspace({ clientUid, initialPlanId, onClosePlan }) {
+export default function ClientTrainingWorkspace({ clientUid, initialPlanId, onClosePlan, initialScreen = 'client' }) {
   const coachUid = getUid();
-  const [screen, setScreen] = useState('client');
+  const [screen, setScreen] = useState(initialScreen === 'individual' ? 'individual' : 'client');
+
   const [programs, setPrograms] = useState([]);
   const [plans, setPlans] = useState([]);
   const [templates, setTemplates] = useState([]);
@@ -66,7 +67,7 @@ export default function ClientTrainingWorkspace({ clientUid, initialPlanId, onCl
 
   useEffect(() => {
     planRequest.current++;
-    setScreen('client');
+    setScreen(initialScreen === 'individual' ? 'individual' : 'client');
     setPlanView(null);
     setPlanVersions([]); setLatestPlan(null);
     setComposing(false);
@@ -76,7 +77,7 @@ export default function ClientTrainingWorkspace({ clientUid, initialPlanId, onCl
     setWorkouts([]);
     setNotice('');
     load();
-  }, [clientUid, load]);
+  }, [clientUid, load, initialScreen]);
 
   useEffect(() => { if (initialPlanId) openClientPlan(initialPlanId); }, [clientUid, initialPlanId]);
 

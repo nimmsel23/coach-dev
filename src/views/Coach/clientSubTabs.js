@@ -12,8 +12,9 @@ export const CLIENT_MORE_TABS = [
   { id: 'sixpack', label: '6Pack', icon: Flame },
   { id: 'habits', label: 'Habits', icon: RotateCw },
   { id: 'insights', label: 'KI-Insights', icon: Sparkles },
-  { id: 'plan', label: 'Rotation (alt)', icon: Layers },
+  { id: 'plan', label: 'Rotation', icon: Layers },
 ]
+
 
 export const CLIENT_ALL_TABS = [...CLIENT_PRIMARY_TABS, ...CLIENT_MORE_TABS]
 
