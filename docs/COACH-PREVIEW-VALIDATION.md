@@ -50,3 +50,17 @@ The same inspection found that the shared email dialog still claimed Fitness
 demo access and exceeded the visible iframe viewport in landscape: its bounds
 were top=-94.25, bottom=415.25 at viewport height=321. Contextual copy, scrolling
 and keyboard-focus corrections are tracked separately from the fixed cold start.
+
+## Follow-up: hosted mobile email dialog verified
+
+Preview release.json identified `174a6a78c8ecde24c1ddedd82c63a92989860b48`.
+[Check 43202986793](https://github.com/nimmsel23/coach-dev/actions/runs/43202986793)
+and [Deploy 43202986798](https://github.com/nimmsel23/coach-dev/actions/runs/43202986798)
+both completed successfully. Hosted Chromium inspection covered 390x844,
+844x390, 768x1024 and 1024x768. The Coach-specific email dialog remained within
+the embedded viewport without horizontal overflow; inputs computed to 16px.
+At 844x390, its top/bottom were 16/305 within the 321px iframe viewport and
+scrolling reached the final control (540px content, 287px client height).
+The client/messages deep-link remained intact and no runtime exception occurred.
+No credentials were entered. This verifies the deployed layout in emulated
+Chromium sizes; real Safari, authentication and production acceptance remain open.

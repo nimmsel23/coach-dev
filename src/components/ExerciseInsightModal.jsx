@@ -515,12 +515,8 @@ export default function ExerciseInsightModal({ exercise, onClose, onExerciseChan
     getAnatomy(id)
       .then((lesson) => {
         if (!active || !lesson) return
-        setLocalExercise((prev) => {
-          const base = prev && typeof prev === 'object' ? prev : exercise
-          const next = { ...base, lesson }
-          onExerciseChange?.(next)
-          return next
-        })
+        setLocalExercise((prev) => ({ ...prev, lesson }))
+        onExerciseChange?.((prev) => (prev === exercise ? { ...prev, lesson } : prev))
         setLessonDraft(buildLessonDraft(exercise, lesson))
       })
       .catch(() => {})

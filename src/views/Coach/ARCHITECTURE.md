@@ -297,3 +297,16 @@ Hosting-App vor dem Login leerlaufen ließ. Ein Actor-Wechsel räumt bestehende
 Listener und Zähler/Profile auf. Die isolierte Browser-Fixture `?auth` prüft
 Rendern bei werfendem `getUid`, null Reads ohne Actor, Listener nach Freigabe
 und Cleanup bei Abmeldung. Sie ersetzt nicht die erneute Hosting-Abnahme.
+
+## Übungsinspektor: ein Anatomie-Ladeweg (2026-11-12)
+
+`CoachShell` und der ältere `App`-Einstieg wählen die Übung und öffnen `ExerciseInsightModal`; sie laden keine
+zusätzliche Anatomie. Der Modal-Effekt besitzt den einzigen Ladeweg und
+verwirft Antworten nach Übungswechsel oder Schließen über sein Cleanup.
+Die funktionale Aktualisierung der Shell-Auswahl prüft zusätzlich die
+ursprüngliche Objektreferenz, damit auch eine unmittelbar vor der Antwort
+eingereihte Auswahländerung oder Schließung erhalten bleibt.
+Vorher konnten zwei weitere Shell-Requests ihre verspätete Antwort an eine
+inzwischen andere Auswahl hängen. Die Browser-Fixture `?inspector` prüft
+verzögerte Antworten A/B, genau einen Request pro Auswahl und Schließen vor
+Antwort C. Dabei werden ausschließlich Fixture-Daten verwendet.

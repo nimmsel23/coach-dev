@@ -8,7 +8,7 @@ import ErrorBoundary from '../components/common/ErrorBoundary.jsx'
 import { useUser } from '../contexts/UserContext.jsx'
 import { useSettingsStore } from '../store/index.js'
 import { useCoachAccess } from '../hooks/useCoachAccess.js'
-import { getAnatomy, watchCoachInbox } from '@db'
+import { watchCoachInbox } from '@db'
 import { getStaticMuscleTaxonomy } from '../lib/kb/muscles.js'
 import CoachSidebar from './CoachSidebar.jsx'
 import CoachTabBar from './CoachTabBar.jsx'
@@ -76,18 +76,11 @@ export default function CoachShell() {
     })
   }, [allowed])
 
-  async function inspectExercise(exercise) {
-    if (!exercise) return
-    setInspectorExercise(exercise)
-    const id = exercise.exercise_id || exercise.id
-    if (!id || exercise.lesson) return
-    try {
-      const lesson = await getAnatomy(id)
-      if (lesson) setInspectorExercise((prev) => (prev ? { ...prev, lesson } : prev))
-    } catch {}
-  }
+  const inspectExercise = useCallback((exercise) => {
+    if (exercise) setInspectorExercise(exercise)
+  }, [])
 
-  const selectInbox = useCallback(async (exercise) => {
+  const selectInbox = useCallback((exercise) => {
     navigateRoute({ sub: 'exercises', client: '', date: '' })
     if (!exercise) return
     const githubUrl = typeof exercise.html_url === 'string' && exercise.html_url.startsWith('https://')
@@ -97,14 +90,8 @@ export default function CoachShell() {
       window.open(githubUrl, '_blank', 'noopener')
       return
     }
-    setInspectorExercise(exercise)
-    const id = exercise.exercise_id || exercise.id
-    if (!id || exercise.lesson) return
-    try {
-      const lesson = await getAnatomy(id)
-      if (lesson) setInspectorExercise((prev) => (prev ? { ...prev, lesson } : prev))
-    } catch {}
-  }, [navigateRoute])
+    inspectExercise(exercise)
+  }, [navigateRoute, inspectExercise])
 
   async function handleAuthSubmit(event) {
     event.preventDefault()

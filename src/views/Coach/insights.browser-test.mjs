@@ -226,6 +226,25 @@ try {
   await send('Input.dispatchKeyEvent', { type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27 });
   await wait("!document.querySelector('[role=dialog]')");
   assert.equal(await evaluate('document.activeElement.textContent'),'Login öffnen');
+  await send('Page.navigate', {url:'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?inspector'});
+  await wait('!!window.selectInspectorExercise');
+  await evaluate("window.selectInspectorExercise({id:'exercise-a',name:'Exercise A'})");
+  await wait('!!window.insightsFixture.anatomyPending?.["exercise-a"]');
+  await evaluate("window.selectInspectorExercise({id:'exercise-b',name:'Exercise B'})");
+  await wait('!!window.insightsFixture.anatomyPending?.["exercise-b"]');
+  await evaluate("window.insightsFixture.anatomyPending['exercise-a'].resolve({summary:'Lesson A'})");
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(await evaluate('window.inspectorExercise.id'),'exercise-b');
+  assert.equal(await evaluate('!!window.inspectorExercise.lesson'),false);
+  await evaluate("window.insightsFixture.anatomyPending['exercise-b'].resolve({summary:'Lesson B'})");
+  await wait("window.inspectorExercise.lesson?.summary === 'Lesson B'");
+  assert.equal(await evaluate("window.insightsFixture.calls.filter(c=>c[0]==='anatomy').length"),2);
+  await evaluate("window.selectInspectorExercise({id:'exercise-c',name:'Exercise C'})");
+  await wait('!!window.insightsFixture.anatomyPending?.["exercise-c"]');
+  await evaluate("window.selectInspectorExercise(null)");
+  await evaluate("window.insightsFixture.anatomyPending['exercise-c'].resolve({summary:'Lesson C'})");
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(await evaluate('window.inspectorExercise'),null);
   const deepLink = '#/clients/client-a/trainingplan?plan=plan-a&date=2026-11-12';
   await send('Page.navigate', { url: `http://coach.localhost:15918/coach-shell.html${deepLink}` });
   await wait("!!document.querySelector('iframe')?.contentDocument?.querySelector('h1')");
@@ -245,5 +264,5 @@ try {
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);
-  console.log('PASS: habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
+  console.log('PASS: inspector anatomy responses isolated on switch and close; habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
 } finally { ws.close(); }

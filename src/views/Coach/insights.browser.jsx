@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import ExerciseInsightModal from '../../components/ExerciseInsightModal.jsx';
 import AuthGateModal from '../../components/AuthGateModal.jsx';
 import ClientInsights from './ClientInsights.jsx';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed.jsx';
@@ -17,6 +18,12 @@ function UnreadAuthFixture() {
     <button onClick={() => setActor(null)}>Abmelden</button>
   </div>;
 }
+function InspectorFixture() {
+  const [exercise, setExercise] = useState(null);
+  window.selectInspectorExercise = setExercise;
+  window.inspectorExercise = exercise;
+  return <ExerciseInsightModal exercise={exercise} onExerciseChange={setExercise} onClose={() => setExercise(null)} />;
+}
 function LoginFixture() {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
@@ -32,7 +39,7 @@ function Fixture() {
   return <main className="mx-auto max-w-3xl p-3">
     <button type="button" className="min-h-11" onClick={() => setUid('Klient B')}>Klient B wählen</button>
     <h1>{uid}</h1>
-    {new URLSearchParams(window.location.search).has('login') ? <LoginFixture /> : new URLSearchParams(window.location.search).has('auth') ? <UnreadAuthFixture /> : new URLSearchParams(window.location.search).has('feed') ? <ClientWorkoutsFeed /> : new URLSearchParams(window.location.search).has('habits') ? <ClientHabitCycle key={uid} clientUid={uid} /> : <ClientInsights key={uid} clientUid={uid} />}
+    {new URLSearchParams(window.location.search).has('inspector') ? <InspectorFixture /> : new URLSearchParams(window.location.search).has('login') ? <LoginFixture /> : new URLSearchParams(window.location.search).has('auth') ? <UnreadAuthFixture /> : new URLSearchParams(window.location.search).has('feed') ? <ClientWorkoutsFeed /> : new URLSearchParams(window.location.search).has('habits') ? <ClientHabitCycle key={uid} clientUid={uid} /> : <ClientInsights key={uid} clientUid={uid} />}
   </main>;
 }
 createRoot(document.getElementById('root')).render(<Fixture />);

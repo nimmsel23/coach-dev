@@ -12,7 +12,7 @@ const Anamnese = lazy(() => import('./views/Anamnese/index.jsx'))
 const Fokus = lazy(() => import('./views/Fokus/index.jsx'))
 const Inbox = lazy(() => import('./views/Inbox/index.js'))
 import ExerciseInsightModal from './components/ExerciseInsightModal.jsx'
-import { isLocalMode, getAnatomy, getAllMuscles } from '@db'
+import { isLocalMode, getAllMuscles } from '@db'
 import { getMessagingIfSupported } from '@cloud/firebase.js'
 
 import { getNavItems, VALID_TABS, IS_SOLO, SOLO_TAB } from './constants/NavigationItems.js'
@@ -524,16 +524,8 @@ export default function App() {
     navigate('session')
   }
 
-  async function inspectExercise(exercise) {
-    if (!exercise) return
-    setInspectorExercise(exercise)
-    const id = exercise.exercise_id || exercise.id
-    if (!id || exercise.lesson) return
-    try {
-      const lesson = await getAnatomy(id)
-      if (lesson)
-        setInspectorExercise(prev => prev ? { ...prev, lesson } : prev)
-    } catch {}
+  function inspectExercise(exercise) {
+    if (exercise) setInspectorExercise(exercise)
   }
 
   async function handleAuthSubmit(e) {

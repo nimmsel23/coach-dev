@@ -52,3 +52,20 @@ export function watchClientUnread(uid, callback) {
   callback(2);
   return () => fixtureState.calls.push(['stop-unread', uid]);
 }
+
+export function getAnatomy(id) {
+  fixtureState.calls.push(['anatomy', id]);
+  return new Promise((resolve, reject) => {
+    fixtureState.anatomyPending ||= {};
+    fixtureState.anatomyPending[id] = {resolve, reject};
+  });
+}
+export const describeCoachError = (error) => error.message;
+export const approveInbox = () => { throw new Error('Unexpected write'); };
+export const deleteInbox = approveInbox;
+export const downloadText = approveInbox;
+export const exportFitnessData = approveInbox;
+export const reenrichInbox = approveInbox;
+export const saveAnatomy = approveInbox;
+export const saveExercise = approveInbox;
+export const editExerciseSources = approveInbox;
