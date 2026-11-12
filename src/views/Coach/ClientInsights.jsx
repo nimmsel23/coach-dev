@@ -16,7 +16,8 @@ export default function ClientInsights({ clientUid }) {
   const [loadingDrafts, setLoadingDrafts] = useState(true);
   const [reviewing, setReviewing] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
+  const [draftError, setDraftError] = useState('');
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -25,8 +26,10 @@ export default function ClientInsights({ clientUid }) {
 
   const loadDrafts = useCallback(() => {
     setLoadingDrafts(true);
-    getCoachDrafts({ uid: clientUid })
+    setDraftError('');
+    return getCoachDrafts({ uid: clientUid })
       .then(setDrafts)
+      .catch((err) => setDraftError(err.message || 'Entwürfe konnten nicht geladen werden.'))
       .finally(() => setLoadingDrafts(false));
   }, [clientUid]);
 
@@ -36,14 +39,15 @@ export default function ClientInsights({ clientUid }) {
 
   async function runGapCheck() {
     setChecking(true);
-    setError(false);
+    setError('');
+    setGaps([]);
     try {
       const result = await checkClientGaps(clientUid);
       setGaps(result);
       loadDrafts();
       if (result.length === 0) triggerToast('Keine ungeklärte Trainingslücke gefunden ✓');
-    } catch {
-      setError(true);
+    } catch (err) {
+      setError(err.message || 'Trainingslücken konnten nicht geprüft werden.');
     } finally {
       setChecking(false);
     }
@@ -52,7 +56,8 @@ export default function ClientInsights({ clientUid }) {
   async function handleReview(draft, status) {
     setReviewing(draft.id);
     try {
-      await reviewCoachDraft(draft.id, draft.uid, status);
+      const result = await reviewCoachDraft(draft.id, draft.uid, status);
+      if (result?.ok !== true) throw new Error('Entscheidung wurde nicht bestätigt.');
       setDrafts((prev) => prev.map((d) => (d.id === draft.id ? { ...d, status } : d)));
       triggerToast(status === 'approved' ? 'Draft freigegeben ✓' : 'Draft verworfen');
     } catch {
@@ -94,8 +99,8 @@ export default function ClientInsights({ clientUid }) {
       </div>
 
       {error && (
-        <div className="card py-6 flex flex-col items-center justify-center text-center text-xs" style={{ color: 'var(--dim)' }}>
-          Fehler beim Gap-Check — Fitness-Backend evtl. nicht erreichbar
+        <div role="alert" className="card py-6 flex flex-col items-center justify-center text-center text-xs" style={{ color: 'var(--dim)' }}>
+          {error}
         </div>
       )}
 
@@ -121,7 +126,13 @@ export default function ClientInsights({ clientUid }) {
         <div className="text-xs font-medium pl-1 mb-2" style={{ color: 'var(--dim)', opacity: 0.7 }}>
           Offene Drafts ({loadingDrafts ? '…' : pendingDrafts.length})
         </div>
-        {!loadingDrafts && pendingDrafts.length === 0 && (
+        {draftError && (
+          <div role="alert" className="card p-4 text-sm text-fit-red">
+            <p>{draftError}</p>
+            <button type="button" onClick={loadDrafts} disabled={loadingDrafts} className="mt-2 min-h-11 underline disabled:opacity-50">Erneut versuchen</button>
+          </div>
+        )}
+        {!loadingDrafts && !draftError && pendingDrafts.length === 0 && (
           <div className="card py-8 flex flex-col items-center justify-center text-center" style={{ opacity: 0.5 }}>
             <p className="text-xs font-medium" style={{ color: 'var(--dim)' }}>Keine offenen Drafts</p>
           </div>

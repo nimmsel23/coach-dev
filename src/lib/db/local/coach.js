@@ -138,28 +138,24 @@ export async function updateClientWorkout(clientUid, workoutId, patch) {
 // hier als Einmal-Check statt Endlos-Loop. Gleiche Persistenz
 // (~/.aos/fitness/console/drafts/), `fitness-log drafts` sieht dieselben Einträge.
 export async function checkClientGaps(clientUid = null) {
-  try {
-    const qs = clientUid ? `?uid=${encodeURIComponent(clientUid)}` : '';
-    const data = await api.get(`/fitness/coach/gaps${qs}`);
-    return data?.gaps || [];
-  } catch {
-    return [];
-  }
+  const qs = clientUid ? `?uid=${encodeURIComponent(clientUid)}` : '';
+  const data = await api.get(`/fitness/coach/gaps${qs}`);
+  if (data?.ok !== true || !Array.isArray(data?.gaps)) throw new Error('Ungültige Antwort bei der Trainingslücken-Prüfung.');
+  return data.gaps;
 }
 
 export async function getCoachDrafts({ uid = null, status = null } = {}) {
-  try {
-    const params = new URLSearchParams();
-    if (uid) params.set('uid', uid);
-    if (status) params.set('status', status);
-    const qs = params.toString();
-    const data = await api.get(`/fitness/coach/drafts${qs ? `?${qs}` : ''}`);
-    return data?.drafts || [];
-  } catch {
-    return [];
-  }
+  const params = new URLSearchParams();
+  if (uid) params.set('uid', uid);
+  if (status) params.set('status', status);
+  const qs = params.toString();
+  const data = await api.get(`/fitness/coach/drafts${qs ? `?${qs}` : ''}`);
+  if (data?.ok !== true || !Array.isArray(data?.drafts)) throw new Error('Ungültige Antwort beim Laden der Entwürfe.');
+  return data.drafts;
 }
 
 export async function reviewCoachDraft(draftId, uid, status) {
-  return api.post(`/fitness/coach/drafts/${encodeURIComponent(draftId)}/review`, { uid, status });
+  const data = await api.post(`/fitness/coach/drafts/${encodeURIComponent(draftId)}/review`, { uid, status });
+  if (data?.ok !== true) throw new Error('Entscheidung wurde nicht bestätigt.');
+  return data;
 }

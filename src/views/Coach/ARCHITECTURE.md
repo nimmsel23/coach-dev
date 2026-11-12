@@ -192,3 +192,17 @@ ClientForge ist die gemeinsame Plan-Komposition: der lokale Einstieg liegt unter
 Trainingslücken, Zyklus-Konfiguration und laufende UI-Zustände neu initialisiert.
 Verspätete Antworten des vorherigen Klienten aktualisieren dadurch keine Ansicht
 des nächsten Klienten. Das entspricht den übrigen klientengebundenen Bereichen.
+
+## Insights: bestätigte Ergebnisse und Dienstfehler (2026-11-12)
+
+Die lokalen und Firestore-Datenadapter geben Fehler bei Trainingslücken,
+Entwürfen und Review-Entscheidungen an `ClientInsights` weiter. Nur gültige
+Arrays gelten als Abfrageergebnis; eine Review-Entscheidung benötigt `ok: true`
+vom Dienst. Ein fehlender lokaler Insights-Dienst auf Firebase Hosting wird
+explizit als nicht verfügbar angezeigt. Er wird nicht als erfolgreicher Check
+mit null Trainingslücken interpretiert.
+
+Die Ansicht zeigt Ladefehler bei Entwürfen mit Wiederholen-Aktion, unterdrückt
+in diesem Fall den Leerzustand und behält bei fehlgeschlagenen Reviews den
+bisherigen Status. Ein neuer Gap-Check entfernt vorherige Gap-Ergebnisse, damit
+ein fehlgeschlagener neuer Versuch keine alten Ergebnisse als aktuell ausgibt.

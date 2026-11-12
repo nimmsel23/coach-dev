@@ -443,54 +443,41 @@ export async function saveWorkoutFeedback(clientUid, workoutId, text) {
 }
 
 // ── KI-Insights: Trainingslücken-Check + persistierte Drafts ────────────────
-// Die eigentliche Logik (Gemini/Haiku-Check, Datei-Persistenz unter
-// ~/.aos/fitness/console/drafts/) läuft nur im Python-Backend, nicht
-// portierbar nach reinem Firestore — identischer Fall wie
-// getInboxMergeCandidates() oben. Im echten Coach-Build (import.meta.env.MODE
-// === "coach") ist LOCAL_FITNESS_API_BASE bewusst "" (kein Heimnetz-Zugriff
-// von remote) — liefert dann leer statt Fehler, Gap-Badges/Drafts bleiben im
-// Remote-Coach-Build schlicht aus, kein kritischer Pfad.
+// Insights benötigen den Coach-Dienst; fehlende Erreichbarkeit ist kein leeres Ergebnis.
 export async function checkClientGaps(clientUid = null) {
-  if (!LOCAL_FITNESS_API_BASE) return [];
-  try {
-    const qs = clientUid ? `?uid=${encodeURIComponent(clientUid)}` : '';
-    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/gaps${qs}`);
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data?.gaps || [];
-  } catch {
-    return [];
-  }
+  if (!LOCAL_FITNESS_API_BASE) throw new Error('KI-Insights sind hier nicht verfügbar. Bitte den lokalen Coach öffnen.');
+  const qs = clientUid ? `?uid=${encodeURIComponent(clientUid)}` : '';
+  const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/gaps${qs}`);
+  if (!res.ok) throw new Error('Trainingslücken konnten nicht geprüft werden.');
+  const data = await res.json();
+  if (data?.ok !== true || !Array.isArray(data?.gaps)) throw new Error('Ungültige Antwort bei der Trainingslücken-Prüfung.');
+  return data.gaps;
 }
 
 export async function getCoachDrafts({ uid = null, status = null } = {}) {
-  if (!LOCAL_FITNESS_API_BASE) return [];
-  try {
-    const params = new URLSearchParams();
-    if (uid) params.set('uid', uid);
-    if (status) params.set('status', status);
-    const qs = params.toString();
-    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/drafts${qs ? `?${qs}` : ''}`);
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data?.drafts || [];
-  } catch {
-    return [];
-  }
+  if (!LOCAL_FITNESS_API_BASE) throw new Error('KI-Insights sind hier nicht verfügbar. Bitte den lokalen Coach öffnen.');
+  const params = new URLSearchParams();
+  if (uid) params.set('uid', uid);
+  if (status) params.set('status', status);
+  const qs = params.toString();
+  const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/drafts${qs ? `?${qs}` : ''}`);
+  if (!res.ok) throw new Error('Entwürfe konnten nicht geladen werden.');
+  const data = await res.json();
+  if (data?.ok !== true || !Array.isArray(data?.drafts)) throw new Error('Ungültige Antwort beim Laden der Entwürfe.');
+  return data.drafts;
 }
 
 export async function reviewCoachDraft(draftId, uid, status) {
-  if (!LOCAL_FITNESS_API_BASE) return { ok: false };
-  try {
-    const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/drafts/${encodeURIComponent(draftId)}/review`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uid, status }),
-    });
-    return { ok: res.ok };
-  } catch {
-    return { ok: false };
-  }
+  if (!LOCAL_FITNESS_API_BASE) throw new Error('KI-Insights sind hier nicht verfügbar. Bitte den lokalen Coach öffnen.');
+  const res = await fetch(`${LOCAL_FITNESS_API_BASE}/coach/drafts/${encodeURIComponent(draftId)}/review`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ uid, status }),
+  });
+  if (!res.ok) throw new Error('Entscheidung konnte nicht gespeichert werden.');
+  const data = await res.json();
+  if (data?.ok !== true) throw new Error('Entscheidung wurde nicht bestätigt.');
+  return data;
 }
 
 // 6Pack-Spiegel (nur lesen): Programm-Fortschritt users/{uid}/meta/sixpack
