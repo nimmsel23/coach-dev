@@ -49,6 +49,14 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   sind, auch ohne zugewiesenen Cloud-Plan. Trainingsplan / Nachrichten /
   6Pack folgen in der Tableiste; ältere Plan-Ansichten bleiben per Deep-Link.
   Status-Toggle (`client`/`friend`/`hidden`) sitzt im Detail-Header.
+- **`ClientConsole.jsx`** (Verlauf-Tab): Konsole für den gewählten Klienten.
+  Liest dieselben freigegebenen Pfade wie der restliche Coach-Tab
+  (`getClientJournalFeed` auf `fitness/{uid}/…`, plus `nutrition/{uid}/logs`
+  mit dem angemeldeten Konto). Zeigt die Kraft-Logs, die mittlere Ruhephase
+  (Tage zwischen Einheiten desselben Blocks) und die mittleren Makros, sobald
+  ein Tageswert in diesen Daten liegt. Fehlt die Nutrition-Freigabe, bleibt
+  die Makro-Kachel leer — ohne zweiten Zugriffsweg. Auswertung:
+  `clientConsoleStats.js`.
 - **`ClientWorkoutsFeed.jsx`**: eigenständig nutzbar (Klienten-Dropdown +
   Typ-Filter, `getGlobalJournalFeed()`) **oder** eingebettet mit
   `clientUid`-Prop (kein eigener Dropdown, nutzt stattdessen
@@ -97,10 +105,10 @@ Sub-Tab, Klient und Detail-Tab stehen im URL-Hash (`coachRoute.js` rein, `useCoa
 
 Zurück-Taste und Reload bleiben an derselben Stelle. Die Push-Links der Cloud Function `onClientWorkout`
 (fitness-dev, `functions/clientWorkout.js`) zeigen auf dieses Format. Liegt `?date=` auf dem Verlauf,
-markiert `ClientWorkoutsFeed` jeden geladenen Eintrag dieses Kalendertags, scrollt den ersten
-sichtbaren in die Mitte und nennt die Anzahl. Ein Typ-Filter, der den Tag verdeckt, lässt sich
-zurücksetzen. Fehlt der Tag in den geladenen Einträgen (Feed-Limit), sagt die Leiste das, statt
-einen Treffer zu erfinden. „Markierung schließen“ nimmt `date` aus dem Hash.
+markiert die Klientenkonsole jede geladene Kraft-Einheit dieses Kalendertags, scrollt die erste
+in die Mitte und nennt die Anzahl. Fehlt der Tag in den geladenen Logs, sagt die Leiste das.
+„Markierung schließen“ nimmt `date` aus dem Hash. Dieselbe Zuordnung kann der Übersicht-Feed
+nutzen, wenn er `highlightDate` bekommt; ein Typ-Filter lässt sich dort zurücksetzen.
 Test: `node --test src/views/Coach/coachRoute.test.mjs src/views/Coach/feedHighlight.test.mjs`.
 
 

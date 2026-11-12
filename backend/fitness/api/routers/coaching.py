@@ -146,16 +146,26 @@ def coach_feed(limit: int = 100):
             date_str = f.name.replace(".json", "")
             day = date_str.split("__")[0]
             
+            meals = data.get("meals") if isinstance(data.get("meals"), list) else data.get("mahlzeiten")
             feed.append({
                 "id": f"{uid}__{date_str}",
                 "userId": uid,
                 "date": data.get("date") or day,
+                "block": data.get("block") or data.get("trainingsart") or None,
+                "trainingsart": data.get("trainingsart") or None,
+                "sessionMode": data.get("sessionMode") or None,
                 "exercises": data.get("exercises") or [],
                 "effort": data.get("effort"),
                 "mood": data.get("mood") or "",
                 "notes": data.get("notes") or "",
                 "coachFeedback": data.get("coachFeedback") or "",
-                "type": "workout"
+                "type": "workout",
+                "macros": data.get("macros") or data.get("makros") or None,
+                "meals": meals if isinstance(meals, list) else None,
+                "kcal": data.get("kcal", data.get("kalorien")),
+                "protein": data.get("protein"),
+                "carbs": data.get("carbs", data.get("kohlenhydrate")),
+                "fat": data.get("fat", data.get("fett")),
             })
             
     feed.sort(key=lambda x: x["date"], reverse=True)
