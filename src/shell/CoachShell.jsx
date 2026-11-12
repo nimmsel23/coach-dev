@@ -39,7 +39,6 @@ export default function CoachShell() {
   const [taxonomy] = useState(() => getStaticMuscleTaxonomy())
 
   const reportExerciseCount = useCallback((n) => setCounts((prev) => (prev.exercises === n ? prev : { ...prev, exercises: n })), [])
-  const reportUnreadCount = useCallback((n) => setCounts((prev) => (prev.clients === n ? prev : { ...prev, clients: n })), [])
   const goTo = (sub) => navigateRoute({ sub, client: '', date: '' })
   const selectClient = useCallback((uid) => {
     navigateRoute({ sub: 'clients', client: uid, detail: 'workouts', date: '', planId: '' })
@@ -113,6 +112,7 @@ export default function CoachShell() {
     )
   }
 
+  const navCounts = { ...counts, clients: unread.total }
   const current = findNavItem(route.sub)
   const subtitle = route.sub === 'exercises'
     ? (counts.exercises > 0 ? `${counts.exercises} offen` : 'Alles freigegeben')
@@ -129,7 +129,7 @@ export default function CoachShell() {
             <CoachSidebar
               active={route.sub}
               onNavigate={goTo}
-              counts={counts}
+              counts={navCounts}
               pinned={pinned}
               setPinned={setSidebarPinned}
               user={user}
@@ -153,13 +153,13 @@ export default function CoachShell() {
                 className="mx-auto max-w-[1600px] pb-[calc(var(--mobile-nav-height)+12px)] lg:pb-6"
                 style={{ paddingLeft: 'var(--safe-left)', paddingRight: 'var(--safe-right)' }}
               >
-                <Coach sub={route.sub} onInspectExercise={inspectExercise} onInboxCount={reportExerciseCount} onUnreadCount={reportUnreadCount} />
+                <Coach sub={route.sub} onInspectExercise={inspectExercise} onInboxCount={reportExerciseCount} unread={unread} />
               </main>
             </div>
             <CoachTabBar
               active={route.sub}
               onNavigate={goTo}
-              counts={counts}
+              counts={navCounts}
               expanded={navExpanded}
               onExpandedChange={setNavExpanded}
               user={user}

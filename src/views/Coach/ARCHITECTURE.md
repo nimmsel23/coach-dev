@@ -330,3 +330,20 @@ Lesson-Save. Die beiden Save-Buttons haben zugängliche Namen und mindestens
 44px große Touch-Flächen. Firebase-Serverbestätigung bleibt durch die gemeinsame
 Offline-Schreibqueue begrenzt; die Prüfung von `ok:true` ändert diesen Vertrag
 nicht.
+
+## Eine Quelle für ungelesene Nachrichten (2026-11-12)
+
+Nur `CoachShell` ruft `useCoachUnreadCounts` mit der freigegebenen Actor-ID
+auf. Die Shell leitet dasselbe Ergebnis an `Coach`, die Klientenliste und
+beide Navigationsvarianten weiter; die Navigationssumme wird direkt aus
+`unread.total` abgeleitet. `Coach` startet keinen zweiten Listener und meldet
+keine unabhängig geladene Summe zurück. Ein Aufruf ohne Actor würde seit der
+Auth-Absicherung absichtlich keine Daten lesen und die sichtbaren Zähler auf
+null setzen.
+
+`unreadWiring.test.mjs` rendert die echten Komponenten `CoachShell` und `Coach`
+mit isolierten Auth-/Daten- und Blattkomponenten. Die Regression prüft genau
+einen freigegebenen Hook-Aufruf, die klientenbezogenen Werte, beide
+Navigationssummen, die Fehleranzeige und das Auth-/Zugriffsgate. Der Test
+prüft die Verdrahtung; Firebase-Listener und mobile Darstellung benötigen
+ihre eigenen Integrationsprüfungen.

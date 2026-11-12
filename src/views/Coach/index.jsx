@@ -1,4 +1,3 @@
-import { useCoachUnreadCounts } from './useCoachUnreadCounts.js';
 import { useEffect } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { useInbox } from '../Inbox/useInbox';
@@ -9,9 +8,7 @@ import TractionPanel from './TractionPanel.jsx';
 
 // Inhalt der Coach-Konsole. Navigation (Sidebar/Tab-Bar) und Titel liegen in
 // der Shell (src/shell/CoachShell.jsx); `sub` kommt aus der Hash-Route.
-export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCount, onUnreadCount }) {
-  const unread = useCoachUnreadCounts();
-  useEffect(() => { onUnreadCount?.(unread.total); }, [unread.total, onUnreadCount]);
+export default function Coach({ sub = 'exercises', onInspectExercise, onInboxCount, unread }) {
   const { exercises, mergeCandidates, loading, actioning, toast, approve, remove, reenrich } = useInbox({ global: true });
 
   useEffect(() => {
