@@ -259,10 +259,17 @@ try {
   assert.equal(await evaluate('window.inspectorExercise.file_id'),'b');
   assert.equal(await evaluate(has('Exercise gespeichert')),false);
   // Adapter failures remain errors and leave the selected record unchanged.
+  await evaluate(`(() => {const t=[...document.querySelectorAll('textarea')].find(t=>t.placeholder.startsWith('Eigene Coach'));Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(t,'Edited notes B');t.dispatchEvent(new Event('input',{bubbles:true}));})()`);
   await evaluate("[...document.querySelectorAll('aside button')].find(b=>b.textContent.trim()==='save').click()");
   await wait("window.insightsFixture.calls.filter(c=>c[0]==='save-exercise').length===2");
   await evaluate("window.insightsFixture.inspectorWrites['save-exercise'].resolve({ok:false})");
   await wait(has('Exercise Save fehlgeschlagen'));
+  assert.equal(await evaluate("[...document.querySelectorAll('textarea')].find(t=>t.placeholder.startsWith('Eigene Coach')).value"),'Edited notes B');
+  assert.equal(await evaluate('window.inspectorExercise.notes'),'Notes b');
+  await evaluate("document.querySelector('[aria-label=\"Coach-Notizen speichern\"]').click()");
+  await wait("window.insightsFixture.calls.filter(c=>c[0]==='save-exercise').length===3");
+  await evaluate("window.insightsFixture.inspectorWrites['save-exercise'].resolve({ok:true})");
+  await wait("window.inspectorExercise.notes==='Edited notes B'");
   await click('Freigeben');
   await wait("!!window.insightsFixture.inspectorWrites.approve");
   await evaluate("window.insightsFixture.inspectorWrites.approve.resolve({ok:false})");
@@ -284,7 +291,7 @@ try {
   await wait("window.inspectorExercise.lesson.summary==='Saved lesson B'");
   await wait(has('Coach Sheet gespeichert'));
   await evaluate("document.querySelector('[aria-label=\"Coach-Notizen speichern\"]').click()");
-  await wait("window.insightsFixture.calls.filter(c=>c[0]==='save-exercise').length===3");
+  await wait("window.insightsFixture.calls.filter(c=>c[0]==='save-exercise').length===4");
   await evaluate("window.selectInspectorExercise(null)");
   await evaluate("window.insightsFixture.inspectorWrites['save-exercise'].resolve({ok:true})");
   await new Promise(resolve=>setTimeout(resolve,100));
