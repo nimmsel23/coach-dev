@@ -1,3 +1,13 @@
+## 2026-11-12 — Legacy-Rotation → gepinnte Plan-Verwaltung
+
+- `AssignPlan.jsx` (414 Zeilen, Speichern bei jeder Eingabe) ersetzt durch Einstieg
+  in `@plan/views/Plan/TrainingPlans` — dieselben Macrocycle-/Routinen-Daten, kein
+  paralleler Schreibpfad. Tab-Label „Rotation“.
+- `legacyPlanContract.test.mjs`: Source-Guard + Plan-Reader sieht Übungen,
+  Versionen und Completions.
+- Repo vorher 25 Commits hinter `origin/dev`; Stash-Konflikt `bin/coach-sync`
+  aufgelöst. Der ChatGPT-Commit `67e50b1f` existierte lokal nicht.
+
 ## 2026-11-12 — CI: Gemini + Merge-Agent wiederhergestellt
 
 - Restored: gemini-ci-repair.yml merge-agent.yml (Owner: volle Automatisierung)
