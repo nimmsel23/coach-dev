@@ -206,3 +206,23 @@ Die Ansicht zeigt Ladefehler bei Entwürfen mit Wiederholen-Aktion, unterdrückt
 in diesem Fall den Leerzustand und behält bei fehlgeschlagenen Reviews den
 bisherigen Status. Ein neuer Gap-Check entfernt vorherige Gap-Ergebnisse, damit
 ein fehlgeschlagener neuer Versuch keine alten Ergebnisse als aktuell ausgibt.
+
+## Reproduzierbare Insights-Browserprüfung (2026-11-12)
+
+Die isolierte Fixture `insights.browser.html` rendert `ClientInsights` mit den
+Produktionsstyles und einem kontrollierten Datenadapter ohne echte Konten.
+Start: `node src/views/Coach/insights.browser-server.mjs` (:15918).
+Ein separater Chromium-/Thorium-Testprozess mit eigenem temporären Profil muss
+CDP auf localhost:19238 bereitstellen. Anschließend:
+`node src/views/Coach/insights.browser-test.mjs`.
+Benötigt initialisierte `modules/plan` am gepinnten Commit für Tailwind sowie
+die gemeinsame Fitness-Quelle gemäß `scripts/shared-fitness-root.cjs`.
+
+Geprüft: Ladefehler statt Leerzustand, Retry, abgelehnte und bestätigte
+Freigabe, fehlerhafter Gap-Check, neuer Zustand bei geänderter Klienten-Key,
+44px-Trefferflächen und kein horizontaler Überlauf bei 390/844/768/1024px.
+Die Schlüsselbindung im Fixture entspricht `ClientsPanel`; der komplette
+ClientsPanel-Router wird hier nicht gerendert. Screenshot:
+`/tmp/coach-insights-browser.png` (temporär, nicht versioniert).
+Die Prüfung nutzt Chromium-Emulation; echte Safari-/Geräteabnahme und
+Authentifizierung gegen Firebase sind davon nicht abgedeckt.
