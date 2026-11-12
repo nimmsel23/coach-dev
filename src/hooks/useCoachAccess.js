@@ -5,14 +5,14 @@ import { db, isLocalMode } from '@db';
 const ALPHA_COACH_UID = '59ole36uNpNwml5H6VDYCXyCME92';
 
 export function useCoachAccess(user) {
-  const [allowed, setAllowed] = useState(false);
+  const [access, setAccess] = useState(null);
 
   useEffect(() => {
     let active = true;
-    setAllowed(false);
+    setAccess(null);
     if (!user) return () => { active = false; };
     if (isLocalMode()) {
-      setAllowed(true);
+      setAccess({ user, allowed: true });
       return () => { active = false; };
     }
 
@@ -23,9 +23,9 @@ export function useCoachAccess(user) {
       const role = await getDoc(doc(db, 'roles', user.uid));
       return role.exists() && role.data().role === 'coach';
     }
-    check().then((result) => { if (active) setAllowed(result); }).catch(() => {});
+    check().then((result) => { if (active) setAccess({ user, allowed: result }); }).catch(() => {});
     return () => { active = false; };
   }, [user]);
 
-  return allowed;
+  return Boolean(user && access?.user === user && access.allowed);
 }
