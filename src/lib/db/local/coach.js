@@ -69,12 +69,8 @@ export async function deleteClientRoutine(clientUid, routineId) {
 // `block`-Tags gezählt werden + Zielzahl der Zyklen. Genutzt von
 // ClientHabitCycle.jsx zusammen mit lib/habitProgress.js::computeSplitCycleProgress().
 export async function getClientHabitCycleConfig(clientUid) {
-  try {
-    const data = await api.get(`/fitness/coach/habit-cycle/${encodeURIComponent(clientUid)}`);
-    return data?.config || { tags: [], targetCycles: 0 };
-  } catch {
-    return { tags: [], targetCycles: 0 };
-  }
+  const data = await api.get(`/fitness/coach/habit-cycle/${encodeURIComponent(clientUid)}`);
+  return data?.config || { tags: [], targetCycles: 0 };
 }
 
 export async function saveClientHabitCycleConfig(clientUid, config) {

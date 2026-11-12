@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 const server = await createServer({
   configFile: false, plugins: [react()],
   optimizeDeps: { entries: ['src/views/Coach/insights.browser.html'] },
-  resolve: { alias: { '@db': resolve('src/views/Coach/insights.browser-db.js') } },
+  resolve: { alias: { '@db': resolve('src/views/Coach/insights.browser-db.js'), '@plan': resolve('modules/plan/src') } },
   server: { host: '127.0.0.1', port: 15918, strictPort: true },
 });
 await server.listen();

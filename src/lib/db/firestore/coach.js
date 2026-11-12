@@ -312,13 +312,8 @@ export async function getGlobalJournalFeed(limitCount = 50) {
 // local/coach.js, hier direkt als Doc statt Datei.
 export async function getClientHabitCycleConfig(clientUid) {
   return cachedQuery(CACHE_KEYS.habitCycle(clientUid), async () => {
-    try {
-      const snap = await getDoc(doc(db, "fitness", clientUid, "settings", "habitCycle"));
-      return snap.exists() ? { tags: [], targetCycles: 0, ...snap.data() } : { tags: [], targetCycles: 0 };
-    } catch (e) {
-      console.error("Error in getClientHabitCycleConfig:", e);
-      return { tags: [], targetCycles: 0 };
-    }
+    const snap = await getDoc(doc(db, "fitness", clientUid, "settings", "habitCycle"));
+    return snap.exists() ? { tags: [], targetCycles: 0, ...snap.data() } : { tags: [], targetCycles: 0 };
   });
 }
 

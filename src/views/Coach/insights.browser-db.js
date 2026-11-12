@@ -15,3 +15,17 @@ export async function reviewCoachDraft(id, uid, status) {
   if (rejectReview) { rejectReview = false; return { ok: false }; }
   return { ok: true };
 }
+let failHabitLoad = true;
+let failHabitSave = true;
+let habitConfig = { tags: ['Push'], targetCycles: 6 };
+export async function getClientJournalFeed() { return []; }
+export async function getClientHabitCycleConfig() {
+  if (failHabitLoad) { failHabitLoad = false; throw new Error('unavailable'); }
+  return structuredClone(habitConfig);
+}
+export async function saveClientHabitCycleConfig(uid, config) {
+  fixtureState.calls.push(['habit-save', uid, structuredClone(config)]);
+  if (failHabitSave) { failHabitSave = false; return { ok: false }; }
+  habitConfig = structuredClone(config);
+  return { ok: true };
+}

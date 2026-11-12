@@ -95,8 +95,33 @@ try {
   for (const [width, height] of [[390, 844], [844, 390], [768, 1024], [1024, 768]]) {
     await checkViewport(width, height, true);
   }
+  await send('Page.navigate', { url: 'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?habits' });
+  await wait(has('Zyklus konnte nicht geladen werden.'));
+  assert.equal(await evaluate(has('Zyklus-Tags')), false);
+  await click('Erneut versuchen');
+  await wait(has('Zyklus-Tags'));
+  await evaluate(`(() => {
+    const input = document.querySelector('input[aria-label="Neuer Zyklus-Tag"]');
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, 'Pull');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  })()`);
+  await evaluate(`document.querySelector('button[aria-label="Tag hinzufügen"]').click()`);
+  await wait(has('Ungespeicherte Änderungen'));
+  assert.equal(await evaluate(`window.insightsFixture.calls.filter((c) => c[0] === 'habit-save').length`), 0);
+  await click('Änderungen speichern');
+  await wait(has('Änderungen konnten nicht gespeichert werden.'));
+  assert.equal(await evaluate(has('Ungespeicherte Änderungen')), true);
+  await click('Änderungen speichern');
+  await wait(has('Keine offenen Änderungen'));
+  assert.equal(await evaluate(`window.insightsFixture.calls.filter((c) => c[0] === 'habit-save').length`), 2);
+  await evaluate(`document.querySelector('button[aria-label="Pull entfernen"]').click()`);
+  await wait(has('Ungespeicherte Änderungen'));
+  await click('Verwerfen');
+  await wait(has('Keine offenen Änderungen'));
+  assert.equal(await evaluate(`!!document.querySelector('button[aria-label="Pull entfernen"]')`), true);
+  for (const [width, height] of [[390, 844], [844, 390], [768, 1024], [1024, 768]]) await checkViewport(width, height, true);
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);
-  console.log('PASS: retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
+  console.log('PASS: habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
 } finally { ws.close(); }

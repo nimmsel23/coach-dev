@@ -226,3 +226,25 @@ ClientsPanel-Router wird hier nicht gerendert. Screenshot:
 `/tmp/coach-insights-browser.png` (temporär, nicht versioniert).
 Die Prüfung nutzt Chromium-Emulation; echte Safari-/Geräteabnahme und
 Authentifizierung gegen Firebase sind davon nicht abgedeckt.
+
+## Habit-Zyklus: expliziter Konfigurationsentwurf (2026-11-12)
+
+`ClientHabitCycle` hält bearbeitete und zuletzt angenommene Konfiguration
+getrennt. Tags und Zyklusziel ändern zunächst den sichtbaren Entwurf;
+„Änderungen speichern“ führt einen Schreibvorgang aus. Währenddessen sind
+Eingaben gesperrt und ein Ref verhindert doppelte Übermittlung. Nur `ok: true`
+übernimmt den Entwurf als neuen Ausgangsstand. Fehler lassen Änderungen zur
+Korrektur/erneuten Übermittlung stehen; „Verwerfen“ stellt den Ausgangsstand
+wieder her. Ganze, nicht negative Zyklusziele werden vor Übermittlung geprüft.
+Die Fortschrittsanzeige verwendet den sichtbaren Entwurf als Vorschau.
+
+Fehlgeschlagene Konfigurationsabfragen werden von beiden Datenadaptern
+weitergegeben statt als leere Konfiguration zurückgegeben. Die Ansicht bietet
+in diesem Fall Wiederholen statt eines bearbeitbaren leeren Formulars.
+Firestore verwendet weiterhin die gemeinsame Offline-Schreibqueue; deren
+lokale Annahme ist keine Bestätigung der späteren Serversynchronisierung.
+
+Die Browser-Fixture unterstützt `?habits` und prüft zusätzlich Lade-Retry,
+explizite Speicherung, abgelehnte/erfolgreiche Speicherung und Verwerfen.
+Der gemeinsame Browser-Test durchläuft Insights und Habit-Zyklus nacheinander
+mit kontrollierten Adaptern ohne reale Klientendaten.
