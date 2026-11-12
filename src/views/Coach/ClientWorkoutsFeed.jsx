@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Dumbbell, MessageSquare, Brain, Check } from 'lucide-react';
 import { getGlobalJournalFeed, getClientJournalFeed, getAllUserProfiles, saveCoachFeedback } from '@db';
-import { feedItemsOnDate, formatFeedDate, highlightStatus, normalizeFeedDate } from './feedHighlight.js';
+import { feedEntryKey, feedItemsOnDate, formatFeedDate, highlightStatus, normalizeFeedDate } from './feedHighlight.js';
 
 export default function ClientWorkoutsFeed({
   clientUid,
@@ -13,7 +13,8 @@ export default function ClientWorkoutsFeed({
   const [journals, setJournals] = useState([]);
   const [loadingJournals, setLoadingJournals] = useState(true);
   const [userProfiles, setUserProfiles] = useState({});
-  const [submittingComment, setSubmittingComment] = useState(null);
+  const [submittingComments, setSubmittingComments] = useState(() => new Set());
+  const pendingComments = useRef(new Set());
   const [commentsText, setCommentsText] = useState({});
   const [toastMessage, setToastMessage] = useState('');
   const [filterUserId, setFilterUserId] = useState('all');
@@ -34,7 +35,7 @@ export default function ClientWorkoutsFeed({
       setUserProfiles(profiles);
       const initialTexts = {};
       feed.forEach((j) => {
-        if (j.coachFeedback) initialTexts[j.id] = j.coachFeedback;
+        if (j.coachFeedback) initialTexts[feedEntryKey(j)] = j.coachFeedback;
       });
       setCommentsText((prev) => ({ ...initialTexts, ...prev }));
       setLoadingJournals(false);
@@ -69,19 +70,24 @@ export default function ClientWorkoutsFeed({
   }, [clientUid]);
 
   async function handleCommentSubmit(item) {
-    const text = commentsText[item.id] || '';
+    const key = feedEntryKey(item);
+    if (pendingComments.current.has(key)) return;
+    const text = commentsText[key] || '';
     if (!text.trim()) return;
 
-    setSubmittingComment(item.id);
+    pendingComments.current.add(key);
+    setSubmittingComments((prev) => new Set(prev).add(key));
     try {
-      await saveCoachFeedback(item.userId, item.id, item.type, text, item.habitId || null, item.date || null);
-      setJournals(prev => prev.map(j => j.id === item.id ? { ...j, coachFeedback: text } : j));
+      const saved = await saveCoachFeedback(item.userId, item.id, item.type, text, item.habitId || null, item.date || null);
+      if (saved?.ok === false) throw new Error('Kommentar konnte nicht gespeichert werden.');
+      setJournals(prev => prev.map(j => feedEntryKey(j) === key ? { ...j, coachFeedback: text } : j));
       triggerToast('Kommentar gespeichert ✓');
     } catch (e) {
       console.error(e);
       triggerToast('Fehler beim Speichern des Kommentars');
     } finally {
-      setSubmittingComment(null);
+      pendingComments.current.delete(key);
+      setSubmittingComments((prev) => { const next = new Set(prev); next.delete(key); return next; });
     }
   }
 
@@ -103,10 +109,10 @@ export default function ClientWorkoutsFeed({
     const pool = clientUid ? journals.filter((item) => item.userId === clientUid) : journals;
     return feedItemsOnDate(pool, highlightDate);
   }, [journals, highlightDate, clientUid]);
-  const highlightedIds = useMemo(() => new Set(highlighted.map((item) => item.id)), [highlighted]);
-  const visibleHighlighted = filteredJournals.filter((item) => highlightedIds.has(item.id));
+  const highlightedIds = useMemo(() => new Set(highlighted.map(feedEntryKey)), [highlighted]);
+  const visibleHighlighted = filteredJournals.filter((item) => highlightedIds.has(feedEntryKey(item)));
   const hiddenCount = highlighted.length - visibleHighlighted.length;
-  const firstVisibleId = visibleHighlighted[0]?.id || '';
+  const firstVisibleId = visibleHighlighted[0] ? feedEntryKey(visibleHighlighted[0]) : '';
   const anchorRef = useRef(null);
   const scrolledFor = useRef('');
 
@@ -223,12 +229,14 @@ export default function ClientWorkoutsFeed({
         const profile = userProfiles[item.userId] || {};
         const clientName = profile.displayName || profile.email || item.userId;
         const isWorkout = item.type === 'workout';
-        const isHighlighted = highlightedIds.has(item.id);
-        const isAnchor = item.id === firstVisibleId;
+        const isHighlighted = highlightedIds.has(feedEntryKey(item));
+        const key = feedEntryKey(item);
+        const isAnchor = key === firstVisibleId;
 
         return (
           <div
-            key={item.id}
+            key={key}
+            data-entry-key={key}
             ref={isAnchor ? anchorRef : undefined}
             tabIndex={isAnchor ? -1 : undefined}
             data-testid={isHighlighted ? 'feed-highlight-card' : undefined}
@@ -353,8 +361,9 @@ export default function ClientWorkoutsFeed({
               </div>
 
               <textarea
-                value={commentsText[item.id] || ''}
-                onChange={(e) => setCommentsText(prev => ({ ...prev, [item.id]: e.target.value }))}
+                aria-label={`Feedback für ${clientName}, ${isWorkout ? 'Workout' : 'Journaleintrag'}, ${formatFeedDate(item.date)}`}
+                value={commentsText[key] || ''}
+                onChange={(e) => setCommentsText(prev => ({ ...prev, [key]: e.target.value }))}
                 placeholder="Schreibe Feedback für dieses Workout..."
                 className="w-full bg-fit-bg2 border border-fit-line/60 focus:border-fit-accent/50 focus:ring-1 focus:ring-fit-accent/30 rounded-xl p-3 text-xs text-fit-ink placeholder:opacity-40 outline-none transition-all resize-none h-20 font-medium"
               />
@@ -362,10 +371,10 @@ export default function ClientWorkoutsFeed({
               <div className="flex justify-end">
                 <button
                   onClick={() => handleCommentSubmit(item)}
-                  disabled={submittingComment === item.id}
-                  className="flex items-center gap-2 px-4 py-2 bg-fit-accent text-fit-bg rounded-full font-semibold text-xs transition-all disabled:opacity-50 hover:opacity-90"
+                  disabled={submittingComments.has(key)}
+                  className="flex min-h-11 items-center gap-2 px-4 py-2 bg-fit-accent text-fit-bg rounded-full font-semibold text-xs transition-all disabled:opacity-50 hover:opacity-90"
                 >
-                  {submittingComment === item.id ? 'Warte…' : (
+                  {submittingComments.has(key) ? 'Warte…' : (
                     <>
                       <Check size={13} /> Feedback senden
                     </>

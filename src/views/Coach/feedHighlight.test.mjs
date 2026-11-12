@@ -44,3 +44,14 @@ test('highlightStatus unterscheidet fehlend, sichtbar und verdeckt', () => {
     '2 Einträge vom 10. November 2026 sichtbar. Ein Eintrag ist durch den Filter verdeckt.',
   )
 })
+
+test('feed identity separates clients and entry collections with identical document IDs', async () => {
+  const { feedEntryKey } = await import('./feedHighlight.js');
+  const entries = [
+    { userId: 'a', type: 'workout', id: '2026-11-12' },
+    { userId: 'b', type: 'workout', id: '2026-11-12' },
+    { userId: 'a', type: 'journal', id: '2026-11-12' },
+  ];
+  assert.equal(new Set(entries.map(feedEntryKey)).size, 3);
+  assert.equal(feedEntryKey(entries[0]), feedEntryKey({ ...entries[0], coachFeedback: 'Updated' }));
+});

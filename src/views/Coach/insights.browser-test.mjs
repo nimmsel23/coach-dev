@@ -152,8 +152,31 @@ try {
       await snapDelete(key);
     }
   })()`), { hit: 'cached', stored: 'fresh', published: ['fresh'], reads: 2 });
+  await send('Page.navigate', { url: 'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?feed' });
+  await wait("document.querySelectorAll('textarea').length === 3");
+  assert.deepEqual(await evaluate("[...document.querySelectorAll('textarea')].map((n) => n.value)"), ['Feedback A', 'Feedback B', 'Journal A']);
+  await evaluate(`(() => {
+    const input = document.querySelector('textarea');
+    Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set.call(input, 'Neuer Text A');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  })()`);
+  await wait("document.querySelector('textarea').value === 'Neuer Text A'");
+  assert.deepEqual(await evaluate("[...document.querySelectorAll('textarea')].map((n) => n.value)"), ['Neuer Text A', 'Feedback B', 'Journal A']);
+  await evaluate(`document.querySelectorAll('[data-entry-key]')[0].querySelector('button:last-child').click()`);
+  await evaluate(`document.querySelectorAll('[data-entry-key]')[1].querySelector('button:last-child').click()`);
+  await wait("document.querySelectorAll('[data-entry-key] button:disabled').length === 2");
+  assert.deepEqual(await evaluate("window.insightsFixture.calls.filter((c) => c[0] === 'feedback')"), [
+    ['feedback', 'a', 'same-day', 'workout', 'Neuer Text A'],
+    ['feedback', 'b', 'same-day', 'workout', 'Feedback B'],
+  ]);
+  await evaluate("window.insightsFixture.feedbackPending.a({ok:true})");
+  await wait("document.querySelectorAll('[data-entry-key] button:disabled').length === 1");
+  assert.equal(await evaluate("document.querySelectorAll('[data-entry-key]')[1].querySelector('button:last-child').disabled"), true);
+  await evaluate("window.insightsFixture.feedbackPending.b({ok:false})");
+  await wait(has('Fehler beim Speichern des Kommentars'));
+  for (const [width, height] of [[390, 844], [844, 390], [768, 1024], [1024, 768]]) await checkViewport(width, height, true);
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);
-  console.log('PASS: habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
+  console.log('PASS: duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
 } finally { ws.close(); }

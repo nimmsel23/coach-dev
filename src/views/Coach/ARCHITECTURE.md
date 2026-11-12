@@ -248,3 +248,18 @@ Die Browser-Fixture unterstützt `?habits` und prüft zusätzlich Lade-Retry,
 explizite Speicherung, abgelehnte/erfolgreiche Speicherung und Verwerfen.
 Der gemeinsame Browser-Test durchläuft Insights und Habit-Zyklus nacheinander
 mit kontrollierten Adaptern ohne reale Klientendaten.
+
+## Aktivitätsfeed: Feedback-Identität (2026-11-12)
+
+`feedEntryKey` in `feedHighlight.js` bildet die Identität als JSON-Tupel aus
+`userId`, `type` und `id`. Dokument-IDs allein sind in einem globalen Feed
+nicht eindeutig. `ClientWorkoutsFeed` verwendet den Schlüssel für React-Karten,
+Kommentarentwürfe, laufende Speicherungen und Datumsmarkierungen. Der an den
+Datenadapter übergebene Dokument-Identifier bleibt unverändert.
+
+Speicherungen sind pro Eintrag gesperrt (Ref plus sichtbares Set); parallele
+Speicherungen anderer Einträge bleiben unabhängig. Nur der passende Eintrag
+bekommt nach Erfolg das Feedback. `{ok:false}` wird als Fehler angezeigt.
+Die Browser-Fixture `?feed` prüft gleiche IDs bei zwei Klienten und in einem
+Journal, getrennte Texte, korrekte Schreibparameter und zwei unabhängig
+abgeschlossene Schreibvorgänge. Testdaten bleiben im Fixture-Adapter.

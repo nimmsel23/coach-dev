@@ -29,3 +29,18 @@ export async function saveClientHabitCycleConfig(uid, config) {
   habitConfig = structuredClone(config);
   return { ok: true };
 }
+export async function getGlobalJournalFeed() {
+  return [
+    { id: 'same-day', userId: 'a', type: 'workout', date: '2026-11-12', coachFeedback: 'Feedback A' },
+    { id: 'same-day', userId: 'b', type: 'workout', date: '2026-11-12', coachFeedback: 'Feedback B' },
+    { id: 'same-day', userId: 'a', type: 'journal', date: '2026-11-12', coachFeedback: 'Journal A' },
+  ];
+}
+export async function getAllUserProfiles() { return { a: { displayName: 'Anna' }, b: { displayName: 'Ben' } }; }
+export function saveCoachFeedback(uid, id, type, text) {
+  fixtureState.calls.push(['feedback', uid, id, type, text]);
+  return new Promise((resolve) => {
+    fixtureState.feedbackPending ||= {};
+    fixtureState.feedbackPending[uid] = resolve;
+  });
+}

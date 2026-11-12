@@ -1,3 +1,8 @@
+// Firestore-IDs sind nur innerhalb einer Collection und eines Klienten eindeutig.
+export function feedEntryKey(item) {
+  return JSON.stringify([item?.userId || '', item?.type || '', item?.id || ''])
+}
+
 // Kalendertag aus Feed-Einträgen und Push-Links (#/clients/<uid>?date=YYYY-MM-DD).
 // Reine Funktionen, prüfbar mit node --test. Der Tag steht als Präfix im Datum;
 // ein UTC-Slice würde ihn in Europa zwischen 00:00 und 01:00 verschieben.
