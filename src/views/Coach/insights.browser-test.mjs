@@ -27,6 +27,7 @@ const send = (method, params = {}) =>
 ws.addEventListener('message', (event) => {
   const msg = JSON.parse(event.data)
   if (!msg.id) {
+    if (msg.method === 'Page.javascriptDialogOpening') send('Page.handleJavaScriptDialog', { accept: true }).catch(() => {});
     if (msg.method === 'Runtime.exceptionThrown') {
       errors.push(msg.params.exceptionDetails.text + ': ' + (msg.params.exceptionDetails.exception?.description || ''))
     }
@@ -152,6 +153,27 @@ try {
       await snapDelete(key);
     }
   })()`), { hit: 'cached', stored: 'fresh', published: ['fresh'], reads: 2 });
+  await evaluate(`(() => {
+    const input = document.querySelector('input[aria-label="Neuer Zyklus-Tag"]');
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, 'Legs');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  })()`);
+  await wait(has('Ungespeicherte Änderungen'));
+  await send('Page.reload');
+  await wait(has('Zyklus konnte nicht geladen werden.'));
+  await click('Erneut versuchen');
+  await wait(has('Entwurf wiederhergestellt. Die gespeicherte Konfiguration hat sich inzwischen geändert.'));
+  assert.equal(await evaluate(`document.querySelector('input[aria-label="Neuer Zyklus-Tag"]').value`), 'Legs');
+  assert.equal(await evaluate(`!!document.querySelector('button[aria-label="Pull entfernen"]')`), true);
+  await send('Page.reload');
+  await wait(has('Zyklus konnte nicht geladen werden.'));
+  await click('Erneut versuchen');
+  await wait(has('Entwurf wiederhergestellt. Die gespeicherte Konfiguration hat sich inzwischen geändert.'));
+  await click('Verwerfen');
+  await wait(has('Keine offenen Änderungen'));
+  assert.equal(await evaluate(`document.querySelector('input[aria-label="Neuer Zyklus-Tag"]').value`), '');
+  assert.equal(await evaluate(`!!document.querySelector('button[aria-label="Pull entfernen"]')`), false);
+  assert.equal(await evaluate(`Object.keys(sessionStorage).some((k) => k.startsWith('coach:habit-draft:'))`), false);
   await send('Page.navigate', { url: 'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?feed' });
   await wait("document.querySelectorAll('textarea').length === 3");
   assert.deepEqual(await evaluate("[...document.querySelectorAll('textarea')].map((n) => n.value)"), ['Feedback A', 'Feedback B', 'Journal A']);
@@ -194,5 +216,5 @@ try {
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);
-  console.log('PASS: real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
+  console.log('PASS: habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
 } finally { ws.close(); }

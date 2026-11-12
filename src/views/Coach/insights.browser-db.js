@@ -44,3 +44,5 @@ export function saveCoachFeedback(uid, id, type, text) {
     fixtureState.feedbackPending[uid] = resolve;
   });
 }
+
+export function getUid() { return 'fixture-coach'; }

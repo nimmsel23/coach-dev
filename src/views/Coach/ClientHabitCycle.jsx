@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { RotateCw, Plus, X } from 'lucide-react';
-import { getClientJournalFeed, getClientHabitCycleConfig, saveClientHabitCycleConfig } from '@db';
+import { getUid, getClientJournalFeed, getClientHabitCycleConfig, saveClientHabitCycleConfig } from '@db';
 import { computeSplitCycleProgress, getRecentBlockDays } from '../../lib/habitProgress.js';
+import { readHabitDraft, writeHabitDraft, clearHabitDraft } from './habitCycleDraft.js';
 import { blockColor } from '../Session/utils.js';
 
 // Coach-Ansicht: "HabitShare"-artige Wochenübersicht pro Split-Tag (Push/
@@ -10,11 +11,17 @@ import { blockColor } from '../Session/utils.js';
 // nicht, siehe ARCHITECTURE.md) — liest stattdessen retroaktiv das ohnehin
 // vorhandene `session.block`-Feld aus (SplitPicker), keine Doppelpflege.
 export default function ClientHabitCycle({ clientUid }) {
+  const coachUid = getUid();
+  const scope = JSON.stringify([coachUid, clientUid]);
+  const [loadedScope, setLoadedScope] = useState('');
+  const [draftNotice, setDraftNotice] = useState('');
+  const [storageError, setStorageError] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [config, setConfig] = useState({ tags: [], targetCycles: 0 });
   const [loading, setLoading] = useState(true);
   const [newTag, setNewTag] = useState('');
   const [savedConfig, setSavedConfig] = useState(null);
+  const [draftBaseConfig, setDraftBaseConfig] = useState(null);
   const [error, setError] = useState('');
   const [loadError, setLoadError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -31,13 +38,21 @@ export default function ClientHabitCycle({ clientUid }) {
         if (!active) return;
         setSessions(feed.filter((f) => f.type === 'workout'));
         const loaded = cfg || { tags: [], targetCycles: 0 };
-        setConfig(loaded);
+        let draft = null;
+        try { draft = readHabitDraft(window.sessionStorage, coachUid, clientUid); } catch { /* unavailable storage */ }
+        setConfig(draft?.config || loaded);
+        setNewTag(draft?.newTag || '');
         setSavedConfig(loaded);
+        setDraftBaseConfig(draft?.baseConfig || loaded);
+        setLoadedScope(JSON.stringify([coachUid, clientUid]));
+        setDraftNotice(draft ? JSON.stringify(draft.baseConfig.tags) === JSON.stringify(loaded.tags) && draft.baseConfig.targetCycles === loaded.targetCycles
+          ? 'Ungespeicherter Entwurf aus diesem Tab wiederhergestellt.'
+          : 'Entwurf wiederhergestellt. Die gespeicherte Konfiguration hat sich inzwischen geändert. Bitte vor dem Speichern prüfen.' : '');
       })
       .catch(() => { if (active) setLoadError('Zyklus konnte nicht geladen werden.'); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [clientUid, loadAttempt]);
+  }, [clientUid, coachUid, loadAttempt]);
 
   const progress = useMemo(
     () => computeSplitCycleProgress(sessions, config.tags, config.targetCycles),
@@ -46,9 +61,29 @@ export default function ClientHabitCycle({ clientUid }) {
 
   const dirty = savedConfig && JSON.stringify(config) !== JSON.stringify(savedConfig);
 
+  useEffect(() => {
+    if (loading || !savedConfig || loadedScope !== scope) return;
+    try {
+      const storage = window.sessionStorage;
+      const ok = dirty || newTag ? writeHabitDraft(storage, coachUid, clientUid, { baseConfig: draftBaseConfig, config, newTag })
+        : clearHabitDraft(storage, coachUid, clientUid);
+      setStorageError(!ok);
+    } catch { setStorageError(true); }
+  }, [loading, savedConfig, dirty, newTag, config, coachUid, clientUid, loadedScope, scope, draftBaseConfig]);
+
+  useEffect(() => {
+    if (!dirty && !newTag) return;
+    const warn = (event) => { event.preventDefault(); event.returnValue = ''; };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [dirty, newTag]);
+
   async function persist(event) {
     event.preventDefault();
-    if (savePending.current || !dirty) return;
+    if (savePending.current || (!dirty && !newTag.trim())) return;
+    const tag = newTag.trim();
+    const next = tag && !config.tags.some((value) => value.toLowerCase() === tag.toLowerCase())
+      ? { ...config, tags: [...config.tags, tag] } : config;
     if (!Number.isInteger(config.targetCycles) || config.targetCycles < 0) {
       setError('Bitte eine ganze Zahl ab 0 für das Zyklusziel eingeben.');
       return;
@@ -57,9 +92,13 @@ export default function ClientHabitCycle({ clientUid }) {
     setSaving(true);
     setError('');
     try {
-      const result = await saveClientHabitCycleConfig(clientUid, config);
+      const result = await saveClientHabitCycleConfig(clientUid, next);
       if (result?.ok !== true) throw new Error('not saved');
-      setSavedConfig(config);
+      setConfig(next);
+      setSavedConfig(next);
+      setDraftBaseConfig(next);
+      setNewTag('');
+      setDraftNotice('');
     } catch {
       setError('Änderungen konnten nicht gespeichert werden. Bitte erneut speichern.');
     } finally {
@@ -92,6 +131,8 @@ export default function ClientHabitCycle({ clientUid }) {
 
   return (
     <div className="space-y-5">
+      {draftNotice && <p role="status" className="text-sm text-fit-muted">{draftNotice}</p>}
+      {storageError && <p role="alert" className="text-sm text-fit-red">Der Tab-Entwurf konnte nicht gesichert werden. Bitte vor dem Verlassen speichern.</p>}
       {/* Konfiguration */}
       <form onSubmit={persist} className="card p-4 space-y-3">
         <fieldset disabled={saving} className="space-y-3">
@@ -144,10 +185,10 @@ export default function ClientHabitCycle({ clientUid }) {
         </label>
         </fieldset>
         {error && <p role="alert" className="text-sm text-fit-red">{error}</p>}
-        <p role="status" className="text-sm text-fit-muted">{saving ? 'Speichert…' : dirty ? 'Ungespeicherte Änderungen' : 'Keine offenen Änderungen'}</p>
+        <p role="status" className="text-sm text-fit-muted">{saving ? 'Speichert…' : dirty || newTag ? 'Ungespeicherte Änderungen' : 'Keine offenen Änderungen'}</p>
         <div className="flex flex-wrap gap-2">
-          <button type="submit" disabled={!dirty || saving} className="min-h-11 rounded-full bg-fit-accent px-4 text-sm text-fit-bg disabled:opacity-50">Änderungen speichern</button>
-          <button type="button" disabled={!dirty || saving} onClick={() => { setConfig(savedConfig); setNewTag(''); setError(''); }} className="min-h-11 px-3 text-sm disabled:opacity-50">Verwerfen</button>
+          <button type="submit" disabled={(!dirty && !newTag.trim()) || saving} className="min-h-11 rounded-full bg-fit-accent px-4 text-sm text-fit-bg disabled:opacity-50">Änderungen speichern</button>
+          <button type="button" disabled={(!dirty && !newTag) || saving} onClick={() => { setConfig(savedConfig); setDraftBaseConfig(savedConfig); setNewTag(''); setError(''); setDraftNotice(''); }} className="min-h-11 px-3 text-sm disabled:opacity-50">Verwerfen</button>
         </div>
       </form>
 

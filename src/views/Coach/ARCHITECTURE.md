@@ -263,3 +263,25 @@ bekommt nach Erfolg das Feedback. `{ok:false}` wird als Fehler angezeigt.
 Die Browser-Fixture `?feed` prüft gleiche IDs bei zwei Klienten und in einem
 Journal, getrennte Texte, korrekte Schreibparameter und zwei unabhängig
 abgeschlossene Schreibvorgänge. Testdaten bleiben im Fixture-Adapter.
+
+## Habit-Entwürfe im aktuellen Tab (2026-11-12)
+
+`habitCycleDraft.js` speichert die Konfiguration samt noch nicht hinzugefügtem
+Tag und ursprünglichem Ausgangsstand in `sessionStorage`, getrennt nach
+angemeldetem Coach (`getUid()`) und Klienten-ID. Der Editor stellt einen
+validierten Entwurf nach Remount/Reload wieder her. Bei verändertem gespeicherten
+Ausgangsstand bleibt ein Konflikthinweis bis Speichern oder Verwerfen sichtbar;
+das Wiederherstellen allein bestätigt den neuen Ausgangsstand nicht.
+
+Nur erfolgreich angenommene Änderungen oder ausdrückliches Verwerfen entfernen
+den Entwurf. Ein angefangener Tag wird beim Speichern mit übernommen. Ohne
+verfügbare Tab-Sicherung zeigt der Editor eine Fehlermeldung. `beforeunload`
+warnt ergänzend bei offenen Änderungen; das Betriebssystem kann dieses Ereignis
+beim Beenden mobiler Apps auslassen. Die Entwürfe gehören zum aktuellen Tab,
+sind keine Cloud-Synchronisierung und kein dauerhafter Browser-Backup.
+
+Die Schreibwirkung ist an die erfolgreich geladene Coach/Klient-Kombination
+gebunden, damit ein Identitätswechsel keine alten Eingaben unter einem neuen
+Schlüssel ablegt. Unit-Tests prüfen Identitätstrennung, Entfernung, beschädigte
+Daten und nicht verfügbaren Storage. Die Browser-Fixture prüft Wiederherstellung
+nach Reload, fortbestehenden Konflikthinweis nach erneutem Reload und Verwerfen.
