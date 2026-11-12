@@ -35,3 +35,18 @@ check is required before accepting the hosted login screen.
 
 The isolated browser fixtures and passing logic tests are incremental evidence.
 They do not prove completion of the overall Coach-console/ClientForge objective.
+
+
+## Follow-up: cold start fixed and verified on Firebase
+
+Preview source `ee20ff10e9aa1102ce2ae79767acb9961f6a8e8e` was observed in
+release.json after successful Deploy Coach run 43202282188. A fresh Chromium
+profile at 390x844 reached the Coach-Zugang screen with Google and E-Mail sign-in
+buttons, preserved the client/messages deep-link and opened the email dialog.
+No Runtime.exceptionThrown event occurred in this inspection. No credentials
+were entered and no account was created.
+
+The same inspection found that the shared email dialog still claimed Fitness
+demo access and exceeded the visible iframe viewport in landscape: its bounds
+were top=-94.25, bottom=415.25 at viewport height=321. Contextual copy, scrolling
+and keyboard-focus corrections are tracked separately from the fixed cold start.

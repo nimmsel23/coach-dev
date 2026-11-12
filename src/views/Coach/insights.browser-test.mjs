@@ -206,6 +206,26 @@ try {
   await click('Abmelden');
   await wait(has('Ungelesen: 0'));
   assert.equal(await evaluate("window.insightsFixture.calls.filter(c => c[0] === 'stop-unread').length"), 2);
+  await send('Page.navigate', { url: 'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?login' });
+  await wait(has('Login öffnen'));
+  await evaluate(`[...document.querySelectorAll('button')].find(b => b.textContent.trim() === 'Login öffnen').focus()`);
+  await click('Login öffnen');
+  await wait(has('ANMELDUNG ERFORDERLICH'));
+  assert.equal(await evaluate(has('Demo-Modus')), false);
+  assert.equal(await evaluate("document.activeElement?.getAttribute('aria-label')"), 'E-Mail');
+  assert.equal(await evaluate("getComputedStyle(document.querySelector('input[type=email]')).fontSize"), '16px');
+  for (const [width, height] of [[390,844],[844,390],[768,1024],[1024,768]]) {
+    await checkViewport(width,height,true);
+    assert.equal(await evaluate(`(() => {const r=document.querySelector('[role=dialog]').getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight;})()`),true);
+  }
+  await evaluate("[...document.querySelectorAll('[role=dialog] button')].at(-1).focus()");
+  await send('Input.dispatchKeyEvent', { type:'keyDown',key:'Tab',code:'Tab',windowsVirtualKeyCode:9 });
+  assert.equal(await evaluate("document.activeElement?.getAttribute('aria-label')"),'Login-Overlay schließen');
+  await send('Input.dispatchKeyEvent', { type:'keyDown',key:'Tab',code:'Tab',windowsVirtualKeyCode:9,modifiers:8 });
+  assert.equal(await evaluate("document.activeElement === [...document.querySelectorAll('[role=dialog] button')].at(-1)"),true);
+  await send('Input.dispatchKeyEvent', { type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27 });
+  await wait("!document.querySelector('[role=dialog]')");
+  assert.equal(await evaluate('document.activeElement.textContent'),'Login öffnen');
   const deepLink = '#/clients/client-a/trainingplan?plan=plan-a&date=2026-11-12';
   await send('Page.navigate', { url: `http://coach.localhost:15918/coach-shell.html${deepLink}` });
   await wait("!!document.querySelector('iframe')?.contentDocument?.querySelector('h1')");

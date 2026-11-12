@@ -223,6 +223,8 @@ export default function CoachShell() {
 
         <ThemeSheet open={themeOpen} onClose={() => setThemeOpen(false)} />
         <AuthGateModal
+          productName="VitalOS Coach"
+          requiredAccess
           open={showEmailAuth}
           onClose={() => { setAuthError(''); setShowEmailAuth(false) }}
           authEmail={authEmail}

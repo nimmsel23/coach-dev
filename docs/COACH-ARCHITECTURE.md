@@ -171,3 +171,20 @@ verifies a cache hit followed by invalidation during a delayed refresh against
 real browser IndexedDB: only the fresh retry is stored and published. This
 protects responses after invalidation; it is not a general transaction system
 or proof of server acknowledgement for offline writes.
+
+
+## Authentication dialog context and mobile viewport (2026-11-12)
+
+`AuthGateModal` accepts `productName` and `requiredAccess`; CoachShell supplies
+VitalOS Coach and mandatory login. The existing Fitness/Plan callers retain
+those props' original demo defaults. Coach copy explains that a newly created
+account still needs Coach access. This does not change access control.
+
+The dialog scrolls within `100dvh - 2rem`, email/password use 16px text and
+explicit accessible labels/autocomplete, and the close action has a 44px target.
+On opening, focus moves to email; Tab wraps within inputs/buttons and Escape
+closes and restores focus to the previous control. The listener uses the latest
+close callback without restarting the focus effect for each typed character.
+The isolated browser fixture `?login` checks copy, four viewport sizes, font
+size, Tab/Shift-Tab wrapping, Escape and restored focus. Real Safari keyboard
+behaviour remains a separate device acceptance requirement.
