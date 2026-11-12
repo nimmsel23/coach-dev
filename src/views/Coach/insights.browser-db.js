@@ -36,7 +36,7 @@ export async function getGlobalJournalFeed() {
     { id: 'same-day', userId: 'a', type: 'journal', date: '2026-11-12', coachFeedback: 'Journal A' },
   ];
 }
-export async function getAllUserProfiles() { return { a: { displayName: 'Anna' }, b: { displayName: 'Ben' } }; }
+export async function getAllUserProfiles() { fixtureState.calls.push(['profiles']); return { a: { displayName: 'Anna' }, b: { displayName: 'Ben' } }; }
 export function saveCoachFeedback(uid, id, type, text) {
   fixtureState.calls.push(['feedback', uid, id, type, text]);
   return new Promise((resolve) => {
@@ -45,4 +45,10 @@ export function saveCoachFeedback(uid, id, type, text) {
   });
 }
 
-export function getUid() { return 'fixture-coach'; }
+export function getUid() { if (fixtureState.denyUid) throw new Error('Nicht eingeloggt'); return 'fixture-coach'; }
+
+export function watchClientUnread(uid, callback) {
+  fixtureState.calls.push(['watch-unread', uid]);
+  callback(2);
+  return () => fixtureState.calls.push(['stop-unread', uid]);
+}

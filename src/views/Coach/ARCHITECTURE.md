@@ -285,3 +285,15 @@ gebunden, damit ein Identitätswechsel keine alten Eingaben unter einem neuen
 Schlüssel ablegt. Unit-Tests prüfen Identitätstrennung, Entfernung, beschädigte
 Daten und nicht verfügbaren Storage. Die Browser-Fixture prüft Wiederherstellung
 nach Reload, fortbestehenden Konflikthinweis nach erneutem Reload und Verwerfen.
+
+
+## Unread-Zähler vor Authentifizierung (2026-11-12)
+
+`useCoachUnreadCounts(actor)` erhält seine freigegebene Coach-ID explizit aus
+`CoachShell` (`allowed && !authLoading ? user?.uid : null`). Ohne Actor werden
+keine Profile gelesen oder Gesprächslistener gestartet. Der Hook ruft beim
+Rendern kein `getUid()` auf, da dies vor Authentifizierung wirft und die gesamte
+Hosting-App vor dem Login leerlaufen ließ. Ein Actor-Wechsel räumt bestehende
+Listener und Zähler/Profile auf. Die isolierte Browser-Fixture `?auth` prüft
+Rendern bei werfendem `getUid`, null Reads ohne Actor, Listener nach Freigabe
+und Cleanup bei Abmeldung. Sie ersetzt nicht die erneute Hosting-Abnahme.

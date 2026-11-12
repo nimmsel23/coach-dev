@@ -9,9 +9,18 @@ Source: `499a21a66f52d299653f8860e284a5104e5efc19` on `dev`.
 - No open repository issues were returned by GitHub search at this check.
 
 The job logs establish a successful preview deployment. They do not establish
-an authenticated browser round-trip. Direct HTTP verification of release.json,
-entry pages, JavaScript assets and manifest remains pending; no successful
-response from that inspection has been observed yet.
+an authenticated browser round-trip. Direct HTTP verification completed: release.json matches the source SHA;
+root, coach.html and local.html respond with HTML and loadable entry scripts;
+15 referenced JavaScript assets passed node --check; the manifest declares
+start_url `/`. Production still identifies e890f563 from 2026-11-10.
+
+**Runtime failure found:** a clean browser profile rendered the outer shell but
+left the embedded application empty. Runtime.exceptionThrown reported
+`Error: Nicht eingeloggt` from the unread-count hook calling getUid during the
+first render. The source correction passes the actor explicitly only after
+Coach auth/access approval and has a browser regression for signed-out render,
+authorized subscriptions and logout cleanup. A new deployed-preview cold-start
+check is required before accepting the hosted login screen.
 
 ## Acceptance still required
 

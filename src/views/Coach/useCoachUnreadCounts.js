@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getAllUserProfiles, getUid, watchClientUnread } from '@db';
+import { getAllUserProfiles, watchClientUnread } from '@db';
 
 function clientLabel(profile, uid) {
   return profile?.displayName || profile?.email || uid;
 }
 
-export function useCoachUnreadCounts() {
-  const actor = getUid();
+export function useCoachUnreadCounts(actor = null) {
   const [counts, setCounts] = useState({});
   const [profiles, setProfiles] = useState({});
   const [error, setError] = useState(false);
   useEffect(() => {
     let active = true;
     const stops = [];
-    setCounts({}); setError(false);
+    setCounts({}); setProfiles({}); setError(false);
+    if (!actor) return undefined;
     getAllUserProfiles().then((data) => {
       if (!active) return;
       const next = data || {};

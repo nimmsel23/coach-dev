@@ -197,6 +197,15 @@ try {
   await evaluate("window.insightsFixture.feedbackPending.b({ok:false})");
   await wait(has('Fehler beim Speichern des Kommentars'));
   for (const [width, height] of [[390, 844], [844, 390], [768, 1024], [1024, 768]]) await checkViewport(width, height, true);
+  await send('Page.navigate', { url: 'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?auth' });
+  await wait(has('Ungelesen: 0'));
+  assert.equal(await evaluate('window.insightsFixture.calls.length'), 0);
+  await click('Coach freigeben');
+  await wait(has('Ungelesen: 4'));
+  assert.equal(await evaluate("window.insightsFixture.calls.filter(c => c[0] === 'watch-unread').length"), 2);
+  await click('Abmelden');
+  await wait(has('Ungelesen: 0'));
+  assert.equal(await evaluate("window.insightsFixture.calls.filter(c => c[0] === 'stop-unread').length"), 2);
   const deepLink = '#/clients/client-a/trainingplan?plan=plan-a&date=2026-11-12';
   await send('Page.navigate', { url: `http://coach.localhost:15918/coach-shell.html${deepLink}` });
   await wait("!!document.querySelector('iframe')?.contentDocument?.querySelector('h1')");

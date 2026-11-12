@@ -24,7 +24,7 @@ export default function CoachShell() {
   const { sidebarPinned, setSidebarPinned } = useSettingsStore()
   const pinned = sidebarPinned !== false && sidebarPinned !== 'false'
   const [route, navigateRoute] = useCoachRoute()
-  const unread = useCoachUnreadCounts()
+  const unread = useCoachUnreadCounts(allowed && !authLoading ? user?.uid : null)
 
   const [navExpanded, setNavExpanded] = useState(true)
   const [themeOpen, setThemeOpen] = useState(false)
