@@ -1,3 +1,8 @@
+## 2026-11-12 — AL: automerge-pr Retarget (Org c1f9b6ce)
+
+- Port journal-SSOT `375e122`: vor Squash Dependabot-PRs mit `base=master` auf `base=dev` retargeten.
+- Coach-Default bleibt `dev`; Schritt greift nur `dependabot/*`-Heads (Drafts/Non-Dep unberührt).
+
 ## 2026-11-12 — Legacy-Rotation → gepinnte Plan-Verwaltung
 
 - `AssignPlan.jsx` (414 Zeilen, Speichern bei jeder Eingabe) ersetzt durch Einstieg

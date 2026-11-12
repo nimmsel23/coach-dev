@@ -95,3 +95,32 @@ _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen sta
 - Erledigt: Guide Katalog-Konsistenz — fitness-dev KB=Symlink `~/dev/fitness`; Coach Tree statt Gitlink seit `710614d9`; Drift vs. `c1419a7`; Docs `cdd09884`/`ef4a8e71`/`c86f780b`; dieser AL-LOG-Commit.
 - Offen/Weiter: TODO KB-Gitlink-Restore (nach jefferson/020-Klärung) → Pin `c1419a7`+; optional Fuel-Upstream; Org `fe34e959` Postgres wartet Urgency; website `71f101a` nicht pinnen.
 - Blocker: Keine (Restore bewusst nicht im Freeze-Lauf; bidirektionaler Content-Drift).
+
+## 2026-11-12 (Donnerstag) — Abteilungsleiter-Lauf
+
+_Automatik (vos-al-log Vorlage 2026-11-12):_
+- Commits seit 2026-11-08: aa1b6029 docs(coach): AssignPlan routes through pinned Plan TrainingPlans
+c5087e42 refactor(coach): route legacy rotations through the pinned Plan workspace
+e491a2b6 docs: auto-update RESULTS.md
+b6448a77 fix(coach): preserve client profiles when discovery refresh fails
+1345681c fix(coach): bind access approval to the checked auth identity
+e9369629 fix(coach): share authenticated unread state across client navigation
+31d1dacf docs(coach): record inspector preview release evidence
+30995a16 test(coach): verify notes survive failed save and retry successfully
+acb7d5d5 fix(coach): isolate inspector saves and reject failed adapter results
+7235c384 fix(coach): isolate inspector anatomy responses from selection changes
+174a6a78 fix(coach): make sign-in dialog fit mobile viewports and coach context
+ee20ff10 fix(coach): defer unread subscriptions until coach authentication
+866bc520 docs(coach): record verified preview build and remaining acceptance
+499a21a6 feat(coach): retain client habit drafts across navigation and reload
+791960df fix(coach): preserve client deep links through the hosting shell
+- Offene PRs: (keine offenen PRs / gh nicht verfuegbar)
+- CI (letzte Läufe): completed	success	Merge-Agent	Merge-Agent	dev	schedule	43265488740	7s	2026-11-12T17:04:17Z
+completed	success	PR-AutoMerge (Dependabot -> dev)	PR-AutoMerge (Dependabot -> dev)	dev	schedule	43221951579	11s	2026-11-12T12:52:41Z
+completed	skipped	PR-AutoMerge (Dependabot -> dev)	PR-AutoMerge (Dependabot -> dev)	dev	workflow_run	43209757699	1s	2026-11-12T11:30:38Z
+- Arbeitsbaum: 1 uncommittete Pfade
+
+_Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
+- Erledigt: Org `c1f9b6ce` Port — `automerge-pr.yml` Retarget base=master→dev vor Squash (journal-SSOT `375e122` / fitness `8c29238`); dieser Lauf-Commit.
+- Offen/Weiter: TODO KB-Gitlink-Restore; optional Fuel-Upstream; Org `e93f739a` Rotation (Beleg `c5087e42`/`aa1b6029` prüfen); Org `fe34e959` Postgres wartet Urgency.
+- Blocker: Keine.
