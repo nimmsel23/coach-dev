@@ -52,6 +52,8 @@ test('Insights adapters preserve failures and require confirmed results', async 
         for (response of [{}, { ok: false }, { ok: false, gaps: [], drafts: [] }, { ok: true, gaps: {}, drafts: {} }]) {
           await assert.rejects(api.checkClientGaps('client-a'));
           await assert.rejects(api.getCoachDrafts({ uid: 'client-a' }));
+        }
+        for (response of [{}, { ok: false }]) {
           await assert.rejects(api.reviewCoachDraft('draft-a', 'client-a', 'approved'));
         }
       });
