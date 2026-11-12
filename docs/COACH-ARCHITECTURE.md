@@ -138,3 +138,17 @@ für die Nachrichten. Ein grüner Worker-Heartbeat sagt nichts über diesen Kana
 ## Central rules import (2026-11-01)
 
 Coach owns `firestore.rules.part` for `coachConversations`; Plan owns `planResponses` in its fragment. VitalOS imports the committed Coach fragment into `firestore/coach.rules.part` with source provenance, then `node scripts/build-rules.mjs` composes all app fragments. Only the central VitalOS rules workflow deploys them. This does not require the VitalOS application source in Coach.
+
+## Functional checks before Hosting builds (2026-11-12)
+
+`pnpm run test:coach:functional` runs the offline Firestore adapter tests,
+Insights adapter contract tests and `src/views/Coach/*.test.mjs` (client console
+aggregation, routing, feed highlights and 6Pack progress). Both `Check (Coach)`
+and `Deploy Coach` run it as a required step before generating KB data/building.
+A failed test stops the workflow before publication.
+
+This is a logic-level gate. The isolated Insights/Habit browser fixture remains
+separate; authenticated Firebase round-trips and real iPhone/iPad Safari
+acceptance are not established by this command. Production release identity
+is observable at `https://vos-coach.web.app/release.json`; a successful local
+command or dev push does not prove production publication.

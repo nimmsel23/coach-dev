@@ -146,6 +146,9 @@ jobs:
           pnpm install --frozen-lockfile --ignore-scripts --config.minimumReleaseAge=0
 
       # *.generated.js sind gitignored; build:firebase:coach erzeugt sie nicht selbst
+      - name: Coach functional tests
+        run: pnpm run test:coach:functional
+
       - name: KB-Daten generieren
         run: pnpm run build:kb-data
 

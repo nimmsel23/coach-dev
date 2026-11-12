@@ -117,6 +117,9 @@ jobs:
 
 
 
+      - name: Coach functional tests
+        run: pnpm run test:coach:functional
+
       - name: KB-Daten generieren
         run: pnpm run build:kb-data
 
