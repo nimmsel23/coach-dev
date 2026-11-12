@@ -49,6 +49,14 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   sind, auch ohne zugewiesenen Cloud-Plan. Trainingsplan / Nachrichten /
   6Pack folgen in der Tableiste; ältere Plan-Ansichten bleiben per Deep-Link.
   Status-Toggle (`client`/`friend`/`hidden`) sitzt im Detail-Header.
+- **`ClientConsole.jsx`** (Verlauf-Tab): Konsole für den gewählten Klienten.
+  Liest dieselben freigegebenen Pfade wie der restliche Coach-Tab
+  (`getClientJournalFeed` auf `fitness/{uid}/…`, plus `nutrition/{uid}/logs`
+  mit dem angemeldeten Konto). Zeigt die Kraft-Logs, die mittlere Ruhephase
+  (Tage zwischen Einheiten desselben Blocks) und die mittleren Makros, sobald
+  ein Tageswert in diesen Daten liegt. Fehlt die Nutrition-Freigabe, bleibt
+  die Makro-Kachel leer — ohne zweiten Zugriffsweg. Auswertung:
+  `clientConsoleStats.js`.
 - **`ClientWorkoutsFeed.jsx`**: eigenständig nutzbar (Klienten-Dropdown +
   Typ-Filter, `getGlobalJournalFeed()`) **oder** eingebettet mit
   `clientUid`-Prop (kein eigener Dropdown, nutzt stattdessen

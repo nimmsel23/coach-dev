@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Users } from 'lucide-react';
 import { getAllUserProfiles, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
+import ClientConsole from './ClientConsole';
 import AssignPlan from './AssignPlan';
 import ClientTrainingPlans from './ClientTrainingPlans';
 import ClientHabitCycle from './ClientHabitCycle';
@@ -275,7 +276,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
 
             <div className="flex-1 overflow-y-auto p-3">
               {detailTab === 'messages' && <ClientMessages key={selectedUid} clientUid={selectedUid} />}
-              {detailTab === 'workouts' && <ClientWorkoutsFeed clientUid={selectedUid} />}
+              {detailTab === 'workouts' && <ClientConsole key={selectedUid} clientUid={selectedUid} />}
               {detailTab === 'sixpack' && <ClientSixPack key={selectedUid} clientUid={selectedUid} />}
               {detailTab === 'insights' && <ClientInsights clientUid={selectedUid} />}
               {detailTab === 'habits' && <ClientHabitCycle clientUid={selectedUid} />}
