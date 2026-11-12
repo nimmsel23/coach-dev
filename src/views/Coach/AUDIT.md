@@ -3,6 +3,14 @@
 ## Zweck
 Admin-Ansicht für Coach-seitige Verwaltung — nicht in der Nav, erreichbar per `#coach` (fitness-dev) bzw. eigener Sidebar-Button (vitalos, Sichtbarkeit per UID/Local-Mode-Gate).
 
+## Update 2026-11-12: Klientenkonsole im Verlauf
+
+Der Verlauf-Tab eines gewählten Klienten ist `ClientConsole.jsx` statt des
+eingebetteten Feeds. Die Übersicht ohne Auswahl bleibt `ClientWorkoutsFeed`.
+Die Konsole zeigt Logs, Ø Ruhephase und Ø Makros. Makros kommen nur aus den
+bereits gelesenen Einträgen oder aus `nutrition/{uid}/logs`, wenn die
+bestehenden Rules das für den Coach erlauben.
+
 ## Update 2026-11-02: Fitness-Nutzung
 
 `TractionPanel.jsx` ergänzt die Coach-Navigation um eine Live-Traction-Ansicht.

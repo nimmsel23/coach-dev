@@ -85,6 +85,12 @@ export async function saveClientHabitCycleConfig(clientUid, config) {
   }
 }
 
+// Lokaler Build hat keinen freigegebenen Nutrition-Read. Makros erscheinen
+// nur, wenn sie schon in den Fitness-Einträgen des bestehenden Feeds liegen.
+export async function getClientNutritionDays() {
+  return { access: "unavailable", days: [] };
+}
+
 export async function getAllUserProfiles() {
   try {
     const data = await api.get('/fitness/coach/profiles');

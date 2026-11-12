@@ -82,6 +82,24 @@ export async function deleteClientRoutine(clientUid, routineId) {
   return { ok: true };
 }
 
+// Makros, die bereits auf einem freigegebenen Fitness-Dokument liegen.
+// Die Nutrition-Collection ist ein eigener Lesepfad (getClientNutritionDays).
+function nutritionFields(data = {}) {
+  const meals = Array.isArray(data.meals)
+    ? data.meals
+    : Array.isArray(data.mahlzeiten)
+      ? data.mahlzeiten
+      : null;
+  return {
+    macros: data.macros || data.makros || null,
+    meals,
+    kcal: data.kcal ?? data.kalorien ?? null,
+    protein: data.protein ?? null,
+    carbs: data.carbs ?? data.kohlenhydrate ?? null,
+    fat: data.fat ?? data.fett ?? null,
+  };
+}
+
 // Direkte Pro-Klient-Query (fitness/{uid}/sessions|journal|habitJournals),
 // keine collectionGroup über alle User. Wichtig: getGlobalJournalFeed()
 // deckelt global auf `limitCount` Items über ALLE Klienten hinweg, bevor
@@ -105,6 +123,7 @@ export async function getClientJournalFeed(clientUid, limitCount = 100) {
           date: data.date || "Unbekannt",
           block: data.block || data.trainingsart || null,
           trainingsart: data.trainingsart || null,
+          sessionMode: data.sessionMode || null,
           exercises: data.exercises || [],
           effort: data.effort ?? null,
           mood: data.mood || "",
@@ -112,6 +131,7 @@ export async function getClientJournalFeed(clientUid, limitCount = 100) {
           coachFeedback: data.coachFeedback || "",
           time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
           type: "workout",
+          ...nutritionFields(data),
         });
       }
     } catch (e) {
@@ -132,6 +152,7 @@ export async function getClientJournalFeed(clientUid, limitCount = 100) {
           coachFeedback: data.coachFeedback || "",
           time: data.time || data.date || "",
           type: "journal",
+          ...nutritionFields(data),
         });
       }
     } catch (e) {
@@ -205,7 +226,9 @@ export async function getGlobalJournalFeed(limitCount = 50) {
           date: data.date || "Unbekannt",
           block: data.block || data.trainingsart || null,
           trainingsart: data.trainingsart || null,
+          sessionMode: data.sessionMode || null,
           exercises: data.exercises || [],
+          ...nutritionFields(data),
           effort: data.effort ?? null,
           mood: data.mood || "",
           notes: data.notes || "",
@@ -234,6 +257,7 @@ export async function getGlobalJournalFeed(limitCount = 50) {
           coachFeedback: data.coachFeedback || "",
           time: data.time || data.date || "",
           type: "journal",
+          ...nutritionFields(data),
         });
       }
     } catch (e) {
@@ -293,6 +317,29 @@ export async function saveClientHabitCycleConfig(clientUid, config) {
   } catch (e) {
     console.error("Error in saveClientHabitCycleConfig:", e);
     return { ok: false };
+  }
+}
+
+// Fuel-Tageslogs liegen unter nutrition/{uid}/logs. Der Coach liest sie mit
+// demselben angemeldeten Konto. Fehlt die Freigabe in den Rules, bleibt das
+// ein leerer Makro-Zustand — kein zweiter Zugriffsweg.
+export async function getClientNutritionDays(clientUid) {
+  if (!clientUid) return { access: "unavailable", days: [] };
+  try {
+    const snap = await getDocs(collection(db, "nutrition", clientUid, "logs"));
+    const days = snap.docs.map((d) => {
+      const data = d.data() || {};
+      return { id: d.id, date: data.date || d.id, ...data };
+    });
+    return { access: "ok", days };
+  } catch (error) {
+    const code = String(error?.code || "");
+    const message = String(error?.message || "");
+    if (code === "permission-denied" || /permission/i.test(message)) {
+      return { access: "denied", days: [] };
+    }
+    console.error("Error in getClientNutritionDays:", error);
+    return { access: "error", days: [] };
   }
 }
 
