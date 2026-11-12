@@ -34,3 +34,22 @@ Einstieg `/` zeigt die Vue-Shell; **Direkt öffnen** führt zu `/coach.html`.
 Shell und React-App werden gemeinsam mit `build:firebase:coach` gebaut und
 unter demselben Hosting-Target veröffentlicht. Die Shell enthält keine zweite
 Kopie von Coach-Daten oder Geschäftslogik.
+
+## Hosting-Deep-Links (2026-11-12)
+
+Auf Hosting übernimmt das iframe beim Einstieg den Hash der äußeren Shell,
+inklusive Klienten-ID, Detail-Tab, Plan-ID und Datum. `src/vue-shell/frameRoute.js`
+verknüpft anschließend Hash-Navigation in beiden Fenstern. Änderungen im
+Coach-Fenster ersetzen den äußeren URL-Hash, damit Teilen, Neuladen und
+„Direkt öffnen“ den sichtbaren Kontext behalten. Äußere Hash-Navigation wird
+per `location.replace` in das iframe übertragen, ohne zusätzliche innere
+History-Einträge anzulegen. Listener werden beim Unmount entfernt; fremde
+Origins sind keine Quelle für Coach-Routing. Lokale Arbeitsplätze behalten
+ihren bisherigen Einstieg in `local.html`.
+
+Der isolierte Browser-Test `src/views/Coach/insights.browser-test.mjs` öffnet
+die echte Vue-Shell über `coach.localhost` (Hosting-Modus) und verwendet eine
+minimale same-origin Zielseite statt echter Firebase-Konten. Er prüft den
+vollständigen Einstiegslink, Navigation im iframe, äußere Navigation, den
+Direkt-Link und Reload. Authentifizierung und reale Plan-Daten sind dadurch
+nicht abgenommen.

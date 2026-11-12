@@ -1,11 +1,23 @@
-import { createApp, h } from 'vue'
+import { createApp, h, onMounted, onBeforeUnmount, ref } from 'vue'
+import { syncFrameRoute } from './frameRoute.js'
 import './style.css'
 
 const coachAppUrl = new URL('./coach.html', window.location.href).pathname
 const isLocal = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname)
+const coachFrameUrl = `${coachAppUrl}${window.location.hash}`
 const localAppUrl = new URL('./local.html', window.location.href).pathname
 
 const CoachFrame = {
+  setup() {
+    const frame = ref(null)
+    const routeHash = ref(window.location.hash)
+    let stopSync
+    onMounted(() => {
+      if (!isLocal) stopSync = syncFrameRoute(frame.value, window, (hash) => { routeHash.value = hash })
+    })
+    onBeforeUnmount(() => stopSync?.())
+    return { frame, routeHash }
+  },
   render() {
     return h('div', { class: 'coach-frame' }, [
       h('header', { class: 'coach-frame__header' }, [
@@ -18,7 +30,7 @@ const CoachFrame = {
         isLocal ? h('a', { class: 'coach-frame__open', href: coachAppUrl }, 'Cloud Coach') : null,
         h('a', {
           class: 'coach-frame__open',
-          href: isLocal ? localAppUrl : coachAppUrl,
+          href: isLocal ? localAppUrl : `${coachAppUrl}${this.routeHash}`,
           target: '_blank',
           rel: 'noopener noreferrer',
         }, [
@@ -42,7 +54,8 @@ const CoachFrame = {
       ]),
       h('main', { class: 'coach-frame__content' }, [
         h('iframe', {
-          src: isLocal ? localAppUrl : coachAppUrl,
+          ref: 'frame',
+          src: isLocal ? localAppUrl : coachFrameUrl,
           title: isLocal ? 'Lokale Vital Coach Konsole' : 'Coach-Anwendung',
           allow: 'clipboard-read; clipboard-write',
           referrerpolicy: 'same-origin',

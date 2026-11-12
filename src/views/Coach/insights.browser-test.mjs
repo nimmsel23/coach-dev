@@ -175,8 +175,24 @@ try {
   await evaluate("window.insightsFixture.feedbackPending.b({ok:false})");
   await wait(has('Fehler beim Speichern des Kommentars'));
   for (const [width, height] of [[390, 844], [844, 390], [768, 1024], [1024, 768]]) await checkViewport(width, height, true);
+  const deepLink = '#/clients/client-a/trainingplan?plan=plan-a&date=2026-11-12';
+  await send('Page.navigate', { url: `http://coach.localhost:15918/coach-shell.html${deepLink}` });
+  await wait("!!document.querySelector('iframe')?.contentDocument?.querySelector('h1')");
+  assert.equal(await evaluate("document.querySelector('iframe').contentWindow.location.hash"), deepLink);
+  assert.equal(await evaluate("document.querySelector('a[target=\"_blank\"]').hash"), deepLink);
+  await evaluate("document.querySelector('iframe').contentDocument.querySelector('a').click()");
+  await wait("location.hash === '#/clients/client-b/messages'");
+  assert.equal(await evaluate("document.querySelector('a[target=\"_blank\"]').hash"), '#/clients/client-b/messages');
+  await evaluate("location.hash = '#/catalog'");
+  await wait("document.querySelector('iframe').contentWindow.location.hash === '#/catalog'");
+  await evaluate('history.back()');
+  await wait("location.hash === '#/clients/client-b/messages' && document.querySelector('iframe').contentWindow.location.hash === '#/clients/client-b/messages'");
+  await evaluate('history.forward()');
+  await wait("location.hash === '#/catalog' && document.querySelector('iframe').contentWindow.location.hash === '#/catalog'");
+  await send('Page.reload');
+  await wait("document.querySelector('iframe')?.contentWindow.location.hash === '#/catalog'");
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);
-  console.log('PASS: duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
+  console.log('PASS: real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
 } finally { ws.close(); }
