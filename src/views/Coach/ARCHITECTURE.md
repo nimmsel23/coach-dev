@@ -63,21 +63,20 @@ Der Content reserviert unten Platz über `--mobile-nav-height` (auf dem Shell-Wr
   Typ-Filter, `getGlobalJournalFeed()`) **oder** eingebettet mit
   `clientUid`-Prop (kein eigener Dropdown, nutzt stattdessen
   `getClientJournalFeed(clientUid)` — siehe Datenfluss unten).
-- **`AssignPlan.jsx`** (Legacy-Ansicht): eigenständig nutzbar (Klienten-Dropdown aus
-  `getAllUserProfiles()`) **oder** eingebettet mit `clientUid`+`clientName`-
-  Props (`embedded`-Flag intern, blendet den Dropdown aus, lädt den Klienten
-  per `useEffect` sofort). Baut einen Plan (`getPlanSuggestion()`,
-  Template-Auswahl) und pusht ihn direkt an den Klienten
-  (`assignPlanToClient()`). Zeigt bereits zugewiesene Pläne dieses Coaches an
-  diesen Klienten inkl. Tages-Fortschritt (`getClientPlanProgress()`).
+- **`AssignPlan.jsx`** (Mehr-Tab „Rotation“): kein eigener Editor mehr. Lädt
+  `@plan/views/Plan/TrainingPlans` für denselben Klienten-Macrocycle-Pfad wie
+  „Individuellen Plan gestalten“. Speichern/Versionen laufen über den gepinnten
+  Plan-Vertrag; der frühere Parallelweg (Schreiben bei jeder Eingabe) ist
+  entfernt. Optional `clientName` nur für die Kopfzeile.
 - **`ClientTrainingWorkspace.jsx`**: Klientenansicht plus Coach-eigene
-  Programmbibliothek. `CoachRoutineEditor.jsx` bearbeitet Vorlagen im Coach-
-  Datenraum. `trainingProgramStore.js` veröffentlicht immutable Programm-
- Snapshots und erstellt bei Zuweisung den bestehenden Klienten-Makrozyklus.
+  Programmbibliothek; `initialScreen="individual"` öffnet direkt die
+  Plan-Verwaltung. `CoachRoutineEditor.jsx` bearbeitet Vorlagen im Coach-
+  Datenraum über Plan `RoutineBuilder`. `trainingProgramStore.js` veröffentlicht
+  immutable Programm-Snapshots und erstellt bei Zuweisung den Klienten-Makrozyklus.
 - **Firestore-Integration**: `firestore/routines.js` und `firestore/macrocycles.js`
-  gehören zum Coach-Repo. Die Makrozyklus-Dokumente halten den von der
-  Klienten-Plan-App konsumierten Vertrag ein; Coach importiert keine
-  Laufzeitkomponenten oder Adapter aus `plan-dev`.
+  re-exportieren den gepinnten Plan-Stand (`modules/plan`). Die Makrozyklus-
+  Dokumente halten den von der Klienten-Plan-App konsumierten Vertrag ein.
+
 
 ## Datenfluss (Firebase / Firestore)
 
