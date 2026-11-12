@@ -36,7 +36,7 @@ export async function getGlobalJournalFeed() {
     { id: 'same-day', userId: 'a', type: 'journal', date: '2026-11-12', coachFeedback: 'Journal A' },
   ];
 }
-export async function getAllUserProfiles() { fixtureState.calls.push(['profiles']); return { a: { displayName: 'Anna' }, b: { displayName: 'Ben' } }; }
+export async function getAllUserProfiles() { fixtureState.calls.push(['profiles']); if (fixtureState.profilesFail) throw new Error('Klienten konnten nicht geladen werden.'); if (fixtureState.profilesDeferred) return new Promise(resolve => { fixtureState.resolveProfiles = resolve; }); return { a: { displayName: 'Anna' }, b: { displayName: 'Ben' } }; }
 export function saveCoachFeedback(uid, id, type, text) {
   fixtureState.calls.push(['feedback', uid, id, type, text]);
   return new Promise((resolve) => {
@@ -76,3 +76,4 @@ export const reenrichInbox = approveInbox;
 export const saveAnatomy = (id, data) => inspectorWrite('save-anatomy', id, data);
 export const saveExercise = (id, data) => inspectorWrite('save-exercise', id, data);
 export const editExerciseSources = approveInbox;
+export const updateUserProfile = () => { throw new Error('Unexpected profile write'); };

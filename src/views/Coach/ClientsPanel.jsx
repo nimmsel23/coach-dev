@@ -24,6 +24,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(null);
   const [error, setError] = useState('');
+  const [loadError, setLoadError] = useState('');
   const [manageUsers, setManageUsers] = useState(false);
   const [route, navigate] = useCoachRoute();
   const selectedUid = route.client;
@@ -38,6 +39,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
       const { key, data } = event.detail || {};
       if (key !== 'profiles:all' || !data) return;
       setProfiles(data);
+      setLoadError('');
       const entries = Object.keys(data).map((uid) => [
         uid,
         data[uid]?.clientStatus || (data[uid]?.authUserOnly ? 'hidden' : 'friend'),
@@ -45,11 +47,19 @@ export default function ClientsPanel({ unreadCounts = {} }) {
       setStatuses(Object.fromEntries(entries));
       setLoading(false);
     };
+    const onCacheError = (event) => {
+      if (event.detail?.key === 'profiles:all') setLoadError('Klienten konnten nicht aktualisiert werden. Gespeicherter Stand wird angezeigt.');
+    };
     window.addEventListener('vos-coach-cache', onCache);
-    return () => window.removeEventListener('vos-coach-cache', onCache);
+    window.addEventListener('vos-coach-cache-error', onCacheError);
+    return () => {
+      window.removeEventListener('vos-coach-cache', onCache);
+      window.removeEventListener('vos-coach-cache-error', onCacheError);
+    };
   }, []);
 
   async function load() {
+    setLoadError('');
     setLoading(true);
     try {
       const p = await getAllUserProfiles();
@@ -60,7 +70,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
       ]);
       setStatuses(Object.fromEntries(entries));
     } catch (err) {
-      setError(err.message || 'Klienten konnten nicht geladen werden.');
+      setLoadError(err.message || 'Klienten konnten nicht geladen werden.');
     } finally {
       setLoading(false);
     }
@@ -93,7 +103,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
   const uids = allUids.filter((uid) => manageUsers || (statuses[uid] || 'friend') !== 'hidden');
   const visibleCount = allUids.filter((uid) => (statuses[uid] || 'friend') !== 'hidden').length;
 
-  if (loading) {
+  if (loading && allUids.length === 0) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="spinner" />
@@ -101,11 +111,13 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     );
   }
 
-  if (error && allUids.length === 0) {
+  const clientError = loadError || error;
+
+  if (clientError && allUids.length === 0) {
     return (
       <div role="alert" className="p-6 text-fit-red">
-        {error}
-        <button type="button" onClick={load} className="ml-3 underline">Erneut versuchen</button>
+        {clientError}
+        <button type="button" onClick={load} disabled={loading} className="ml-3 min-h-11 underline">Erneut versuchen</button>
       </div>
     );
   }
@@ -201,7 +213,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
               <h3 className="text-base font-semibold text-fit-ink">Letzte Kraftsessions</h3>
               <span className="text-xs text-fit-muted">Klient links wählen für Plan & Chat</span>
             </header>
-            {error && <p role="alert" className="px-3 pt-2 text-sm text-fit-red">{error}</p>}
+            {clientError && <p role="alert" className="px-3 pt-2 text-sm text-fit-red">{clientError}{loadError && <button type="button" onClick={load} disabled={loading} className="ml-3 min-h-11 underline">Erneut versuchen</button>}</p>}
             <div className="flex-1 overflow-y-auto p-3">
               <ClientWorkoutsFeed
                 initialTypeFilter="workout"
@@ -272,7 +284,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
               </select>
             </nav>
 
-            {error && <p role="alert" className="px-3 pt-2 text-sm text-fit-red">{error}</p>}
+            {clientError && <p role="alert" className="px-3 pt-2 text-sm text-fit-red">{clientError}{loadError && <button type="button" onClick={load} disabled={loading} className="ml-3 min-h-11 underline">Erneut versuchen</button>}</p>}
 
             <div className="flex-1 overflow-y-auto p-3">
               {detailTab === 'messages' && <ClientMessages key={selectedUid} clientUid={selectedUid} />}

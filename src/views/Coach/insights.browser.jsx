@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import ExerciseInsightModal from '../../components/ExerciseInsightModal.jsx';
 import AuthGateModal from '../../components/AuthGateModal.jsx';
+import ClientsPanel from './ClientsPanel.jsx';
 import ClientInsights from './ClientInsights.jsx';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed.jsx';
 import ClientHabitCycle from './ClientHabitCycle.jsx';
@@ -33,13 +34,14 @@ function LoginFixture() {
     authEmail={email} setAuthEmail={setEmail} authPassword={password} setAuthPassword={setPassword}
     authRegistering={registering} setAuthRegistering={setRegistering} onSubmit={(event) => event.preventDefault()} onGoogleSignIn={() => {}} /></>;
 }
+if (new URLSearchParams(window.location.search).has('clients')) fixtureState.profilesFail = true;
 function Fixture() {
   const [uid, setUid] = useState('Klient A');
   window.insightsFixture = fixtureState;
   return <main className="mx-auto max-w-3xl p-3">
     <button type="button" className="min-h-11" onClick={() => setUid('Klient B')}>Klient B wählen</button>
     <h1>{uid}</h1>
-    {new URLSearchParams(window.location.search).has('inspector') ? <InspectorFixture /> : new URLSearchParams(window.location.search).has('login') ? <LoginFixture /> : new URLSearchParams(window.location.search).has('auth') ? <UnreadAuthFixture /> : new URLSearchParams(window.location.search).has('feed') ? <ClientWorkoutsFeed /> : new URLSearchParams(window.location.search).has('habits') ? <ClientHabitCycle key={uid} clientUid={uid} /> : <ClientInsights key={uid} clientUid={uid} />}
+    {new URLSearchParams(window.location.search).has('clients') ? <ClientsPanel /> : new URLSearchParams(window.location.search).has('inspector') ? <InspectorFixture /> : new URLSearchParams(window.location.search).has('login') ? <LoginFixture /> : new URLSearchParams(window.location.search).has('auth') ? <UnreadAuthFixture /> : new URLSearchParams(window.location.search).has('feed') ? <ClientWorkoutsFeed /> : new URLSearchParams(window.location.search).has('habits') ? <ClientHabitCycle key={uid} clientUid={uid} /> : <ClientInsights key={uid} clientUid={uid} />}
   </main>;
 }
 createRoot(document.getElementById('root')).render(<Fixture />);

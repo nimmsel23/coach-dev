@@ -88,12 +88,11 @@ export async function getClientNutritionDays() {
 }
 
 export async function getAllUserProfiles() {
-  try {
-    const data = await api.get('/fitness/coach/profiles');
-    return data?.profiles || {};
-  } catch {
-    return {};
+  const data = await api.get('/fitness/coach/profiles');
+  if (data?.ok === false || !data?.profiles || typeof data.profiles !== 'object' || Array.isArray(data.profiles)) {
+    throw new Error('Klienten konnten nicht geladen werden.');
   }
+  return data.profiles;
 }
 
 export async function saveCoachFeedback(userId, sessionId, type, text) {

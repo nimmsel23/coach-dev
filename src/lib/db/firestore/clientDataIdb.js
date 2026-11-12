@@ -125,6 +125,14 @@ export async function cachedQuery(key, loader) {
       }
       return plain
     })
+    .catch((error) => {
+      if (revision(key) === startedAt && typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('vos-coach-cache-error', {
+          detail: { key, message: error?.message || 'Aktualisierung fehlgeschlagen.' },
+        }))
+      }
+      throw error
+    })
 
   if (hit !== undefined && revision(key) === startedAt) {
     pending.catch(() => {})

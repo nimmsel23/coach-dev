@@ -296,6 +296,40 @@ try {
   await evaluate("window.insightsFixture.inspectorWrites['save-exercise'].resolve({ok:true})");
   await new Promise(resolve=>setTimeout(resolve,100));
   assert.equal(await evaluate('window.inspectorExercise'),null);
+  await send('Page.navigate', {url:'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?clients'});
+  await wait(has('Klienten konnten nicht geladen werden.'));
+  assert.equal(await evaluate(has('Keine Nutzer')),false);
+  await evaluate('window.insightsFixture.profilesFail=false');
+  await click('Erneut versuchen');
+  await wait(has('Anna'));
+  assert.equal(await evaluate(has('Klienten konnten nicht geladen werden.')),false);
+  await evaluate("window.dispatchEvent(new CustomEvent('vos-coach-cache-error',{detail:{key:'profiles:all',message:'offline'}}))");
+  await wait(has('Gespeicherter Stand wird angezeigt.'));
+  assert.equal(await evaluate(has('Anna')),true);
+  await evaluate('window.insightsFixture.profilesDeferred=true');
+  await click('Erneut versuchen');
+  await wait('!!window.insightsFixture.resolveProfiles');
+  assert.equal(await evaluate(has('Anna')),true,'retains the client panel during refresh');
+  await evaluate("window.insightsFixture.profilesDeferred=false;window.insightsFixture.resolveProfiles({a:{displayName:'Anna'}})");
+  // Complete cache refresh clears the background failure while preserving the list.
+  await evaluate("window.dispatchEvent(new CustomEvent('vos-coach-cache',{detail:{key:'profiles:all',data:{a:{displayName:'Anna'}}}}))");
+  await wait("!document.body.innerText.includes('Gespeicherter Stand wird angezeigt.')");
+  assert.equal(await evaluate(has('Anna')),true);
+  for (const [width,height] of [[390,844],[844,390],[768,1024],[1024,768]]) await checkViewport(width,height,true);
+  assert.deepEqual(await evaluate(`(async()=>{
+    const {snapSet,snapGet,snapDelete,cachedQuery}=await import('/src/lib/db/firestore/clientDataIdb.js');
+    const key='browser:profiles:refresh-error';
+    await snapSet(key,{a:{displayName:'Anna'}});
+    let fail;
+    const failed=new Promise(resolve=>{fail=resolve;});
+    const listener=(e)=>{if(e.detail.key===key)fail(e.detail.message);};
+    window.addEventListener('vos-coach-cache-error',listener);
+    try {
+      const hit=await cachedQuery(key,async()=>{throw new Error('discovery offline');});
+      const error=await failed;
+      return {hit,stored:await snapGet(key),error};
+    } finally {window.removeEventListener('vos-coach-cache-error',listener);await snapDelete(key);}
+  })()`),{hit:{a:{displayName:'Anna'}},stored:{a:{displayName:'Anna'}},error:'discovery offline'});
   const deepLink = '#/clients/client-a/trainingplan?plan=plan-a&date=2026-11-12';
   await send('Page.navigate', { url: `http://coach.localhost:15918/coach-shell.html${deepLink}` });
   await wait("!!document.querySelector('iframe')?.contentDocument?.querySelector('h1')");
@@ -315,5 +349,5 @@ try {
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);
-  console.log('PASS: inspector read/write responses isolated on switch and close; failed notes/lesson/approve/reject results remain errors; successful lesson save; habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
+  console.log('PASS: profiles cold failure/retry and cached refresh preserve clients; inspector read/write responses isolated on switch and close; failed notes/lesson/approve/reject results remain errors; successful lesson save; habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
 } finally { ws.close(); }

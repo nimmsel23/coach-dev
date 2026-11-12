@@ -4,6 +4,13 @@ import { resolve } from 'node:path';
 const server = await createServer({
   configFile: false, plugins: [react(), {
     name: 'coach-frame-fixture',
+    enforce: 'pre',
+    resolveId(source, importer) {
+      if (importer?.endsWith('/ClientsPanel.jsx') && source.startsWith('./') && !['./useCoachRoute.js', './clientSubTabs.js'].includes(source)) return `\0client-leaf:${source}`;
+    },
+    load(id) {
+      if (id.startsWith('\0client-leaf:')) return 'export default function ClientLeaf() {return null;}';
+    },
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         if (req.url?.split('?')[0] !== '/coach.html') return next();

@@ -359,29 +359,25 @@ export async function getAllUserProfiles() {
   return cachedQuery(CACHE_KEYS.profiles, async () => {
     const profiles = {};
 
-    try {
-      const snap = await getDocs(collectionGroup(db, "profile"));
-      snap.docs.forEach((d) => {
-        const uid = d.ref.parent?.parent?.id;
-        if (uid) profiles[uid] = { ...profiles[uid], ...d.data() };
-      });
-    } catch {}
+    const snap = await getDocs(collectionGroup(db, "profile"));
+    snap.docs.forEach((d) => {
+      const uid = d.ref.parent?.parent?.id;
+      if (uid) profiles[uid] = { ...profiles[uid], ...d.data() };
+    });
 
-    try {
-      const snapSettings = await getDocs(collectionGroup(db, "settings"));
-      snapSettings.docs.forEach((d) => {
-        const uid = d.ref.parent?.parent?.id;
-        if (uid) {
-          const data = d.data();
-          profiles[uid] = {
-            displayName: data.displayName || data.name || profiles[uid]?.displayName || profiles[uid]?.email || uid,
-            email: data.email || profiles[uid]?.email || "",
-            ...profiles[uid],
-            ...data,
-          };
-        }
-      });
-    } catch {}
+    const snapSettings = await getDocs(collectionGroup(db, "settings"));
+    snapSettings.docs.forEach((d) => {
+      const uid = d.ref.parent?.parent?.id;
+      if (uid) {
+        const data = d.data();
+        profiles[uid] = {
+          displayName: data.displayName || data.name || profiles[uid]?.displayName || profiles[uid]?.email || uid,
+          email: data.email || profiles[uid]?.email || "",
+          ...profiles[uid],
+          ...data,
+        };
+      }
+    });
 
     // The local Coach console can use its loopback Admin SDK to list Auth-only
     // accounts too. Hosted Coach has no Auth list permission; it uses the

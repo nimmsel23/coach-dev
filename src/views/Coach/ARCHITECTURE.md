@@ -347,3 +347,32 @@ einen freigegebenen Hook-Aufruf, die klientenbezogenen Werte, beide
 Navigationssummen, die Fehleranzeige und das Auth-/Zugriffsgate. Der Test
 prüft die Verdrahtung; Firebase-Listener und mobile Darstellung benötigen
 ihre eigenen Integrationsprüfungen.
+
+## Kontowechsel und Coach-Freigabe (2026-11-12)
+
+`useCoachAccess` bindet jede Freigabe an das geprüfte Firebase-User-Objekt.
+Bei Kontowechsel oder Logout ist bereits der erste Render gesperrt; die neue
+Identität benötigt ihre eigene Prüfung. Lokaler Modus, feste Owner-UID,
+Coach-Claim und Rollen-Dokument behalten ihre bisherigen Freigaberegeln.
+`coachAccess.test.mjs` führt den echten Hook mit kontrollierten State-/
+Effektprimitiven aus und prüft den Render vor Effect-Cleanup sowie verspätete
+Antworten nach Identitätswechsel und Logout. Das ersetzt keine authentifizierte
+Firebase- oder Safari-Abnahme.
+
+## Profil-Discovery und fehlgeschlagene Aktualisierung (2026-11-12)
+
+Firestore-Discovery veröffentlicht erst nach erfolgreichen `profile`- und
+`settings`-Abfragen einen vollständigen Snapshot. Fehler dürfen keinen leeren
+oder teilweisen Profilstand als erfolgreiches Ergebnis cachen. Der lokale
+Adapter verlangt eine gültige `profiles`-Map und reicht Transportfehler weiter.
+Ein echter leerer Stand bleibt erlaubt.
+
+`cachedQuery` behält bei fehlgeschlagenem Refresh den gespeicherten Snapshot
+und veröffentlicht `vos-coach-cache-error` mit `{key,message}`. `ClientsPanel`
+zeigt bei `profiles:all` einen Aktualisierungsfehler samt Retry an; ein frisches
+Cache-Ergebnis räumt diesen Ladefehler auf. Status-Schreibfehler werden getrennt
+gehalten. Beim Kaltstart zeigt ein Lesefehler Retry statt „Keine Nutzer“.
+Adaptertests prüfen beide Firestore-Quellen und lokale Antwortverträge; die
+Browser-Fixture prüft echte IndexedDB-Erhaltung und Fehler/Retry im realen
+ClientsPanel mit isolierten Detailansichten. Die ergänzende lokale Auth-
+Benutzersuche bleibt optional, weil sie auf Hosting nicht verfügbar ist.
