@@ -115,3 +115,29 @@ Daten wie die kompatible `/api/coach/local/clients/<id>/plans`-API. Legacy-APIs
 werden aus klienten-python importiert, ohne weiteren Dienst auf 5200.
 Lokaler Zugriff und gültiger vorhandener Klient bleiben Voraussetzung.
 Details: [LOCAL-PLANNING.md](LOCAL-PLANNING.md).
+
+## Org-Cockpit-API (`/api/org`, seit 2026-11-13)
+
+Modul `coach_org.py` (eingebunden in `server.py` neben `coach_local_traction`). Liefert dem Org-Cockpit
+„vitalos · Organisation“ (GitHub Page https://nimmsel23.github.io/dashboards/org/, Quelle `~/.vos/org-dashboard/`)
+Live-Daten und speichert Daniels Antworten. Das Cockpit selbst wird hier **nicht** ausgeliefert.
+
+| Route | Zweck |
+| --- | --- |
+| `GET /api/org/state` | `{live, today, coaching, answers}` — Coaching-Lage anonym (K-xx/T-xx) aus `~/.vos/coaching/report.py --json`, letzte 30 Owner-Antworten |
+| `POST /api/org/decision` | `{id, status: angenommen\|abgelehnt, reason?}` — Ja/Nein zum Wochenbrief |
+| `POST /api/org/line` | `{text}` (≤ 500 Zeichen) — „Eine Zeile, wenn du willst“ |
+
+- **Ablage:** additiv in `~/workspace/team/owner/ANTWORTEN.md` (Pfad über `COACH_WORKSPACE_DIR`), je Antwort ein
+  Commit nur dieser Datei, Push im Hintergrund (`pull --rebase --autostash`, Fehler blockieren nicht).
+- **Zugang Laptop:** direkt `http://127.0.0.1:9150/api/org` (Loopback-Host, ohne Proxy-Header).
+- **Zugang Handy (Tailnet):** `https://ideapad.tail7a15d6.ts.net:8443/api/org` über
+  `tailscale serve --bg --https=8443 --set-path /api/org http://127.0.0.1:9150/api/org` (Root nötig, z. B. per
+  `pkexec`; **tailnet only**, nicht gefunnelt; abschalten: `tailscale serve --https=8443 off`). Zugelassen nur mit
+  `Tailscale-User-Login` aus `COACH_ORG_TAILNET_LOGINS` (Standard: nimmsel23@ und nimmdaniel@gmail.com), Absender
+  aus 100.64.0.0/10 bzw. fd7a:115c:a1e0::/48 (uvicorn übernimmt die IP aus X-Forwarded-For), Host `*.ts.net`,
+  ohne `Tailscale-Funnel-Request`.
+- **Nie über Funnel:** Der Funnel-Host (Port 443) hat keinen `/api/org`-Pfad; Funnel-Anfragen tragen keine Identität.
+- **Ursprünge:** schreibend nur `https://nimmsel23.github.io` oder `http://localhost|127.0.0.1:*`; sonst 403.
+- **Tests:** `PYTHONPATH=backend:. python3 -m unittest tests.test_org`
+- Änderungen an `coach_org.py` wirken erst nach `systemctl --user restart coach-api` (Owner).
