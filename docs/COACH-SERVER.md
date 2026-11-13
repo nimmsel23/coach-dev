@@ -116,11 +116,11 @@ werden aus klienten-python importiert, ohne weiteren Dienst auf 5200.
 Lokaler Zugriff und gültiger vorhandener Klient bleiben Voraussetzung.
 Details: [LOCAL-PLANNING.md](LOCAL-PLANNING.md).
 
-## Org-Cockpit-API (`/api/org`, seit 2026-11-13)
+## Org-Dashboard-API (`/api/org`, seit 2026-11-13)
 
-Modul `coach_org.py` (eingebunden in `server.py` neben `coach_local_traction`). Liefert dem Org-Cockpit
+Modul `coach_org.py` (eingebunden in `server.py` neben `coach_local_traction`). Liefert dem Org-Dashboard
 „vitalos · Organisation“ (GitHub Page https://nimmsel23.github.io/dashboards/org/, Quelle `~/.vos/org-dashboard/`)
-Live-Daten und speichert Daniels Antworten. Das Cockpit selbst wird hier **nicht** ausgeliefert.
+Live-Daten und speichert Daniels Antworten. Das Dashboard selbst wird hier **nicht** ausgeliefert.
 
 | Route | Zweck |
 | --- | --- |

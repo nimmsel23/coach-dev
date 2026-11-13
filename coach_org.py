@@ -1,6 +1,6 @@
-"""/api/org — Live-Anbindung für das Org-Cockpit „vitalos · Organisation“ (nur lokal).
+"""/api/org — Live-Anbindung für das Org-Dashboard „vitalos · Organisation“ (nur lokal).
 
-Das Cockpit liegt als statische GitHub Page unter https://nimmsel23.github.io/dashboards/org/
+Das Dashboard liegt als statische GitHub Page unter https://nimmsel23.github.io/dashboards/org/
 (Quelle ~/.vos/org-dashboard). Läuft coach-api auf diesem Rechner, holt es sich hier die echte Lage
 und legt Daniels Antworten ab. Ohne coach-api bleibt die Page beim Schnappschuss.
 
@@ -136,14 +136,14 @@ def append(kind: str, text: str, ident: str | None = None) -> dict:
     if not path.exists():
         path.write_text(
             "# Antworten des Owners\n\n"
-            "Aus dem Org-Cockpit (https://nimmsel23.github.io/dashboards/org/) über coach-api `/api/org`.\n"
+            "Aus dem Org-Dashboard (https://nimmsel23.github.io/dashboards/org/) über coach-api `/api/org`.\n"
             "Additiv, neueste unten. Ilse liest das für den nächsten Wochenbrief.\n\n",
             encoding="utf-8",
         )
     label = f"{kind} {ident}" if ident else kind
     with path.open("a", encoding="utf-8") as fh:
         fh.write(f"- {now} · {label}: {text}\n")
-    _commit_and_push(path, f"owner: {label} aus dem Org-Cockpit")
+    _commit_and_push(path, f"owner: {label} aus dem Org-Dashboard")
     return {"ok": True, "at": now}
 
 
