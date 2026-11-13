@@ -1,0 +1,78 @@
+# Auto-Promote dev -> master (ersetzt den alten PR-basierten Auto-Merge).
+# Coach: Default-Branch ist dev; master ist Spiegel (Org-Regel *-dev: Check gruen -> Promote).
+# Live-Deploy bleibt manuell (Deploy Coach, production=true) - hier KEIN Deploy-Dispatch.
+# Ziel: nichts bleibt auf dev liegen. Ablauf:
+#   Check auf dev gruen            -> master wird per Fast-Forward auf dev gezogen, (ohne Deploy)
+#   dev hinter master              -> dev wird per Fast-Forward auf master gezogen
+#   beide haben eigene Commits     -> roter Lauf (kommt nur nach direktem Push auf master vor): von Hand mit normalem Push zusammenfuehren
+# Rot bleibt liegen (kein Promote). Ein Zeitplan (alle 30 Min) faengt haengende Faelle ab. Fast-Forward statt Merge-Commit auf master, weil der Branch-Schutz den Check
+# `check` fuer genau diesen Commit verlangt. Pushes mit GITHUB_TOKEN loesen keine Workflows aus -> der Deploy
+# wird per workflow_dispatch gestartet. Laeuft aus dem Default-Branch; die Datei muss dort liegen.
+
+name: Auto-Promote dev -> master (Check (Coach))
+
+on:
+  workflow_run:
+    workflows: ["Check (Coach)"]
+    types: [completed]
+  push:
+    branches: [master]
+  schedule:
+    - cron: '17,47 * * * *'   # Sicherungsnetz: haengende Faelle alle 30 Min abgleichen
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+  checks: read
+
+concurrency:
+  group: auto-promote-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'dev' &&
+       (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      CHECK_FILE: check.yml
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: dev
+      - name: Abgleichen
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          git fetch -q origin master dev
+          master=$(git rev-parse origin/master); dev=$(git rev-parse origin/dev)
+          [ "$master" = "$dev" ] && { echo "dev == master, nichts zu tun."; exit 0; }
+
+          if git merge-base --is-ancestor "$dev" "$master"; then
+            echo "dev ist hinter master -> dev per Fast-Forward nachziehen."
+            git push origin "${master}:refs/heads/dev"
+            exit 0
+          fi
+
+          if ! git merge-base --is-ancestor "$master" "$dev"; then
+            echo "::error::dev und master haben eigene Commits (jemand hat direkt auf master gepusht). Von Hand mit einem normalen Push zusammenfuehren: git merge origin/master auf dev, pushen -> Check -> dieser Workflow zieht master nach."
+            exit 1
+          fi
+
+          # Nur ein Check, den ein normaler Push ausgeloest hat, erfuellt den Branch-Schutz; per Dispatch gestartete Checks nicht.
+          res=$(gh api "repos/$REPO/commits/$dev/check-runs" --jq '[.check_runs[]|select(.name=="check")]|first|if .==null then "none" elif .status!="completed" then "pending" else .conclusion end')
+          case "$res" in
+            success)
+              echo "Check gruen auf $dev -> master per Fast-Forward."
+              git push origin "${dev}:refs/heads/master"
+              ;;
+            none|pending) echo "Check fuer $dev laeuft noch/fehlt -> naechster Lauf (workflow_run oder Zeitplan) uebernimmt." ;;
+            *) echo "Check auf $dev ist '$res' -> bleibt auf dev liegen (rot)." ;;
+          esac
