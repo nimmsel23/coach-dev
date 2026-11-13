@@ -9,8 +9,13 @@ und legt Daniels Antworten ab. Ohne coach-api bleibt die Page beim Schnappschuss
   POST /api/org/line      {"text"}  — „Eine Zeile, wenn du willst“
 
 Antworten landen additiv in ~/workspace/team/owner/ANTWORTEN.md und werden dort committet
-(Push im Hintergrund). Nur Loopback, kein Funnel: Anfragen mit Proxy-Headern oder fremdem Host
-werden abgelehnt; schreibende Anfragen nur von erlaubten Ursprüngen.
+(Push im Hintergrund).
+
+Zugang: direkt über Loopback (Laptop) oder übers Tailnet (Handy) via
+`tailscale serve --https=8443 --set-path /api/org http://127.0.0.1:9150/api/org` — dieser Port ist
+NICHT gefunnelt. Tailnet-Anfragen müssen die Tailscale-Identität eines Owner-Kontos tragen
+(`Tailscale-User-Login`, von tailscale serve gesetzt); Funnel-Anfragen tragen keine Identität und
+werden abgelehnt. Schreibende Anfragen nur von erlaubten Ursprüngen.
 """
 from __future__ import annotations
 
@@ -31,6 +36,11 @@ from coach_workspace import workspace_root
 VIENNA = ZoneInfo("Europe/Vienna")
 ALLOWED_ORIGINS = {"https://nimmsel23.github.io"}
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
+OWNER_LOGINS = {
+    x.strip().lower()
+    for x in os.environ.get("COACH_ORG_TAILNET_LOGINS", "nimmsel23@gmail.com,nimmdaniel@gmail.com").split(",")
+    if x.strip()
+}
 REPORT = Path(os.environ.get("COACH_ORG_REPORT", Path.home() / ".vos" / "coaching" / "report.py"))
 DECISION_IDS = re.compile(r"^[a-z0-9-]{1,40}$")
 ENTRY = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · (Entscheid|Zeile)(?: ([a-z0-9-]+))?: (.*)$")
@@ -41,14 +51,22 @@ def owner_file() -> Path:
 
 
 def guard(request: Request) -> None:
-    """Nur dieser Rechner, nie über Tailscale Funnel oder einen anderen Proxy."""
+    """Laptop direkt oder Owner übers Tailnet; nie Funnel, nie ein anderer Proxy."""
     client = request.client.host if request.client else ""
     if client not in LOCAL_HOSTS | {"testclient"}:
         raise HTTPException(403, "Nur lokal.")
-    if request.url.hostname not in LOCAL_HOSTS:
-        raise HTTPException(403, "Lokaler Hostname erforderlich.")
-    if any(h in request.headers for h in ("x-forwarded-for", "x-forwarded-host", "forwarded", "tailscale-user-login")):
-        raise HTTPException(403, "Nicht über Proxy.")
+    login = request.headers.get("tailscale-user-login", "").strip().lower()
+    if login:
+        # Über tailscale serve: nur Owner-Konten, nie Funnel, nur *.ts.net.
+        if login not in OWNER_LOGINS or "tailscale-funnel-request" in request.headers:
+            raise HTTPException(403, "Nur Owner im Tailnet.")
+        if not (request.url.hostname or "").endswith(".ts.net"):
+            raise HTTPException(403, "Tailnet-Hostname erforderlich.")
+    else:
+        if request.url.hostname not in LOCAL_HOSTS:
+            raise HTTPException(403, "Lokaler Hostname erforderlich.")
+        if any(h in request.headers for h in ("x-forwarded-for", "x-forwarded-host", "forwarded", "tailscale-funnel-request")):
+            raise HTTPException(403, "Nicht über Proxy.")
     origin = request.headers.get("origin")
     if origin:
         parts = urlsplit(origin)

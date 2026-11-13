@@ -52,6 +52,15 @@ class OrgRouterTest(unittest.TestCase):
         self.assertEqual(self.local.get("/api/org/state", headers={"X-Forwarded-For": "1.2.3.4"}).status_code, 403)
         self.assertEqual(self.remote.get("/api/org/state").status_code, 403)
 
+    def test_tailnet_owner_allowed_others_not(self):
+        owner = {"Tailscale-User-Login": "nimmsel23@gmail.com", "X-Forwarded-For": "100.64.0.5"}
+        self.assertEqual(self.remote.get("/api/org/state", headers=owner).status_code, 200)
+        stranger = {**owner, "Tailscale-User-Login": "fremd@example.com"}
+        self.assertEqual(self.remote.get("/api/org/state", headers=stranger).status_code, 403)
+        funnel = {**owner, "Tailscale-Funnel-Request": "?1"}
+        self.assertEqual(self.remote.get("/api/org/state", headers=funnel).status_code, 403)
+        self.assertEqual(self.local.get("/api/org/state", headers=owner).status_code, 403)
+
     def test_validates_input(self):
         self.assertEqual(self.local.post("/api/org/decision", json={"id": "x", "status": "vielleicht"}).status_code, 400)
         self.assertEqual(self.local.post("/api/org/line", json={"text": "  "}).status_code, 400)
