@@ -1,0 +1,351 @@
+{
+ "evidence": {
+  "generated_at": "2026-11-13T00:04:57+00:00",
+  "repo": "nimmsel23/coach-dev",
+  "meta": {
+   "name": "coach-dev",
+   "description": null,
+   "html_url": "https://github.com/nimmsel23/coach-dev",
+   "pushed_at": "2026-11-13T00:04:31Z",
+   "default_branch": "dev",
+   "visibility": "public",
+   "pages_url": "https://nimmsel23.github.io/coach-dev/"
+  },
+  "package": {
+   "name": "coach",
+   "version": "3.0.0"
+  },
+  "branches": {
+   "main": "master",
+   "has_dev": true,
+   "dev_behind": 2,
+   "dev_ahead": 95,
+   "oldest_unpromoted": "2026-11-10T01:25:57+01:00",
+   "dev_head": "c5f3a8ed 2026-11-13T01:04:29+01:00",
+   "master_head": "1c47aeb4 2026-11-12T02:27:32+01:00"
+  },
+  "commits": [
+   {
+    "sha": "c5f3a8ed",
+    "date": "2026-11-13T01:04:29+01:00",
+    "author": "Alpha",
+    "subject": "feat(ci): Living Dashboard als GitHub Page, pages-docs.yml archiviert"
+   },
+   {
+    "sha": "2ccd6ac6",
+    "date": "2026-11-13T01:04:06+01:00",
+    "author": "nimmsel23",
+    "subject": "chore(ci): pages-docs.yml archivieren — Dashboard-Workflow baut docs/ mit"
+   },
+   {
+    "sha": "1e84fe57",
+    "date": "2026-11-12T18:12:29+01:00",
+    "author": "Alpha",
+    "subject": "fix(ci): Dependabot base=master→dev Retarget vor Squash (Org c1f9b6ce)"
+   },
+   {
+    "sha": "aa1b6029",
+    "date": "2026-11-12T12:29:11+01:00",
+    "author": "Alpha",
+    "subject": "docs(coach): AssignPlan routes through pinned Plan TrainingPlans"
+   },
+   {
+    "sha": "c5087e42",
+    "date": "2026-11-12T12:22:04+01:00",
+    "author": "Alpha",
+    "subject": "refactor(coach): route legacy rotations through the pinned Plan workspace"
+   },
+   {
+    "sha": "e491a2b6",
+    "date": "2026-11-12T12:21:36+01:00",
+    "author": "Alpha",
+    "subject": "docs: auto-update RESULTS.md"
+   },
+   {
+    "sha": "b6448a77",
+    "date": "2026-11-12T12:06:43+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): preserve client profiles when discovery refresh fails"
+   },
+   {
+    "sha": "1345681c",
+    "date": "2026-11-12T12:02:58+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): bind access approval to the checked auth identity"
+   },
+   {
+    "sha": "e9369629",
+    "date": "2026-11-12T11:54:36+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): share authenticated unread state across client navigation"
+   },
+   {
+    "sha": "31d1dacf",
+    "date": "2026-11-12T11:54:00+01:00",
+    "author": "Alpha",
+    "subject": "docs(coach): record inspector preview release evidence"
+   },
+   {
+    "sha": "30995a16",
+    "date": "2026-11-12T11:53:23+01:00",
+    "author": "Alpha",
+    "subject": "test(coach): verify notes survive failed save and retry successfully"
+   },
+   {
+    "sha": "acb7d5d5",
+    "date": "2026-11-12T11:52:09+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): isolate inspector saves and reject failed adapter results"
+   },
+   {
+    "sha": "7235c384",
+    "date": "2026-11-12T11:49:06+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): isolate inspector anatomy responses from selection changes"
+   },
+   {
+    "sha": "174a6a78",
+    "date": "2026-11-12T11:44:07+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): make sign-in dialog fit mobile viewports and coach context"
+   },
+   {
+    "sha": "ee20ff10",
+    "date": "2026-11-12T11:39:16+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): defer unread subscriptions until coach authentication"
+   },
+   {
+    "sha": "866bc520",
+    "date": "2026-11-12T11:35:10+01:00",
+    "author": "Alpha",
+    "subject": "docs(coach): record verified preview build and remaining acceptance"
+   },
+   {
+    "sha": "499a21a6",
+    "date": "2026-11-12T11:31:36+01:00",
+    "author": "Alpha",
+    "subject": "feat(coach): retain client habit drafts across navigation and reload"
+   },
+   {
+    "sha": "791960df",
+    "date": "2026-11-12T11:28:28+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): preserve client deep links through the hosting shell"
+   },
+   {
+    "sha": "5eb11d99",
+    "date": "2026-11-12T11:25:31+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): isolate feedback by client and feed entry type"
+   },
+   {
+    "sha": "f866bf87",
+    "date": "2026-11-12T11:22:51+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): prevent stale reads from undoing cache invalidation"
+   }
+  ],
+  "activity": [
+   {
+    "day": "2026-10-24",
+    "n": 40
+   },
+   {
+    "day": "2026-10-25",
+    "n": 33
+   },
+   {
+    "day": "2026-10-26",
+    "n": 32
+   },
+   {
+    "day": "2026-10-27",
+    "n": 3
+   },
+   {
+    "day": "2026-10-28",
+    "n": 30
+   },
+   {
+    "day": "2026-10-29",
+    "n": 44
+   },
+   {
+    "day": "2026-10-30",
+    "n": 32
+   },
+   {
+    "day": "2026-10-31",
+    "n": 143
+   },
+   {
+    "day": "2026-11-01",
+    "n": 77
+   },
+   {
+    "day": "2026-11-02",
+    "n": 75
+   },
+   {
+    "day": "2026-11-03",
+    "n": 10
+   },
+   {
+    "day": "2026-11-04",
+    "n": 25
+   },
+   {
+    "day": "2026-11-05",
+    "n": 89
+   },
+   {
+    "day": "2026-11-06",
+    "n": 18
+   },
+   {
+    "day": "2026-11-07",
+    "n": 18
+   },
+   {
+    "day": "2026-11-08",
+    "n": 0
+   },
+   {
+    "day": "2026-11-09",
+    "n": 79
+   },
+   {
+    "day": "2026-11-10",
+    "n": 51
+   },
+   {
+    "day": "2026-11-11",
+    "n": 17
+   },
+   {
+    "day": "2026-11-12",
+    "n": 30
+   },
+   {
+    "day": "2026-11-13",
+    "n": 2
+   }
+  ],
+  "workflows": [
+   {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "skipped",
+    "created_at": "2026-11-13T00:04:47Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43334128720",
+    "sha": "c5f3a8e"
+   },
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-13T00:04:33Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43334096731",
+    "sha": "c5f3a8e"
+   },
+   {
+    "name": "Merge-Agent",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-12T22:42:36Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43322392994",
+    "sha": "1e84fe5"
+   },
+   {
+    "name": "Gemini CI Agent",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-12T11:23:52Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43208798473",
+    "sha": "c5087e4"
+   },
+   {
+    "name": "Deploy Coach",
+    "branch": "dev",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-12T11:22:28Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43208593262",
+    "sha": "c5087e4"
+   },
+   {
+    "name": "Pages Docs",
+    "branch": "dev",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-12T10:55:00Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43204546448",
+    "sha": "e936962"
+   }
+  ],
+  "issues": [],
+  "pulls": [],
+  "live_sites": [
+   "https://vos-coach.web.app"
+  ]
+ },
+ "assessment": {
+  "status": "red",
+  "signals": [
+   {
+    "level": "red",
+    "key": "diverged",
+    "text": "dev und master sind auseinandergelaufen (95 vor, 2 hinter) — Auto-Promote kann nicht vorspulen"
+   }
+  ],
+  "ai": {
+   "headline": "Dev-Branch stark divergent; Pages-Deploy in Arbeit",
+   "lage": "Der `dev`-Branch ist 95 Commits vor und 2 Commits hinter `master` gelaufen, was den Auto-Promote blockiert. Es gab kürzlich mehrere Fixes und Features, darunter die Umstellung des Living Dashboards auf GitHub Pages. Der `Check (Coach)`-Workflow läuft aktuell.",
+   "auffaelligkeiten": [
+    {
+     "level": "hoch",
+     "text": "Der `dev`-Branch ist 95 Commits vor und 2 Commits hinter `master` divergiert, was den Auto-Promote blockiert."
+    },
+    {
+     "level": "mittel",
+     "text": "Der Workflow \"Check (Coach)\" (Run 43334096731) auf `dev` ist aktuell in Bearbeitung."
+    },
+    {
+     "level": "info",
+     "text": "Der neueste Commit `c5f3a8ed` auf `dev` implementiert das Living Dashboard als GitHub Page und archiviert `pages-docs.yml`."
+    },
+    {
+     "level": "info",
+     "text": "Die Verifizierung des neuen \"Pages Docs\"-Actions-Workflows steht laut `NEXT.md` noch aus."
+    },
+    {
+     "level": "info",
+     "text": "Die Wiederherstellung des KB-Gitlinks ist in `TODO.md` als offene Aufgabe mit Divergenzen im Submodul beschrieben."
+    }
+   ],
+   "naechste_schritte": [
+    "Merge `dev` in `master`, um die Divergenz zu beheben und Auto-Promote zu ermöglichen.",
+    "Verifiziere den öffentlichen Pages-Deploy des Living Dashboards nach Commit `c5f3a8ed`.",
+    "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs."
+   ],
+   "veraendert": "",
+   "fragen": [
+    "Wie soll mit der Divergenz des KB-Gitlinks (`backend/fitness/catalog/kb`) umgegangen werden, insbesondere bezüglich der Coach-only Inbox-Dateien?",
+    "Soll der lokal unpushed Commit `71f101a` im `website`-Submodul gepusht oder verworfen werden, um das Pinnen Remote-erreichbarer SHAs zu ermöglichen?"
+   ],
+   "model": "gemini-2.5-flash"
+  },
+  "ai_at": "2026-11-13T00:04:59+00:00"
+ }
+}
