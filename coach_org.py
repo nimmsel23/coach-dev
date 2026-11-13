@@ -19,6 +19,7 @@ werden abgelehnt. Schreibende Anfragen nur von erlaubten Ursprüngen.
 """
 from __future__ import annotations
 
+import ipaddress
 import json
 import os
 import re
@@ -36,6 +37,17 @@ from coach_workspace import workspace_root
 VIENNA = ZoneInfo("Europe/Vienna")
 ALLOWED_ORIGINS = {"https://nimmsel23.github.io"}
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
+TAILNET_NETS = (ipaddress.ip_network("100.64.0.0/10"), ipaddress.ip_network("fd7a:115c:a1e0::/48"))
+
+
+def _is_tailnet(host: str) -> bool:
+    try:
+        ip = ipaddress.ip_address(host)
+    except ValueError:
+        return False
+    return any(ip in net for net in TAILNET_NETS)
+
+
 OWNER_LOGINS = {
     x.strip().lower()
     for x in os.environ.get("COACH_ORG_TAILNET_LOGINS", "nimmsel23@gmail.com,nimmdaniel@gmail.com").split(",")
@@ -53,9 +65,10 @@ def owner_file() -> Path:
 def guard(request: Request) -> None:
     """Laptop direkt oder Owner übers Tailnet; nie Funnel, nie ein anderer Proxy."""
     client = request.client.host if request.client else ""
-    if client not in LOCAL_HOSTS | {"testclient"}:
-        raise HTTPException(403, "Nur lokal.")
     login = request.headers.get("tailscale-user-login", "").strip().lower()
+    # uvicorn übernimmt hinter tailscale serve die Tailnet-IP aus X-Forwarded-For als Absender.
+    if client not in LOCAL_HOSTS | {"testclient"} and not (login and _is_tailnet(client)):
+        raise HTTPException(403, "Nur lokal.")
     if login:
         # Über tailscale serve: nur Owner-Konten, nie Funnel, nur *.ts.net.
         if login not in OWNER_LOGINS or "tailscale-funnel-request" in request.headers:
