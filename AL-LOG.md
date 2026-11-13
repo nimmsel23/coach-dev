@@ -124,3 +124,33 @@ _Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen sta
 - Erledigt: Org `c1f9b6ce` Port — `automerge-pr.yml` Retarget base=master→dev vor Squash (journal-SSOT `375e122` / fitness `8c29238`); dieser Lauf-Commit.
 - Offen/Weiter: TODO KB-Gitlink-Restore; optional Fuel-Upstream; Org `e93f739a` Rotation (Beleg `c5087e42`/`aa1b6029` prüfen); Org `fe34e959` Postgres wartet Urgency.
 - Blocker: Keine.
+
+## 2026-11-13 (Freitag) — Abteilungsleiter-Lauf
+
+_Automatik (vos-al-log Vorlage 2026-11-13):_
+- Commits seit 2026-11-08: 98ed32cd docs: auto-update RESULTS.md NEXT.md (pre-compact)
+1e84fe57 fix(ci): Dependabot base=master→dev Retarget vor Squash (Org c1f9b6ce)
+aa1b6029 docs(coach): AssignPlan routes through pinned Plan TrainingPlans
+c5087e42 refactor(coach): route legacy rotations through the pinned Plan workspace
+e491a2b6 docs: auto-update RESULTS.md
+b6448a77 fix(coach): preserve client profiles when discovery refresh fails
+1345681c fix(coach): bind access approval to the checked auth identity
+e9369629 fix(coach): share authenticated unread state across client navigation
+31d1dacf docs(coach): record inspector preview release evidence
+30995a16 test(coach): verify notes survive failed save and retry successfully
+acb7d5d5 fix(coach): isolate inspector saves and reject failed adapter results
+7235c384 fix(coach): isolate inspector anatomy responses from selection changes
+174a6a78 fix(coach): make sign-in dialog fit mobile viewports and coach context
+ee20ff10 fix(coach): defer unread subscriptions until coach authentication
+866bc520 docs(coach): record verified preview build and remaining acceptance
+- Offene PRs: (keine offenen PRs / gh nicht verfuegbar)
+- CI (letzte Läufe): completed	success	Merge-Agent	Merge-Agent	dev	schedule	43355442084	8s	2026-11-13T02:55:18Z
+completed	success	PR-AutoMerge (Dependabot -> dev)	PR-AutoMerge (Dependabot -> dev)	dev	schedule	43348387690	8s	2026-11-13T01:55:06Z
+completed	skipped	PR-AutoMerge (Dependabot -> dev)	PR-AutoMerge (Dependabot -> dev)	dev	workflow_run	43334250265	1s	2026-11-13T00:05:39Z
+- Arbeitsbaum: 22 uncommittete Pfade
+
+_Vom AL ausfüllen (knapp & belegbar, je 1–3 Zeilen, Commit-/PR-Referenzen statt Erzählung):_
+- Erledigt: Org `e93f739a` (doppelter Rotation-Planeditor) verifiziert umgesetzt — `c5087e42` (AssignPlan → gepinntes Plan-`TrainingPlans`, Plan `faa3c955`) + Docs `aa1b6029`; `legacyPlanContract.test.mjs` 2/2 grün auf Tip `c5f3a8ed`.
+- Offen/Weiter: `e93f739a` in der Org-DB auf done setzen (PM/Runner); danach TODO KB-Gitlink-Restore bzw. `fe34e959` (Postgres, niedrige Urgency). Feature-Freeze gilt.
+- Blocker: `task`-CLI im headless-Lauf ohne Freigabe → Org-Task nicht geschlossen.
+- AUTOMATION: Org-Task nach Umsetzungs-Commit von Hand prüfen/schließen — Commit-Trailer `Org: <uuid>` per CI/post-push automatisch `task <uuid> done` + Annotation — ~5 min pro Task und Lauf.
