@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-13T11:31:09+00:00",
+  "generated_at": "2026-11-13T11:38:25+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-13T11:30:48Z",
+   "pushed_at": "2026-11-13T11:38:05Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,18 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 2,
-   "oldest_unpromoted": "2026-11-13T12:30:46+01:00",
-   "dev_head": "bef98047 2026-11-13T12:30:46+01:00",
-   "master_head": "ca549714 2026-11-13T06:06:31Z"
+   "dev_ahead": 1,
+   "oldest_unpromoted": "2026-11-13T12:38:03+01:00",
+   "dev_head": "589f08eb 2026-11-13T12:38:03+01:00",
+   "master_head": "bef98047 2026-11-13T12:30:46+01:00"
   },
   "commits": [
+   {
+    "sha": "589f08eb",
+    "date": "2026-11-13T12:38:03+01:00",
+    "author": "Alpha",
+    "subject": "feat(api): /api/org übers Tailnet für Owner-Konten"
+   },
    {
     "sha": "bef98047",
     "date": "2026-11-13T12:30:46+01:00",
@@ -138,12 +144,6 @@
     "date": "2026-11-12T11:49:06+01:00",
     "author": "Alpha",
     "subject": "fix(coach): isolate inspector anatomy responses from selection changes"
-   },
-   {
-    "sha": "174a6a78",
-    "date": "2026-11-12T11:44:07+01:00",
-    "author": "Alpha",
-    "subject": "fix(coach): make sign-in dialog fit mobile viewports and coach context"
    }
   ],
   "activity": [
@@ -229,7 +229,7 @@
    },
    {
     "day": "2026-11-13",
-    "n": 8
+    "n": 9
    }
   ],
   "workflows": [
@@ -239,8 +239,28 @@
     "event": "push",
     "status": "in_progress",
     "conclusion": null,
-    "created_at": "2026-11-13T11:30:50Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43417658877",
+    "created_at": "2026-11-13T11:38:07Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43418637323",
+    "sha": "589f08e"
+   },
+   {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "skipped",
+    "created_at": "2026-11-13T11:31:48Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43417790666",
+    "sha": "bef9804"
+   },
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-13T11:31:48Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43417790661",
     "sha": "bef9804"
    },
    {
@@ -251,26 +271,6 @@
     "conclusion": "success",
     "created_at": "2026-11-13T10:24:46Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43408864600",
-    "sha": "ca54971"
-   },
-   {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-13T09:40:47Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43403322989",
-    "sha": "ca54971"
-   },
-   {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-13T06:07:22Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43376492678",
     "sha": "ca54971"
    },
    {
@@ -314,38 +314,34 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev 2 Commits vor Master, Auto-Promote erfolgreich, Check läuft",
-   "lage": "Der `dev`-Branch ist nun 2 Commits vor `master` und 0 Commits dahinter. Der `Auto-Promote dev -> master`-Workflow für Commit `ca549714` wurde erfolgreich abgeschlossen. Aktuell läuft der `Check (Coach)`-Workflow für den neuesten `dev`-Commit `bef98047`.",
+   "headline": "Dev 1 Commit vor Master, Auto-Promote erfolgreich, neuer Check läuft",
+   "lage": "Der `dev`-Branch ist nun 1 Commit (`589f08eb`) vor `master` und 0 Commits dahinter. Der `Auto-Promote dev -> master`-Workflow für Commit `bef98047` wurde erfolgreich abgeschlossen, wodurch dieser Commit nun auf `master` ist. Aktuell läuft der `Check (Coach)`-Workflow für den neuesten `dev`-Commit `589f08eb`.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Der `Check (Coach)`-Workflow für den neuesten `dev`-Commit `bef98047` ist in Bearbeitung und blockiert potenziell weitere Auto-Promotes."
-    },
-    {
-     "level": "info",
-     "text": "Der `Auto-Promote dev -> master`-Workflow für Commit `ca549714` wurde erfolgreich abgeschlossen, was die Divergenz zu `master` reduziert hat."
+     "text": "Der `Check (Coach)`-Workflow für den neuesten `dev`-Commit `589f08eb` ist noch `in_progress`."
     },
     {
      "level": "mittel",
-     "text": "Das Problem mit dem `website`-Submodul (lokal unpushed SHA `71f101a`) ist weiterhin in `NEXT.md` und `TODO.md` als offener Punkt vermerkt."
+     "text": "Das `website`-Submodul hat weiterhin das Problem mit lokal unpushed SHAs (`71f101a`), was in `NEXT.md` und `TODO.md` als offener Punkt vermerkt ist."
     },
     {
      "level": "info",
-     "text": "Der `Deploy Coach`-Workflow für Commit `78079718` und der `Pages Docs`-Workflow wurden erfolgreich abgeschlossen."
+     "text": "Der `Pages Docs`-Workflow für Commit `e936962` wurde erfolgreich abgeschlossen, die Verifikation des öffentlichen Deploy ist noch offen laut `NEXT.md`."
     }
    ],
    "naechste_schritte": [
-    "Überwache den `Check (Coach)`-Workflow für `bef98047` und behebe ggf. Fehler.",
-    "Verifiziere den öffentlichen Pages-Deploy des Living Dashboards und prüfe die neue Seite `/README.html`.",
-    "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs, um das Problem mit `71f101a` zu adressieren."
+    "Überwache den `Check (Coach)`-Workflow für `589f08eb` und behebe ggf. Fehler.",
+    "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs, um das Problem mit `71f101a` zu adressieren.",
+    "Verifiziere den öffentlichen Pages-Deploy des Living Dashboards und prüfe die neue Seite `/README.html` gemäß `NEXT.md`."
    ],
-   "veraendert": "Der `dev`-Branch ist von 99 Commits auf 2 Commits vor `master` reduziert worden, und der `Auto-Promote dev -> master`-Workflow für `ca549714` wurde erfolgreich abgeschlossen.",
+   "veraendert": "Gegenüber der letzten Einschätzung wurde Commit `bef98047` erfolgreich nach `master` promotet, wodurch `dev` nun 1 Commit vor `master` liegt, statt 2.",
    "fragen": [
-    "Soll der lokal unpushed SHA `71f101a` im `website`-Repo gepusht oder verworfen werden, um das Pinnen remote-erreichbarer SHAs zu ermöglichen?",
-    "Wie soll mit der Divergenz des `KB-Gitlink` umgegangen werden, bevor das Submodul `fitness/catalog/kb` wiederhergestellt wird (Übernahme/Verwerfen von `inbox_jefferson_curl_pipeline.yml`)?"
+    "Soll der lokal unpushed SHA `71f101a` im `website`-Submodul gepusht oder verworfen werden, um das Pinnen Remote-erreichbarer SHAs zu ermöglichen?",
+    "Ist der erfolgreich abgeschlossene `Pages Docs`-Workflow für `e936962` der in `NEXT.md` erwähnte \"neue Pages Docs-Actions-Workflow\", dessen öffentlicher Deploy verifiziert werden soll?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-13T11:31:11+00:00"
+  "ai_at": "2026-11-13T11:38:27+00:00"
  }
 }
