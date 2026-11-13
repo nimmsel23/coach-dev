@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-13T12:35:25+00:00",
+  "generated_at": "2026-11-13T14:44:37+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-13T11:42:09Z",
+   "pushed_at": "2026-11-13T14:44:16Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,18 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 0,
-   "oldest_unpromoted": null,
-   "dev_head": "4dd1d666 2026-11-13T12:40:57+01:00",
+   "dev_ahead": 1,
+   "oldest_unpromoted": "2026-11-13T15:44:14+01:00",
+   "dev_head": "6ab48cf9 2026-11-13T15:44:14+01:00",
    "master_head": "4dd1d666 2026-11-13T12:40:57+01:00"
   },
   "commits": [
+   {
+    "sha": "6ab48cf9",
+    "date": "2026-11-13T15:44:14+01:00",
+    "author": "Alpha",
+    "subject": "„Cockpit“ heißt jetzt durchgehend „Dashboard“ (Owner-Wunsch)"
+   },
    {
     "sha": "4dd1d666",
     "date": "2026-11-13T12:40:57+01:00",
@@ -138,12 +144,6 @@
     "date": "2026-11-12T11:54:00+01:00",
     "author": "Alpha",
     "subject": "docs(coach): record inspector preview release evidence"
-   },
-   {
-    "sha": "30995a16",
-    "date": "2026-11-12T11:53:23+01:00",
-    "author": "Alpha",
-    "subject": "test(coach): verify notes survive failed save and retry successfully"
    }
   ],
   "activity": [
@@ -229,18 +229,28 @@
    },
    {
     "day": "2026-11-13",
-    "n": 11
+    "n": 12
    }
   ],
   "workflows": [
    {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-13T14:44:18Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43445583005",
+    "sha": "6ab48cf"
+   },
+   {
     "name": "Auto-Promote dev -> master (Check (Coach))",
     "branch": "dev",
-    "event": "workflow_run",
+    "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-13T11:42:01Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43419136949",
+    "created_at": "2026-11-13T14:36:31Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43444335671",
     "sha": "4dd1d66"
    },
    {
@@ -251,16 +261,6 @@
     "conclusion": "skipped",
     "created_at": "2026-11-13T11:42:00Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43419136943",
-    "sha": "4dd1d66"
-   },
-   {
-    "name": "Check (Coach)",
-    "branch": "dev",
-    "event": "push",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-13T11:41:01Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43419010223",
     "sha": "4dd1d66"
    },
    {
@@ -314,38 +314,33 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev/Master synchron, Commit 4dd1d666 erfolgreich promoted und Check grün",
-   "lage": "Der `dev`-Branch und `master` sind auf Commit `4dd1d666` synchronisiert. Der `Check (Coach)`-Workflow für `4dd1d666` wurde erfolgreich abgeschlossen, gefolgt von einem erfolgreichen `Auto-Promote dev -> master`.",
+   "headline": "Dev ist einen Commit voraus, Check (Coach) läuft für 6ab48cf9",
+   "lage": "Der `dev`-Branch ist mit Commit `6ab48cf9` (`„Cockpit“ heißt jetzt durchgehend „Dashboard“ (Owner-Wunsch)`) einen Commit vor `master`. `master` verbleibt auf `4dd1d666`. Der `Check (Coach)`-Workflow für den aktuellen `dev`-Head `6ab48cf9` ist noch `in_progress`.",
    "auffaelligkeiten": [
     {
-     "level": "hoch",
-     "text": "Der `dev`-Branch und `master` sind auf Commit `4dd1d666` synchronisiert, was die vorherige Divergenz auflöst."
+     "level": "mittel",
+     "text": "Der `dev`-Branch ist einen Commit (`6ab48cf9`) vor `master`, aber der `Check (Coach)`-Workflow für diesen Commit ist noch `in_progress`. Ein `Auto-Promote` kann erst nach dessen erfolgreichem Abschluss erfolgen."
     },
     {
      "level": "info",
-     "text": "Der `Check (Coach)`-Workflow für Commit `4dd1d666` wurde erfolgreich abgeschlossen."
+     "text": "Die `website`-Submodul-SHA `71f101a` ist laut `NEXT.md` lokal unpushed und muss entweder im `website`-Repo gepusht oder verworfen werden, um Remote-Erreichbarkeit sicherzustellen."
     },
     {
      "level": "info",
-     "text": "Der `Auto-Promote dev -> master`-Workflow für Commit `4dd1d66` (entspricht `4dd1d666`) wurde erfolgreich ausgeführt."
-    },
-    {
-     "level": "mittel",
-     "text": "Die Aufgabe, nur Remote-erreichbare SHAs für das `website`-Submodul zu pinnen (Problem `71f101a`), ist laut `NEXT.md` noch offen."
-    },
-    {
-     "level": "mittel",
-     "text": "Die Verifizierung des öffentlichen Pages-Deploys des Living Dashboards und die Prüfung der neuen Seite `/README.html` sind laut `NEXT.md` noch offen."
+     "text": "Der öffentliche Pages-Deploy des Living Dashboards und die neue Seite `/README.html` müssen noch verifiziert werden (gemäß `NEXT.md`)."
     }
    ],
    "naechste_schritte": [
+    "Prüfe den Status des `Check (Coach)`-Workflows für `6ab48cf9`.",
     "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs, um das Problem mit `71f101a` zu adressieren (gemäß `NEXT.md`).",
     "Verifiziere den öffentlichen Pages-Deploy des Living Dashboards und prüfe die neue Seite `/README.html` (gemäß `NEXT.md`)."
    ],
-   "veraendert": "Gegenüber der letzten Einschätzung sind `dev` und `master` nun auf Commit `4dd1d666` synchronisiert, und der `Check (Coach)`-Workflow für diesen Commit wurde erfolgreich abgeschlossen.",
-   "fragen": [],
+   "veraendert": "Gegenüber der letzten Einschätzung ist der `dev`-Branch nun einen Commit (`6ab48cf9`) vor `master`, und der `Check (Coach)`-Workflow für diesen neuen `dev`-Head läuft noch.",
+   "fragen": [
+    "Soll die lokal unpushed SHA `71f101a` des `website`-Submoduls im `website`-Repo gepusht oder verworfen werden?"
+   ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-13T12:35:28+00:00"
+  "ai_at": "2026-11-13T14:44:39+00:00"
  }
 }
