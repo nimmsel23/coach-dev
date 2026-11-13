@@ -1,3 +1,10 @@
+## 2026-11-13 — AL: Fitness-Agent Skill als PT-Gehilfe neu aufgebaut (Org 1c508846)
+
+Der `fitness-agent` Skill wurde als effizienter Gehilfe für den Personal Trainer (Daniel) komplett neu geschrieben und versioniert. Er deckt nun fünf Kernabläufe ab, um Daniel vor, während und nach einer Einheit mit den nötigen Fakten zu versorgen.
+
+-   **Skill-Definition:** `~/.dotfiles/claude-skills/fitness-agent/SKILL.md` erstellt und im `~/.dotfiles`-Repo committet (`1c508846`).
+-   **Alte Commands:**
+
 ## 2026-11-12 — AL: automerge-pr Retarget (Org c1f9b6ce)
 
 - Port journal-SSOT `375e122`: vor Squash Dependabot-PRs mit `base=master` auf `base=dev` retargeten.

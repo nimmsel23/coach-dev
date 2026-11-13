@@ -38,3 +38,8 @@
 - [ ] Observe one genuine code-related red Coach CI run through repair and a green rerun. Production remains a manual release decision.
 - [ ] Coach-Pages-Deploy nach dem neuen Docs-Commit verifizieren und die neue Seite `/README.html` prüfen.
 - [ ] Gemini-Reparaturpfad nach dem Feld-Fix anhand eines isolierten roten Checks verifizieren: Diagnose, Commit, Check-Neustart und nachgelagerter Deploy.
+
+**Gemini-Review (potenzielle blinde Flecken, 2026-11-13):**
+*   **Ungeprüfte Automatisierung:** Die Behauptung, dass nach jedem geloggten Workout für Klient Jakob automatisch eine WhatsApp-Zusammenfassung verschickt wird, wurde nicht durch einen tatsächlichen Test (z.B. das Loggen eines Workouts und Überprüfung des WhatsApp-Versands) verifiziert.
+*   **Teilweise verifizierte `coach clients`-Optionen:** Claude hat selbst berichtet, dass nur die Optionen `-l` und `-s` mit echten Daten getestet wurden, während andere Filteroptionen lediglich über die `--help`-Ausgabe geprüft wurden.
+*   **Ungeprüfte Annahme zur KB-Synchronisation:** Der Ersatz des kaputten `coach data-sync kb` durch `coach catalog push-changed` erfolgte ohne vollständige Verifikation, ob `push-changed` *alle* Datenbereiche abdeckt, die `data-sync kb` potenziell synchronisiert hätte, insbesondere da die `data-sync --help`-Ausgabe fehlerhaft war.
