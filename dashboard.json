@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-13T11:41:18+00:00",
+  "generated_at": "2026-11-13T12:35:25+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-13T11:40:59Z",
+   "pushed_at": "2026-11-13T11:42:09Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,10 +19,10 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 1,
-   "oldest_unpromoted": "2026-11-13T12:40:57+01:00",
+   "dev_ahead": 0,
+   "oldest_unpromoted": null,
    "dev_head": "4dd1d666 2026-11-13T12:40:57+01:00",
-   "master_head": "2d790cb0 2026-11-13T12:39:12+01:00"
+   "master_head": "4dd1d666 2026-11-13T12:40:57+01:00"
   },
   "commits": [
    {
@@ -234,13 +234,13 @@
   ],
   "workflows": [
    {
-    "name": "Check (Coach)",
+    "name": "Auto-Promote dev -> master (Check (Coach))",
     "branch": "dev",
-    "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
-    "created_at": "2026-11-13T11:41:01Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43419010223",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-13T11:42:01Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43419136949",
     "sha": "4dd1d66"
    },
    {
@@ -249,19 +249,19 @@
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "skipped",
-    "created_at": "2026-11-13T11:40:28Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43418939904",
-    "sha": "2d790cb"
+    "created_at": "2026-11-13T11:42:00Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43419136943",
+    "sha": "4dd1d66"
    },
    {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "name": "Check (Coach)",
     "branch": "dev",
-    "event": "workflow_run",
+    "event": "push",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-13T11:40:28Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43418939882",
-    "sha": "2d790cb"
+    "created_at": "2026-11-13T11:41:01Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43419010223",
+    "sha": "4dd1d66"
    },
    {
     "name": "Merge-Agent",
@@ -314,31 +314,38 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev 1 Commit vor Master, 2d790cb0 promoted, 4dd1d666 im Check",
-   "lage": "Der `dev`-Branch ist weiterhin 1 Commit (`4dd1d666`) vor `master` und 0 Commits dahinter. Der `Auto-Promote dev -> master`-Workflow für Commit `2d790cb0` wurde erfolgreich abgeschlossen, wodurch dieser Commit nun auf `master` ist. Aktuell läuft der `Check (Coach)`-Workflow für den neuesten `dev`-Commit `4dd1d666`.",
+   "headline": "Dev/Master synchron, Commit 4dd1d666 erfolgreich promoted und Check grün",
+   "lage": "Der `dev`-Branch und `master` sind auf Commit `4dd1d666` synchronisiert. Der `Check (Coach)`-Workflow für `4dd1d666` wurde erfolgreich abgeschlossen, gefolgt von einem erfolgreichen `Auto-Promote dev -> master`.",
    "auffaelligkeiten": [
     {
+     "level": "hoch",
+     "text": "Der `dev`-Branch und `master` sind auf Commit `4dd1d666` synchronisiert, was die vorherige Divergenz auflöst."
+    },
+    {
+     "level": "info",
+     "text": "Der `Check (Coach)`-Workflow für Commit `4dd1d666` wurde erfolgreich abgeschlossen."
+    },
+    {
+     "level": "info",
+     "text": "Der `Auto-Promote dev -> master`-Workflow für Commit `4dd1d66` (entspricht `4dd1d666`) wurde erfolgreich ausgeführt."
+    },
+    {
      "level": "mittel",
-     "text": "Das `website`-Submodul hat weiterhin ein Problem mit lokal ungepushten SHAs (`71f101a`), die nicht remote erreichbar sind und das Pinnen durch Dependabot erschweren (gemäß `NEXT.md` und `TODO.md`)."
+     "text": "Die Aufgabe, nur Remote-erreichbare SHAs für das `website`-Submodul zu pinnen (Problem `71f101a`), ist laut `NEXT.md` noch offen."
     },
     {
-     "level": "info",
-     "text": "Der `Check (Coach)`-Workflow für den `dev`-Head `4dd1d666` ist aktuell `in_progress`."
-    },
-    {
-     "level": "info",
-     "text": "Der `Pages Docs`-Workflow für Commit `e936962` wurde erfolgreich abgeschlossen, jedoch ist die Verifikation des öffentlichen Pages-Deploys und der neuen Seite `/README.html` noch offen (gemäß `NEXT.md` und `Gemini CI-Agent follow-up`)."
+     "level": "mittel",
+     "text": "Die Verifizierung des öffentlichen Pages-Deploys des Living Dashboards und die Prüfung der neuen Seite `/README.html` sind laut `NEXT.md` noch offen."
     }
    ],
    "naechste_schritte": [
-    "Überwache den `Check (Coach)`-Workflow für `4dd1d666` und behebe ggf. Fehler.",
     "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs, um das Problem mit `71f101a` zu adressieren (gemäß `NEXT.md`).",
     "Verifiziere den öffentlichen Pages-Deploy des Living Dashboards und prüfe die neue Seite `/README.html` (gemäß `NEXT.md`)."
    ],
-   "veraendert": "Der `dev`-Branch hat einen neuen Head-Commit (`4dd1d666`), und der `Auto-Promote dev -> master`-Workflow wurde für `2d790cb0` erfolgreich abgeschlossen, wodurch dieser Commit nun auf `master` ist. Der `Check (Coach)`-Workflow läuft jetzt für den neuen `dev`-Head `4dd1d666`.",
+   "veraendert": "Gegenüber der letzten Einschätzung sind `dev` und `master` nun auf Commit `4dd1d666` synchronisiert, und der `Check (Coach)`-Workflow für diesen Commit wurde erfolgreich abgeschlossen.",
    "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-13T11:41:20+00:00"
+  "ai_at": "2026-11-13T12:35:28+00:00"
  }
 }
