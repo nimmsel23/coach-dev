@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-13T06:05:07+00:00",
+  "generated_at": "2026-11-13T06:06:05+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-13T06:04:46Z",
+   "pushed_at": "2026-11-13T06:05:30Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,18 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 97,
+   "dev_ahead": 98,
    "oldest_unpromoted": "2026-11-10T01:25:57+01:00",
-   "dev_head": "3cd6f136 2026-11-13T06:04:44Z",
+   "dev_head": "78079718 2026-11-13T06:05:08Z",
    "master_head": "1c47aeb4 2026-11-12T02:27:32+01:00"
   },
   "commits": [
+   {
+    "sha": "78079718",
+    "date": "2026-11-13T06:05:08Z",
+    "author": "nimmdaniel",
+    "subject": "chore(pins): modules/plan faa3c955 → d4dbff26 (plan-dev master, KW46)"
+   },
    {
     "sha": "3cd6f136",
     "date": "2026-11-13T06:04:44Z",
@@ -138,12 +144,6 @@
     "date": "2026-11-12T11:31:36+01:00",
     "author": "Alpha",
     "subject": "feat(coach): retain client habit drafts across navigation and reload"
-   },
-   {
-    "sha": "791960df",
-    "date": "2026-11-12T11:28:28+01:00",
-    "author": "Alpha",
-    "subject": "fix(coach): preserve client deep links through the hosting shell"
    }
   ],
   "activity": [
@@ -229,29 +229,39 @@
    },
    {
     "day": "2026-11-13",
-    "n": 4
+    "n": 5
    }
   ],
   "workflows": [
-   {
-    "name": "Check (Coach)",
-    "branch": "dev",
-    "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
-    "created_at": "2026-11-13T06:04:48Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43376192289",
-    "sha": "3cd6f13"
-   },
    {
     "name": "PR-AutoMerge (Dependabot -> dev)",
     "branch": "dev",
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "skipped",
-    "created_at": "2026-11-13T05:12:59Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43370547567",
-    "sha": "e65a466"
+    "created_at": "2026-11-13T06:06:01Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43376339155",
+    "sha": "7807971"
+   },
+   {
+    "name": "Deploy Coach",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-13T06:05:11Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43376238439",
+    "sha": "7807971"
+   },
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-13T06:05:11Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43376238332",
+    "sha": "7807971"
    },
    {
     "name": "Merge-Agent",
@@ -274,16 +284,6 @@
     "sha": "c5087e4"
    },
    {
-    "name": "Deploy Coach",
-    "branch": "dev",
-    "event": "push",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-12T11:22:28Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43208593262",
-    "sha": "c5087e4"
-   },
-   {
     "name": "Pages Docs",
     "branch": "dev",
     "event": "push",
@@ -294,19 +294,7 @@
     "sha": "e936962"
    }
   ],
-  "issues": [
-   {
-    "number": 20,
-    "title": "Dashboard-Lage: rot",
-    "created_at": "2026-11-13T00:05:13Z",
-    "updated_at": "2026-11-13T05:12:45Z",
-    "labels": [
-     "dashboard"
-    ],
-    "url": "https://github.com/nimmsel23/coach-dev/issues/20",
-    "author": "github-actions[bot]"
-   }
-  ],
+  "issues": [],
   "pulls": [],
   "live_sites": [
    "https://vos-coach.web.app"
@@ -318,32 +306,24 @@
    {
     "level": "yellow",
     "key": "promote",
-    "text": "97 Commit(s) auf dev seit 3.2 Tagen nicht auf master promotet"
+    "text": "98 Commit(s) auf dev seit 3.2 Tagen nicht auf master promotet"
    }
   ],
   "ai": {
-   "headline": "Dev-Branch stark divergent; Pages-Deploy in Verifikation; CI läuft",
-   "lage": "Der `dev`-Branch ist weiterhin 97 Commits vor `master`, was den Auto-Promote blockiert. Ein `Merge master into dev` (Commit `3cd6f136`) hat die \"behind\"-Divergenz behoben. Der `Check (Coach)`-Workflow läuft aktuell, und Issue #20 \"Dashboard-Lage: rot\" ist offen.",
+   "headline": "Dev-Branch divergent, Pages-Deploy in Verifikation, CI läuft erfolgreich",
+   "lage": "Der `dev`-Branch ist weiterhin 98 Commits vor `master`, was den Auto-Promote blockiert. Ein `Merge master into dev` (Commit `3cd6f136`) hat die \"behind\"-Divergenz behoben. Der `Check (Coach)`-Workflow ist erfolgreich abgeschlossen, und ein `Deploy Coach`-Workflow läuft aktuell.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Der `dev`-Branch ist 97 Commits vor `master` seit 3.2 Tagen, was den Auto-Promote blockiert."
-    },
-    {
-     "level": "mittel",
-     "text": "Der `Check (Coach)`-Workflow für Commit `3cd6f13` ist aktuell `in_progress`."
-    },
-    {
-     "level": "mittel",
-     "text": "Issue #20 \"Dashboard-Lage: rot\" ist weiterhin offen und wurde zuletzt um 05:12:45Z aktualisiert."
+     "text": "Der `dev`-Branch ist 98 Commits vor `master` und blockiert den Auto-Promote, wie durch das Regel-Signal 'promote' angezeigt."
     },
     {
      "level": "info",
-     "text": "Commit `3cd6f136` (\"Merge master into dev\") hat die Divergenz des `dev`-Branches, hinter `master` zu liegen, behoben."
+     "text": "Der `Deploy Coach`-Workflow läuft aktuell für Commit `78079718`."
     },
     {
      "level": "info",
-     "text": "Der `feat(ci)`-Commit `c5f3a8ed` für das Living Dashboard als GitHub Page ist im `dev`-Branch enthalten."
+     "text": "Der `Check (Coach)`-Workflow für Commit `78079718` wurde erfolgreich abgeschlossen."
     }
    ],
    "naechste_schritte": [
@@ -351,10 +331,13 @@
     "Verifiziere den öffentlichen Pages-Deploy des Living Dashboards (URL: `https://nimmsel23.github.io/coach-dev/`) nach Commit `c5f3a8ed` und prüfe die neue Seite `/README.html`.",
     "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs, um das Problem mit `71f101a` zu adressieren."
    ],
-   "veraendert": "Der `dev`-Branch ist nicht mehr hinter `master` (Commit `3cd6f136`), aber die Vorlage von 97 Commits bleibt bestehen.",
-   "fragen": [],
+   "veraendert": "Der `Check (Coach)`-Workflow ist nun erfolgreich abgeschlossen; Issue #20 ist nicht mehr in der Evidenz.",
+   "fragen": [
+    "Soll der lokal unpushed Commit `71f101a` im `website`-Repo gepusht oder verworfen werden, um das Pinnen remote-erreichbarer SHAs zu ermöglichen?",
+    "Soll die `inbox_jefferson_curl_pipeline.yml` vor der Wiederherstellung des KB-Gitlinks nach `~/dev/fitness` übernommen oder bewusst verworfen werden?"
+   ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-13T06:05:10+00:00"
+  "ai_at": "2026-11-13T06:06:08+00:00"
  }
 }
