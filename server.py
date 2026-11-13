@@ -399,6 +399,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     app.include_router(create_router())
     from coach_local_traction import router as local_traction_router
     app.include_router(local_traction_router)
+    from coach_org import create_router as create_org_router
+    app.include_router(create_org_router())
 
     from coach_legacy_clients import (
         include_legacy_clients, legacy_ui, schmiede_dir, konsole_dir, spa_document,
