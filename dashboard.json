@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-13T05:12:26+00:00",
+  "generated_at": "2026-11-13T06:05:07+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-13T05:12:08Z",
+   "pushed_at": "2026-11-13T06:04:46Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -18,13 +18,19 @@
   "branches": {
    "main": "master",
    "has_dev": true,
-   "dev_behind": 2,
-   "dev_ahead": 96,
+   "dev_behind": 0,
+   "dev_ahead": 97,
    "oldest_unpromoted": "2026-11-10T01:25:57+01:00",
-   "dev_head": "e65a466d 2026-11-13T06:12:05+01:00",
+   "dev_head": "3cd6f136 2026-11-13T06:04:44Z",
    "master_head": "1c47aeb4 2026-11-12T02:27:32+01:00"
   },
   "commits": [
+   {
+    "sha": "3cd6f136",
+    "date": "2026-11-13T06:04:44Z",
+    "author": "nimmdaniel",
+    "subject": "Merge master into dev (sync divergent master-only CI commits; net no-op)"
+   },
    {
     "sha": "e65a466d",
     "date": "2026-11-13T06:12:05+01:00",
@@ -138,12 +144,6 @@
     "date": "2026-11-12T11:28:28+01:00",
     "author": "Alpha",
     "subject": "fix(coach): preserve client deep links through the hosting shell"
-   },
-   {
-    "sha": "5eb11d99",
-    "date": "2026-11-12T11:25:31+01:00",
-    "author": "Alpha",
-    "subject": "fix(coach): isolate feedback by client and feed entry type"
    }
   ],
   "activity": [
@@ -221,15 +221,15 @@
    },
    {
     "day": "2026-11-11",
-    "n": 17
+    "n": 18
    },
    {
     "day": "2026-11-12",
-    "n": 30
+    "n": 31
    },
    {
     "day": "2026-11-13",
-    "n": 3
+    "n": 4
    }
   ],
   "workflows": [
@@ -239,8 +239,18 @@
     "event": "push",
     "status": "in_progress",
     "conclusion": null,
-    "created_at": "2026-11-13T05:12:10Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43370457708",
+    "created_at": "2026-11-13T06:04:48Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43376192289",
+    "sha": "3cd6f13"
+   },
+   {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "skipped",
+    "created_at": "2026-11-13T05:12:59Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43370547567",
     "sha": "e65a466"
    },
    {
@@ -251,16 +261,6 @@
     "conclusion": "success",
     "created_at": "2026-11-13T02:55:18Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43355442084",
-    "sha": "c5f3a8e"
-   },
-   {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-13T01:55:06Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43348387690",
     "sha": "c5f3a8e"
    },
    {
@@ -299,7 +299,7 @@
     "number": 20,
     "title": "Dashboard-Lage: rot",
     "created_at": "2026-11-13T00:05:13Z",
-    "updated_at": "2026-11-13T00:05:13Z",
+    "updated_at": "2026-11-13T05:12:45Z",
     "labels": [
      "dashboard"
     ],
@@ -313,37 +313,37 @@
   ]
  },
  "assessment": {
-  "status": "red",
+  "status": "yellow",
   "signals": [
    {
-    "level": "red",
-    "key": "diverged",
-    "text": "dev und master sind auseinandergelaufen (96 vor, 2 hinter) — Auto-Promote kann nicht vorspulen"
+    "level": "yellow",
+    "key": "promote",
+    "text": "97 Commit(s) auf dev seit 3.2 Tagen nicht auf master promotet"
    }
   ],
   "ai": {
-   "headline": "Dev-Branch stark divergent; Dashboard-Lage rot und Pages-Deploy in Verifikation",
-   "lage": "Der `dev`-Branch ist weiterhin stark divergent (96 Commits vor, 2 hinter `master`), was den Auto-Promote blockiert. Ein neuer `feat(ci)`-Commit `c5f3a8ed` hat das Living Dashboard auf GitHub Pages umgestellt. Ein `Check (Coach)`-Workflow läuft aktuell, während ein Bot-Issue #20 \"Dashboard-Lage: rot\" gemeldet hat.",
+   "headline": "Dev-Branch stark divergent; Pages-Deploy in Verifikation; CI läuft",
+   "lage": "Der `dev`-Branch ist weiterhin 97 Commits vor `master`, was den Auto-Promote blockiert. Ein `Merge master into dev` (Commit `3cd6f136`) hat die \"behind\"-Divergenz behoben. Der `Check (Coach)`-Workflow läuft aktuell, und Issue #20 \"Dashboard-Lage: rot\" ist offen.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Der `dev`-Branch ist 96 Commits vor und 2 Commits hinter `master` gelaufen, was den Auto-Promote blockiert (Regel-Signal: `diverged`)."
-    },
-    {
-     "level": "hoch",
-     "text": "Ein Bot hat Issue #20 'Dashboard-Lage: rot' erstellt, was auf ein Problem mit dem Living Dashboard hindeutet."
+     "text": "Der `dev`-Branch ist 97 Commits vor `master` seit 3.2 Tagen, was den Auto-Promote blockiert."
     },
     {
      "level": "mittel",
-     "text": "Der `Check (Coach)`-Workflow für Commit `e65a466d` ist aktuell `in_progress`."
+     "text": "Der `Check (Coach)`-Workflow für Commit `3cd6f13` ist aktuell `in_progress`."
+    },
+    {
+     "level": "mittel",
+     "text": "Issue #20 \"Dashboard-Lage: rot\" ist weiterhin offen und wurde zuletzt um 05:12:45Z aktualisiert."
     },
     {
      "level": "info",
-     "text": "Der `Merge-Agent` und `PR-AutoMerge (Dependabot -> dev)` Workflows wurden erfolgreich abgeschlossen."
+     "text": "Commit `3cd6f136` (\"Merge master into dev\") hat die Divergenz des `dev`-Branches, hinter `master` zu liegen, behoben."
     },
     {
      "level": "info",
-     "text": "Das Living Dashboard wurde mit Commit `c5f3a8ed` auf GitHub Pages umgestellt, der alte `pages-docs.yml` Workflow archiviert."
+     "text": "Der `feat(ci)`-Commit `c5f3a8ed` für das Living Dashboard als GitHub Page ist im `dev`-Branch enthalten."
     }
    ],
    "naechste_schritte": [
@@ -351,13 +351,10 @@
     "Verifiziere den öffentlichen Pages-Deploy des Living Dashboards (URL: `https://nimmsel23.github.io/coach-dev/`) nach Commit `c5f3a8ed` und prüfe die neue Seite `/README.html`.",
     "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs, um das Problem mit `71f101a` zu adressieren."
    ],
-   "veraendert": "Der `dev`-Branch ist um einen Commit weiter vor `master` gelaufen, das Living Dashboard wurde auf GitHub Pages umgestellt, und ein Bot hat ein neues Issue #20 'Dashboard-Lage: rot' gemeldet.",
-   "fragen": [
-    "Soll der `dev`-Branch trotz des roten Dashboard-Status (Issue #20) in `master` gemergt werden, um die Divergenz zu beheben?",
-    "Welche Priorität hat die Behebung des roten Dashboard-Status (Issue #20) im Vergleich zur Verifikation des Pages-Deploys?"
-   ],
+   "veraendert": "Der `dev`-Branch ist nicht mehr hinter `master` (Commit `3cd6f136`), aber die Vorlage von 97 Commits bleibt bestehen.",
+   "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-13T05:12:29+00:00"
+  "ai_at": "2026-11-13T06:05:10+00:00"
  }
 }
