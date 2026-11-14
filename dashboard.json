@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-13T14:44:37+00:00",
+  "generated_at": "2026-11-14T11:43:54+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-13T14:44:16Z",
+   "pushed_at": "2026-11-13T14:45:32Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,10 +19,10 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 1,
-   "oldest_unpromoted": "2026-11-13T15:44:14+01:00",
+   "dev_ahead": 0,
+   "oldest_unpromoted": null,
    "dev_head": "6ab48cf9 2026-11-13T15:44:14+01:00",
-   "master_head": "4dd1d666 2026-11-13T12:40:57+01:00"
+   "master_head": "6ab48cf9 2026-11-13T15:44:14+01:00"
   },
   "commits": [
    {
@@ -148,12 +148,8 @@
   ],
   "activity": [
    {
-    "day": "2026-10-24",
-    "n": 7
-   },
-   {
     "day": "2026-10-25",
-    "n": 33
+    "n": 12
    },
    {
     "day": "2026-10-26",
@@ -230,17 +226,21 @@
    {
     "day": "2026-11-13",
     "n": 12
+   },
+   {
+    "day": "2026-11-14",
+    "n": 0
    }
   ],
   "workflows": [
    {
-    "name": "Check (Coach)",
+    "name": "Merge-Agent",
     "branch": "dev",
-    "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
-    "created_at": "2026-11-13T14:44:18Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43445583005",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-14T10:44:44Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43586717633",
     "sha": "6ab48cf"
    },
    {
@@ -249,29 +249,29 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-13T14:36:31Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43444335671",
-    "sha": "4dd1d66"
+    "created_at": "2026-11-14T08:02:26Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43573885235",
+    "sha": "6ab48cf"
    },
    {
     "name": "PR-AutoMerge (Dependabot -> dev)",
     "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "skipped",
-    "created_at": "2026-11-13T11:42:00Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43419136943",
-    "sha": "4dd1d66"
-   },
-   {
-    "name": "Merge-Agent",
-    "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-13T10:24:46Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43408864600",
-    "sha": "ca54971"
+    "created_at": "2026-11-14T06:40:06Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43567457492",
+    "sha": "6ab48cf"
+   },
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-13T14:44:18Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43445583005",
+    "sha": "6ab48cf"
    },
    {
     "name": "Gemini CI Agent",
@@ -314,33 +314,33 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev ist einen Commit voraus, Check (Coach) läuft für 6ab48cf9",
-   "lage": "Der `dev`-Branch ist mit Commit `6ab48cf9` (`„Cockpit“ heißt jetzt durchgehend „Dashboard“ (Owner-Wunsch)`) einen Commit vor `master`. `master` verbleibt auf `4dd1d666`. Der `Check (Coach)`-Workflow für den aktuellen `dev`-Head `6ab48cf9` ist noch `in_progress`.",
+   "headline": "Dev und Master synchronisiert auf 6ab48cf9, alle Checks erfolgreich",
+   "lage": "Die Branches `dev` und `master` sind auf Commit `6ab48cf9` (`„Cockpit“ heißt jetzt durchgehend „Dashboard“ (Owner-Wunsch)`) synchronisiert. Der `Check (Coach)`-Workflow für `6ab48cf9` und der `Auto-Promote dev -> master (Check (Coach))` Workflow liefen erfolgreich.",
    "auffaelligkeiten": [
     {
-     "level": "mittel",
-     "text": "Der `dev`-Branch ist einen Commit (`6ab48cf9`) vor `master`, aber der `Check (Coach)`-Workflow für diesen Commit ist noch `in_progress`. Ein `Auto-Promote` kann erst nach dessen erfolgreichem Abschluss erfolgen."
+     "level": "info",
+     "text": "Der `website`-Submodul-Pin `71f101a` ist weiterhin als lokal unpushed in `NEXT.md` und `TODO.md` vermerkt."
     },
     {
      "level": "info",
-     "text": "Die `website`-Submodul-SHA `71f101a` ist laut `NEXT.md` lokal unpushed und muss entweder im `website`-Repo gepusht oder verworfen werden, um Remote-Erreichbarkeit sicherzustellen."
+     "text": "Die Verifizierung des öffentlichen Pages-Deploys und der neuen Seite `/README.html` steht noch aus (gemäß `NEXT.md`)."
     },
     {
      "level": "info",
-     "text": "Der öffentliche Pages-Deploy des Living Dashboards und die neue Seite `/README.html` müssen noch verifiziert werden (gemäß `NEXT.md`)."
+     "text": "Das `KB-Gitlink` in `backend/fitness/catalog/kb` ist noch ein vendored Tree statt eines Submoduls (gemäß `TODO.md`)."
     }
    ],
    "naechste_schritte": [
-    "Prüfe den Status des `Check (Coach)`-Workflows für `6ab48cf9`.",
-    "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs, um das Problem mit `71f101a` zu adressieren (gemäß `NEXT.md`).",
-    "Verifiziere den öffentlichen Pages-Deploy des Living Dashboards und prüfe die neue Seite `/README.html` (gemäß `NEXT.md`)."
+    "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` (gemäß `NEXT.md`).",
+    "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs (gemäß `NEXT.md`, `TODO.md`).",
+    "Untersuche die Diskrepanz des `KB-Gitlink` in `backend/fitness/catalog/kb` und stelle den Gitlink wieder her (gemäß `TODO.md`)."
    ],
-   "veraendert": "Gegenüber der letzten Einschätzung ist der `dev`-Branch nun einen Commit (`6ab48cf9`) vor `master`, und der `Check (Coach)`-Workflow für diesen neuen `dev`-Head läuft noch.",
+   "veraendert": "Der `dev`-Branch ist nicht mehr einen Commit vor `master`, sondern beide Branches sind auf `6ab48cf9` synchronisiert, nachdem der `Check (Coach)`-Workflow erfolgreich abgeschlossen wurde.",
    "fragen": [
-    "Soll die lokal unpushed SHA `71f101a` des `website`-Submoduls im `website`-Repo gepusht oder verworfen werden?"
+    "Sollen die divergierenden Inbox-Deltas vor der Wiederherstellung des `KB-Gitlink` in `backend/fitness/catalog/kb` nach `~/dev/fitness` übernommen oder verworfen werden?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-13T14:44:39+00:00"
+  "ai_at": "2026-11-14T11:43:56+00:00"
  }
 }
