@@ -670,10 +670,12 @@ def create_router(root=None, deliver=None):
     @router.get('/api/client/{client}/taskwarrior')
     async def taskwarrior_tasks(client: str, request: Request):
         workspace = await handle(request, store.client, client)
+        if not (workspace / 'tw-data' / 'taskrc').is_file():
+            return {'tasks': [], 'available': False, 'reason': 'not-configured', 'storage': 'local-client-workspace'}
         try:
             from coach_taskwarrior_scheduler import with_taskwarrior_lock
             tasks = await asyncio.to_thread(with_taskwarrior_lock, load_taskwarrior_module().workspace_tasks, workspace)
-            return {'tasks': tasks, 'storage': 'local-client-workspace'}
+            return {'tasks': tasks, 'available': True, 'storage': 'local-client-workspace'}
         except Exception:
             logging.exception('Unable to read client Taskwarrior database')
             raise HTTPException(503, 'Taskwarrior-Datenbank des Klienten nicht lesbar.')

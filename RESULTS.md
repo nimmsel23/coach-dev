@@ -2279,3 +2279,9 @@ Fitness-/Rules-Release voraus.
 - `GET /coach/local.html` liefert HTTP 200; das ausgelieferte `local-main`-Bundle enthält die Fitness-Nutzungsansicht samt leerem Zustand.
 - Aktueller Firestore-Abfragewert: 0 Events/Öffnungen/Seitenaufrufe. Die Konsole funktioniert; echte App-Nutzung ist damit noch nicht nachgewiesen.
 
+## 2026-11-14 — Taskwarrior-Setupstatus pro Klientenworkspace
+
+- Lokaler Read-only-Audit: 12 Workspaces, fünf lokale Pläne (zwei freigegeben, einer übergeben); eine Taskwarrior-DB mit 30 offenen Plan-Tasks, keine Workout-Log-Tasks und kein aktivierter Auto-Abgleich.
+- `GET /api/client/<id>/taskwarrior` unterscheidet jetzt fehlende DB (`available: false`, `not-configured`) von leerer/lesbarer DB und HTTP-Lesefehlern. Office-Übersicht und Premium-Tracking zeigen den Einrichtungszustand verständlich an.
+- Coach-Frontend mit direktem lokal installiertem Vite 8.3.6 gebaut; Bundle enthält beide Zustände. Backend-Syntax kompiliert. Kein Testlauf und kein Dienstneustart.
+

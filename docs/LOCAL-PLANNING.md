@@ -161,6 +161,11 @@ Unbekannte Klienten ergeben 404. Konfliktprüfung, Versionssnapshots und explizi
 Versand bleiben erhalten. Die singulären `/plan`-Routen der früheren 5200-App
 haben einen anderen Legacy-Vertrag und werden nicht still umgedeutet.
 
+`GET /api/client/<id>/taskwarrior` meldet eine noch nicht angelegte Datenbank mit
+`available: false, reason: not-configured`; eine vorhandene, leere DB liefert
+`available: true` und `tasks: []`. So bleibt „noch nicht eingerichtet“ von
+„eingerichtet, aber ohne Tasks“ und einem tatsächlichen Lesefehler getrennt.
+
 Die Python-API bleibt auf Loopback und gleiche Schreib-Origin beschränkt.
 Firebase Hosting führt keinen Python-Server aus; Cloud-Coach verwendet weiterhin
 seine authentifizierten Firestore-Adapter. Eine Client-ID ist keine Zugangsberechtigung.

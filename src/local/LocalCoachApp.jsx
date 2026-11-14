@@ -87,6 +87,7 @@ export default function LocalCoachApp() {
   const [noteEditingDate, setNoteEditingDate] = useState('');
   const [taskwarriorTasks, setTaskwarriorTasks] = useState([]);
   const [taskwarriorLoading, setTaskwarriorLoading] = useState(false);
+  const [taskwarriorDbStatus, setTaskwarriorDbStatus] = useState('unknown');
   const [taskwarriorPlanId, setTaskwarriorPlanId] = useState('');
   const [taskwarriorReport, setTaskwarriorReport] = useState(null);
   const [workoutHistory, setWorkoutHistory] = useState({ available: null, reason: null, workouts: [] });
@@ -153,7 +154,7 @@ export default function LocalCoachApp() {
           ? workoutsResult.value.workouts
           : [];
         const lastWorkoutAt = workouts.map((workout) => workout.finished_at || workout.date || workout.id).filter(Boolean).sort().at(-1) || '';
-        const taskwarriorTasks = taskwarriorResult.status === 'fulfilled' && Array.isArray(taskwarriorResult.value.tasks)
+        const taskwarriorTasks = taskwarriorResult.status === 'fulfilled' && taskwarriorResult.value.available !== false && Array.isArray(taskwarriorResult.value.tasks)
           ? taskwarriorResult.value.tasks
           : null;
         const planFeedback = feedbackResult.status === 'fulfilled' ? feedbackResult.value : null;
@@ -164,6 +165,7 @@ export default function LocalCoachApp() {
           workoutsCount: workoutsResult.status === 'fulfilled' && workoutsResult.value.available !== false ? workouts.length : null,
           lastWorkoutAt,
           taskwarriorAvailable: taskwarriorTasks !== null,
+          taskwarriorReason: taskwarriorResult.status === 'fulfilled' ? taskwarriorResult.value.reason || null : null,
           taskwarriorTaskCount: taskwarriorTasks?.length ?? null,
           taskwarriorPendingCount: taskwarriorTasks?.filter((task) => task.status === 'pending').length ?? null,
           taskwarriorCompletedCount: taskwarriorTasks?.filter((task) => task.status === 'completed').length ?? null,
@@ -219,7 +221,7 @@ export default function LocalCoachApp() {
     const mine = ++sequence.current;
     setPlans([]); setShareCard(null); setViewing(null); setHistory(null); setReleasing(null); setCreating(false); setError(''); setNotice('');
     setCoachNotes([]); setNoteDate(todayISO()); setNoteDraft(''); setNoteDirty(false); setNoteEditingDate('');
-    setTaskwarriorTasks([]); setTaskwarriorPlanId(''); setTaskwarriorReport(null);
+    setTaskwarriorTasks([]); setTaskwarriorDbStatus('unknown'); setTaskwarriorPlanId(''); setTaskwarriorReport(null);
     setWorkoutHistory({ available: null, reason: null, workouts: [] });
     if (!clientId) return;
     setLoading(true);
@@ -240,8 +242,8 @@ export default function LocalCoachApp() {
     const request = ++taskwarriorSequence.current;
     setTaskwarriorLoading(true);
     api(`${clientPath}/taskwarrior`)
-      .then((data) => { if (request === taskwarriorSequence.current) setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); })
-      .catch((err) => { if (request === taskwarriorSequence.current) setError(err.message); })
+      .then((data) => { if (request === taskwarriorSequence.current) { setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); setTaskwarriorDbStatus(data.available === false ? 'not-configured' : 'available'); } })
+      .catch((err) => { if (request === taskwarriorSequence.current) { setTaskwarriorDbStatus('unreadable'); setError(err.message); } })
       .finally(() => { if (request === taskwarriorSequence.current) setTaskwarriorLoading(false); });
     return () => { taskwarriorSequence.current += 1; };
   }, [clientId, workspaceTab]);
@@ -278,7 +280,7 @@ export default function LocalCoachApp() {
     const refresh = async () => {
       try {
         const data = await api(`${clientPath}/taskwarrior`);
-        if (active) setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
+        if (active) setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); setTaskwarriorDbStatus(data.available === false ? 'not-configured' : 'available');
       } catch (err) { if (active) setError(err.message); }
     };
     const timer = window.setInterval(refresh, 60_000);
@@ -304,7 +306,7 @@ export default function LocalCoachApp() {
         matchedWorkouts: result.matchedWorkouts,
       });
       const data = await api(`${clientPath}/taskwarrior`);
-      setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
+      setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); setTaskwarriorDbStatus(data.available === false ? 'not-configured' : 'available');
       setNotice(`Trainingsvorkommen abgeglichen; ${result.report?.completed || 0} durch Fitness-Logs erledigt markiert.`);
     });
   }
@@ -320,7 +322,7 @@ export default function LocalCoachApp() {
     await act(async () => {
       await api(`${clientPath}/taskwarrior/complete`, 'POST', { occurrenceKey });
       const data = await api(`${clientPath}/taskwarrior`);
-      setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []);
+      setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); setTaskwarriorDbStatus(data.available === false ? 'not-configured' : 'available');
       setNotice('Workout in der lokalen Taskwarrior-Datenbank abgehakt.');
     });
   }
@@ -419,7 +421,7 @@ export default function LocalCoachApp() {
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">App-Zuordnung</p><p className="mt-1 text-2xl font-semibold">{clients.filter((item) => item.canDeliver).length}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Trainingseinträge · 28 Tage</p><p className="mt-1 text-2xl font-semibold">{clientSummaries.reduce((total, item) => total + (item.workoutsCount || 0), 0)}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Ohne Eintrag · 28 Tage</p><p className="mt-1 text-2xl font-semibold">{clientSummaries.filter((item) => item.workoutsCount === 0).length}</p></div>
-              <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Überfällige Workout-Tasks</p><p className="mt-1 text-2xl font-semibold text-fit-red">{summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.overdueTaskCount || 0), 0)}</p><p className="mt-1 text-xs text-fit-muted">Taskwarrior-Antworten: {summariesLoading ? '…' : `${clientSummaries.filter((item) => item.taskwarriorAvailable).length}/${clients.length}`}</p></div>
+              <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Überfällige Workout-Tasks</p><p className="mt-1 text-2xl font-semibold text-fit-red">{summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.overdueTaskCount || 0), 0)}</p><p className="mt-1 text-xs text-fit-muted">Taskwarrior-Datenbanken: {summariesLoading ? '…' : `${clientSummaries.filter((item) => item.taskwarriorAvailable).length}/${clients.length}`}</p></div>
               <div className="rounded-xl border border-fit-line p-4"><p className="text-xs text-fit-muted">Coach-Antworten offen</p><p className="mt-1 text-2xl font-semibold text-fit-accent">{summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.feedbackAwaitingReplyCount || 0), 0)}</p><p className="mt-1 text-xs text-fit-muted">Empfang offen: {summariesLoading ? '…' : clientSummaries.reduce((total, item) => total + (item.feedbackAwaitingReceiptCount || 0), 0)} · Cloud-Status: {summariesLoading ? '…' : `${clientSummaries.filter((item) => item.feedbackAvailable).length}/${clients.length}`}</p></div>
             </div>
           </header>
@@ -443,7 +445,7 @@ export default function LocalCoachApp() {
                     : 'Cloud-Status nicht lesbar';
             return <article key={item.id} className="rounded-2xl border border-fit-line bg-fit-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="text-lg font-semibold">{item.name}</h3><p className="mt-1 text-xs text-fit-muted">{item.status || 'Aktiver Klient'} · {item.canDeliver ? 'App zugeordnet' : 'Lokale Betreuung'}</p></div><a className={button} href={`/${encodeURIComponent(item.id)}/`}>Klientenakte öffnen</a></div>
-              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span><span className="text-fit-muted">Workout-Tasks: <strong className={summary?.overdueTaskCount > 0 ? 'text-fit-red' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.taskwarriorAvailable ? 'nicht lesbar' : summary.taskwarriorTaskCount === 0 ? 'keine Tasks' : summary.taskwarriorPendingCount === 0 ? `keine offen · ${summary.taskwarriorCompletedCount} erledigt` : `${summary.taskwarriorPendingCount} offen · ${summary.overdueTaskCount} überfällig`}</strong></span><span className="text-fit-muted">Planfeedback: <strong className={summary?.feedbackAwaitingReplyCount > 0 ? 'text-fit-accent' : 'text-fit-ink'}>{feedbackStatus}</strong></span></div>
+              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm"><span className="text-fit-muted">Pläne: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.plansCount ?? '—'}</strong></span><span className="text-fit-muted">Trainingseinträge: <strong className="text-fit-ink">{summariesLoading ? '…' : summary?.workoutsCount ?? '—'}</strong></span><span className="text-fit-muted">Zuletzt: <strong className="text-fit-ink">{summary?.lastWorkoutAt ? new Date(summary.lastWorkoutAt).toLocaleDateString('de-AT') : summary?.workoutsCount === 0 ? 'kein Eintrag in 28 Tagen' : '—'}</strong></span><span className="text-fit-muted">Workout-Tasks: <strong className={summary?.overdueTaskCount > 0 ? 'text-fit-red' : 'text-fit-ink'}>{summariesLoading ? '…' : !summary?.taskwarriorAvailable ? (summary?.taskwarriorReason === 'not-configured' ? 'nicht eingerichtet' : 'nicht lesbar') : summary.taskwarriorTaskCount === 0 ? 'keine Tasks' : summary.taskwarriorPendingCount === 0 ? `keine offen · ${summary.taskwarriorCompletedCount} erledigt` : `${summary.taskwarriorPendingCount} offen · ${summary.overdueTaskCount} überfällig`}</strong></span><span className="text-fit-muted">Planfeedback: <strong className={summary?.feedbackAwaitingReplyCount > 0 ? 'text-fit-accent' : 'text-fit-ink'}>{feedbackStatus}</strong></span></div>
               <div className="mt-4 flex flex-wrap gap-2"><button className={`${button} bg-fit-accent text-fit-bg`} onClick={() => selectClient(item.id)}>Trainingsplanung öffnen</button><button className={button} onClick={() => selectClient(item.id, 'notes')}>Betreuungsnotizen</button></div>
             </article>;
           })}</div>
@@ -477,7 +479,7 @@ export default function LocalCoachApp() {
             </form>
             <section aria-label="Gespeicherte Betreuungsnotizen" className="space-y-3"><div className="flex items-center justify-between"><h3 className="font-semibold">Gespeicherte Notizen</h3><button className={button} disabled={notesLoading} onClick={() => setWorkspaceTab('plans')}>Zur Planung</button></div>{notesLoading && <p role="status" className="text-sm text-fit-muted">Notizen werden geladen…</p>}{!notesLoading && !coachNotes.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Noch keine Betreuungsnotizen für diesen Klienten.</p>}{coachNotes.map((note) => <article key={note.date} className="rounded-xl border border-fit-line bg-fit-card p-4"><div className="flex items-start justify-between gap-3"><p className="font-semibold">{new Date(`${note.date}T12:00:00`).toLocaleDateString('de-AT')}</p><button className="min-h-10 text-sm text-fit-accent underline" disabled={busy} onClick={() => editNote(note)}>Bearbeiten</button></div><p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed">{note.note || 'Leerer Eintrag'}</p><p className="mt-3 text-xs text-fit-dim">Geändert {fmt(note.updated_at)}</p></article>)}</section>
           </section> : workspaceTab === 'taskwarrior' ? <section className="space-y-5">
-            <header className="rounded-2xl border border-fit-line bg-fit-card p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div><h3 className="flex items-center gap-2 text-lg font-semibold"><ClipboardList size={19} /> Workout-Tracking in Taskwarrior</h3><p className="mt-2 max-w-2xl text-sm leading-relaxed text-fit-muted">Geplante Einzeltrainings werden in der vorhandenen Taskwarrior-Datenbank im privaten Klienten-Workspace geführt. Änderungen bleiben lokal; dieser Abgleich sendet keine Klientenakte und keine Tasks an Firebase.</p></div><button className={button} disabled={taskwarriorLoading || busy} onClick={() => act(async () => { const data = await api(`${clientPath}/taskwarrior`); setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); })}><RefreshCw size={15} className="mr-2 inline" /> Aktualisieren</button></div>
+            <header className="rounded-2xl border border-fit-line bg-fit-card p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div><h3 className="flex items-center gap-2 text-lg font-semibold"><ClipboardList size={19} /> Workout-Tracking in Taskwarrior</h3><p className="mt-2 max-w-2xl text-sm leading-relaxed text-fit-muted">Geplante Einzeltrainings werden in der vorhandenen Taskwarrior-Datenbank im privaten Klienten-Workspace geführt. Änderungen bleiben lokal; dieser Abgleich sendet keine Klientenakte und keine Tasks an Firebase.</p></div><button className={button} disabled={taskwarriorLoading || busy} onClick={() => act(async () => { const data = await api(`${clientPath}/taskwarrior`); setTaskwarriorTasks(Array.isArray(data.tasks) ? data.tasks : []); setTaskwarriorDbStatus(data.available === false ? 'not-configured' : 'available'); })}><RefreshCw size={15} className="mr-2 inline" /> Aktualisieren</button></div>
               <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4"><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Offene Workouts</p><p className="mt-1 text-xl font-semibold">{taskwarriorTasks.filter((task) => task.status === 'pending').length}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Überfällig</p><p className="mt-1 text-xl font-semibold text-fit-red">{taskwarriorTasks.filter((task) => task.status === 'pending' && task.due?.slice(0, 10) < todayISO()).length}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Heute fällig</p><p className="mt-1 text-xl font-semibold text-fit-accent">{taskwarriorTasks.filter((task) => task.status === 'pending' && task.due?.slice(0, 10) === todayISO()).length}</p></div><div className="rounded-xl border border-fit-line p-3"><p className="text-xs text-fit-muted">Erledigt</p><p className="mt-1 text-xl font-semibold">{taskwarriorTasks.filter((task) => task.status === 'completed').length}</p></div></div>
             </header>
             <div className="grid gap-4 xl:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.2fr)]">
@@ -491,7 +493,8 @@ export default function LocalCoachApp() {
               </section>
               <section aria-label="Geplante Workout-Tasks" className="space-y-3"><div className="flex items-center justify-between"><h4 className="font-semibold">Einzelne Workouts</h4><button className="min-h-10 text-sm text-fit-accent underline" onClick={() => setWorkspaceTab('plans')}>Zur Planung</button></div>
                 {taskwarriorLoading && <p role="status" className="text-sm text-fit-muted">Taskwarrior-Aufgaben werden geladen…</p>}
-                {!taskwarriorLoading && !taskwarriorTasks.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Noch keine Workout-Tasks. Wähle links einen lokalen Plan und gleiche ihn ab.</p>}
+                {!taskwarriorLoading && taskwarriorDbStatus === 'not-configured' && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Taskwarrior ist für diesen Workspace noch nicht eingerichtet. Wähle oben einen lokalen Plan und gleiche ihn ab; dabei wird die lokale Datenbank angelegt.</p>}
+                {!taskwarriorLoading && taskwarriorDbStatus === 'available' && !taskwarriorTasks.length && <p className="rounded-xl border border-dashed border-fit-line p-5 text-sm text-fit-muted">Noch keine Workout-Tasks. Wähle links einen lokalen Plan und gleiche ihn ab.</p>}
                 {taskwarriorTasks.map((task) => { const day = task.due?.slice(0, 10) || ''; const overdue = Boolean(day && day < todayISO()); const dueToday = Boolean(day && day === todayISO()); const status = task.status === 'completed' ? task.workoutid ? 'Erledigt · Fitness-Log' : 'Erledigt · manuell / ohne Log-Link' : overdue ? 'Überfällig' : dueToday ? 'Heute fällig' : 'Geplant'; const statusClass = task.status === 'completed' || dueToday ? 'text-fit-accent' : overdue ? 'text-fit-red' : 'text-fit-muted'; return <article key={task.uuid} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-fit-line bg-fit-card p-4"><div><p className="font-semibold">{task.description}</p><p className={`mt-1 text-xs ${statusClass}`}>{status}{day ? ` · ${new Date(`${day}T12:00:00`).toLocaleDateString('de-AT')}` : ''}</p>{task.workoutid && <p className="mt-1 text-xs text-fit-dim">Fitness-Workout <code>{task.workoutid}</code></p>}</div>{task.status === 'pending' && <button className="min-h-[44px] rounded-full border border-fit-accent/50 px-4 text-sm font-semibold text-fit-accent disabled:opacity-40" disabled={busy} onClick={() => completeTaskwarriorTask(task.occkey)}>Workout erledigt</button>}</article>; })}
               </section>
             </div>
