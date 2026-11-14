@@ -247,3 +247,24 @@ Live-Stand deployen und dessen Bereitschaft abwarten. Indexfehler erscheinen
 als nicht verfügbarer Ungelesen-Status; sie dürfen nicht als null Nachrichten
 interpretiert werden. Empfang und Rückmeldung direkt am Plan bleiben der
 primäre Ablauf; Nachrichten erweitern diesen um optionalen Austausch.
+
+## Zuverlässigkeit im Coach-Chat (2026-11-14)
+
+Listener- und Planlistenfehler besitzen eine sichtbare Wiederholung. Die
+Wiederholung ersetzt die betroffenen Listener und lädt Planbezüge erneut,
+behält aber die Nachrichtenansicht und den Composer-Entwurf. Allgemeine
+Nachrichten bleiben bei fehlender Planliste möglich; eine gespeicherte
+Planreferenz wird weiterhin vor dem Versand auf die veröffentlichte Version
+geprüft. Aus einem Listener-Fehler wird kein „Noch keine Nachrichten“.
+
+Ein unmittelbarer Ref-Guard verhindert doppelte Schreibaufträge durch zwei
+Formularereignisse vor dem nächsten React-Render. Ein erfolgreicher Versand
+entfernt den lokalen Entwurf nur, wenn Text und Planreferenz noch dem erfassten
+Sendestand entsprechen. Ein neuer Text nach Weg-/Zurückwechseln bleibt dadurch
+erhalten. Die Gesprächsinstanz ist an Coach-ID und Klienten-ID gebunden;
+entfernte Listener und späte UI-Rückmeldungen können ein anderes Gespräch
+nicht verändern. Text- und Planfelder verwenden 16px Schrift für mobile Eingabe.
+
+Der inhaltsbasierte Entwurfsvergleich führt keine Versionshistorie: Ein neuer
+Entwurf mit exakt gleichem Text und Planbezug lässt sich vom gesendeten Stand
+nicht unterscheiden. Entwürfe bleiben gerätelokal und sind kein Cloud-Backup.

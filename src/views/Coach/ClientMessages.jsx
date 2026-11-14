@@ -1,4 +1,4 @@
-import { readConversationDraft, saveConversationDraft } from '../../lib/conversationDrafts.js';
+import { clearConversationDraftIfUnchanged, readConversationDraft, saveConversationDraft } from '../../lib/conversationDrafts.js';
 import { listClientTrainingPlans } from './trainingProgramStore.js';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { getMacrocycle, loadClientMessagePlan, getUid, markClientConversationRead, sendClientMessage, watchClientMessages } from '@db';
@@ -9,9 +9,19 @@ const time = (value) => value?.toDate?.().toLocaleString('de-AT') || 'Wird gesen
 
 export default function ClientMessages({ clientUid }) {
   const uid = getUid();
+  return <Conversation key={JSON.stringify([uid, clientUid])} uid={uid} clientUid={clientUid} />;
+}
+
+function Conversation({ uid, clientUid }) {
   const [state, setState] = useState({ messages: [], readers: {}, fromCache: false });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [readError, setReadError] = useState('');
+  const [plansError, setPlansError] = useState('');
+  const [retryKey, setRetryKey] = useState(0);
+  const mounted = useRef(false);
+  const sendingRef = useRef(false);
+  const skipDraftSave = useRef(false);
   const [initialDraft] = useState(() => readConversationDraft(uid, clientUid));
   const [text, setText] = useState(initialDraft.text);
   const [draftSaved, setDraftSaved] = useState(true);
@@ -27,12 +37,24 @@ export default function ClientMessages({ clientUid }) {
   const [sending, setSending] = useState(false);
   const lastIncoming = useRef(null);
   useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
+  useEffect(() => {
     let alive = true;
-    const stop = watchClientMessages(clientUid, (value) => { if (alive) { setState(value); setLoading(false); } }, (err) => { if (alive) { setError(`Nachrichten konnten nicht geladen werden: ${err.message}`); setLoading(false); } });
-    listClientTrainingPlans(clientUid).then((values) => { if (alive) setPlans(values.filter((p) => p.headVersion > 0)); }).catch(() => {});
-    subscription.current = stop;
-    return () => { alive = false; subscription.current = null; stop.unsubscribe(); };
-  }, [clientUid]);
+    let stop;
+    setReadError(''); setPlansError(''); setLoading(true);
+    try {
+      stop = watchClientMessages(clientUid,
+        (value) => { if (alive) { setState(value); setLoading(false); } },
+        (err) => { if (alive) { setReadError(`Nachrichten konnten nicht geladen werden: ${err.message}`); setLoading(false); } });
+      subscription.current = stop;
+    } catch (err) { setReadError(err.message || 'Nachrichten konnten nicht geladen werden.'); setLoading(false); }
+    listClientTrainingPlans(clientUid)
+      .then((values) => { if (alive) setPlans(values.filter((p) => p.headVersion > 0)); })
+      .catch(() => { if (alive) setPlansError('Planbezüge konnten nicht geladen werden. Allgemeine Nachrichten sind weiterhin möglich.'); });
+    return () => { alive = false; subscription.current = null; stop?.unsubscribe(); };
+  }, [clientUid, retryKey]);
   const latest = state.messages.filter((message) => message.senderUid !== uid).at(-1)?.id;
   useEffect(() => {
     if (planView || !latest || !lastIncoming.current) return undefined;
@@ -49,7 +71,10 @@ export default function ClientMessages({ clientUid }) {
     document.addEventListener('visibilitychange', mark);
     return () => { observer.disconnect(); document.removeEventListener('visibilitychange', mark); };
   }, [clientUid, latest, planView]);
-  useEffect(() => { setDraftSaved(saveConversationDraft(uid, clientUid, { text, plan })); }, [uid, clientUid, text, plan]);
+  useEffect(() => {
+    if (skipDraftSave.current) { skipDraftSave.current = false; return; }
+    setDraftSaved(saveConversationDraft(uid, clientUid, { text, plan }));
+  }, [uid, clientUid, text, plan]);
   const lastId = state.messages.at(-1)?.id;
   useEffect(() => {
     if (planView || !bottom.current) return undefined;
@@ -71,7 +96,11 @@ export default function ClientMessages({ clientUid }) {
     finally { setOpeningPlan(false); }
   }
   async function send(event) {
-    event.preventDefault(); setSending(true); setError('');
+    event.preventDefault();
+    if (sendingRef.current || !text.trim()) return;
+    sendingRef.current = true;
+    setSending(true); setError('');
+    const submittedDraft = { text, plan };
     try {
       let context = null;
       if (plan) {
@@ -80,16 +109,23 @@ export default function ClientMessages({ clientUid }) {
         context = { id: plan.id, name: current.published.name, version: current.headVersion };
       }
       await sendClientMessage(clientUid, text, context);
-      saveConversationDraft(uid, clientUid, { text: '', plan: null }); ownSend.current = true; setText(''); setPlan(null);
-    } catch (err) { setError(err.message || 'Nachricht konnte nicht gesendet werden.'); }
-    finally { setSending(false); }
+      const saved = clearConversationDraftIfUnchanged(uid, clientUid, submittedDraft);
+      if (!mounted.current) return;
+      setDraftSaved(saved); skipDraftSave.current = true;
+      ownSend.current = true; setText(''); setPlan(null);
+    } catch (err) { if (mounted.current) setError(err.message || 'Nachricht konnte nicht gesendet werden.'); }
+    finally { sendingRef.current = false; if (mounted.current) setSending(false); }
   }
   if (planView) return <div className="space-y-4"><button type="button" className="min-h-[44px] rounded-xl border border-fit-line px-4" onClick={() => setPlanView(null)}>← Zurück zu den Nachrichten</button><Suspense fallback={<p role="status">Plan lädt…</p>}><PlanDocument plan={planView} /></Suspense></div>;
   return <section className="space-y-4" aria-label="Gespräch mit dem Klienten">
     <header><h3 className="text-lg font-semibold">Nachrichten</h3><p className="text-xs text-fit-dim">Direkter Austausch mit diesem Klienten</p></header>
     {state.fromCache && <p role="status" className="text-xs text-fit-dim">Lokaler Stand · Verbindung wird abgeglichen.</p>}
+    {(readError || plansError) && <div role="alert" className="space-y-1 rounded-xl border border-fit-line p-3 text-sm text-fit-red">
+      {readError && <p>{readError}</p>}{plansError && <p>{plansError}</p>}
+      <button type="button" className="min-h-11 underline" onClick={() => setRetryKey((value) => value + 1)}>Erneut versuchen</button>
+    </div>}
     {error && <p role="alert" className="text-sm text-fit-red">{error}</p>}
-    {loading ? <p role="status">Nachrichten laden…</p> : !state.messages.length && !error ? <p className="text-sm text-fit-dim">Noch keine Nachrichten. Du kannst etwa einen bereitgestellten Plan besprechen.</p> : null}
+    {loading && !state.messages.length ? <p role="status">Nachrichten laden…</p> : !state.messages.length && !error && !readError ? <p className="text-sm text-fit-dim">Noch keine Nachrichten. Du kannst etwa einen bereitgestellten Plan besprechen.</p> : null}
     {state.hasMore && <button type="button" disabled={state.loadingOlder} onClick={older} className="min-h-[44px] rounded-xl border border-fit-line px-4 text-sm">{state.loadingOlder ? 'Ältere Nachrichten laden…' : 'Ältere Nachrichten laden'}</button>}
     <ol className="space-y-3">{state.messages.map((message) => <li key={message.id} ref={message.id === latest ? lastIncoming : undefined} className={`rounded-xl border border-fit-line p-3 ${message.senderUid === uid ? 'bg-fit-accent/10' : 'bg-fit-bg2'}`}>
       <p className="text-xs text-fit-dim">{message.senderRole === 'coach' ? 'Coach' : 'Klient'} · {time(message.createdAt)}</p>
@@ -100,8 +136,8 @@ export default function ClientMessages({ clientUid }) {
     {!draftSaved && <p role="alert" className="text-sm text-fit-red">Entwurf kann auf diesem Gerät nicht gespeichert werden. Der Text bleibt nur im offenen Fenster.</p>}
     {draftSaved && (text || plan) && <p role="status" className="text-xs text-fit-dim">Entwurf auf diesem Gerät gesichert.</p>}
     <form onSubmit={send} className="space-y-3 rounded-xl border border-fit-line p-3">
-      <label className="block text-sm">Bezug<select disabled={sending} value={plan ? `${plan.id}:${plan.version}` : ''} onChange={(event) => { const chosen = plans.find((item) => `${item.id}:${item.headVersion}` === event.target.value); setPlan(chosen ? { id: chosen.id, name: chosen.name, version: chosen.headVersion } : null); }} className="mt-1 block min-h-[44px] w-full rounded-lg border border-fit-line bg-fit-bg p-2"><option value="">Allgemeine Nachricht</option>{plan && !plans.some((p) => p.id === plan.id && p.headVersion === plan.version) && <option value={`${plan.id}:${plan.version}`}>Gespeicherter Bezug: {plan.name} · v{plan.version} (bitte prüfen)</option>}{plans.map((item) => <option key={item.id} value={`${item.id}:${item.headVersion}`}>{item.name} · v{item.headVersion}</option>)}</select></label>
-      <label className="block text-sm">Nachricht an den Klienten<textarea value={text} onChange={(event) => setText(event.target.value)} maxLength={4000} rows={4} disabled={sending} className="mt-1 block w-full rounded-lg border border-fit-line bg-fit-bg p-3" /></label>
+      <label className="block text-sm">Bezug<select disabled={sending} value={plan ? `${plan.id}:${plan.version}` : ''} onChange={(event) => { const chosen = plans.find((item) => `${item.id}:${item.headVersion}` === event.target.value); setPlan(chosen ? { id: chosen.id, name: chosen.name, version: chosen.headVersion } : null); }} className="mt-1 block min-h-[44px] w-full text-base rounded-lg border border-fit-line bg-fit-bg p-2"><option value="">Allgemeine Nachricht</option>{plan && !plans.some((p) => p.id === plan.id && p.headVersion === plan.version) && <option value={`${plan.id}:${plan.version}`}>Gespeicherter Bezug: {plan.name} · v{plan.version} (bitte prüfen)</option>}{plans.map((item) => <option key={item.id} value={`${item.id}:${item.headVersion}`}>{item.name} · v{item.headVersion}</option>)}</select></label>
+      <label className="block text-sm">Nachricht an den Klienten<textarea value={text} onChange={(event) => setText(event.target.value)} maxLength={4000} rows={4} disabled={sending} className="mt-1 block w-full text-base rounded-lg border border-fit-line bg-fit-bg p-3" /></label>
       <button type="submit" disabled={sending || !text.trim()} className="min-h-[44px] rounded-xl bg-fit-accent px-4 text-sm font-semibold text-fit-bg disabled:opacity-50">{sending ? 'Wird gesendet…' : 'Nachricht senden'}</button>
     </form>
   </section>;

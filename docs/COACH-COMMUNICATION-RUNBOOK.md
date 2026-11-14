@@ -215,3 +215,21 @@ Emulator, Vite und Thorium wurden direkt als einzelne Befehle ausgeführt,
 ohne temporäres Bash-Starter-Skript. Der echte Login und reale Geräte sind
 damit nicht abgenommen. Zentraler Ungelesen-Index muss vor Live-Release bereit
 sein; siehe COACH-COMMUNICATION.md.
+
+## Isolierte Coach-UI-Prüfung (2026-11-14)
+
+`node src/views/Coach/clientMessages.browser-test.mjs` startet einen eigenen
+kurzlebigen Vite-Server auf 15920 und einen eigenen Headless-Browser auf 19241.
+Die Datenadapter und die Planliste sind virtuelle Testquellen. Es werden weder
+reale Konten angemeldet noch Nachrichten in Firebase geschrieben. Ein eigenes
+temporäres Browser-/Vite-Cache-Verzeichnis wird anschließend entfernt; fremde
+Listener werden nicht beendet.
+
+Geprüft werden Listener-/Planlisten-Retry, Erhaltung des Composer-Entwurfs,
+Doppelsubmit, erfolgloses und erfolgreiches Senden, ein neuer A-Entwurf nach
+A→B→A bei noch offenem altem Send, alte Listener, Entwurfswiederherstellung nach
+Reload und vier Handy-/Tablet-Größen. Unit-Tests unter
+`src/views/Coach/conversationDrafts.test.mjs` prüfen den Vergleich von Text,
+Planbezug und Identität einschließlich beschädigtem bzw. nicht verfügbarem
+Storage. Diese UI-/Logiknachweise ersetzen keine Rules-, authentifizierte
+Firebase- oder physische Safari-Abnahme.
