@@ -76,7 +76,13 @@ export const reenrichInbox = approveInbox;
 export const saveAnatomy = (id, data) => inspectorWrite('save-anatomy', id, data);
 export const saveExercise = (id, data) => inspectorWrite('save-exercise', id, data);
 export const editExerciseSources = approveInbox;
-export const updateUserProfile = () => { throw new Error('Unexpected profile write'); };
+export function updateUserProfile(uid, data) {
+  fixtureState.calls.push(['profile-save',uid,data]);
+  return new Promise((resolve,reject)=>{
+    fixtureState.profileWrites ||= {};
+    fixtureState.profileWrites[uid]={resolve,reject};
+  });
+}
 
 export function getClientRoutinesProgress(uid) {
   fixtureState.calls.push(['rotation-progress', uid]);

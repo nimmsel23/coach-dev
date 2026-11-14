@@ -330,6 +330,39 @@ try {
       return {hit,stored:await snapGet(key),error};
     } finally {window.removeEventListener('vos-coach-cache-error',listener);await snapDelete(key);}
   })()`),{hit:{a:{displayName:'Anna'}},stored:{a:{displayName:'Anna'}},error:'discovery offline'});
+  await send('Page.navigate', {url:'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?clients&status'});
+  await wait(has('Klienten konnten nicht geladen werden.'));
+  await evaluate('window.insightsFixture.profilesFail=false');
+  await click('Erneut versuchen');
+  await wait(has('Anna'));
+  await click('Verwalten');
+  const statusButton=(name)=>`[...document.querySelectorAll('li')].find(li=>li.innerText.includes(${JSON.stringify(name)}))?.querySelectorAll('button')`;
+  const setClientStatus=async(name,label)=>evaluate(`[...(${statusButton(name)})].find(b=>b.textContent.trim()===${JSON.stringify(label)}).click()`);
+  await setClientStatus('Anna','Klient');
+  await setClientStatus('Ben','Klient');
+  await wait("!!window.insightsFixture.profileWrites?.a && !!window.insightsFixture.profileWrites?.b");
+  assert.equal(await evaluate("document.querySelectorAll('li button:disabled').length"),6);
+  await evaluate("window.dispatchEvent(new CustomEvent('vos-coach-cache',{detail:{key:'profiles:all',data:{a:{displayName:'Anna'},b:{displayName:'Ben'}}}}))");
+  assert.equal(await evaluate("[...document.querySelectorAll('li button[aria-pressed=true]')].every(b=>b.textContent==='Klient')"),true);
+  await evaluate("window.insightsFixture.profileWrites.a.resolve(true)");
+  await wait("document.querySelectorAll('li button:disabled').length===3");
+  await setClientStatus('Anna','Freund/Test');
+  await evaluate("window.insightsFixture.profileWrites.a.resolve(false)");
+  await wait(has('Anna: Auswahl konnte nicht gespeichert werden.'));
+  assert.equal(await evaluate("document.querySelectorAll('li button:disabled').length"),3);
+  assert.equal(await evaluate("[...document.querySelectorAll('li')].find(li=>li.innerText.includes('Anna')).querySelector('[aria-pressed=true]').textContent"),'Klient');
+  await evaluate("window.insightsFixture.profileWrites.b.resolve(true)");
+  await wait("document.querySelectorAll('li button:disabled').length===0");
+  // Start hiding the selected client, then select someone else before save resolves.
+  await evaluate("[...document.querySelectorAll('li')].find(li=>li.innerText.includes('Ben')).querySelector('button').click()");
+  await wait("location.hash.includes('/b')");
+  await setClientStatus('Ben','Ausgeblendet');
+  await evaluate("[...document.querySelectorAll('li')].find(li=>li.innerText.includes('Anna')).querySelector('button').click()");
+  await wait("location.hash.includes('/a')");
+  await evaluate("window.insightsFixture.profileWrites.b.resolve(true)");
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(await evaluate("location.hash.includes('/a')"),true);
+  for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768]]) await checkViewport(width,height,true);
   await send('Page.navigate', {url:'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?rotation'});
   await wait("!!window.insightsFixture?.rotationPending?.['Klient A']");
   await click('Klient B wählen');
@@ -376,5 +409,5 @@ try {
   const shot = await send('Page.captureScreenshot', { format: 'png' });
   await writeFile('/tmp/coach-insights-browser.png', Buffer.from(shot.data, 'base64'));
   assert.deepEqual(errors, []);
-  console.log('PASS: profiles cold failure/retry and cached refresh preserve clients; inspector read/write responses isolated on switch and close; failed notes/lesson/approve/reject results remain errors; successful lesson save; habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
+  console.log('PASS: concurrent client status saves and late-hide navigation isolated; profiles cold failure/retry and cached refresh preserve clients; inspector read/write responses isolated on switch and close; failed notes/lesson/approve/reject results remain errors; successful lesson save; habit draft reload, conflict notice and discard; real Vue shell deep links, iframe navigation, direct-open URL and reload; duplicate feed IDs isolated across clients and collections; concurrent feedback saves and failures; habit load retry, explicit save, failed save, successful save and discard;  retry, failed and successful review, failed gap check, client switch; no overflow at 390/844/768/1024px; no runtime exceptions.');
 } finally { ws.close(); }
