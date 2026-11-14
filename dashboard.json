@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-14T17:33:16+00:00",
+  "generated_at": "2026-11-14T17:39:40+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-14T17:32:57Z",
+   "pushed_at": "2026-11-14T17:39:16Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,24 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 4,
-   "oldest_unpromoted": "2026-11-14T18:32:50+01:00",
-   "dev_head": "d5dedbe1 2026-11-14T18:32:50+01:00",
-   "master_head": "22adee5a 2026-11-14T18:31:44+01:00"
+   "dev_ahead": 2,
+   "oldest_unpromoted": "2026-11-14T18:36:25+01:00",
+   "dev_head": "91026049 2026-11-14T18:39:01+01:00",
+   "master_head": "d5dedbe1 2026-11-14T18:32:50+01:00"
   },
   "commits": [
+   {
+    "sha": "91026049",
+    "date": "2026-11-14T18:39:01+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): recover chat listeners and preserve newer conversation drafts"
+   },
+   {
+    "sha": "1f4f7956",
+    "date": "2026-11-14T18:36:25+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): clear only the conversation draft that was sent"
+   },
    {
     "sha": "d5dedbe1",
     "date": "2026-11-14T18:32:50+01:00",
@@ -132,18 +144,6 @@
     "date": "2026-11-13T06:04:44Z",
     "author": "nimmdaniel",
     "subject": "Merge master into dev (sync divergent master-only CI commits; net no-op)"
-   },
-   {
-    "sha": "e65a466d",
-    "date": "2026-11-13T06:12:05+01:00",
-    "author": "Alpha",
-    "subject": "docs(al): AL-LOG 2026-11-13 — Org e93f739a verifiziert (c5087e42, Contract-Test grün)"
-   },
-   {
-    "sha": "c5f3a8ed",
-    "date": "2026-11-13T01:04:29+01:00",
-    "author": "Alpha",
-    "subject": "feat(ci): Living Dashboard als GitHub Page, pages-docs.yml archiviert"
    }
   ],
   "activity": [
@@ -229,19 +229,19 @@
    },
    {
     "day": "2026-11-14",
-    "n": 9
+    "n": 11
    }
   ],
   "workflows": [
    {
-    "name": "Gemini CI Agent",
+    "name": "Deploy Coach",
     "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-14T17:33:00Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621706699",
-    "sha": "d5dedbe"
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-14T17:39:18Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622275282",
+    "sha": "9102604"
    },
    {
     "name": "Check (Coach)",
@@ -249,18 +249,18 @@
     "event": "push",
     "status": "in_progress",
     "conclusion": null,
-    "created_at": "2026-11-14T17:32:59Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621705401",
-    "sha": "d5dedbe"
+    "created_at": "2026-11-14T17:39:18Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622275280",
+    "sha": "9102604"
    },
    {
-    "name": "Deploy Coach",
+    "name": "Gemini CI Agent",
     "branch": "dev",
-    "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
-    "created_at": "2026-11-14T17:32:59Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621705364",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-14T17:34:07Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621810352",
     "sha": "d5dedbe"
    },
    {
@@ -269,9 +269,9 @@
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "skipped",
-    "created_at": "2026-11-14T17:32:44Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621682608",
-    "sha": "22adee5"
+    "created_at": "2026-11-14T17:33:43Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621774541",
+    "sha": "d5dedbe"
    },
    {
     "name": "Auto-Promote dev -> master (Check (Coach))",
@@ -279,9 +279,9 @@
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-14T17:32:44Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621682569",
-    "sha": "22adee5"
+    "created_at": "2026-11-14T17:33:43Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621774499",
+    "sha": "d5dedbe"
    },
    {
     "name": "Merge-Agent",
@@ -304,34 +304,31 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev 4 Commits vor Master, Workflows für d5dedbe1 laufen",
-   "lage": "Der `dev`-Branch (`d5dedbe1`) ist 4 Commits vor `master` (`22adee5a`). Der `master`-Branch wurde durch `Auto-Promote` auf `22adee5a` aktualisiert. Die Workflows `Check (Coach)` und `Deploy Coach` für den aktuellen `dev`-Head `d5dedbe1` sind `in_progress`.",
+   "headline": "Master auf d5dedbe1 aktualisiert, dev 2 Commits voraus, Workflows laufen",
+   "lage": "Der `master`-Branch wurde erfolgreich auf `d5dedbe1` (`docs(coach): record console refresh contracts and hosted status evidence`) durch den `Auto-Promote`-Workflow aktualisiert. Der `dev`-Branch (`91026049`) ist nun 2 Commits vor `master`. Die Workflows `Check (Coach)` und `Deploy Coach` für den aktuellen `dev`-Head `91026049` sind `in_progress`.",
    "auffaelligkeiten": [
     {
-     "level": "info",
-     "text": "Der Workflow `Auto-Promote dev -> master (Check (Coach))` für `22adee5a` wurde erfolgreich abgeschlossen."
+     "level": "hoch",
+     "text": "Die Workflows `Check (Coach)` und `Deploy Coach` für den aktuellen `dev`-Head `91026049` sind noch `in_progress`."
     },
     {
      "level": "info",
-     "text": "Der Workflow `Gemini CI Agent` für `d5dedbe1` wurde erfolgreich abgeschlossen."
+     "text": "Der `Auto-Promote dev -> master (Check (Coach))` Workflow für `d5dedbe` wurde erfolgreich abgeschlossen."
     },
     {
-     "level": "mittel",
-     "text": "Die Verifikation des öffentlichen Pages-Deploys und der neuen Seite `/README.html` ist gemäß `NEXT.md` weiterhin offen."
+     "level": "info",
+     "text": "Der `dev`-Branch enthält zwei neue Commits (`91026049`, `1f4f7956`) seit der letzten `master`-Promotion."
     }
    ],
    "naechste_schritte": [
-    "Überwache die Workflows `Check (Coach)` und `Deploy Coach` für `d5dedbe1`.",
+    "Überwache die Workflows `Check (Coach)` und `Deploy Coach` für `91026049`.",
     "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` gemäß `NEXT.md`.",
-    "Überprüfe die offenen Punkte in `NEXT.md` und `TODO.md` auf Aktualität."
+    "Prüfe die Task `Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen` in `NEXT.md`."
    ],
-   "veraendert": "Der `dev`-Branch ist nun 4 Commits vor `master`, und `master` wurde erfolgreich auf den vorherigen `dev`-Head `22adee5a` aktualisiert.",
-   "fragen": [
-    "Soll die `inbox_jefferson_curl_pipeline.yml` aus `coach-dev` nach `~/dev/fitness` übernommen oder verworfen werden, bevor der KB-Gitlink wiederhergestellt wird (siehe `TODO.md`)?",
-    "Soll der lokal unpushed Commit `71f101a` im `website`-Repo gepusht oder verworfen werden, um das Pinnen remote-erreichbarer SHAs zu ermöglichen (siehe `NEXT.md`)?"
-   ],
+   "veraendert": "Der `master`-Branch wurde von `22adee5a` auf `d5dedbe1` aktualisiert, und der `dev`-Branch ist nun 2 Commits vor `master` statt 4.",
+   "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-14T17:33:18+00:00"
+  "ai_at": "2026-11-14T17:39:42+00:00"
  }
 }
