@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-14T11:43:54+00:00",
+  "generated_at": "2026-11-14T17:19:29+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-13T14:45:32Z",
+   "pushed_at": "2026-11-14T17:19:04Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,18 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 0,
-   "oldest_unpromoted": null,
-   "dev_head": "6ab48cf9 2026-11-13T15:44:14+01:00",
+   "dev_ahead": 1,
+   "oldest_unpromoted": "2026-11-14T18:18:58+01:00",
+   "dev_head": "89f05c03 2026-11-14T18:18:58+01:00",
    "master_head": "6ab48cf9 2026-11-13T15:44:14+01:00"
   },
   "commits": [
+   {
+    "sha": "89f05c03",
+    "date": "2026-11-14T18:18:58+01:00",
+    "author": "Alpha",
+    "subject": "docs(coach): verify local traction console"
+   },
    {
     "sha": "6ab48cf9",
     "date": "2026-11-13T15:44:14+01:00",
@@ -138,12 +144,6 @@
     "date": "2026-11-12T11:54:36+01:00",
     "author": "Alpha",
     "subject": "fix(coach): share authenticated unread state across client navigation"
-   },
-   {
-    "sha": "31d1dacf",
-    "date": "2026-11-12T11:54:00+01:00",
-    "author": "Alpha",
-    "subject": "docs(coach): record inspector preview release evidence"
    }
   ],
   "activity": [
@@ -229,18 +229,28 @@
    },
    {
     "day": "2026-11-14",
-    "n": 0
+    "n": 1
    }
   ],
   "workflows": [
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-14T17:19:06Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620436531",
+    "sha": "89f05c0"
+   },
    {
     "name": "Merge-Agent",
     "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-14T10:44:44Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43586717633",
+    "created_at": "2026-11-14T16:44:34Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43617254076",
     "sha": "6ab48cf"
    },
    {
@@ -249,8 +259,8 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-14T08:02:26Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43573885235",
+    "created_at": "2026-11-14T15:05:44Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43608296390",
     "sha": "6ab48cf"
    },
    {
@@ -259,18 +269,8 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-14T06:40:06Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43567457492",
-    "sha": "6ab48cf"
-   },
-   {
-    "name": "Check (Coach)",
-    "branch": "dev",
-    "event": "push",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-13T14:44:18Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43445583005",
+    "created_at": "2026-11-14T14:15:39Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43603927793",
     "sha": "6ab48cf"
    },
    {
@@ -314,33 +314,31 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev und Master synchronisiert auf 6ab48cf9, alle Checks erfolgreich",
-   "lage": "Die Branches `dev` und `master` sind auf Commit `6ab48cf9` (`„Cockpit“ heißt jetzt durchgehend „Dashboard“ (Owner-Wunsch)`) synchronisiert. Der `Check (Coach)`-Workflow für `6ab48cf9` und der `Auto-Promote dev -> master (Check (Coach))` Workflow liefen erfolgreich.",
+   "headline": "Dev ist 1 Commit vor Master, Check (Coach) für 89f05c03 läuft",
+   "lage": "Der `dev`-Branch ist mit Commit `89f05c03` (`docs(coach): verify local traction console`) einen Commit vor `master`. Der `Check (Coach)`-Workflow für diesen Commit ist noch `in_progress`. `master` verbleibt auf `6ab48cf9`.",
    "auffaelligkeiten": [
     {
-     "level": "info",
-     "text": "Der `website`-Submodul-Pin `71f101a` ist weiterhin als lokal unpushed in `NEXT.md` und `TODO.md` vermerkt."
+     "level": "hoch",
+     "text": "Der `Check (Coach)`-Workflow für den neuesten `dev`-Commit `89f05c03` ist noch `in_progress`, was den `dev`-Branch aktuell nicht als 'grün' qualifiziert."
+    },
+    {
+     "level": "mittel",
+     "text": "`dev` ist um einen Commit (`89f05c03`) von `master` abgewichen, was die Synchronisation aufhebt."
     },
     {
      "level": "info",
-     "text": "Die Verifizierung des öffentlichen Pages-Deploys und der neuen Seite `/README.html` steht noch aus (gemäß `NEXT.md`)."
-    },
-    {
-     "level": "info",
-     "text": "Das `KB-Gitlink` in `backend/fitness/catalog/kb` ist noch ein vendored Tree statt eines Submoduls (gemäß `TODO.md`)."
+     "text": "Ein neuer Punkt in `NEXT.md` fordert die Prüfung des `tractionDaily`-Schreibvorgangs nach dem Fitness-Traction-Release."
     }
    ],
    "naechste_schritte": [
+    "Überwache den `Check (Coach)`-Workflow für `89f05c03` und behebe ggf. Fehler.",
     "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` (gemäß `NEXT.md`).",
-    "Prüfe den Status des `website`-Submoduls und pinne nur Remote-erreichbare SHAs (gemäß `NEXT.md`, `TODO.md`).",
     "Untersuche die Diskrepanz des `KB-Gitlink` in `backend/fitness/catalog/kb` und stelle den Gitlink wieder her (gemäß `TODO.md`)."
    ],
-   "veraendert": "Der `dev`-Branch ist nicht mehr einen Commit vor `master`, sondern beide Branches sind auf `6ab48cf9` synchronisiert, nachdem der `Check (Coach)`-Workflow erfolgreich abgeschlossen wurde.",
-   "fragen": [
-    "Sollen die divergierenden Inbox-Deltas vor der Wiederherstellung des `KB-Gitlink` in `backend/fitness/catalog/kb` nach `~/dev/fitness` übernommen oder verworfen werden?"
-   ],
+   "veraendert": "Der `dev`-Branch ist mit Commit `89f05c03` einen Commit vor `master` und der zugehörige `Check (Coach)`-Workflow ist `in_progress`, wodurch die vorherige Synchronisation und der grüne Status von `dev` aufgehoben sind.",
+   "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-14T11:43:56+00:00"
+  "ai_at": "2026-11-14T17:19:32+00:00"
  }
 }
