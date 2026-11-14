@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-14T17:24:28+00:00",
+  "generated_at": "2026-11-14T17:32:10+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-14T17:24:09Z",
+   "pushed_at": "2026-11-14T17:31:51Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,24 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 1,
-   "oldest_unpromoted": "2026-11-14T18:23:59+01:00",
-   "dev_head": "3e37b434 2026-11-14T18:23:59+01:00",
-   "master_head": "cd84ce4b 2026-11-14T18:21:00+01:00"
+   "dev_ahead": 2,
+   "oldest_unpromoted": "2026-11-14T18:30:22+01:00",
+   "dev_head": "22adee5a 2026-11-14T18:31:44+01:00",
+   "master_head": "3e37b434 2026-11-14T18:23:59+01:00"
   },
   "commits": [
+   {
+    "sha": "22adee5a",
+    "date": "2026-11-14T18:31:44+01:00",
+    "author": "Alpha",
+    "subject": "Merge remote-tracking branch 'origin/dev' into dev"
+   },
+   {
+    "sha": "74ffe41f",
+    "date": "2026-11-14T18:30:22+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): distinguish missing client taskwarrior db"
+   },
    {
     "sha": "3e37b434",
     "date": "2026-11-14T18:23:59+01:00",
@@ -132,18 +144,6 @@
     "date": "2026-11-12T12:22:04+01:00",
     "author": "Alpha",
     "subject": "refactor(coach): route legacy rotations through the pinned Plan workspace"
-   },
-   {
-    "sha": "e491a2b6",
-    "date": "2026-11-12T12:21:36+01:00",
-    "author": "Alpha",
-    "subject": "docs: auto-update RESULTS.md"
-   },
-   {
-    "sha": "b6448a77",
-    "date": "2026-11-12T12:06:43+01:00",
-    "author": "Alpha",
-    "subject": "fix(coach): preserve client profiles when discovery refresh fails"
    }
   ],
   "activity": [
@@ -229,28 +229,48 @@
    },
    {
     "day": "2026-11-14",
-    "n": 3
+    "n": 5
    }
   ],
   "workflows": [
-   {
-    "name": "Check (Coach)",
-    "branch": "dev",
-    "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
-    "created_at": "2026-11-14T17:24:11Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620911101",
-    "sha": "3e37b43"
-   },
    {
     "name": "Deploy Coach",
     "branch": "dev",
     "event": "push",
     "status": "in_progress",
     "conclusion": null,
-    "created_at": "2026-11-14T17:24:11Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620911032",
+    "created_at": "2026-11-14T17:31:52Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621602862",
+    "sha": "22adee5"
+   },
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-14T17:31:52Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43621602858",
+    "sha": "22adee5"
+   },
+   {
+    "name": "Gemini CI Agent",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-14T17:25:10Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620999810",
+    "sha": "3e37b43"
+   },
+   {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "skipped",
+    "created_at": "2026-11-14T17:25:08Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620995947",
     "sha": "3e37b43"
    },
    {
@@ -259,29 +279,9 @@
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-14T17:22:15Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620737755",
-    "sha": "cd84ce4"
-   },
-   {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "skipped",
-    "created_at": "2026-11-14T17:22:15Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620737746",
-    "sha": "cd84ce4"
-   },
-   {
-    "name": "Gemini CI Agent",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-14T17:22:13Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620733814",
-    "sha": "cd84ce4"
+    "created_at": "2026-11-14T17:25:08Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620995851",
+    "sha": "3e37b43"
    },
    {
     "name": "Merge-Agent",
@@ -314,37 +314,33 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev 1 Commit vor Master, Workflows für 3e37b434 laufen",
-   "lage": "Der `dev`-Branch ist mit Commit `3e37b434` (`fix(coach): isolate concurrent client status changes`) einen Commit vor `master`. `master` wurde auf `cd84ce4b` (`fix(coach): isolate rotation progress across client changes`) aktualisiert. Die Workflows `Check (Coach)` und `Deploy Coach` für `3e37b434` sind `in_progress`.",
+   "headline": "Dev 2 Commits vor Master, Workflows für 22adee5a laufen",
+   "lage": "Der `dev`-Branch (`22adee5a`) ist zwei Commits vor `master` (`3e37b434`). Die Workflows `Check (Coach)` und `Deploy Coach` für den aktuellen `dev`-Head `22adee5a` sind `in_progress`. Der `master`-Branch wurde durch `Auto-Promote` auf `3e37b434` aktualisiert.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Die Workflows `Check (Coach)` und `Deploy Coach` für den aktuellen `dev`-Head `3e37b434` sind `in_progress`."
-    },
-    {
-     "level": "mittel",
-     "text": "Die Verifikation des öffentlichen Pages-Deploys und der neuen Seite `/README.html` ist gemäß `NEXT.md` noch ausstehend, obwohl der `Pages Docs` Workflow für `e936962` erfolgreich war."
-    },
-    {
-     "level": "mittel",
-     "text": "Die Wiederherstellung des `KB-Gitlink` in `backend/fitness/catalog/kb` ist gemäß `TODO.md` weiterhin offen."
+     "text": "Der `KB-Gitlink` in `backend/fitness/catalog/kb` ist weiterhin ein vendored Tree, obwohl `.gitmodules` ein Submodul deklariert. Dies ist in `TODO.md` als offene Aufgabe gelistet."
     },
     {
      "level": "info",
-     "text": "Der `master`-Branch wurde durch den erfolgreichen `Auto-Promote dev -> master (Check (Coach))` Workflow für Commit `cd84ce4b` aktualisiert."
+     "text": "Der `Auto-Promote dev -> master (Check (Coach))` Workflow für `3e37b43` wurde erfolgreich abgeschlossen."
+    },
+    {
+     "level": "info",
+     "text": "Die `Pages Docs` für `dev` wurden zuletzt am 2026-11-12 erfolgreich deployed. Die Verifikation der neuen Seite `/README.html` steht noch aus (gemäß `NEXT.md`)."
     }
    ],
    "naechste_schritte": [
-    "Überwache die Workflows `Check (Coach)` und `Deploy Coach` für `3e37b434` und behebe ggf. Fehler.",
-    "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` (gemäß `NEXT.md`).",
-    "Untersuche die Diskrepanz des `KB-Gitlink` in `backend/fitness/catalog/kb` und stelle den Gitlink wieder her (gemäß `TODO.md`)."
+    "Überwache die Workflows `Check (Coach)` und `Deploy Coach` für `22adee5a` und behebe ggf. Fehler.",
+    "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` (gemäß `NEXT.md`)."
    ],
-   "veraendert": "Der `master`-Branch wurde auf `cd84ce4b` aktualisiert, und die `dev`-Workflows laufen nun für den neueren Commit `3e37b434`.",
+   "veraendert": "Der `dev`-Branch ist nun zwei Commits vor `master`, und der `master`-Branch wurde erfolgreich auf den vorherigen `dev`-Head `3e37b434` aktualisiert.",
    "fragen": [
-    "Soll die `inbox_jefferson_curl_pipeline.yml` vor der Wiederherstellung des `KB-Gitlink` nach `~/dev/fitness` übernommen oder bewusst verworfen werden (gemäß `TODO.md`)?"
+    "Soll der `KB-Gitlink` in `backend/fitness/catalog/kb` wiederhergestellt werden, und welche der divergierenden Inhalte (Inbox-Pipeline, Exercises) sollen dabei übernommen oder verworfen werden?",
+    "Soll das `website`-Submodul `71f101a` im `website`-Repo gepusht oder verworfen werden, um Remote-Erreichbarkeit sicherzustellen (gemäß `NEXT.md`)?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-14T17:24:30+00:00"
+  "ai_at": "2026-11-14T17:32:12+00:00"
  }
 }
