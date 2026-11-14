@@ -13,3 +13,24 @@ export function saveConversationDraft(author, client, value) {
     return true;
   } catch { return false; }
 }
+
+export function clearConversationDraftIfUnchanged(author, client, expectedDraft) {
+  let stored;
+  try { stored = localStorage.getItem(key(author, client)); } catch { return false; }
+  if (stored === null) return true;
+  let draft;
+  try { draft = JSON.parse(stored); } catch { return true; }
+  if (!draft || typeof draft.text !== 'string' || draft.text.length > 4000
+    || draft.text !== expectedDraft?.text) return true;
+  const actualPlan = draft.plan;
+  const expectedPlan = expectedDraft.plan;
+  const samePlan = actualPlan == null && expectedPlan == null
+    || actualPlan && expectedPlan
+      && typeof actualPlan.id === 'string' && !actualPlan.id.includes('/')
+      && typeof actualPlan.name === 'string'
+      && Number.isInteger(actualPlan.version) && actualPlan.version > 0
+      && actualPlan.id === expectedPlan.id && actualPlan.name === expectedPlan.name
+      && actualPlan.version === expectedPlan.version;
+  if (!samePlan) return true;
+  try { localStorage.removeItem(key(author, client)); return true; } catch { return false; }
+}
