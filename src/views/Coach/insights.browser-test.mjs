@@ -330,6 +330,33 @@ try {
       return {hit,stored:await snapGet(key),error};
     } finally {window.removeEventListener('vos-coach-cache-error',listener);await snapDelete(key);}
   })()`),{hit:{a:{displayName:'Anna'}},stored:{a:{displayName:'Anna'}},error:'discovery offline'});
+  await send('Page.navigate', {url:'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?rotation'});
+  await wait("!!window.insightsFixture?.rotationPending?.['Klient A']");
+  await click('Klient B wählen');
+  await wait("!!window.insightsFixture?.rotationPending?.['Klient B']");
+  await evaluate("window.insightsFixture.rotationPending['Klient B'].resolve({workouts:[{id:'b-workout'}]})");
+  await wait(has('b-workout'));
+  await evaluate("window.insightsFixture.rotationPending['Klient A'].resolve({workouts:[{id:'a-workout'}]})");
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(await evaluate("document.querySelector('[aria-label=Trainingsdaten]').textContent"),'[{"id":"b-workout"}]');
+  await click('Trainingsdaten aktualisieren');
+  await evaluate("window.insightsFixture.rotationPending['Klient B'].reject(new Error('Trainingsdaten nicht erreichbar'))");
+  await wait(has('Trainingsdaten nicht erreichbar'));
+  assert.equal(await evaluate(has('b-workout')),true);
+  await click('Erneut versuchen');
+  await evaluate("window.insightsFixture.rotationPending['Klient B'].resolve({workouts:[{id:'b-retry'}]})");
+  await wait(has('b-retry'));
+  assert.equal(await evaluate(has('Trainingsdaten nicht erreichbar')),false);
+  // Two same-client refreshes must keep the newest response.
+  await click('Trainingsdaten aktualisieren');
+  await evaluate("window.oldRotationRefresh=window.insightsFixture?.rotationPending?.['Klient B']");
+  await click('Trainingsdaten aktualisieren');
+  await evaluate("window.insightsFixture.rotationPending['Klient B'].resolve({workouts:[{id:'b-newest'}]})");
+  await wait(has('b-newest'));
+  await evaluate("window.oldRotationRefresh.resolve({workouts:[{id:'b-outdated'}]})");
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(await evaluate(has('b-outdated')),false);
+  for(const [width,height] of [[390,844],[844,390],[768,1024],[1024,768]]) await checkViewport(width,height,true);
   const deepLink = '#/clients/client-a/trainingplan?plan=plan-a&date=2026-11-12';
   await send('Page.navigate', { url: `http://coach.localhost:15918/coach-shell.html${deepLink}` });
   await wait("!!document.querySelector('iframe')?.contentDocument?.querySelector('h1')");

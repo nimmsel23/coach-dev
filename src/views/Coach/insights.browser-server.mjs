@@ -6,9 +6,11 @@ const server = await createServer({
     name: 'coach-frame-fixture',
     enforce: 'pre',
     resolveId(source, importer) {
+      if (importer?.endsWith('/AssignPlan.jsx') && source.endsWith('/views/Plan/TrainingPlans.jsx')) return '\0rotation-plan-leaf';
       if (importer?.endsWith('/ClientsPanel.jsx') && source.startsWith('./') && !['./useCoachRoute.js', './clientSubTabs.js'].includes(source)) return `\0client-leaf:${source}`;
     },
     load(id) {
+      if (id === '\0rotation-plan-leaf') return `import {createElement} from 'react';export default function Plan({clientUid,workouts,onChanged}) {return createElement('section',{'data-plan-client':clientUid}, createElement('output',{'aria-label':'Trainingsdaten'},JSON.stringify(workouts)),createElement('button',{onClick:onChanged},'Trainingsdaten aktualisieren'));}`;
       if (id.startsWith('\0client-leaf:')) return 'export default function ClientLeaf() {return null;}';
     },
     configureServer(server) {

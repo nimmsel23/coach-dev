@@ -77,3 +77,11 @@ export const saveAnatomy = (id, data) => inspectorWrite('save-anatomy', id, data
 export const saveExercise = (id, data) => inspectorWrite('save-exercise', id, data);
 export const editExerciseSources = approveInbox;
 export const updateUserProfile = () => { throw new Error('Unexpected profile write'); };
+
+export function getClientRoutinesProgress(uid) {
+  fixtureState.calls.push(['rotation-progress', uid]);
+  return new Promise((resolve, reject) => {
+    fixtureState.rotationPending ||= {};
+    fixtureState.rotationPending[uid] = {resolve, reject};
+  });
+}

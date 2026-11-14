@@ -311,7 +311,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                   onNavigate={setDetailTab}
                 />
               )}
-              {detailTab === 'plan' && <AssignPlan clientUid={selectedUid} clientName={selectedName} />}
+              {detailTab === 'plan' && <AssignPlan key={selectedUid} clientUid={selectedUid} clientName={selectedName} />}
             </div>
           </>
         )}
