@@ -407,3 +407,27 @@ zwischenzeitlichem Klientenwechsel. Die Statusbuttons und der Status-Selektor
 besitzen mindestens 44px Höhe; die Fixture kontrolliert horizontale Überläufe
 bei 390/844/768/1024px. Der Adaptervertrag bleibt Boolean und die gemeinsame
 Firestore-Offlinequeue liefert weiterhin keine garantierte Serverbestätigung.
+
+## Feed- und Fortschrittsfehler bleiben Fehler (2026-11-14)
+
+`getClientJournalFeed` und `getGlobalJournalFeed` veröffentlichen erst nach
+erfolgreichen Reads aller drei Quellen (`sessions`, `journal`, `habitJournals`)
+einen vollständigen Feed. `getClientRoutinesProgress` verlangt beide Reads
+(`routines`, `workouts`). Verbindungs- oder Berechtigungsfehler dürfen keinen
+leeren/teilweisen Stand als erfolgreiches Ergebnis cachen. Lokale Adapter
+verlangen entsprechende Arrays und propagieren Transportfehler. Bestehende
+IndexedDB-Snapshots bleiben beim fehlgeschlagenen Refresh erhalten.
+
+`ClientWorkoutsFeed` zeigt dauerhafte Lade-/Aktualisierungsfehler und Retry,
+statt nach einem Fehler „Keine Workouts“ zu behaupten. Vorhandene Karten bleiben
+bei Refreshfehlern sichtbar. Klientennamen und Verlauf werden getrennt behandelt;
+fehlende Namen verhindern nicht die Anzeige bereits geladener Einträge.
+Cache-Ergebnisse und Fehler werden nur für den tatsächlich angeforderten
+Feed-Key konsumiert. Ein später beendeter Namens-Read darf einen zuvor gemeldeten
+Feed-Refreshfehler nicht löschen.
+
+`coachFeedReads.test.mjs` prüft alle Quellen einzeln, echte Leerstände,
+Identitäten und lokale Antwortverträge. Die Browser-Fixture `?feed&feedFailure`
+prüft Kaltstartfehler/Retry, erhaltene Karten und fremde Cache-Ereignisse;
+`?feed&slowProfiles` prüft die Reihenfolge von Namens-Read und Refreshfehler.
+Dies sind isolierte Tests ohne reale Coach-/Klientenkonten.

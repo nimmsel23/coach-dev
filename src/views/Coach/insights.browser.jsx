@@ -35,6 +35,8 @@ function LoginFixture() {
     authEmail={email} setAuthEmail={setEmail} authPassword={password} setAuthPassword={setPassword}
     authRegistering={registering} setAuthRegistering={setRegistering} onSubmit={(event) => event.preventDefault()} onGoogleSignIn={() => {}} /></>;
 }
+if (new URLSearchParams(window.location.search).has('slowProfiles')) fixtureState.profilesDeferred = true;
+if (new URLSearchParams(window.location.search).has('feedFailure')) fixtureState.feedFail = true;
 if (new URLSearchParams(window.location.search).has('clients')) fixtureState.profilesFail = true;
 function Fixture() {
   const [uid, setUid] = useState('Klient A');

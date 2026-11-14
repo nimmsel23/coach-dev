@@ -127,72 +127,60 @@ export async function getClientJournalFeed(clientUid, limitCount = 100) {
   return cachedQuery(CACHE_KEYS.feedClient(clientUid, limitCount), async () => {
     const feed = [];
 
-    try {
-      const snap = await getDocs(collection(db, "fitness", clientUid, "sessions"));
-      for (const d of snap.docs) {
-        const data = d.data();
-        feed.push({
-          id: d.id,
-          userId: clientUid,
-          path: d.ref.path,
-          date: data.date || "Unbekannt",
-          block: data.block || data.trainingsart || null,
-          trainingsart: data.trainingsart || null,
-          sessionMode: data.sessionMode || null,
-          exercises: data.exercises || [],
-          ...activityFields(data),
-          effort: data.effort ?? null,
-          mood: data.mood || "",
-          notes: data.notes || "",
-          coachFeedback: data.coachFeedback || "",
-          time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
-          type: "workout",
-          ...nutritionFields(data),
-        });
-      }
-    } catch (e) {
-      console.error("Error in getClientJournalFeed sessions:", e);
+    const snap = await getDocs(collection(db, "fitness", clientUid, "sessions"));
+    for (const d of snap.docs) {
+      const data = d.data();
+      feed.push({
+        id: d.id,
+        userId: clientUid,
+        path: d.ref.path,
+        date: data.date || "Unbekannt",
+        block: data.block || data.trainingsart || null,
+        trainingsart: data.trainingsart || null,
+        sessionMode: data.sessionMode || null,
+        exercises: data.exercises || [],
+        ...activityFields(data),
+        effort: data.effort ?? null,
+        mood: data.mood || "",
+        notes: data.notes || "",
+        coachFeedback: data.coachFeedback || "",
+        time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
+        type: "workout",
+        ...nutritionFields(data),
+      });
     }
 
-    try {
-      const journalSnap = await getDocs(collection(db, "fitness", clientUid, "journal"));
-      for (const d of journalSnap.docs) {
-        const data = d.data();
-        feed.push({
-          id: d.id,
-          userId: clientUid,
-          path: d.ref.path,
-          date: data.date || "Unbekannt",
-          notes: data.text || "",
-          tags: data.tags || [],
-          coachFeedback: data.coachFeedback || "",
-          time: data.time || data.date || "",
-          type: "journal",
-          ...nutritionFields(data),
-        });
-      }
-    } catch (e) {
-      console.error("Error in getClientJournalFeed journal:", e);
+    const journalSnap = await getDocs(collection(db, "fitness", clientUid, "journal"));
+    for (const d of journalSnap.docs) {
+      const data = d.data();
+      feed.push({
+        id: d.id,
+        userId: clientUid,
+        path: d.ref.path,
+        date: data.date || "Unbekannt",
+        notes: data.text || "",
+        tags: data.tags || [],
+        coachFeedback: data.coachFeedback || "",
+        time: data.time || data.date || "",
+        type: "journal",
+        ...nutritionFields(data),
+      });
     }
 
-    try {
-      const habitSnap = await getDocs(collection(db, "fitness", clientUid, "habitJournals"));
-      for (const d of habitSnap.docs) {
-        const data = d.data();
-        feed.push({
-          id: d.id,
-          userId: clientUid,
-          path: d.ref.path,
-          habitId: data.habitId || null,
-          date: data.date || "Unbekannt",
-          notes: data.text || "",
-          coachFeedback: data.coachFeedback || "",
-          time: data.date || "",
-          type: "habit_journal",
-        });
-      }
-    } catch (e) {
-      console.error("Error in getClientJournalFeed habitJournals:", e);
+    const habitSnap = await getDocs(collection(db, "fitness", clientUid, "habitJournals"));
+    for (const d of habitSnap.docs) {
+      const data = d.data();
+      feed.push({
+        id: d.id,
+        userId: clientUid,
+        path: d.ref.path,
+        habitId: data.habitId || null,
+        date: data.date || "Unbekannt",
+        notes: data.text || "",
+        coachFeedback: data.coachFeedback || "",
+        time: data.date || "",
+        type: "habit_journal",
+      });
     }
 
     feed.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
@@ -209,19 +197,14 @@ export async function getClientJournalFeed(clientUid, limitCount = 100) {
 // exercises-Subcollections nötig.
 export async function getClientRoutinesProgress(clientUid) {
   return cachedQuery(CACHE_KEYS.routinesProgress(clientUid), async () => {
-    try {
-      const [routinesSnap, workoutsSnap] = await Promise.all([
-        getDocs(collection(db, "fitness", clientUid, "routines")),
-        getDocs(collection(db, "fitness", clientUid, "workouts")),
-      ]);
-      return {
-        routines: routinesSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
-        workouts: workoutsSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
-      };
-    } catch (e) {
-      console.error("Error in getClientRoutinesProgress:", e);
-      return { routines: [], workouts: [] };
-    }
+    const [routinesSnap, workoutsSnap] = await Promise.all([
+      getDocs(collection(db, "fitness", clientUid, "routines")),
+      getDocs(collection(db, "fitness", clientUid, "workouts")),
+    ]);
+    return {
+      routines: routinesSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
+      workouts: workoutsSnap.docs.map((d) => ({ id: d.id, ...d.data() })),
+    };
   });
 }
 
@@ -230,77 +213,65 @@ export async function getGlobalJournalFeed(limitCount = 50) {
     const feed = [];
 
     // 1. Workout Sessions
-    try {
-      const snap = await getDocs(collectionGroup(db, "sessions"));
-      for (const d of snap.docs) {
-        const data = d.data();
-        const userId = d.ref.parent?.parent?.id || "unknown";
-        feed.push({
-          id: d.id,
-          userId,
-          path: d.ref.path,
-          date: data.date || "Unbekannt",
-          block: data.block || data.trainingsart || null,
-          trainingsart: data.trainingsart || null,
-          sessionMode: data.sessionMode || null,
-          exercises: data.exercises || [],
-          ...activityFields(data),
-          ...nutritionFields(data),
-          effort: data.effort ?? null,
-          mood: data.mood || "",
-          notes: data.notes || "",
-          coachFeedback: data.coachFeedback || "",
-          time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
-          type: "workout",
-        });
-      }
-    } catch (e) {
-      console.error("Error in getGlobalJournalFeed sessions:", e);
+    const snap = await getDocs(collectionGroup(db, "sessions"));
+    for (const d of snap.docs) {
+      const data = d.data();
+      const userId = d.ref.parent?.parent?.id || "unknown";
+      feed.push({
+        id: d.id,
+        userId,
+        path: d.ref.path,
+        date: data.date || "Unbekannt",
+        block: data.block || data.trainingsart || null,
+        trainingsart: data.trainingsart || null,
+        sessionMode: data.sessionMode || null,
+        exercises: data.exercises || [],
+        ...activityFields(data),
+        ...nutritionFields(data),
+        effort: data.effort ?? null,
+        mood: data.mood || "",
+        notes: data.notes || "",
+        coachFeedback: data.coachFeedback || "",
+        time: data.saved_at?.toDate?.()?.toISOString() || data.date || "",
+        type: "workout",
+      });
     }
 
     // 2. Daily Journal Entries
-    try {
-      const journalSnap = await getDocs(collectionGroup(db, "journal"));
-      for (const d of journalSnap.docs) {
-        const data = d.data();
-        const userId = d.ref.parent?.parent?.id || "unknown";
-        feed.push({
-          id: d.id,
-          userId,
-          path: d.ref.path,
-          date: data.date || "Unbekannt",
-          notes: data.text || "",
-          tags: data.tags || [],
-          coachFeedback: data.coachFeedback || "",
-          time: data.time || data.date || "",
-          type: "journal",
-          ...nutritionFields(data),
-        });
-      }
-    } catch (e) {
-      console.error("Error in getGlobalJournalFeed journal:", e);
+    const journalSnap = await getDocs(collectionGroup(db, "journal"));
+    for (const d of journalSnap.docs) {
+      const data = d.data();
+      const userId = d.ref.parent?.parent?.id || "unknown";
+      feed.push({
+        id: d.id,
+        userId,
+        path: d.ref.path,
+        date: data.date || "Unbekannt",
+        notes: data.text || "",
+        tags: data.tags || [],
+        coachFeedback: data.coachFeedback || "",
+        time: data.time || data.date || "",
+        type: "journal",
+        ...nutritionFields(data),
+      });
     }
 
     // 3. Habit Journal Entries
-    try {
-      const habitSnap = await getDocs(collectionGroup(db, "habitJournals"));
-      for (const d of habitSnap.docs) {
-        const data = d.data();
-        const userId = d.ref.parent?.parent?.id || "unknown";
-        feed.push({
-          id: d.id,
-          userId,
-          path: d.ref.path,
-          habitId: data.habitId || null,
-          date: data.date || "Unbekannt",
-          notes: data.text || "",
-          coachFeedback: data.coachFeedback || "",
-          time: data.date || "",
-          type: "habit_journal",
-        });
-      }
-    } catch (e) {
-      console.error("Error in getGlobalJournalFeed habitJournals:", e);
+    const habitSnap = await getDocs(collectionGroup(db, "habitJournals"));
+    for (const d of habitSnap.docs) {
+      const data = d.data();
+      const userId = d.ref.parent?.parent?.id || "unknown";
+      feed.push({
+        id: d.id,
+        userId,
+        path: d.ref.path,
+        habitId: data.habitId || null,
+        date: data.date || "Unbekannt",
+        notes: data.text || "",
+        coachFeedback: data.coachFeedback || "",
+        time: data.date || "",
+        type: "habit_journal",
+      });
     }
 
     feed.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
