@@ -29,6 +29,7 @@ export default function ClientConsoleView({
   nutritionAccess = 'ok',
   comments = {},
   submittingId = null,
+  submittingIds = [],
   onCommentChange,
   onCommentSubmit,
   onRetry,
@@ -69,7 +70,7 @@ export default function ClientConsoleView({
     </div>
   ) : null
 
-  if (loading) {
+  if (loading && !workouts.length && !error) {
     return (
       <div className="flex items-center justify-center py-20" role="status">
         <div className="spinner" />
@@ -78,23 +79,19 @@ export default function ClientConsoleView({
     )
   }
 
-  if (error) {
-    return (
-      <div role="alert" className="card p-6 text-sm text-fit-red">
-        {error}
-        {onRetry && (
-          <button type="button" onClick={onRetry} className="ml-3 underline">
-            Erneut versuchen
-          </button>
-        )}
-      </div>
-    )
-  }
+  const errorBanner = error ? (
+    <div role="alert" className="card flex flex-wrap items-center justify-between gap-2 p-4 text-sm text-fit-red">
+      <p>{error}</p>
+      {onRetry && <button type="button" onClick={onRetry} className="min-h-11 rounded-xl border border-fit-line px-3 text-fit-ink">Erneut versuchen</button>}
+    </div>
+  ) : null
+  if (error && !workouts.length) return errorBanner
 
   const lines = macroLines(model?.macros)
 
   return (
     <section className="space-y-4" aria-label="Klientenkonsole">
+      {errorBanner}
       {highlightBanner}
       {commentError && <p role="alert" className="text-sm text-fit-red">{commentError}</p>}
       <header className="grid gap-3 sm:grid-cols-3">
@@ -131,7 +128,7 @@ export default function ClientConsoleView({
         </article>
       </header>
 
-      {!workouts.length && (
+      {!workouts.length && !error && (
         <div className="card flex flex-col items-center justify-center px-6 py-16 text-center">
           <Dumbbell size={36} className="mb-3 text-fit-dim" />
           <h3 className="text-base font-semibold text-fit-ink">Keine Trainingslogs</h3>
@@ -143,6 +140,7 @@ export default function ClientConsoleView({
         {workouts.map((log) => {
           const exercises = Array.isArray(log.exercises) ? log.exercises : []
           const marked = highlightedIds.has(log.id)
+          const submitting = submittingId === log.id || submittingIds.includes(log.id)
           return (
             <article
               key={log.id}
@@ -211,10 +209,10 @@ export default function ClientConsoleView({
                   <div className="flex justify-end">
                     <button
                       type="submit"
-                      disabled={submittingId === log.id || !(comments[log.id] || '').trim()}
+                      disabled={submitting || !(comments[log.id] || '').trim()}
                       className="inline-flex items-center gap-2 rounded-full bg-fit-accent px-4 py-2 text-xs font-semibold text-fit-bg disabled:opacity-40"
                     >
-                      {submittingId === log.id ? 'Speichert…' : <><Check size={13} /> Senden</>}
+                      {submitting ? 'Speichert…' : <><Check size={13} /> Senden</>}
                     </button>
                   </div>
                 </form>
