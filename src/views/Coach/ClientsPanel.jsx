@@ -1,5 +1,5 @@
 import ClientMessages from './ClientMessages';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Users } from 'lucide-react';
 import { getAllUserProfiles, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
@@ -22,29 +22,36 @@ export default function ClientsPanel({ unreadCounts = {} }) {
   const [profiles, setProfiles] = useState({});
   const [statuses, setStatuses] = useState({});
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(null);
+  const [saving, setSaving] = useState(new Set());
+  const pendingStatuses = useRef(new Map());
+  const mounted = useRef(false);
+  const selectedClient = useRef(null);
   const [error, setError] = useState('');
   const [loadError, setLoadError] = useState('');
   const [manageUsers, setManageUsers] = useState(false);
   const [route, navigate] = useCoachRoute();
   const selectedUid = route.client;
+  selectedClient.current = selectedUid;
   const detailTab = route.detail;
 
   const setSelectedUid = (uid) => navigate({ sub: 'clients', client: uid, detail: 'workouts', date: '', planId: '' });
   const setDetailTab = (detail) => navigate({ sub: 'clients', detail, date: '', planId: '' });
 
+  function applyProfiles(data) {
+    setProfiles(data);
+    setStatuses(Object.fromEntries(Object.keys(data).map((uid) => [
+      uid, pendingStatuses.current.get(uid)?.status || data[uid]?.clientStatus || (data[uid]?.authUserOnly ? 'hidden' : 'friend'),
+    ])));
+  }
+
   useEffect(() => {
+    mounted.current = true;
     load();
     const onCache = (event) => {
       const { key, data } = event.detail || {};
       if (key !== 'profiles:all' || !data) return;
-      setProfiles(data);
+      applyProfiles(data);
       setLoadError('');
-      const entries = Object.keys(data).map((uid) => [
-        uid,
-        data[uid]?.clientStatus || (data[uid]?.authUserOnly ? 'hidden' : 'friend'),
-      ]);
-      setStatuses(Object.fromEntries(entries));
       setLoading(false);
     };
     const onCacheError = (event) => {
@@ -53,6 +60,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     window.addEventListener('vos-coach-cache', onCache);
     window.addEventListener('vos-coach-cache-error', onCacheError);
     return () => {
+      mounted.current = false;
       window.removeEventListener('vos-coach-cache', onCache);
       window.removeEventListener('vos-coach-cache-error', onCacheError);
     };
@@ -63,35 +71,37 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     setLoading(true);
     try {
       const p = await getAllUserProfiles();
-      setProfiles(p);
-      const entries = Object.keys(p).map((uid) => [
-        uid,
-        p[uid]?.clientStatus || (p[uid]?.authUserOnly ? 'hidden' : 'friend'),
-      ]);
-      setStatuses(Object.fromEntries(entries));
+      if (mounted.current) applyProfiles(p);
     } catch (err) {
-      setLoadError(err.message || 'Klienten konnten nicht geladen werden.');
+      if (mounted.current) setLoadError(err.message || 'Klienten konnten nicht geladen werden.');
     } finally {
-      setLoading(false);
+      if (mounted.current) setLoading(false);
     }
   }
 
   async function setStatus(uid, status) {
+    if (pendingStatuses.current.has(uid)) return;
     const previous = statuses[uid];
+    pendingStatuses.current.set(uid, { status });
     setError('');
-    setSaving(uid);
+    setSaving(new Set(pendingStatuses.current.keys()));
     setStatuses((prev) => ({ ...prev, [uid]: status }));
     try {
       const saved = await updateUserProfile(uid, { clientStatus: status });
       if (!saved) throw new Error('Auswahl konnte nicht gespeichert werden.');
-      if (status === 'hidden' && selectedUid === uid) {
+      if (!mounted.current) return;
+      setProfiles((prev) => ({ ...prev, [uid]: { ...prev[uid], clientStatus: status } }));
+      if (status === 'hidden' && selectedClient.current === uid) {
         navigate({ sub: 'clients', client: '', detail: 'workouts', date: '' });
       }
     } catch (err) {
-      setStatuses((prev) => ({ ...prev, [uid]: previous }));
-      setError(err.message || 'Status konnte nicht gespeichert werden.');
+      if (mounted.current) {
+        setStatuses((prev) => ({ ...prev, [uid]: previous }));
+        setError(`${profiles[uid]?.displayName || uid}: ${err.message || 'Status konnte nicht gespeichert werden.'}`);
+      }
     } finally {
-      setSaving(null);
+      pendingStatuses.current.delete(uid);
+      if (mounted.current) setSaving(new Set(pendingStatuses.current.keys()));
     }
   }
 
@@ -147,7 +157,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
             type="button"
             aria-pressed={manageUsers}
             onClick={() => setManageUsers((value) => !value)}
-            className="text-xs text-fit-accent underline"
+            className="min-h-11 px-2 text-xs text-fit-accent underline"
           >
             {manageUsers ? 'Fertig' : 'Verwalten'}
           </button>
@@ -185,11 +195,11 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                       <button
                         key={option.id}
                         type="button"
-                        disabled={saving === uid}
+                        disabled={saving.has(uid)}
                         aria-pressed={status === option.id}
                         title={option.hint}
                         onClick={() => setStatus(uid, option.id)}
-                        className={`rounded-full border px-2 py-0.5 text-[10px] disabled:opacity-50 ${
+                        className={`min-h-11 rounded-full border px-3 py-1 text-xs disabled:opacity-50 ${
                           status === option.id
                             ? 'border-fit-accent bg-fit-accent/10 text-fit-accent'
                             : 'border-fit-line/40 text-fit-muted'
@@ -238,9 +248,9 @@ export default function ClientsPanel({ unreadCounts = {} }) {
               <select
                 id="client-status"
                 value={statuses[selectedUid] || 'friend'}
-                disabled={saving === selectedUid}
+                disabled={saving.has(selectedUid)}
                 onChange={(event) => setStatus(selectedUid, event.target.value)}
-                className="rounded-full border border-fit-line/40 bg-fit-bg2 px-2.5 py-1 text-xs text-fit-ink disabled:opacity-50"
+                className="min-h-11 rounded-full border border-fit-line/40 bg-fit-bg2 px-2.5 py-1 text-xs text-fit-ink disabled:opacity-50"
               >
                 {STATUS_OPTIONS.map((opt) => (
                   <option key={opt.id} value={opt.id}>{opt.label}</option>
@@ -311,7 +321,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                   onNavigate={setDetailTab}
                 />
               )}
-              {detailTab === 'plan' && <AssignPlan clientUid={selectedUid} clientName={selectedName} />}
+              {detailTab === 'plan' && <AssignPlan key={selectedUid} clientUid={selectedUid} clientName={selectedName} />}
             </div>
           </>
         )}

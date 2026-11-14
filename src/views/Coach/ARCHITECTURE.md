@@ -375,3 +375,35 @@ Adaptertests prüfen beide Firestore-Quellen und lokale Antwortverträge; die
 Browser-Fixture prüft echte IndexedDB-Erhaltung und Fehler/Retry im realen
 ClientsPanel mit isolierten Detailansichten. Die ergänzende lokale Auth-
 Benutzersuche bleibt optional, weil sie auf Hosting nicht verfügbar ist.
+
+## Rotations-Einstieg nach Klientenwechsel (2026-11-14)
+
+`AssignPlan` delegiert seit `c5087e42` an den gepinnten Plan-Editor. Der
+Coach-eigene Trainingsdaten-Read besitzt eine fortlaufende Request-ID:
+Antworten nach Klientenwechsel, Unmount oder einer neueren Aktualisierung
+werden verworfen. `ClientsPanel` und der eingebundene Plan-Editor haben einen
+Klienten-Key, damit auch Editorzustände beim Wechsel getrennt bleiben.
+Ein fehlgeschlagener Refresh erhält bereits geladene Trainingsdaten und zeigt
+„Erneut versuchen“. Die Browser-Fixture `?rotation` prüft A→B mit verspäteter
+A-Antwort, Fehler/Retry und zwei vertauschte Antworten desselben Klienten.
+Der echte Coach-Einstieg wird gerendert; die Plan-Detailansicht wird für diese
+Wiring-Prüfung ersetzt. Die getrennten Vertragstests lesen den tatsächlichen
+gepinnten Plan-Adapter inklusive Übungen, Versionen und Completions.
+
+## Klientenstatus: parallele Saves (2026-11-14)
+
+Status-Schreibvorgänge werden pro UID verwaltet. Eine sofortige Ref-Sperre
+verhindert doppelte Writes desselben Klienten; verschiedene Klienten dürfen
+parallel speichern. Profil-Refreshes übernehmen währenddessen die offenen
+Statuswerte, statt sie mit einem älteren Snapshot zu ersetzen. Ein Fehlschlag
+rollt nur die betroffene UID zurück und nennt den Klienten in der Fehlermeldung.
+Erfolgreiche Änderungen aktualisieren auch den lokalen Profilstand.
+
+Eine spät bestätigte Ausblendung navigiert nur dann zurück zur Liste, wenn
+der betroffene Klient weiterhin ausgewählt und das Panel noch gemountet ist.
+`?clients&status` in der Browser-Fixture prüft parallele Saves, älteren
+Cache-Refresh, einen fehlgeschlagenen zweiten Save und Ausblenden bei
+zwischenzeitlichem Klientenwechsel. Die Statusbuttons und der Status-Selektor
+besitzen mindestens 44px Höhe; die Fixture kontrolliert horizontale Überläufe
+bei 390/844/768/1024px. Der Adaptervertrag bleibt Boolean und die gemeinsame
+Firestore-Offlinequeue liefert weiterhin keine garantierte Serverbestätigung.
