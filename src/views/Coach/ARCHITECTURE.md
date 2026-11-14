@@ -424,7 +424,8 @@ bei Refreshfehlern sichtbar. Klientennamen und Verlauf werden getrennt behandelt
 fehlende Namen verhindern nicht die Anzeige bereits geladener Einträge.
 Cache-Ergebnisse und Fehler werden nur für den tatsächlich angeforderten
 Feed-Key konsumiert. Ein später beendeter Namens-Read darf einen zuvor gemeldeten
-Feed-Refreshfehler nicht löschen.
+Feed-Refreshfehler nicht löschen. Ein inzwischen eingetroffenes frisches
+Cache-Ergebnis hat Vorrang vor dem älteren Ergebnis des ursprünglichen Reads.
 
 `coachFeedReads.test.mjs` prüft alle Quellen einzeln, echte Leerstände,
 Identitäten und lokale Antwortverträge. Die Browser-Fixture `?feed&feedFailure`

@@ -412,6 +412,14 @@ try {
   await evaluate("window.insightsFixture.resolveProfiles({a:{displayName:'Anna'}})");
   await wait(has('Verlauf konnte nicht aktualisiert werden.'));
   assert.equal(await evaluate("document.querySelectorAll('[data-entry-key]').length"),3,'slower profile read must not clear an earlier refresh failure');
+  await send('Page.navigate', {url:'http://127.0.0.1:15918/src/views/Coach/insights.browser.html?feed&slowProfiles&fresh'});
+  await wait('!!window.insightsFixture?.resolveProfiles');
+  await evaluate("window.dispatchEvent(new CustomEvent('vos-coach-cache',{detail:{key:'feed:global:50',data:[{id:'fresh-session',userId:'a',type:'workout',date:'2026-11-14',coachFeedback:'Fresh feedback'}]}}))");
+  await wait("document.querySelector('textarea')?.value==='Fresh feedback'");
+  await evaluate("window.insightsFixture.resolveProfiles({a:{displayName:'Anna'}})");
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(await evaluate("document.querySelectorAll('[data-entry-key]').length"),1,'late initial cache result must not replace a fresh feed event');
+  assert.equal(await evaluate("document.querySelector('textarea')?.value"),'Fresh feedback');
   const deepLink = '#/clients/client-a/trainingplan?plan=plan-a&date=2026-11-12';
   await send('Page.navigate', { url: `http://coach.localhost:15918/coach-shell.html${deepLink}` });
   await wait("!!document.querySelector('iframe')?.contentDocument?.querySelector('h1')");

@@ -29,6 +29,8 @@ export default function ClientWorkoutsFeed({
 
   useEffect(() => {
     let cancelled = false;
+    let feedRefreshed = false;
+    let profilesRefreshed = false;
     setLoadingJournals(true);
     setReadErrors({});
     const feedKey = clientUid ? `feed:client:${clientUid}:100` : 'feed:global:50';
@@ -50,13 +52,13 @@ export default function ClientWorkoutsFeed({
       getAllUserProfiles(),
     ]).then(([feed, profiles]) => {
       if (cancelled) return;
-      if (feed.status === 'fulfilled') applyFeed(feed.value);
+      if (feed.status === 'fulfilled' && !feedRefreshed) applyFeed(feed.value);
       else setLoadingJournals(false);
-      if (profiles.status === 'fulfilled') setUserProfiles(profiles.value);
+      if (profiles.status === 'fulfilled' && !profilesRefreshed) setUserProfiles(profiles.value);
       setReadErrors((prev) => ({
         ...prev,
-        ...(feed.status === 'rejected' ? { feed: 'Verlauf konnte nicht geladen werden.' } : {}),
-        ...(profiles.status === 'rejected' ? { profiles: 'Klientennamen konnten nicht geladen werden.' } : {}),
+        ...(feed.status === 'rejected' && !feedRefreshed ? { feed: 'Verlauf konnte nicht geladen werden.' } : {}),
+        ...(profiles.status === 'rejected' && !profilesRefreshed ? { profiles: 'Klientennamen konnten nicht geladen werden.' } : {}),
       }));
     });
 
@@ -65,10 +67,12 @@ export default function ClientWorkoutsFeed({
       const { key, data } = event.detail || {};
       if (!key || cancelled) return;
       if (key === feedKey) {
+        feedRefreshed = true;
         applyFeed(data);
         setReadErrors((prev) => ({ ...prev, feed: '' }));
       }
       if (key === 'profiles:all') {
+        profilesRefreshed = true;
         setUserProfiles(data);
         setReadErrors((prev) => ({ ...prev, profiles: '' }));
       }
