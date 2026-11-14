@@ -432,3 +432,22 @@ Identitäten und lokale Antwortverträge. Die Browser-Fixture `?feed&feedFailure
 prüft Kaltstartfehler/Retry, erhaltene Karten und fremde Cache-Ereignisse;
 `?feed&slowProfiles` prüft die Reihenfolge von Namens-Read und Refreshfehler.
 Dies sind isolierte Tests ohne reale Coach-/Klientenkonten.
+
+## Hauptkonsole: Feed-Refresh und Kommentarentwürfe (2026-11-14)
+
+Die Klientenkonsole verarbeitet Cache-Erfolg und Cache-Fehler ausschließlich
+für ihren Standardfeed `feed:client:<uid>:100`. Gespeicherte Logs bleiben bei
+Aktualisierungsfehlern sichtbar; ein fehlgeschlagener Kaltstart zeigt Fehler
+und Wiederholung statt leerer Trainingshistorie oder Nullsummen.
+Kommentarentwürfe liegen als Overlay über den Feed-Daten und bleiben bei
+Refresh/Retry einschließlich absichtlich geleertem Text erhalten. Erfolgreiche
+Saves entfernen nur den tatsächlich gesendeten Entwurf, sodass zwischenzeitliche
+Eingaben erhalten bleiben. Pro Log bestehen unabhängige Schreibsperren.
+Klientenwechsel erzeugt eine neue Console-Instanz; verspätete Antworten und
+entfernte Listener können diese nicht beeinflussen.
+
+`node src/views/Coach/clientConsole.browser-test.mjs` startet einen eigenen
+Vite-/Browser-Prozess mit virtuellen Daten und kontrolliert diese Abläufe bei
+vier Bildschirmgrößen. Der Test verwendet ein eigenes temporäres Cache-/
+Browserverzeichnis und beendet seine Prozesse. Entwürfe sind komponentenlokal;
+Browser-Neustart und Navigation sind keine dauerhafte Entwurfssicherung.
