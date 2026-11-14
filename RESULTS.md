@@ -2272,3 +2272,10 @@ Fitness-/Rules-Release voraus.
 - Production remains manually dispatched. A red code-repair path has not yet been exercised.
 
 - 2026-11-10: CI override sync re-trigger for major Vite-8 lockfile.
+
+## 2026-11-14 — Coach lokal: Traction-Route und Browser-Bundle verifiziert
+
+- `coach-api.service` läuft; `GET /api/coach/local/traction?days=7` liefert HTTP 200 und aggregierte Daten für drei sichtbare Klienten.
+- `GET /coach/local.html` liefert HTTP 200; das ausgelieferte `local-main`-Bundle enthält die Fitness-Nutzungsansicht samt leerem Zustand.
+- Aktueller Firestore-Abfragewert: 0 Events/Öffnungen/Seitenaufrufe. Die Konsole funktioniert; echte App-Nutzung ist damit noch nicht nachgewiesen.
+

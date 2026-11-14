@@ -1,6 +1,7 @@
 - ~~Vite-8 Vorbeuge~~: esbuild-Tests + build.target Browserliste (modules/plan folgt plan-Pin).
 # NEXT (coach-dev)
 
+- [ ] Nach dem Fitness-Traction-Release mit einem realen angemeldeten App-Aufruf prüfen, dass `tractionDaily` geschrieben wird und in der lokalen Coach-Konsole erscheint; aktuell live verifiziert, aber noch 0 Events.
 - [x] Katalog-Rechtsklick + `POST /fitness/inbox/draft` + Jefferson-Curl Pipeline-Smoke.
 - [x] Shell: Klienten-SubTabs in Sidebar; Bottom-Nav Long-Press/Rechtsklick → SubTabs / Inbox / Mehr.
 - [x] Inbox-SubTabs live in Sidebar + CF/SW-Push bei neuer `coachInbox`-Anfrage.
