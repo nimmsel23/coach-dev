@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-14T17:21:35+00:00",
+  "generated_at": "2026-11-14T17:24:28+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-14T17:21:12Z",
+   "pushed_at": "2026-11-14T17:24:09Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -20,11 +20,17 @@
    "has_dev": true,
    "dev_behind": 0,
    "dev_ahead": 1,
-   "oldest_unpromoted": "2026-11-14T18:21:00+01:00",
-   "dev_head": "cd84ce4b 2026-11-14T18:21:00+01:00",
-   "master_head": "89f05c03 2026-11-14T18:18:58+01:00"
+   "oldest_unpromoted": "2026-11-14T18:23:59+01:00",
+   "dev_head": "3e37b434 2026-11-14T18:23:59+01:00",
+   "master_head": "cd84ce4b 2026-11-14T18:21:00+01:00"
   },
   "commits": [
+   {
+    "sha": "3e37b434",
+    "date": "2026-11-14T18:23:59+01:00",
+    "author": "Alpha",
+    "subject": "fix(coach): isolate concurrent client status changes"
+   },
    {
     "sha": "cd84ce4b",
     "date": "2026-11-14T18:21:00+01:00",
@@ -138,12 +144,6 @@
     "date": "2026-11-12T12:06:43+01:00",
     "author": "Alpha",
     "subject": "fix(coach): preserve client profiles when discovery refresh fails"
-   },
-   {
-    "sha": "1345681c",
-    "date": "2026-11-12T12:02:58+01:00",
-    "author": "Alpha",
-    "subject": "fix(coach): bind access approval to the checked auth identity"
    }
   ],
   "activity": [
@@ -229,7 +229,7 @@
    },
    {
     "day": "2026-11-14",
-    "n": 2
+    "n": 3
    }
   ],
   "workflows": [
@@ -239,9 +239,9 @@
     "event": "push",
     "status": "in_progress",
     "conclusion": null,
-    "created_at": "2026-11-14T17:21:14Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620643774",
-    "sha": "cd84ce4"
+    "created_at": "2026-11-14T17:24:11Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620911101",
+    "sha": "3e37b43"
    },
    {
     "name": "Deploy Coach",
@@ -249,8 +249,18 @@
     "event": "push",
     "status": "in_progress",
     "conclusion": null,
-    "created_at": "2026-11-14T17:21:14Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620643767",
+    "created_at": "2026-11-14T17:24:11Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620911032",
+    "sha": "3e37b43"
+   },
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-14T17:22:15Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620737755",
     "sha": "cd84ce4"
    },
    {
@@ -259,19 +269,19 @@
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "skipped",
-    "created_at": "2026-11-14T17:20:02Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620526423",
-    "sha": "89f05c0"
+    "created_at": "2026-11-14T17:22:15Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620737746",
+    "sha": "cd84ce4"
    },
    {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "name": "Gemini CI Agent",
     "branch": "dev",
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-14T17:20:02Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620526372",
-    "sha": "89f05c0"
+    "created_at": "2026-11-14T17:22:13Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43620733814",
+    "sha": "cd84ce4"
    },
    {
     "name": "Merge-Agent",
@@ -282,16 +292,6 @@
     "created_at": "2026-11-14T16:44:34Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43617254076",
     "sha": "6ab48cf"
-   },
-   {
-    "name": "Gemini CI Agent",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-13T06:06:28Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43376391060",
-    "sha": "7807971"
    },
    {
     "name": "Pages Docs",
@@ -314,30 +314,37 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev 1 Commit vor Master, Workflows für cd84ce4b laufen",
-   "lage": "Der `dev`-Branch ist mit Commit `cd84ce4b` (`fix(coach): isolate rotation progress across client changes`) einen Commit vor `master`. `master` wurde auf `89f05c03` (`docs(coach): verify local traction console`) aktualisiert. Die Workflows `Check (Coach)` und `Deploy Coach` für `cd84ce4b` sind `in_progress`.",
+   "headline": "Dev 1 Commit vor Master, Workflows für 3e37b434 laufen",
+   "lage": "Der `dev`-Branch ist mit Commit `3e37b434` (`fix(coach): isolate concurrent client status changes`) einen Commit vor `master`. `master` wurde auf `cd84ce4b` (`fix(coach): isolate rotation progress across client changes`) aktualisiert. Die Workflows `Check (Coach)` und `Deploy Coach` für `3e37b434` sind `in_progress`.",
    "auffaelligkeiten": [
     {
+     "level": "hoch",
+     "text": "Die Workflows `Check (Coach)` und `Deploy Coach` für den aktuellen `dev`-Head `3e37b434` sind `in_progress`."
+    },
+    {
      "level": "mittel",
-     "text": "Die Workflows `Check (Coach)` und `Deploy Coach` für den aktuellen `dev`-Head `cd84ce4b` sind `in_progress`."
+     "text": "Die Verifikation des öffentlichen Pages-Deploys und der neuen Seite `/README.html` ist gemäß `NEXT.md` noch ausstehend, obwohl der `Pages Docs` Workflow für `e936962` erfolgreich war."
+    },
+    {
+     "level": "mittel",
+     "text": "Die Wiederherstellung des `KB-Gitlink` in `backend/fitness/catalog/kb` ist gemäß `TODO.md` weiterhin offen."
     },
     {
      "level": "info",
-     "text": "Der `Auto-Promote dev -> master (Check (Coach))` Workflow für `89f05c0` wurde erfolgreich abgeschlossen, was die Aktualisierung von `master` bestätigt."
+     "text": "Der `master`-Branch wurde durch den erfolgreichen `Auto-Promote dev -> master (Check (Coach))` Workflow für Commit `cd84ce4b` aktualisiert."
     }
    ],
    "naechste_schritte": [
-    "Überwache die Workflows `Check (Coach)` und `Deploy Coach` für `cd84ce4b` und behebe ggf. Fehler.",
+    "Überwache die Workflows `Check (Coach)` und `Deploy Coach` für `3e37b434` und behebe ggf. Fehler.",
     "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` (gemäß `NEXT.md`).",
     "Untersuche die Diskrepanz des `KB-Gitlink` in `backend/fitness/catalog/kb` und stelle den Gitlink wieder her (gemäß `TODO.md`)."
    ],
-   "veraendert": "`master` wurde erfolgreich auf `89f05c03` (`docs(coach): verify local traction console`) aktualisiert, und `dev` hat einen neuen Commit `cd84ce4b` erhalten.",
+   "veraendert": "Der `master`-Branch wurde auf `cd84ce4b` aktualisiert, und die `dev`-Workflows laufen nun für den neueren Commit `3e37b434`.",
    "fragen": [
-    "Ist ein realer App-Aufruf zur Verifizierung des `tractionDaily` Events geplant (gemäß `NEXT.md`)?",
-    "Soll `inbox_jefferson_curl_pipeline.yml` vor der Wiederherstellung des `KB-Gitlink` übernommen oder verworfen werden (gemäß `TODO.md`)?"
+    "Soll die `inbox_jefferson_curl_pipeline.yml` vor der Wiederherstellung des `KB-Gitlink` nach `~/dev/fitness` übernommen oder bewusst verworfen werden (gemäß `TODO.md`)?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-14T17:21:37+00:00"
+  "ai_at": "2026-11-14T17:24:30+00:00"
  }
 }
