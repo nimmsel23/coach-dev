@@ -2278,6 +2278,7 @@ Fitness-/Rules-Release voraus.
 - `coach-api.service` läuft; `GET /api/coach/local/traction?days=7` liefert HTTP 200 und aggregierte Daten für drei sichtbare Klienten.
 - `GET /coach/local.html` liefert HTTP 200; das ausgelieferte `local-main`-Bundle enthält die Fitness-Nutzungsansicht samt leerem Zustand.
 - Aktueller Firestore-Abfragewert: 0 Events/Öffnungen/Seitenaufrufe. Die Konsole funktioniert; echte App-Nutzung ist damit noch nicht nachgewiesen.
+- Fitness-`master` Live Deploy `43561614435` für `c3f9a6e` war erfolgreich; das öffentliche `vos-training.web.app`-Bundle enthält `tractionDaily`/`lastSection`. Der letzte Fitness-Shared-Rules-Deploy `42125093913` enthält die Collection-Group-Regel im Projekt `fitness-aos`.
 
 ## 2026-11-14 — Taskwarrior-Setupstatus pro Klientenworkspace
 
