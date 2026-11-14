@@ -30,6 +30,7 @@ export async function saveClientHabitCycleConfig(uid, config) {
   return { ok: true };
 }
 export async function getGlobalJournalFeed() {
+  if (fixtureState.feedFail) throw new Error('offline');
   return [
     { id: 'same-day', userId: 'a', type: 'workout', date: '2026-11-12', coachFeedback: 'Feedback A' },
     { id: 'same-day', userId: 'b', type: 'workout', date: '2026-11-12', coachFeedback: 'Feedback B' },

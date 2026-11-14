@@ -77,3 +77,15 @@ results; the notes retry extension also verifies that an unsaved draft survives
 a failed save and is adopted only after successful retry. Functional tests
 remain 62/62 passing. This source identity check does not establish a real
 Coach account's write permissions or the shared write queue's server ack.
+
+## 2026-11-14: Statusänderungen auf Firebase bestätigt
+
+[Check 43620911101](https://github.com/nimmsel23/coach-dev/actions/runs/43620911101)
+und [Deploy 43620911032](https://github.com/nimmsel23/coach-dev/actions/runs/43620911032)
+für `3e37b43439010ac8e19c70d57c001db03fe477c8` sind erfolgreich.
+Die Vorschau liefert HTTP 200 und genau diesen Commit in release.json,
+mit builtAt `2026-11-14T17:24:46.659Z`. Das bestätigt die Veröffentlichung des
+Status-Fixes. Die nachfolgenden Feed-/Console-Korrekturen haben lokale
+Adapter-, Logik- und Browsernachweise; deren CI-/Hosting-Abnahme ist separat
+zu verfolgen. Authentifizierte Konten und physische Safari-Geräte wurden bei
+diesen Prüfungen nicht verwendet.

@@ -3,40 +3,27 @@ import { api } from "./core";
 // ── Coach-Tab: globaler Feed aller Klienten-Workouts + Profile ───────────────
 
 export async function getGlobalJournalFeed(limitCount = 100) {
-  try {
-    const data = await api.get(`/fitness/coach/feed?limit=${limitCount}`);
-    return data?.feed || [];
-  } catch {
-    return [];
-  }
+  const data = await api.get(`/fitness/coach/feed?limit=${limitCount}`);
+  if (data?.ok === false || !Array.isArray(data?.feed)) throw new Error('Verlauf konnte nicht geladen werden.');
+  return data.feed;
 }
 
-// Gezielt nur die Einträge eines Klienten — umgeht den globalen
-// limit-Cutoff von getGlobalJournalFeed() (siehe server.mjs-Kommentar).
+// Pro-Klient-Abfrage statt nachträglichem Filtern eines globalen Limits.
 export async function getClientJournalFeed(clientUid, limitCount = 100) {
-  try {
-    const data = await api.get(`/fitness/coach/feed?uid=${encodeURIComponent(clientUid)}&limit=${limitCount}`);
-    return data?.feed || [];
-  } catch {
-    return [];
-  }
+  const data = await api.get(`/fitness/coach/feed?uid=${encodeURIComponent(clientUid)}&limit=${limitCount}`);
+  if (data?.ok === false || !Array.isArray(data?.feed)) throw new Error('Verlauf konnte nicht geladen werden.');
+  return data.feed;
 }
 
-// Coach beobachtet Habit-Fortschritt eines Klienten (read-only) — nutzt
-// dieselben /routines + /workouts-Routen wie der Klient selbst, per
-// ?uid=-Override (Python _uid_from_request() unterstützt das bereits für
-// alle Routen, kein neuer Endpoint nötig). Fortschritt wird im UI-Layer
-// aus routines+workouts berechnet (lib/habitProgress.js).
 export async function getClientRoutinesProgress(clientUid) {
-  try {
-    const [routinesRes, workoutsRes] = await Promise.all([
-      api.get(`/routines?uid=${encodeURIComponent(clientUid)}`),
-      api.get(`/workouts?uid=${encodeURIComponent(clientUid)}`),
-    ]);
-    return { routines: routinesRes?.routines || [], workouts: workoutsRes?.workouts || [] };
-  } catch {
-    return { routines: [], workouts: [] };
+  const [routinesRes, workoutsRes] = await Promise.all([
+    api.get(`/routines?uid=${encodeURIComponent(clientUid)}`),
+    api.get(`/workouts?uid=${encodeURIComponent(clientUid)}`),
+  ]);
+  if (routinesRes?.ok === false || workoutsRes?.ok === false || !Array.isArray(routinesRes?.routines) || !Array.isArray(workoutsRes?.workouts)) {
+    throw new Error('Trainingsdaten konnten nicht geladen werden.');
   }
+  return { routines: routinesRes.routines, workouts: workoutsRes.workouts };
 }
 
 // Coach-Schreibpfad für Klienten-Routinen — nutzt dieselben Routen wie der

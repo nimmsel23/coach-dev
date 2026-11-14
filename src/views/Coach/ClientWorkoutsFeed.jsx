@@ -12,6 +12,8 @@ export default function ClientWorkoutsFeed({
 }) {
   const [journals, setJournals] = useState([]);
   const [loadingJournals, setLoadingJournals] = useState(true);
+  const [readErrors, setReadErrors] = useState({});
+  const [reloadKey, setReloadKey] = useState(0);
   const [userProfiles, setUserProfiles] = useState({});
   const [submittingComments, setSubmittingComments] = useState(() => new Set());
   const pendingComments = useRef(new Set());
@@ -27,12 +29,15 @@ export default function ClientWorkoutsFeed({
 
   useEffect(() => {
     let cancelled = false;
+    let feedRefreshed = false;
+    let profilesRefreshed = false;
     setLoadingJournals(true);
+    setReadErrors({});
+    const feedKey = clientUid ? `feed:client:${clientUid}:100` : 'feed:global:50';
 
-    const applyFeed = (feed, profiles) => {
+    const applyFeed = (feed) => {
       if (cancelled) return;
       setJournals(feed);
-      setUserProfiles(profiles);
       const initialTexts = {};
       feed.forEach((j) => {
         if (j.coachFeedback) initialTexts[feedEntryKey(j)] = j.coachFeedback;
@@ -42,32 +47,50 @@ export default function ClientWorkoutsFeed({
     };
 
     // clientUid gesetzt: Pro-Klient-Query (IndexedDB-Cache in firestore/coach.js).
-    Promise.all([
+    Promise.allSettled([
       clientUid ? getClientJournalFeed(clientUid) : getGlobalJournalFeed(),
       getAllUserProfiles(),
-    ]).then(([feed, profiles]) => applyFeed(feed, profiles)).catch(() => {
-      if (!cancelled) triggerToast('Fehler beim Laden des Journal-Feeds');
-      if (!cancelled) setLoadingJournals(false);
+    ]).then(([feed, profiles]) => {
+      if (cancelled) return;
+      if (feed.status === 'fulfilled' && !feedRefreshed) applyFeed(feed.value);
+      else setLoadingJournals(false);
+      if (profiles.status === 'fulfilled' && !profilesRefreshed) setUserProfiles(profiles.value);
+      setReadErrors((prev) => ({
+        ...prev,
+        ...(feed.status === 'rejected' && !feedRefreshed ? { feed: 'Verlauf konnte nicht geladen werden.' } : {}),
+        ...(profiles.status === 'rejected' && !profilesRefreshed ? { profiles: 'Klientennamen konnten nicht geladen werden.' } : {}),
+      }));
     });
 
     // Background-Refresh aus IDB-SWR → UI nachziehen
     const onCache = (event) => {
       const { key, data } = event.detail || {};
       if (!key || cancelled) return;
-      if (key.startsWith('feed:')) {
-        if (clientUid && !key.includes(`feed:client:${clientUid}:`)) return;
-        if (!clientUid && !key.startsWith('feed:global:')) return;
-        setJournals(data);
-        setLoadingJournals(false);
+      if (key === feedKey) {
+        feedRefreshed = true;
+        applyFeed(data);
+        setReadErrors((prev) => ({ ...prev, feed: '' }));
       }
-      if (key === 'profiles:all') setUserProfiles(data);
+      if (key === 'profiles:all') {
+        profilesRefreshed = true;
+        setUserProfiles(data);
+        setReadErrors((prev) => ({ ...prev, profiles: '' }));
+      }
+    };
+    const onCacheError = (event) => {
+      if (cancelled) return;
+      const key = event.detail?.key;
+      if (key === feedKey) setReadErrors((prev) => ({ ...prev, feed: 'Verlauf konnte nicht aktualisiert werden. Gespeicherter Stand wird angezeigt.' }));
+      if (key === 'profiles:all') setReadErrors((prev) => ({ ...prev, profiles: 'Klientennamen konnten nicht aktualisiert werden.' }));
     };
     window.addEventListener('vos-coach-cache', onCache);
+    window.addEventListener('vos-coach-cache-error', onCacheError);
     return () => {
       cancelled = true;
       window.removeEventListener('vos-coach-cache', onCache);
+      window.removeEventListener('vos-coach-cache-error', onCacheError);
     };
-  }, [clientUid]);
+  }, [clientUid, reloadKey]);
 
   async function handleCommentSubmit(item) {
     const key = feedEntryKey(item);
@@ -154,11 +177,20 @@ export default function ClientWorkoutsFeed({
     </div>
   ) : null;
 
-  if (loadingJournals) return (
+  const readErrorBanner = Object.values(readErrors).some(Boolean) ? (
+    <div role="alert" className="rounded-xl border border-fit-line p-3 text-sm text-fit-red">
+      {Object.values(readErrors).filter(Boolean).join(' ')}
+      <button type="button" onClick={() => setReloadKey((value) => value + 1)} className="ml-2 min-h-11 underline">Erneut versuchen</button>
+    </div>
+  ) : null;
+
+  if (loadingJournals && scopedJournals.length === 0) return (
     <div className="flex items-center justify-center py-20">
       <div className="w-6 h-6 border-2 border-fit-accent/30 border-t-fit-accent rounded-full animate-spin" />
     </div>
   );
+
+  if (scopedJournals.length === 0 && readErrorBanner) return readErrorBanner;
 
   if (scopedJournals.length === 0) return (
     <div className="space-y-4">
@@ -175,6 +207,7 @@ export default function ClientWorkoutsFeed({
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
+      {readErrorBanner}
       {highlightBanner}
       {/* Filter-Leiste */}
       <div className="flex flex-wrap items-center gap-3">
