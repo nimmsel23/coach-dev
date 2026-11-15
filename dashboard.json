@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-14T17:40:38+00:00",
+  "generated_at": "2026-11-15T12:14:22+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-14T17:40:15Z",
+   "pushed_at": "2026-11-14T17:41:21Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,10 +19,10 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 4,
-   "oldest_unpromoted": "2026-11-14T18:36:25+01:00",
+   "dev_ahead": 0,
+   "oldest_unpromoted": null,
    "dev_head": "48fbf071 2026-11-14T18:40:06+01:00",
-   "master_head": "d5dedbe1 2026-11-14T18:32:50+01:00"
+   "master_head": "48fbf071 2026-11-14T18:40:06+01:00"
   },
   "commits": [
    {
@@ -148,12 +148,8 @@
   ],
   "activity": [
    {
-    "day": "2026-10-25",
-    "n": 12
-   },
-   {
     "day": "2026-10-26",
-    "n": 32
+    "n": 22
    },
    {
     "day": "2026-10-27",
@@ -230,15 +226,49 @@
    {
     "day": "2026-11-14",
     "n": 13
+   },
+   {
+    "day": "2026-11-15",
+    "n": 0
    }
   ],
   "workflows": [
    {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-15T11:10:06Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43707594396",
+    "sha": "48fbf07"
+   },
+   {
+    "name": "Merge-Agent",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-15T07:25:08Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43689858366",
+    "sha": "48fbf07"
+   },
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-15T06:33:56Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43686022551",
+    "sha": "48fbf07"
+   },
+   {
     "name": "Gemini CI Agent",
     "branch": "dev",
     "event": "workflow_run",
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "created_at": "2026-11-14T17:40:32Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622387074",
     "sha": "48fbf07"
@@ -247,31 +277,11 @@
     "name": "Check (Coach)",
     "branch": "dev",
     "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "created_at": "2026-11-14T17:40:17Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622363237",
     "sha": "48fbf07"
-   },
-   {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-14T17:40:16Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622361881",
-    "sha": "9102604"
-   },
-   {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "skipped",
-    "created_at": "2026-11-14T17:40:16Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622361735",
-    "sha": "9102604"
    },
    {
     "name": "Deploy Coach",
@@ -282,16 +292,6 @@
     "created_at": "2026-11-14T17:39:18Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622275282",
     "sha": "9102604"
-   },
-   {
-    "name": "Merge-Agent",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-14T16:44:34Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43617254076",
-    "sha": "6ab48cf"
    }
   ],
   "issues": [],
@@ -304,34 +304,22 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "dev 4 Commits voraus, Auto-Promote erfolgreich aber master unverändert",
-   "lage": "Der `dev`-Branch (`48fbf071`) ist 4 Commits vor `master` (`d5dedbe1`). Die Workflows `Gemini CI Agent` und `Check (Coach)` für den aktuellen `dev`-Head `48fbf071` sind `in_progress`. Der `Auto-Promote`-Workflow für den vorherigen `dev`-Head `9102604` wurde als `success` abgeschlossen, der `master`-Branch wurde jedoch nicht aktualisiert.",
+   "headline": "Master mit Dev synchronisiert, alle Workflows erfolgreich",
+   "lage": "Der `dev`-Branch (`48fbf071`) ist nun mit `master` synchronisiert. Alle relevanten Workflows für den aktuellen `dev`-Head `48fbf071`, einschliesslich `Auto-Promote dev -> master (Check (Coach))`, wurden erfolgreich abgeschlossen.",
    "auffaelligkeiten": [
     {
-     "level": "hoch",
-     "text": "Der `Auto-Promote dev -> master (Check (Coach))` Workflow für `9102604` wurde als `success` abgeschlossen, aber der `master`-Branch (`d5dedbe1`) wurde nicht auf diesen Commit aktualisiert."
-    },
-    {
-     "level": "mittel",
-     "text": "Die Workflows `Gemini CI Agent` und `Check (Coach)` für den aktuellen `dev`-Head `48fbf071` sind noch `in_progress`."
-    },
-    {
      "level": "info",
-     "text": "Der `Deploy Coach` Workflow für `9102604` wurde erfolgreich abgeschlossen."
+     "text": "Die Tasks in `NEXT.md` bezüglich der Verifizierung des öffentlichen Pages-Deploys und der neuen `/README.html` Seite sowie der Taskwarrior-Statusanzeige sind weiterhin offen."
     }
    ],
    "naechste_schritte": [
-    "Überwache die `in_progress` Workflows für `48fbf071`.",
-    "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` gemäß `NEXT.md` nach dem erfolgreichen `Deploy Coach` für `9102604`.",
+    "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` gemäss `NEXT.md`.",
     "Prüfe die Task `Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen` in `NEXT.md`."
    ],
-   "veraendert": "Der `dev`-Branch ist nun 4 Commits vor `master`, und der `Auto-Promote`-Workflow für den vorherigen `dev`-Head `9102604` wurde als `success` abgeschlossen, ohne den `master`-Branch zu aktualisieren.",
-   "fragen": [
-    "Warum wurde der `master`-Branch nicht auf `9102604` aktualisiert, obwohl der `Auto-Promote`-Workflow als `success` abgeschlossen wurde?",
-    "Soll `master` manuell auf `9102604` oder den aktuellen `dev`-Head `48fbf071` promoted werden?"
-   ],
+   "veraendert": "Der `master`-Branch wurde erfolgreich auf den Stand des `dev`-Branches (`48fbf071`) aktualisiert, was in der letzten Einschätzung noch ausstand.",
+   "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-14T17:40:39+00:00"
+  "ai_at": "2026-11-15T12:14:24+00:00"
  }
 }
