@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-16T11:35:51+00:00",
+  "generated_at": "2026-11-16T13:06:32+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-16T11:35:32Z",
+   "pushed_at": "2026-11-16T11:36:44Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,10 +19,10 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 3,
-   "oldest_unpromoted": "2026-11-16T11:26:31Z",
+   "dev_ahead": 0,
+   "oldest_unpromoted": null,
    "dev_head": "4b6b8896 2026-11-16T11:35:31Z",
-   "master_head": "48fbf071 2026-11-14T18:40:06+01:00"
+   "master_head": "4b6b8896 2026-11-16T11:35:31Z"
   },
   "commits": [
    {
@@ -234,24 +234,34 @@
   ],
   "workflows": [
    {
-    "name": "Check (Coach)",
+    "name": "PR-AutoMerge (Dependabot -> dev)",
     "branch": "dev",
-    "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
-    "created_at": "2026-11-16T11:35:34Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43859099957",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-16T11:40:06Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43859758320",
     "sha": "4b6b889"
    },
    {
     "name": "Auto-Promote dev -> master (Check (Coach))",
     "branch": "dev",
-    "event": "schedule",
+    "event": "workflow_run",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-16T06:31:03Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43817284023",
-    "sha": "48fbf07"
+    "created_at": "2026-11-16T11:36:32Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43859241996",
+    "sha": "4b6b889"
+   },
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-16T11:35:34Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43859099957",
+    "sha": "4b6b889"
    },
    {
     "name": "Merge-Agent",
@@ -261,16 +271,6 @@
     "conclusion": "success",
     "created_at": "2026-11-16T04:48:35Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43806293716",
-    "sha": "48fbf07"
-   },
-   {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-16T02:50:09Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43794529163",
     "sha": "48fbf07"
    },
    {
@@ -304,35 +304,27 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev-Branch 3 Commits voraus, Workflow 'Check (Coach)' läuft",
-   "lage": "Der `dev`-Branch (`4b6b8896`) ist 3 Commits vor `master` (`48fbf071`). Der Workflow `Check (Coach)` für den aktuellen `dev`-Head ist aktiv. Eine automatische Promotion von `dev` nach `master` wurde zuvor erfolgreich abgeschlossen.",
+   "headline": "Dev und Master synchronisiert, alle Workflows erfolgreich abgeschlossen",
+   "lage": "Der `dev`-Branch (`4b6b8896`) ist nun mit `master` synchronisiert. Die Workflows `Check (Coach)` und `Auto-Promote dev -> master` für den aktuellen Head `4b6b8896` wurden erfolgreich abgeschlossen.",
    "auffaelligkeiten": [
     {
-     "level": "mittel",
-     "text": "Der `dev`-Branch (`4b6b8896`) ist 3 Commits vor `master` (`48fbf071`)."
-    },
-    {
-     "level": "mittel",
-     "text": "Der Workflow 'Check (Coach)' für den aktuellen `dev`-Head `4b6b8896` ist 'in_progress'."
+     "level": "info",
+     "text": "Die Branches `dev` und `master` sind nach erfolgreicher Auto-Promotion von `4b6b8896` synchronisiert."
     },
     {
      "level": "info",
-     "text": "Die Tasks in `NEXT.md` zur Verifizierung des öffentlichen Pages-Deploys und der neuen Seite `/README.html` sowie zur Prüfung der Taskwarrior-Statusanzeige sind weiterhin offen."
-    },
-    {
-     "level": "info",
-     "text": "Die Aufgabe in `NEXT.md` bezüglich des `website`-Submodules (lokal unpushed Landing `71f101a`) ist noch nicht abgeschlossen."
+     "text": "Drei Commits des \"Cursor Agent\" (`4b6b8896`, `4ac95e6f`, `3db82dfe`) wurden in den `dev`-Branch integriert und nach `master` promoted."
     }
    ],
    "naechste_schritte": [
-    "Prüfe den Abschluss des Workflows `Check (Coach)` für `4b6b8896`.",
     "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` gemäss `NEXT.md`.",
-    "Prüfe die Task `Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen` in `NEXT.md`."
+    "Prüfe die Task `Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen` in `NEXT.md`.",
+    "Überprüfe die Dashboard-Funktionalität nach den jüngsten Commits `4b6b8896`, `4ac95e6f` und `3db82dfe`."
    ],
-   "veraendert": "Gegenüber der letzten Einschätzung ist der `dev`-Branch (`4b6b8896`) nun 3 Commits vor `master` (`48fbf071`), und der `Check (Coach)` Workflow ist in Bearbeitung.",
+   "veraendert": "Der `dev`-Branch ist nicht mehr 3 Commits vor `master`, sondern beide Branches sind nach erfolgreicher Promotion synchronisiert.",
    "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-16T11:35:53+00:00"
+  "ai_at": "2026-11-16T13:06:36+00:00"
  }
 }
