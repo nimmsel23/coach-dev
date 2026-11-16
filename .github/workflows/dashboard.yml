@@ -1,10 +1,11 @@
 # Living Dashboard → https://nimmsel23.github.io/<repo>/
 # Engine + Doku: https://github.com/nimmsel23/dashboards/tree/engine
-# Täglich + bei jedem dev-Push: Regeln + Gemini-Lagebild. Montags zusätzlich Claude-Tiefenanalyse.
+# Täglich und bei Push auf dev oder master. Gebaut wird immer Branch dev.
+# Montags zusätzlich Claude-Tiefenanalyse. Der Zeitplan läuft auf dem Default-Branch.
 name: Dashboard
 on:
   push:
-    branches: [dev]
+    branches: [dev, master]
   schedule:
     - cron: "40 4 * * 1"   # Mo: mit Claude-Tiefenanalyse
     - cron: "40 4 * * 0,2-6"
@@ -28,5 +29,6 @@ jobs:
   dashboard:
     uses: nimmsel23/dashboards/.github/workflows/repo-dashboard.yml@engine
     with:
+      branch: dev
       deep: ${{ github.event.schedule == '40 4 * * 1' || inputs.deep == true }}
     secrets: inherit
