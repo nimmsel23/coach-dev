@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-17T13:49:03+00:00",
+  "generated_at": "2026-11-17T16:05:39+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-16T13:06:49Z",
+   "pushed_at": "2026-11-17T16:05:16Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,18 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 0,
-   "oldest_unpromoted": null,
-   "dev_head": "4b6b8896 2026-11-16T11:35:31Z",
+   "dev_ahead": 1,
+   "oldest_unpromoted": "2026-11-17T17:05:16+01:00",
+   "dev_head": "41e613f9 2026-11-17T17:05:16+01:00",
    "master_head": "4b6b8896 2026-11-16T11:35:31Z"
   },
   "commits": [
+   {
+    "sha": "41e613f9",
+    "date": "2026-11-17T17:05:16+01:00",
+    "author": "nimmsel23",
+    "subject": "org-bot: Workflow installieren (Org-Autonomie 16.11.2026)"
+   },
    {
     "sha": "4b6b8896",
     "date": "2026-11-16T11:35:31Z",
@@ -138,18 +144,12 @@
     "date": "2026-11-13T12:39:12+01:00",
     "author": "Alpha",
     "subject": "fix(api): /api/org erkennt Tailnet-Absender hinter tailscale serve"
-   },
-   {
-    "sha": "589f08eb",
-    "date": "2026-11-13T12:38:03+01:00",
-    "author": "Alpha",
-    "subject": "feat(api): /api/org übers Tailnet für Owner-Konten"
    }
   ],
   "activity": [
    {
     "day": "2026-10-28",
-    "n": 3
+    "n": 2
    },
    {
     "day": "2026-10-29",
@@ -229,18 +229,28 @@
    },
    {
     "day": "2026-11-17",
-    "n": 0
+    "n": 1
    }
   ],
   "workflows": [
    {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-17T16:05:19Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44121719758",
+    "sha": "41e613f"
+   },
+   {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
     "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-17T08:30:17Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44047287163",
+    "created_at": "2026-11-17T14:36:40Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44105002500",
     "sha": "4b6b889"
    },
    {
@@ -249,28 +259,18 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-17T04:57:20Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44020678799",
+    "created_at": "2026-11-17T14:07:05Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44099614238",
     "sha": "4b6b889"
    },
    {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "name": "Auto-Promote dev -> master (Check (Coach))",
     "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-17T04:34:51Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44018164050",
-    "sha": "4b6b889"
-   },
-   {
-    "name": "Check (Coach)",
-    "branch": "dev",
-    "event": "push",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-16T11:35:34Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43859099957",
+    "created_at": "2026-11-17T08:30:17Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44047287163",
     "sha": "4b6b889"
    },
    {
@@ -304,30 +304,27 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev und Master synchronisiert, Dashboard-Commits aktiv",
-   "lage": "Der `dev`-Branch ist mit `master` auf `4b6b8896` synchronisiert. Mehrere Workflows, darunter `Auto-Promote dev -> master (Check (Coach))` und `Check (Coach)`, wurden erfolgreich abgeschlossen. Die jüngsten Commits `4b6b8896`, `4ac95e6f` und `3db82dfe` betreffen das Dashboard.",
+   "headline": "Dev ist 1 Commit voraus, Check (Coach) läuft",
+   "lage": "Der `dev`-Branch ist mit `41e613f9` einen Commit vor `master` (`4b6b8896`). Der Workflow `Check (Coach)` läuft aktuell für den neuesten Commit auf `dev`. Mehrere Automatisierungsworkflows, darunter `Auto-Promote dev -> master (Check (Coach))`, wurden erfolgreich abgeschlossen.",
    "auffaelligkeiten": [
     {
-     "level": "mittel",
-     "text": "Die Dokumentation `NEXT.md` und `TODO.md` listen mehrere offene Aufgaben, darunter die Verifizierung des Pages-Deploys und der Taskwarrior-Statusanzeige."
+     "level": "hoch",
+     "text": "Der Workflow \"Check (Coach)\" für den neuesten Commit \"41e613f9\" auf dem \"dev\"-Branch ist noch \"in_progress\"."
     },
     {
-     "level": "mittel",
-     "text": "Das Submodul `fitness/catalog/kb` ist laut `.gitmodules` als Gitlink deklariert, liegt aber seit `710614d9` als vendored Tree vor, was in `TODO.md` als 'KB-Gitlink wiederherstellen' adressiert wird."
+     "level": "info",
+     "text": "Der \"dev\"-Branch ist 1 Commit vor \"master\" und nicht mehr synchronisiert. Der letzte Commit auf \"dev\" ist \"41e613f9\" (\"org-bot: Workflow installieren\")."
     }
    ],
    "naechste_schritte": [
-    "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`.",
-    "Verifiziere den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy.",
-    "Prüfe einen echten Fitness-App-Aufruf und den `tractionDaily`-Event in der lokalen Coach-Konsole gemäss `NEXT.md`."
+    "Prüfe den Status des laufenden Workflows `Check (Coach)` für Commit `41e613f9`.",
+    "Verifiziere den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy gemäss `NEXT.md`.",
+    "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`."
    ],
-   "veraendert": "Gegenüber der letzten Einschätzung wurden neue Commits (`4b6b8896`, `4ac95e6f`, `3db82dfe`) zum Dashboard hinzugefügt, die von einem 'Cursor Agent' stammen.",
-   "fragen": [
-    "Soll der KB-Gitlink für `fitness/catalog/kb` wiederhergestellt werden, und wie sollen die divergierenden Inbox-Dateien behandelt werden?",
-    "Soll der lokal unpushed Commit `71f101a` im `website`-Submodul gepusht oder verworfen werden?"
-   ],
+   "veraendert": "Der `dev`-Branch ist nicht mehr mit `master` synchronisiert, sondern 1 Commit voraus, und der `Check (Coach)`-Workflow läuft für den neuesten `dev`-Commit.",
+   "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-17T13:49:05+00:00"
+  "ai_at": "2026-11-17T16:05:42+00:00"
  }
 }
