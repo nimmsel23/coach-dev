@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-16T13:06:32+00:00",
+  "generated_at": "2026-11-17T13:49:03+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-16T11:36:44Z",
+   "pushed_at": "2026-11-16T13:06:49Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -148,12 +148,8 @@
   ],
   "activity": [
    {
-    "day": "2026-10-27",
-    "n": 3
-   },
-   {
     "day": "2026-10-28",
-    "n": 30
+    "n": 3
    },
    {
     "day": "2026-10-29",
@@ -230,27 +226,41 @@
    {
     "day": "2026-11-16",
     "n": 3
+   },
+   {
+    "day": "2026-11-17",
+    "n": 0
    }
   ],
   "workflows": [
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-17T08:30:17Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44047287163",
+    "sha": "4b6b889"
+   },
+   {
+    "name": "Merge-Agent",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-17T04:57:20Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44020678799",
+    "sha": "4b6b889"
+   },
    {
     "name": "PR-AutoMerge (Dependabot -> dev)",
     "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-16T11:40:06Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43859758320",
-    "sha": "4b6b889"
-   },
-   {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-16T11:36:32Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43859241996",
+    "created_at": "2026-11-17T04:34:51Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44018164050",
     "sha": "4b6b889"
    },
    {
@@ -262,16 +272,6 @@
     "created_at": "2026-11-16T11:35:34Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43859099957",
     "sha": "4b6b889"
-   },
-   {
-    "name": "Merge-Agent",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-16T04:48:35Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43806293716",
-    "sha": "48fbf07"
    },
    {
     "name": "Gemini CI Agent",
@@ -304,27 +304,30 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev und Master synchronisiert, alle Workflows erfolgreich abgeschlossen",
-   "lage": "Der `dev`-Branch (`4b6b8896`) ist nun mit `master` synchronisiert. Die Workflows `Check (Coach)` und `Auto-Promote dev -> master` für den aktuellen Head `4b6b8896` wurden erfolgreich abgeschlossen.",
+   "headline": "Dev und Master synchronisiert, Dashboard-Commits aktiv",
+   "lage": "Der `dev`-Branch ist mit `master` auf `4b6b8896` synchronisiert. Mehrere Workflows, darunter `Auto-Promote dev -> master (Check (Coach))` und `Check (Coach)`, wurden erfolgreich abgeschlossen. Die jüngsten Commits `4b6b8896`, `4ac95e6f` und `3db82dfe` betreffen das Dashboard.",
    "auffaelligkeiten": [
     {
-     "level": "info",
-     "text": "Die Branches `dev` und `master` sind nach erfolgreicher Auto-Promotion von `4b6b8896` synchronisiert."
+     "level": "mittel",
+     "text": "Die Dokumentation `NEXT.md` und `TODO.md` listen mehrere offene Aufgaben, darunter die Verifizierung des Pages-Deploys und der Taskwarrior-Statusanzeige."
     },
     {
-     "level": "info",
-     "text": "Drei Commits des \"Cursor Agent\" (`4b6b8896`, `4ac95e6f`, `3db82dfe`) wurden in den `dev`-Branch integriert und nach `master` promoted."
+     "level": "mittel",
+     "text": "Das Submodul `fitness/catalog/kb` ist laut `.gitmodules` als Gitlink deklariert, liegt aber seit `710614d9` als vendored Tree vor, was in `TODO.md` als 'KB-Gitlink wiederherstellen' adressiert wird."
     }
    ],
    "naechste_schritte": [
-    "Verifiziere den öffentlichen Pages-Deploy und die neue Seite `/README.html` gemäss `NEXT.md`.",
-    "Prüfe die Task `Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen` in `NEXT.md`.",
-    "Überprüfe die Dashboard-Funktionalität nach den jüngsten Commits `4b6b8896`, `4ac95e6f` und `3db82dfe`."
+    "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`.",
+    "Verifiziere den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy.",
+    "Prüfe einen echten Fitness-App-Aufruf und den `tractionDaily`-Event in der lokalen Coach-Konsole gemäss `NEXT.md`."
    ],
-   "veraendert": "Der `dev`-Branch ist nicht mehr 3 Commits vor `master`, sondern beide Branches sind nach erfolgreicher Promotion synchronisiert.",
-   "fragen": [],
+   "veraendert": "Gegenüber der letzten Einschätzung wurden neue Commits (`4b6b8896`, `4ac95e6f`, `3db82dfe`) zum Dashboard hinzugefügt, die von einem 'Cursor Agent' stammen.",
+   "fragen": [
+    "Soll der KB-Gitlink für `fitness/catalog/kb` wiederhergestellt werden, und wie sollen die divergierenden Inbox-Dateien behandelt werden?",
+    "Soll der lokal unpushed Commit `71f101a` im `website`-Submodul gepusht oder verworfen werden?"
+   ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-16T13:06:36+00:00"
+  "ai_at": "2026-11-17T13:49:05+00:00"
  }
 }
