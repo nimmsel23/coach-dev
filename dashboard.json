@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-17T16:05:39+00:00",
+  "generated_at": "2026-11-18T13:24:07+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-17T16:05:16Z",
+   "pushed_at": "2026-11-17T16:06:39Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,10 +19,10 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 1,
-   "oldest_unpromoted": "2026-11-17T17:05:16+01:00",
+   "dev_ahead": 0,
+   "oldest_unpromoted": null,
    "dev_head": "41e613f9 2026-11-17T17:05:16+01:00",
-   "master_head": "4b6b8896 2026-11-16T11:35:31Z"
+   "master_head": "41e613f9 2026-11-17T17:05:16+01:00"
   },
   "commits": [
    {
@@ -148,12 +148,8 @@
   ],
   "activity": [
    {
-    "day": "2026-10-28",
-    "n": 2
-   },
-   {
     "day": "2026-10-29",
-    "n": 44
+    "n": 31
    },
    {
     "day": "2026-10-30",
@@ -230,17 +226,31 @@
    {
     "day": "2026-11-17",
     "n": 1
+   },
+   {
+    "day": "2026-11-18",
+    "n": 0
    }
   ],
   "workflows": [
    {
-    "name": "Check (Coach)",
+    "name": "Merge-Agent",
     "branch": "dev",
-    "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
-    "created_at": "2026-11-17T16:05:19Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44121719758",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-18T12:31:42Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44304776179",
+    "sha": "41e613f"
+   },
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-18T08:33:42Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44268049692",
     "sha": "41e613f"
    },
    {
@@ -249,29 +259,19 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-17T14:36:40Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44105002500",
-    "sha": "4b6b889"
+    "created_at": "2026-11-18T04:30:39Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44237814170",
+    "sha": "41e613f"
    },
    {
-    "name": "Merge-Agent",
+    "name": "Check (Coach)",
     "branch": "dev",
-    "event": "schedule",
+    "event": "push",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-17T14:07:05Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44099614238",
-    "sha": "4b6b889"
-   },
-   {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-17T08:30:17Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44047287163",
-    "sha": "4b6b889"
+    "created_at": "2026-11-17T16:05:19Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44121719758",
+    "sha": "41e613f"
    },
    {
     "name": "Gemini CI Agent",
@@ -304,27 +304,27 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev ist 1 Commit voraus, Check (Coach) läuft",
-   "lage": "Der `dev`-Branch ist mit `41e613f9` einen Commit vor `master` (`4b6b8896`). Der Workflow `Check (Coach)` läuft aktuell für den neuesten Commit auf `dev`. Mehrere Automatisierungsworkflows, darunter `Auto-Promote dev -> master (Check (Coach))`, wurden erfolgreich abgeschlossen.",
+   "headline": "Dev und Master synchronisiert, alle Checks erfolgreich",
+   "lage": "Der `dev`-Branch und `master` sind beide auf Commit `41e613f9` synchronisiert. Der Workflow `Check (Coach)` für diesen Commit wurde erfolgreich abgeschlossen, ebenso wie der `Auto-Promote dev -> master` Workflow.",
    "auffaelligkeiten": [
     {
-     "level": "hoch",
-     "text": "Der Workflow \"Check (Coach)\" für den neuesten Commit \"41e613f9\" auf dem \"dev\"-Branch ist noch \"in_progress\"."
+     "level": "info",
+     "text": "Der Workflow `Merge-Agent` wurde am 2026-11-18T12:31:42Z erfolgreich abgeschlossen."
     },
     {
      "level": "info",
-     "text": "Der \"dev\"-Branch ist 1 Commit vor \"master\" und nicht mehr synchronisiert. Der letzte Commit auf \"dev\" ist \"41e613f9\" (\"org-bot: Workflow installieren\")."
+     "text": "Der Workflow `PR-AutoMerge (Dependabot -> dev)` wurde am 2026-11-18T04:30:39Z erfolgreich abgeschlossen."
     }
    ],
    "naechste_schritte": [
-    "Prüfe den Status des laufenden Workflows `Check (Coach)` für Commit `41e613f9`.",
+    "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`.",
     "Verifiziere den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy gemäss `NEXT.md`.",
-    "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`."
+    "Prüfe die neue Seite `/README.html` nach dem Coach-Pages-Deploy gemäss `NEXT.md`."
    ],
-   "veraendert": "Der `dev`-Branch ist nicht mehr mit `master` synchronisiert, sondern 1 Commit voraus, und der `Check (Coach)`-Workflow läuft für den neuesten `dev`-Commit.",
+   "veraendert": "Der `dev`-Branch ist nicht mehr einen Commit vor `master`, sondern beide Branches sind auf Commit `41e613f9` synchronisiert, und der `Check (Coach)` Workflow ist abgeschlossen.",
    "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-17T16:05:42+00:00"
+  "ai_at": "2026-11-18T13:24:09+00:00"
  }
 }
