@@ -49,9 +49,67 @@ def normalize_common_errors(value: Any) -> list[dict[str, str]]:
     return errors
 
 
+def _text_block(body: dict[str, Any], existing: dict[str, Any], key: str, fields: tuple[str, ...], flat_prefix: str) -> dict[str, str]:
+    """Nested Textblock (learning_goal / trainer_explanation) übernehmen.
+
+    Akzeptiert die verschachtelte Form (``{"learning_goal": {"short": ...}}``)
+    und die alte flache Form (``learning_goal_short``). Ein im Body vorhandener
+    Schlüssel gewinnt auch dann, wenn er leer ist — sonst ließe sich ein Feld
+    nie leeren.
+    """
+    nested = body.get(key) if isinstance(body.get(key), dict) else {}
+    old = existing.get(key) if isinstance(existing.get(key), dict) else {}
+    out: dict[str, str] = {}
+    for field in fields:
+        flat = f"{flat_prefix}{field}"
+        if field in nested:
+            value = nested.get(field)
+        elif flat in body:
+            value = body.get(flat)
+        else:
+            value = old.get(field)
+        out[field] = str(value or "").strip()
+    return out
+
+
+def _normalize_quiz(value: Any) -> list[dict[str, str]]:
+    items = value if isinstance(value, list) else [value] if isinstance(value, dict) else []
+    quiz = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        question = str(item.get("question") or "").strip()
+        answer = str(item.get("answer") or "").strip()
+        if question or answer:
+            quiz.append({"question": question, "answer": answer})
+    return quiz
+
+
+def _normalize_variations(value: Any) -> list[dict[str, str]]:
+    variations = []
+    for item in value if isinstance(value, list) else []:
+        if not isinstance(item, dict):
+            continue
+        variation = str(item.get("variation") or "").strip()
+        lesson = str(item.get("lesson") or "").strip()
+        if variation or lesson:
+            variations.append({"variation": variation, "lesson": lesson})
+    return variations
+
+
 def normalize_lesson_payload(exercise_id: str, body: dict[str, Any], existing: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Lesson aus Coach-Sheet-Payload + bestehender Lesson bauen.
+
+    Unbekannte Felder der bestehenden Lesson (``region``, ``variations_teach``,
+    ``quiz_prompts``, ``simple_explanation`` …) bleiben erhalten — das Sheet
+    editiert nur einen Teil der Lesson und darf den Rest nicht wegwerfen.
+    """
     existing = existing or {}
-    movement_pattern = body.get("movement_pattern", existing.get("movement_pattern"))
+
+    def pick(key: str) -> Any:
+        return body[key] if key in body else existing.get(key)
+
+    movement_pattern = pick("movement_pattern")
     if isinstance(movement_pattern, dict):
         primary = str(movement_pattern.get("primary") or "").strip()
         secondary = as_list(movement_pattern.get("secondary"))
@@ -61,29 +119,32 @@ def normalize_lesson_payload(exercise_id: str, body: dict[str, Any], existing: d
     else:
         movement_pattern = ""
 
+    def pick_struct(key: str, types: tuple[type, ...], default: Any) -> Any:
+        value = body.get(key)
+        if isinstance(value, types):
+            return value
+        return existing.get(key, default)
+
     lesson = {
+        **existing,
         "exercise_id": exercise_id,
         "title": str(body.get("title") or existing.get("title") or exercise_id.replace("_", " ").title()).strip(),
-        "learning_goal": {
-            "short": str(body.get("learning_goal_short") or existing.get("learning_goal", {}).get("short") or "").strip(),
-            "detailed": str(body.get("learning_goal_detailed") or existing.get("learning_goal", {}).get("detailed") or "").strip(),
-        },
+        "learning_goal": _text_block(body, existing, "learning_goal", ("short", "detailed"), "learning_goal_"),
         "movement_pattern": movement_pattern,
-        "trainer_explanation": {
-            "simple": str(body.get("trainer_simple") or existing.get("trainer_explanation", {}).get("simple") or "").strip(),
-            "technical": str(body.get("trainer_technical") or existing.get("trainer_explanation", {}).get("technical") or "").strip(),
-            "client_friendly": str(body.get("trainer_client_friendly") or existing.get("trainer_explanation", {}).get("client_friendly") or "").strip(),
-        },
-        "coaching_cues": as_list(body.get("coaching_cues", existing.get("coaching_cues"))),
-        "feel_cues": as_list(body.get("feel_cues", existing.get("feel_cues"))),
-        "joint_actions": body.get("joint_actions") if isinstance(body.get("joint_actions"), dict) else existing.get("joint_actions", {}),
-        "body_highlighter_regions": body.get("body_highlighter_regions") if isinstance(body.get("body_highlighter_regions"), (dict, list)) else existing.get("body_highlighter_regions", {}),
-        "muscle_roles": body.get("muscle_roles") if isinstance(body.get("muscle_roles"), dict) else existing.get("muscle_roles", {}),
-        "muscle_anatomy": body.get("muscle_anatomy") if isinstance(body.get("muscle_anatomy"), dict) else existing.get("muscle_anatomy", {}),
-        "common_errors": normalize_common_errors(body.get("common_errors", existing.get("common_errors"))),
-        "quiz": body.get("quiz") if isinstance(body.get("quiz"), (dict, list)) else existing.get("quiz", {}),
+        "trainer_explanation": _text_block(body, existing, "trainer_explanation", ("simple", "technical", "client_friendly"), "trainer_"),
+        "coaching_cues": as_list(pick("coaching_cues")),
+        "feel_cues": as_list(pick("feel_cues")),
+        "joint_actions": pick_struct("joint_actions", (dict,), {}),
+        "body_highlighter_regions": pick_struct("body_highlighter_regions", (dict, list), {}),
+        "muscle_roles": pick_struct("muscle_roles", (dict,), {}),
+        "muscle_anatomy": pick_struct("muscle_anatomy", (dict,), {}),
+        "common_errors": normalize_common_errors(pick("common_errors")),
+        "variations_teach": _normalize_variations(pick("variations_teach")),
+        "quiz": _normalize_quiz(pick("quiz")),
         "updated_at": utc_now(),
     }
+    if not lesson["variations_teach"] and "variations_teach" not in existing and "variations_teach" not in body:
+        lesson.pop("variations_teach")
     if not lesson["learning_goal"]["short"] and lesson["learning_goal"]["detailed"]:
         lesson["learning_goal"]["short"] = lesson["learning_goal"]["detailed"]
     return lesson

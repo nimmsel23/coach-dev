@@ -468,6 +468,18 @@ Coach-Tab) — trotz des Namens "Coach Sheet" kein reines Coach-Feature.
   `insight.commonErrors.length`, `insight.quiz[0]?.question`) — keine leeren
   Platzhalter-Boxen mehr. `buildExerciseCoachSheet()` (Markdown-Export)
   zieht mit, inkl. `status: unreviewed|reviewed` im Frontmatter.
+- **Sheet-Konzept (2026-11-20):** Spickzettel fürs Coachen am Klienten, Reihenfolge
+  wie in der Einheit: 1 Ziel (`learning_goal.short` + `trainer_explanation.client_friendly`)
+  → 2 Cues (`coaching_cues` = was ich sage, `feel_cues` = was der Klient spürt)
+  → 3 Fehlerbilder (Fehler → Korrektur, Kurz-Cue, Warum) → 4 Varianten
+  (`variations_teach`) → 5 Fachwissen (simple/technical, `learning_goal.detailed`,
+  alle Quiz-Fragen, Muskelrollen, Gelenkaktionen). Tabs: Sheet (Lesen, Default) /
+  Bearbeiten (gleiche Struktur, Zeilen-Editor statt `a | b | c`-Text) / Rohdaten.
+  Speichern schickt nur editierte Felder; `normalize_lesson_payload()`
+  (`backend/fitness/api/routers/exercise_store.py`) merged in die bestehende Lesson —
+  vorher gingen dabei `variations_teach`, `region`, Quiz-Fragen 2+ verloren und
+  verschachtelte `learning_goal`/`trainer_explanation`-Edits wurden ignoriert.
+  „Meine Notizen" speichert nur `notes`, nicht mehr zusätzlich `description`.
 
 ---
 

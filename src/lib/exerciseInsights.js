@@ -157,12 +157,8 @@ export function buildExerciseInsights(rawEx) {
   const category = ex?.category || 'Unbekannte Kategorie'
   const equipment = Array.isArray(ex?.equipment) ? ex.equipment.join(', ') : (ex?.equipment || 'Unbekannt')
 
-  const coachCues = cleanList([
-    ...movement.cues,
-    ...(lesson?.coaching_cues || []),
-    ...(primary.length ? [`Treiber: ${primary.slice(0, 2).join(', ')}`] : []),
-    ...(secondary.length ? [`Mitspieler: ${secondary.slice(0, 2).join(', ')}`] : []),
-  ])
+  // Nur echte Cues aus der Lesson — keine generierten „Treiber: …"-Füller.
+  const coachCues = cleanList([...movement.cues, ...(lesson?.coaching_cues || [])])
 
   const lessonErrors = Array.isArray(lesson?.common_errors) ? lesson.common_errors : []
   const commonErrors = (lessonErrors.length ? lessonErrors : movement.errors).map(err => ({
@@ -185,11 +181,7 @@ export function buildExerciseInsights(rawEx) {
     learningGoal: lesson?.learning_goal?.detailed || movement.lesson,
     detailedMeaning: lesson?.trainer_explanation?.technical || movement.lesson,
     simpleMeaning: movement.pattern,
-    feelCues: cleanList([
-      movement.feel,
-      ...(lesson?.feel_cues || []),
-      primary[0] ? `Achte auf ${primary[0]}.` : '',
-    ]),
+    feelCues: cleanList(lesson?.feel_cues || []),
     quiz: [
       {
         question: lesson?.quiz?.question || lesson?.quiz?.[0]?.question || movement.quiz,
@@ -202,9 +194,19 @@ export function buildExerciseInsights(rawEx) {
   }
 }
 
+function quizItems(lesson) {
+  const quiz = lesson?.quiz
+  const items = Array.isArray(quiz) ? quiz : quiz && typeof quiz === 'object' ? [quiz] : []
+  return items.filter((q) => q && (q.question || q.answer))
+}
+
+// Coach Sheet als Markdown — gleiche Reihenfolge wie im Modal:
+// Ziel → Cues → Fehlerbilder → Varianten → Fachwissen.
 export function buildExerciseCoachSheet(ex) {
   const i = buildExerciseInsights(ex)
+  const lesson = unwrapLesson(normalizeExerciseRecord(ex))
   const status = isUnreviewedExercise(ex) ? 'unreviewed' : i.isRaw ? 'imported' : 'reviewed'
+  const list = (items) => items.map((item) => `- ${item}`)
   const lines = [
     `---`,
     `type: exercise-coach-sheet`,
@@ -214,33 +216,48 @@ export function buildExerciseCoachSheet(ex) {
     `---`,
     `# ${i.title}`,
     ``,
-    `## Was es lehrt`,
-    `- ${i.learningGoal || 'Keine Original-Beschreibung vorhanden.'}`,
-    ``,
-    `## Setup`,
-    `- Kategorie: ${i.category}`,
     `- Equipment: ${i.equipment}`,
-    `- Body Regions: ${i.regions.join(', ')}`,
-    ``,
-    `## Muskeln`,
     `- Primär: ${i.primary.length ? i.primary.join(', ') : 'n/a'}`,
     `- Sekundär: ${i.secondary.length ? i.secondary.join(', ') : 'n/a'}`,
   ]
 
   if (i.isRaw) {
     lines.push(``, `## Original-Anleitung (ungeprüft)`)
-    lines.push(...(i.rawInstructions.length ? i.rawInstructions.map(l => `- ${l}`) : [`- Keine Original-Anleitung vorhanden.`]))
+    lines.push(...(i.rawInstructions.length ? list(i.rawInstructions) : [`- Keine Original-Anleitung vorhanden.`]))
     return lines.join('\n')
   }
 
-  if (i.coachCues.length) {
-    lines.push(``, `## Coaching Cues`, ...i.coachCues.map(c => `- ${c}`))
+  const goal = String(lesson?.learning_goal?.short || '').trim()
+  const toClient = String(lesson?.trainer_explanation?.client_friendly || '').trim()
+  if (goal || toClient) {
+    lines.push(``, `## Worum es geht`)
+    if (goal) lines.push(goal)
+    if (toClient) lines.push(``, `> Zum Klienten: ${toClient}`)
   }
+  if (i.coachCues.length) lines.push(``, `## Cues (was ich sage)`, ...list(i.coachCues))
+  if (i.feelCues.length) lines.push(``, `## Feel (was der Klient spürt)`, ...list(i.feelCues))
   if (i.commonErrors.length) {
-    lines.push(``, `## Fehlerbilder`, ...i.commonErrors.map(err => `- ${err.error}: ${err.anatomicalReason} -> ${err.correction}`))
+    lines.push(``, `## Fehlerbilder`)
+    for (const err of i.commonErrors) {
+      lines.push(`- **${err.error}** → ${err.correction || '—'}${err.coachingCue && err.coachingCue !== err.correction ? ` („${err.coachingCue}")` : ''}`)
+      if (err.anatomicalReason) lines.push(`  - Warum: ${err.anatomicalReason}`)
+    }
   }
-  if (i.quiz[0]?.question) {
-    lines.push(``, `## Quiz`, `- ${i.quiz[0].question}`)
+  const variations = Array.isArray(lesson?.variations_teach) ? lesson.variations_teach.filter((v) => v?.variation) : []
+  if (variations.length) {
+    lines.push(``, `## Varianten`, ...variations.map((v) => `- **${v.variation}**: ${v.lesson || ''}`))
+  }
+  const trainer = lesson?.trainer_explanation || {}
+  const knowledge = [
+    trainer.simple && `Einfach: ${trainer.simple}`,
+    trainer.technical && `Technisch: ${trainer.technical}`,
+    lesson?.learning_goal?.detailed && `Lernziel: ${lesson.learning_goal.detailed}`,
+  ].filter(Boolean)
+  if (knowledge.length) lines.push(``, `## Fachwissen`, ...list(knowledge))
+  const quiz = quizItems(lesson)
+  if (quiz.length) {
+    lines.push(``, `## Quiz`)
+    for (const q of quiz) lines.push(`- ${q.question}`, ...(q.answer ? [`  - ${q.answer}`] : []))
   }
   return lines.join('\n')
 }

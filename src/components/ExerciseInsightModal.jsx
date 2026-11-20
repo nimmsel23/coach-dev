@@ -3,6 +3,7 @@ import SourceEditor from '../views/Inbox/SourceEditor.jsx'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import {
+  BookOpen,
   CheckCircle2,
   Copy,
   Download,
@@ -10,9 +11,9 @@ import {
   FileSearch,
   Loader2,
   PencilLine,
+  Plus,
   RefreshCw,
   Save,
-  Sparkles,
   Trash2,
   X,
 } from 'lucide-react'
@@ -32,6 +33,17 @@ import { translateMuscle } from '../lib/kb/muscles.js'
 import { useEscapeKey } from '../hooks/useEscapeKey.js'
 import { yuhonasImageUrls } from '../lib/yuhonasImage.js'
 
+// ── Coach-Sheet-Konzept ──────────────────────────────────────────────────────
+// Das Sheet ist der Spickzettel, um eine Übung am Klienten zu coachen. Die
+// Reihenfolge folgt dem Ablauf in der Einheit:
+//   1. Worum es geht   — learning_goal.short + trainer_explanation.client_friendly
+//   2. Cues            — coaching_cues (was ich sage) / feel_cues (was der Klient spürt)
+//   3. Fehlerbilder    — common_errors: Fehler → Korrektur (+ Kurz-Cue, Warum)
+//   4. Varianten       — variations_teach
+//   5. Fachwissen      — trainer simple/technical, learning_goal.detailed, Quiz, Anatomie
+// Felder, die das Sheet nicht editiert (region, joint_actions, quiz_prompts …),
+// bleiben beim Speichern erhalten (Backend merged in die bestehende Lesson).
+
 function linesToText(value) {
   return Array.isArray(value) ? value.join('\n') : ''
 }
@@ -43,62 +55,54 @@ function textToLines(value) {
     .filter(Boolean)
 }
 
-function errorsToText(value) {
-  if (!Array.isArray(value)) return ''
-  return value
-    .map((item) => {
-      if (!item || typeof item !== 'object') return String(item || '').trim()
-      return [
-        item.error || '',
-        item.anatomical_reason || item.anatomicalReason || '',
-        item.correction || '',
-        item.coaching_cue || item.coachingCue || '',
-      ].join(' | ')
-    })
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .join('\n')
+const EMPTY_ERROR = { error: '', anatomical_reason: '', correction: '', coaching_cue: '' }
+const EMPTY_VARIATION = { variation: '', lesson: '' }
+const EMPTY_QUIZ = { question: '', answer: '' }
+
+function asObjectList(value, keys) {
+  const items = Array.isArray(value) ? value : value && typeof value === 'object' ? [value] : []
+  return items
+    .filter((item) => item && typeof item === 'object')
+    .map((item) => Object.fromEntries(keys.map((key) => [key, String(item[key] || '').trim()])))
 }
 
-function textToErrors(value) {
-  return String(value || '')
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [error = '', anatomical_reason = '', correction = '', coaching_cue = ''] = line.split('|').map((part) => part.trim())
-      return { error, anatomical_reason, correction, coaching_cue }
-    })
-    .filter((item) => item.error || item.anatomical_reason || item.correction || item.coaching_cue)
+function errorList(value) {
+  return (Array.isArray(value) ? value : []).map((item) => {
+    if (!item || typeof item !== 'object') return { ...EMPTY_ERROR, error: String(item || '').trim() }
+    return {
+      error: String(item.error || '').trim(),
+      anatomical_reason: String(item.anatomical_reason || item.anatomicalReason || item.reason || '').trim(),
+      correction: String(item.correction || item.fix || '').trim(),
+      coaching_cue: String(item.coaching_cue || item.coachingCue || '').trim(),
+    }
+  })
+}
+
+function hasContent(item) {
+  return Object.values(item).some((value) => String(value || '').trim())
 }
 
 function buildLessonDraft(exercise, lesson) {
   const record = exercise && typeof exercise === 'object' ? exercise : {}
   const source = lesson && typeof lesson === 'object' ? lesson : {}
-  const quizSource = Array.isArray(source.quiz) ? source.quiz[0] || {} : (source.quiz || {})
   return {
     title: source.title || record.display_name || record.displayName || record.name || '',
     learning_goal_short: source.learning_goal?.short || '',
     learning_goal_detailed: source.learning_goal?.detailed || '',
-    movement_pattern: typeof source.movement_pattern === 'string'
-      ? source.movement_pattern
-      : source.movement_pattern?.primary || '',
     trainer_simple: source.trainer_explanation?.simple || '',
     trainer_technical: source.trainer_explanation?.technical || '',
     trainer_client_friendly: source.trainer_explanation?.client_friendly || '',
     coaching_cues: linesToText(source.coaching_cues),
     feel_cues: linesToText(source.feel_cues),
-    common_errors: errorsToText(source.common_errors),
-    quiz_question: quizSource.question || '',
-    quiz_answer: quizSource.answer || '',
-    muscle_anatomy: source.muscle_anatomy || {},
-    joint_actions: source.joint_actions || {},
-    body_highlighter_regions: source.body_highlighter_regions || {},
-    muscle_roles: source.muscle_roles || {},
+    common_errors: errorList(source.common_errors),
+    variations_teach: asObjectList(source.variations_teach, ['variation', 'lesson']),
+    quiz: asObjectList(source.quiz, ['question', 'answer']),
   }
 }
 
 function lessonDraftToPayload(exerciseId, draft) {
+  // Nur was das Sheet editiert — movement_pattern, joint_actions, muscle_roles,
+  // region usw. lässt der Server aus der bestehenden Lesson stehen.
   return {
     exercise_id: exerciseId,
     title: draft.title,
@@ -106,7 +110,6 @@ function lessonDraftToPayload(exerciseId, draft) {
       short: draft.learning_goal_short,
       detailed: draft.learning_goal_detailed,
     },
-    movement_pattern: draft.movement_pattern,
     trainer_explanation: {
       simple: draft.trainer_simple,
       technical: draft.trainer_technical,
@@ -114,16 +117,15 @@ function lessonDraftToPayload(exerciseId, draft) {
     },
     coaching_cues: textToLines(draft.coaching_cues),
     feel_cues: textToLines(draft.feel_cues),
-    common_errors: textToErrors(draft.common_errors),
-    quiz: {
-      question: draft.quiz_question,
-      answer: draft.quiz_answer,
-    },
-    muscle_anatomy: draft.muscle_anatomy,
-    joint_actions: draft.joint_actions,
-    body_highlighter_regions: draft.body_highlighter_regions,
-    muscle_roles: draft.muscle_roles,
+    common_errors: draft.common_errors.filter(hasContent),
+    variations_teach: draft.variations_teach.filter(hasContent),
+    quiz: draft.quiz.filter(hasContent),
   }
+}
+
+function patternLabel(pattern) {
+  const value = typeof pattern === 'string' ? pattern : pattern?.primary || ''
+  return value.replace(/_/g, ' ')
 }
 
 function toneColor(tone) {
@@ -478,10 +480,298 @@ function roleEntries(items = [], taxonomy = null, muscleLanguage = 'de') {
     .map((item) => translateMuscle(item, taxonomy, muscleLanguage))
     .filter(Boolean)
 }
+function SectionLabel({ children }) {
+  return (
+    <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-2" style={{ color: 'var(--muted)' }}>{children}</div>
+  )
+}
+
+function Input({ label, value, onChange, placeholder = '' }) {
+  return (
+    <label className="block space-y-1">
+      {label && <div className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: 'var(--muted)' }}>{label}</div>}
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full rounded-xl px-3 py-2 text-sm outline-none"
+        style={{ background: 'rgba(0,0,0,0.12)', color: 'var(--ink)', border: '1px solid var(--line)' }}
+      />
+    </label>
+  )
+}
+
+// Liste strukturierter Einträge (Fehlerbilder, Varianten, Quiz) — eine Karte
+// pro Eintrag statt „a | b | c"-Zeilen im Textfeld.
+function RowListEditor({ items, onChange, empty, addLabel, renderRow }) {
+  const update = (index, patch) => onChange(items.map((item, i) => (i === index ? { ...item, ...patch } : item)))
+  const remove = (index) => onChange(items.filter((_, i) => i !== index))
+  return (
+    <div className="space-y-3">
+      {items.map((item, index) => (
+        <div key={index} className="rounded-2xl p-3 space-y-2" style={{ background: 'rgba(0,0,0,0.12)', border: '1px solid var(--line)' }}>
+          {renderRow(item, (patch) => update(index, patch))}
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => remove(index)}
+              className="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold"
+              style={{ color: '#fca5a5', border: '1px solid rgba(239,68,68,0.2)' }}
+            >
+              <Trash2 size={12} /> Entfernen
+            </button>
+          </div>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { ...empty }])}
+        className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold"
+        style={{ background: 'var(--bg2)', border: '1px dashed var(--line)', color: 'var(--ink)' }}
+      >
+        <Plus size={14} /> {addLabel}
+      </button>
+    </div>
+  )
+}
+
+function Bullets({ items, empty }) {
+  if (!items.length) return <div className="text-sm" style={{ color: 'var(--muted)' }}>{empty}</div>
+  return (
+    <ul className="space-y-2">
+      {items.map((item, index) => (
+        <li key={index} className="flex gap-2 text-sm leading-6" style={{ color: 'var(--ink)' }}>
+          <span style={{ color: 'var(--accent)' }}>›</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function SheetView({ draft, lesson, roleBlocks, jointActions, muscleLanguage, taxonomy, onEdit }) {
+  const coachingCues = textToLines(draft.coaching_cues)
+  const feelCues = textToLines(draft.feel_cues)
+  const errors = draft.common_errors.filter(hasContent)
+  const variations = draft.variations_teach.filter(hasContent)
+  const quiz = draft.quiz.filter(hasContent)
+  const knowledge = [
+    { label: 'Einfach erklärt', value: draft.trainer_simple },
+    { label: 'Technisch', value: draft.trainer_technical },
+    { label: 'Lernziel (Ausbildung)', value: draft.learning_goal_detailed },
+  ].filter((item) => item.value)
+  const missing = [
+    !draft.learning_goal_short && 'Ziel',
+    !draft.trainer_client_friendly && 'Satz an den Klienten',
+    !coachingCues.length && 'Cues',
+    !errors.length && 'Fehlerbilder',
+  ].filter(Boolean)
+
+  return (
+    <div className="space-y-5">
+      {missing.length > 0 && (
+        <button
+          type="button"
+          onClick={onEdit}
+          className="w-full text-left rounded-2xl px-4 py-3 text-sm"
+          style={toneColor('warn')}
+        >
+          Noch leer: {missing.join(', ')} — <span className="underline">ergänzen</span>
+        </button>
+      )}
+
+      <ShellCard title="Worum es geht" eyebrow="1 · Ziel" tone="accent">
+        <div className="space-y-3">
+          <div className="text-base md:text-lg font-semibold leading-7" style={{ color: 'var(--ink)' }}>
+            {draft.learning_goal_short || <span style={{ color: 'var(--muted)' }}>Kein Ziel formuliert.</span>}
+          </div>
+          {draft.trainer_client_friendly && (
+            <div className="rounded-2xl px-4 py-3 text-sm leading-6" style={{ background: 'rgba(0,0,0,0.14)', borderLeft: '3px solid var(--accent)', color: 'var(--ink)' }}>
+              <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-1" style={{ color: 'var(--muted)' }}>Zum Klienten</div>
+              „{draft.trainer_client_friendly}"
+            </div>
+          )}
+          {lesson?.movement_pattern && <MetaPill tone="accent">{patternLabel(lesson.movement_pattern)}</MetaPill>}
+        </div>
+      </ShellCard>
+
+      <div className={AUTO_FIT_GRID}>
+        <ShellCard title="Was ich sage" eyebrow="2 · Coaching Cues">
+          <Bullets items={coachingCues} empty="Noch keine Cues." />
+        </ShellCard>
+        <ShellCard title="Was der Klient spürt" eyebrow="2 · Feel Cues">
+          <Bullets items={feelCues} empty="Noch keine Feel-Cues." />
+        </ShellCard>
+      </div>
+
+      <ShellCard title="Fehlerbilder" eyebrow="3 · Sehen → Korrigieren" tone="warn">
+        {errors.length ? (
+          <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))]">
+            {errors.map((err, index) => (
+              <div key={index} className="rounded-2xl p-3 space-y-1.5" style={{ background: 'rgba(0,0,0,0.12)', border: '1px solid var(--line)' }}>
+                <div className="text-sm font-black" style={{ color: 'var(--ink)' }}>{err.error || 'Fehler'}</div>
+                {err.correction && <div className="text-sm" style={{ color: 'var(--accent)' }}>→ {err.correction}</div>}
+                {err.coaching_cue && err.coaching_cue !== err.correction && (
+                  <MetaPill tone="accent">„{err.coaching_cue}"</MetaPill>
+                )}
+                {err.anatomical_reason && (
+                  <div className="text-xs leading-5" style={{ color: 'var(--muted)' }}>Warum: {err.anatomical_reason}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-sm" style={{ color: 'var(--muted)' }}>Noch keine Fehlerbilder.</div>
+        )}
+      </ShellCard>
+
+      {variations.length > 0 && (
+        <ShellCard title="Varianten" eyebrow="4 · Anpassen">
+          <div className="space-y-2">
+            {variations.map((v, index) => (
+              <div key={index} className="text-sm leading-6" style={{ color: 'var(--ink)' }}>
+                <span className="font-black">{v.variation}</span>
+                {v.lesson && <span style={{ color: 'var(--muted)' }}> — {v.lesson}</span>}
+              </div>
+            ))}
+          </div>
+        </ShellCard>
+      )}
+
+      <ShellCard title="Fachwissen" eyebrow="5 · Hintergrund & Ausbildung">
+        <div className="space-y-4">
+          {knowledge.map((item) => (
+            <div key={item.label}>
+              <SectionLabel>{item.label}</SectionLabel>
+              <div className="text-sm leading-6" style={{ color: 'var(--ink)' }}>{item.value}</div>
+            </div>
+          ))}
+          {roleBlocks.length > 0 && (
+            <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))]">
+              {roleBlocks.map((block) => (
+                <div key={block.label}>
+                  <SectionLabel>{block.label}</SectionLabel>
+                  <TagCloud items={block.items} tone={block.tone} />
+                </div>
+              ))}
+            </div>
+          )}
+          {jointActions.length > 0 && (
+            <div>
+              <SectionLabel>Gelenkaktionen</SectionLabel>
+              <Bullets items={jointActions} empty="" />
+            </div>
+          )}
+          {lesson?.muscle_anatomy && Object.keys(lesson.muscle_anatomy).length > 0 && (
+            <div>
+              <SectionLabel>Muskel-Anatomie</SectionLabel>
+              <MuscleAnatomySection muscleAnatomy={lesson.muscle_anatomy} muscleLanguage={muscleLanguage} taxonomy={taxonomy} />
+            </div>
+          )}
+          {quiz.length > 0 && (
+            <div className="space-y-2">
+              <SectionLabel>Prüfungsfragen</SectionLabel>
+              {quiz.map((q, index) => (
+                <details key={index} className="rounded-2xl px-3 py-2" style={{ background: 'rgba(0,0,0,0.12)', border: '1px solid var(--line)' }}>
+                  <summary className="cursor-pointer text-sm font-semibold" style={{ color: 'var(--ink)' }}>{q.question || 'Frage'}</summary>
+                  <div className="mt-2 text-sm leading-6" style={{ color: 'var(--muted)' }}>{q.answer || '—'}</div>
+                </details>
+              ))}
+            </div>
+          )}
+          {!knowledge.length && !roleBlocks.length && !jointActions.length && !quiz.length && (
+            <div className="text-sm" style={{ color: 'var(--muted)' }}>Noch kein Fachwissen hinterlegt.</div>
+          )}
+        </div>
+      </ShellCard>
+    </div>
+  )
+}
+
+function EditView({ draft, setDraft }) {
+  const set = (key) => (value) => setDraft((prev) => ({ ...prev, [key]: value }))
+  return (
+    <div className="space-y-5">
+      <ShellCard title="Worum es geht" eyebrow="1 · Ziel" tone="accent">
+        <div className="space-y-4">
+          <Field label="Ziel in einem Satz (für dich)" value={draft.learning_goal_short} onChange={set('learning_goal_short')} rows={2} placeholder="z. B. Lat als Schulter-Beweger spüren — nicht als Armzug." />
+          <Field label="Satz an den Klienten" value={draft.trainer_client_friendly} onChange={set('trainer_client_friendly')} rows={2} placeholder="So sagst du es in der Einheit, ohne Fachbegriffe." />
+        </div>
+      </ShellCard>
+
+      <div className={AUTO_FIT_GRID}>
+        <ShellCard title="Was ich sage" eyebrow="2 · Coaching Cues">
+          <Field label="Eine Zeile pro Cue (externe Anweisung)" value={draft.coaching_cues} onChange={set('coaching_cues')} rows={7} placeholder="Schultern von den Ohren weg." />
+        </ShellCard>
+        <ShellCard title="Was der Klient spürt" eyebrow="2 · Feel Cues">
+          <Field label="Eine Zeile pro Cue (Körpergefühl)" value={draft.feel_cues} onChange={set('feel_cues')} rows={7} placeholder="Breiter Schild, der sich zusammenzieht." />
+        </ShellCard>
+      </div>
+
+      <ShellCard title="Fehlerbilder" eyebrow="3 · Sehen → Korrigieren" tone="warn">
+        <RowListEditor
+          items={draft.common_errors}
+          onChange={set('common_errors')}
+          empty={EMPTY_ERROR}
+          addLabel="Fehlerbild hinzufügen"
+          renderRow={(err, update) => (
+            <>
+              <Input label="Was ich sehe" value={err.error} onChange={(v) => update({ error: v })} placeholder="Schultern wandern nach oben" />
+              <Input label="Korrektur" value={err.correction} onChange={(v) => update({ correction: v })} placeholder="Schulterblätter vor dem Zug nach unten setzen" />
+              <Input label="Kurz-Cue (optional)" value={err.coaching_cue} onChange={(v) => update({ coaching_cue: v })} placeholder="Erst runter, dann ziehen." />
+              <Input label="Warum (anatomisch, optional)" value={err.anatomical_reason} onChange={(v) => update({ anatomical_reason: v })} />
+            </>
+          )}
+        />
+      </ShellCard>
+
+      <ShellCard title="Varianten" eyebrow="4 · Anpassen">
+        <RowListEditor
+          items={draft.variations_teach}
+          onChange={set('variations_teach')}
+          empty={EMPTY_VARIATION}
+          addLabel="Variante hinzufügen"
+          renderRow={(v, update) => (
+            <>
+              <Input label="Variante" value={v.variation} onChange={(val) => update({ variation: val })} placeholder="Neutral Grip" />
+              <Input label="Wann / was ändert sich" value={v.lesson} onChange={(val) => update({ lesson: val })} placeholder="Schulterfreundlicher, mehr Brachialis." />
+            </>
+          )}
+        />
+      </ShellCard>
+
+      <ShellCard title="Fachwissen" eyebrow="5 · Hintergrund & Ausbildung">
+        <div className="space-y-4">
+          <Field label="Titel der Lektion" value={draft.title} onChange={set('title')} rows={1} />
+          <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))]">
+            <Field label="Einfach erklärt" value={draft.trainer_simple} onChange={set('trainer_simple')} rows={4} />
+            <Field label="Technisch" value={draft.trainer_technical} onChange={set('trainer_technical')} rows={4} />
+          </div>
+          <Field label="Lernziel (Ausbildung)" value={draft.learning_goal_detailed} onChange={set('learning_goal_detailed')} rows={3} />
+          <div>
+            <SectionLabel>Prüfungsfragen</SectionLabel>
+            <RowListEditor
+              items={draft.quiz}
+              onChange={set('quiz')}
+              empty={EMPTY_QUIZ}
+              addLabel="Frage hinzufügen"
+              renderRow={(q, update) => (
+                <>
+                  <Input label="Frage" value={q.question} onChange={(v) => update({ question: v })} />
+                  <Field label="Antwort" value={q.answer} onChange={(v) => update({ answer: v })} rows={2} />
+                </>
+              )}
+            />
+          </div>
+        </div>
+      </ShellCard>
+    </div>
+  )
+}
 
 const VIEW_OPTIONS = [
-  { id: 'coach', label: 'Coach Sheet', icon: PencilLine },
-  { id: 'preview', label: 'Preview', icon: Sparkles },
+  { id: 'sheet', label: 'Sheet', icon: BookOpen },
+  { id: 'edit', label: 'Bearbeiten', icon: PencilLine },
   { id: 'raw', label: 'Rohdaten', icon: FileSearch },
 ]
 
@@ -504,22 +794,22 @@ export default function ExerciseInsightModal({ exercise, onExerciseChange, ...pr
 function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage = 'de', taxonomy = null }) {
   const [localExercise, setLocalExercise] = useState(exercise)
   const [lessonDraft, setLessonDraft] = useState(() => buildLessonDraft(exercise, exercise?.lesson))
-  const [exerciseNotes, setExerciseNotes] = useState(exercise?.notes || exercise?.description || '')
+  const [exerciseNotes, setExerciseNotes] = useState(exercise?.notes || '')
   const [loadingLesson, setLoadingLesson] = useState(false)
   const [savingLesson, setSavingLesson] = useState(false)
   const [savingNotes, setSavingNotes] = useState(false)
   const [reviewFeedback, setReviewFeedback] = useState(exercise?.coachFeedback || exercise?.feedback || '')
   const [reviewAction, setReviewAction] = useState('')
   const [notice, setNotice] = useState('')
-  const [activeView, setActiveView] = useState('coach')
+  const [activeView, setActiveView] = useState('sheet')
 
   useEffect(() => {
     setLocalExercise(exercise)
     setLessonDraft(buildLessonDraft(exercise, exercise?.lesson))
-    setExerciseNotes(exercise?.notes || exercise?.description || '')
+    setExerciseNotes(exercise?.notes || '')
     setReviewFeedback(exercise?.coachFeedback || exercise?.feedback || '')
     setReviewAction('')
-    setActiveView('coach')
+    setActiveView('sheet')
   }, [exercise])
 
   useEffect(() => {
@@ -610,7 +900,9 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
       const payload = lessonDraftToPayload(exerciseId, lessonDraft)
       const result = await saveAnatomy(exerciseId, payload)
       if (result?.ok !== true) throw new Error('Coach Sheet Save fehlgeschlagen')
-      const nextLesson = result.lesson || payload
+      // Firestore-Adapter liefert nur den Payload zurück — bestehende Lesson-
+      // Felder (muscle_roles, joint_actions …) für die Anzeige behalten.
+      const nextLesson = { ...(localExercise.lesson || {}), ...(result.lesson || payload) }
       const next = { ...localExercise, lesson: nextLesson }
       setLocalExercise(next)
       onExerciseChange?.(next)
@@ -631,7 +923,6 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
         exercise_id: exerciseId,
         id: exerciseId,
         notes: exerciseNotes,
-        description: exerciseNotes,
         display_name: displayName,
       }
       const result = await saveExercise(exerciseId, payload)
@@ -739,6 +1030,8 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
       setReviewAction('')
     }
   }
+  const hasLesson = Boolean(lesson) || !insight.isRaw
+  const btn = { background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }
 
   return createPortal(
     <div className="fixed inset-0 z-50">
@@ -763,22 +1056,18 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                     <h2 className="text-2xl md:text-3xl font-black leading-tight" style={{ color: 'var(--ink)' }}>
                       {displayName}
                     </h2>
-                    <MetaPill tone={insight.isRaw ? 'warn' : 'accent'}>
-                      {insight.isRaw ? 'Raw / ungeprüft' : 'Lesson vorhanden'}
+                    <MetaPill tone={hasLesson ? 'accent' : 'warn'}>
+                      {hasLesson ? 'Sheet vorhanden' : 'Noch kein Sheet'}
                     </MetaPill>
                     {loadingLesson && (
                       <MetaPill tone="default">
-                        <span className="inline-flex items-center gap-1.5"><Loader2 size={12} className="animate-spin" /> lade anatomy</span>
+                        <span className="inline-flex items-center gap-1.5"><Loader2 size={12} className="animate-spin" /> lade Sheet</span>
                       </MetaPill>
                     )}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {insight.category && insight.category !== 'n/a' && <MetaPill>{insight.category}</MetaPill>}
-                    {insight.equipment && insight.equipment !== 'n/a' && <MetaPill>{insight.equipment}</MetaPill>}
-                    {insight.movement?.pattern && <MetaPill tone="accent">{insight.movement.pattern}</MetaPill>}
-                    {exerciseId && exerciseId !== displayName && <MetaPill>{exerciseId}</MetaPill>}
-                    {localExercise.origin?.type && <MetaPill>{localExercise.origin.type}</MetaPill>}
-                    {localExercise.source && <MetaPill>{localExercise.source}</MetaPill>}
+                    {insight.equipment && insight.equipment !== 'Unbekannt' && <MetaPill>{insight.equipment}</MetaPill>}
+                    {insight.category && insight.category !== 'Unbekannte Kategorie' && <MetaPill>{insight.category}</MetaPill>}
                     {(() => {
                       const german = cleanText(localExercise.german)
                       const english = cleanText(localExercise.english || localExercise.name)
@@ -790,136 +1079,26 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                 </div>
 
                 <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
-                  <button onClick={copySheet} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={{ background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
+                  <button onClick={copySheet} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Sheet als Markdown kopieren">
                     <span className="inline-flex items-center gap-2"><Copy size={14} /> Copy</span>
                   </button>
-                  <button onClick={downloadSheet} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={{ background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
+                  <button onClick={downloadSheet} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Sheet als .md herunterladen">
                     <span className="inline-flex items-center gap-2"><Download size={14} /> MD</span>
                   </button>
-                  <button onClick={() => exportSheet('sheet')} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={{ background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
-                    Export Sheet
+                  <button onClick={() => exportSheet('sheet')} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Nach Obsidian exportieren">
+                    Export
                   </button>
-                  <button onClick={() => exportSheet('lesson')} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={{ background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
-                    Export Lesson
-                  </button>
-                  <button onClick={onClose} className="rounded-2xl p-2.5" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'var(--muted)' }}>
+                  <button onClick={onClose} aria-label="Schließen" className="rounded-2xl p-2.5" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'var(--muted)' }}>
                     <X size={18} />
                   </button>
                 </div>
               </div>
             </header>
 
-            <div className="flex-1 min-h-0 overflow-hidden">
-              <div className="grid h-full min-h-0 grid-cols-1 md:grid-cols-[minmax(300px,380px)_minmax(0,1fr)] xl:grid-cols-[minmax(340px,460px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(380px,560px)_minmax(0,1fr)]">
-                <aside className="min-h-0 overflow-y-auto p-4 md:p-5 space-y-4" style={{ borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-                  {inboxFileId && (
-                    <ShellCard title="Review Actions" eyebrow="Coach Inbox" tone={inboxStatusMeta.tone}>
-                      <div className="space-y-3">
-                        <div className="flex flex-wrap gap-2">
-                          <MetaPill tone={inboxStatusMeta.tone}>{inboxStatusMeta.label}</MetaPill>
-                          {inboxUserId && <MetaPill>{inboxUserId}</MetaPill>}
-                          <MetaPill>{inboxFileId}</MetaPill>
-                        </div>
-                        <Field
-                          label="Nachfrage / Review-Fokus"
-                          value={reviewFeedback}
-                          onChange={setReviewFeedback}
-                          rows={5}
-                          placeholder="Was soll Gemini bzw. das Backend beim Re-Enrichment präzisieren?"
-                        />
-                        <div className="grid gap-2">
-                          <button
-                            onClick={handleApproveInbox}
-                            disabled={Boolean(reviewAction) || inboxStatus === 'approved'}
-                            className="rounded-2xl px-3 py-2.5 text-sm font-semibold text-left"
-                            style={{ background: 'rgba(94,234,212,0.14)', border: '1px solid rgba(94,234,212,0.28)', color: 'var(--accent)' }}
-                          >
-                            <span className="inline-flex items-center gap-2">
-                              {reviewAction === 'approve' ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
-                              Freigeben
-                            </span>
-                          </button>
-                          <button
-                            onClick={handleReenrichInbox}
-                            disabled={Boolean(reviewAction)}
-                            className="rounded-2xl px-3 py-2.5 text-sm font-semibold text-left"
-                            style={{ background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }}
-                          >
-                            <span className="inline-flex items-center gap-2">
-                              {reviewAction === 'reenrich' ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
-                              Neu anreichern
-                            </span>
-                          </button>
-                          <button
-                            onClick={handleRejectInbox}
-                            disabled={Boolean(reviewAction) || inboxStatus === 'rejected'}
-                            className="rounded-2xl px-3 py-2.5 text-sm font-semibold text-left"
-                            style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#fca5a5' }}
-                          >
-                            <span className="inline-flex items-center gap-2">
-                              {reviewAction === 'reject' ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                              Verwerfen
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </ShellCard>
-                  )}
-
-                  <div className="grid gap-4 grid-cols-1 min-[1700px]:grid-cols-2">
-                    <SourceProvenanceCard exercise={localExercise} source="wger" mergeCandidate={mergeCandidate} />
-                    <SourceProvenanceCard exercise={localExercise} source="yuhonas" mergeCandidate={mergeCandidate} />
-                  </div>
-
-                  {(inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && (
-                    <SourceEditor
-                      key={inboxFileId || exerciseId}
-                      id={inboxFileId || exerciseId}
-                      target={inboxFileId ? 'inbox' : 'approved'}
-                      exercise={localExercise}
-                      candidates={mergeCandidate}
-                      onSaved={handleSourceSaved}
-                    />
-                  )}
-
-                  <ShellCard title="Muscles" eyebrow="Targeting">
-                    <div className="space-y-3">
-                      <div>
-                        <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-2" style={{ color: 'var(--muted)' }}>Primär</div>
-                        <TagCloud items={primaryLabels} tone="accent" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-2" style={{ color: 'var(--muted)' }}>Sekundär</div>
-                        <TagCloud items={secondaryLabels} />
-                      </div>
-                      <div>
-                        <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-2" style={{ color: 'var(--muted)' }}>Body Regions</div>
-                        <TagCloud items={insight.regions} />
-                      </div>
-                    </div>
-                  </ShellCard>
-
-                  <ShellCard
-                    title="Coach Notes"
-                    eyebrow="Exercise Layer"
-                    actions={(
-                      <button aria-label="Coach-Notizen speichern" onClick={handleSaveNotes} disabled={savingNotes} className="min-h-11 min-w-11 rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider" style={{ background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
-                        {savingNotes ? <span className="inline-flex items-center gap-2"><Loader2 size={12} className="animate-spin" /> save</span> : <span className="inline-flex items-center gap-2"><Save size={12} /> save</span>}
-                      </button>
-                    )}
-                  >
-                    <Field
-                      label="Notes / Description"
-                      value={exerciseNotes}
-                      onChange={setExerciseNotes}
-                      rows={8}
-                      placeholder="Eigene Coach-Notizen, Qualitätsurteil, Merge-Hinweise, Kontext."
-                    />
-                  </ShellCard>
-                </aside>
-
-                <main className="min-h-0 overflow-y-auto p-4 md:p-6 space-y-5">
-                  <div className="flex flex-wrap gap-2">
+            <div className="flex-1 min-h-0 overflow-y-auto md:overflow-hidden">
+              <div className="grid md:h-full md:min-h-0 grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(300px,380px)] xl:grid-cols-[minmax(0,1fr)_minmax(340px,420px)]">
+                <main className="md:min-h-0 md:overflow-y-auto p-4 md:p-6 space-y-5">
+                  <div className="flex flex-wrap items-center gap-2">
                     {VIEW_OPTIONS.map(({ id, label, icon: Icon }) => {
                       const active = activeView === id
                       return (
@@ -927,11 +1106,7 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                           key={id}
                           onClick={() => setActiveView(id)}
                           className="rounded-full px-4 py-2 text-sm font-black transition-all"
-                          style={active ? {
-                            background: 'rgba(94,234,212,0.14)',
-                            border: '1px solid rgba(94,234,212,0.28)',
-                            color: 'var(--accent)',
-                          } : {
+                          style={active ? toneColor('accent') : {
                             background: 'rgba(255,255,255,0.04)',
                             border: '1px solid rgba(255,255,255,0.08)',
                             color: 'var(--muted)',
@@ -941,106 +1116,53 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                         </button>
                       )
                     })}
+                    {activeView === 'edit' && (
+                      <button aria-label="Coach Sheet speichern" onClick={handleSaveLesson} disabled={savingLesson || loadingLesson} className="ml-auto min-h-11 rounded-xl px-4 py-2 text-xs font-black uppercase tracking-wider" style={toneColor('accent')}>
+                        {savingLesson ? <span className="inline-flex items-center gap-2"><Loader2 size={12} className="animate-spin" /> Speichern</span> : <span className="inline-flex items-center gap-2"><Save size={12} /> Speichern</span>}
+                      </button>
+                    )}
                   </div>
 
-                  {activeView === 'coach' && (
+                  {notice && (
+                    <div className="rounded-2xl px-4 py-3 text-sm font-semibold" style={toneColor('accent')}>
+                      {notice}
+                    </div>
+                  )}
+
+                  {activeView === 'sheet' && (hasLesson ? (
+                    <SheetView
+                      draft={lessonDraft}
+                      lesson={lesson}
+                      roleBlocks={roleBlocks}
+                      jointActions={insight.movement?.jointActions || []}
+                      muscleLanguage={muscleLanguage}
+                      taxonomy={taxonomy}
+                      onEdit={() => setActiveView('edit')}
+                    />
+                  ) : (
                     <div className="space-y-5">
-                      <div className="flex justify-end">
-                        <button aria-label="Coach Sheet speichern" onClick={handleSaveLesson} disabled={savingLesson || loadingLesson} className="min-h-11 min-w-11 rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider" style={{ background: 'rgba(94,234,212,0.14)', border: '1px solid rgba(94,234,212,0.28)', color: 'var(--accent)' }}>
-                          {savingLesson ? <span className="inline-flex items-center gap-2"><Loader2 size={12} className="animate-spin" /> save</span> : <span className="inline-flex items-center gap-2"><Save size={12} /> save</span>}
-                        </button>
-                      </div>
-
-                      <div className={AUTO_FIT_GRID}>
-                        <ShellCard title="Do" eyebrow="Cues" tone="accent">
-                          <div className="space-y-4">
-                            <Field label="Coaching Cues" value={lessonDraft.coaching_cues} onChange={(value) => setLessonDraft((prev) => ({ ...prev, coaching_cues: value }))} rows={8} placeholder="Eine Zeile pro Cue" />
-                            <Field label="Feel Cues" value={lessonDraft.feel_cues} onChange={(value) => setLessonDraft((prev) => ({ ...prev, feel_cues: value }))} rows={6} placeholder="Eine Zeile pro Cue" />
+                      <ShellCard title="Noch kein Coach Sheet" eyebrow="Ungeprüfte Quelldaten" tone="warn">
+                        <div className="space-y-4">
+                          <div className="text-sm leading-6" style={{ color: 'var(--ink)' }}>
+                            Für diese Übung gibt es nur die Original-Anleitung aus der Quell-Datenbank. Lege Ziel, Cues und Fehlerbilder an, damit das Sheet in der Einheit trägt.
                           </div>
-                        </ShellCard>
-
-                        <ShellCard title="Don't" eyebrow="Fehlerbilder" tone="warn">
-                          <Field
-                            label="Common Errors"
-                            value={lessonDraft.common_errors}
-                            onChange={(value) => setLessonDraft((prev) => ({ ...prev, common_errors: value }))}
-                            rows={14}
-                            placeholder="error | anatomical reason | correction | cue"
-                          />
-                        </ShellCard>
-                      </div>
-
-                      <ShellCard title="Trainer Voice" eyebrow="Erklärung">
-                        <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))]">
-                          <Field label="Simple" value={lessonDraft.trainer_simple} onChange={(value) => setLessonDraft((prev) => ({ ...prev, trainer_simple: value }))} rows={5} />
-                          <Field label="Technical" value={lessonDraft.trainer_technical} onChange={(value) => setLessonDraft((prev) => ({ ...prev, trainer_technical: value }))} rows={5} />
-                          <Field label="Client Friendly" value={lessonDraft.trainer_client_friendly} onChange={(value) => setLessonDraft((prev) => ({ ...prev, trainer_client_friendly: value }))} rows={5} />
+                          <button onClick={() => setActiveView('edit')} className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold" style={toneColor('accent')}>
+                            <PencilLine size={14} /> Sheet anlegen
+                          </button>
                         </div>
                       </ShellCard>
-
-                      <details className="rounded-[24px] p-4 md:p-5" style={{ background: 'var(--bg2)', border: '1px solid var(--line)' }}>
-                        <summary className="cursor-pointer text-sm font-black" style={{ color: 'var(--muted)' }}>Titel, Ziele, Quiz</summary>
-                        <div className="mt-4 grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))]">
-                          <Field label="Titel" value={lessonDraft.title} onChange={(value) => setLessonDraft((prev) => ({ ...prev, title: value }))} rows={2} />
-                          <Field label="Movement Pattern" value={lessonDraft.movement_pattern} onChange={(value) => setLessonDraft((prev) => ({ ...prev, movement_pattern: value }))} rows={2} disabled />
-                          <Field label="Learning Goal Kurz" value={lessonDraft.learning_goal_short} onChange={(value) => setLessonDraft((prev) => ({ ...prev, learning_goal_short: value }))} rows={3} />
-                          <Field label="Learning Goal Detailliert" value={lessonDraft.learning_goal_detailed} onChange={(value) => setLessonDraft((prev) => ({ ...prev, learning_goal_detailed: value }))} rows={4} />
-                          <Field label="Quiz Question" value={lessonDraft.quiz_question} onChange={(value) => setLessonDraft((prev) => ({ ...prev, quiz_question: value }))} rows={3} />
-                          <Field label="Quiz Answer" value={lessonDraft.quiz_answer} onChange={(value) => setLessonDraft((prev) => ({ ...prev, quiz_answer: value }))} rows={4} />
-                        </div>
-                      </details>
-                    </div>
-                  )}
-
-                  {activeView === 'preview' && (
-                    <div className="space-y-5">
-                      <div className={AUTO_FIT_GRID}>
-                        <ShellCard title="Do" eyebrow="Cues" tone="accent">
-                          <div className="space-y-4">
-                            <RawList title="Coaching Cues" items={textToLines(lessonDraft.coaching_cues)} empty="Noch keine Cues." />
-                            <RawList title="Feel Cues" items={textToLines(lessonDraft.feel_cues)} empty="Noch keine Feel-Cues." />
-                          </div>
-                        </ShellCard>
-
-                        <ShellCard title="Don't" eyebrow="Fehlerbilder" tone="warn">
-                          {textToErrors(lessonDraft.common_errors).length ? (
-                            <div className="space-y-3">
-                              {textToErrors(lessonDraft.common_errors).map((err) => (
-                                <div key={`${err.error}-${err.correction}`} className="rounded-2xl p-3" style={{ background: 'rgba(0,0,0,0.12)', border: '1px solid var(--line)' }}>
-                                  <div className="text-sm font-black" style={{ color: 'var(--ink)' }}>{err.error}</div>
-                                  {err.anatomical_reason && <div className="text-sm mt-1" style={{ color: 'var(--muted)' }}>{err.anatomical_reason}</div>}
-                                  {err.correction && <div className="text-sm mt-1" style={{ color: 'var(--accent)' }}>{err.correction}</div>}
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="text-sm" style={{ color: 'var(--muted)' }}>Noch keine Fehlerbilder.</div>
+                      <ShellCard title="Original-Anleitung" eyebrow="Quelle">
+                        <div className="space-y-4">
+                          <Bullets items={rawInstructions} empty="Keine Anleitung vorhanden." />
+                          {insight.rawDescription && (
+                            <div className="text-sm leading-6" style={{ color: 'var(--muted)' }}>{insight.rawDescription}</div>
                           )}
-                        </ShellCard>
-                      </div>
-
-                      {roleBlocks.length > 0 && (
-                        <ShellCard title="Muskelrollen" eyebrow="Funktionssicht">
-                          <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))]">
-                            {roleBlocks.map((block) => (
-                              <div key={block.label} className="space-y-2">
-                                <div className="text-[10px] font-black uppercase tracking-[0.22em]" style={{ color: 'var(--muted)' }}>
-                                  {block.label}
-                                </div>
-                                <TagCloud items={block.items} tone={block.tone} />
-                              </div>
-                            ))}
-                          </div>
-                        </ShellCard>
-                      )}
-
-                      {(lesson?.muscle_anatomy || lessonDraft.muscle_anatomy) && (
-                        <ShellCard title="Muscle Anatomy" eyebrow="Preview">
-                          <MuscleAnatomySection muscleAnatomy={lesson?.muscle_anatomy || lessonDraft.muscle_anatomy} muscleLanguage={muscleLanguage} taxonomy={taxonomy} />
-                        </ShellCard>
-                      )}
+                        </div>
+                      </ShellCard>
                     </div>
-                  )}
+                  ))}
+
+                  {activeView === 'edit' && <EditView draft={lessonDraft} setDraft={setLessonDraft} />}
 
                   {activeView === 'raw' && (
                     <div className="space-y-5">
@@ -1059,43 +1181,27 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                       <div className={AUTO_FIT_GRID}>
                         <ShellCard title="Field Snapshot" eyebrow="Exercise">
                           <div className="space-y-2">
-                            {cleanText(localExercise.german) && cleanText(localExercise.german) !== displayName && (
-                              <StatRow label="German" value={localExercise.german} />
-                            )}
-                            {cleanText(localExercise.english) && cleanText(localExercise.english) !== displayName && (
-                              <StatRow label="English" value={localExercise.english} />
-                            )}
+                            <StatRow label="ID" value={exerciseId} />
+                            {cleanText(localExercise.german) && <StatRow label="German" value={localExercise.german} />}
+                            {cleanText(localExercise.english) && <StatRow label="English" value={localExercise.english} />}
                             <StatRow label="Category" value={localExercise.category || 'n/a'} />
                             <StatRow label="Type" value={localExercise.type || 'n/a'} />
                             <StatRow label="Equipment" value={Array.isArray(localExercise.equipment) ? localExercise.equipment.join(', ') : (localExercise.equipment || 'n/a')} />
-                            <StatRow label="Pattern" value={insight.movement?.pattern || 'n/a'} />
+                            <StatRow label="Source" value={localExercise.source || localExercise.origin?.type || 'n/a'} />
+                            <StatRow label="Pattern" value={patternLabel(lesson?.movement_pattern) || 'n/a'} />
                           </div>
                         </ShellCard>
 
                         <ShellCard title="Tags & Arrays" eyebrow="Exercise">
                           <div className="space-y-3">
-                            <div>
-                              <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-2" style={{ color: 'var(--muted)' }}>Tags</div>
-                              <TagCloud items={sourceTags} />
-                            </div>
-                            <div>
-                              <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-2" style={{ color: 'var(--muted)' }}>Primary Raw</div>
-                              <TagCloud items={(localExercise.primary_muscles || localExercise.primaryMuscles || []).map(String)} />
-                            </div>
-                            <div>
-                              <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-2" style={{ color: 'var(--muted)' }}>Secondary Raw</div>
-                              <TagCloud items={(localExercise.secondary_muscles || localExercise.secondaryMuscles || []).map(String)} />
-                            </div>
+                            <div><SectionLabel>Tags</SectionLabel><TagCloud items={sourceTags} /></div>
+                            <div><SectionLabel>Primary Raw</SectionLabel><TagCloud items={(localExercise.primary_muscles || localExercise.primaryMuscles || []).map(String)} /></div>
+                            <div><SectionLabel>Secondary Raw</SectionLabel><TagCloud items={(localExercise.secondary_muscles || localExercise.secondaryMuscles || []).map(String)} /></div>
                           </div>
                         </ShellCard>
 
                         <ShellCard title="Lesson Structure" eyebrow="Raw JSON">
                           <JsonBlock title="lesson" value={lesson} />
-                        </ShellCard>
-                        <ShellCard title="Extended Anatomy Blocks" eyebrow="Raw JSON">
-                          <JsonBlock title="joint_actions" value={lesson?.joint_actions || lessonDraft.joint_actions} />
-                          <JsonBlock title="body_highlighter_regions" value={lesson?.body_highlighter_regions || lessonDraft.body_highlighter_regions} />
-                          <JsonBlock title="muscle_roles" value={lesson?.muscle_roles || lessonDraft.muscle_roles} />
                         </ShellCard>
                         <ShellCard title="Origin Metadata" eyebrow="Raw JSON">
                           <JsonBlock title="origin" value={localExercise.origin} />
@@ -1107,13 +1213,92 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                       </div>
                     </div>
                   )}
-
-                  {notice && (
-                    <div className="rounded-2xl px-4 py-3 text-sm font-semibold" style={{ background: 'rgba(94,234,212,0.1)', border: '1px solid rgba(94,234,212,0.22)', color: 'var(--accent)' }}>
-                      {notice}
-                    </div>
-                  )}
                 </main>
+
+                <aside className="md:min-h-0 md:overflow-y-auto p-4 md:p-5 space-y-4" style={{ borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
+                  {inboxFileId && (
+                    <ShellCard title="Review Actions" eyebrow="Coach Inbox" tone={inboxStatusMeta.tone}>
+                      <div className="space-y-3">
+                        <div className="flex flex-wrap gap-2">
+                          <MetaPill tone={inboxStatusMeta.tone}>{inboxStatusMeta.label}</MetaPill>
+                          {inboxUserId && <MetaPill>{inboxUserId}</MetaPill>}
+                          <MetaPill>{inboxFileId}</MetaPill>
+                        </div>
+                        <Field
+                          label="Nachfrage / Review-Fokus"
+                          value={reviewFeedback}
+                          onChange={setReviewFeedback}
+                          rows={4}
+                          placeholder="Was soll Gemini bzw. das Backend beim Re-Enrichment präzisieren?"
+                        />
+                        <div className="grid gap-2">
+                          <button onClick={handleApproveInbox} disabled={Boolean(reviewAction) || inboxStatus === 'approved'} className="rounded-2xl px-3 py-2.5 text-sm font-semibold text-left" style={toneColor('accent')}>
+                            <span className="inline-flex items-center gap-2">
+                              {reviewAction === 'approve' ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
+                              Freigeben
+                            </span>
+                          </button>
+                          <button onClick={handleReenrichInbox} disabled={Boolean(reviewAction)} className="rounded-2xl px-3 py-2.5 text-sm font-semibold text-left" style={btn}>
+                            <span className="inline-flex items-center gap-2">
+                              {reviewAction === 'reenrich' ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+                              Neu anreichern
+                            </span>
+                          </button>
+                          <button onClick={handleRejectInbox} disabled={Boolean(reviewAction) || inboxStatus === 'rejected'} className="rounded-2xl px-3 py-2.5 text-sm font-semibold text-left" style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#fca5a5' }}>
+                            <span className="inline-flex items-center gap-2">
+                              {reviewAction === 'reject' ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                              Verwerfen
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    </ShellCard>
+                  )}
+
+                  <ShellCard title="Muskeln" eyebrow="Targeting">
+                    <div className="space-y-3">
+                      <div><SectionLabel>Primär</SectionLabel><TagCloud items={primaryLabels} tone="accent" /></div>
+                      <div><SectionLabel>Sekundär</SectionLabel><TagCloud items={secondaryLabels} /></div>
+                      <div><SectionLabel>Body Regions</SectionLabel><TagCloud items={insight.regions} /></div>
+                    </div>
+                  </ShellCard>
+
+                  <ShellCard
+                    title="Meine Notizen"
+                    eyebrow="Privat, nicht im Sheet"
+                    actions={(
+                      <button aria-label="Coach-Notizen speichern" onClick={handleSaveNotes} disabled={savingNotes} className="min-h-11 min-w-11 rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider" style={btn}>
+                        {savingNotes ? <span className="inline-flex items-center gap-2"><Loader2 size={12} className="animate-spin" /> save</span> : <span className="inline-flex items-center gap-2"><Save size={12} /> save</span>}
+                      </button>
+                    )}
+                  >
+                    <Field
+                      label="Notizen"
+                      value={exerciseNotes}
+                      onChange={setExerciseNotes}
+                      rows={5}
+                      placeholder="Klienten-Erfahrungen, Qualitätsurteil, Merge-Hinweise."
+                    />
+                  </ShellCard>
+
+                  <details className="rounded-[24px] p-4" style={{ background: 'var(--bg2)', border: '1px solid var(--line)' }}>
+                    <summary className="cursor-pointer text-sm font-black" style={{ color: 'var(--muted)' }}>Quellen (wger / yuhonas)</summary>
+                    <div className="mt-4 space-y-4">
+                      <SourceProvenanceCard exercise={localExercise} source="wger" mergeCandidate={mergeCandidate} />
+                      <SourceProvenanceCard exercise={localExercise} source="yuhonas" mergeCandidate={mergeCandidate} />
+                      {(inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && (
+                        <SourceEditor
+                          key={inboxFileId || exerciseId}
+                          id={inboxFileId || exerciseId}
+                          target={inboxFileId ? 'inbox' : 'approved'}
+                          exercise={localExercise}
+                          candidates={mergeCandidate}
+                          onSaved={handleSourceSaved}
+                        />
+                      )}
+                    </div>
+                  </details>
+                </aside>
               </div>
             </div>
           </div>
