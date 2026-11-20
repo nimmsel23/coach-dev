@@ -36,9 +36,9 @@ Hosting-Target `<id>` in `firebase.json` und `.firebaserc`. `NavigationItems.js`
 
 ## Bauen und deployen
 ```bash
-pnpm run build:miniapp <id>                 # dist-<id>/ (KB-Daten gestempelt, vite --mode <id>, SW, Manifest, Splash, Snapshot)
-pnpm run build:miniapp <id> --deploy        # zusätzlich firebase deploy --only hosting:<id>
-pnpm run build:training | build:atlas       # Kurzformen
+npm run build:miniapp <id>                 # dist-<id>/ (KB-Daten gestempelt, vite --mode <id>, SW, Manifest, Splash, Snapshot)
+npm run build:miniapp <id> --deploy        # zusätzlich firebase deploy --only hosting:<id>
+npm run build:training | build:atlas       # Kurzformen
 ```
 Der Build setzt `VITE_SOLO_TAB` selbst. Das Build-Ergebnis liegt in `dist-<id>/` (per `.gitignore` `dist-*/` ignoriert).
 
@@ -75,7 +75,7 @@ Die Update-Leiste unten (`PwaUpdateBanner`) bleibt unverändert. Der Helfer ist 
 4. Hosting-Target `<id>` in `firebase.json` (Block von `training` kopieren, `public: dist-<id>`) und in `.firebaserc` (`targets.fitness-aos.hosting.<id>`).
 5. Site anlegen: `firebase hosting:sites:create vos-<id> --project fitness-aos` (mit einem Konto mit Zugriff, hier `nimmsel23@gmail.com`).
 6. Autorisierte Domains eintragen (`vos-<id>.web.app` und `vos-<id>.firebaseapp.com`), sonst scheitert der Google-Login.
-7. `pnpm run build:miniapp <id>` lokal prüfen, committen, über `dev` → `master` ausliefern. Am Workflow ändert sich nichts.
+7. `npm run build:miniapp <id>` lokal prüfen, committen, über `dev` → `master` ausliefern. Am Workflow ändert sich nichts.
 
 ### Autorisierte Domains per Admin-API
 Firebase Auth erlaubt nur Domains aus der Liste „Autorisierte Domains“; die Standarddomains des Projekts sind automatisch drin, zusätzliche
@@ -96,7 +96,7 @@ und Login sind getrennt; jede neue App braucht Site und autorisierte Domain.
 **B, Branch `feat/shared-origin`, nicht live: Unterpfade einer gemeinsamen Origin** (z. B. `fitness-vos.web.app/<id>/`). Cache, IndexedDB und
 Login wären mit Pulse geteilt (einmal anmelden, Atlas-Daten für Pulse); keine neuen Sites und keine zusätzlichen Domains. Dafür sind zwei
 Pipelines an einer Site gekoppelt (ein Hosting-Deploy ersetzt den kompletten Inhalt der Site) und alle Apps teilen das Fehlerrisiko.
-Stand des Branches: `pnpm run build:origin` (`scripts/build-miniapps-origin.mjs`) baut alle Apps nach `dist-origin/<id>/` mit SW-Scope `/<id>/`,
+Stand des Branches: `npm run build:origin` (`scripts/build-miniapps-origin.mjs`) baut alle Apps nach `dist-origin/<id>/` mit SW-Scope `/<id>/`,
 Manifest-Scope und `start_url` unter dem Pfad und schreibt `dist-origin/_hosting-rewrites.json`. Offen: Einbindung in den
 `fitness-vos`-Deploy (Meta-Repo, `deploy-vos-fitness.yml`: nach dem Pulse-Build in `fitness-app` `pnpm run build:origin` ausführen, `dist-origin/*` nach
 `vos-fitness/dist-firebase/` kopieren, Rewrites vor dem `**`-Catch-all einfügen) und ein Laufzeittest im Browser (SW-Scopes, Login über Pfade).

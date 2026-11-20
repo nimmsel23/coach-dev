@@ -42,8 +42,8 @@ git submodule update --init modules/plan
 # Nach expliziter Push-Freigabe zuerst den Plan-Commit veröffentlichen.
 git -C modules/plan fetch origin dev
 git -C modules/plan checkout --detach <geprüfter-plan-commit>
-pnpm run test:plan:contract
-pnpm run build
+npm run test:plan:contract
+npm run build
 # Danach nur den geprüften Pointer und zugehörige Änderungen committen.
 git add modules/plan
 ```
@@ -54,7 +54,7 @@ referenzierten Commit veröffentlicht haben, bevor Coach gepusht wird.
 
 ## Verifikation
 
-`pnpm run test:plan:contract` prüft im isolierten Firestore-Testdouble Coach →
+`npm run test:plan:contract` prüft im isolierten Firestore-Testdouble Coach →
 gepinnter Plan-Reader/Logger und die Gegenrichtung. `PLAN_SOURCE` ist nur ein
 optionaler Test-Override, kein Build-Fallback. Der mobile Browsertest läuft mit
 `aos-kitty-launch 'cd /home/alpha/coach-dev && bash scripts/tests/run-shared-editor-browser.sh'`.

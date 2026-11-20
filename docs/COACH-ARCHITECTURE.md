@@ -141,7 +141,7 @@ Coach owns `firestore.rules.part` for `coachConversations`; Plan owns `planRespo
 
 ## Functional checks before Hosting builds (2026-11-12)
 
-`pnpm run test:coach:functional` runs the offline Firestore adapter tests,
+`npm run test:coach:functional` runs the offline Firestore adapter tests,
 Insights adapter contract tests and `src/views/Coach/*.test.mjs` (client console
 aggregation, routing, feed highlights and 6Pack progress). Both `Check (Coach)`
 and `Deploy Coach` run it as a required step before generating KB data/building.

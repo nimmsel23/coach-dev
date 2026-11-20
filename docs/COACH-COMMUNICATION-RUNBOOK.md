@@ -27,7 +27,7 @@ stabilen `~/vitalos`-Checkout kopieren oder einen Submodule-Pointer automatisch 
 
 | Voraussetzung | Verwendung |
 | --- | --- |
-| Vorhandene pnpm-Version aus `packageManager` | Repo-Abhängigkeiten und Builds |
+| Vorhandene npm-Version (Lockfile `package-lock.json`) | Repo-Abhängigkeiten und Builds |
 | Node mit globalem `WebSocket` | CDP-Browsertest (geprüft mit Node 26.13.0) |
 | Java und gecachter Firestore-Emulator | Lokale Zugriffsregel-Prüfung |
 | Firebase CLI | Emulator-Orchestrierung für Demo-Projekt |
@@ -36,7 +36,7 @@ stabilen `~/vitalos`-Checkout kopieren oder einen Submodule-Pointer automatisch 
 | Thorium | Runner erwartet `/opt/thorium-browser-avx2/thorium` |
 | `aos-kitty-launch` | Sichtbare Ausführung von Emulator und Browser-Runner |
 
-Abhängigkeiten im jeweiligen Checkout mit dessen normalem pnpm-Workflow einrichten.
+Abhängigkeiten im jeweiligen Checkout mit `npm install` einrichten (coach-dev; Nachbar-Repos nutzen ggf. pnpm).
 Keine geteilten Produktions-`node_modules` in einen Worktree verlinken: dessen
 Manifest-/Workspace-Stand kann abweichen. Eine Rückfrage zum Löschen/Neuinstallieren
 geteilter Module abbrechen und eine eigene konsistente Umgebung verwenden.
@@ -122,10 +122,10 @@ seine eigenen Vite-/Browser-Kinder; `emulators:exec` beendet den Emulator.
 cd ~/dev/coach-dev
 node --test src/views/Coach/coachRoute.test.mjs
 node scripts/tests/plan-contract.test.mjs
-pnpm run build:firebase:coach
+npm run build:firebase:coach
 
 cd ~/dev/fitness-dev
-pnpm run build:firebase:client
+npm run build:firebase:client
 ```
 
 Routing prüft unter anderem `#/clients/<uid>/messages`. Die zwei Plan-Vertragstests

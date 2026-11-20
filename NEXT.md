@@ -1,6 +1,6 @@
-- ~~Vite-8 Vorbeuge~~: esbuild-Tests + build.target Browserliste (modules/plan folgt plan-Pin).
 # NEXT (coach-dev)
 
+- ~~Vite-8 Vorbeuge~~: esbuild-Tests + build.target Browserliste (modules/plan folgt plan-Pin).
 - [ ] Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen; danach einen explizit ausgewählten Klient/Plan als Pilot synchronisieren. Code und Browser-Build sind fertig, der laufende Prozess wurde nicht neu gestartet.
 - [ ] Mit einer angemeldeten UID aus einem sichtbaren Klientenworkspace einen echten Fitness-App-Aufruf prüfen und den resultierenden `tractionDaily`-Event in der lokalen Coach-Konsole nachweisen. Live-Bundle und Regeln enthalten die Implementierung; die aktuelle Abfrage hat noch 0 Events.
 - [x] Katalog-Rechtsklick + `POST /fitness/inbox/draft` + Jefferson-Curl Pipeline-Smoke.
@@ -8,6 +8,9 @@
 - [x] Inbox-SubTabs live in Sidebar + CF/SW-Push bei neuer `coachInbox`-Anfrage.
 - [x] Chat-SubTabs für ungelesene Nachrichten + CF/SW-Push `onClientMessage`.
 - [x] Inbox `github_pr`: Link „Auf GitHub öffnen“ statt Fake-Approve.
+- [x] Übungs-Inbox als GitHub-Issues in `nimmsel23/fitness` (Inbox-Bot: /approve, /reenrich, /unlink …); App listet die Issues (`githubInbox.js`), 2026-11-20.
+- [ ] Coach Sheet (neu: Sheet/Bearbeiten/Rohdaten) live prüfen; Live-Deploy (Deploy Coach, production=true) steht noch aus.
+- [ ] Ausbaustufen-Issues (Label `ausbaustufe`, aus der Dashboard-Tiefenanalyse) sichten: schließen = erledigt/verworfen.
 - [x] `firebase deploy` `functions:fitness:onCoachInbox` + `onClientMessage` (europe-west1, 2026-11-10).
 - [ ] website-Submodule: nur Remote-erreichbare SHAs pinnen (Dependabot); lokal unpushed Landing `71f101a` ggf. im website-Repo pushen oder verwerfen.
 - [ ] vos-coach Hosting (neuer SW für clientMessage/inboxRequest).

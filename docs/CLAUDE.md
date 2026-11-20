@@ -58,7 +58,7 @@ Vollständige Neufassung dieser Doku steht noch aus.
      (:9150) und mit `curl -s localhost:9150/health` verifizieren. Diese
      Repo-Regel geht der globalen „laufende Server nicht restarten"-Regel vor.
      Kein sudo — Prod-Deploys über `vitalos/prod` bleiben beim User.
-- **Paketmanager ist npm, kein pnpm (Owner 2026-11-20).** `npm install` / `npm ci`,
+- **Paketmanager ist npm (Umstellung 2026-11-20).** `npm install` / `npm ci`,
   `npm run <script>`, `npx`. Lockfile `package-lock.json`; Overrides stehen in
   `package.json` (`overrides`), freigegebene Install-Scripts in `allowScripts`,
   `.npmrc` setzt `legacy-peer-deps=true` (eslint-plugin-react-Peer zu eng).

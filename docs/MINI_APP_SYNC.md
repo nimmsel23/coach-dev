@@ -49,7 +49,7 @@ Dann wird der Submodul-Pointer in Fitness aktualisiert:
 ```sh
 cd ~/fitness-dev
 git submodule update --remote plan
-pnpm run build:firebase
+npm run build:firebase
 git add plan
 git commit -m "chore(fitness): update Plan integration"
 git push origin dev

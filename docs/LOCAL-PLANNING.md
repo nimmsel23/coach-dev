@@ -95,8 +95,8 @@ ist nicht Teil dieses lokalen Ablaufs.
 
 ## Entwicklung und Prüfung
 
-- `pnpm run build` baut lokale Seite, Vue-Shell und Cloud-Coach gemeinsam.
-- `pnpm run ui:dev`, dann `local.html` öffnen; API geht an den bestehenden Server.
+- `npm run build` baut lokale Seite, Vue-Shell und Cloud-Coach gemeinsam.
+- `npm run ui:dev`, dann `local.html` öffnen; API geht an den bestehenden Server.
 - Planänderungen zuerst in `~/plan-dev` committen, danach den geprüften Pointer
   `modules/plan` übernehmen. Nicht im Submodul einen zweiten Editor entwickeln.
 - `python3 -m unittest discover -s tests -p test_local_plans.py`: temporäre

@@ -14,7 +14,7 @@ Zuständigkeiten: [docs/OWNERSHIP-MAP.md](./docs/OWNERSHIP-MAP.md).
 | Dispatcher | [`bin/coach`](./bin/coach) | `catalog`, `inbox`, `server`, `release` und weitere Werkzeuge |
 | Plan-Editor | [`modules/plan`](./modules/plan) | Gepinntes Submodul; Coach baut ihn ein, besitzt ihn nicht |
 | Coach-UI | `src/`, `coach.html`, `coach-shell.html`, `local.html` | Vite-Build nach `dist-coach/` |
-| Katalog-UI | `catalog-ui/` | Build nach `dist-catalog/` (`pnpm run build:catalog-ui`) |
+| Katalog-UI | `catalog-ui/` | Build nach `dist-catalog/` (`npm run build:catalog-ui`) |
 | Hosting | [`.firebaserc`](./.firebaserc), [`firebase.json`](./firebase.json) | Target `coach`, Site `vos-coach`, Ausgabeverzeichnis `dist-coach` |
 
 `server.py` hört standardmäßig auf `127.0.0.1:9150` (`COACH_HOST` / `COACH_PORT`,
@@ -32,7 +32,7 @@ Coach-UI auf `/coach/` und Dateien aus dem Submodul `website/` auf `/website/`.
   [`requirements-server.txt`](./requirements-server.txt). Das Paket `fitness`
   (Katalog, API-Router, CLIs) steht in [`pyproject.toml`](./pyproject.toml)
   (Python ≥ 3.11, Poetry).
-- **Frontend:** React 18 und Vite 6 (`package.json`, Paketmanager pnpm 11).
+- **Frontend:** React und Vite 8 (`package.json`, Paketmanager npm, `package-lock.json`).
   Der Dev-Server lauscht auf Port **5902** und proxyt API-Pfade nach
   `http://localhost:9150`. Der Coach-Build enthält zusätzlich die Vue-Shell
   `coach-shell.html` neben den React-Seiten `coach.html`, `local.html` und
@@ -89,20 +89,20 @@ sie unter `/api/relax` und `/relax-api`. Fehlt die Datei, entfallen die Routen.
 ## Lokal starten
 
 ```sh
-pnpm install
+npm install
 python3 -m venv .venv
 .venv/bin/pip install -r requirements-server.txt
 
-pnpm run build:catalog-ui    # dist-catalog/; Quelle catalog-ui/ (oder COACH_CATALOG_SOURCE)
+npm run build:catalog-ui    # dist-catalog/; Quelle catalog-ui/ (oder COACH_CATALOG_SOURCE)
 .venv/bin/python server.py   # 127.0.0.1:9150
 
 # liegt FastAPI im aufgerufenen python3:
-pnpm start                    # python3 server.py
-pnpm run server:dev           # python3 server.py --reload
+npm start                    # python3 server.py
+npm run server:dev           # python3 server.py --reload
 
 # Frontend, startet den Python-Server nicht:
-pnpm run dev                  # Vite :5902, öffnet /coach.html
-pnpm run ui:dev               # Vite :5902, öffnet /coach-shell.html
+npm run dev                  # Vite :5902, öffnet /coach.html
+npm run ui:dev               # Vite :5902, öffnet /coach-shell.html
 ```
 
 User-Unit: `bin/coach-server install|start|status|health|logs`. Vor einem
@@ -125,13 +125,13 @@ Firebase-Projekt `fitness-aos`, nur Hosting-Target `coach` (Site `vos-coach`,
 `firebase.json` und werden von hier nicht ausgerollt.
 
 ```sh
-pnpm run build:firebase:coach   # vite build --mode coach → dist-coach/
-pnpm run firebase               # dieser Build plus firebase deploy --only hosting:coach
+npm run build:firebase:coach   # vite build --mode coach → dist-coach/
+npm run firebase               # dieser Build plus firebase deploy --only hosting:coach
 ```
 
-`pnpm run deploy` akzeptiert nur den Modus Firebase und ruft danach
-`npm run firebase` auf. `deploy.sh`, `pnpm run deploy:local` und
-`pnpm run deploy:prod` beenden sich mit dem Hinweis, dass es kein lokales
+`npm run deploy` akzeptiert nur den Modus Firebase und ruft danach
+`npm run firebase` auf. `deploy.sh`, `npm run deploy:local` und
+`npm run deploy:prod` beenden sich mit dem Hinweis, dass es kein lokales
 Staging-/Prod-Dienst-Deploy gibt.
 
 CI ([`.github/workflows/deploy-coach.yml`](./.github/workflows/deploy-coach.yml)):

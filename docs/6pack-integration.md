@@ -6,7 +6,7 @@
 to that commit to include it in the Fitness build.
 
 The standalone 6Pack release remains independent. `fitness/catalog/kb` remains
-the source of truth for Fitness exercise data; `pnpm run build:sixpack-data`
+the source of truth for Fitness exercise data; `npm run build:sixpack-data`
 generates the Fitness-specific exercise data used by its integrated view.
 
 Fitness CI checks out the nested submodule recursively. A `6pack` gitlink
