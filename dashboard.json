@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-20T08:49:08+00:00",
+  "generated_at": "2026-11-20T08:50:14+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T08:48:49Z",
+   "pushed_at": "2026-11-20T08:49:28Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,18 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 2,
+   "dev_ahead": 3,
    "oldest_unpromoted": "2026-11-20T09:48:14+01:00",
-   "dev_head": "5acb9d67 2026-11-20T09:48:27+01:00",
+   "dev_head": "4bb30a19 2026-11-20T09:49:25+01:00",
    "master_head": "93547f27 2026-11-20T09:25:19+01:00"
   },
   "commits": [
+   {
+    "sha": "4bb30a19",
+    "date": "2026-11-20T09:49:25+01:00",
+    "author": "Alpha",
+    "subject": "ci: npm 12 wie lokal verwenden (Lockfile-Kompatibilität)"
+   },
    {
     "sha": "5acb9d67",
     "date": "2026-11-20T09:48:27+01:00",
@@ -138,12 +144,6 @@
     "date": "2026-11-14T18:32:50+01:00",
     "author": "Alpha",
     "subject": "docs(coach): record console refresh contracts and hosted status evidence"
-   },
-   {
-    "sha": "7764bebb",
-    "date": "2026-11-14T18:32:50+01:00",
-    "author": "Alpha",
-    "subject": "fix(coach): refresh client console without losing feedback drafts"
    }
   ],
   "activity": [
@@ -229,28 +229,58 @@
    },
    {
     "day": "2026-11-20",
-    "n": 10
+    "n": 11
    }
   ],
   "workflows": [
    {
-    "name": "Deploy Coach",
+    "name": "Gemini CI Agent",
     "branch": "dev",
-    "event": "push",
+    "event": "workflow_run",
     "status": "completed",
-    "conclusion": "failure",
-    "created_at": "2026-11-20T08:48:51Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705529253",
-    "sha": "5acb9d6"
+    "conclusion": "skipped",
+    "created_at": "2026-11-20T08:49:36Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705629107",
+    "sha": "4bb30a1"
    },
    {
     "name": "Check (Coach)",
     "branch": "dev",
     "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-20T08:49:30Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705613757",
+    "sha": "4bb30a1"
+   },
+   {
+    "name": "Deploy Coach",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-20T08:49:30Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705613612",
+    "sha": "4bb30a1"
+   },
+   {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "branch": "dev",
+    "event": "workflow_run",
     "status": "completed",
-    "conclusion": "failure",
-    "created_at": "2026-11-20T08:48:51Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705529189",
+    "conclusion": "skipped",
+    "created_at": "2026-11-20T08:49:10Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705569999",
+    "sha": "5acb9d6"
+   },
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "skipped",
+    "created_at": "2026-11-20T08:49:10Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705569837",
     "sha": "5acb9d6"
    },
    {
@@ -262,89 +292,55 @@
     "created_at": "2026-11-20T08:47:58Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705413736",
     "sha": "93547f2"
-   },
-   {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "skipped",
-    "created_at": "2026-11-20T08:26:17Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44702519588",
-    "sha": "93547f2"
-   },
-   {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T08:26:17Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44702519507",
-    "sha": "93547f2"
-   },
-   {
-    "name": "Gemini CI Agent",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T08:18:59Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44701553500",
-    "sha": "a949bb8"
    }
   ],
-  "issues": [],
+  "issues": [
+   {
+    "number": 21,
+    "title": "Dashboard-Lage: rot",
+    "created_at": "2026-11-20T08:49:26Z",
+    "updated_at": "2026-11-20T08:49:26Z",
+    "labels": [
+     "dashboard"
+    ],
+    "url": "https://github.com/nimmsel23/coach-dev/issues/21",
+    "author": "github-actions[bot]"
+   }
+  ],
   "pulls": [],
   "live_sites": [
    "https://vos-coach.web.app"
   ]
  },
  "assessment": {
-  "status": "red",
-  "signals": [
-   {
-    "level": "red",
-    "key": "ci:Deploy Coach:dev",
-    "text": "„Deploy Coach“ auf dev ist rot (failure, 5acb9d6)",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705529253"
-   },
-   {
-    "level": "red",
-    "key": "ci:Check (Coach):dev",
-    "text": "„Check (Coach)“ auf dev ist rot (failure, 5acb9d6)",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705529189"
-   }
-  ],
+  "status": "green",
+  "signals": [],
   "ai": {
-   "headline": "Dev-Branch mit 2 Commits vor Master; CI-Workflows auf dev rot",
-   "lage": "Der `dev`-Branch ist 2 Commits (`ca6f2d09`, `5acb9d67`) vor `master` (`93547f27`). Die Workflows „Deploy Coach“ und „Check (Coach)“ sind für den neuesten `dev`-Commit `5acb9d6` fehlgeschlagen. Der `master`-Branch wurde zuletzt erfolgreich mit `93547f27` aktualisiert.",
+   "headline": "Dev-Branch 3 Commits vor Master; CI-Workflows laufen; Issue #21 erstellt",
+   "lage": "Der `dev`-Branch ist 3 Commits (`ca6f2d09`, `5acb9d67`, `4bb30a19`) vor `master` (`93547f27`). Die Workflows „Check (Coach)“ und „Deploy Coach“ sind für den neuesten `dev`-Commit `4bb30a19` noch in Bearbeitung. Issue #21 \"Dashboard-Lage: rot\" wurde erstellt.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "„Deploy Coach“ auf dev ist rot (failure, 5acb9d6) https://github.com/nimmsel23/coach-dev/actions/runs/44705529253"
-    },
-    {
-     "level": "hoch",
-     "text": "„Check (Coach)“ auf dev ist rot (failure, 5acb9d6) https://github.com/nimmsel23/coach-dev/actions/runs/44705529189"
+     "text": "Issue #21 \"Dashboard-Lage: rot\" wurde durch den `github-actions[bot]` erstellt, was auf ein kritisches Problem im Dashboard hindeutet."
     },
     {
      "level": "mittel",
-     "text": "Der dev-Branch ist mit 2 Commits (ca6f2d09, 5acb9d67) vor master (93547f27)."
+     "text": "Die Workflows „Check (Coach)“ und „Deploy Coach“ für Commit `4bb30a19` sind `in_progress`. Ihr Abschluss und Ergebnis sind entscheidend für die Stabilität des `dev`-Branches."
+    },
+    {
+     "level": "info",
+     "text": "Die Commits `5acb9d67` (\"build: pnpm durch npm ersetzen\") und `4bb30a19` (\"ci: npm 12 wie lokal verwenden\") deuten auf eine Umstellung des Paketmanagers und damit verbundene CI-Anpassungen hin."
     }
    ],
    "naechste_schritte": [
-    "Analysiere die Ursache der fehlgeschlagenen Workflows „Deploy Coach“ und „Check (Coach)“ für Commit 5acb9d6.",
-    "Behebe die Fehler im Commit 5acb9d6, insbesondere bezüglich der Ersetzung von pnpm durch npm.",
-    "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in NEXT.md."
+    "Prüfe den Abschluss und das Ergebnis der Workflows „Check (Coach)“ und „Deploy Coach“ für Commit `4bb30a19`.",
+    "Analysiere Issue #21 \"Dashboard-Lage: rot\" und dessen Ursache.",
+    "Überprüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`."
    ],
-   "veraendert": "Der `dev`-Branch ist nun 2 Commits vor `master`, und die `Check (Coach)` sowie `Deploy Coach` Workflows sind für den neuesten `dev`-Commit `5acb9d6` fehlgeschlagen, während sie zuvor für `93547f27` liefen.",
-   "fragen": [
-    "Soll die Umstellung von pnpm auf npm im Commit 5acb9d6 priorisiert werden, oder ist ein Revert des Commits zur Wiederherstellung der CI-Stabilität zu bevorzugen?",
-    "Soll der neue 'Pages Docs'-Actions-Workflow (NEXT.md) trotz der aktuellen CI-Fehler auf dev weiter verifiziert werden?"
-   ],
+   "veraendert": "Der `dev`-Branch ist um einen weiteren Commit (`4bb30a19`) vor `master` und die Workflows „Check (Coach)“ und „Deploy Coach“ sind für diesen neuesten Commit noch in Bearbeitung, anstatt für den vorherigen Commit `5acb9d67` fehlgeschlagen zu sein; zudem wurde Issue #21 \"Dashboard-Lage: rot\" neu erstellt.",
+   "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-20T08:49:10+00:00"
+  "ai_at": "2026-11-20T08:50:15+00:00"
  }
 }
