@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-20T08:50:14+00:00",
+  "generated_at": "2026-11-20T10:45:30+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T08:49:28Z",
+   "pushed_at": "2026-11-20T10:45:11Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,24 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 3,
-   "oldest_unpromoted": "2026-11-20T09:48:14+01:00",
-   "dev_head": "4bb30a19 2026-11-20T09:49:25+01:00",
-   "master_head": "93547f27 2026-11-20T09:25:19+01:00"
+   "dev_ahead": 2,
+   "oldest_unpromoted": "2026-11-20T11:43:47+01:00",
+   "dev_head": "f88361d4 2026-11-20T11:44:50+01:00",
+   "master_head": "4bb30a19 2026-11-20T09:49:25+01:00"
   },
   "commits": [
+   {
+    "sha": "f88361d4",
+    "date": "2026-11-20T11:44:50+01:00",
+    "author": "Alpha",
+    "subject": "feat(coach-inbox): GitHub-Issues aus nimmsel23/fitness als Inbox-Quelle"
+   },
+   {
+    "sha": "d03ca3e5",
+    "date": "2026-11-20T11:43:47+01:00",
+    "author": "Alpha",
+    "subject": "Revert \"refactor(coach-inbox): toten GitHub-PR-Zweig entfernen\""
+   },
    {
     "sha": "4bb30a19",
     "date": "2026-11-20T09:49:25+01:00",
@@ -132,18 +144,6 @@
     "date": "2026-11-14T18:39:01+01:00",
     "author": "Alpha",
     "subject": "fix(coach): recover chat listeners and preserve newer conversation drafts"
-   },
-   {
-    "sha": "1f4f7956",
-    "date": "2026-11-14T18:36:25+01:00",
-    "author": "Alpha",
-    "subject": "fix(coach): clear only the conversation draft that was sent"
-   },
-   {
-    "sha": "d5dedbe1",
-    "date": "2026-11-14T18:32:50+01:00",
-    "author": "Alpha",
-    "subject": "docs(coach): record console refresh contracts and hosted status evidence"
    }
   ],
   "activity": [
@@ -229,29 +229,19 @@
    },
    {
     "day": "2026-11-20",
-    "n": 11
+    "n": 13
    }
   ],
   "workflows": [
-   {
-    "name": "Gemini CI Agent",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "skipped",
-    "created_at": "2026-11-20T08:49:36Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705629107",
-    "sha": "4bb30a1"
-   },
    {
     "name": "Check (Coach)",
     "branch": "dev",
     "event": "push",
     "status": "in_progress",
     "conclusion": null,
-    "created_at": "2026-11-20T08:49:30Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705613757",
-    "sha": "4bb30a1"
+    "created_at": "2026-11-20T10:45:13Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721873238",
+    "sha": "f88361d"
    },
    {
     "name": "Deploy Coach",
@@ -259,8 +249,28 @@
     "event": "push",
     "status": "in_progress",
     "conclusion": null,
-    "created_at": "2026-11-20T08:49:30Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705613612",
+    "created_at": "2026-11-20T10:45:13Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721872772",
+    "sha": "f88361d"
+   },
+   {
+    "name": "Gemini CI Agent",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-20T08:50:32Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705752357",
+    "sha": "4bb30a1"
+   },
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-20T08:50:22Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705729211",
     "sha": "4bb30a1"
    },
    {
@@ -269,19 +279,9 @@
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "skipped",
-    "created_at": "2026-11-20T08:49:10Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705569999",
-    "sha": "5acb9d6"
-   },
-   {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "skipped",
-    "created_at": "2026-11-20T08:49:10Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705569837",
-    "sha": "5acb9d6"
+    "created_at": "2026-11-20T08:50:22Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705729057",
+    "sha": "4bb30a1"
    },
    {
     "name": "Merge-Agent",
@@ -294,19 +294,7 @@
     "sha": "93547f2"
    }
   ],
-  "issues": [
-   {
-    "number": 21,
-    "title": "Dashboard-Lage: rot",
-    "created_at": "2026-11-20T08:49:26Z",
-    "updated_at": "2026-11-20T08:49:26Z",
-    "labels": [
-     "dashboard"
-    ],
-    "url": "https://github.com/nimmsel23/coach-dev/issues/21",
-    "author": "github-actions[bot]"
-   }
-  ],
+  "issues": [],
   "pulls": [],
   "live_sites": [
    "https://vos-coach.web.app"
@@ -316,31 +304,30 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev-Branch 3 Commits vor Master; CI-Workflows laufen; Issue #21 erstellt",
-   "lage": "Der `dev`-Branch ist 3 Commits (`ca6f2d09`, `5acb9d67`, `4bb30a19`) vor `master` (`93547f27`). Die Workflows „Check (Coach)“ und „Deploy Coach“ sind für den neuesten `dev`-Commit `4bb30a19` noch in Bearbeitung. Issue #21 \"Dashboard-Lage: rot\" wurde erstellt.",
+   "headline": "Dev-Branch 2 Commits vor Master; `4bb30a19` auf Master; Workflows laufen",
+   "lage": "Der `dev`-Branch (`f88361d4`) ist 2 Commits vor `master` (`4bb30a19`). Die Workflows „Check (Coach)“ und „Deploy Coach“ sind für den neuesten `dev`-Commit `f88361d4` in Bearbeitung. Der Commit `4bb30a19` wurde erfolgreich nach `master` promotet.",
    "auffaelligkeiten": [
     {
-     "level": "hoch",
-     "text": "Issue #21 \"Dashboard-Lage: rot\" wurde durch den `github-actions[bot]` erstellt, was auf ein kritisches Problem im Dashboard hindeutet."
-    },
-    {
      "level": "mittel",
-     "text": "Die Workflows „Check (Coach)“ und „Deploy Coach“ für Commit `4bb30a19` sind `in_progress`. Ihr Abschluss und Ergebnis sind entscheidend für die Stabilität des `dev`-Branches."
+     "text": "Issue #21 \"Dashboard-Lage: rot\" ist nicht mehr in der Evidenz, obwohl es in der letzten Einschätzung als erstellt galt."
     },
     {
      "level": "info",
-     "text": "Die Commits `5acb9d67` (\"build: pnpm durch npm ersetzen\") und `4bb30a19` (\"ci: npm 12 wie lokal verwenden\") deuten auf eine Umstellung des Paketmanagers und damit verbundene CI-Anpassungen hin."
+     "text": "Der `dev`-Branch enthält den Revert-Commit `d03ca3e5` (\"Revert \"refactor(coach-inbox): toten GitHub-PR-Zweig entfernen\"\")."
     }
    ],
    "naechste_schritte": [
-    "Prüfe den Abschluss und das Ergebnis der Workflows „Check (Coach)“ und „Deploy Coach“ für Commit `4bb30a19`.",
-    "Analysiere Issue #21 \"Dashboard-Lage: rot\" und dessen Ursache.",
-    "Überprüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`."
+    "Überprüfe den Abschluss und das Ergebnis der Workflows „Check (Coach)“ und „Deploy Coach“ für Commit `f88361d4`.",
+    "Kläre den Verbleib von Issue #21 \"Dashboard-Lage: rot\", da es nicht mehr in der Evidenz ist.",
+    "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`."
    ],
-   "veraendert": "Der `dev`-Branch ist um einen weiteren Commit (`4bb30a19`) vor `master` und die Workflows „Check (Coach)“ und „Deploy Coach“ sind für diesen neuesten Commit noch in Bearbeitung, anstatt für den vorherigen Commit `5acb9d67` fehlgeschlagen zu sein; zudem wurde Issue #21 \"Dashboard-Lage: rot\" neu erstellt.",
-   "fragen": [],
+   "veraendert": "Der `master`-Branch wurde auf Commit `4bb30a19` aktualisiert, und der `dev`-Branch ist nun 2 Commits vor `master` statt 3; Issue #21 ist nicht mehr in der Evidenz.",
+   "fragen": [
+    "Was ist der aktuelle Status von Issue #21 \"Dashboard-Lage: rot\"?",
+    "Soll die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md` nun ausgeführt werden?"
+   ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-20T08:50:15+00:00"
+  "ai_at": "2026-11-20T10:45:32+00:00"
  }
 }
