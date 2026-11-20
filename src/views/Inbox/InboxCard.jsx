@@ -74,7 +74,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
   const origin = originLine(data, refs);
   const githubUrl = typeof ex.html_url === 'string' && ex.html_url.startsWith('https://') ? ex.html_url : null;
   const isGithubPr = Boolean(
-    githubUrl && (ex.cache_source === 'github_pr' || String(fileId || '').startsWith('pr-')),
+    githubUrl && (/^github/.test(String(ex.cache_source || '')) || /^(gh|pr)-/.test(String(fileId || ''))),
   );
 
   if (asMessage) {
@@ -201,7 +201,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
             )}
             {isGithubPr && (
               <span className="text-[9px] font-black px-2 py-0.5 bg-fit-bg2 rounded-full border border-fit-line text-fit-dim uppercase tracking-tighter">
-                GitHub PR{ex.pr_number ? ` #${ex.pr_number}` : ''}
+                {ex.issue_number ? `GitHub #${ex.issue_number}` : `GitHub PR${ex.pr_number ? ` #${ex.pr_number}` : ''}`}
               </span>
             )}
           </div>
@@ -249,7 +249,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
               target="_blank"
               rel="noopener noreferrer"
               className="vos-btn go"
-              title="PR auf GitHub öffnen"
+              title="Auf GitHub prüfen: /approve, /reenrich, /unlink … als Kommentar"
             >
               <ExternalLink size={13} /> Auf GitHub öffnen
             </a>

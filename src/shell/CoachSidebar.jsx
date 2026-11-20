@@ -106,7 +106,7 @@ export default function CoachSidebar({
                       const key = ex.file_id || inboxTitle(ex)
                       const title = inboxTitle(ex)
                       const status = inboxStatus(ex)
-                      const isGithub = Boolean(ex.html_url) && (ex.cache_source === 'github_pr' || String(ex.file_id || '').startsWith('pr-'))
+                      const isGithub = Boolean(ex.html_url) && (/^github/.test(String(ex.cache_source || '')) || /^(gh|pr)-/.test(String(ex.file_id || '')))
                       const TabIcon = isGithub ? ExternalLink : Inbox
                       const tabActive = exercisesActive && activeInboxId && (activeInboxId === ex.file_id || activeInboxId === key)
                       return (

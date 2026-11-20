@@ -85,7 +85,7 @@ export default function CoachShell() {
     const githubUrl = typeof exercise.html_url === 'string' && exercise.html_url.startsWith('https://')
       ? exercise.html_url
       : null
-    if (githubUrl && (exercise.cache_source === 'github_pr' || String(exercise.file_id || '').startsWith('pr-'))) {
+    if (githubUrl && (/^github/.test(String(exercise.cache_source || '')) || /^(gh|pr)-/.test(String(exercise.file_id || '')))) {
       window.open(githubUrl, '_blank', 'noopener')
       return
     }

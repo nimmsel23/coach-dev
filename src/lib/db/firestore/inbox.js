@@ -10,7 +10,7 @@ import {
 import { db } from "../../../firebase.js";
 import { getUid, LOCAL_FITNESS_API_BASE } from "./core.js";
 import { normalizeExerciseRecord } from "../shared/exercise.js";
-import { isGithubInboxItem, listGithubInboxPrs } from "./githubInbox.js";
+import { isGithubInboxItem, listGithubInboxIssues, mergeWithGithub } from "./githubInbox.js";
 
 const FIREBASE_COACH = import.meta.env.MODE === "coach";
 
@@ -24,7 +24,7 @@ const COMMAND_TIMEOUT_MS = 190000;  // so lange wartet die UI auf ein laufendes 
 const COACH_ERROR_TEXT = {
   coach_worker_offline: "Coach-Rechner offline – Befehl nicht gesendet",
   coach_command_timeout: "Keine Antwort vom Coach-Rechner – Ergebnis unklar, Liste neu laden",
-  github_pr_close_on_github: "GitHub-PR bitte auf github.com/nimmsel23/fitness schließen",
+  github_pr_close_on_github: "Auf GitHub verwerfen: im Issue /reject kommentieren",
 };
 
 function coachError(code, message) {
@@ -224,8 +224,7 @@ export function watchCoachInbox(cb, { includeGithub = true } = {}) {
 
   const emit = () => {
     if (cancelled) return;
-    const prIds = new Set(prs.map((p) => p.file_id));
-    cb([...prs, ...firestoreItems.filter((item) => !prIds.has(item.file_id))]);
+    cb(mergeWithGithub(prs, firestoreItems));
   };
 
   const unsub = onSnapshot(
@@ -241,7 +240,7 @@ export function watchCoachInbox(cb, { includeGithub = true } = {}) {
   );
 
   if (includeGithub && FIREBASE_COACH) {
-    listGithubInboxPrs()
+    listGithubInboxIssues()
       .then((data) => {
         if (cancelled) return;
         prs = Array.isArray(data) ? data : [];
@@ -263,17 +262,15 @@ export function watchCoachInbox(cb, { includeGithub = true } = {}) {
 
 export async function getGlobalInbox() {
   if (FIREBASE_COACH) {
-    // Übergang: GitHub-PRs (KB-SOT) zuerst, Firestore coachInbox als Cache/Altbestand.
-    let prs = [];
+    // GitHub-Issues (nimmsel23/fitness, Cloud-SOT) zuerst; coachInbox nur für Altbestand.
+    let issues = [];
     try {
-      prs = await listGithubInboxPrs();
+      issues = await listGithubInboxIssues();
     } catch (e) {
-      console.warn("github inbox prs unavailable", e);
+      console.warn("github inbox issues unavailable", e);
     }
     const snap = await getDocs(collection(db, "coachInbox"));
-    const firestoreItems = mapCoachInboxDocs(snap.docs);
-    const prIds = new Set(prs.map((p) => p.file_id));
-    return [...prs, ...firestoreItems.filter((item) => !prIds.has(item.file_id))];
+    return mergeWithGithub(issues, mapCoachInboxDocs(snap.docs));
   }
   try {
     return await fetchLocalInbox();
@@ -315,7 +312,7 @@ export async function approveInbox(id, userId, ex = null) {
   const currentData = exercise ? normalizeExerciseRecord(exercise) : null;
   if (FIREBASE_COACH && isGithubInboxItem({ file_id: id, ...(ex || {}) })) {
     if (ex?.html_url && typeof window !== "undefined") window.open(ex.html_url, "_blank", "noopener");
-    return { ok: true, deferred: "github_pr", url: ex?.html_url || null };
+    return { ok: true, deferred: "github_issue", url: ex?.html_url || null };
   }
   if (FIREBASE_COACH) return coachCommand("approve", id, targetUid, { current_data: currentData });
   try {
@@ -344,9 +341,9 @@ export async function reenrichInbox(id, userId, ex) {
   const data = ex?.exercises?.[0] || ex?.enriched || ex || {};
   const feedback = ex?.coachFeedback || ex?.feedback || null;
   if (FIREBASE_COACH && isGithubInboxItem({ file_id: id, ...(ex || {}) })) {
-    // Cloud-Fallback: Enrich-Inbox workflow; UI öffnet den PR zur Kontrolle.
+    // Re-Enrich läuft im Issue per Kommentar /reenrich <Feedback>; UI öffnet das Issue.
     if (ex?.html_url && typeof window !== "undefined") window.open(ex.html_url, "_blank", "noopener");
-    return { ok: true, deferred: "github_pr_enrich", url: ex?.html_url || null };
+    return { ok: true, deferred: "github_issue_enrich", url: ex?.html_url || null };
   }
   if (FIREBASE_COACH) return coachCommand("reenrich", id, targetUid, {
     exercise_id: data.exercise_id || data.id,

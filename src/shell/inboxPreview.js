@@ -24,7 +24,7 @@ export function inboxStatus(ex) {
 }
 
 export function inboxStatusTone(status) {
-  if (status === 'ai_enriched' || status === 'approved' || status === 'github_pr') return 'text-fit-accent'
+  if (status === 'ai_enriched' || status === 'approved' || status === 'github_pr' || status === 'github_issue') return 'text-fit-accent'
   if (status === 'pending' || status === 'pending_review' || status === 'failed_enrichment' || status === 'pr_draft') return 'text-fit-orange'
   return 'text-fit-dim'
 }

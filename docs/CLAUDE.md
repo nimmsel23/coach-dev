@@ -239,6 +239,21 @@ Dry-Run. Unit-Vorschläge unter `backend/deploy/` sind **nicht aktiv** — `fitn
 `fitness-firestore-daemon.service` sind seit 2026-10-15 auf Wunsch gestoppt, dürfen nie parallel zu den neuen
 Prozessen auf denselben Daten schreiben. Frontend-Fork: `frontend/`, Notifications: `backend/notifier/`.
 
+## Übungs-Inbox = GitHub-Issues in `nimmsel23/fitness` (seit 2026-11-20)
+
+**Cloud ist SOT, dieser Laptop nur Spiegel.** Drafts leben in
+`nimmsel23/fitness/inbox/*.yml`; jeder Draft hat ein Issue (Label `inbox`) mit
+Zusammenfassung. Befehle als Issue-Kommentar: `/approve` (→ `exercises/`),
+`/reenrich <Feedback>`, `/unlink wger|yuhonas`, `/link …`, `/name …`, `/reject`.
+Neue Übung = Issue-Vorlage „Neue Übung“. Bot: `.github/workflows/inbox-bot.yml` +
+`scripts/inbox_bot.py` dort, Bedienung: `INBOX.md` dort.
+- Die Coach-App liest die Issues (`src/lib/db/firestore/githubInbox.js`) und
+  verlinkt dorthin; GitHub-Einträge verdrängen gleichnamige `coachInbox`-Kopien.
+- Inbox-Fixes immer dort machen, nicht in `backend/fitness/catalog/kb/inbox/`
+  (normale Kopie in diesem Repo, trotz `.gitmodules`-Eintrag kein echtes Submodul).
+- CI/Deploy baut den Katalog aus `nimmsel23/fitness@main`; Freigaben erscheinen
+  mit dem nächsten Coach-Deploy (Live-Deploy bleibt manuell: Deploy Coach, production=true).
+
 ## Push-Benachrichtigungen (Klienten-Workout → Coach)
 
 Cloud Function `onClientWorkout` meldet dem Coach neue Klienten-Sessions per FCM; der Service Worker zeigt sie
