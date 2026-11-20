@@ -35,7 +35,7 @@ const run = (cmd, env = {}) => {
 
 rmSync(resolve(root, 'dist-origin'), { recursive: true, force: true })
 mkdirSync(resolve(root, 'dist-origin'), { recursive: true })
-run('pnpm run build:kb-data')
+run('npm run build:kb-data')
 
 for (const app of list) {
   const out = `dist-origin/${app.id}`

@@ -1,5 +1,5 @@
 # Check für Coach: Build auf jedem PR/dev-Push, ohne Deploy und ohne Firebase-Secrets.
-# Gleiche Build-Kette wie deploy-coach.yml (KB + Plan-Pin + pnpm build:firebase:coach).
+# Gleiche Build-Kette wie deploy-coach.yml (KB + Plan-Pin + npm run build:firebase:coach).
 
 name: Check (Coach)
 
@@ -67,10 +67,6 @@ jobs:
           echo "FITNESS_KB_DIR=$GITHUB_WORKSPACE/fitness/catalog/kb" >> "$GITHUB_ENV"
           echo "KB @ $(git -C fitness-kb rev-parse --short HEAD)"
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 11.3.0
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -78,50 +74,28 @@ jobs:
       - name: sixpack-dev auschecken (KB-Daten)
         run: |
           git clone --depth 1 --branch master https://github.com/nimmsel23/6pack-dev.git ../6pack-dev
-          pnpm --dir ../6pack-dev install --frozen-lockfile --ignore-scripts
 
       - name: Install
         run: |
-          cat > pnpm-workspace.yaml <<'YAML'
-          packages: ["."]
-          nodeLinker: hoisted
-          verifyDepsBeforeRun: false
-          ignoreScripts: true
-          overrides:
-            rollup: 4.68.0
-            rolldown: 1.2.16
-            vite: 8.3.6
-            "@vitejs/plugin-react": 6.2.1
-            "@firebase/util": "^1.12.1"
-            "@grpc/grpc-js@<1.13.6": "^1.14.6"
-            "brace-expansion@<1.1.20": "^1.1.20"
-            "brace-expansion@>=2.0.0 <2.1.7": "^2.1.7"
-            "brace-expansion@>=5.0.0 <5.0.11": "^5.0.11"
-            "postcss-selector-parser@<6.1.5": "^6.1.5"
-            "glob@<14.0.2": "^14.0.3"
-            "minimatch@<11.0.1": "^11.0.4"
-            "fast-uri@<3.1.9": "^3.1.9"
-            "node-forge@<=1.4.0": "^1.4.3"
-            "serialize-javascript@<7.1.3": "^7.1.3"
-            "uuid@<11.1.1": "^11.1.1"
-          YAML
-          sed -i 's/^          //' pnpm-workspace.yaml
-          pnpm install --frozen-lockfile --ignore-scripts --config.minimumReleaseAge=0
+          npm ci --ignore-scripts --no-audit --no-fund
+          # 6pack-dev/catalogContent.mjs importiert js-yaml aus seinem eigenen Ordner
+          mkdir -p ../6pack-dev/node_modules
+          ln -sfn "$PWD/node_modules/js-yaml" ../6pack-dev/node_modules/js-yaml
 
       - name: Tooling (Biome format scripts/)
-        run: pnpm run tooling:biome
+        run: npm run tooling:biome
 
       - name: Tooling (knip report)
         continue-on-error: true
-        run: pnpm run tooling:knip
+        run: npm run tooling:knip
 
 
 
       - name: Coach functional tests
-        run: pnpm run test:coach:functional
+        run: npm run test:coach:functional
 
       - name: KB-Daten generieren
-        run: pnpm run build:kb-data
+        run: npm run build:kb-data
 
       - name: Build (Coach)
-        run: pnpm run build:firebase:coach
+        run: npm run build:firebase:coach

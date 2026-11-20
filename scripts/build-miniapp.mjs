@@ -20,7 +20,7 @@ if (!app) {
 const out = `dist-${id}`
 const q = (s) => JSON.stringify(s)
 const steps = [
-  'pnpm run build:kb-data',
+  'npm run build:kb-data',
   `vite build --mode ${id} --outDir ${out}`,
   `node scripts/mini-app-shell/cli.mjs sw ${out} --app fitness`,
   `node scripts/stamp-training.mjs ${out} ${q(app.name)} ${q(app.short)} ${q(app.start)} ${q(app.description)}`,

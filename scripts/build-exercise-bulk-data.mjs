@@ -119,7 +119,7 @@ for (const item of yuhonasRaw) {
 
 const banner = `// AUTO-GENERATED — nicht manuell editieren.
 // Quellen: unreviewed_wger.yml + vendor/free-exercise-db/dist/exercises.json
-// Neu erzeugen: pnpm run build:kb-data / build:bulk-data
+// Neu erzeugen: npm run build:kb-data / build:bulk-data
 `
 
 writeFileSync(

@@ -58,6 +58,11 @@ Vollständige Neufassung dieser Doku steht noch aus.
      (:9150) und mit `curl -s localhost:9150/health` verifizieren. Diese
      Repo-Regel geht der globalen „laufende Server nicht restarten"-Regel vor.
      Kein sudo — Prod-Deploys über `vitalos/prod` bleiben beim User.
+- **Paketmanager ist npm, kein pnpm (Owner 2026-11-20).** `npm install` / `npm ci`,
+  `npm run <script>`, `npx`. Lockfile `package-lock.json`; Overrides stehen in
+  `package.json` (`overrides`), freigegebene Install-Scripts in `allowScripts`,
+  `.npmrc` setzt `legacy-peer-deps=true` (eslint-plugin-react-Peer zu eng).
+  Kein `pnpm-lock.yaml`/`pnpm-workspace.yaml` zurückholen.
 
 - `CLAUDE.md` ist Symlink → `docs/CLAUDE.md`. Direktes Schreiben scheitert
   ("Refusing to write through symlink") — immer `docs/CLAUDE.md` editieren.
@@ -73,7 +78,7 @@ Vollständige Neufassung dieser Doku steht noch aus.
   `~/vitalos/bin/vos-release fitness`, verifiziert + branch-Fix
   2026-08-22). Er pusht `~/fitness-dev`s `dev`-Branch, mergt ihn in den
   `~/vitalos/fitness-app`-Worktree, pusht dort — was den Post-Push-Hook
-  triggert (`pnpm run firebase`: KB-Data-Rebuild → `vite build --mode
+  triggert (`npm run firebase`: KB-Data-Rebuild → `vite build --mode
   firebase` → stamp-sw → snapshot → `firebase deploy --only hosting` nach
   `fitness-aos.web.app`) — und bumpt danach den Submodule-Pointer im
   `~/vitalos`-Parent-Repo. `vos-release` deckt neben `fitness` auch fuel/
@@ -111,7 +116,7 @@ Vollständige Neufassung dieser Doku steht noch aus.
   dem man nachfragt, sondern der Normalfall.
 - **`fitness-dev.service` ist im Normalfall `disabled`/`inactive`**
   (verifiziert 2026-08-31, `systemctl --user status fitness-dev.service`)
-  — der Dev-Server läuft praktisch immer manuell (`pnpm run dev` /
+  — der Dev-Server läuft praktisch immer manuell (`npm run dev` /
   `scripts/dev-runner.mjs` in einem Terminal), nicht als Service. Vor
   Live-Tests gegen :9100 IMMER verifizieren ob überhaupt etwas läuft
   (`curl`/`systemctl status`), nicht annehmen. Und: `server.mjs` als
@@ -154,7 +159,7 @@ Vollständige Neufassung dieser Doku steht noch aus.
   die frühestens beim nächsten tatsächlichen `git push` nach `master` greift
   (der eigentliche Deploy-Trigger bleibt dieser spätere, separate `push`-
   Befehl, den der User ohnehin selbst auslöst). Deploy-Bestätigung bleibt
-  Pflicht für: `firebase deploy`, `pnpm run firebase`/`build:firebase &&
+  Pflicht für: `firebase deploy`, `npm run firebase`/`build:firebase &&
   deploy`, `git push` nach `master` selbst, `fitness-catalog push` (Prod-
   KB-Sync) — nicht für das bloße Freischalten eines bereits geschriebenen,
   gereviewten Hooks. (2026-08-14, nach einem Fall wo der Auto-Mode-
@@ -256,10 +261,10 @@ nutzen. Siehe [COACH-SERVER.md](COACH-SERVER.md).
 
 | Befehl | Zweck |
 |--------|-------|
-| `pnpm run dev` | Backend (9100) + Vite DevServer (5902) mit HMR |
-| `pnpm run ui:dev` | Nur Vite DevServer (Port 5902) |
-| `pnpm run build` | Production-Build in `dist/` |
-| `pnpm run build:catalog` | Katalog → ~/.aos/fitness/workouts/catalog.json |
+| `npm run dev` | Backend (9100) + Vite DevServer (5902) mit HMR |
+| `npm run ui:dev` | Nur Vite DevServer (Port 5902) |
+| `npm run build` | Production-Build in `dist/` |
+| `npm run build:catalog` | Katalog → ~/.aos/fitness/workouts/catalog.json |
 | `fitnessctl dev status` / `fitnessctl prod status` | Service-Status Dev bzw. Prod |
 | `fitness sync kb\|pull\|pull-uid\|push\|watch\|all` | KB-Sync + Firestore-Sync (`fitness/commands/sync.py`) |
 | `fitness catalog` | Katalog-TUI (Dashboard/Inbox-Review "Neuzugänge"/Browser/Plan/Lesson/History) |
@@ -267,8 +272,8 @@ nutzen. Siehe [COACH-SERVER.md](COACH-SERVER.md).
 | `systemctl --user status fitness-enricher.service` | Status des dauerhaften Enrichment-Watchers |
 | `fitness session today` | Heutige Session anzeigen |
 | `fitness coverage -d DAYS` | Muskelabdeckung der letzten N Tage |
-| `pnpm run build:firebase` | Firebase-PWA-Build (`vite build --mode firebase` → `dist-firebase/`) — kein eigenes `pwa/`-Verzeichnis mehr, Scripts liegen im Root-`package.json` |
-| `pnpm run firebase` | Firebase-PWA bauen + deployen (`build:firebase && deploy:firebase`) |
+| `npm run build:firebase` | Firebase-PWA-Build (`vite build --mode firebase` → `dist-firebase/`) — kein eigenes `pwa/`-Verzeichnis mehr, Scripts liegen im Root-`package.json` |
+| `npm run firebase` | Firebase-PWA bauen + deployen (`build:firebase && deploy:firebase`) |
 
 Weitere Dispatcher (fitness-devctl/fitness-prodctl/fitnessctl): `../fitness/CLAUDE.md`.
 
@@ -343,7 +348,7 @@ gibt den deutschen Anzeigenamen zurück (`"Rücken"`).
   basiertes Firestore-Konfliktmodell (Details: `docs/ARCHITECTURE.md`)
 - ✅ Gmail-Pipeline (bin/fitness-mail, Fitbit-Daten)
 - ✅ Firestore Sync + PWA Offline-Unterstützung (SW + IndexedDB offline-queue)
-- ✅ Firebase PWA: `pnpm run build:firebase` → `~/fitness/dist-firebase/`
+- ✅ Firebase PWA: `npm run build:firebase` → `~/fitness/dist-firebase/`
 - ✅ anatomy-kb Integration (Git Subtree, :9200)
 - ✅ Exercise-Insight-Modal zeigt bei fehlender Lesson echte wger/yuhonas-
   Rohdaten statt erfundenem Keyword-Fallback-Text (Details: `../src/CLAUDE.md`)
@@ -366,7 +371,7 @@ gibt den deutschen Anzeigenamen zurück (`"Rücken"`).
 
 ## Mini-Apps: Splash / Service Worker / Manifest (seit 2026-10-16)
 
-- **Solo-Mini-Apps je Tab (seit 2026-11-04):** SSOT `scripts/miniapps.json` (training, logbuch, review, atlas, touren, setup, anamnese, fokus → Sites `vos-<id>`). Bauen: `pnpm run build:miniapp <id>` (`--deploy` hängt `firebase deploy --only hosting:<id>` an), CI: `.github/workflows/deploy-miniapps.yml` (Push auf master, Diff-gesteuert, Matrix). Neue App = Eintrag + `.env.<id>` + Hosting-Target `<id>` (`firebase.json`/`.firebaserc`) + Icon in `scripts/solo-icons.py` + Site (`firebase hosting:sites:create`). learn/plan/6pack/skills haben eigene Repos/Sites. Cache/IndexedDB sind pro Origin getrennt: die Mini-Apps teilen nichts mit `fitness-aos.web.app`.
+- **Solo-Mini-Apps je Tab (seit 2026-11-04):** SSOT `scripts/miniapps.json` (training, logbuch, review, atlas, touren, setup, anamnese, fokus → Sites `vos-<id>`). Bauen: `npm run build:miniapp <id>` (`--deploy` hängt `firebase deploy --only hosting:<id>` an), CI: `.github/workflows/deploy-miniapps.yml` (Push auf master, Diff-gesteuert, Matrix). Neue App = Eintrag + `.env.<id>` + Hosting-Target `<id>` (`firebase.json`/`.firebaserc`) + Icon in `scripts/solo-icons.py` + Site (`firebase hosting:sites:create`). learn/plan/6pack/skills haben eigene Repos/Sites. Cache/IndexedDB sind pro Origin getrennt: die Mini-Apps teilen nichts mit `fitness-aos.web.app`.
 
 - Splash, Service Worker und SW-Register kommen aus `@vos/mini-app-shell` (SSOT `~/vitalos/packages/mini-app-shell`, hier vendored unter `scripts/mini-app-shell/` — nicht editieren, Aktualisieren/Drift: `node ~/vitalos/packages/mini-app-shell/cli.mjs vendor scripts/mini-app-shell [--check]`; Konfig `mini-app.json`).
 - Solo-Builds `training`/`atlas`: `scripts/stamp-training.mjs` → `stampApp` (Manifest, Titel `<Name> - VitalOS`, Icons aus `solo-icons/<mode>/`, Splash); der SW ist hier der Haupt-SW (generiert, s. u.).
