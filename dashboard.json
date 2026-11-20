@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-20T11:21:55+00:00",
+  "generated_at": "2026-11-20T11:23:00+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T11:21:36Z",
+   "pushed_at": "2026-11-20T11:22:41Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,10 +19,10 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 1,
-   "oldest_unpromoted": "2026-11-20T12:21:32+01:00",
+   "dev_ahead": 0,
+   "oldest_unpromoted": null,
    "dev_head": "c0c2c4a1 2026-11-20T12:21:32+01:00",
-   "master_head": "f88361d4 2026-11-20T11:44:50+01:00"
+   "master_head": "c0c2c4a1 2026-11-20T12:21:32+01:00"
   },
   "commits": [
    {
@@ -234,11 +234,31 @@
   ],
   "workflows": [
    {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-20T11:22:32Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44727084021",
+    "sha": "c0c2c4a"
+   },
+   {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "skipped",
+    "created_at": "2026-11-20T11:22:32Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44727083988",
+    "sha": "c0c2c4a"
+   },
+   {
     "name": "Check (Coach)",
     "branch": "dev",
     "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "created_at": "2026-11-20T11:21:38Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44726960777",
     "sha": "c0c2c4a"
@@ -251,26 +271,6 @@
     "conclusion": "success",
     "created_at": "2026-11-20T10:46:30Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44722052452",
-    "sha": "f88361d"
-   },
-   {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T10:45:57Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721977725",
-    "sha": "f88361d"
-   },
-   {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "skipped",
-    "created_at": "2026-11-20T10:45:57Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721977675",
     "sha": "f88361d"
    },
    {
@@ -349,42 +349,46 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev-Branch voraus, CI läuft; Doku-Drift reduziert, Live-Verifikation ausstehend",
-   "lage": "Der `dev`-Branch ist mit Commit `c0c2c4a1` einen Schritt vor `master`, dessen letzter Commit `f88361d4` ist. Die Umstellung auf npm und die GitHub-Issues-Integration sind im Code verankert, und die Dokumentation wurde teilweise angepasst. Jedoch bestehen weiterhin Doku-Diskrepanzen und die Live-Wirkung wichtiger Funktionen ist unbestätigt.",
+   "headline": "Dev/Master synchronisiert, CI grün; Doku-Drift und Live-Tests offen",
+   "lage": "Die Branches `dev` und `master` sind mit Commit `c0c2c4a1` synchronisiert. Die CI-Läufe sind erfolgreich, und die GitHub-Issues-Integration (`f88361d4`) ist aktiv. Wesentliche Doku-Diskrepanzen und die Live-Verifikation zentraler Funktionen bleiben jedoch ausstehend.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Der `dev`-Branch ist mit `c0c2c4a1` einen Commit vor `master` (`f88361d4`); der `Check (Coach)` Workflow für `c0c2c4a1` ist noch `in_progress` (Run 44726960777)."
+     "text": "Die Live-Wirkung von Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet und der Produktion-Deploy sind unbelegt (siehe `NEXT.md:3-4,12`)."
+    },
+    {
+     "level": "hoch",
+     "text": "Der KB-Ordner `backend/fitness/catalog/kb` ist ein vendored Tree, obwohl `.gitmodules` ihn als Submodul deklariert (`TODO.md:15`)."
     },
     {
      "level": "mittel",
-     "text": "Die Live-Wirkung der Taskwarrior-Anzeige und des `tractionDaily`-Events ist unbestätigt (`NEXT.md:3-4`)."
+     "text": "Doku-Drift besteht in `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` sowie bei verbleibenden pnpm-Erwähnungen in `docs/`."
     },
     {
      "level": "mittel",
-     "text": "Der KB-Ordner `backend/fitness/catalog/kb` ist ein vendored Tree, obwohl `.gitmodules` ein Submodul `nimmsel23/fitness` deklariert (`TODO.md:15-22`)."
+     "text": "`src/plan-main.jsx` importiert die fehlende Datei `./views/Plan/StrongApp.jsx`."
     },
     {
      "level": "info",
-     "text": "Dokumente wie `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` enthalten veraltete Informationen oder widersprechen dem aktuellen Code."
+     "text": "Vier neue Issues (#22-#25) mit dem Label `ausbaustufe` wurden automatisch erstellt und sind offen."
     },
     {
      "level": "info",
-     "text": "Der Fitness-SPA (`App.jsx`-Baum) und der Plan-Einstieg `src/plan-main.jsx` sind entweder verwaist oder defekt."
+     "text": "Am 20.11. gab es eine hohe Commit-Aktivität mit 14 Commits, darunter die Umstellung auf npm (`5acb9d67`) und die GitHub-Issues-Integration (`f88361d4`)."
     }
    ],
    "naechste_schritte": [
-    "Verifizieren: Taskwarrior-Anzeige und `tractionDaily`-Event live prüfen (`NEXT.md:3-4`).",
-    "Klären: KB-Gitlink-Status (Übernahme von `inbox_jefferson_curl_pipeline.yml` oder Verwerfen) und Gitlink wiederherstellen (`TODO.md:15`).",
-    "Aktualisieren: `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` an den aktuellen Code anpassen."
+    "Verifizieren: Taskwarrior-Anzeige, `tractionDaily`-Event und GitHub-Inbox live prüfen.",
+    "Entscheiden: Umgang mit `src/plan-main.jsx` (löschen, reparieren oder extern markieren).",
+    "Aktualisieren: `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` an den Code anpassen."
    ],
-   "veraendert": "Der `dev`-Branch ist nun mit Commit `c0c2c4a1` einen Commit vor `master`, und die Dokumentation wurde teilweise auf npm und die GitHub-Issue-Inbox aktualisiert.",
+   "veraendert": "Die Branches `dev` und `master` sind nun synchronisiert auf `c0c2c4a1`, während `dev` zuvor einen Commit voraus war. Die `README.md` wurde bezüglich pnpm/npm korrigiert.",
    "fragen": [
-    "Soll der Fitness-SPA (`App.jsx`-Baum) als Entry ergänzt oder als extern/archiviert markiert werden?",
-    "Soll `src/plan-main.jsx` gelöscht oder repariert werden?"
+    "Soll `src/plan-main.jsx` gelöscht, repariert oder als extern markiert werden?",
+    "Soll der KB-Gitlink wiederhergestellt werden, und welche `inbox_jefferson_curl_pipeline.yml`-Version soll übernommen werden?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-20T11:21:57+00:00"
+  "ai_at": "2026-11-20T11:23:53+00:00"
  }
 }
