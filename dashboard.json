@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-19T13:51:17+00:00",
+  "generated_at": "2026-11-20T08:04:10+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-18T13:24:22Z",
+   "pushed_at": "2026-11-20T08:03:51Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,24 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 0,
-   "oldest_unpromoted": null,
-   "dev_head": "41e613f9 2026-11-17T17:05:16+01:00",
+   "dev_ahead": 2,
+   "oldest_unpromoted": "2026-11-20T08:53:12+01:00",
+   "dev_head": "eee89d62 2026-11-20T09:03:47+01:00",
    "master_head": "41e613f9 2026-11-17T17:05:16+01:00"
   },
   "commits": [
+   {
+    "sha": "eee89d62",
+    "date": "2026-11-20T09:03:47+01:00",
+    "author": "Alpha",
+    "subject": "docs(claude): nach Arbeit automatisch dokumentieren, pushen, coach-api neu starten"
+   },
+   {
+    "sha": "017bec55",
+    "date": "2026-11-20T08:53:12+01:00",
+    "author": "Alpha",
+    "subject": "feat(coach): Exercise Sheet als Coaching-Spickzettel neu strukturiert"
+   },
    {
     "sha": "41e613f9",
     "date": "2026-11-17T17:05:16+01:00",
@@ -132,28 +144,12 @@
     "date": "2026-11-13T15:44:14+01:00",
     "author": "Alpha",
     "subject": "„Cockpit“ heißt jetzt durchgehend „Dashboard“ (Owner-Wunsch)"
-   },
-   {
-    "sha": "4dd1d666",
-    "date": "2026-11-13T12:40:57+01:00",
-    "author": "Alpha",
-    "subject": "docs(server): Org-Cockpit-API /api/org (Routen, Ablage, Laptop-/Tailnet-Zugang, Schutz)"
-   },
-   {
-    "sha": "2d790cb0",
-    "date": "2026-11-13T12:39:12+01:00",
-    "author": "Alpha",
-    "subject": "fix(api): /api/org erkennt Tailnet-Absender hinter tailscale serve"
    }
   ],
   "activity": [
    {
-    "day": "2026-10-30",
-    "n": 1
-   },
-   {
     "day": "2026-10-31",
-    "n": 143
+    "n": 86
    },
    {
     "day": "2026-11-01",
@@ -230,27 +226,41 @@
    {
     "day": "2026-11-19",
     "n": 0
+   },
+   {
+    "day": "2026-11-20",
+    "n": 2
    }
   ],
   "workflows": [
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-20T08:03:53Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44699583091",
+    "sha": "eee89d6"
+   },
+   {
+    "name": "Deploy Coach",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-20T08:03:53Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44699583036",
+    "sha": "eee89d6"
+   },
    {
     "name": "PR-AutoMerge (Dependabot -> dev)",
     "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-19T13:26:57Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44533547602",
-    "sha": "41e613f"
-   },
-   {
-    "name": "Merge-Agent",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-19T10:15:39Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44503989247",
+    "created_at": "2026-11-20T03:28:04Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44667910781",
     "sha": "41e613f"
    },
    {
@@ -259,18 +269,18 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-19T04:32:09Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44458988068",
+    "created_at": "2026-11-20T03:17:26Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44666707604",
     "sha": "41e613f"
    },
    {
-    "name": "Check (Coach)",
+    "name": "Merge-Agent",
     "branch": "dev",
-    "event": "push",
+    "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-17T16:05:19Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44121719758",
+    "created_at": "2026-11-20T01:15:08Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44652211014",
     "sha": "41e613f"
    },
    {
@@ -282,16 +292,6 @@
     "created_at": "2026-11-14T17:40:32Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622387074",
     "sha": "48fbf07"
-   },
-   {
-    "name": "Deploy Coach",
-    "branch": "dev",
-    "event": "push",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-14T17:39:18Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/43622275282",
-    "sha": "9102604"
    }
   ],
   "issues": [],
@@ -304,34 +304,31 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev und Master synchronisiert, Promotion und Automatisierung erfolgreich",
-   "lage": "Die Branches `dev` und `master` sind weiterhin auf Commit `41e613f9` synchronisiert. Der `Auto-Promote dev -> master` Workflow wurde am 2026-11-19 erfolgreich ausgeführt, was die Synchronisation bestätigt. Zusätzlich liefen `PR-AutoMerge (Dependabot -> dev)` und `Merge-Agent` erfolgreich.",
+   "headline": "Dev 2 Commits vor Master; Workflows laufen, neue Features in Dev",
+   "lage": "Der Branch `dev` ist mit 2 Commits (`017bec55`, `eee89d62`) vor `master` (`41e613f9`). Der `Auto-Promote dev -> master` Workflow wurde erfolgreich für den vorherigen Stand von `dev` ausgeführt. Aktuell laufen `Check (Coach)` und `Deploy Coach` für den neuesten `dev`-Commit `eee89d62`.",
    "auffaelligkeiten": [
     {
+     "level": "hoch",
+     "text": "Der Branch `dev` ist 2 Commits (`017bec55`, `eee89d62`) vor `master`, obwohl der `Auto-Promote dev -> master` Workflow erfolgreich lief. Dies deutet darauf hin, dass neue Commits nach dem letzten Promote-Lauf auf `dev` hinzugefügt wurden."
+    },
+    {
      "level": "info",
-     "text": "Die Workflows `PR-AutoMerge (Dependabot -> dev)` und `Merge-Agent` wurden am 2026-11-19 erfolgreich abgeschlossen."
+     "text": "Die Workflows `Check (Coach)` und `Deploy Coach` sind für den neuesten `dev`-Commit `eee89d62` in Bearbeitung."
     },
     {
-     "level": "mittel",
-     "text": "Die Tasks zum `Pages Docs`-Actions-Workflow und zur Prüfung von `/README.html` sind laut `NEXT.md` noch offen, obwohl sie in der letzten Einschätzung als nächste Schritte genannt wurden."
-    },
-    {
-     "level": "mittel",
-     "text": "Das Submodul `fitness/catalog/kb` ist laut `TODO.md` seit Commit `710614d9` ein vendored Tree statt eines Gitlinks, was eine manuelle Korrektur erfordert."
+     "level": "info",
+     "text": "Die in `NEXT.md` gelisteten Verifizierungsaufgaben für die Taskwarrior-Statusanzeige, den Pages Docs-Workflow und die README.html-Seite sind weiterhin offen."
     }
    ],
    "naechste_schritte": [
+    "Warte den Abschluss der Workflows `Check (Coach)` und `Deploy Coach` für `eee89d62` ab.",
     "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`.",
-    "Verifiziere den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy gemäss `NEXT.md`.",
-    "Prüfe die neue Seite `/README.html` nach dem Coach-Pages-Deploy gemäss `NEXT.md`."
+    "Verifiziere den neuen `Pages Docs`-Actions-Workflow bis zu einem erfolgreichen öffentlichen Pages-Deploy gemäss `NEXT.md`."
    ],
-   "veraendert": "Gegenüber der letzten Einschätzung wurde der `Auto-Promote dev -> master` Workflow erneut erfolgreich ausgeführt, und neue Automatisierungs-Workflows (`PR-AutoMerge`, `Merge-Agent`) liefen erfolgreich.",
-   "fragen": [
-    "Soll das Submodul `fitness/catalog/kb` gemäss `TODO.md` wieder als Gitlink hergestellt werden, und welche `inbox_jefferson_curl_pipeline.yml` Version soll dabei übernommen oder verworfen werden?",
-    "Soll der lokal unpushed Commit `71f101a` im `website`-Repo gepusht oder verworfen werden, um das Pinnen Remote-erreichbarer SHAs zu gewährleisten?"
-   ],
+   "veraendert": "Gegenüber der letzten Einschätzung ist der `dev`-Branch nicht mehr mit `master` synchronisiert und liegt 2 Commits voraus.",
+   "fragen": [],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-19T13:51:19+00:00"
+  "ai_at": "2026-11-20T08:04:12+00:00"
  }
 }
