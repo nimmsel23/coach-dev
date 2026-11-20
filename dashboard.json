@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-20T11:23:00+00:00",
+  "generated_at": "2026-11-20T11:38:33+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T11:22:41Z",
+   "pushed_at": "2026-11-20T11:38:10Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,18 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 0,
-   "oldest_unpromoted": null,
-   "dev_head": "c0c2c4a1 2026-11-20T12:21:32+01:00",
+   "dev_ahead": 1,
+   "oldest_unpromoted": "2026-11-20T12:37:48+01:00",
+   "dev_head": "42f401ed 2026-11-20T12:37:48+01:00",
    "master_head": "c0c2c4a1 2026-11-20T12:21:32+01:00"
   },
   "commits": [
+   {
+    "sha": "42f401ed",
+    "date": "2026-11-20T12:37:48+01:00",
+    "author": "Alpha",
+    "subject": "chore: toten Code entfernen (Ausbaustufen #25, #26)"
+   },
    {
     "sha": "c0c2c4a1",
     "date": "2026-11-20T12:21:32+01:00",
@@ -138,12 +144,6 @@
     "date": "2026-11-14T18:40:06+01:00",
     "author": "Alpha",
     "subject": "Merge remote-tracking branch 'origin/dev' into dev"
-   },
-   {
-    "sha": "a49100d4",
-    "date": "2026-11-14T18:39:46+01:00",
-    "author": "Alpha",
-    "subject": "docs(coach): verify fitness traction release"
    }
   ],
   "activity": [
@@ -229,10 +229,30 @@
    },
    {
     "day": "2026-11-20",
-    "n": 14
+    "n": 15
    }
   ],
   "workflows": [
+   {
+    "name": "Deploy Coach",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-20T11:38:12Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44729214381",
+    "sha": "42f401e"
+   },
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-20T11:38:12Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44729214224",
+    "sha": "42f401e"
+   },
    {
     "name": "Auto-Promote dev -> master (Check (Coach))",
     "branch": "dev",
@@ -254,16 +274,6 @@
     "sha": "c0c2c4a"
    },
    {
-    "name": "Check (Coach)",
-    "branch": "dev",
-    "event": "push",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T11:21:38Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44726960777",
-    "sha": "c0c2c4a"
-   },
-   {
     "name": "Gemini CI Agent",
     "branch": "dev",
     "event": "workflow_run",
@@ -271,16 +281,6 @@
     "conclusion": "success",
     "created_at": "2026-11-20T10:46:30Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44722052452",
-    "sha": "f88361d"
-   },
-   {
-    "name": "Deploy Coach",
-    "branch": "dev",
-    "event": "push",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T10:45:13Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721872772",
     "sha": "f88361d"
    },
    {
@@ -296,21 +296,32 @@
   ],
   "issues": [
    {
-    "number": 25,
-    "title": "Ausbaustufe: `monolith.py`, `refactor_catalog.py` (verwaist)",
-    "created_at": "2026-11-20T11:19:58Z",
-    "updated_at": "2026-11-20T11:19:58Z",
+    "number": 29,
+    "title": "Ausbaustufe: `gas-coach-summary/` (verwaist)",
+    "created_at": "2026-11-20T11:24:12Z",
+    "updated_at": "2026-11-20T11:24:12Z",
     "labels": [
      "ausbaustufe"
     ],
-    "url": "https://github.com/nimmsel23/coach-dev/issues/25",
+    "url": "https://github.com/nimmsel23/coach-dev/issues/29",
+    "author": "github-actions[bot]"
+   },
+   {
+    "number": 27,
+    "title": "Ausbaustufe: Fitness-SPA (`main.jsx`→`App.jsx`) (Gerüst)",
+    "created_at": "2026-11-20T11:24:08Z",
+    "updated_at": "2026-11-20T11:24:08Z",
+    "labels": [
+     "ausbaustufe"
+    ],
+    "url": "https://github.com/nimmsel23/coach-dev/issues/27",
     "author": "github-actions[bot]"
    },
    {
     "number": 24,
     "title": "Ausbaustufe: Gemini-CI-Reparatur (halb fertig)",
     "created_at": "2026-11-20T11:19:57Z",
-    "updated_at": "2026-11-20T11:19:57Z",
+    "updated_at": "2026-11-20T11:24:10Z",
     "labels": [
      "ausbaustufe"
     ],
@@ -332,7 +343,7 @@
     "number": 22,
     "title": "Ausbaustufe: Anamnese / Fokus (verwaist)",
     "created_at": "2026-11-20T11:19:55Z",
-    "updated_at": "2026-11-20T11:19:55Z",
+    "updated_at": "2026-11-20T11:24:11Z",
     "labels": [
      "ausbaustufe"
     ],
@@ -349,46 +360,70 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev/Master synchronisiert, CI grün; Doku-Drift und Live-Tests offen",
-   "lage": "Die Branches `dev` und `master` sind mit Commit `c0c2c4a1` synchronisiert. Die CI-Läufe sind erfolgreich, und die GitHub-Issues-Integration (`f88361d4`) ist aktiv. Wesentliche Doku-Diskrepanzen und die Live-Verifikation zentraler Funktionen bleiben jedoch ausstehend.",
+   "headline": "Dev vor Master, CI läuft; Doku-Drift und Live-Tests offen",
+   "lage": "Der `dev`-Branch ist mit Commit `42f401ed` einen Commit vor `master`. Die CI-Läufe für `c0c2c4a1` waren erfolgreich, jedoch sind neue Läufe für `42f401ed` noch in Bearbeitung. Wesentliche Doku-Diskrepanzen und die Live-Verifikation zentraler Funktionen bleiben ausstehend.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Die Live-Wirkung von Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet und der Produktion-Deploy sind unbelegt (siehe `NEXT.md:3-4,12`)."
+     "text": "`dev` ist 1 Commit (`42f401ed`) vor `master` (`c0c2c4a1`). Die `Auto-Promote` für `c0c2c4a1` war erfolgreich, aber der neueste Commit auf `dev` ist noch nicht auf `master` promotet."
     },
     {
      "level": "hoch",
-     "text": "Der KB-Ordner `backend/fitness/catalog/kb` ist ein vendored Tree, obwohl `.gitmodules` ihn als Submodul deklariert (`TODO.md:15`)."
+     "text": "`src/plan-main.jsx` importiert eine fehlende Datei (`./views/Plan/StrongApp.jsx`) und hat keinen HTML-Einstieg."
+    },
+    {
+     "level": "hoch",
+     "text": "`backend/fitness/catalog/kb` ist ein vendored Tree, obwohl `.gitmodules` es als Submodul deklariert, was einen Blind-rsync verhindert."
+    },
+    {
+     "level": "hoch",
+     "text": "Die Live-Wirkung von Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet und der neuen GitHub-Inbox ist unbelegt."
     },
     {
      "level": "mittel",
-     "text": "Doku-Drift besteht in `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` sowie bei verbleibenden pnpm-Erwähnungen in `docs/`."
+     "text": "`src/OVERVIEW.md` und `src/views/DISCONNECTED.md` enthalten veraltete oder falsche Informationen zu Tabs/Views."
     },
     {
      "level": "mittel",
-     "text": "`src/plan-main.jsx` importiert die fehlende Datei `./views/Plan/StrongApp.jsx`."
+     "text": "`docs/ROADMAP.md` trägt noch den Titel „fitness-dev Roadmap“."
+    },
+    {
+     "level": "mittel",
+     "text": "`website/` und `modules/plan/` sind im Checkout leer; ein lokal ungepushter Pin `71f101a` für `website` darf nicht gepinnt werden."
+    },
+    {
+     "level": "mittel",
+     "text": "Die Gemini-Reparaturkette wurde nie an einem echten roten Lauf geprüft, und die WhatsApp-Zusammenfassung für Jakob ist ungetestet."
+    },
+    {
+     "level": "mittel",
+     "text": "Mehrere \"verwaiste\" Bereiche wie `gas-coach-summary/`, `monolith.py`, `refactor_catalog.py` wurden identifiziert und als Issues (`#25`, `#29`) erfasst."
     },
     {
      "level": "info",
-     "text": "Vier neue Issues (#22-#25) mit dem Label `ausbaustufe` wurden automatisch erstellt und sind offen."
+     "text": "Fünf neue Issues (`#22`, `#23`, `#24`, `#27`, `#29`) mit Label `ausbaustufe` wurden automatisch erstellt."
     },
     {
      "level": "info",
-     "text": "Am 20.11. gab es eine hohe Commit-Aktivität mit 14 Commits, darunter die Umstellung auf npm (`5acb9d67`) und die GitHub-Issues-Integration (`f88361d4`)."
+     "text": "Der Wechsel von pnpm zu npm wurde mit Commit `5acb9d67` und `c0c2c4a1` (Doku) vollzogen, jedoch verbleiben pnpm-Referenzen in einigen `docs/` Dateien."
+    },
+    {
+     "level": "info",
+     "text": "Die GitHub-Issues-Integration als Inbox (`f88361d4`) wurde umgesetzt."
     }
    ],
    "naechste_schritte": [
-    "Verifizieren: Taskwarrior-Anzeige, `tractionDaily`-Event und GitHub-Inbox live prüfen.",
-    "Entscheiden: Umgang mit `src/plan-main.jsx` (löschen, reparieren oder extern markieren).",
-    "Aktualisieren: `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` an den Code anpassen."
+    "Verifizieren: `tractionDaily`-Event, Taskwarrior-Anzeige und GitHub-Inbox live prüfen.",
+    "Aktualisieren: `src/OVERVIEW.md` und `src/views/DISCONNECTED.md` an den Code anpassen.",
+    "Sichten: Verbleibende pnpm-Stellen in `docs/` prüfen und korrigieren."
    ],
-   "veraendert": "Die Branches `dev` und `master` sind nun synchronisiert auf `c0c2c4a1`, während `dev` zuvor einen Commit voraus war. Die `README.md` wurde bezüglich pnpm/npm korrigiert.",
+   "veraendert": "Gegenüber der letzten Einschätzung ist `dev` mit Commit `42f401ed` einen Commit vor `master`, die GitHub-Issues-Integration (`f88361d4`) wurde umgesetzt und neue Ausbaustufen-Issues (`#22`, `#23`, `#24`, `#27`, `#29`) wurden erstellt.",
    "fragen": [
-    "Soll `src/plan-main.jsx` gelöscht, repariert oder als extern markiert werden?",
-    "Soll der KB-Gitlink wiederhergestellt werden, und welche `inbox_jefferson_curl_pipeline.yml`-Version soll übernommen werden?"
+    "Entscheiden: Umgang mit `src/plan-main.jsx` und Fitness-SPA (löschen, reparieren oder extern markieren).",
+    "Entscheiden: Umgang mit den Ausbaustufen-Issues (`#22`, `#23`, `#24`, `#27`, `#29`) (schließen oder behalten)."
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-20T11:23:53+00:00"
+  "ai_at": "2026-11-20T11:38:35+00:00"
  }
 }
