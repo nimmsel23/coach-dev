@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-20T11:13:37+00:00",
+  "generated_at": "2026-11-20T11:17:58+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T10:46:13Z",
+   "pushed_at": "2026-11-20T11:14:42Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -304,42 +304,42 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev und Master synchron, Workflows grün; Doku-Diskrepanzen und offene Verifikationen",
-   "lage": "Der `dev`-Branch und `master` sind auf Commit `f88361d4` synchronisiert. Alle relevanten Workflows, inklusive „Check (Coach)“, „Deploy Coach“ und „Auto-Promote dev -> master“, wurden für `f88361d4` erfolgreich abgeschlossen. Am 20.11. gab es 13 Commits, darunter die Umstellung von pnpm auf npm (`5acb9d67`, `4bb30a19`) und die Integration von GitHub-Issues als Inbox-Quelle (`f88361d4`).",
+   "headline": "Dev/Master synchron, Workflows grün; Doku-Drift und offene Verifikationen",
+   "lage": "Der `dev`- und `master`-Branch sind auf Commit `f88361d4` synchronisiert, mit allen CI-Workflows erfolgreich abgeschlossen. Die Umstellung von pnpm auf npm (`5acb9d67`, `4bb30a19`) und die Integration von GitHub Issues als Inbox-Quelle (`f88361d4`) wurden implementiert. Jedoch bestehen weiterhin erhebliche Doku-Diskrepanzen und unbestätigte Live-Funktionen.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Dokumentation (`README.md`, `AGENTS.md`, `docs/*.md`) ist veraltet bezüglich Paketmanager (pnpm statt npm) und Vite-Version, obwohl der Code bereits aktualisiert wurde (`5acb9d67`, `4bb30a19`)."
+     "text": "Erhebliche Doku-Code-Diskrepanzen: `README.md`, `AGENTS.md` und 10 `docs/*.md` referenzieren pnpm 11/Vite 6, obwohl der Code `npm` und Vite 8.3.6 nutzt (Commits `5acb9d67`, `4bb30a19`)."
+    },
+    {
+     "level": "hoch",
+     "text": "Das KB-Gitlink-Submodul (`backend/fitness/catalog/kb`) ist als vendored Tree eingecheckt, obwohl `.gitmodules` es als Submodul `nimmsel23/fitness` deklariert, was zu bidirektionalen Divergenzen führt (`TODO.md:15-22`)."
+    },
+    {
+     "level": "hoch",
+     "text": "Die Live-Wirkung wichtiger Funktionen wie Taskwarrior-Anzeige, `tractionDaily`-Event und Coach Sheet gegen Inbox-Records ist unbelegt (`NEXT.md:3-4,14`)."
     },
     {
      "level": "mittel",
-     "text": "Mehrere Live-Verifikationen stehen aus, darunter die Taskwarrior-Statusanzeige und der `tractionDaily`-Event, obwohl der Code implementiert ist (`NEXT.md:4-5`)."
+     "text": "Mehrere Code-Einstiege sind defekt oder verwaist: Die Fitness-SPA (`App.jsx`-Baum) hat keinen HTML-Entry/Build-Skript, und `plan-main.jsx` importiert fehlende Dateien."
     },
     {
      "level": "mittel",
-     "text": "Das KB-Verzeichnis (`backend/fitness/catalog/kb`) ist ein vendored Tree statt eines Git-Submoduls, was zu Divergenzen führen kann (`TODO.md:63`)."
-    },
-    {
-     "level": "info",
-     "text": "Der `NEXT.md`-Eintrag für `github_pr` ist veraltet, da der PR-Zweig zurückgesetzt und durch GitHub-Issues als Inbox-Quelle ersetzt wurde (`d03ca3e5`, `f88361d4`)."
-    },
-    {
-     "level": "info",
-     "text": "Das Submodul `website` hat einen lokal ungepushten SHA (`71f101a`), der nicht gepinnt werden sollte, um CI-Probleme zu vermeiden (`NEXT.md:12`)."
+     "text": "Die `website`-Gitlink-Referenz (`NEXT.md:12`, `TODO.md:35`) verweist auf einen lokal ungepushten SHA `71f101a`, der nicht gepinnt werden sollte."
     }
    ],
    "naechste_schritte": [
-    "Verifizieren: Taskwarrior-Anzeige und `tractionDaily`-Event live prüfen (`NEXT.md:4-5`).",
-    "Klären: KB-Gitlink-Frage (Übernahme oder Verwerfen von `inbox_jefferson_curl_pipeline.yml`), dann Gitlink wiederherstellen (`TODO.md:63`).",
+    "Verifizieren: Taskwarrior-Anzeige und `tractionDaily`-Event live prüfen (`NEXT.md:3-4`).",
+    "Klären: KB-Gitlink-Status (Übernahme von `inbox_jefferson_curl_pipeline.yml` oder Verwerfen) und Gitlink wiederherstellen (`TODO.md:15`).",
     "Aktualisieren: `README.md`, `AGENTS.md` und andere `docs/*.md` auf npm und Vite 8 umstellen."
    ],
-   "veraendert": "Der `dev`-Branch und `master` sind nun synchron auf `f88361d4`, und alle Workflows für diesen Commit sind erfolgreich abgeschlossen, im Gegensatz zur letzten Einschätzung, wo `dev` 2 Commits voraus war und Workflows noch liefen.",
+   "veraendert": "Gegenüber der letzten Einschätzung wurden neue Doku-Drifts in `OVERVIEW.md`/`DISCONNECTED.md` sowie defekte/verwaiste Code-Einstiege (Fitness-SPA, `plan-main.jsx`) identifiziert, während der HEAD unverändert blieb.",
    "fragen": [
-    "Soll die Coach-only Inbox `inbox_jefferson_curl_pipeline.yml` in das `nimmsel23/fitness`-Repo übernommen oder verworfen werden, bevor der KB-Gitlink wiederhergestellt wird (`TODO.md:63`)?",
-    "Soll der lokal ungepushte SHA `71f101a` des `website`-Submoduls im `website`-Repo gepusht oder verworfen werden, um CI-Probleme zu vermeiden (`NEXT.md:12`)?"
+    "Soll die Fitness-SPA (`App.jsx`-Baum) als Build-Entry ergänzt oder als extern/archiviert markiert werden, und soll `plan-main.jsx` gelöscht oder repariert werden?",
+    "Soll die `inbox_jefferson_curl_pipeline.yml` aus dem vendored KB-Tree in `~/dev/fitness` übernommen oder verworfen werden, bevor der KB-Gitlink wiederhergestellt wird?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-20T11:14:21+00:00"
+  "ai_at": "2026-11-20T11:19:37+00:00"
  }
 }
