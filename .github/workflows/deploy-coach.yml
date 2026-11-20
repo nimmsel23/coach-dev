@@ -114,6 +114,7 @@ jobs:
 
       - name: Install
         run: |
+          npm install -g npm@12.2.2  # gleiche npm-Version wie lokal (Lockfile-Format)
           npm ci --ignore-scripts --no-audit --no-fund
           # 6pack-dev/catalogContent.mjs importiert js-yaml aus seinem eigenen Ordner
           mkdir -p ../6pack-dev/node_modules
