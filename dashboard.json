@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-20T10:45:30+00:00",
+  "generated_at": "2026-11-20T11:13:37+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T10:45:11Z",
+   "pushed_at": "2026-11-20T10:46:13Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,10 +19,10 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 2,
-   "oldest_unpromoted": "2026-11-20T11:43:47+01:00",
+   "dev_ahead": 0,
+   "oldest_unpromoted": null,
    "dev_head": "f88361d4 2026-11-20T11:44:50+01:00",
-   "master_head": "4bb30a19 2026-11-20T09:49:25+01:00"
+   "master_head": "f88361d4 2026-11-20T11:44:50+01:00"
   },
   "commits": [
    {
@@ -234,11 +234,41 @@
   ],
   "workflows": [
    {
+    "name": "Gemini CI Agent",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-20T10:46:30Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44722052452",
+    "sha": "f88361d"
+   },
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-20T10:45:57Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721977725",
+    "sha": "f88361d"
+   },
+   {
+    "name": "PR-AutoMerge (Dependabot -> dev)",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "skipped",
+    "created_at": "2026-11-20T10:45:57Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721977675",
+    "sha": "f88361d"
+   },
+   {
     "name": "Check (Coach)",
     "branch": "dev",
     "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "created_at": "2026-11-20T10:45:13Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721873238",
     "sha": "f88361d"
@@ -247,41 +277,11 @@
     "name": "Deploy Coach",
     "branch": "dev",
     "event": "push",
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "created_at": "2026-11-20T10:45:13Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721872772",
     "sha": "f88361d"
-   },
-   {
-    "name": "Gemini CI Agent",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T08:50:32Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705752357",
-    "sha": "4bb30a1"
-   },
-   {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T08:50:22Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705729211",
-    "sha": "4bb30a1"
-   },
-   {
-    "name": "PR-AutoMerge (Dependabot -> dev)",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "skipped",
-    "created_at": "2026-11-20T08:50:22Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705729057",
-    "sha": "4bb30a1"
    },
    {
     "name": "Merge-Agent",
@@ -304,30 +304,42 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev-Branch 2 Commits vor Master; `4bb30a19` auf Master; Workflows laufen",
-   "lage": "Der `dev`-Branch (`f88361d4`) ist 2 Commits vor `master` (`4bb30a19`). Die Workflows „Check (Coach)“ und „Deploy Coach“ sind für den neuesten `dev`-Commit `f88361d4` in Bearbeitung. Der Commit `4bb30a19` wurde erfolgreich nach `master` promotet.",
+   "headline": "Dev und Master synchron, Workflows grün; Doku-Diskrepanzen und offene Verifikationen",
+   "lage": "Der `dev`-Branch und `master` sind auf Commit `f88361d4` synchronisiert. Alle relevanten Workflows, inklusive „Check (Coach)“, „Deploy Coach“ und „Auto-Promote dev -> master“, wurden für `f88361d4` erfolgreich abgeschlossen. Am 20.11. gab es 13 Commits, darunter die Umstellung von pnpm auf npm (`5acb9d67`, `4bb30a19`) und die Integration von GitHub-Issues als Inbox-Quelle (`f88361d4`).",
    "auffaelligkeiten": [
     {
+     "level": "hoch",
+     "text": "Dokumentation (`README.md`, `AGENTS.md`, `docs/*.md`) ist veraltet bezüglich Paketmanager (pnpm statt npm) und Vite-Version, obwohl der Code bereits aktualisiert wurde (`5acb9d67`, `4bb30a19`)."
+    },
+    {
      "level": "mittel",
-     "text": "Issue #21 \"Dashboard-Lage: rot\" ist nicht mehr in der Evidenz, obwohl es in der letzten Einschätzung als erstellt galt."
+     "text": "Mehrere Live-Verifikationen stehen aus, darunter die Taskwarrior-Statusanzeige und der `tractionDaily`-Event, obwohl der Code implementiert ist (`NEXT.md:4-5`)."
+    },
+    {
+     "level": "mittel",
+     "text": "Das KB-Verzeichnis (`backend/fitness/catalog/kb`) ist ein vendored Tree statt eines Git-Submoduls, was zu Divergenzen führen kann (`TODO.md:63`)."
     },
     {
      "level": "info",
-     "text": "Der `dev`-Branch enthält den Revert-Commit `d03ca3e5` (\"Revert \"refactor(coach-inbox): toten GitHub-PR-Zweig entfernen\"\")."
+     "text": "Der `NEXT.md`-Eintrag für `github_pr` ist veraltet, da der PR-Zweig zurückgesetzt und durch GitHub-Issues als Inbox-Quelle ersetzt wurde (`d03ca3e5`, `f88361d4`)."
+    },
+    {
+     "level": "info",
+     "text": "Das Submodul `website` hat einen lokal ungepushten SHA (`71f101a`), der nicht gepinnt werden sollte, um CI-Probleme zu vermeiden (`NEXT.md:12`)."
     }
    ],
    "naechste_schritte": [
-    "Überprüfe den Abschluss und das Ergebnis der Workflows „Check (Coach)“ und „Deploy Coach“ für Commit `f88361d4`.",
-    "Kläre den Verbleib von Issue #21 \"Dashboard-Lage: rot\", da es nicht mehr in der Evidenz ist.",
-    "Prüfe die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md`."
+    "Verifizieren: Taskwarrior-Anzeige und `tractionDaily`-Event live prüfen (`NEXT.md:4-5`).",
+    "Klären: KB-Gitlink-Frage (Übernahme oder Verwerfen von `inbox_jefferson_curl_pipeline.yml`), dann Gitlink wiederherstellen (`TODO.md:63`).",
+    "Aktualisieren: `README.md`, `AGENTS.md` und andere `docs/*.md` auf npm und Vite 8 umstellen."
    ],
-   "veraendert": "Der `master`-Branch wurde auf Commit `4bb30a19` aktualisiert, und der `dev`-Branch ist nun 2 Commits vor `master` statt 3; Issue #21 ist nicht mehr in der Evidenz.",
+   "veraendert": "Der `dev`-Branch und `master` sind nun synchron auf `f88361d4`, und alle Workflows für diesen Commit sind erfolgreich abgeschlossen, im Gegensatz zur letzten Einschätzung, wo `dev` 2 Commits voraus war und Workflows noch liefen.",
    "fragen": [
-    "Was ist der aktuelle Status von Issue #21 \"Dashboard-Lage: rot\"?",
-    "Soll die Task 'Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen' in `NEXT.md` nun ausgeführt werden?"
+    "Soll die Coach-only Inbox `inbox_jefferson_curl_pipeline.yml` in das `nimmsel23/fitness`-Repo übernommen oder verworfen werden, bevor der KB-Gitlink wiederhergestellt wird (`TODO.md:63`)?",
+    "Soll der lokal ungepushte SHA `71f101a` des `website`-Submoduls im `website`-Repo gepusht oder verworfen werden, um CI-Probleme zu vermeiden (`NEXT.md:12`)?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-20T10:45:32+00:00"
+  "ai_at": "2026-11-20T11:14:21+00:00"
  }
 }
