@@ -1,30 +1,18 @@
 name: inbox_wide_grip_chin_up
-description: 'Proactively generated expert draft for: Weiter Untergriff-Klimmzug'
+description: 'Inbox-Draft: Weiter Untergriff-Klimmzug — wger/yuhonas bewusst getrennt
+  (dort nur normaler Chin-Up)'
 generated_at: '2026-11-20T07:44:48.224260+00:00'
 enriched_at: '2026-11-20T07:44:48.224260+00:00'
 exercises:
-- display_name: Klimmzug im Untergriff
+- display_name: Weiter Untergriff-Klimmzug
   id: wide_grip_chin_up
-  english: Chin-Up
+  english: Wide Grip Chin-Up
   origin:
-    type: merged_external
-    source_refs:
-      wger:
-      - '152'
-      yuhonas:
-      - Chin-Up
-  german: Klimmzug im Untergriff
-  wger_muscle_ids:
-    primary: []
-    secondary: []
-  wger_id: 152
-  yuhonas_id: Chin-Up
-  external_ids:
-    wger:
-    - 152
-    yuhonas:
-    - Chin-Up
-  name: Klimmzug im Untergriff
+    type: manual
+    source_refs: {}
+  german: Weiter Untergriff-Klimmzug
+  external_ids: {}
+  name: Weiter Untergriff-Klimmzug
   exercise_id: wide_grip_chin_up
   category: pull
   equipment:
@@ -56,31 +44,12 @@ exercises:
   - scapular_retraction
   - scapular_depression
   - core_stabilization
-  instructions:
-  - Grab the pull-up bar with the palms facing your torso and a grip closer than the
-    shoulder width.
-  - 'As you have both arms extended in front of you holding the bar at the chosen
-    grip width, keep your torso as straight as possible while creating a curvature
-    on your lower back and sticking your chest out. This is your starting position.
-    Tip: Keeping the torso as straight as possible maximizes biceps stimulation while
-    minimizing back involvement.'
-  - 'As you breathe out, pull your torso up until your head is around the level of
-    the pull-up bar. Concentrate on using the biceps muscles in order to perform the
-    movement. Keep the elbows close to your body. Tip: The upper torso should remain
-    stationary as it moves through space and only the arms should move. The forearms
-    should do no other work other than hold the bar.'
-  - After a second of squeezing the biceps in the contracted position, slowly lower
-    your torso back to the starting position; when your arms are fully extended. Breathe
-    in as you perform this portion of the movement.
-  - Repeat this motion for the prescribed amount of repetitions.
-  images:
-  - Chin-Up/0.jpg
-  - Chin-Up/1.jpg
   coaching_notes:
-  - Der Klimmzug im Untergriff ist eine hervorragende Übung für den oberen Rücken
+  - Der weite Untergriff-Klimmzug ist eine hervorragende Übung für den oberen Rücken
     und die Arme, insbesondere den Bizeps.
-  - Greifen Sie die Stange im Untergriff (Handflächen zeigen zum Körper), etwa schulterbreit
-    oder leicht enger, wie in den Anweisungen beschrieben.
+  - 'Greifen Sie die Stange im Untergriff (Handflächen zeigen zum Körper) deutlich
+    breiter als schulterbreit — das unterscheidet ihn vom normalen Chin-Up: mehr Latissimus
+    über Schulteradduktion, weniger Bizeps-Dominanz.'
   - Beginnen Sie den Zug aus den Schulterblättern, indem Sie diese aktiv nach unten
     und hinten ziehen (Scapula-Depression und -Retraktion), bevor die Arme die Hauptarbeit
     übernehmen.
@@ -102,29 +71,8 @@ exercises:
     Kraftübertragung.'
   - 'Nur die Arme benutzen: Der Fokus sollte auf dem Ziehen des Rückens liegen, nicht
     nur auf dem Beugen der Arme. Die Schulterblätter aktiv einzusetzen ist entscheidend.'
-  original_description:
-  - Grab the pull-up bar with the palms facing your torso and a grip closer than the
-    shoulder width.
-  - 'As you have both arms extended in front of you holding the bar at the chosen
-    grip width, keep your torso as straight as possible while creating a curvature
-    on your lower back and sticking your chest out. This is your starting position.
-    Tip: Keeping the torso as straight as possible maximizes biceps stimulation while
-    minimizing back involvement.'
-  - 'As you breathe out, pull your torso up until your head is around the level of
-    the pull-up bar. Concentrate on using the biceps muscles in order to perform the
-    movement. Keep the elbows close to your body. Tip: The upper torso should remain
-    stationary as it moves through space and only the arms should move. The forearms
-    should do no other work other than hold the bar.'
-  - After a second of squeezing the biceps in the contracted position, slowly lower
-    your torso back to the starting position; when your arms are fully extended. Breathe
-    in as you perform this portion of the movement.
-  - Repeat this motion for the prescribed amount of repetitions.
   tags:
   - unreviewed
-  - wger
-  - bulk_import
-  - yuhonas
-  - merged_external
   variations: []
   source: unreviewed
   enriched_at: '2026-11-20T07:44:48.224260+00:00'
@@ -133,3 +81,7 @@ exercises:
     status: draft
     ai_reviewed: false
     enriched_at: '2026-11-20T07:44:48.224260+00:00'
+  source_selection:
+    wger: null
+    yuhonas: null
+  source_review_required: false
