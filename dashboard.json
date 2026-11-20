@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-20T11:17:58+00:00",
+  "generated_at": "2026-11-20T11:21:55+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T11:14:42Z",
+   "pushed_at": "2026-11-20T11:21:36Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -19,12 +19,18 @@
    "main": "master",
    "has_dev": true,
    "dev_behind": 0,
-   "dev_ahead": 0,
-   "oldest_unpromoted": null,
-   "dev_head": "f88361d4 2026-11-20T11:44:50+01:00",
+   "dev_ahead": 1,
+   "oldest_unpromoted": "2026-11-20T12:21:32+01:00",
+   "dev_head": "c0c2c4a1 2026-11-20T12:21:32+01:00",
    "master_head": "f88361d4 2026-11-20T11:44:50+01:00"
   },
   "commits": [
+   {
+    "sha": "c0c2c4a1",
+    "date": "2026-11-20T12:21:32+01:00",
+    "author": "Alpha",
+    "subject": "docs: npm statt pnpm, NEXT.md auf GitHub-Issue-Inbox und Ausbaustufen"
+   },
    {
     "sha": "f88361d4",
     "date": "2026-11-20T11:44:50+01:00",
@@ -138,12 +144,6 @@
     "date": "2026-11-14T18:39:46+01:00",
     "author": "Alpha",
     "subject": "docs(coach): verify fitness traction release"
-   },
-   {
-    "sha": "91026049",
-    "date": "2026-11-14T18:39:01+01:00",
-    "author": "Alpha",
-    "subject": "fix(coach): recover chat listeners and preserve newer conversation drafts"
    }
   ],
   "activity": [
@@ -229,10 +229,20 @@
    },
    {
     "day": "2026-11-20",
-    "n": 13
+    "n": 14
    }
   ],
   "workflows": [
+   {
+    "name": "Check (Coach)",
+    "branch": "dev",
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null,
+    "created_at": "2026-11-20T11:21:38Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44726960777",
+    "sha": "c0c2c4a"
+   },
    {
     "name": "Gemini CI Agent",
     "branch": "dev",
@@ -264,16 +274,6 @@
     "sha": "f88361d"
    },
    {
-    "name": "Check (Coach)",
-    "branch": "dev",
-    "event": "push",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T10:45:13Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44721873238",
-    "sha": "f88361d"
-   },
-   {
     "name": "Deploy Coach",
     "branch": "dev",
     "event": "push",
@@ -294,7 +294,52 @@
     "sha": "93547f2"
    }
   ],
-  "issues": [],
+  "issues": [
+   {
+    "number": 25,
+    "title": "Ausbaustufe: `monolith.py`, `refactor_catalog.py` (verwaist)",
+    "created_at": "2026-11-20T11:19:58Z",
+    "updated_at": "2026-11-20T11:19:58Z",
+    "labels": [
+     "ausbaustufe"
+    ],
+    "url": "https://github.com/nimmsel23/coach-dev/issues/25",
+    "author": "github-actions[bot]"
+   },
+   {
+    "number": 24,
+    "title": "Ausbaustufe: Gemini-CI-Reparatur (halb fertig)",
+    "created_at": "2026-11-20T11:19:57Z",
+    "updated_at": "2026-11-20T11:19:57Z",
+    "labels": [
+     "ausbaustufe"
+    ],
+    "url": "https://github.com/nimmsel23/coach-dev/issues/24",
+    "author": "github-actions[bot]"
+   },
+   {
+    "number": 23,
+    "title": "Ausbaustufe: Plan-Tab (`views/Plan`, 5 Dateien) (halb fertig)",
+    "created_at": "2026-11-20T11:19:56Z",
+    "updated_at": "2026-11-20T11:19:56Z",
+    "labels": [
+     "ausbaustufe"
+    ],
+    "url": "https://github.com/nimmsel23/coach-dev/issues/23",
+    "author": "github-actions[bot]"
+   },
+   {
+    "number": 22,
+    "title": "Ausbaustufe: Anamnese / Fokus (verwaist)",
+    "created_at": "2026-11-20T11:19:55Z",
+    "updated_at": "2026-11-20T11:19:55Z",
+    "labels": [
+     "ausbaustufe"
+    ],
+    "url": "https://github.com/nimmsel23/coach-dev/issues/22",
+    "author": "github-actions[bot]"
+   }
+  ],
   "pulls": [],
   "live_sites": [
    "https://vos-coach.web.app"
@@ -304,42 +349,42 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev/Master synchron, Workflows grün; Doku-Drift und offene Verifikationen",
-   "lage": "Der `dev`- und `master`-Branch sind auf Commit `f88361d4` synchronisiert, mit allen CI-Workflows erfolgreich abgeschlossen. Die Umstellung von pnpm auf npm (`5acb9d67`, `4bb30a19`) und die Integration von GitHub Issues als Inbox-Quelle (`f88361d4`) wurden implementiert. Jedoch bestehen weiterhin erhebliche Doku-Diskrepanzen und unbestätigte Live-Funktionen.",
+   "headline": "Dev-Branch voraus, CI läuft; Doku-Drift reduziert, Live-Verifikation ausstehend",
+   "lage": "Der `dev`-Branch ist mit Commit `c0c2c4a1` einen Schritt vor `master`, dessen letzter Commit `f88361d4` ist. Die Umstellung auf npm und die GitHub-Issues-Integration sind im Code verankert, und die Dokumentation wurde teilweise angepasst. Jedoch bestehen weiterhin Doku-Diskrepanzen und die Live-Wirkung wichtiger Funktionen ist unbestätigt.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Erhebliche Doku-Code-Diskrepanzen: `README.md`, `AGENTS.md` und 10 `docs/*.md` referenzieren pnpm 11/Vite 6, obwohl der Code `npm` und Vite 8.3.6 nutzt (Commits `5acb9d67`, `4bb30a19`)."
-    },
-    {
-     "level": "hoch",
-     "text": "Das KB-Gitlink-Submodul (`backend/fitness/catalog/kb`) ist als vendored Tree eingecheckt, obwohl `.gitmodules` es als Submodul `nimmsel23/fitness` deklariert, was zu bidirektionalen Divergenzen führt (`TODO.md:15-22`)."
-    },
-    {
-     "level": "hoch",
-     "text": "Die Live-Wirkung wichtiger Funktionen wie Taskwarrior-Anzeige, `tractionDaily`-Event und Coach Sheet gegen Inbox-Records ist unbelegt (`NEXT.md:3-4,14`)."
+     "text": "Der `dev`-Branch ist mit `c0c2c4a1` einen Commit vor `master` (`f88361d4`); der `Check (Coach)` Workflow für `c0c2c4a1` ist noch `in_progress` (Run 44726960777)."
     },
     {
      "level": "mittel",
-     "text": "Mehrere Code-Einstiege sind defekt oder verwaist: Die Fitness-SPA (`App.jsx`-Baum) hat keinen HTML-Entry/Build-Skript, und `plan-main.jsx` importiert fehlende Dateien."
+     "text": "Die Live-Wirkung der Taskwarrior-Anzeige und des `tractionDaily`-Events ist unbestätigt (`NEXT.md:3-4`)."
     },
     {
      "level": "mittel",
-     "text": "Die `website`-Gitlink-Referenz (`NEXT.md:12`, `TODO.md:35`) verweist auf einen lokal ungepushten SHA `71f101a`, der nicht gepinnt werden sollte."
+     "text": "Der KB-Ordner `backend/fitness/catalog/kb` ist ein vendored Tree, obwohl `.gitmodules` ein Submodul `nimmsel23/fitness` deklariert (`TODO.md:15-22`)."
+    },
+    {
+     "level": "info",
+     "text": "Dokumente wie `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` enthalten veraltete Informationen oder widersprechen dem aktuellen Code."
+    },
+    {
+     "level": "info",
+     "text": "Der Fitness-SPA (`App.jsx`-Baum) und der Plan-Einstieg `src/plan-main.jsx` sind entweder verwaist oder defekt."
     }
    ],
    "naechste_schritte": [
     "Verifizieren: Taskwarrior-Anzeige und `tractionDaily`-Event live prüfen (`NEXT.md:3-4`).",
     "Klären: KB-Gitlink-Status (Übernahme von `inbox_jefferson_curl_pipeline.yml` oder Verwerfen) und Gitlink wiederherstellen (`TODO.md:15`).",
-    "Aktualisieren: `README.md`, `AGENTS.md` und andere `docs/*.md` auf npm und Vite 8 umstellen."
+    "Aktualisieren: `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` an den aktuellen Code anpassen."
    ],
-   "veraendert": "Gegenüber der letzten Einschätzung wurden neue Doku-Drifts in `OVERVIEW.md`/`DISCONNECTED.md` sowie defekte/verwaiste Code-Einstiege (Fitness-SPA, `plan-main.jsx`) identifiziert, während der HEAD unverändert blieb.",
+   "veraendert": "Der `dev`-Branch ist nun mit Commit `c0c2c4a1` einen Commit vor `master`, und die Dokumentation wurde teilweise auf npm und die GitHub-Issue-Inbox aktualisiert.",
    "fragen": [
-    "Soll die Fitness-SPA (`App.jsx`-Baum) als Build-Entry ergänzt oder als extern/archiviert markiert werden, und soll `plan-main.jsx` gelöscht oder repariert werden?",
-    "Soll die `inbox_jefferson_curl_pipeline.yml` aus dem vendored KB-Tree in `~/dev/fitness` übernommen oder verworfen werden, bevor der KB-Gitlink wiederhergestellt wird?"
+    "Soll der Fitness-SPA (`App.jsx`-Baum) als Entry ergänzt oder als extern/archiviert markiert werden?",
+    "Soll `src/plan-main.jsx` gelöscht oder repariert werden?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-20T11:19:37+00:00"
+  "ai_at": "2026-11-20T11:21:57+00:00"
  }
 }
