@@ -43,6 +43,22 @@ Vollständige Neufassung dieser Doku steht noch aus.
 
 ## Arbeitshinweise für Claude Code (dauerhaft gültig, repo-weit)
 
+- **Nach jeder Arbeit automatisch abschließen (Owner 2026-11-20) — ohne
+  Rückfrage:**
+  1. **Doku:** Zur eigenen Änderung die passende Doku im selben Zug anlegen
+     bzw. nachziehen (Bereichs-`CLAUDE.md`, z. B. `src/CLAUDE.md` /
+     `backend/fitness/CLAUDE.md`, oder eine eigene `docs/*.md` bei neuen
+     Features) — was gebaut wurde, warum, wo der Code liegt.
+  2. **Commit + Push:** Nur die eigenen Dateien stagen (fremdes WIP anderer
+     Sessions liegen lassen), committen, `git push origin dev`. Der Push
+     triggert CI → `master` → Live-Deploy; das ist hier ausdrücklich
+     freigegeben. Danach `gh run list --limit 3` prüfen.
+  3. **Neustart:** Wenn Backend-Code geändert wurde (`server.py`,
+     `backend/fitness/**`), `systemctl --user restart coach-api.service`
+     (:9150) und mit `curl -s localhost:9150/health` verifizieren. Diese
+     Repo-Regel geht der globalen „laufende Server nicht restarten"-Regel vor.
+     Kein sudo — Prod-Deploys über `vitalos/prod` bleiben beim User.
+
 - `CLAUDE.md` ist Symlink → `docs/CLAUDE.md`. Direktes Schreiben scheitert
   ("Refusing to write through symlink") — immer `docs/CLAUDE.md` editieren.
 - **Release-Weg seit 2026-10-29: `dev` → `master` → `vitalos`.** Erst
