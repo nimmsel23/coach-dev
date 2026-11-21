@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-20T13:33:43+00:00",
+  "generated_at": "2026-11-21T12:58:44+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T11:39:15Z",
+   "pushed_at": "2026-11-20T13:34:10Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -148,12 +148,8 @@
   ],
   "activity": [
    {
-    "day": "2026-10-31",
-    "n": 85
-   },
-   {
     "day": "2026-11-01",
-    "n": 77
+    "n": 59
    },
    {
     "day": "2026-11-02",
@@ -230,17 +226,31 @@
    {
     "day": "2026-11-20",
     "n": 15
+   },
+   {
+    "day": "2026-11-21",
+    "n": 0
    }
   ],
   "workflows": [
+   {
+    "name": "Merge-Agent",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-21T12:35:33Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44904681507",
+    "sha": "42f401e"
+   },
    {
     "name": "PR-AutoMerge (Dependabot -> dev)",
     "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-20T13:06:40Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44741429646",
+    "created_at": "2026-11-21T11:20:47Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44898663331",
     "sha": "42f401e"
    },
    {
@@ -249,8 +259,8 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-20T12:12:51Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44733900232",
+    "created_at": "2026-11-21T08:50:12Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44886729156",
     "sha": "42f401e"
    },
    {
@@ -282,16 +292,6 @@
     "created_at": "2026-11-20T11:38:12Z",
     "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44729214224",
     "sha": "42f401e"
-   },
-   {
-    "name": "Merge-Agent",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-20T08:47:58Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44705413736",
-    "sha": "93547f2"
    }
   ],
   "issues": [
@@ -360,62 +360,42 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev/Master synchronisiert, CI grün; Doku-Drift und Live-Tests offen",
-   "lage": "Der `dev`-Branch ist mit `master` auf Commit `42f401ed` synchronisiert, und alle zugehörigen CI-Läufe sind erfolgreich. Es bestehen weiterhin Doku-Diskrepanzen und ausstehende Live-Verifikationen zentraler Funktionen. Neue `ausbaustufe`-Issues (#22, #23, #24, #27, #29) wurden automatisch erstellt.",
+   "headline": "Dev/Master synchronisiert, CI grün; Doku-Drift reduziert, Live-Tests offen",
+   "lage": "Der `dev`-Branch ist mit `master` auf Commit `42f401ed` synchronisiert, und alle zugehörigen CI-Läufe sind erfolgreich. Doku-Diskrepanzen wurden teilweise behoben, jedoch bleiben Live-Verifikationen zentraler Funktionen und die Bearbeitung der `ausbaustufe`-Issues (#22, #23, #24, #27, #29) offen.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Die Live-Verifikation der Taskwarrior-Anzeige, des `tractionDaily`-Events, des Coach Sheets und der GitHub-Inbox steht noch aus."
-    },
-    {
-     "level": "hoch",
-     "text": "Der KB-Ordner (`backend/fitness/catalog/kb`) ist ein vendored Tree, obwohl `.gitmodules` ihn als Submodul deklariert, was eine manuelle Prüfung vor Synchronisation erfordert."
+     "text": "Live-Wirkung unbelegt: Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet und die neue GitHub-Inbox sind noch nicht live verifiziert."
     },
     {
      "level": "mittel",
-     "text": "Doku-Drift: `src/OVERVIEW.md` und `src/views/DISCONNECTED.md` spiegeln den aktuellen Code nicht wider."
+     "text": "Doku-Drift: `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` sind nicht aktuell; weitere `pnpm`-Erwähnungen in `docs/` sind ungeprüft."
     },
     {
      "level": "mittel",
-     "text": "Fehlende Dateien: `src/plan-main.jsx` importiert die nicht existierende `StrongApp.jsx`, und `plan.html` fehlt."
-    },
-    {
-     "level": "mittel",
-     "text": "`website/` und `modules/plan/` sind im Checkout leer; ein lokal ungepushter Pin (`71f101a`) darf nicht gepinnt werden."
-    },
-    {
-     "level": "mittel",
-     "text": "`docs/ROADMAP.md` trägt noch den alten Titel \"fitness-dev Roadmap\"."
-    },
-    {
-     "level": "mittel",
-     "text": "Verbleibende `pnpm`-Referenzen in `docs/` (z.B. `docs/DEPLOY.md`, `docs/CLAUDE.md`) trotz Umstellung auf `npm`."
+     "text": "`plan-main.jsx` importiert die fehlende `StrongApp.jsx`, und das Fitness-SPA ist in keinem Coach-HTML eingebunden."
     },
     {
      "level": "info",
-     "text": "Fünf `ausbaustufe`-Issues (#22, #23, #24, #27, #29) wurden automatisch erstellt und warten auf Sichtung."
+     "text": "`backend/fitness/catalog/kb` ist ein vendored Tree, obwohl in `.gitmodules` als Submodul deklariert."
     },
     {
      "level": "info",
-     "text": "Die Gemini-CI-Reparaturkette wurde noch nicht an einem echten roten Lauf geprüft."
-    },
-    {
-     "level": "info",
-     "text": "Verwaiste Code-Bestandteile wie `gas-coach-summary/`, `monolith.py` und `refactor_catalog.py` existieren noch im Repo."
+     "text": "`gas-coach-summary/` (Telegram-Briefing) ist verwaist und der Betrieb unbekannt."
     }
    ],
    "naechste_schritte": [
+    "Entscheiden: Umgang mit `plan-main.jsx` und dem Fitness-SPA klären (löschen, reparieren oder extern markieren).",
     "Verifizieren: `tractionDaily`-Event, Taskwarrior-Anzeige und GitHub-Inbox live prüfen.",
-    "Aktualisieren: `src/OVERVIEW.md` und `src/views/DISCONNECTED.md` an den Code anpassen.",
-    "Entscheiden: Umgang mit `plan-main.jsx` und dem Fitness-SPA klären (löschen, reparieren oder extern markieren)."
+    "Aktualisieren: `src/OVERVIEW.md` und `src/views/DISCONNECTED.md` an den Code anpassen."
    ],
-   "veraendert": "Der `dev`-Branch ist nun mit `master` auf Commit `42f401ed` synchronisiert, und alle zugehörigen CI-Läufe sind erfolgreich.",
+   "veraendert": "Gegenüber der letzten Einschätzung wurde der `README.md`-Doku-Drift zu `pnpm` durch Commit `c0c2c4a1` behoben und die GitHub-Issues als Inbox-Quelle durch `f88361d4` integriert; `ausbaustufe`-Issue #25 wurde durch Code-Entfernung in `42f401ed` adressiert.",
    "fragen": [
-    "Sollen die `ausbaustufe`-Issues (#22, #23, #24, #27, #29) geschlossen oder behalten werden?",
-    "Soll der Coach mit `production=true` live deployed werden, nachdem die Live-Verifikationen abgeschlossen sind?"
+    "Sollen `plan-main.jsx` und das Fitness-SPA gelöscht, repariert oder als extern markiert werden?",
+    "Wie soll mit dem vendored Tree `backend/fitness/catalog/kb` umgegangen werden, der als Submodul deklariert ist?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-20T13:33:45+00:00"
+  "ai_at": "2026-11-21T12:58:46+00:00"
  }
 }
