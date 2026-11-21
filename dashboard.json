@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-21T12:58:44+00:00",
+  "generated_at": "2026-11-21T20:08:26+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-20T13:34:10Z",
+   "pushed_at": "2026-11-21T12:59:06Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -149,7 +149,7 @@
   "activity": [
    {
     "day": "2026-11-01",
-    "n": 59
+    "n": 34
    },
    {
     "day": "2026-11-02",
@@ -239,8 +239,8 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-21T12:35:33Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44904681507",
+    "created_at": "2026-11-21T19:46:50Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44942756248",
     "sha": "42f401e"
    },
    {
@@ -249,8 +249,8 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-21T11:20:47Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44898663331",
+    "created_at": "2026-11-21T18:05:08Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44933556030",
     "sha": "42f401e"
    },
    {
@@ -259,8 +259,8 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-21T08:50:12Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44886729156",
+    "created_at": "2026-11-21T16:47:44Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44926508044",
     "sha": "42f401e"
    },
    {
@@ -360,28 +360,36 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev/Master synchronisiert, CI grün; Doku-Drift reduziert, Live-Tests offen",
-   "lage": "Der `dev`-Branch ist mit `master` auf Commit `42f401ed` synchronisiert, und alle zugehörigen CI-Läufe sind erfolgreich. Doku-Diskrepanzen wurden teilweise behoben, jedoch bleiben Live-Verifikationen zentraler Funktionen und die Bearbeitung der `ausbaustufe`-Issues (#22, #23, #24, #27, #29) offen.",
+   "headline": "Dev/Master synchronisiert, CI grün; Live-Tests & Doku-Drift bestehen",
+   "lage": "Der `dev`-Branch ist mit `master` auf Commit `42f401ed` synchronisiert, und alle zugehörigen CI-Läufe sind erfolgreich. Die Doku-Code-Diskrepanzen wurden teilweise behoben, jedoch bleiben Live-Verifikationen zentraler Funktionen und die Bearbeitung der `ausbaustufe`-Issues (#22, #23, #24, #27, #29) offen.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Live-Wirkung unbelegt: Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet und die neue GitHub-Inbox sind noch nicht live verifiziert."
+     "text": "Die Live-Verifikation zentraler Funktionen (Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet, neue GitHub-Inbox) steht aus."
     },
     {
      "level": "mittel",
-     "text": "Doku-Drift: `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` sind nicht aktuell; weitere `pnpm`-Erwähnungen in `docs/` sind ungeprüft."
+     "text": "Mehrere Doku-Code-Diskrepanzen bestehen weiterhin, z.B. in `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md`."
     },
     {
      "level": "mittel",
-     "text": "`plan-main.jsx` importiert die fehlende `StrongApp.jsx`, und das Fitness-SPA ist in keinem Coach-HTML eingebunden."
+     "text": "`src/plan-main.jsx` importiert eine fehlende Datei (`./views/Plan/StrongApp.jsx`) und hat keinen HTML-Einstieg."
+    },
+    {
+     "level": "mittel",
+     "text": "Der KB-Ordner `backend/fitness/catalog/kb` ist ein vendored Tree, obwohl `.gitmodules` ihn als Submodul deklariert."
     },
     {
      "level": "info",
-     "text": "`backend/fitness/catalog/kb` ist ein vendored Tree, obwohl in `.gitmodules` als Submodul deklariert."
+     "text": "Fünf `ausbaustufe`-Issues (#22, #23, #24, #27, #29) wurden am 20.11.2026 automatisch erstellt und sind offen."
     },
     {
      "level": "info",
-     "text": "`gas-coach-summary/` (Telegram-Briefing) ist verwaist und der Betrieb unbekannt."
+     "text": "`gas-coach-summary/` ist ein verwaistes Telegram-Briefing, dessen Betrieb unbekannt ist (Issue #29)."
+    },
+    {
+     "level": "info",
+     "text": "Die Umstellung von pnpm auf npm wurde im `README.md` korrigiert (Commit `c0c2c4a1`), aber in anderen `docs/`-Dateien sind noch pnpm-Referenzen vorhanden."
     }
    ],
    "naechste_schritte": [
@@ -389,13 +397,13 @@
     "Verifizieren: `tractionDaily`-Event, Taskwarrior-Anzeige und GitHub-Inbox live prüfen.",
     "Aktualisieren: `src/OVERVIEW.md` und `src/views/DISCONNECTED.md` an den Code anpassen."
    ],
-   "veraendert": "Gegenüber der letzten Einschätzung wurde der `README.md`-Doku-Drift zu `pnpm` durch Commit `c0c2c4a1` behoben und die GitHub-Issues als Inbox-Quelle durch `f88361d4` integriert; `ausbaustufe`-Issue #25 wurde durch Code-Entfernung in `42f401ed` adressiert.",
+   "veraendert": "Die Doku-Diskrepanz im `README.md` bezüglich pnpm/npm wurde durch Commit `c0c2c4a1` behoben, und die `ausbaustufe`-Issues #25 und #26 wurden durch Commit `42f401ed` als toter Code entfernt.",
    "fragen": [
-    "Sollen `plan-main.jsx` und das Fitness-SPA gelöscht, repariert oder als extern markiert werden?",
-    "Wie soll mit dem vendored Tree `backend/fitness/catalog/kb` umgegangen werden, der als Submodul deklariert ist?"
+    "Sollen die `ausbaustufe`-Issues (#22, #23, #24, #27, #29) basierend auf der Tiefenanalyse geschlossen oder behalten werden?",
+    "Wie soll mit dem `website`-Submodul umgegangen werden, insbesondere mit dem lokal ungepushten Pin `71f7101a`?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-21T12:58:46+00:00"
+  "ai_at": "2026-11-21T20:08:28+00:00"
  }
 }
