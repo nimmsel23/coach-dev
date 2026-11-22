@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-21T20:08:26+00:00",
+  "generated_at": "2026-11-22T12:50:17+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-21T12:59:06Z",
+   "pushed_at": "2026-11-21T20:09:05Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -148,12 +148,8 @@
   ],
   "activity": [
    {
-    "day": "2026-11-01",
-    "n": 34
-   },
-   {
     "day": "2026-11-02",
-    "n": 75
+    "n": 66
    },
    {
     "day": "2026-11-03",
@@ -230,17 +226,21 @@
    {
     "day": "2026-11-21",
     "n": 0
+   },
+   {
+    "day": "2026-11-22",
+    "n": 0
    }
   ],
   "workflows": [
    {
-    "name": "Merge-Agent",
+    "name": "Auto-Promote dev -> master (Check (Coach))",
     "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-21T19:46:50Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44942756248",
+    "created_at": "2026-11-22T09:51:57Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45009601679",
     "sha": "42f401e"
    },
    {
@@ -249,18 +249,18 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-21T18:05:08Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44933556030",
+    "created_at": "2026-11-22T07:02:14Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44996383905",
     "sha": "42f401e"
    },
    {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "name": "Merge-Agent",
     "branch": "dev",
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-21T16:47:44Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44926508044",
+    "created_at": "2026-11-22T06:39:57Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/44994737229",
     "sha": "42f401e"
    },
    {
@@ -360,20 +360,16 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Dev/Master synchronisiert, CI grün; Live-Tests & Doku-Drift bestehen",
-   "lage": "Der `dev`-Branch ist mit `master` auf Commit `42f401ed` synchronisiert, und alle zugehörigen CI-Läufe sind erfolgreich. Die Doku-Code-Diskrepanzen wurden teilweise behoben, jedoch bleiben Live-Verifikationen zentraler Funktionen und die Bearbeitung der `ausbaustufe`-Issues (#22, #23, #24, #27, #29) offen.",
+   "headline": "Repo synchronisiert, CI grün; Ausbaustufen teilweise adressiert, Live-Tests und Doku-Drift bestehen",
+   "lage": "Der `dev`-Branch ist mit `master` auf Commit `42f401ed` synchronisiert, und alle zugehörigen CI-Läufe sind erfolgreich. Die `ausbaustufe`-Issues #25 und #26 wurden durch Code-Entfernung adressiert, während #22, #23, #24, #27, #29 weiterhin offen sind. Live-Verifikationen zentraler Funktionen und die Behebung von Doku-Code-Diskrepanzen stehen noch aus.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Die Live-Verifikation zentraler Funktionen (Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet, neue GitHub-Inbox) steht aus."
+     "text": "Die Live-Wirkung von Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet und der neuen GitHub-Inbox ist unbelegt."
     },
     {
      "level": "mittel",
-     "text": "Mehrere Doku-Code-Diskrepanzen bestehen weiterhin, z.B. in `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md`."
-    },
-    {
-     "level": "mittel",
-     "text": "`src/plan-main.jsx` importiert eine fehlende Datei (`./views/Plan/StrongApp.jsx`) und hat keinen HTML-Einstieg."
+     "text": "Es bestehen Doku-Code-Diskrepanzen in `src/OVERVIEW.md`, `src/views/DISCONNECTED.md`, `src/plan-main.jsx` (fehlende `StrongApp.jsx`) und `docs/ROADMAP.md` (veralteter Titel)."
     },
     {
      "level": "mittel",
@@ -381,29 +377,29 @@
     },
     {
      "level": "info",
-     "text": "Fünf `ausbaustufe`-Issues (#22, #23, #24, #27, #29) wurden am 20.11.2026 automatisch erstellt und sind offen."
+     "text": "Die Submodule `website/` und `modules/plan/` sind im Checkout leer."
     },
     {
      "level": "info",
-     "text": "`gas-coach-summary/` ist ein verwaistes Telegram-Briefing, dessen Betrieb unbekannt ist (Issue #29)."
+     "text": "Die Gemini-CI-Reparaturkette wurde nie an einem echten roten Lauf geprüft."
     },
     {
      "level": "info",
-     "text": "Die Umstellung von pnpm auf npm wurde im `README.md` korrigiert (Commit `c0c2c4a1`), aber in anderen `docs/`-Dateien sind noch pnpm-Referenzen vorhanden."
+     "text": "Das Modul `gas-coach-summary/` (Issue #29) ist verwaist und sein Betrieb unbekannt."
     }
    ],
    "naechste_schritte": [
     "Entscheiden: Umgang mit `plan-main.jsx` und dem Fitness-SPA klären (löschen, reparieren oder extern markieren).",
-    "Verifizieren: `tractionDaily`-Event, Taskwarrior-Anzeige und GitHub-Inbox live prüfen.",
-    "Aktualisieren: `src/OVERVIEW.md` und `src/views/DISCONNECTED.md` an den Code anpassen."
+    "Verifizieren: `tractionDaily`-Event, Taskwarrior-Anzeige und neue GitHub-Inbox live prüfen.",
+    "Korrigieren: `src/OVERVIEW.md` und `src/views/DISCONNECTED.md` an den Code anpassen."
    ],
-   "veraendert": "Die Doku-Diskrepanz im `README.md` bezüglich pnpm/npm wurde durch Commit `c0c2c4a1` behoben, und die `ausbaustufe`-Issues #25 und #26 wurden durch Commit `42f401ed` als toter Code entfernt.",
+   "veraendert": "Gegenüber der letzten Einschätzung wurden die `ausbaustufe`-Issues #25 und #26 durch Code-Entfernung adressiert und der pnpm-Widerspruch im `README.md` behoben.",
    "fragen": [
-    "Sollen die `ausbaustufe`-Issues (#22, #23, #24, #27, #29) basierend auf der Tiefenanalyse geschlossen oder behalten werden?",
-    "Wie soll mit dem `website`-Submodul umgegangen werden, insbesondere mit dem lokal ungepushten Pin `71f7101a`?"
+    "Soll der KB-Ordner `backend/fitness/catalog/kb` als Gitlink wiederhergestellt oder der vendored Tree-Status beibehalten werden?",
+    "Wie soll mit den verwaisten Submodulen `website/` und `modules/plan/` umgegangen werden, die im Checkout leer sind?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-21T20:08:28+00:00"
+  "ai_at": "2026-11-22T12:50:19+00:00"
  }
 }
