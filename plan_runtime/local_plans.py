@@ -193,7 +193,18 @@ class LocalPlans:
         profile = read(self.client(client) / 'client.json') or {}
         uid = profile.get('firebase_uid')
         if not isinstance(uid, str) or not IDENTIFIER.fullmatch(uid): raise PlanError('Dem Klienten fehlt eine gültige Firebase-UID.')
-        return {'clientUid': uid, 'planId': f'local-{plan}', 'source': 'coach-local-plan', 'localVersion': current['headVersion'], 'snapshot': current['published']}
+        active = Path.home() / '.aos' / 'users' / '.active-uid'
+        coach_uid = active.read_text().strip() if active.exists() else ''
+        payload = {
+            'clientUid': uid,
+            'planId': f'local-{plan}',
+            'source': 'coach-local-plan',
+            'localVersion': current['headVersion'],
+            'snapshot': current['published'],
+        }
+        if coach_uid:
+            payload['coachUid'] = coach_uid
+        return payload
 
     def delivered(self, client, plan, version, result):
         with _LOCK:

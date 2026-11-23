@@ -1,6 +1,22 @@
 """Publish a released local snapshot using an injected Firestore client."""
 from copy import deepcopy
 from datetime import datetime, timezone
+from pathlib import Path
+
+def _coach_uid(payload=None, current=None):
+    """Echte Coach-UID — sonst filtert die Athlet-UI Coach-Pläne falsch bzw. Attribution stirbt."""
+    for value in (
+        (payload or {}).get('coachUid'),
+        (current or {}).get('coachUid'),
+    ):
+        if isinstance(value, str) and value and value != 'local-coach':
+            return value
+    active = Path.home() / '.aos' / 'users' / '.active-uid'
+    if active.exists():
+        uid = active.read_text().strip()
+        if uid:
+            return uid
+    return 'local-coach'
 
 def publish(payload, db):
     # Import only on an explicit delivery, never while editing locally.
@@ -20,6 +36,7 @@ def _publish(tx, ref, payload):
     if version_ref.get(transaction=tx).exists: raise ValueError('Zielversion existiert bereits.')
     now = datetime.now(timezone.utc).isoformat()
     snapshot = deepcopy(payload['snapshot'])
-    tx.set(version_ref, {'id': f'v{version}', 'number': version, 'message': f"Lokale Freigabe v{payload['localVersion']}", 'createdAt': now, 'author': 'local-coach', 'parent': f'v{version - 1}' if version > 1 else None, 'snapshot': snapshot})
-    tx.set(ref, {**current, **snapshot, 'id': payload['planId'], 'clientUid': payload['clientUid'], 'coachUid': current.get('coachUid') or 'local-coach', 'source': payload['source'], 'sourceLocalVersion': payload['localVersion'], 'status': 'published', 'createdAt': current.get('createdAt') or now, 'updatedAt': now, 'publishedAt': now, 'published': snapshot, 'headVersion': version, 'headMessage': f"Lokale Freigabe v{payload['localVersion']}"})
+    coach_uid = _coach_uid(payload, current)
+    tx.set(version_ref, {'id': f'v{version}', 'number': version, 'message': f"Lokale Freigabe v{payload['localVersion']}", 'createdAt': now, 'author': coach_uid, 'parent': f'v{version - 1}' if version > 1 else None, 'snapshot': snapshot})
+    tx.set(ref, {**current, **snapshot, 'id': payload['planId'], 'clientUid': payload['clientUid'], 'coachUid': coach_uid, 'source': payload['source'], 'sourceLocalVersion': payload['localVersion'], 'status': 'published', 'createdAt': current.get('createdAt') or now, 'updatedAt': now, 'publishedAt': now, 'published': snapshot, 'headVersion': version, 'headMessage': f"Lokale Freigabe v{payload['localVersion']}"})
     return {'planId': payload['planId'], 'version': version, 'unchanged': False}
