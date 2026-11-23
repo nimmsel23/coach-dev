@@ -1,11 +1,11 @@
 # Living Dashboard → https://nimmsel23.github.io/<repo>/
 # Engine + Doku: https://github.com/nimmsel23/dashboards/tree/engine
-# Täglich und bei Push auf dev oder master. Gebaut wird immer Branch dev.
+# Täglich und bei Push auf master. Gebaut wird immer Branch master (Daniel 23.11.).
 # Montags zusätzlich Claude-Tiefenanalyse. Der Zeitplan läuft auf dem Default-Branch.
 name: Dashboard
 on:
   push:
-    branches: [dev, master]
+    branches: [master]
   schedule:
     - cron: "40 4 * * 1"   # Mo: mit Claude-Tiefenanalyse
     - cron: "40 4 * * 0,2-6"
@@ -24,11 +24,11 @@ permissions:
   id-token: write
 concurrency:
   group: dashboard-pages
-  cancel-in-progress: false  # Montags-Tiefenanalyse nicht durch dev-Push abbrechen
+  cancel-in-progress: false  # Montags-Tiefenanalyse nicht durch Push abbrechen
 jobs:
   dashboard:
     uses: nimmsel23/dashboards/.github/workflows/repo-dashboard.yml@engine
     with:
-      branch: dev
+      branch: master
       deep: ${{ github.event.schedule == '40 4 * * 1' || inputs.deep == true }}
     secrets: inherit
