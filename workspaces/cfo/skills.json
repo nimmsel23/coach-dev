@@ -1,87 +1,129 @@
 {
   "workspaceId": "cfo",
-  "roleTitle": "Chief Financial Officer — Umsatz & Belege",
+  "roleTitle": "Chief Financial Officer — Umsatz, Posten & Belege",
   "defaultModel": "gemini",
   "temperature": 0.2,
-  "version": "1.0",
+  "version": "1.1",
   "tools": [
     {
       "name": "summarize_month_revenue",
-      "description": "Monatsumsatz-Snapshot (Ist/fehlt). Intern ready.",
+      "description": "Monatsumsatz-Snapshot (Ist/Offen/fehlt). Intern — keine Klientenkommunikation.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "month": { "type": "string", "description": "YYYY-MM oder current" }
+          "month": {
+            "type": "string",
+            "description": "YYYY-MM oder current."
+          }
         }
       }
     },
     {
       "name": "draft_invoice_reminder",
-      "description": "Höfliche Zahlungserinnerung. Immer pending_approval.",
+      "description": "Höfliche Zahlungserinnerung (Text). Immer pending_approval — kein Versand ohne Freigabe.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "clientName": { "type": "string" },
-          "amount": { "type": "string" },
-          "dueDate": { "type": "string" }
+          "clientName": {
+            "type": "string",
+            "description": "Name des Schuldners/Klienten."
+          },
+          "amount": {
+            "type": "string",
+            "description": "Betrag inkl. Währung."
+          },
+          "dueDate": {
+            "type": "string",
+            "description": "Fälligkeitsdatum falls bekannt."
+          }
         },
         "required": ["clientName", "amount"]
       }
     },
     {
       "name": "package_price_check",
-      "description": "Preis-/Paket-Check mit Annahmen. Freigabe wenn an Klient kommuniziert.",
+      "description": "Preis-/Paket-Check mit markierten Annahmen. Freigabe nötig, wenn an Klient kommuniziert werden soll.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "package": { "type": "string" },
-          "proposedPrice": { "type": "string" }
+          "package": {
+            "type": "string",
+            "description": "Paketname."
+          },
+          "proposedPrice": {
+            "type": "string",
+            "description": "Vorgeschlagener Preis oder 'fehlt'."
+          }
         },
         "required": ["package"]
       }
     },
     {
       "name": "open_items_list",
-      "description": "Offene Posten-Liste aus Stub/Kontext.",
+      "description": "Listet offene Posten aus Kontext/Stub. Interne Übersicht.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "asOf": { "type": "string" }
+          "asOf": {
+            "type": "string",
+            "description": "Stichtag."
+          }
         }
       }
     },
     {
       "name": "expense_note",
-      "description": "Belegnotiz für Buchhaltung (intern).",
+      "description": "Belegnotiz für die Buchhaltung (Vendor, Betrag, Kategorie). Intern.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "vendor": { "type": "string" },
-          "amount": { "type": "string" },
-          "category": { "type": "string" }
+          "vendor": {
+            "type": "string",
+            "description": "Lieferant/Anbieter."
+          },
+          "amount": {
+            "type": "string",
+            "description": "Betrag."
+          },
+          "category": {
+            "type": "string",
+            "description": "Kategorie (tools, hosting, …)."
+          }
         },
         "required": ["vendor", "amount"]
       }
     },
     {
       "name": "cashflow_snapshot",
-      "description": "14-Tage-Cashflow-Überblick mit Unsicherheiten markiert.",
+      "description": "Kurzfristiger Cashflow-Überblick; Unsicherheiten als fehlt markieren. Intern.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "horizonDays": { "type": "number" }
+          "horizonDays": {
+            "type": "number",
+            "description": "Horizont in Tagen (Default 14)."
+          }
         }
       }
     }
   ],
   "collections": {
-    "readAccess": ["csuite/cfo/approvals", "csuite/cfo/threads"],
-    "writeAccess": ["csuite/cfo/approvals", "csuite/cfo/threads"]
+    "readAccess": [
+      "csuite/cfo/approvals",
+      "csuite/cfo/threads",
+      "csuite/cfo/agent_logs"
+    ],
+    "writeAccess": [
+      "csuite/cfo/approvals",
+      "csuite/cfo/threads",
+      "csuite/cfo/agent_logs"
+    ],
+    "notes": "Keine Steuerberatung. Outbound nur über approvals pending_approval. Zahlenquellen: Konsole/CRM / CEO-Input."
   }
 }

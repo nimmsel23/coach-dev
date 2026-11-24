@@ -1,10 +1,10 @@
 {
   "id": "cmo",
   "title": "Chief Marketing Officer",
-  "version": "1.0",
+  "version": "1.1",
   "focus": "Sichtbarkeit, Leads & Markenstimme",
   "defaultModel": "gemini",
-  "temperature": 0.45,
+  "temperature": 0.7,
   "allowedSkills": [
     "draft_linkedin_post",
     "draft_instagram_caption",

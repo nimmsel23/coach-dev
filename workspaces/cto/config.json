@@ -4,7 +4,7 @@
   "version": "1.0",
   "focus": "Coach-Werkstatt, Architektur & CI",
   "defaultModel": "gemini",
-  "temperature": 0.25,
+  "temperature": 0.2,
   "allowedSkills": [
     "diagnose_ci_red",
     "audit_write_paths",

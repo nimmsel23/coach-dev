@@ -3,86 +3,122 @@
   "roleTitle": "Chief Product Officer — Angebot & Coach-Produkt",
   "defaultModel": "gemini",
   "temperature": 0.35,
-  "version": "1.0",
+  "version": "1.1",
   "tools": [
     {
       "name": "clarify_offer_slice",
-      "description": "Schärft einen Angebotsschnitt (Wer, Job, Ergebnis, Grenze).",
+      "description": "Schärft einen Angebotsschnitt (Wer, Job, Ergebnis, Grenze). Interne Klarheit — kein Kundenversand.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "offerName": { "type": "string" },
-          "audience": { "type": "string" }
+          "offerName": {
+            "type": "string",
+            "description": "Name des Angebots/Pakets."
+          },
+          "audience": {
+            "type": "string",
+            "description": "Zielgruppe (z. B. 40+ mit Zeitdruck)."
+          }
         },
         "required": ["offerName"]
       }
     },
     {
       "name": "write_job_story",
-      "description": "Job Story im Format When/I want/So that für Coach- oder Klienten-Job.",
+      "description": "Formuliert eine Job Story (When / I want / So that) für Coach- oder Klienten-Jobs. Analyse, kein Publish.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "situation": { "type": "string" },
-          "motivation": { "type": "string" }
+          "situation": {
+            "type": "string",
+            "description": "When-Situation."
+          },
+          "motivation": {
+            "type": "string",
+            "description": "Optional: I-want-Motivation."
+          }
         },
         "required": ["situation"]
       }
     },
     {
       "name": "critique_coach_surface",
-      "description": "Desktop-UX-Kritik einer Coach-Fläche (Schmiede/Hub/C-Suite/vos-coach). Kein Client-App-Kosmetik-Fokus.",
+      "description": "Desktop-UX-Kritik einer Coach-Fläche (Schmiede/Hub/C-Suite/vos-coach). Fokus Coach-only — keine Client-App-Kosmetik.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "surface": { "type": "string" },
-          "pain": { "type": "string" }
+          "surface": {
+            "type": "string",
+            "description": "Name der Oberfläche."
+          },
+          "pain": {
+            "type": "string",
+            "description": "Bekannte Reibung."
+          }
         },
         "required": ["surface"]
       }
     },
     {
       "name": "prioritize_backlog",
-      "description": "Ordnet 3–5 Items Now/Next/Later. Freigabe wenn als Order kommuniziert.",
+      "description": "Ordnet Items in NOW / NEXT / LATER. Wenn als verbindliche Order gedacht → pending_approval.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "items": { "type": "string", "description": "Liste oder Stichpunkte" }
+          "items": {
+            "type": "string",
+            "description": "Liste oder Stichpunkte der Backlog-Items."
+          }
         },
         "required": ["items"]
       }
     },
     {
       "name": "draft_release_notes",
-      "description": "Kurze Release-Notes für Coach-Tooling. pending_approval vor Publish.",
+      "description": "Kurze Release-Notes für Coach-Tooling. pending_approval vor Publish/Share.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "changes": { "type": "string" }
+          "changes": {
+            "type": "string",
+            "description": "Was sich geändert hat."
+          }
         },
         "required": ["changes"]
       }
     },
     {
       "name": "gate_check_product",
-      "description": "Prüft ob ein Produkt-Gate (Leads/Attention/Owner) offen ist — Observed only.",
+      "description": "Prüft Observed/Proposal gegen Produkt-Gates (Leads/Attention/Owner). Nur Beobachtung, keine Freigabe vortäuschen.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "proposal": { "type": "string" }
+          "proposal": {
+            "type": "string",
+            "description": "Zu prüfender Vorschlag."
+          }
         },
         "required": ["proposal"]
       }
     }
   ],
   "collections": {
-    "readAccess": ["csuite/cpo/approvals", "csuite/cpo/threads"],
-    "writeAccess": ["csuite/cpo/approvals", "csuite/cpo/threads"]
+    "readAccess": [
+      "csuite/cpo/approvals",
+      "csuite/cpo/threads",
+      "csuite/cpo/agent_logs"
+    ],
+    "writeAccess": [
+      "csuite/cpo/approvals",
+      "csuite/cpo/threads",
+      "csuite/cpo/agent_logs"
+    ],
+    "notes": "Produktentscheidungen bleiben Owner-Gates. Außenwirkung nur über approvals pending_approval."
   }
 }

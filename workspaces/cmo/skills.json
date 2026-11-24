@@ -1,88 +1,128 @@
 {
   "workspaceId": "cmo",
-  "roleTitle": "Chief Marketing Officer — Sichtbarkeit & Leads",
+  "roleTitle": "Chief Marketing Officer — Sichtbarkeit, Leads & Markenstimme",
   "defaultModel": "gemini",
-  "temperature": 0.45,
-  "version": "1.0",
+  "temperature": 0.7,
+  "version": "1.1",
   "tools": [
     {
       "name": "draft_linkedin_post",
-      "description": "LinkedIn-Post-Entwurf (Hook, Substanz, CTA). Immer pending_approval.",
+      "description": "Erstellt einen LinkedIn-Post-Entwurf (Hook, Substanz, CTA) für Vitaltrainer. Immer pending_approval — kein Publish ohne CEO-Freigabe. Nutzen wenn ein Thema/Slot im Fokus liegt oder Daniel einen Post anfordert.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "topic": { "type": "string" },
-          "angle": { "type": "string" }
+          "topic": {
+            "type": "string",
+            "description": "Kernthema (z. B. Konsistenz 40+)."
+          },
+          "angle": {
+            "type": "string",
+            "description": "Optionaler Winkel (Alltag, Mythos, Case)."
+          }
         },
         "required": ["topic"]
       }
     },
     {
       "name": "draft_instagram_caption",
-      "description": "Instagram-Caption + Hashtag-Vorschlag. Immer pending_approval.",
+      "description": "Instagram-Caption inkl. optionaler Hashtags/Format-Hinweis. Immer pending_approval vor Veröffentlichung.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "topic": { "type": "string" },
-          "format": { "type": "string", "enum": ["reel", "carousel", "static"] }
+          "topic": {
+            "type": "string",
+            "description": "Thema der Caption."
+          },
+          "format": {
+            "type": "string",
+            "enum": ["reel", "carousel", "static"],
+            "description": "Format-Hinweis für Tonlänge."
+          }
         },
         "required": ["topic"]
       }
     },
     {
       "name": "plan_content_week",
-      "description": "Wochenplan 3–4 Content-Slots (Kanal, Thema, Status). Intern ready.",
+      "description": "Skizziert 3–4 Content-Slots der Woche (Kanal, Thema, Status). Reine Planung — kein Publish, daher requiresApproval false.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "week": { "type": "string", "description": "ISO-Woche oder 'current'" }
+          "week": {
+            "type": "string",
+            "description": "ISO-Woche oder 'current'."
+          }
         }
       }
     },
     {
       "name": "nurture_lead_reply",
-      "description": "Antwort-Entwurf an Interessenten. Immer pending_approval.",
+      "description": "Antwort-Entwurf an einen Interessenten (DM/Mail). Immer pending_approval — kein Versand ohne Freigabe.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "leadName": { "type": "string" },
-          "channel": { "type": "string" },
-          "context": { "type": "string" }
+          "leadName": {
+            "type": "string",
+            "description": "Name des Leads."
+          },
+          "channel": {
+            "type": "string",
+            "description": "Kanal (instagram, linkedin, email, …)."
+          },
+          "context": {
+            "type": "string",
+            "description": "Was der Lead geschrieben/gefragt hat."
+          }
         },
         "required": ["leadName", "context"]
       }
     },
     {
       "name": "offer_teaser",
-      "description": "Kurzer Angebots-Teaser für Bio/Link-in-Bio. pending_approval.",
+      "description": "Kurzer Angebots-Teaser für Bio, Link-in-Bio oder Antwortanhang. pending_approval weil öffentlich/outbound.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "package": { "type": "string" }
+          "package": {
+            "type": "string",
+            "description": "Paketname (z. B. 10er Coaching)."
+          }
         },
         "required": ["package"]
       }
     },
     {
       "name": "audit_brand_voice",
-      "description": "Prüft Text gegen Markenstimme (Substanz, 40+, kein Hype). Intern.",
+      "description": "Prüft einen Entwurf gegen die Markenstimme (Substanz, 40+, kein Hype). Interne Analyse — kein Versand.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "draft": { "type": "string" }
+          "draft": {
+            "type": "string",
+            "description": "Zu prüfender Text."
+          }
         },
         "required": ["draft"]
       }
     }
   ],
   "collections": {
-    "readAccess": ["csuite/cmo/approvals", "csuite/cmo/threads"],
-    "writeAccess": ["csuite/cmo/approvals", "csuite/cmo/threads"]
+    "readAccess": [
+      "csuite/cmo/approvals",
+      "csuite/cmo/threads",
+      "csuite/cmo/agent_logs"
+    ],
+    "writeAccess": [
+      "csuite/cmo/approvals",
+      "csuite/cmo/threads",
+      "csuite/cmo/agent_logs"
+    ],
+    "notes": "Reichweiten-/Lead-Rohdaten kommen später aus Coach-APIs oder manueller CEO-Eingabe. Außenwirkung nur über approvals mit status pending_approval."
   }
 }

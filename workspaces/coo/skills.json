@@ -3,7 +3,7 @@
   "roleTitle": "Chief Operating Officer — Coaching-Delivery & Kundenerfolg",
   "defaultModel": "anthropic/claude-sonnet-4.5",
   "temperature": 0.35,
-  "version": "1.1",
+  "version": "1.2",
   "tools": [
     {
       "name": "deep_dive_notes",

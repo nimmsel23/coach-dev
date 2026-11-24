@@ -1,84 +1,118 @@
 {
   "workspaceId": "cto",
-  "roleTitle": "Chief Technology Officer — Coach-Werkstatt",
+  "roleTitle": "Chief Technology Officer — Coach-Werkstatt & Architektur",
   "defaultModel": "gemini",
-  "temperature": 0.25,
-  "version": "1.0",
+  "temperature": 0.2,
+  "version": "1.1",
   "tools": [
     {
       "name": "diagnose_ci_red",
-      "description": "Strukturierte Diagnose eines roten CI-Laufs (Ursache, Fix-Slice).",
+      "description": "Strukturierte Diagnose eines roten CI-Laufs (Symptom, Hypothese, kleinster Fix-Slice). Intern, kein Deploy.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "runUrl": { "type": "string" },
-          "symptom": { "type": "string" }
+          "runUrl": {
+            "type": "string",
+            "description": "URL oder ID des CI-Laufs."
+          },
+          "symptom": {
+            "type": "string",
+            "description": "Kurzes Fehlerbild."
+          }
         }
       }
     },
     {
       "name": "audit_write_paths",
-      "description": "Listet Plan-/Klient-Schreibpfade und Doppelungen (Schmiede vs Lokal vs Cloud).",
+      "description": "Listet und bewertet Schreibpfade (Pläne/Habits/Notizen) — Ist vs. Soll, Doppelungen Schmiede/Lokal/Cloud.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "area": { "type": "string", "enum": ["plans", "habits", "notes", "all"] }
+          "area": {
+            "type": "string",
+            "enum": ["plans", "habits", "notes", "all"],
+            "description": "Audit-Bereich."
+          }
         }
       }
     },
     {
       "name": "propose_ufo_slice",
-      "description": "Kleinster Desktop-UFO-Plan-Editor-Slice (Schema + UI + Abhängen).",
+      "description": "Schlägt den kleinsten Desktop-UFO-Plan-Editor-Slice vor (Schema, UI, Abhängen alter Editoren). Vorschlag only.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "goal": { "type": "string" }
+          "goal": {
+            "type": "string",
+            "description": "Ziel des Slices."
+          }
         }
       }
     },
     {
       "name": "draft_architecture_note",
-      "description": "Kurze Architektur-Notiz für docs/ oder AGENTS.",
+      "description": "Kurze Architektur-Notiz für docs/ oder AGENTS — intern.",
       "requiresApproval": false,
       "parameters": {
         "type": "object",
         "properties": {
-          "topic": { "type": "string" }
+          "topic": {
+            "type": "string",
+            "description": "Thema der Notiz."
+          }
         },
         "required": ["topic"]
       }
     },
     {
       "name": "plan_server_change",
-      "description": "Änderungsplan für server.py / coach-api. pending_approval vor Umsetzungshinweis als Order.",
+      "description": "Änderungsplan für server.py / coach-api. Immer pending_approval bevor es als Order gilt.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "change": { "type": "string" }
+          "change": {
+            "type": "string",
+            "description": "Gewünschte Server-/API-Änderung."
+          }
         },
         "required": ["change"]
       }
     },
     {
       "name": "escalate_owner_gate",
-      "description": "Eine knappe Owner-Frage mit Beleg. pending_approval.",
+      "description": "Eine knappe Owner-Frage mit Beleg für strategische Technik-Entscheidungen. pending_approval.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
         "properties": {
-          "question": { "type": "string" },
-          "evidence": { "type": "string" }
+          "question": {
+            "type": "string",
+            "description": "Die eine Frage an den Owner/CEO."
+          },
+          "evidence": {
+            "type": "string",
+            "description": "Beleg / Kontext."
+          }
         },
         "required": ["question"]
       }
     }
   ],
   "collections": {
-    "readAccess": ["csuite/cto/approvals", "csuite/cto/threads"],
-    "writeAccess": ["csuite/cto/approvals", "csuite/cto/threads"]
+    "readAccess": [
+      "csuite/cto/approvals",
+      "csuite/cto/threads",
+      "csuite/cto/agent_logs"
+    ],
+    "writeAccess": [
+      "csuite/cto/approvals",
+      "csuite/cto/threads",
+      "csuite/cto/agent_logs"
+    ],
+    "notes": "Kein automatischer Deploy. Server-Orders und Owner-Gates nur über approvals pending_approval."
   }
 }
