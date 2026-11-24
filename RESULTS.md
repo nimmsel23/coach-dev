@@ -1,3 +1,9 @@
+## 2026-11-24 — COO Tailnet-Serve `:8443/coach/coo`
+
+- Server: `/coach/coo` → `coo.html` (Assets unter `/coach/assets`).
+- Tailscale serve (tailnet-only :8443): `/coach`, `/api/csuite`, `/api/clients`, `/api/client`.
+- URL: `https://ideapad.tail7a15d6.ts.net:8443/coach/coo`
+
 ## 2026-11-24 — C-Suite Agent-Bridge (`/api/csuite`)
 
 Lokale Engine-Bridge in coach-api: CLI (claude/agy/cursor-agent/codex), Gemini-API-Oneshot, GitHub-Issue-Oneshot. Cockpit wählt Engine und legt Entwürfe in die HITL-Queue.
