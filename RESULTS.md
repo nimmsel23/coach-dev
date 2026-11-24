@@ -1,3 +1,11 @@
+## 2026-11-24 — C-Suite Agent-Bridge (`/api/csuite`)
+
+Lokale Engine-Bridge in coach-api: CLI (claude/agy/cursor-agent/codex), Gemini-API-Oneshot, GitHub-Issue-Oneshot. Cockpit wählt Engine und legt Entwürfe in die HITL-Queue.
+
+- **`coach_csuite.py`:** `GET /engines`, `POST /run`, `POST /issue` (Loopback-Guard).
+- **UI:** Engine-Dropdown; `runSkill`/`runChat` → Bridge, Stub-Fallback.
+- **Doku:** `docs/COACH-ARCHITECTURE.md`. Kein Outbound-Send.
+
 ## 2026-11-24 — COO Brain v1.1 (system-prompt + skills Schema)
 
 - `workspaces/coo/system-prompt.md`: Identität, Ton, Dashboard-Outputs, HITL, Eskalation.
