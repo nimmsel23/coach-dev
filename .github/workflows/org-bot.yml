@@ -98,6 +98,7 @@ jobs:
           GH_TOKEN: ${{ steps.app.outputs.token }}
           REPO: ${{ github.repository }}
           MODE: ${{ vars.ORG_BOT_MODE || 'docs' }}
+          EVENT: ${{ github.event_name }}
           ONE_PR: ${{ github.event.pull_request.number || '' }}
           HEAD_SHA: ${{ github.event.check_suite.head_sha || github.event.check_run.head_sha || '' }}
         run: |

@@ -38,6 +38,7 @@ else
 fi
 
 MODE="${MODE:-docs}"
+EVENT="${EVENT:-pull_request_target}"
 DRY_RUN="${DRY_RUN:-}"
 PREFIXES="${ORG_BOT_PREFIXES:-codex/ claude/ cursor/ agent/ vibe/ orch/ dependabot/}"
 
@@ -136,6 +137,22 @@ checks_state() {
   fi
 }
 
+# Direkt nach dem Öffnen sind noch nicht alle Checks angemeldet: auf PR-Events
+# kurz warten und "keine Checks" als "laufen noch" werten. Der Stunden-Sweep
+# und die Check-Events mergen danach.
+settled_checks() {
+  local st
+  st="$(checks_state "$head_sha" 2>/tmp/org-checks.txt || true)"
+  if [ "$EVENT" = "pull_request_target" ]; then
+    if [ "$st" = "green" ] || [ "$st" = "none" ]; then
+      sleep "${PIN_CHECK_SETTLE_SECONDS:-25}"
+      st="$(checks_state "$head_sha" 2>/tmp/org-checks.txt || true)"
+    fi
+    [ "$st" = "none" ] && st=pending
+  fi
+  echo "$st"
+}
+
 squash() {
   local cls="$1"
   if [ "$DRY_RUN" = 1 ]; then echo "DRY-RUN: würde #${PR} squash-mergen (Klasse ${cls})."; return 0; fi
@@ -148,7 +165,7 @@ squash() {
 # --- Pin-Bump (nur Repos mit pin-bump-policy.sh) ---------------------------
 if pin_files_ok "$files" && pin_actor_ok "$login" "$branch" && pin_gitlinks_ok; then
   echo "PR #${PR}: Pin-Bump Klasse A (${login}, ${branch}). Kein peer-ok."
-  state="$(checks_state "$head_sha" 2>/tmp/org-checks.txt || true)"
+  state="$(settled_checks)"
   case "$state" in
     green|none) squash A || pin_issue_upsert "$(printf 'PR #%s konnte nicht gemergt werden (%s).\n%s' "$PR" "$title" "https://github.com/${REPO}/pull/${PR}")" ;;
     pending) echo "PR #${PR}: Checks laufen noch." ;;
@@ -174,14 +191,14 @@ done <<< "$files"
 if [ "$class" = "B" ] && ! has_label peer-ok; then
   ensure_label peer-ok 0E8A16 "Klasse B: von einem anderen Agenten als dem Autor geprüft"
   ensure_label needs-peer FBCA04 "Klasse B: braucht Prüfung durch einen anderen Agenten"
-  if ! has_label needs-peer && [ "$DRY_RUN" != 1 ]; then
+  if [ -n "$reason" ] && ! has_label needs-peer && [ "$DRY_RUN" != 1 ]; then
     gh pr edit "$PR" -R "$REPO" --add-label needs-peer >/dev/null || true
   fi
   echo "PR #${PR}: Klasse B, wartet auf peer-ok.${reason}"
   exit 0
 fi
 
-state="$(checks_state "$head_sha" 2>/tmp/org-checks.txt || true)"
+state="$(settled_checks)"
 echo "PR #${PR}: Klasse ${class}, Checks ${state}."
 case "$state" in
   pending) echo "Checks laufen noch; der nächste Check-Event oder der Stunden-Sweep merged."; exit 0 ;;
