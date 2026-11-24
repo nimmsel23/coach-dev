@@ -13,16 +13,16 @@
 - [ ] vos-coach Desktop-Layout **nicht** „fixen“ als Ersatz — Coach-Werkstatt bleibt coach-dev.
 
 ### C-Suite / CEO-Portal (MVP da, Lücken)
-- [ ] Freigabe-Klick → Copy-CTA und/oder echter Outbound (Mail/WhatsApp); Approve führt heute nichts aus.
-- [ ] Firebase-Adapter live (Queue heute: localStorage-Mock); optional Firestore `csuite/{role}/**`.
-- [ ] Firestore-Rules: nur CEO-Account auf `csuite/**` (und verwandte Collections).
-- [ ] iframe → `postMessage` Auth-Token an Dashboards (Session-Weitergabe).
-- [ ] Rolle **CSO** (Sales) — im Gemini-Portal-Snippet genannt, bei uns nicht angelegt (CPO/CTO statt dessen).
-- [ ] React-COO (`/coach/coo`) vs. Vanilla (`/coach/coo/dashboard`) konsolidieren / eines abhängen.
-- [ ] CEO-Portal Live-Smoke: Google-Login + Tailnet `:8443/coach/ceo` + Brain-fetch + Skill→HITL.
-- [ ] `git push origin dev` der C-Suite-Commits (lokal ahead, nicht gepusht).
-- [ ] Hosting-Deploy vos-coach mit `dist-coach/workspaces/` (Brain auf Firebase Hosting).
-- [ ] Tailscale Serve `/workspaces` Root — Workaround `/coach/workspaces` (Serve-Config braucht Operator/sudo).
+- [x] Freigabe → **Kopieren** + mailto (kein Auto-WhatsApp); Approve schreibt Status + Clipboard.
+- [x] Firebase-Adapter live (`_shared/runtime.js`, Fallback localStorage wenn Rules/Auth fehlen).
+- [x] `firestore.rules.part` für `csuite/{role}/{approvals,threads,agent_logs}` (isCoach) — Deploy Rules = VitalOS/Owner.
+- [x] iframe `postMessage` `csuite-auth` vom CEO-Portal (same-origin Auth teilt Persistenz).
+- [x] Rolle **CSO** angelegt + CEO-Tab/Hub.
+- [x] `/coach/coo` → Vanilla dashboard; React unter `/coach/coo/react`.
+- [ ] CEO-Portal Live-Smoke mit Google-Login (manuell am Desktop).
+- [ ] `git push origin dev` (beim Stopfen mit erledigen).
+- [ ] Hosting-Deploy vos-coach mit `dist-coach/workspaces/` (explizites Deploy-OK nötig).
+- [ ] Tailscale Serve `/workspaces` Root — Workaround `/coach/workspaces` bleibt (Operator/sudo).
 
 ### Explizit verworfen / nicht gewollt im MVP
 - ~~Firestore als Brain-SOT / `sync-agents.yml` Git→Firestore~~ — Git bleibt Brain-SOT (`fetch` der MD/JSON).
