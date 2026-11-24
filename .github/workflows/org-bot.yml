@@ -12,7 +12,8 @@ name: Org-Bot (PR anlegen & mergen)
 #
 # Sicherheit: pull_request_target läuft in der Version des Default-Branches.
 # Der PR-Code wird nie ausgecheckt oder ausgeführt; gelesen wird nur die
-# Dateiliste über die API. Das Klassifikationsskript kommt aus dem Default-Branch.
+# Dateiliste über die API. Das Klassifikationsskript kommt aus dem Default-Branch,
+# auch bei pull_request_review (nur Branches im selben Repo, keine Forks).
 #
 # Sweep zweimal stündlich (:17, :47) und per repository_dispatch vom Org-Sweep: jeder offene Agenten-PR wird neu bewertet. So
 # bleibt kein grüner PR liegen, nur weil ein Event gefehlt hat, und PRs hinter
@@ -23,6 +24,9 @@ on:
     branches: ["codex/**", "claude/**", "cursor/**", "agent/**", "vibe/**", "orch/**"]
   pull_request_target:
     types: [opened, reopened, synchronize, labeled, ready_for_review]
+  # Freigabe des Approval Agents zählt als peer-ok (Daniel, 24.11.2026).
+  pull_request_review:
+    types: [submitted]
   check_suite:
     types: [completed]
   check_run:
@@ -76,6 +80,10 @@ jobs:
       vars.ORG_BOT_APP_ID != '' &&
       (
         (github.event_name == 'pull_request_target' &&
+         github.event.pull_request.head.repo.full_name == github.repository &&
+         !github.event.pull_request.draft) ||
+        (github.event_name == 'pull_request_review' &&
+         github.event.review.state == 'approved' &&
          github.event.pull_request.head.repo.full_name == github.repository &&
          !github.event.pull_request.draft) ||
         (github.event_name == 'check_suite' && github.event.check_suite.app.slug != 'github-actions' &&

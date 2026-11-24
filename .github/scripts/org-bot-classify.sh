@@ -9,8 +9,12 @@
 #
 # Klassen (org/DECISIONS/2026-11-16-merge-klassen.md):
 #   A  Modus docs, keine sensiblen Pfade      -> Squash, sobald kein Check rot/offen ist
-#   B  Modus code oder sensible Pfade         -> erst mit Label peer-ok; dann Auto-Merge,
+#   B  Modus code oder sensible Pfade         -> erst mit Peer-Freigabe; dann Auto-Merge,
 #                                                ohne Branch-Schutz Squash bei grünen Checks
+#      Peer-Freigabe = Label peer-ok ODER ein APPROVED-Review des Cursor Approval
+#      Agents (ORG_BOT_APPROVERS, Default cursor[bot]) auf dem aktuellen Head-Commit,
+#      von einem anderen Akteur als dem PR-Autor, ohne offenes CHANGES_REQUESTED.
+#      Owner-Freigabe Daniel 24.11.2026 10:08 (Wien).
 #   owner-gate (Label)                        -> nie
 #   Pin-Bump (nur wenn .github/scripts/pin-bump-policy.sh existiert, z. B. vitalos)
 #                                             -> Klasse A ohne peer-ok
@@ -41,6 +45,7 @@ MODE="${MODE:-docs}"
 EVENT="${EVENT:-pull_request_target}"
 DRY_RUN="${DRY_RUN:-}"
 PREFIXES="${ORG_BOT_PREFIXES:-codex/ claude/ cursor/ agent/ vibe/ orch/ dependabot/}"
+APPROVERS="${ORG_BOT_APPROVERS:-cursor[bot]}"
 
 ensure_label() {
   gh label create "$1" -R "$REPO" --color "$2" --description "$3" 2>/dev/null || true
@@ -188,13 +193,39 @@ while IFS= read -r f; do
   esac
 done <<< "$files"
 
-if [ "$class" = "B" ] && ! has_label peer-ok; then
+# Approval-Agent-Freigabe: letzter Review je Reviewer zählt. Gültig nur, wenn
+# ein Approver aus APPROVERS (nicht der Autor) den aktuellen Head-Commit
+# freigegeben hat und kein Reviewer zuletzt Änderungen verlangt hat.
+approval_ok() {
+  local reviews a
+  reviews="$(gh api --paginate "repos/${REPO}/pulls/${PR}/reviews?per_page=100" \
+    -q '.[] | select(.state != "COMMENTED" and .state != "PENDING") | [.user.login, .state, .commit_id] | @tsv' 2>/dev/null || true)"
+  [ -n "$reviews" ] || return 1
+  # Letzter Stand je Reviewer (Reviews kommen chronologisch).
+  reviews="$(printf '%s\n' "$reviews" | tac | awk -F'\t' '!seen[$1]++' )"
+  printf '%s\n' "$reviews" | awk -F'\t' '$2=="CHANGES_REQUESTED"{f=1} END{exit f?0:1}' && return 1
+  for a in $APPROVERS; do
+    [ "$a" = "$login" ] && continue
+    printf '%s\n' "$reviews" | awk -F'\t' -v a="$a" -v h="$head_sha" \
+      '$1==a && $2=="APPROVED" && $3==h {f=1} END{exit f?0:1}' && return 0
+  done
+  return 1
+}
+
+peer_ok=0
+if [ "$class" = "B" ]; then
+  if has_label peer-ok; then peer_ok=1
+  elif approval_ok; then peer_ok=1; echo "PR #${PR}: Klasse B, Approval-Agent-Freigabe auf ${head_sha:0:7} zählt als peer-ok."
+  fi
+fi
+
+if [ "$class" = "B" ] && [ "$peer_ok" != 1 ]; then
   ensure_label peer-ok 0E8A16 "Klasse B: von einem anderen Agenten als dem Autor geprüft"
   ensure_label needs-peer FBCA04 "Klasse B: braucht Prüfung durch einen anderen Agenten"
   if [ -n "$reason" ] && ! has_label needs-peer && [ "$DRY_RUN" != 1 ]; then
     gh pr edit "$PR" -R "$REPO" --add-label needs-peer >/dev/null || true
   fi
-  echo "PR #${PR}: Klasse B, wartet auf peer-ok.${reason}"
+  echo "PR #${PR}: Klasse B, wartet auf peer-ok oder Approval-Agent-Freigabe auf dem Head-Commit.${reason}"
   exit 0
 fi
 
@@ -210,7 +241,7 @@ if [ "$class" = "A" ]; then
   exit 0
 fi
 
-# Klasse B mit peer-ok: zuerst Auto-Merge (wartet auf Pflicht-Checks, falls
+# Klasse B mit Peer-Freigabe: zuerst Auto-Merge (wartet auf Pflicht-Checks, falls
 # Branch-Schutz gesetzt). Ohne Branch-Schutz nur bei grünen Checks direkt.
 if [ "$DRY_RUN" != 1 ] && gh pr merge "$PR" -R "$REPO" --squash --auto --delete-branch 2>/dev/null; then
   ensure_label "merge:B" C2E0C6 "Vom Org-Bot gemergt (Klasse B)"
