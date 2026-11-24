@@ -1,3 +1,11 @@
+## 2026-11-24 — C-Suite-Lücken gestopft
+
+- HITL: Freigeben+Kopieren, Nur kopieren, mailto; kein Auto-Versand.
+- Firebase HITL-Runtime `workspaces/_shared/runtime.js` (Auth/Firestore, LS-Fallback).
+- `firestore.rules.part`: `csuite/{role}/**` nur `isCoach()`.
+- CEO-Portal: CSO-Tab + `postMessage` Auth; `/coach/coo` → Vanilla, React unter `/coo/react`.
+- CSO Brain + Dashboard. Rules-Deploy/Hosting-Deploy/Tailscale-Root bewusst Owner.
+
 ## 2026-11-24 — MVP-Auslassungen notiert
 
 In `NEXT.md` Abschnitt „Ausgelassen seit C-Suite-MVP“: Plan-UFO, Outbound/HITL-Ausführung, Firestore-Rules/Adapter, CSO, React-vs-Vanilla-COO, Push/Deploy, Tailscale-/Hosting-Lücken; verworfen: Brain-Firestore-Sync, vos-coach als Authoring, Calzone-Fusion.
