@@ -18,7 +18,7 @@
 #      PR-Autor) ODER ein APPROVED-Review des Cursor Approval
 #      Agents (ORG_BOT_APPROVERS, Default cursor[bot]) auf dem aktuellen Head-Commit,
 #      von einem anderen Akteur als PR-Autor und Commit-Autoren, ohne offenes
-#      CHANGES_REQUESTED.
+#      CHANGES_REQUESTED und ohne Security-Befund HIGH/CRITICAL auf dem Head-Commit.
 #      Owner-Freigabe Daniel 24.11.2026 10:08 (Wien).
 #   owner-gate (Label)                        -> nie
 #   Pin-Bump (nur wenn .github/scripts/pin-bump-policy.sh existiert, z. B. vitalos)
@@ -243,6 +243,16 @@ approval_ok() {
   # Letzter Stand je Reviewer (Reviews kommen chronologisch).
   reviews="$(printf '%s\n' "$reviews" | tac | awk -F'\t' '!seen[$1]++' )"
   printf '%s\n' "$reviews" | awk -F'\t' '$2=="CHANGES_REQUESTED"{f=1} END{exit f?0:1}' && return 1
+  # Offene Security-Befunde (HIGH/CRITICAL) eines Approvers auf dem Head-Commit sperren.
+  local high
+  high="$(gh api --paginate "repos/${REPO}/pulls/${PR}/comments?per_page=100" \
+    -q ".[] | select(.commit_id == \"${head_sha}\") | select(.body | test(\"Severity: (HIGH|CRITICAL)\")) | .user.login")" || return 1
+  for a in $APPROVERS; do
+    if printf '%s\n' "$high" | grep -qxF "$a"; then
+      echo "PR #${PR}: offener Security-Befund (HIGH/CRITICAL) auf ${head_sha:0:7}; Freigabe zählt nicht." >&2
+      return 1
+    fi
+  done
   writers="$(pr_writers)" || return 1
   for a in $APPROVERS; do
     printf '%s\n' "$writers" | grep -qxF "$a" && continue
