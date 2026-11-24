@@ -1,5 +1,8 @@
 # NEXT (coach-dev)
 
+- [ ] COO-Cockpit live: `npm run ui:dev` → `/coo.html` gegen `:9150` prüfen (Heute-Karten, Skill → HITL Freigabe/Verwerfen).
+- [ ] COO Schritt 2: LLM-Router (`/api/agent-run` oder OpenRouter/Vertex) + echte Outbound-Freigabe; Firestore-Rules für `csuite/**`.
+- [ ] CMO/CFO/CSO Workspaces analog zu `workspaces/coo/` (nur nach COO-Alltagstest).
 - ~~Vite-8 Vorbeuge~~: esbuild-Tests + build.target Browserliste (modules/plan folgt plan-Pin).
 - [ ] Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen; danach einen explizit ausgewählten Klient/Plan als Pilot synchronisieren. Code und Browser-Build sind fertig, der laufende Prozess wurde nicht neu gestartet.
 - [ ] Mit einer angemeldeten UID aus einem sichtbaren Klientenworkspace einen echten Fitness-App-Aufruf prüfen und den resultierenden `tractionDaily`-Event in der lokalen Coach-Konsole nachweisen. Live-Bundle und Regeln enthalten die Implementierung; die aktuelle Abfrage hat noch 0 Events.
@@ -24,7 +27,9 @@
 - [x] `coach-api` Reload + `fuel_api: local`; fitness.env ohne vergiftete `DATABASE_URL`; fuelctl/deploy auf Coach `:9150`.
 - [ ] Firestore-Mirror weiter entkoppeln falls Idle-RSS stört (Watchers nur in Sync-Daemon, nicht Coach-Request-Pfad).
 - [ ] Eine Postgres-Instanz statt fuel/fitness/vitalos-Container — wenn Urgency (Task `fe34e959-…`).
-
+- [ ] Org-Dashboard-GAS (vos `2dbfe1e`): Der Owner muss im Script-Editor einmal `setup` ausführen und den Zugriff auf Tabellen erlauben. Danach einen Test-POST schicken; bis dahin liefert die Web-App eine Google-Seite statt JSON. Außerdem das Ergebnis des CI-Laufs „Publish dashboards“ prüfen.
+- [ ] Antworten aus dem Sheet „Org-Dashboard Antworten“ kommen noch nicht nach `~/workspace/team/owner/ANTWORTEN.md`, dorthin schreibt bisher nur coach-api.
+- [ ] Offen und vom Owner nicht entschieden: Laut Owner hat jeder Bereich ein eigenes Repo, und `dashboards` dient nur zum Veröffentlichen. Trotzdem überschreibt der vos-Generator die Ordner `coach/`, `business/`, `creator/`, `workspace/`, `vitalos/` und `coaching/` mit eigener Rollenprosa. Ein Coach-Dashboard sollte aus `nimmsel23/coach` kommen (eventuell über Firebase). Nichts entfernen, ohne den Owner ausdrücklich zu fragen.
 
 -   **Fuel in-process:** live auf Coach `:9150`; VitalOS `:8000` nur Workspace-Fallback, kein Extra-Host ausbauen.
 -   **Frontend-Serve Katalog-UI**: Coach-Dist statt Legacy-Fitness-SPA unter
@@ -48,3 +53,8 @@
 *   **Ungeprüfte Automatisierung:** Die Behauptung, dass nach jedem geloggten Workout für Klient Jakob automatisch eine WhatsApp-Zusammenfassung verschickt wird, wurde nicht durch einen tatsächlichen Test (z.B. das Loggen eines Workouts und Überprüfung des WhatsApp-Versands) verifiziert.
 *   **Teilweise verifizierte `coach clients`-Optionen:** Claude hat selbst berichtet, dass nur die Optionen `-l` und `-s` mit echten Daten getestet wurden, während andere Filteroptionen lediglich über die `--help`-Ausgabe geprüft wurden.
 *   **Ungeprüfte Annahme zur KB-Synchronisation:** Der Ersatz des kaputten `coach data-sync kb` durch `coach catalog push-changed` erfolgte ohne vollständige Verifikation, ob `push-changed` *alle* Datenbereiche abdeckt, die `data-sync kb` potenziell synchronisiert hätte, insbesondere da die `data-sync --help`-Ausgabe fehlerhaft war.
+
+**Gemini-Review (potenzielle blinde Flecken, 2026-11-21):**
+*   **Ratenbegrenzung:** Die Implementierung der Ratenbegrenzung (`CacheService.getScriptCache()`) ist pro Nutzer, nicht global für die gesamte Web-App, was die Annahme einer „max. 30 Einträge pro Minute“ für das Formular insgesamt untergräbt.
+*   **Irreführender Kommentar:** Der Kommentar `/* offline: bleibt lokal gespeichert */` in `src/lib/desk.tsx` ist nicht zutreffend, da keine clientseitige Persistenz für fehlgeschlagene Anfragen implementiert wurde.
+*   **`setup()`-Berechtigungen:** Die `setup()`-Funktion zum Erstellen des Sheets könnte über die angegebene `spreadsheets`-Berechtigung hinaus zusätzliche oder explizitere Nutzerzustimmungen für `SpreadsheetApp.create` erfordern, was nicht vollständig verifiziert wurde.
