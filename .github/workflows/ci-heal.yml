@@ -1,7 +1,7 @@
 name: CI-Heilung (rote Läufe wiederholen)
 
 # Vorlage: nimmsel23/vos cto/tools/ci-heal.yml · Doku: cto/wissen/merge-und-pin-automatik.md
-# Stündlich: Ist der jeweils letzte Lauf eines Workflows auf dem Default-Branch
+# Zweimal stündlich und auf Anstoß des Org-Sweeps: Ist der jeweils letzte Lauf eines Workflows auf dem Default-Branch
 # (oder auf dev) rot, wiederholt dieser Job die fehlgeschlagenen Jobs, höchstens
 # bis Versuch 3 und nur für Läufe der letzten 72 Stunden. Das fängt flüchtige
 # Fehler ab (Firebase 500, Netz, ein kurz fehlender Nachbar-Branch).
@@ -12,7 +12,11 @@ name: CI-Heilung (rote Läufe wiederholen)
 
 on:
   schedule:
-    - cron: "35 * * * *"
+    # Zwei Slots abseits der vollen Stunde (volle-Stunde-Slots fallen oft aus).
+    - cron: "8,38 * * * *"
+  # Der Org-Sweep in vos stößt hier an, sobald er einen roten Lauf sieht.
+  repository_dispatch:
+    types: [ci-heal]
   workflow_dispatch:
 
 permissions:

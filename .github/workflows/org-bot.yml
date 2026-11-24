@@ -14,7 +14,7 @@ name: Org-Bot (PR anlegen & mergen)
 # Der PR-Code wird nie ausgecheckt oder ausgeführt; gelesen wird nur die
 # Dateiliste über die API. Das Klassifikationsskript kommt aus dem Default-Branch.
 #
-# Stündlicher Sweep (:20): jeder offene Agenten-PR wird neu bewertet. So
+# Sweep zweimal stündlich (:17, :47) und per repository_dispatch vom Org-Sweep: jeder offene Agenten-PR wird neu bewertet. So
 # bleibt kein grüner PR liegen, nur weil ein Event gefehlt hat, und PRs hinter
 # der Basis bekommen die Basis nachgezogen.
 
@@ -28,7 +28,12 @@ on:
   check_run:
     types: [completed]
   schedule:
-    - cron: "20 * * * *"
+    # Zwei Slots abseits der vollen Stunde: GitHub verwirft volle-Stunde-Slots
+    # in diesen Repos oft (vitalos ":20" lief seit 17.11. nur zweimal).
+    - cron: "17,47 * * * *"
+  # Der Org-Sweep in vos stößt hier an, falls ein Zeitplan-Slot ausfällt.
+  repository_dispatch:
+    types: [org-bot-sweep]
   workflow_dispatch:
 
 permissions:
@@ -78,6 +83,7 @@ jobs:
         (github.event_name == 'check_run' && github.event.check_run.app.slug != 'github-actions' &&
          github.event.check_run.check_suite.head_branch != github.event.repository.default_branch) ||
         github.event_name == 'schedule' ||
+        github.event_name == 'repository_dispatch' ||
         github.event_name == 'workflow_dispatch'
       )
     runs-on: ubuntu-latest
