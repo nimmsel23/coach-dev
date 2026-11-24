@@ -2,6 +2,7 @@
 from __future__ import annotations
 import asyncio
 import hashlib
+import ipaddress
 import logging
 import importlib.util
 import json
@@ -13,6 +14,20 @@ from pathlib import Path
 from urllib.parse import urlsplit
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse, Response
+
+_LOCAL_HOSTS = frozenset({'127.0.0.1', '::1', 'localhost', 'testclient'})
+_TAILNET_NETS = (
+    ipaddress.ip_network('100.64.0.0/10'),
+    ipaddress.ip_network('fd7a:115c:a1e0::/48'),
+)
+
+
+def _is_tailnet_ip(host: str) -> bool:
+    try:
+        ip = ipaddress.ip_address(host)
+    except ValueError:
+        return False
+    return any(ip in net for net in _TAILNET_NETS)
 
 ROOT = Path(__file__).resolve().parent
 # Coach-owned copy of the former plan-dev runtime/ (coach-dev#14).
@@ -169,9 +184,18 @@ def clients_root():
 
 
 def local_only(request):
-    if not request.client or request.client.host not in ('127.0.0.1', '::1', 'localhost', 'testclient'):
+    # Laptop loopback *or* Tailnet peer via Tailscale Serve (:8443, client = 100.x).
+    # Funnel stays blocked via header. Hostname may be empty/odd behind some proxies —
+    # Tailnet-IP alone is enough when not Funnel.
+    client = request.client.host if request.client else ''
+    host = (request.url.hostname or '').lower()
+    loopback = client in _LOCAL_HOSTS
+    tailnet = _is_tailnet_ip(client)
+    if 'tailscale-funnel-request' in request.headers:
+        raise HTTPException(403, 'Nicht über Funnel.')
+    if not (loopback or tailnet):
         raise HTTPException(403, 'Lokale Planverwaltung ist nur auf diesem Rechner verfügbar.')
-    if request.url.hostname not in ('127.0.0.1', 'localhost', '::1'):
+    if loopback and host and host not in _LOCAL_HOSTS and not host.endswith('.ts.net'):
         raise HTTPException(403, 'Lokaler Hostname erforderlich.')
     if request.method not in ('GET', 'HEAD'):
         origin = request.headers.get('origin')

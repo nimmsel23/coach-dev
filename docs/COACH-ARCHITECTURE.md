@@ -90,9 +90,34 @@ Tests: `tests/test_plan_push.py` (Umwandlung, Idempotenz, Schutz fremder Routine
 ### Noch offen
 
 1. Dienste umschalten: `coach-klienten.service` installieren, `klienten-dev.service` (:5200, bisher eigener uvicorn) bzw. `coach-api.service` (:9150) ersetzen.
-2. UI: ClientForge (Plan/Habits/Journal) und Konsole (Klientenliste/CRM) in die Coach-SPA übernehmen.
+2. UI: ClientForge/Schmiede und Coach-SPA bleiben parallel (unterschiedliche SOTs); Zusammenlegung bewusst offen — siehe Konflikte unten.
 3. `CLAUDE.md` von coach-dev neu schreiben (beschreibt noch fitness-dev); Filter für `bin` in der Klientenliste.
 4. Einseitig: Änderungen eines Plans in der App fließen nicht nach `plan.json` zurück.
+
+## Coach Hub + COO Cockpit (2026-11-24)
+
+Zielgestalt für die Zusammenführung von Coach + Klienten (Delivery), nicht Org-/VitalOS-Rollen.
+
+- **Hub:** `hub.html` → `:9150/coach/` und Tailnet `https://ideapad.tail7a15d6.ts.net:8443/coach/` (Links zu COO, Cloud Coach, Lokal, Shell, Schmiede, Konsole). Shell bleibt unter `/coach/shell`.
+- **Git-Brain:** `workspaces/coo/` (`config.json`, `system-prompt.md`, `skills.json`, `knowledge/`).
+- **COO-UI:** `coo.html` → `/coach/coo`. Dev: `npm run ui:dev` → `/coo.html`.
+- **State:** Firestore `csuite/coo/approvals` (+ Thread lokal); ohne Auth/Rules → `localStorage`-Fallback.
+- **Lesen:** `/api/clients` und `/api/client/<id>/plan/today` (+ Coaching-Notes) über Vite-Proxy → `:9150`.
+- **Agent-Bridge (lokal):** `coach_csuite.py` → `GET /api/csuite/engines`, `POST /api/csuite/run`, `POST /api/csuite/issue` (nur Loopback). Engines: `claude` / `agy` / `cursor-agent` / `codex` / `gemini` / `issue` / `stub`.
+- **Tailnet :8443:** `/coach`, `/schmiede`, `/konsole`, `/api/csuite`, `/api/clients`, `/api/client` (+ bestehendes `/api/org`).
+- **MVP-Grenzen:** Kein automatischer Mail/WhatsApp-Versand. CMO/CFO/CSO später analog.
+
+### Parallelflächen (Stand Audit 2026-11-24)
+
+Drei lokale/cloudige Coaching-UIs laufen bewusst nebeneinander — nicht vermischen ohne Owner-Entscheidung:
+
+| Fläche | Route | SOT |
+|--------|-------|-----|
+| Schmiede | `/schmiede/` | `~/.local/Klienten`, `plan.json`, eigene Editoren |
+| Lokal-Planung | `/coach/local.html` | `training-plans/` + `@plan` |
+| Cloud Coach | `/coach/coach.html` | Firestore `fitness/{uid}` |
+
+Weitere Doppelungen: Habits (Schmiede-Logs vs. HabitCycle), Notizen (Disk vs. Messages), Klientenliste (Slug vs. Firebase-UID). Docs, die noch `/clientforge/` als Planstudio oder `~/dev/klienten-dev` als UI-Root nennen, sind veraltet (`KLIENTEN_UI_ROOT` → in-repo `klienten-ui`).
 
 ## Plan documents and catalog failures (2026-10-31)
 

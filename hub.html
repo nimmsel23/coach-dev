@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#16384f" />
+    <title>Coach Hub · VitalOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #eef3f8;
+        --panel: rgba(255, 255, 255, 0.92);
+        --line: #d5deea;
+        --ink: #142338;
+        --muted: #4f6078;
+        --sidebar: #16384f;
+        --accent: #2f7a6f;
+        --accent-soft: rgba(47, 122, 111, 0.14);
+        --shadow: 0 2px 10px rgba(20, 45, 70, 0.08);
+        --font: "IBM Plex Sans", "Segoe UI", sans-serif;
+        --display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: var(--font);
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(120, 166, 255, 0.22), transparent 28%),
+          radial-gradient(circle at bottom right, rgba(45, 127, 110, 0.12), transparent 22%),
+          linear-gradient(180deg, #f4f8ff 0%, var(--bg) 100%);
+      }
+      main {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 3rem;
+      }
+      .eyebrow {
+        margin: 0;
+        font-size: 0.75rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 650;
+      }
+      h1 {
+        margin: 0.35rem 0 0.5rem;
+        font-family: var(--display);
+        font-size: clamp(1.85rem, 4vw, 2.5rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .lead {
+        margin: 0 0 1.5rem;
+        max-width: 38rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .grid {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+      }
+      a.card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        padding: 1rem 1.05rem;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: inherit;
+        text-decoration: none;
+        box-shadow: var(--shadow);
+      }
+      a.card:hover {
+        border-color: rgba(47, 122, 111, 0.45);
+        background: var(--accent-soft);
+      }
+      a.card strong { font-size: 1.05rem; }
+      a.card span {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .section {
+        margin: 1.5rem 0 0.65rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 650;
+      }
+      footer {
+        margin-top: 2rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      footer code { color: var(--accent); font-weight: 650; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">VitalOS · Coaching</p>
+      <h1>Coach Hub</h1>
+      <p class="lead">
+        Gleichrangige Einstiege — Schmiede, Cloud, Lokal, COO-Agent. Kein bevorzugter Haupteinstieg.
+      </p>
+
+      <p class="section">Klienten &amp; Praxis</p>
+      <div class="grid">
+        <a class="card" href="/schmiede/">
+          <strong>Klientenschmiede</strong>
+          <span>Heute · Plan · Notizen · Habits · Journal (ClientForge).</span>
+        </a>
+        <a class="card" href="/konsole/">
+          <strong>Konsole</strong>
+          <span>CRM, Zahlung, Übersicht, neuer Klient.</span>
+        </a>
+        <a class="card" href="./local.html">
+          <strong>Lokal · Planung</strong>
+          <span>Pläne &amp; Workspace ohne Cloud-Login.</span>
+        </a>
+      </div>
+
+      <p class="section">Cloud &amp; Agent</p>
+      <div class="grid">
+        <a class="card" href="./coach.html">
+          <strong>Cloud Coach</strong>
+          <span>Inbox, Katalog, Messages, Traction.</span>
+        </a>
+        <a class="card" href="./coo">
+          <strong>COO Cockpit</strong>
+          <span>HITL, Skills, Agent-Bridge.</span>
+        </a>
+        <a class="card" href="./shell">
+          <strong>Arbeitsplatz-Shell</strong>
+          <span>Vue-Rahmen mit eingebettetem Coach.</span>
+        </a>
+      </div>
+
+      <footer>
+        Tailnet: <code>https://ideapad.tail7a15d6.ts.net:8443/coach/</code>
+      </footer>
+    </main>
+  </body>
+</html>

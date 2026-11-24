@@ -1,0 +1,21 @@
+{
+  "id": "coo",
+  "title": "Chief Operating Officer",
+  "version": "1.1",
+  "focus": "Coaching-Delivery & Kundenerfolg",
+  "defaultModel": "anthropic/claude-sonnet-4.5",
+  "temperature": 0.35,
+  "allowedSkills": [
+    "deep_dive_notes",
+    "create_exercise_sheet",
+    "process_call_transcript",
+    "onboard_client",
+    "draft_followup_email",
+    "draft_checkin_reminder"
+  ],
+  "requiresApproval": [
+    "draft_followup_email",
+    "draft_checkin_reminder",
+    "onboard_client"
+  ]
+}

@@ -6,6 +6,13 @@
 
 ## 2026-11-24 — Coach Hub unter `/coach/` (Tailnet)
 
+- **`hub.html`:** Neue HTML-Seite als zentraler Einstiegspunkt für alle Coaching-relevanten UIs.
+- **Routing:** `/coach/` und `/coach/hub` liefern nun `hub.html`. `/coach/coo` liefert `coo.html`, `/coach/shell` liefert `index.html` (Vue-Shell).
+- **Tailnet `:8443`:** `/coach/`, `/schmiede/`, `/konsole/`, `/api/csuite`, `/api/clients`, `/api/client` werden über Tailscale Serve bereitgestellt.
+-
+
+## 2026-11-24 — Coach Hub unter `/coach/` (Tailnet)
+
 - `hub.html` ist der Einstieg unter `/coach/`; Shell → `/coach/shell`, COO → `/coach/coo`.
 - Tailnet `:8443`: `/coach`, `/schmiede`, `/konsole`, plus C-Suite-/Klienten-APIs.
 - Hub: `https://ideapad.tail7a15d6.ts.net:8443/coach/`

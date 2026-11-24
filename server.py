@@ -401,6 +401,8 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     app.include_router(local_traction_router)
     from coach_org import create_router as create_org_router
     app.include_router(create_org_router())
+    from coach_csuite import create_router as create_csuite_router
+    app.include_router(create_csuite_router())
 
     from coach_legacy_clients import (
         include_legacy_clients, legacy_ui, schmiede_dir, konsole_dir, spa_document,
@@ -475,6 +477,24 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     @app.api_route("/coach", methods=["GET", "HEAD"])
     async def coach_redirect():
         return RedirectResponse("/coach/")
+
+    @app.api_route("/coach/", methods=["GET", "HEAD"])
+    @app.api_route("/coach/hub", methods=["GET", "HEAD"])
+    @app.api_route("/coach/hub/", methods=["GET", "HEAD"])
+    async def coach_hub_ui():
+        # Gleichrangiger Link-Hub (kein Schmiede-Haupteinstieg).
+        return frontend(coach, "hub.html")
+
+    @app.api_route("/coach/coo", methods=["GET", "HEAD"])
+    @app.api_route("/coach/coo/", methods=["GET", "HEAD"])
+    async def coach_coo_ui():
+        # Clean URL for Tailnet; assets remain under /coach/assets/*.
+        return frontend(coach, "coo.html")
+
+    @app.api_route("/coach/shell", methods=["GET", "HEAD"])
+    @app.api_route("/coach/shell/", methods=["GET", "HEAD"])
+    async def coach_shell_ui():
+        return frontend(coach, "index.html")
 
     @app.api_route("/coach/{path:path}", methods=["GET", "HEAD"])
     async def coach_ui(path: str):

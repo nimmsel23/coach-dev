@@ -141,6 +141,8 @@ export default defineConfig(async ({ mode }) => {
               coach: resolve(__dirname, 'coach.html'),
               local: resolve(__dirname, 'local.html'),
               clientforge: resolve(__dirname, 'clientforge.html'),
+              coo: resolve(__dirname, 'coo.html'),
+              hub: resolve(__dirname, 'hub.html'),
             }
           : undefined,
         output: {

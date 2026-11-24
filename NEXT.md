@@ -60,3 +60,7 @@
 *   **Ratenbegrenzung:** Die Implementierung der Ratenbegrenzung (`CacheService.getScriptCache()`) ist pro Nutzer, nicht global für die gesamte Web-App, was die Annahme einer „max. 30 Einträge pro Minute“ für das Formular insgesamt untergräbt.
 *   **Irreführender Kommentar:** Der Kommentar `/* offline: bleibt lokal gespeichert */` in `src/lib/desk.tsx` ist nicht zutreffend, da keine clientseitige Persistenz für fehlgeschlagene Anfragen implementiert wurde.
 *   **`setup()`-Berechtigungen:** Die `setup()`-Funktion zum Erstellen des Sheets könnte über die angegebene `spreadsheets`-Berechtigung hinaus zusätzliche oder explizitere Nutzerzustimmungen für `SpreadsheetApp.create` erfordern, was nicht vollständig verifiziert wurde.
+
+**Gemini-Review (potenzielle blinde Flecken, 2026-11-24):**
+*   **Ungeprüfte Annahme zur `local_only`-Guard-Abdeckung:** Die Anpassung der `local_only`-Guard-Logik für Tailnet-Zugriff erfolgte explizit in `coach_local_plans.py`. Es wurde nicht explizit verifiziert, ob andere lokale UIs wie die Konsole (die von `coach_legacy_clients.py` bedient wird) dieselbe aktualisierte Guard-Funktion verwenden oder eine eigene, potenziell noch blockierende Logik besitzen.
+*   **Mangel an konkreten Details im Konflikt-Audit:** Der Audit zu Widersprüchen zwischen `coach-dev/src` und `klienten-ui/schmiede-src` identifiz

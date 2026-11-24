@@ -1,0 +1,169 @@
+{
+  "workspaceId": "coo",
+  "roleTitle": "Chief Operating Officer — Coaching-Delivery & Kundenerfolg",
+  "defaultModel": "anthropic/claude-sonnet-4.5",
+  "temperature": 0.35,
+  "version": "1.1",
+  "tools": [
+    {
+      "name": "deep_dive_notes",
+      "description": "Durchsucht Notizen/Transkripte/Session-Historie eines Klienten und liefert Muster, Stärken und eine offene Coaching-Frage. Reine Analyse — kein Versand. Nutzen vor einer Session oder wenn Daniel nach wiederkehrenden Blockaden fragt.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Lokale Klienten-ID (z. B. matthias-mayer)."
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Anzeigename für Karten und Queue."
+          },
+          "focus": {
+            "type": "string",
+            "description": "Optionaler Fokus (z. B. Perfektionismus, Consistenz)."
+          }
+        },
+        "required": ["clientId"]
+      }
+    },
+    {
+      "name": "create_exercise_sheet",
+      "description": "Erstellt ein Markdown-Übungs-/Reflexionsblatt zur heutigen Agenda. Internes Delivery-Artefakt — kein automatischer Klienten-Versand.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Lokale Klienten-ID."
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Anzeigename."
+          },
+          "agenda": {
+            "type": "string",
+            "description": "Heutige Agenda oder Einheitenname."
+          },
+          "sessionLabel": {
+            "type": "string",
+            "description": "Kurzlabel für die Karte (z. B. Session 4 von 8)."
+          }
+        },
+        "required": ["clientId", "agenda"]
+      }
+    },
+    {
+      "name": "process_call_transcript",
+      "description": "Verdichtet ein Call-/Session-Transkript in Erkenntnis, Hausaufgaben, emotionalen Zustand und offene Punkte. Speichert nur den Analyse-Entwurf — versendet nichts.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Optional; wenn bekannt, für Zuordnung."
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Anzeigename oder Session-Label."
+          },
+          "transcript": {
+            "type": "string",
+            "description": "Rohtext aus Zoom/Fireflies/Notizen."
+          }
+        },
+        "required": ["transcript"]
+      }
+    },
+    {
+      "name": "onboard_client",
+      "description": "Bereitet Willkommensfragebogen-Text und Vertrags-/Paketdaten für einen neuen Klienten vor. Außenwirkung (Mail, Ordner final anlegen) nur nach Freigabe — daher immer pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vollständiger Name des neuen Klienten."
+          },
+          "email": {
+            "type": "string",
+            "description": "E-Mail für Willkommensentwurf."
+          },
+          "package": {
+            "type": "string",
+            "description": "Paket (z. B. 10er Coaching, Gruppe)."
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    {
+      "name": "draft_followup_email",
+      "description": "Formuliert Follow-up nach einer Session (Betreff + Body inkl. Kurzfassung und nächstem Schritt). Immer pending_approval — kein Versand ohne CEO-Freigabe.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Lokale Klienten-ID."
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Anzeigename für Anrede."
+          },
+          "sessionSummary": {
+            "type": "string",
+            "description": "Stichpunkte oder Zusammenfassung der Session."
+          }
+        },
+        "required": ["clientId", "clientName"]
+      }
+    },
+    {
+      "name": "draft_checkin_reminder",
+      "description": "Kurze Check-in-Nachricht, wenn seit Tagen kein Update kam. Immer pending_approval — kein WhatsApp/Mail-Send ohne Freigabe.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Lokale Klienten-ID."
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Anzeigename."
+          },
+          "daysSince": {
+            "type": "number",
+            "description": "Tage seit letztem Kontakt/Update."
+          },
+          "channel": {
+            "type": "string",
+            "enum": ["email", "whatsapp", "auto"],
+            "description": "Bevorzugter Kanal für den Entwurf."
+          }
+        },
+        "required": ["clientId", "clientName"]
+      }
+    }
+  ],
+  "collections": {
+    "readAccess": [
+      "csuite/coo/approvals",
+      "csuite/coo/threads",
+      "csuite/coo/agent_logs"
+    ],
+    "writeAccess": [
+      "csuite/coo/approvals",
+      "csuite/coo/threads",
+      "csuite/coo/agent_logs"
+    ],
+    "notes": "Klientendaten (Pläne, Notizen) kommen über Coach-API :9150 (/api/clients, /api/client/*), nicht als freie Firestore-Vollzugriffe. Außenwirkung nur über approvals mit status pending_approval."
+  }
+}
