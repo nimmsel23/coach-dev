@@ -18,6 +18,8 @@
 #   Grün = mindestens ein lesbarer, erfolgreicher Check, keiner rot/offen
 #   (fail-closed). Basis mit Branch-Schutz/Rulesets -> Auto-Merge, GitHub
 #   erzwingt die Pflicht-Checks; sonst direkter Squash.
+#   Jeder Merge mit --match-head-commit <geprüfter Head>: ein neuerer,
+#   ungeprüfter Head wird nie gemergt.
 #   Pin-Bump (nur wenn .github/scripts/pin-bump-policy.sh existiert, z. B. vitalos)
 #                                             -> wie A, Fehler ins Pin-Issue
 #
@@ -178,7 +180,7 @@ squash() {
   if [ "$DRY_RUN" = 1 ]; then echo "DRY-RUN: würde #${PR} squash-mergen (Klasse ${cls})."; return 0; fi
   ensure_label "merge:$cls" C2E0C6 "Vom Org-Bot gemergt (Klasse $cls)"
   gh pr edit "$PR" -R "$REPO" --add-label "merge:$cls" >/dev/null 2>&1 || true
-  gh pr merge "$PR" -R "$REPO" --squash --delete-branch && return 0
+  gh pr merge "$PR" -R "$REPO" --squash --match-head-commit "$head_sha" --delete-branch && return 0
   [ "$(gh pr view "$PR" -R "$REPO" --json state -q .state)" = "MERGED" ]
 }
 
@@ -235,7 +237,7 @@ if base_unprotected; then
   squash "$class"
   exit 0
 fi
-if gh pr merge "$PR" -R "$REPO" --squash --auto --delete-branch; then
+if gh pr merge "$PR" -R "$REPO" --squash --auto --match-head-commit "$head_sha" --delete-branch; then
   ensure_label "merge:$class" C2E0C6 "Vom Org-Bot gemergt (Klasse $class)"
   gh pr edit "$PR" -R "$REPO" --add-label "merge:$class" >/dev/null 2>&1 || true
   echo "PR #${PR}: Auto-Merge eingereiht (Branch-Schutz aktiv)."
