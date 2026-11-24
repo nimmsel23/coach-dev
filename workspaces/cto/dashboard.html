@@ -192,6 +192,37 @@ footer.note code { color: var(--accent2); }
   <script type="module">
 const ROLE = {"id": "cto", "title": "KI-CTO · Coach-Werkstatt", "icon": "⬡", "gitBadge": "Git: main@cto-v1.0", "kpis": [{"id": "ci", "label": "CI (dev)", "value": "grün*"}, {"id": "paths", "label": "Plan-SOTs", "value": "2"}, {"id": "queue", "label": "Tech-Freigaben", "value": "1"}], "focus": [{"title": "Doppelte Plan-Schreibpfade", "meta": "plan.json ↔ training-plans", "bullets": ["Schmiede → routines Push", "Lokal → macrocycles Deliver", "App schreibt nicht zurück auf Disk"], "skills": [["audit_write_paths", "Write-Path Audit"], ["propose_ufo_slice", "UFO-Slice"]], "ctx": {"area": "plans", "goal": "Ein Store + Desktop-Shell"}}, {"title": "C-Suite Serve", "meta": "server.py · /coach/*", "bullets": ["Dashboards unter workspaces/*/dashboard.html", "Bridge /api/csuite/run Loopback", "Tailnet :8443 Hub"], "skills": [["plan_server_change", "Server-Plan"], ["draft_architecture_note", "Arch-Notiz"]], "ctx": {"change": "Static mount /workspaces + role routes", "topic": "C-Suite dashboards"}}], "launcher": [{"id": "diagnose_ci_red", "title": "CI-Diagnose", "sub": "Roter Lauf"}, {"id": "audit_write_paths", "title": "Write-Paths", "sub": "SOT-Audit"}, {"id": "propose_ufo_slice", "title": "UFO-Slice", "sub": "Nächster Bau"}, {"id": "escalate_owner_gate", "title": "Owner-Gate", "sub": "Eine Frage"}], "mockQueue": [{"title": "Server-Änderung · Workspaces", "skillId": "plan_server_change", "preview": "Scope:\n• GET /coach/cmo|cpo|cto|cfo → workspaces/*/dashboard.html\n• Static /workspaces/ für Brain-Dateien\n• Kein Firebase-Deploy nötig für lokal/Tailnet\n\nRisiko: niedrig. Restart coach-api."}]};
 
+/** Git-as-a-Brain: load prompt + skills from same workspace folder (no Firestore sync). */
+let BRAIN = { systemPrompt: "", skillsConfig: null, loaded: false };
+
+async function loadWorkspaceBrain() {
+  try {
+    const base = `/coach/workspaces/${ROLE.id}`;
+    const [promptRes, skillsRes] = await Promise.all([
+      fetch(`${base}/system-prompt.md`, { cache: "no-cache" }),
+      fetch(`${base}/skills.json`, { cache: "no-cache" }),
+    ]);
+    if (!promptRes.ok || !skillsRes.ok) {
+      throw new Error(`HTTP ${promptRes.status}/${skillsRes.status}`);
+    }
+    const systemPrompt = await promptRes.text();
+    const skillsConfig = await skillsRes.json();
+    BRAIN = { systemPrompt, skillsConfig, loaded: true };
+    if (skillsConfig?.version) {
+      ROLE.gitBadge = `Git: main@${ROLE.id}-v${skillsConfig.version}`;
+    }
+    if (Array.isArray(skillsConfig?.tools)) {
+      ROLE.brainToolNames = skillsConfig.tools.map((t) => t.name);
+    }
+    return BRAIN;
+  } catch (err) {
+    console.warn("[csuite] loadWorkspaceBrain failed", err);
+    BRAIN = { systemPrompt: "", skillsConfig: null, loaded: false, error: String(err?.message || err) };
+    return BRAIN;
+  }
+}
+
+
 const MODELS = [
   { id: "claude", label: "Claude (CLI / Bridge)" },
   { id: "gpt", label: "GPT (OpenRouter)" },
@@ -250,6 +281,8 @@ export const llmRouter = {
       engine: this.model === "local" ? "stub" : this.model === "gpt" ? "issue" : this.model,
       context,
       message,
+      systemPrompt: BRAIN.systemPrompt || undefined,
+      skills: BRAIN.skillsConfig || undefined,
     };
     try {
       const res = await fetch("/api/csuite/run", {
@@ -556,6 +589,7 @@ async function boot() {
   state.sync = conn.mode;
   $(".dot").classList.toggle("live", conn.mode !== "mock");
   $(".sync-label").textContent = conn.mode === "mock" ? "Sync: lokal (Mock)" : "Sync: Firebase";
+  const brain = await loadWorkspaceBrain();
   await ensureSeedQueue();
   renderHeader();
   renderFocus();
@@ -563,7 +597,12 @@ async function boot() {
   renderChat();
   renderQueue();
   wire();
-  if (!state.chat.length) log("system", `${ROLE.id.toUpperCase()}-Cockpit geladen · Bridge /api/csuite/run falls lokal.`);
+  if (!state.chat.length) {
+    const brainNote = brain.loaded
+      ? `Brain: system-prompt.md + skills.json v${brain.skillsConfig?.version || "?"}`
+      : `Brain-Fetch fehlgeschlagen (${brain.error || "offline"}) — eingebettetes ROLE bleibt aktiv`;
+    log("system", `${ROLE.id.toUpperCase()}-Cockpit · ${brainNote} · Bridge /api/csuite/run`);
+  }
 }
 
 boot();

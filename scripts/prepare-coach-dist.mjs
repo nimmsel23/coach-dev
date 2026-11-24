@@ -1,12 +1,14 @@
 // coach-shell.html -> index.html; coach.html remains the React app embedded by the shell.
 // Splash, SW (coach-sw.js inkl. Precache der Assets), SW-Register und Manifest-Patch
 // macht danach scripts/mini-app-shell (@vos/mini-app-shell, Konfig: mini-app.json).
-import { copyFileSync, existsSync } from 'node:fs'
+import { copyFileSync, cpSync, existsSync, mkdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 const distDir = resolve('dist-coach')
 const coachHtml = resolve(distDir, 'coach-shell.html')
 const indexHtml = resolve(distDir, 'index.html')
+const workspacesSrc = resolve('workspaces')
+const workspacesDest = resolve(distDir, 'workspaces')
 
 if (!existsSync(coachHtml)) {
   console.error('prepare-coach-dist: dist-coach/coach-shell.html missing')
@@ -15,3 +17,10 @@ if (!existsSync(coachHtml)) {
 
 copyFileSync(coachHtml, indexHtml)
 console.log('prepare-coach-dist: coach-shell.html -> index.html; React app bleibt unter coach.html')
+
+// C-Suite Git-Brain → Hosting-Pfad /workspaces/<role>/ (dashboard + prompt + skills).
+if (existsSync(workspacesSrc)) {
+  mkdirSync(distDir, { recursive: true })
+  cpSync(workspacesSrc, workspacesDest, { recursive: true })
+  console.log('prepare-coach-dist: workspaces/ → dist-coach/workspaces/')
+}

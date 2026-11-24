@@ -526,6 +526,24 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def workspace_dashboard_file(role: str):
         return _workspace_dashboard(role)
 
+    @app.api_route("/coach/ceo", methods=["GET", "HEAD"])
+    @app.api_route("/coach/ceo/", methods=["GET", "HEAD"])
+    @app.api_route("/coach/portal", methods=["GET", "HEAD"])
+    @app.api_route("/coach/portal/", methods=["GET", "HEAD"])
+    async def coach_ceo_portal():
+        return frontend(coach, "ceo.html")
+
+    # Git-Brain static: /workspaces/* and /coach/workspaces/* (Tailnet already proxies /coach).
+    workspaces_dir = (ROOT / "workspaces").resolve()
+    if workspaces_dir.is_dir():
+        from fastapi.staticfiles import StaticFiles
+        app.mount("/workspaces", StaticFiles(directory=str(workspaces_dir), html=False), name="csuite-workspaces")
+        app.mount(
+            "/coach/workspaces",
+            StaticFiles(directory=str(workspaces_dir), html=False),
+            name="csuite-workspaces-coach",
+        )
+
     @app.api_route("/coach/shell", methods=["GET", "HEAD"])
     @app.api_route("/coach/shell/", methods=["GET", "HEAD"])
     async def coach_shell_ui():

@@ -14,4 +14,9 @@ Freigaben) lebt in localStorage bzw. später Firestore `csuite/{role}/…`.
 Pro Rolle: `config.json`, `system-prompt.md`, `skills.json`, `knowledge/`,
 `dashboard.html` (Vanilla, Dark Cockpit, HITL, LLM-Switcher, Mock bis Bridge).
 
-Hub: `/coach/`. Bridge: `POST /api/csuite/run` (Loopback).
+**Brain-Laden:** Dashboard liest `./system-prompt.md` und `./skills.json` per
+`fetch` (Git = SOT, kein Firestore-Sync fürs Gehirn).
+
+**CEO-Portal:** `/coach/ceo` — Firebase Auth, iframe-Tabs auf alle Rollen.
+
+Hub: `/coach/`. Bridge: `POST /api/csuite/run` (Loopback). Static: `/workspaces/`.

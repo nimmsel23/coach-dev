@@ -192,6 +192,37 @@ footer.note code { color: var(--accent2); }
   <script type="module">
 const ROLE = {"id": "coo", "title": "KI-COO · Coaching-Delivery", "icon": "◎", "gitBadge": "Git: main@coo-v1.1", "kpis": [{"id": "active", "label": "Aktive Klienten", "value": "12"}, {"id": "sessions", "label": "Sessions heute", "value": "3"}, {"id": "queue", "label": "Offene Freigaben", "value": "2"}], "focus": [{"title": "Matthias · Session 5/10", "meta": "Heute 17:00 · Plan: Push A", "bullets": ["Letzte Notiz: Schlaf besser, Knie ok", "Blockade: Hausaufgaben nur 1×/Woche", "Ziel: eine Mikro-Übung festziehen"], "skills": [["deep_dive_notes", "Deep-Dive"], ["draft_followup_email", "Follow-up Entwurf"]], "ctx": {"clientId": "matthias-mayer", "clientName": "Matthias"}}, {"title": "Jakob · Check-in überfällig", "meta": "12 Tage ohne Update", "bullets": ["Firestore-UID verknüpft", "Letzte Session geloggt vor 12 Tagen", "Kein offenes Follow-up in der Queue"], "skills": [["draft_checkin_reminder", "Check-in"], ["create_exercise_sheet", "Übungsblatt"]], "ctx": {"clientId": "jakob-stadler", "clientName": "Jakob", "daysSince": 12}}], "launcher": [{"id": "deep_dive_notes", "title": "Deep-Dive Notizen", "sub": "Muster vor der Session"}, {"id": "process_call_transcript", "title": "Transkript", "sub": "Call verdichten"}, {"id": "onboard_client", "title": "Onboarding", "sub": "Willkommen vorbereiten"}, {"id": "draft_followup_email", "title": "Follow-up", "sub": "Nach der Session"}], "mockQueue": [{"title": "Follow-up · Matthias", "skillId": "draft_followup_email", "preview": "Betreff: Nach unserer Session\n\nHallo Matthias,\n\nkurz die Punkte von heute:\n• Knie entlasten, Tempo runter\n• 2× Push A diese Woche\n\nViele Grüße\nDaniel"}]};
 
+/** Git-as-a-Brain: load prompt + skills from same workspace folder (no Firestore sync). */
+let BRAIN = { systemPrompt: "", skillsConfig: null, loaded: false };
+
+async function loadWorkspaceBrain() {
+  try {
+    const base = `/coach/workspaces/${ROLE.id}`;
+    const [promptRes, skillsRes] = await Promise.all([
+      fetch(`${base}/system-prompt.md`, { cache: "no-cache" }),
+      fetch(`${base}/skills.json`, { cache: "no-cache" }),
+    ]);
+    if (!promptRes.ok || !skillsRes.ok) {
+      throw new Error(`HTTP ${promptRes.status}/${skillsRes.status}`);
+    }
+    const systemPrompt = await promptRes.text();
+    const skillsConfig = await skillsRes.json();
+    BRAIN = { systemPrompt, skillsConfig, loaded: true };
+    if (skillsConfig?.version) {
+      ROLE.gitBadge = `Git: main@${ROLE.id}-v${skillsConfig.version}`;
+    }
+    if (Array.isArray(skillsConfig?.tools)) {
+      ROLE.brainToolNames = skillsConfig.tools.map((t) => t.name);
+    }
+    return BRAIN;
+  } catch (err) {
+    console.warn("[csuite] loadWorkspaceBrain failed", err);
+    BRAIN = { systemPrompt: "", skillsConfig: null, loaded: false, error: String(err?.message || err) };
+    return BRAIN;
+  }
+}
+
+
 const MODELS = [
   { id: "claude", label: "Claude (CLI / Bridge)" },
   { id: "gpt", label: "GPT (OpenRouter)" },
@@ -250,6 +281,8 @@ export const llmRouter = {
       engine: this.model === "local" ? "stub" : this.model === "gpt" ? "issue" : this.model,
       context,
       message,
+      systemPrompt: BRAIN.systemPrompt || undefined,
+      skills: BRAIN.skillsConfig || undefined,
     };
     try {
       const res = await fetch("/api/csuite/run", {
@@ -556,6 +589,7 @@ async function boot() {
   state.sync = conn.mode;
   $(".dot").classList.toggle("live", conn.mode !== "mock");
   $(".sync-label").textContent = conn.mode === "mock" ? "Sync: lokal (Mock)" : "Sync: Firebase";
+  const brain = await loadWorkspaceBrain();
   await ensureSeedQueue();
   renderHeader();
   renderFocus();
@@ -563,7 +597,12 @@ async function boot() {
   renderChat();
   renderQueue();
   wire();
-  if (!state.chat.length) log("system", `${ROLE.id.toUpperCase()}-Cockpit geladen · Bridge /api/csuite/run falls lokal.`);
+  if (!state.chat.length) {
+    const brainNote = brain.loaded
+      ? `Brain: system-prompt.md + skills.json v${brain.skillsConfig?.version || "?"}`
+      : `Brain-Fetch fehlgeschlagen (${brain.error || "offline"}) — eingebettetes ROLE bleibt aktiv`;
+    log("system", `${ROLE.id.toUpperCase()}-Cockpit · ${brainNote} · Bridge /api/csuite/run`);
+  }
 }
 
 boot();

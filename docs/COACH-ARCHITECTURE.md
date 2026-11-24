@@ -99,11 +99,12 @@ Tests: `tests/test_plan_push.py` (Umwandlung, Idempotenz, Schutz fremder Routine
 Coach-only Werkstatt (kein Klient sieht coach-dev). Nicht Org-/VitalOS-Meta-Rollen.
 
 - **Hub:** `hub.html` → `:9150/coach/` und Tailnet `:8443/coach/`.
-- **Git-Brain:** `workspaces/{coo,cmo,cpo,cto,cfo}/` — `config.json`, `system-prompt.md`, `skills.json`, `knowledge/`, **`dashboard.html`** (Vanilla Dark Cockpit, HITL, LLM-Switcher, Mock + Bridge).
-- **Routen:** `/coach/cmo|cpo|cto|cfo`, `/coach/coo/dashboard`; React-COO bleibt `/coach/coo`.
-- **State:** localStorage `csuite-{role}-*`; später Firestore `csuite/{role}/approvals`.
-- **Agent-Bridge:** `coach_csuite.py` → `GET /api/csuite/engines`, `POST /api/csuite/run`, `POST /api/csuite/issue` (Loopback).
-- **Tailnet :8443:** `/coach`, `/schmiede`, `/konsole`, `/api/csuite`, `/api/clients`, `/api/client`.
+- **Git-Brain (SOT):** `workspaces/{coo,cmo,cpo,cto,cfo}/` — `system-prompt.md` + `skills.json` werden vom Dashboard per `fetch('./…')` geladen (kein Firestore-Sync fürs Brain). `dashboard.html` + `config.json` + `knowledge/`.
+- **CEO-Portal:** `ceo.html` → `/coach/ceo` (Firebase Auth, Tabs → iframe `/workspaces/<role>/dashboard.html`). Optional `VITE_CEO_EMAIL`.
+- **Static:** `:9150/workspaces/*` und Build-Kopie nach `dist-coach/workspaces/` für Hosting.
+- **Routen:** `/coach/cmo|cpo|cto|cfo`, `/coach/coo/dashboard`; React-COO `/coach/coo`.
+- **State (Queue):** localStorage `csuite-{role}-*`; Auth über Firebase; Brain bleibt Git.
+- **Agent-Bridge:** `POST /api/csuite/run` akzeptiert optional `systemPrompt`/`skills` vom Client; sonst Dateien aus `workspaces/`.
 - **MVP-Grenzen:** Kein automatischer Outbound-Send.
 
 ### Parallelflächen (Stand Audit 2026-11-24)

@@ -43,6 +43,9 @@ class RunBody(BaseModel):
     engine: str = "claude"
     context: dict[str, Any] = Field(default_factory=dict)
     message: str | None = None
+    # Optional: dashboard fetched Git-brain client-side (fetch ./system-prompt.md).
+    systemPrompt: str | None = None
+    skills: dict[str, Any] | None = None
 
 
 class IssueBody(BaseModel):
@@ -449,8 +452,13 @@ def create_router() -> APIRouter:
     async def run(request: Request, body: RunBody):
         guard(request)
         ws = load_workspace(body.workspaceId)
+        if isinstance(body.systemPrompt, str) and body.systemPrompt.strip():
+            ws["prompt"] = body.systemPrompt.strip()
+        if isinstance(body.skills, dict) and body.skills:
+            ws["skills"] = body.skills
+            ws["tools"] = body.skills.get("tools") or body.skills.get("skills") or ws["tools"]
         skill = skill_meta(ws, body.skillId)
-        system = ws["prompt"] or "Du bist der COO-Agent für Coaching-Delivery."
+        system = ws["prompt"] or "Du bist ein C-Suite-Agent für Daniels Coaching-Business."
         user = build_user_prompt(ws, skill, body)
         text, used = run_engine(body.engine, system, user, skill, body)
         requires = bool(skill.get("requiresApproval")) if skill else True

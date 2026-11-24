@@ -143,6 +143,7 @@ export default defineConfig(async ({ mode }) => {
               clientforge: resolve(__dirname, 'clientforge.html'),
               coo: resolve(__dirname, 'coo.html'),
               hub: resolve(__dirname, 'hub.html'),
+              ceo: resolve(__dirname, 'ceo.html'),
             }
           : undefined,
         output: {
