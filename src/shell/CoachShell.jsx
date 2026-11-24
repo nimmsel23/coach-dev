@@ -116,7 +116,7 @@ export default function CoachShell() {
   const current = findNavItem(route.sub)
   const subtitle = route.sub === 'exercises'
     ? (counts.exercises > 0 ? `${counts.exercises} offen` : 'Alles freigegeben')
-    : route.sub === 'traction' ? 'Live-Nutzung' : 'Verwaltung & Freigaben'
+    : route.sub === 'traction' ? 'Live-Nutzung' : route.sub === 'clients' ? 'Klienten & Betreuung' : 'Verwaltung & Freigaben'
 
   return (
     <ErrorBoundary>
@@ -150,7 +150,7 @@ export default function CoachShell() {
             <div className={`min-w-0 transition-all duration-500 ease-in-out ${pinned ? 'lg:ml-[304px]' : 'lg:ml-[108px]'}`}>
               <CoachHeader title={current.title} subtitle={subtitle} actions={<WorkerChip />} />
               <main
-                className="mx-auto max-w-[1600px] pb-[calc(var(--mobile-nav-height)+12px)] lg:pb-6"
+                className="mx-auto max-w-[1920px] pb-[calc(var(--mobile-nav-height)+12px)] lg:pb-6"
                 style={{ paddingLeft: 'var(--safe-left)', paddingRight: 'var(--safe-right)' }}
               >
                 <Coach sub={route.sub} onInspectExercise={inspectExercise} onInboxCount={reportExerciseCount} unread={unread} />

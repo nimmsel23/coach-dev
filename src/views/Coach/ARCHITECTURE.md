@@ -463,3 +463,33 @@ zukünftige oder ausschließlich gecachte Zeitpunkte ergeben „Unbekannt“.
 Eine Minutenuhr aktualisiert den Status auch ohne neue Events. Fitness sendet
 bereits Öffnungs-/Vordergrund-Events und sichtbare Fünf-Minuten-Heartbeats.
 Fuel/Relax und weitere Apps sind noch keine Aktivitätsquellen.
+
+## Offene Coaching-Übersicht und lokale Workspaces (2026-11-24)
+
+Der leere Hash öffnet jetzt `clients`: eine breite, durchsuchbare Klientenübersicht
+mit Aktivitätsfilter, ungelesenen Nachrichten und direkten Console-/Plan-/Chat-Aktionen.
+Die Seite scrollt als Ganzes; feste Panel-Höhe und verschachtelte Listen-/Detail-Scroller
+entfallen. Beim ausgewählten Klienten sind alle sieben Bereiche direkt als Navigation
+sichtbar; das redundante Klienten-Untermenü in der Desktop-Sidebar entfällt.
+Bestehende Workout-/Chat-/Plan-Deep-Links und Datumsmarkierungen bleiben erhalten.
+Firebase-Hosting öffnet die React-App direkt statt in einer zweiten Shell mit iframe;
+der lokale ClientForge-Einstieg bleibt erhalten.
+
+`useWorkspaceSummary` lädt einmal pro Console-Mount und bei „Aktualisieren“ eine
+lesende Projektion über `GET /api/clients/workspaces`. Lokal: gleicher Origin;
+Firebase: bestehender Tailnet-Zugang `https://ideapad.tail7a15d6.ts.net:8443`.
+Die Route ist über die bereits vorhandene `/api/clients`-Serve-Regel erreichbar;
+kein neuer Port, Dienst oder Funnel-Pfad. Acht Sekunden Timeout, kein persistenter
+Cache; Offline, Auth-Fehler und ungültige Antworten werden sichtbar gemeldet.
+
+`src/coach_workspace_api.py` verwendet die bestehende Klientenwurzel und LocalPlans.
+Vor dem Lesen: lokale/Tailnet-Zugangsprüfung, Funnel-Verbot, Firebase-ID-Token-Prüfung
+inkl. Revocation und Coach-Rolle (Owner-UID, coach claim oder `roles/{uid}`).
+Die Antwort enthält nur Workspace-Identität, explizite UID-Zuordnungen,
+Plan-Metadaten (Entwurf/Freigabe, Version, Versand) und den Konfigurationsstatus
+von Taskwarrior. Keine Rohprofile, Notizen, Trainingsinhalte oder Dateipfade.
+Kein Schreibzugriff, kein automatischer Upload. Doppelte UID-Zuordnungen bleiben
+unklar und zeigen niemals willkürlich einen Workspace.
+`WorkspaceOverview` bleibt beim gewählten Klienten sichtbar (Desktop seitlich,
+Mobil oben). Änderungen am Backend brauchen den nächsten autorisierten Service-Reload;
+in dieser Session wird kein laufender Server neugestartet.

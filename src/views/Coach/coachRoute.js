@@ -11,7 +11,7 @@
 export const SUB_TAB_IDS = ['exercises', 'catalog', 'clients', 'traction']
 export const DETAIL_TAB_IDS = ['messages', 'workouts', 'sixpack', 'insights', 'habits', 'templates', 'trainingplan', 'plan']
 
-const DEFAULT_ROUTE = { sub: 'exercises', client: '', detail: 'workouts', date: '' }
+const DEFAULT_ROUTE = { sub: 'clients', client: '', detail: 'workouts', date: '' }
 
 function isIsoDate(value) {
   return /^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))

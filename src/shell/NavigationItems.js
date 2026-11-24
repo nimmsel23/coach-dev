@@ -4,9 +4,9 @@ import { Activity, Inbox, LibraryBig, Users } from 'lucide-react'
 // Geforkt aus ~/vitalos/src/shell/NavigationItems.js: gleiche Form ({ id, label, Icon }),
 // damit Sidebar und Tab-Bar der Shell 1:1 weiterverwendet werden koennen.
 export const NAV_ITEMS = [
+  { id: 'clients', label: 'Übersicht', title: 'Coach', Icon: Users },
   { id: 'exercises', label: 'Anfragen', title: 'Übungsanfragen', Icon: Inbox },
   { id: 'catalog',   label: 'Katalog',  title: 'Katalog',        Icon: LibraryBig },
-  { id: 'clients',   label: 'Klienten', title: 'Klienten',       Icon: Users },
   { id: 'traction',  label: 'Nutzung',   title: 'Fitness-Nutzung', Icon: Activity },
 ]
 

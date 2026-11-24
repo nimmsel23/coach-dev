@@ -1,3 +1,11 @@
+## 2026-11-24 — Offene Coach-Übersicht mit lokalen Workspaces
+
+- Firebase-Coach startet in der Klientenübersicht; Suche, Aktivitätsfilter, direkte Console-/Plan-/Chat-Zugänge. Breite Seite statt verschachtelter Scroll-Panels, alle Klientenbereiche sichtbar.
+- Gehosteter Einstieg öffnet React direkt statt einer zweiten iframe-Shell; lokale ClientForge-Shell bleibt erhalten.
+- Lesende Workspace-Projektion über bestehendes Tailnet/API: eindeutige Firebase-UID-Zuordnung, lokale Planversionen/Versand und Aufgaben-Konfiguration. Firebase-Token + Coach-Rolle, Funnel gesperrt, kein Rohdaten-/Datei-Export.
+- Drei isolierte Python-Zugriffs-/Projektionstests, 115 Coach-Funktionstests, ESLint und Firebase-Build bestanden. Desktop (1600px) und Mobil (390px) mit Beispieldaten visuell geprüft: Klientenwechsel, Chat, Filter, fehlende UID-Zuordnung und Offline-Workspace; kein horizontaler Überlauf. Reproduzierbar: `node src/tests/coach-dashboard-browser.mjs` nach dem Build.
+- Kein Neustart laufender Dienste; authentifizierte Live-Abnahme nach Backend-Reload offen.
+
 ## 2026-11-24 — C-Suite-Lücken gestopft
 
 - HITL: Freigeben+Kopieren, Nur kopieren, mailto; kein Auto-Versand.

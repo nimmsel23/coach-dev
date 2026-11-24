@@ -3,7 +3,6 @@ import { ChevronLeft, ChevronRight, ExternalLink, Inbox, LogOut, MessageSquare, 
 import { NAV_ITEMS } from './NavigationItems.js'
 import ClientQuickMenu, { placeContextMenu } from './ClientQuickMenu.jsx'
 import InboxQuickMenu from './InboxQuickMenu.jsx'
-import { CLIENT_MORE_TABS, CLIENT_PRIMARY_TABS } from '../views/Coach/clientSubTabs.js'
 import { INBOX_SIDEBAR_LIMIT, inboxPayload, inboxStatus, inboxStatusTone, inboxTitle } from './inboxPreview.js'
 
 const MESSAGE_SIDEBAR_LIMIT = 6
@@ -28,15 +27,12 @@ export default function CoachSidebar({
   inboxItems = [],
   activeInboxId = null,
   clientDetail = 'workouts',
-  onSelectClientDetail = null,
   activeClient = '',
 }) {
   const [clientMenu, setClientMenu] = useState(null)
   const [inboxMenu, setInboxMenu] = useState(null)
-  const [moreOpen, setMoreOpen] = useState(false)
   const clientsActive = active === 'clients'
   const exercisesActive = active === 'exercises'
-  const moreActive = CLIENT_MORE_TABS.some((tab) => tab.id === clientDetail)
   const inboxPreview = Array.isArray(inboxItems) ? inboxItems.slice(0, INBOX_SIDEBAR_LIMIT) : []
   const inboxOverflow = Math.max(0, (inboxItems?.length || 0) - inboxPreview.length)
   const showInboxSubs = Boolean(onSelectInbox && inboxPreview.length > 0)
@@ -142,7 +138,7 @@ export default function CoachSidebar({
                   </div>
                 )}
 
-                {id === 'clients' && (showMessageSubs || (clientsActive && onSelectClientDetail)) && (
+                {id === 'clients' && showMessageSubs && (
                   <div className={`mt-1 space-y-0.5 ${pinned ? 'ml-4 border-l border-fit-line/30 pl-2' : 'flex flex-col items-center'}`}>
                     {showMessageSubs && messagePreview.map((client) => {
                       const tabActive = clientsActive && activeClient === client.uid && clientDetail === 'messages'
@@ -180,71 +176,6 @@ export default function CoachSidebar({
                       </button>
                     )}
 
-                    {clientsActive && onSelectClientDetail && CLIENT_PRIMARY_TABS.map((tab) => {
-                      const TabIcon = tab.icon
-                      const tabActive = clientDetail === tab.id
-                      return (
-                        <button
-                          key={tab.id}
-                          type="button"
-                          title={tab.label}
-                          onClick={() => onSelectClientDetail(tab.id)}
-                          aria-current={tabActive ? 'page' : undefined}
-                          className={`flex w-full items-center transition-all ${pinned ? 'gap-3 rounded-xl px-3 py-2 text-left' : 'justify-center rounded-xl p-2.5'} ${tabActive ? 'bg-fit-accent/15 font-semibold text-fit-accent' : 'text-fit-dim hover:bg-white/5 hover:text-fit-ink'}`}
-                        >
-                          <TabIcon size={pinned ? 15 : 16} />
-                          {pinned && <span className="truncate text-xs">{tab.label}</span>}
-                        </button>
-                      )
-                    })}
-                    {clientsActive && onSelectClientDetail && pinned ? (
-                      <div className="relative">
-                        <button
-                          type="button"
-                          onClick={() => setMoreOpen((value) => !value)}
-                          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-xs ${moreActive || moreOpen ? 'bg-fit-accent/10 font-semibold text-fit-accent' : 'text-fit-dim hover:bg-white/5 hover:text-fit-ink'}`}
-                        >
-                          Mehr…
-                        </button>
-                        {moreOpen && (
-                          <div className="mt-1 space-y-0.5 rounded-xl border border-fit-line/40 bg-fit-card/90 p-1 shadow-lg">
-                            {CLIENT_MORE_TABS.map((tab) => {
-                              const TabIcon = tab.icon
-                              const tabActive = clientDetail === tab.id
-                              return (
-                                <button
-                                  key={tab.id}
-                                  type="button"
-                                  onClick={() => {
-                                    onSelectClientDetail(tab.id)
-                                    setMoreOpen(false)
-                                  }}
-                                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs ${tabActive ? 'bg-fit-accent/15 font-semibold text-fit-accent' : 'text-fit-dim hover:bg-white/5 hover:text-fit-ink'}`}
-                                >
-                                  <TabIcon size={14} />
-                                  <span className="truncate">{tab.label}</span>
-                                </button>
-                              )
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    ) : null}
-                    {clientsActive && onSelectClientDetail && !pinned && CLIENT_MORE_TABS.slice(0, 1).map((tab) => {
-                      const TabIcon = tab.icon
-                      const tabActive = CLIENT_MORE_TABS.some((item) => item.id === clientDetail)
-                      return (
-                        <button
-                          key="more-collapsed"
-                          type="button"
-                          title="Mehr Klienten-Bereiche"
-                          onClick={() => onSelectClientDetail(tabActive ? clientDetail : tab.id)}
-                          className={`flex justify-center rounded-xl p-2.5 ${tabActive ? 'bg-fit-accent/15 text-fit-accent' : 'text-fit-dim hover:bg-white/5'}`}
-                        >
-                          <TabIcon size={16} />
-                        </button>
-                      )
-                    })}
                   </div>
                 )}
               </div>

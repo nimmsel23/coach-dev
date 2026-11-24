@@ -4,8 +4,8 @@ import { buildCoachHash, parseCoachHash } from './coachRoute.js'
 
 const UID = 'WM4bgRvDGxXD7SJHo8yWqaKFRQo2'
 
-test('leerer Hash landet auf den Übungsanfragen', () => {
-  assert.deepEqual(parseCoachHash(''), { sub: 'exercises', client: '', detail: 'workouts', date: '' })
+test('leerer Hash öffnet die Coaching-Übersicht', () => {
+  assert.deepEqual(parseCoachHash(''), { sub: 'clients', client: '', detail: 'workouts', date: '' })
   assert.deepEqual(parseCoachHash('#/unbekannt'), parseCoachHash(''))
 })
 

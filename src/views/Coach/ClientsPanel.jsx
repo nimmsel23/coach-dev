@@ -1,7 +1,11 @@
 import ClientMessages from './ClientMessages';
 import { useClientActivity } from './useClientActivity.js';
 import { useState, useEffect, useRef } from 'react';
-import { Users } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, FolderOpen, MessageSquare, Search, Users } from 'lucide-react';
+import { useWorkspaceSummary } from './useWorkspaceSummary.js';
+import WorkspaceOverview from './WorkspaceOverview.jsx';
+import { workspaceForUid } from './workspaceApi.js';
+import './coachDashboard.css';
 import { getAllUserProfiles, updateUserProfile } from '@db';
 import ClientWorkoutsFeed from './ClientWorkoutsFeed';
 import ClientConsole from './ClientConsole';
@@ -11,7 +15,7 @@ import ClientHabitCycle from './ClientHabitCycle';
 import ClientInsights from './ClientInsights';
 import ClientSixPack from './ClientSixPack';
 import { useCoachRoute } from './useCoachRoute.js';
-import { CLIENT_MORE_IDS, CLIENT_MORE_TABS, CLIENT_PRIMARY_TABS } from './clientSubTabs.js';
+import { CLIENT_ALL_TABS } from './clientSubTabs.js';
 
 const STATUS_OPTIONS = [
   { id: 'client', label: 'Klient', hint: 'Zahlend & committed' },
@@ -22,6 +26,8 @@ const STATUS_OPTIONS = [
 export default function ClientsPanel({ unreadCounts = {} }) {
   const [profiles, setProfiles] = useState({});
   const [activityFilter, setActivityFilter] = useState('all');
+  const [search, setSearch] = useState('');
+  const workspaceState = useWorkspaceSummary();
   const activity = useClientActivity(Object.keys(profiles));
   const [statuses, setStatuses] = useState({});
   const [loading, setLoading] = useState(true);
@@ -114,7 +120,8 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     return nameA.localeCompare(nameB);
   });
   const uids = allUids.filter((uid) => (manageUsers || (statuses[uid] || 'friend') !== 'hidden')
-    && (activityFilter === 'all' || activity[uid]?.status === activityFilter));
+    && (activityFilter === 'all' || activity[uid]?.status === activityFilter)
+    && `${profiles[uid].displayName || ''} ${profiles[uid].email || ''}`.toLocaleLowerCase('de').includes(search.toLocaleLowerCase('de')));
   const visibleCount = allUids.filter((uid) => (statuses[uid] || 'friend') !== 'hidden').length;
 
   if (loading && allUids.length === 0) {
@@ -150,198 +157,99 @@ export default function ClientsPanel({ unreadCounts = {} }) {
   const selectedName = selectedProfile
     ? (selectedProfile.displayName || selectedProfile.email || selectedUid)
     : '';
-  const moreActive = CLIENT_MORE_IDS.has(detailTab);
-
   return (
-    <div className="vos-panel h-[calc(100dvh-15rem)] min-h-[480px] flex-col md:flex-row lg:h-[calc(100dvh-9rem)]">
-      <aside className="vos-panel-side flex max-h-56 w-full shrink-0 flex-col overflow-y-auto border-b border-fit-line/30 md:max-h-none md:w-64 md:border-b-0 md:border-r">
-        <div className="vos-panel-head vos-bar sticky top-0 flex items-center justify-between gap-2 px-3 py-2.5">
-          <span className="text-xs text-fit-muted">{visibleCount} Klienten</span>
-          <button
-            type="button"
-            aria-pressed={manageUsers}
-            onClick={() => setManageUsers((value) => !value)}
-            className="min-h-11 px-2 text-xs text-fit-accent underline"
-          >
-            {manageUsers ? 'Fertig' : 'Verwalten'}
-          </button>
+    <div className="coach-dashboard">
+      <header className="coach-dashboard-heading">
+        <div>
+          {selectedUid && <button type="button" onClick={() => navigate({ sub: 'clients', client: '', detail: 'workouts', date: '', planId: '' })} className="mb-3 inline-flex min-h-11 items-center gap-2 text-sm text-fit-muted hover:text-fit-ink"><ArrowLeft size={16} /> Klientenübersicht</button>}
+          <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">{selectedUid ? selectedName || 'Klient' : 'Dein Coaching im Überblick'}</h1>
+          <p className="mt-2 text-sm text-fit-muted">{selectedUid ? activity[selectedUid]?.label || 'Aktivität unbekannt' : `${visibleCount} Klienten und Kontakte · Aktivität, Betreuung und lokale Workspaces`}</p>
         </div>
-        <label className="px-3 py-2 text-xs text-fit-muted">
-          App-Aktivität
-          <select aria-label="App-Aktivität filtern" value={activityFilter} onChange={(event) => setActivityFilter(event.target.value)} className="mt-1 min-h-11 w-full rounded-lg border border-fit-line/40 bg-fit-bg2 px-2 text-fit-ink">
-            <option value="all">Alle</option>
-            <option value="active">Aktiv · letzte 14 Tage</option>
-            <option value="inactive">Inaktiv · ab 14 Tagen</option>
-            <option value="unknown">Unbekannt</option>
-          </select>
-        </label>
-        {uids.length === 0 && (
-          <p className="px-3 py-4 text-sm text-fit-muted">Keine Klienten für diese Auswahl.</p>
-        )}
-        <ul className="divide-y divide-fit-line/20">
-          {uids.map((uid) => {
-            const profile = profiles[uid];
-            const name = profile.displayName || profile.email || uid;
-            const status = statuses[uid] || 'friend';
-            const isSelected = selectedUid === uid;
-            const unread = unreadCounts[uid] || 0;
-            return (
-              <li key={uid}>
-                <button
-                  type="button"
-                  onClick={() => setSelectedUid(uid)}
-                  className={`vos-list-row flex w-full items-center gap-2.5 px-3 py-2.5 text-left ${isSelected ? 'selected' : ''}`}
-                >
-                  <span className={`vos-led ${status} shrink-0`} />
-                  <span className={`min-w-0 flex-1 truncate text-sm font-semibold ${isSelected ? 'text-fit-accent' : 'text-fit-ink'}`}>
-                    {name}
-                    <span className={`mt-0.5 block truncate text-[11px] font-normal ${activity[uid]?.status === 'inactive' ? 'text-fit-accent' : 'text-fit-muted'}`} title="Bisher erfasste Fitness-App-Aktivität; keine Aussage über Trainingshäufigkeit.">
-                      {activity[uid]?.label}
-                    </span>
-                  </span>
-                  {unread > 0 && (
-                    <span className="shrink-0 text-xs font-semibold text-fit-accent">
-                      {unread >= 100 ? '99+' : unread}
-                    </span>
-                  )}
-                </button>
-                {manageUsers && (
-                  <div className="flex flex-wrap gap-1 px-3 pb-2" onClick={(event) => event.stopPropagation()}>
-                    {STATUS_OPTIONS.map((option) => (
-                      <button
-                        key={option.id}
-                        type="button"
-                        disabled={saving.has(uid)}
-                        aria-pressed={status === option.id}
-                        title={option.hint}
-                        onClick={() => setStatus(uid, option.id)}
-                        className={`min-h-11 rounded-full border px-3 py-1 text-xs disabled:opacity-50 ${
-                          status === option.id
-                            ? 'border-fit-accent bg-fit-accent/10 text-fit-accent'
-                            : 'border-fit-line/40 text-fit-muted'
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </aside>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={() => navigate({ sub: 'exercises', client: '', date: '' })} className="vos-btn">Anfragen <ArrowUpRight size={14} /></button>
+          <button type="button" onClick={() => navigate({ sub: 'traction', client: '', date: '' })} className="vos-btn">Nutzung <ArrowUpRight size={14} /></button>
+        </div>
+      </header>
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        {!selectedUid ? (
-          <>
-            <header className="flex shrink-0 items-center justify-between gap-2 border-b border-fit-line/30 px-3 py-2.5">
-              <h3 className="text-base font-semibold text-fit-ink">Letzte Kraftsessions</h3>
-              <span className="text-xs text-fit-muted">Klient links wählen für Plan & Chat</span>
-            </header>
-            {clientError && <p role="alert" className="px-3 pt-2 text-sm text-fit-red">{clientError}{loadError && <button type="button" onClick={load} disabled={loading} className="ml-3 min-h-11 underline">Erneut versuchen</button>}</p>}
-            <div className="flex-1 overflow-y-auto p-3">
-              <ClientWorkoutsFeed
-                initialTypeFilter="workout"
-                onSelectClient={setSelectedUid}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <header className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-fit-line/30 px-3 py-2.5">
-              <div className="flex min-w-0 items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => navigate({ sub: 'clients', client: '', detail: 'workouts', date: '', planId: '' })}
-                  className="shrink-0 text-xs text-fit-muted underline"
-                >
-                  Alle
-                </button>
-                <div className="min-w-0"><h3 className="truncate text-base font-semibold text-fit-ink">{selectedName}</h3><p className="text-xs text-fit-muted" title="Bisher erfasste Fitness-App-Aktivität">{activity[selectedUid]?.label || 'Aktivität unbekannt'}</p></div>
-              </div>
-              <label className="sr-only" htmlFor="client-status">Status</label>
-              <select
-                id="client-status"
-                value={statuses[selectedUid] || 'friend'}
-                disabled={saving.has(selectedUid)}
-                onChange={(event) => setStatus(selectedUid, event.target.value)}
-                className="min-h-11 rounded-full border border-fit-line/40 bg-fit-bg2 px-2.5 py-1 text-xs text-fit-ink disabled:opacity-50"
-              >
-                {STATUS_OPTIONS.map((opt) => (
-                  <option key={opt.id} value={opt.id}>{opt.label}</option>
-                ))}
-              </select>
-            </header>
+      {clientError && <p role="alert" className="text-sm text-fit-red">{clientError}{loadError && <button type="button" onClick={load} disabled={loading} className="ml-3 min-h-11 underline">Erneut versuchen</button>}</p>}
 
-            {/* Desktop: SubTabs leben in der Coach-Sidebar. Mobile behält die Chips. */}
-            <nav className="flex shrink-0 flex-wrap items-center gap-1 border-b border-fit-line/30 px-3 py-2 lg:hidden" aria-label="Klient-Bereiche">
-              {CLIENT_PRIMARY_TABS.map((tab) => {
-                const Icon = tab.icon;
-                const active = detailTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setDetailTab(tab.id)}
-                    className={`vos-chip ${active ? 'active' : ''}`}
-                  >
-                    <Icon size={13} /> {tab.label}
+      {!selectedUid ? <>
+        <section aria-label="Klientenübersicht">
+          <div className="coach-roster-tools">
+            <label className="coach-client-search"><Search size={17} /><span className="sr-only">Klienten suchen</span><input type="search" placeholder="Klienten suchen" value={search} onChange={(event) => setSearch(event.target.value)} /></label>
+            <label className="sr-only" htmlFor="activity-filter">App-Aktivität filtern</label>
+            <select id="activity-filter" value={activityFilter} onChange={(event) => setActivityFilter(event.target.value)} className="coach-select">
+              <option value="all">Alle Aktivitäten</option><option value="active">Aktiv · letzte 14 Tage</option><option value="inactive">Inaktiv · ab 14 Tagen</option><option value="unknown">Aktivität unbekannt</option>
+            </select>
+            <button type="button" aria-pressed={manageUsers} onClick={() => setManageUsers((value) => !value)} className="vos-btn">{manageUsers ? 'Verwaltung schließen' : 'Kontakte verwalten'}</button>
+          </div>
+          <div className="coach-workspace-connection" role="status">
+            <FolderOpen size={16} className="shrink-0" />
+            <p>{workspaceState.status === 'ready' ? `${workspaceState.workspaces.length} ${workspaceState.workspaces.length === 1 ? 'lokaler Workspace' : 'lokale Workspaces'} erreichbar` : workspaceState.status === 'loading' ? 'Lokale Workspaces werden verbunden …' : workspaceState.error}</p>
+            <button type="button" onClick={workspaceState.retry} disabled={workspaceState.status === 'loading'} className="min-h-11 shrink-0 text-sm underline">Erneut prüfen</button>
+          </div>
+          <div className="coach-client-grid">
+            {uids.map((uid) => {
+              const profile = profiles[uid];
+              const name = profile.displayName || profile.email || uid;
+              const status = statuses[uid] || 'friend';
+              const unread = unreadCounts[uid] || 0;
+              const workspace = workspaceState.status === 'ready' ? workspaceForUid(workspaceState.workspaces, uid) : null;
+              return <article key={uid} className="coach-client-item">
+                <div className="flex items-start justify-between gap-3">
+                  <button type="button" onClick={() => setSelectedUid(uid)} className="min-w-0 text-left hover:text-fit-accent">
+                    <span className="block truncate text-lg font-semibold">{name}</span>
+                    <span className="mt-1 block text-xs text-fit-muted">{status === 'client' ? 'Klient' : status === 'hidden' ? 'Ausgeblendet' : 'Freund / Test'}</span>
                   </button>
-                );
-              })}
-              <label className="sr-only" htmlFor="client-more">Weitere Bereiche</label>
-              <select
-                id="client-more"
-                value={moreActive ? detailTab : ''}
-                onChange={(event) => {
-                  if (event.target.value) setDetailTab(event.target.value);
-                }}
-                className={`ml-auto rounded-full border px-2.5 py-1 text-xs ${
-                  moreActive
-                    ? 'border-fit-accent bg-fit-accent/10 text-fit-accent'
-                    : 'border-fit-line/40 bg-fit-bg2 text-fit-muted'
-                }`}
-              >
-                <option value="">Mehr…</option>
-                {CLIENT_MORE_TABS.map((tab) => (
-                  <option key={tab.id} value={tab.id}>{tab.label}</option>
-                ))}
-              </select>
-            </nav>
-
-            {clientError && <p role="alert" className="px-3 pt-2 text-sm text-fit-red">{clientError}{loadError && <button type="button" onClick={load} disabled={loading} className="ml-3 min-h-11 underline">Erneut versuchen</button>}</p>}
-
-            <div className="flex-1 overflow-y-auto p-3">
-              {detailTab === 'messages' && <ClientMessages key={selectedUid} clientUid={selectedUid} />}
-              {detailTab === 'workouts' && (
-                <ClientConsole
-                  key={selectedUid}
-                  clientUid={selectedUid}
-                  highlightDate={route.date}
-                  onDismissHighlight={route.date ? () => navigate({ date: '' }) : undefined}
-                />
-              )}
-              {detailTab === 'sixpack' && <ClientSixPack key={selectedUid} clientUid={selectedUid} />}
-              {detailTab === 'insights' && <ClientInsights key={selectedUid} clientUid={selectedUid} />}
-              {detailTab === 'habits' && <ClientHabitCycle key={selectedUid} clientUid={selectedUid} />}
-              {detailTab === 'templates' && (
-                <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />
-              )}
-              {detailTab === 'trainingplan' && (
-                <ClientTrainingPlans
-                  key={selectedUid}
-                  clientUid={selectedUid}
-                  initialPlanId={route.planId}
-                  onClosePlan={() => navigate({ planId: '' })}
-                  onNavigate={setDetailTab}
-                />
-              )}
-              {detailTab === 'plan' && <AssignPlan key={selectedUid} clientUid={selectedUid} clientName={selectedName} />}
-            </div>
-          </>
-        )}
-      </div>
+                  <span className={`coach-activity-dot ${activity[uid]?.status}`} title={activity[uid]?.label} />
+                </div>
+                <p className="mt-5 text-sm text-fit-muted">{activity[uid]?.label}</p>
+                <p className="mt-2 flex items-center gap-2 text-xs text-fit-muted"><FolderOpen size={14} />{!workspace ? 'Workspace noch nicht geprüft' : workspace.status === 'linked' ? `${workspace.workspace.plans.length} ${workspace.workspace.plans.length === 1 ? 'lokaler Plan' : 'lokale Pläne'}` : workspace.status === 'ambiguous' ? 'Workspace-Zuordnung unklar' : 'Kein Workspace verknüpft'}</p>
+                <div className="mt-5 flex flex-wrap items-center gap-2">
+                  <button type="button" onClick={() => setSelectedUid(uid)} className="vos-btn primary">Console <ArrowUpRight size={14} /></button>
+                  <button type="button" onClick={() => navigate({ sub: 'clients', client: uid, detail: 'trainingplan', date: '', planId: '' })} className="vos-btn">Plan</button>
+                  <button type="button" onClick={() => navigate({ sub: 'clients', client: uid, detail: 'messages', date: '', planId: '' })} className="vos-btn"><MessageSquare size={14} />{unread ? `${unread} neu` : 'Chat'}</button>
+                </div>
+                {manageUsers && <div className="mt-4 flex flex-wrap gap-1 border-t border-fit-line/30 pt-3">{STATUS_OPTIONS.map((option) => <button key={option.id} type="button" disabled={saving.has(uid)} aria-pressed={status === option.id} title={option.hint} onClick={() => setStatus(uid, option.id)} className={`min-h-11 rounded-lg px-3 text-xs ${status === option.id ? 'bg-fit-accent/10 text-fit-accent' : 'text-fit-muted'}`}>{option.label}</button>)}</div>}
+              </article>;
+            })}
+          </div>
+          {!uids.length && <p className="py-10 text-sm text-fit-muted">Keine Klienten für diese Auswahl.</p>}
+        </section>
+        <section className="coach-feed-section" aria-label="Letzte Kraftsessions">
+          <header className="mb-5 flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-semibold">Letzte Kraftsessions</h2><span className="text-sm text-fit-muted">Direkt zum Klienten und Feedback</span></header>
+          <ClientWorkoutsFeed initialTypeFilter="workout" onSelectClient={setSelectedUid} />
+        </section>
+      </> : <>
+        <div className="coach-client-toolbar">
+          <label className="flex flex-wrap items-center gap-2 text-sm text-fit-muted">Klient wechseln
+            <select aria-label="Klient wechseln" value={selectedUid} onChange={(event) => setSelectedUid(event.target.value)} className="coach-select">
+              {!profiles[selectedUid] && <option value={selectedUid}>{selectedName || 'Klient'}</option>}
+              {allUids.filter((uid) => uid === selectedUid || statuses[uid] !== 'hidden').map((uid) => <option key={uid} value={uid}>{profiles[uid].displayName || profiles[uid].email || uid}</option>)}
+            </select>
+          </label>
+          <label className="flex items-center gap-2 text-sm text-fit-muted">Betreuung
+            <select aria-label="Klientenstatus" value={statuses[selectedUid] || 'friend'} disabled={saving.has(selectedUid)} onChange={(event) => setStatus(selectedUid, event.target.value)} className="coach-select">{STATUS_OPTIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}</select>
+          </label>
+        </div>
+        <nav className="coach-client-nav" aria-label="Klient-Bereiche">{CLIENT_ALL_TABS.map((tab) => {
+          const Icon = tab.icon;
+          return <button key={tab.id} type="button" onClick={() => setDetailTab(tab.id)} aria-current={detailTab === tab.id ? 'page' : undefined} className={detailTab === tab.id ? 'active' : ''}><Icon size={16} />{tab.label}{tab.id === 'messages' && unreadCounts[selectedUid] > 0 ? ` · ${unreadCounts[selectedUid]}` : ''}</button>;
+        })}</nav>
+        <div className="coach-client-workbench">
+          <div className="min-w-0">
+            {detailTab === 'messages' && <ClientMessages key={selectedUid} clientUid={selectedUid} />}
+            {detailTab === 'workouts' && <ClientConsole key={selectedUid} clientUid={selectedUid} highlightDate={route.date} onDismissHighlight={route.date ? () => navigate({ date: '' }) : undefined} />}
+            {detailTab === 'sixpack' && <ClientSixPack key={selectedUid} clientUid={selectedUid} />}
+            {detailTab === 'insights' && <ClientInsights key={selectedUid} clientUid={selectedUid} />}
+            {detailTab === 'habits' && <ClientHabitCycle key={selectedUid} clientUid={selectedUid} />}
+            {detailTab === 'templates' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} onNavigate={setDetailTab} />}
+            {detailTab === 'trainingplan' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} initialPlanId={route.planId} onClosePlan={() => navigate({ planId: '' })} onNavigate={setDetailTab} />}
+            {detailTab === 'plan' && <AssignPlan key={selectedUid} clientUid={selectedUid} clientName={selectedName} />}
+          </div>
+          <WorkspaceOverview uid={selectedUid} state={workspaceState} />
+        </div>
+      </>}
     </div>
   );
 }

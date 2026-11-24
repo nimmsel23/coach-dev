@@ -65,4 +65,5 @@ const CoachFrame = {
   },
 }
 
-createApp(CoachFrame).mount('#coach-shell')
+if (isLocal) createApp(CoachFrame).mount('#coach-shell')
+else window.location.replace(`${coachAppUrl}${window.location.search}${window.location.hash}`)
