@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-24T05:09:57+00:00",
+  "generated_at": "2026-11-24T15:14:25+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-23T18:13:06Z",
+   "pushed_at": "2026-11-24T09:40:58Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -21,14 +21,62 @@
    "dev_behind": 0,
    "dev_ahead": 0,
    "oldest_unpromoted": null,
-   "dev_head": "cb229f35 2026-11-23T19:11:48+01:00",
-   "master_head": "cb229f35 2026-11-23T19:11:48+01:00"
+   "dev_head": "56c998ed 2026-11-24T10:39:28+01:00",
+   "master_head": "56c998ed 2026-11-24T10:39:28+01:00"
   },
   "work": {
    "branch": "master",
-   "sha": "cb229f350114da1d733b95902edc37d0bec681c1"
+   "sha": "56c998edae29f76d679fe6055bd1e32868dc1126"
   },
   "commits": [
+   {
+    "sha": "56c998ed",
+    "date": "2026-11-24T10:39:28+01:00",
+    "author": "nimmsel23",
+    "subject": "ci: Merge nur mit --match-head-commit des geprüften Heads"
+   },
+   {
+    "sha": "4a3e5de5",
+    "date": "2026-11-24T10:38:26+01:00",
+    "author": "nimmsel23",
+    "subject": "ci: keine Zweitfreigabe mehr, Merge sobald Checks grün (Owner Daniel 24.11.2026 10:33)"
+   },
+   {
+    "sha": "de1c2b36",
+    "date": "2026-11-24T10:26:12+01:00",
+    "author": "nimmsel23",
+    "subject": "fix(ci): Approval zählt nicht bei offenem Security-Befund HIGH/CRITICAL"
+   },
+   {
+    "sha": "65505038",
+    "date": "2026-11-24T10:18:58+01:00",
+    "author": "nimmsel23",
+    "subject": "fix(ci): Org-Bot fail-closed, Merge-Logik ist Klasse B (Security Review vos#125)"
+   },
+   {
+    "sha": "dc82819f",
+    "date": "2026-11-24T10:11:29+01:00",
+    "author": "nimmsel23",
+    "subject": "ci: Approval-Agent-Freigabe zählt als peer-ok (Daniel 24.11.2026 10:08)"
+   },
+   {
+    "sha": "f079094d",
+    "date": "2026-11-24T08:46:28+01:00",
+    "author": "nimmsel23",
+    "subject": "ci: Org-Bot/ci-heal mit zwei Zeitplan-Slots abseits der vollen Stunde + repository_dispatch"
+   },
+   {
+    "sha": "ec9aa129",
+    "date": "2026-11-24T08:41:06+01:00",
+    "author": "nimmsel23",
+    "subject": "ci(org-bot): v2 wartet auf PR-Events auf angemeldete Checks"
+   },
+   {
+    "sha": "d9ad6fb1",
+    "date": "2026-11-24T08:39:44+01:00",
+    "author": "nimmsel23",
+    "subject": "ci: Org-Bot v2 und CI-Heilung aus Vorlage (vos cto/tools)"
+   },
    {
     "sha": "cb229f35",
     "date": "2026-11-23T19:11:48+01:00",
@@ -100,60 +148,12 @@
     "date": "2026-11-20T09:16:21+01:00",
     "author": "Alpha",
     "subject": "chore(catalog): inbox wide_grip_chin_up aktualisiert"
-   },
-   {
-    "sha": "de0ed798",
-    "date": "2026-11-20T09:16:21+01:00",
-    "author": "Alpha",
-    "subject": "refactor(fitness-log): Klienten/Sessions/Drafts/Sync aus cli.py auslagern"
-   },
-   {
-    "sha": "27650757",
-    "date": "2026-11-20T09:16:10+01:00",
-    "author": "Alpha",
-    "subject": "chore: Altlasten aus Fork-Zeiten entfernen (archive, alte TODOs, firestored-dev)"
-   },
-   {
-    "sha": "eee89d62",
-    "date": "2026-11-20T09:03:47+01:00",
-    "author": "Alpha",
-    "subject": "docs(claude): nach Arbeit automatisch dokumentieren, pushen, coach-api neu starten"
-   },
-   {
-    "sha": "017bec55",
-    "date": "2026-11-20T08:53:12+01:00",
-    "author": "Alpha",
-    "subject": "feat(coach): Exercise Sheet als Coaching-Spickzettel neu strukturiert"
-   },
-   {
-    "sha": "41e613f9",
-    "date": "2026-11-17T17:05:16+01:00",
-    "author": "nimmsel23",
-    "subject": "org-bot: Workflow installieren (Org-Autonomie 16.11.2026)"
-   },
-   {
-    "sha": "4b6b8896",
-    "date": "2026-11-16T11:35:31Z",
-    "author": "Cursor Agent",
-    "subject": "dashboard: Check und Dashboard starten"
-   },
-   {
-    "sha": "4ac95e6f",
-    "date": "2026-11-16T11:33:26Z",
-    "author": "Cursor Agent",
-    "subject": "dashboard: Check und Dashboard auf dev starten"
-   },
-   {
-    "sha": "3db82dfe",
-    "date": "2026-11-16T11:26:31Z",
-    "author": "Cursor Agent",
-    "subject": "dashboard: master-Push baut ebenfalls dev"
    }
   ],
   "activity": [
    {
     "day": "2026-11-04",
-    "n": 22
+    "n": 7
    },
    {
     "day": "2026-11-05",
@@ -233,7 +233,7 @@
    },
    {
     "day": "2026-11-24",
-    "n": 0
+    "n": 8
    }
   ],
   "workflows": [
@@ -243,9 +243,9 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-24T01:54:25Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45308465138",
-    "sha": "cb229f3"
+    "created_at": "2026-11-24T12:30:09Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45394107034",
+    "sha": "56c998e"
    },
    {
     "name": "PR-AutoMerge (Dependabot -> dev)",
@@ -253,19 +253,9 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-24T00:59:41Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45301583639",
-    "sha": "cb229f3"
-   },
-   {
-    "name": "Merge-Agent",
-    "branch": "dev",
-    "event": "schedule",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-23T21:35:35Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45271239207",
-    "sha": "cb229f3"
+    "created_at": "2026-11-24T11:04:37Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45380789419",
+    "sha": "56c998e"
    },
    {
     "name": "Check (Coach)",
@@ -273,8 +263,18 @@
     "event": "push",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-23T18:11:51Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45235774081",
+    "created_at": "2026-11-24T09:39:32Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45367277006",
+    "sha": "56c998e"
+   },
+   {
+    "name": "Merge-Agent",
+    "branch": "dev",
+    "event": "schedule",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-24T05:30:56Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45333850460",
     "sha": "cb229f3"
    },
    {
@@ -364,46 +364,50 @@
   "status": "green",
   "signals": [],
   "ai": {
-   "headline": "Branches synchronisiert, Live-Verifikation und Doku-Drift bleiben offen",
-   "lage": "Die Branches `dev` und `master` sind auf Commit `cb229f35` synchronisiert, und alle relevanten CI-Läufe sind erfolgreich abgeschlossen. Die Implementierung der GitHub-Issues-Inbox ist erfolgt, jedoch stehen Live-Verifikationen zentraler Funktionen sowie die Behebung von Doku-Code-Diskrepanzen weiterhin aus. Die Ausbaustufen-Issues #22, #23, #24, #27, #29 sind offen.",
+   "headline": "CI-Logik aktualisiert, Live-Verifikation und Doku-Drift bleiben Kernaufgaben",
+   "lage": "Die Branches `dev` und `master` sind auf Commit `56c998ed` synchronisiert, mit erfolgreichen CI-Läufen, die eine aktualisierte Merge-Logik reflektieren. Die GitHub-Issues-Inbox ist implementiert, jedoch stehen Live-Verifikationen zentraler Funktionen sowie die Behebung von Doku-Code-Diskrepanzen weiterhin aus. Die Ausbaustufen-Issues #22, #23, #24, #27, #29 sind offen.",
    "auffaelligkeiten": [
     {
      "level": "hoch",
-     "text": "Live-Verifikation der Taskwarrior-Anzeige, `tractionDaily`-Events und der neuen GitHub-Inbox steht aus; ein Live-Deploy des Coach mit `production=true` ist ebenfalls noch offen."
+     "text": "Die Live-Verifikation zentraler Funktionen (Taskwarrior-Anzeige, `tractionDaily`-Event, Coach Sheet, neue GitHub-Inbox) steht aus, obwohl die Implementierung erfolgt ist."
     },
     {
      "level": "hoch",
-     "text": "`src/plan-main.jsx` importiert die fehlende Datei `./views/Plan/StrongApp.jsx`, was auf einen defekten oder unvollständigen Feature-Zweig hindeutet."
+     "text": "`src/plan-main.jsx` importiert die fehlende Datei `StrongApp.jsx`, und `plan.html` fehlt ebenfalls, was auf eine defekte oder unvollständige Funktionalität hindeutet."
     },
     {
      "level": "mittel",
-     "text": "Doku-Code-Diskrepanzen bestehen in `src/OVERVIEW.md`, `src/views/DISCONNECTED.md` und `docs/ROADMAP.md` sowie verbleibende pnpm-Referenzen in `docs/DEPLOY.md`, `docs/CLAUDE.md`, `COMMUNICATION-RUNBOOK` und `MINI-APPS`."
+     "text": "Mehrere Doku-Code-Diskrepanzen bestehen weiterhin, z.B. in `src/OVERVIEW.md` (erwähnt nicht existierende Tabs), `src/views/DISCONNECTED.md` (falsche Aussage zu Muscles-Rendering) und `docs/ROADMAP.md` (falscher Titel)."
     },
     {
      "level": "mittel",
-     "text": "Submodule-Probleme: `backend/fitness/catalog/kb` ist ein vendored Tree statt Gitlink, und die Submodule `website/` sowie `modules/plan/` sind im Checkout leer."
+     "text": "Der KB-Ordner `backend/fitness/catalog/kb` ist ein vendored Tree, obwohl `.gitmodules` ihn als Submodul deklariert, was zu Inkonsistenzen führen kann."
     },
     {
      "level": "mittel",
-     "text": "Die Gemini-CI-Reparaturkette wurde nie an einem echten roten Lauf geprüft, und die WhatsApp-Zusammenfassung für Jakob ist ungetestet."
+     "text": "Die Gemini-CI-Reparaturkette wurde noch nicht an einem echten roten CI-Lauf getestet."
     },
     {
      "level": "info",
-     "text": "Verwaiste Komponenten wie `gas-coach-summary/` (Telegram-Briefing), `monolith.py` und `refactor_catalog.py` sind im Repo vorhanden, ohne Referenzen im Code oder geklärten Betriebszustand."
+     "text": "Die CI-Logik wurde am 24.11. durch mehrere Commits (z.B. `56c998ed`, `4a3e5de5`, `de1c2b36`) aktualisiert, um Merge-Bedingungen und Security-Befunde zu berücksichtigen."
+    },
+    {
+     "level": "info",
+     "text": "Die `pnpm`-Referenzen in `docs/DEPLOY.md`, `docs/CLAUDE.md`, `COMMUNICATION-RUNBOOK` und `MINI-APPS` wurden nach der Umstellung auf `npm` noch nicht vollständig korrigiert."
     }
    ],
    "naechste_schritte": [
-    "Prüfen: `tractionDaily`-Event, Taskwarrior-Anzeige und neue GitHub-Inbox live verifizieren.",
+    "Verifizieren: `tractionDaily`-Event, Taskwarrior-Anzeige und neue GitHub-Inbox live prüfen.",
     "Korrigieren: `src/OVERVIEW.md` und `src/views/DISCONNECTED.md` an den aktuellen Code anpassen.",
     "Sichten: Verbleibende pnpm-Stellen in den `docs/`-Dateien prüfen."
    ],
-   "veraendert": "Gegenüber der letzten Einschätzung sind `dev` und `master` auf Commit `cb229f35` synchronisiert, und alle relevanten CI-Läufe sind erfolgreich abgeschlossen.",
+   "veraendert": "Die Branches `dev` und `master` sind auf den neueren Commit `56c998ed` synchronisiert, und die CI-Merge-Logik wurde durch mehrere Commits am 24.11. aktualisiert.",
    "fragen": [
-    "Soll `src/plan-main.jsx` (importiert fehlende `StrongApp.jsx`) gelöscht, repariert oder als extern markiert werden?",
-    "Sollen die Ausbaustufen-Issues #22, #23, #24, #27, #29 geschlossen oder behalten werden?"
+    "Sollen `plan-main.jsx` und die Fitness-SPA-Komponenten gelöscht, repariert oder als externe Module markiert werden?",
+    "Sollen die Ausbaustufen-Issues #22, #23, #24, #27, #29 geschlossen oder für weitere Bearbeitung beibehalten werden?"
    ],
    "model": "gemini-2.5-flash"
   },
-  "ai_at": "2026-11-24T05:09:59+00:00"
+  "ai_at": "2026-11-24T15:14:27+00:00"
  }
 }
