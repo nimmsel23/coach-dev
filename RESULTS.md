@@ -1,3 +1,7 @@
+## 2026-11-24 — MVP-Auslassungen notiert
+
+In `NEXT.md` Abschnitt „Ausgelassen seit C-Suite-MVP“: Plan-UFO, Outbound/HITL-Ausführung, Firestore-Rules/Adapter, CSO, React-vs-Vanilla-COO, Push/Deploy, Tailscale-/Hosting-Lücken; verworfen: Brain-Firestore-Sync, vos-coach als Authoring, Calzone-Fusion.
+
 ## 2026-11-24 — CEO Cockpit + Git-Brain fetch
 
 - `ceo.html` / `CeoCommandCenter.jsx`: Firebase-Auth-Portal, Tabs für COO/CMO/CPO/CTO/CFO → iframe `/workspaces/<role>/dashboard.html`.
