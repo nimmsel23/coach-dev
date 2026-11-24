@@ -4,7 +4,9 @@
 - [ ] COO-Cockpit + Bridge live: `ui:dev` → `/coo.html`, Engine `gemini`/`claude`, Skill → HITL; optional `issue`-Oneshot.
 - [x] C-Suite Bridge `POST /api/csuite/run` (CLI + Gemini + gh-Issue).
 - [ ] Freigabe-Klick → echter Outbound (Mail/WhatsApp) oder Copy-only CTA; Firestore-Rules für `csuite/**`.
-- [ ] CMO/CFO/CSO Workspaces analog zu `workspaces/coo/` (nur nach COO-Alltagstest).
+- [x] CMO/CPO/CTO/CFO (+ COO dashboard.html) Workspaces + Hub-Links.
+- [ ] C-Suite Dashboards: coach-api restart + Tailnet-Smoke; Freigabe → Copy/Outbound; Firebase-Adapter live.
+
 - ~~Vite-8 Vorbeuge~~: esbuild-Tests + build.target Browserliste (modules/plan folgt plan-Pin).
 - [ ] Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen; danach einen explizit ausgewählten Klient/Plan als Pilot synchronisieren. Code und Browser-Build sind fertig, der laufende Prozess wurde nicht neu gestartet.
 - [ ] Mit einer angemeldeten UID aus einem sichtbaren Klientenworkspace einen echten Fitness-App-Aufruf prüfen und den resultierenden `tractionDaily`-Event in der lokalen Coach-Konsole nachweisen. Live-Bundle und Regeln enthalten die Implementierung; die aktuelle Abfrage hat noch 0 Events.

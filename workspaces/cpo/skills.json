@@ -1,0 +1,88 @@
+{
+  "workspaceId": "cpo",
+  "roleTitle": "Chief Product Officer — Angebot & Coach-Produkt",
+  "defaultModel": "gemini",
+  "temperature": 0.35,
+  "version": "1.0",
+  "tools": [
+    {
+      "name": "clarify_offer_slice",
+      "description": "Schärft einen Angebotsschnitt (Wer, Job, Ergebnis, Grenze).",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "offerName": { "type": "string" },
+          "audience": { "type": "string" }
+        },
+        "required": ["offerName"]
+      }
+    },
+    {
+      "name": "write_job_story",
+      "description": "Job Story im Format When/I want/So that für Coach- oder Klienten-Job.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "situation": { "type": "string" },
+          "motivation": { "type": "string" }
+        },
+        "required": ["situation"]
+      }
+    },
+    {
+      "name": "critique_coach_surface",
+      "description": "Desktop-UX-Kritik einer Coach-Fläche (Schmiede/Hub/C-Suite/vos-coach). Kein Client-App-Kosmetik-Fokus.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "surface": { "type": "string" },
+          "pain": { "type": "string" }
+        },
+        "required": ["surface"]
+      }
+    },
+    {
+      "name": "prioritize_backlog",
+      "description": "Ordnet 3–5 Items Now/Next/Later. Freigabe wenn als Order kommuniziert.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "items": { "type": "string", "description": "Liste oder Stichpunkte" }
+        },
+        "required": ["items"]
+      }
+    },
+    {
+      "name": "draft_release_notes",
+      "description": "Kurze Release-Notes für Coach-Tooling. pending_approval vor Publish.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "changes": { "type": "string" }
+        },
+        "required": ["changes"]
+      }
+    },
+    {
+      "name": "gate_check_product",
+      "description": "Prüft ob ein Produkt-Gate (Leads/Attention/Owner) offen ist — Observed only.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "proposal": { "type": "string" }
+        },
+        "required": ["proposal"]
+      }
+    }
+  ],
+  "collections": {
+    "readAccess": ["csuite/cpo/approvals", "csuite/cpo/threads"],
+    "writeAccess": ["csuite/cpo/approvals", "csuite/cpo/threads"]
+  }
+}

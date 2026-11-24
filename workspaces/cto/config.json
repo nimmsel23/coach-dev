@@ -1,0 +1,20 @@
+{
+  "id": "cto",
+  "title": "Chief Technology Officer",
+  "version": "1.0",
+  "focus": "Coach-Werkstatt, Architektur & CI",
+  "defaultModel": "gemini",
+  "temperature": 0.25,
+  "allowedSkills": [
+    "diagnose_ci_red",
+    "audit_write_paths",
+    "propose_ufo_slice",
+    "draft_architecture_note",
+    "plan_server_change",
+    "escalate_owner_gate"
+  ],
+  "requiresApproval": [
+    "plan_server_change",
+    "escalate_owner_gate"
+  ]
+}

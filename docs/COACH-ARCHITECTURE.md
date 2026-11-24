@@ -94,18 +94,17 @@ Tests: `tests/test_plan_push.py` (Umwandlung, Idempotenz, Schutz fremder Routine
 3. `CLAUDE.md` von coach-dev neu schreiben (beschreibt noch fitness-dev); Filter für `bin` in der Klientenliste.
 4. Einseitig: Änderungen eines Plans in der App fließen nicht nach `plan.json` zurück.
 
-## Coach Hub + COO Cockpit (2026-11-24)
+## Coach Hub + C-Suite (2026-11-24)
 
-Zielgestalt für die Zusammenführung von Coach + Klienten (Delivery), nicht Org-/VitalOS-Rollen.
+Coach-only Werkstatt (kein Klient sieht coach-dev). Nicht Org-/VitalOS-Meta-Rollen.
 
-- **Hub:** `hub.html` → `:9150/coach/` und Tailnet `https://ideapad.tail7a15d6.ts.net:8443/coach/` (Links zu COO, Cloud Coach, Lokal, Shell, Schmiede, Konsole). Shell bleibt unter `/coach/shell`.
-- **Git-Brain:** `workspaces/coo/` (`config.json`, `system-prompt.md`, `skills.json`, `knowledge/`).
-- **COO-UI:** `coo.html` → `/coach/coo`. Dev: `npm run ui:dev` → `/coo.html`.
-- **State:** Firestore `csuite/coo/approvals` (+ Thread lokal); ohne Auth/Rules → `localStorage`-Fallback.
-- **Lesen:** `/api/clients` und `/api/client/<id>/plan/today` (+ Coaching-Notes) über Vite-Proxy → `:9150`.
-- **Agent-Bridge (lokal):** `coach_csuite.py` → `GET /api/csuite/engines`, `POST /api/csuite/run`, `POST /api/csuite/issue` (nur Loopback). Engines: `claude` / `agy` / `cursor-agent` / `codex` / `gemini` / `issue` / `stub`.
-- **Tailnet :8443:** `/coach`, `/schmiede`, `/konsole`, `/api/csuite`, `/api/clients`, `/api/client` (+ bestehendes `/api/org`).
-- **MVP-Grenzen:** Kein automatischer Mail/WhatsApp-Versand. CMO/CFO/CSO später analog.
+- **Hub:** `hub.html` → `:9150/coach/` und Tailnet `:8443/coach/`.
+- **Git-Brain:** `workspaces/{coo,cmo,cpo,cto,cfo}/` — `config.json`, `system-prompt.md`, `skills.json`, `knowledge/`, **`dashboard.html`** (Vanilla Dark Cockpit, HITL, LLM-Switcher, Mock + Bridge).
+- **Routen:** `/coach/cmo|cpo|cto|cfo`, `/coach/coo/dashboard`; React-COO bleibt `/coach/coo`.
+- **State:** localStorage `csuite-{role}-*`; später Firestore `csuite/{role}/approvals`.
+- **Agent-Bridge:** `coach_csuite.py` → `GET /api/csuite/engines`, `POST /api/csuite/run`, `POST /api/csuite/issue` (Loopback).
+- **Tailnet :8443:** `/coach`, `/schmiede`, `/konsole`, `/api/csuite`, `/api/clients`, `/api/client`.
+- **MVP-Grenzen:** Kein automatischer Outbound-Send.
 
 ### Parallelflächen (Stand Audit 2026-11-24)
 

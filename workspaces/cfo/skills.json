@@ -1,0 +1,87 @@
+{
+  "workspaceId": "cfo",
+  "roleTitle": "Chief Financial Officer — Umsatz & Belege",
+  "defaultModel": "gemini",
+  "temperature": 0.2,
+  "version": "1.0",
+  "tools": [
+    {
+      "name": "summarize_month_revenue",
+      "description": "Monatsumsatz-Snapshot (Ist/fehlt). Intern ready.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "month": { "type": "string", "description": "YYYY-MM oder current" }
+        }
+      }
+    },
+    {
+      "name": "draft_invoice_reminder",
+      "description": "Höfliche Zahlungserinnerung. Immer pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "clientName": { "type": "string" },
+          "amount": { "type": "string" },
+          "dueDate": { "type": "string" }
+        },
+        "required": ["clientName", "amount"]
+      }
+    },
+    {
+      "name": "package_price_check",
+      "description": "Preis-/Paket-Check mit Annahmen. Freigabe wenn an Klient kommuniziert.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "package": { "type": "string" },
+          "proposedPrice": { "type": "string" }
+        },
+        "required": ["package"]
+      }
+    },
+    {
+      "name": "open_items_list",
+      "description": "Offene Posten-Liste aus Stub/Kontext.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "asOf": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "expense_note",
+      "description": "Belegnotiz für Buchhaltung (intern).",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "vendor": { "type": "string" },
+          "amount": { "type": "string" },
+          "category": { "type": "string" }
+        },
+        "required": ["vendor", "amount"]
+      }
+    },
+    {
+      "name": "cashflow_snapshot",
+      "description": "14-Tage-Cashflow-Überblick mit Unsicherheiten markiert.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "horizonDays": { "type": "number" }
+        }
+      }
+    }
+  ],
+  "collections": {
+    "readAccess": ["csuite/cfo/approvals", "csuite/cfo/threads"],
+    "writeAccess": ["csuite/cfo/approvals", "csuite/cfo/threads"]
+  }
+}

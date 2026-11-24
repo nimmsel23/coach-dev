@@ -1,0 +1,84 @@
+{
+  "workspaceId": "cto",
+  "roleTitle": "Chief Technology Officer — Coach-Werkstatt",
+  "defaultModel": "gemini",
+  "temperature": 0.25,
+  "version": "1.0",
+  "tools": [
+    {
+      "name": "diagnose_ci_red",
+      "description": "Strukturierte Diagnose eines roten CI-Laufs (Ursache, Fix-Slice).",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "runUrl": { "type": "string" },
+          "symptom": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "audit_write_paths",
+      "description": "Listet Plan-/Klient-Schreibpfade und Doppelungen (Schmiede vs Lokal vs Cloud).",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "area": { "type": "string", "enum": ["plans", "habits", "notes", "all"] }
+        }
+      }
+    },
+    {
+      "name": "propose_ufo_slice",
+      "description": "Kleinster Desktop-UFO-Plan-Editor-Slice (Schema + UI + Abhängen).",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "goal": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "draft_architecture_note",
+      "description": "Kurze Architektur-Notiz für docs/ oder AGENTS.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "topic": { "type": "string" }
+        },
+        "required": ["topic"]
+      }
+    },
+    {
+      "name": "plan_server_change",
+      "description": "Änderungsplan für server.py / coach-api. pending_approval vor Umsetzungshinweis als Order.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "change": { "type": "string" }
+        },
+        "required": ["change"]
+      }
+    },
+    {
+      "name": "escalate_owner_gate",
+      "description": "Eine knappe Owner-Frage mit Beleg. pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "question": { "type": "string" },
+          "evidence": { "type": "string" }
+        },
+        "required": ["question"]
+      }
+    }
+  ],
+  "collections": {
+    "readAccess": ["csuite/cto/approvals", "csuite/cto/threads"],
+    "writeAccess": ["csuite/cto/approvals", "csuite/cto/threads"]
+  }
+}

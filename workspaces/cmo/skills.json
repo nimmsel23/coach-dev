@@ -1,0 +1,88 @@
+{
+  "workspaceId": "cmo",
+  "roleTitle": "Chief Marketing Officer — Sichtbarkeit & Leads",
+  "defaultModel": "gemini",
+  "temperature": 0.45,
+  "version": "1.0",
+  "tools": [
+    {
+      "name": "draft_linkedin_post",
+      "description": "LinkedIn-Post-Entwurf (Hook, Substanz, CTA). Immer pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "topic": { "type": "string" },
+          "angle": { "type": "string" }
+        },
+        "required": ["topic"]
+      }
+    },
+    {
+      "name": "draft_instagram_caption",
+      "description": "Instagram-Caption + Hashtag-Vorschlag. Immer pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "topic": { "type": "string" },
+          "format": { "type": "string", "enum": ["reel", "carousel", "static"] }
+        },
+        "required": ["topic"]
+      }
+    },
+    {
+      "name": "plan_content_week",
+      "description": "Wochenplan 3–4 Content-Slots (Kanal, Thema, Status). Intern ready.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "week": { "type": "string", "description": "ISO-Woche oder 'current'" }
+        }
+      }
+    },
+    {
+      "name": "nurture_lead_reply",
+      "description": "Antwort-Entwurf an Interessenten. Immer pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "leadName": { "type": "string" },
+          "channel": { "type": "string" },
+          "context": { "type": "string" }
+        },
+        "required": ["leadName", "context"]
+      }
+    },
+    {
+      "name": "offer_teaser",
+      "description": "Kurzer Angebots-Teaser für Bio/Link-in-Bio. pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "package": { "type": "string" }
+        },
+        "required": ["package"]
+      }
+    },
+    {
+      "name": "audit_brand_voice",
+      "description": "Prüft Text gegen Markenstimme (Substanz, 40+, kein Hype). Intern.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "draft": { "type": "string" }
+        },
+        "required": ["draft"]
+      }
+    }
+  ],
+  "collections": {
+    "readAccess": ["csuite/cmo/approvals", "csuite/cmo/threads"],
+    "writeAccess": ["csuite/cmo/approvals", "csuite/cmo/threads"]
+  }
+}

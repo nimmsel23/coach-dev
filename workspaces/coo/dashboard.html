@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>KI-COO · Coaching-Delivery · C-Suite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --bg: #0b1220;
+  --bg2: #111827;
+  --panel: #151c2c;
+  --panel2: #1a2336;
+  --line: #2a3548;
+  --ink: #e8eef7;
+  --muted: #93a0b5;
+  --accent: #5b8cff;
+  --accent2: #3dd6c6;
+  --warn: #f0b429;
+  --danger: #f07178;
+  --ok: #3dd68c;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 14px;
+  --font: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background:
+    radial-gradient(900px 400px at 10% -10%, rgba(91,140,255,.18), transparent 50%),
+    radial-gradient(700px 360px at 100% 0%, rgba(61,214,198,.1), transparent 45%),
+    linear-gradient(180deg, #0a101c, var(--bg));
+}
+button, select, textarea, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.app { max-width: 1480px; margin: 0 auto; padding: 1rem 1.1rem 1.5rem; display: grid; gap: .9rem; }
+.header {
+  display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center;
+  padding: 1rem 1.15rem; border: 1px solid var(--line); border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(26,35,54,.95), rgba(17,24,39,.92));
+  box-shadow: var(--shadow);
+}
+.brand { display: flex; gap: .85rem; align-items: center; }
+.icon {
+  width: 2.5rem; height: 2.5rem; border-radius: 12px; display: grid; place-items: center;
+  background: rgba(91,140,255,.15); border: 1px solid rgba(91,140,255,.35);
+  color: var(--accent); font-size: 1.2rem;
+}
+.brand h1 { margin: 0; font-family: var(--display); font-size: 1.25rem; letter-spacing: -.02em; }
+.meta { margin: .2rem 0 0; color: var(--muted); font-size: .82rem; display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
+.badge {
+  display: inline-flex; align-items: center; gap: .35rem; padding: .15rem .55rem;
+  border-radius: 999px; border: 1px solid var(--line); background: var(--bg2); font-size: .75rem;
+}
+.badge.ok { border-color: rgba(61,214,140,.35); color: var(--ok); }
+.badge.warn { border-color: rgba(240,180,41,.35); color: var(--warn); }
+.controls { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.kpis { display: flex; gap: .55rem; }
+.kpi {
+  min-width: 5.5rem; padding: .55rem .7rem; border-radius: 12px; border: 1px solid var(--line);
+  background: rgba(255,255,255,.03); text-align: center;
+}
+.kpi .n { display: block; font-family: var(--display); font-size: 1.15rem; font-weight: 700; }
+.kpi .l { display: block; color: var(--muted); font-size: .7rem; margin-top: .15rem; }
+label.llm { display: grid; gap: .25rem; font-size: .72rem; color: var(--muted); }
+label.llm select {
+  min-width: 11rem; background: var(--bg2); border: 1px solid var(--line); border-radius: 10px;
+  padding: .45rem .6rem;
+}
+.sync { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: var(--muted); }
+.dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--warn); box-shadow: 0 0 0 3px rgba(240,180,41,.15); }
+.dot.live { background: var(--ok); box-shadow: 0 0 0 3px rgba(61,214,140,.15); }
+.grid {
+  display: grid; grid-template-columns: 1.05fr 1.2fr 1.05fr; gap: .85rem; min-height: 70vh;
+}
+@media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
+.panel {
+  border: 1px solid var(--line); border-radius: var(--radius); background: rgba(21,28,44,.92);
+  display: flex; flex-direction: column; min-height: 0; box-shadow: var(--shadow);
+}
+.panel h2 {
+  margin: 0; padding: .85rem 1rem; border-bottom: 1px solid var(--line);
+  font-family: var(--display); font-size: .95rem; letter-spacing: .02em;
+}
+.panel-body { padding: .85rem; overflow: auto; display: grid; gap: .75rem; flex: 1; }
+.card {
+  border: 1px solid var(--line); border-radius: 12px; background: var(--panel2); padding: .85rem .9rem;
+}
+.card h3 { margin: 0 0 .25rem; font-size: .95rem; }
+.card .sub { margin: 0 0 .55rem; color: var(--muted); font-size: .78rem; }
+.card ul { margin: 0 0 .7rem; padding-left: 1.1rem; color: #d5deea; }
+.card li { margin: .2rem 0; }
+.actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+.btn {
+  border: 1px solid var(--line); background: rgba(91,140,255,.12); color: var(--ink);
+  border-radius: 10px; padding: .45rem .7rem; font-size: .82rem;
+}
+.btn:hover { border-color: rgba(91,140,255,.55); background: rgba(91,140,255,.2); }
+.btn.ghost { background: transparent; }
+.btn.ok { background: rgba(61,214,140,.12); border-color: rgba(61,214,140,.35); }
+.btn.danger { background: rgba(240,113,120,.1); border-color: rgba(240,113,120,.35); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.skills { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+.skill {
+  text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: .7rem .75rem;
+  background: linear-gradient(180deg, rgba(91,140,255,.08), rgba(255,255,255,.02));
+}
+.skill strong { display: block; font-size: .88rem; }
+.skill span { display: block; color: var(--muted); font-size: .75rem; margin-top: .2rem; }
+.chat {
+  border: 1px solid var(--line); border-radius: 12px; background: var(--bg2);
+  min-height: 220px; max-height: 340px; overflow: auto; padding: .7rem; display: grid; gap: .55rem;
+}
+.msg { font-size: .84rem; line-height: 1.45; }
+.msg .who { color: var(--accent2); font-weight: 650; margin-right: .35rem; }
+.msg.system .who { color: var(--warn); }
+.msg.user .who { color: var(--accent); }
+.composer { display: grid; gap: .5rem; }
+.composer textarea {
+  width: 100%; min-height: 74px; resize: vertical; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--bg2); padding: .7rem .8rem;
+}
+.composer-row { display: flex; justify-content: space-between; gap: .5rem; align-items: center; }
+.hint { color: var(--muted); font-size: .72rem; }
+.queue-card textarea {
+  width: 100%; min-height: 120px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg); padding: .65rem .7rem; margin: .55rem 0 .7rem;
+}
+.empty { color: var(--muted); font-size: .85rem; margin: 0; }
+footer.note { color: var(--muted); font-size: .75rem; }
+footer.note code { color: var(--accent2); }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="brand">
+        <div class="icon" aria-hidden="true"></div>
+        <div>
+          <h1></h1>
+          <p class="meta">
+            <span class="badge git-badge"></span>
+            <span class="badge warn">HITL aktiv</span>
+          </p>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="kpis" aria-label="KPIs"></div>
+        <div class="sync"><span class="dot"></span><span class="sync-label">Sync…</span></div>
+        <label class="llm">Modell
+          <select id="model" aria-label="LLM wählen"></select>
+        </label>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="panel" aria-label="Fokus">
+        <h2>Proaktiv · Fokus</h2>
+        <div class="panel-body" id="focus"></div>
+      </section>
+      <section class="panel" aria-label="Konsole">
+        <h2>Agent · Skills</h2>
+        <div class="panel-body">
+          <div class="skills" id="launcher"></div>
+          <div class="chat" id="chat" aria-live="polite"></div>
+          <form class="composer" id="composer">
+            <textarea id="prompt" placeholder="Auftrag an COO… (Enter senden, Shift+Enter Zeile)" aria-label="Chat"></textarea>
+            <div class="composer-row">
+              <span class="hint">Git-Brain: workspaces/coo/</span>
+              <button class="btn" type="submit">Senden</button>
+            </div>
+          </form>
+        </div>
+      </section>
+      <section class="panel" aria-label="Freigaben">
+        <h2>Human-in-the-Loop</h2>
+        <div class="panel-body" id="queue"></div>
+      </section>
+    </div>
+
+    <footer class="note">
+      Coach-only · <code>/api/csuite/run</code> · State: localStorage / später Firebase <code>csuite/coo</code>
+      · zurück zum <a href="/coach/" style="color:var(--accent)">Hub</a>
+    </footer>
+  </div>
+  <script type="module">
+const ROLE = {"id": "coo", "title": "KI-COO · Coaching-Delivery", "icon": "◎", "gitBadge": "Git: main@coo-v1.1", "kpis": [{"id": "active", "label": "Aktive Klienten", "value": "12"}, {"id": "sessions", "label": "Sessions heute", "value": "3"}, {"id": "queue", "label": "Offene Freigaben", "value": "2"}], "focus": [{"title": "Matthias · Session 5/10", "meta": "Heute 17:00 · Plan: Push A", "bullets": ["Letzte Notiz: Schlaf besser, Knie ok", "Blockade: Hausaufgaben nur 1×/Woche", "Ziel: eine Mikro-Übung festziehen"], "skills": [["deep_dive_notes", "Deep-Dive"], ["draft_followup_email", "Follow-up Entwurf"]], "ctx": {"clientId": "matthias-mayer", "clientName": "Matthias"}}, {"title": "Jakob · Check-in überfällig", "meta": "12 Tage ohne Update", "bullets": ["Firestore-UID verknüpft", "Letzte Session geloggt vor 12 Tagen", "Kein offenes Follow-up in der Queue"], "skills": [["draft_checkin_reminder", "Check-in"], ["create_exercise_sheet", "Übungsblatt"]], "ctx": {"clientId": "jakob-stadler", "clientName": "Jakob", "daysSince": 12}}], "launcher": [{"id": "deep_dive_notes", "title": "Deep-Dive Notizen", "sub": "Muster vor der Session"}, {"id": "process_call_transcript", "title": "Transkript", "sub": "Call verdichten"}, {"id": "onboard_client", "title": "Onboarding", "sub": "Willkommen vorbereiten"}, {"id": "draft_followup_email", "title": "Follow-up", "sub": "Nach der Session"}], "mockQueue": [{"title": "Follow-up · Matthias", "skillId": "draft_followup_email", "preview": "Betreff: Nach unserer Session\n\nHallo Matthias,\n\nkurz die Punkte von heute:\n• Knie entlasten, Tempo runter\n• 2× Push A diese Woche\n\nViele Grüße\nDaniel"}]};
+
+const MODELS = [
+  { id: "claude", label: "Claude (CLI / Bridge)" },
+  { id: "gpt", label: "GPT (OpenRouter)" },
+  { id: "gemini", label: "Gemini API" },
+  { id: "local", label: "Lokal / Stub" },
+];
+
+const LS = {
+  model: `csuite-${ROLE.id}-model`,
+  queue: `csuite-${ROLE.id}-queue-v1`,
+  chat: `csuite-${ROLE.id}-chat-v1`,
+};
+
+function uid() {
+  return `local_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+}
+function now() { return new Date().toISOString(); }
+function fmtTime(iso) {
+  try { return new Date(iso).toLocaleString("de-AT", { dateStyle: "short", timeStyle: "short" }); }
+  catch { return iso; }
+}
+function readLs(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
+  catch { return fallback; }
+}
+function writeLs(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+
+/** Firebase adapter — wire config later; mock/localStorage until then. */
+export const firebaseAdapter = {
+  mode: "mock",
+  async connect() {
+    this.mode = "mock";
+    return { ok: true, mode: "mock", note: "Keine Firebase-Config — localStorage." };
+  },
+  async listApprovals() { return readLs(LS.queue, []); },
+  async upsertApproval(item) {
+    const list = await this.listApprovals();
+    const i = list.findIndex((x) => x.id === item.id);
+    if (i >= 0) list[i] = item; else list.unshift(item);
+    writeLs(LS.queue, list);
+    return item;
+  },
+  async removeApproval(id) {
+    writeLs(LS.queue, (await this.listApprovals()).filter((x) => x.id !== id));
+  },
+};
+
+/** LLM / agent router — prefers Coach bridge, else realistic mock. */
+export const llmRouter = {
+  model: readLs(LS.model, "gemini"),
+  setModel(id) { this.model = id; writeLs(LS.model, id); },
+  async run({ skillId, context = {}, message = null }) {
+    const body = {
+      workspaceId: ROLE.id,
+      skillId: skillId || null,
+      engine: this.model === "local" ? "stub" : this.model === "gpt" ? "issue" : this.model,
+      context,
+      message,
+    };
+    try {
+      const res = await fetch("/api/csuite/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.preview) {
+          return {
+            ok: true,
+            engine: data.engine || this.model,
+            title: data.title || skillId || "Antwort",
+            preview: data.preview,
+            requiresApproval: Boolean(data.requiresApproval ?? true),
+            source: "bridge",
+          };
+        }
+      }
+    } catch (_) { /* fall through to mock */ }
+    return mockRun(skillId, context, message, this.model);
+  },
+};
+
+function mockRun(skillId, ctx, message, model) {
+  const name = ctx.clientName || ctx.leadName || ctx.offerName || "Item";
+  if (message) {
+    return {
+      ok: true, engine: model, source: "mock", requiresApproval: false,
+      title: "Chat",
+      preview: `[${ROLE.id.toUpperCase()} · ${model}]\nZu „${String(message).slice(0, 180)}":\n• Kurzantwort als Mock — Bridge offline oder Engine lokal.\n• Nutze Skill-Buttons für strukturierte Entwürfe.`,
+    };
+  }
+  const templates = {
+    draft_linkedin_post: `Hook: ${ctx.topic || "Vitalität 40+"}\n\nDie meisten brauchen kein neues Programm — sie brauchen 3 Termine, die wirklich stattfinden.\n\nCTA: Schreib mir „Plan", wenn du den 10er-Block prüfen willst.`,
+    draft_instagram_caption: `${ctx.topic || "Thema"}\n\nWeniger Motivation. Mehr System.\n\n#vitaltrainer #coaching`,
+    plan_content_week: `KW current\n• Mo IG: Alltagsenergie\n• Mi LinkedIn: Konsistenz\n• Fr Story: Session-Behind\n• So Teaser Angebot`,
+    nurture_lead_reply: `Hallo ${name},\n\ndanke für deine Nachricht. Der 10er-Block ist 1:1, alltagsnah, ohne Show.\nKurzcall (20 Min) reicht, um zu sehen ob's passt.\n\nWann geht's dir diese Woche?`,
+    offer_teaser: `${ctx.package || "10er Coaching"} — 10 Sessions, klarer Plan, Check-ins. Substanz statt Hype.`,
+    audit_brand_voice: `Stimm-Check:\n• Substanz: ok\n• Hype-Wörter: keine gefunden (Mock)\n• CTA: vorhanden`,
+    clarify_offer_slice: `Angebot: ${ctx.offerName || "—"}\nWer: ${ctx.audience || "fehlt"}\nJob: Messbare Alltagsvitalität\nGrenze: Kein Medizin-/Therapieversprechen`,
+    write_job_story: `When ${ctx.situation || "ich am Schreibtisch Pläne baue"}\nI want eine dichte Desktop-Akte\nSo that ich nicht gegen Mobile-App-UI kämpfe`,
+    critique_coach_surface: `Surface: ${ctx.surface || "—"}\nPain: ${ctx.pain || "—"}\n• Zu viel Leerraum / Touch-Chips\n• Zu wenig parallele Felder\n• Vorschlag: Desktop-Akte, nicht App-Shell`,
+    prioritize_backlog: `NOW\n1. ${String(ctx.items || "UFO Slice 1").split("\n")[0]}\nNEXT\n2. Alte Editoren abhängen\nLATER\n3. Nice-to-haves`,
+    draft_release_notes: `Coach Hub / C-Suite\n• ${ctx.changes || "Rollen-Dashboards"}\n• HITL-Queue lokal`,
+    gate_check_product: `Proposal: ${ctx.proposal || "—"}\nObserved: Gate-Daten fehlen im Mock\nDecision: keine Store-Arbeit ohne Owner-OK`,
+    diagnose_ci_red: `Symptom: ${ctx.symptom || "unbekannt"}\nURL: ${ctx.runUrl || "—"}\nHypothese: Check-Job / Lint\nNächster Slice: Log lesen → kleinster Fix`,
+    audit_write_paths: `Area: ${ctx.area || "plans"}\n• Schmiede plan.json → routines Push\n• Lokal training-plans → macrocycles Deliver\n• Empfehlung: eine SOT`,
+    propose_ufo_slice: `Ziel: ${ctx.goal || "Desktop UFO"}\n1. Converter plan.json → training-plans\n2. Shell Schmiede-Dichte\n3. Deliver-only Cloud`,
+    draft_architecture_note: `# ${ctx.topic || "Notiz"}\n\nKurz: C-Suite Dashboards unter workspaces/, State localStorage/Firebase.`,
+    plan_server_change: `Änderung: ${ctx.change || "—"}\nSchritte: Route → FileResponse → Restart\nRisiko: niedrig`,
+    escalate_owner_gate: `Frage: ${ctx.question || "—"}\nBeleg: ${ctx.evidence || "—"}\nBrauche: Ja/Nein`,
+    summarize_month_revenue: `Monat ${ctx.month || "current"}\nIst: fehlt (keine Buchhaltungs-API im Mock)\nOffen: Posten manuell aus Konsole`,
+    draft_invoice_reminder: `Hallo ${name},\n\nkurz zur offenen Rechnung über ${ctx.amount || "—"}${ctx.dueDate ? ` (fällig ${ctx.dueDate})` : ""}.\nFalls unterwegs — danke. Sonst kurz Bescheid.\n\nGrüße\nDaniel`,
+    package_price_check: `Paket: ${ctx.package || "—"}\nVorschlag: ${ctx.proposedPrice || "fehlt"}\nAnnahme: Owner-Preisliste prüfen`,
+    open_items_list: `Offen (Mock):\n• Schmidt 480€\n• (weitere aus Konsole laden)`,
+    expense_note: `Beleg: ${ctx.vendor || "—"} · ${ctx.amount || "—"} · ${ctx.category || "ops"}`,
+    cashflow_snapshot: `${ctx.horizonDays || 14}-Tage-Blick\nEingang: unsicher\nAusgang: Hosting/Tools\nfehlt: Bank-Export`,
+    deep_dive_notes: `Deep-Dive · ${name}\n• Muster: Konsistenz\n• Stärke: Training geloggt\n• Frage: Was blockiert die nächste Stufe?`,
+    create_exercise_sheet: `# Übungsblatt — ${name}\n1. Ankommen\n2. Hauptblock\n3. Reflexion`,
+    process_call_transcript: `Erkenntnis / Hausaufgabe / Emotion / Offen (Mock, Transkript ${(ctx.transcript||"").length} Z.)`,
+    onboard_client: `Onboarding · ${ctx.name || name}\nMail: ${ctx.email || "—"}\nPaket: ${ctx.package || "—"}\n→ Freigabe vor Versand`,
+    draft_followup_email: `Betreff: Nach unserer Session\n\nHallo ${name},\n\n${ctx.sessionSummary || "• Punkte einfügen"}\n\nGrüße\nDaniel`,
+    draft_checkin_reminder: `Hey ${name}, kurz nachgefragt — wie läuft's seit ${ctx.daysSince || "einigen"} Tagen?`,
+  };
+  const requiresApproval = ![
+    "plan_content_week", "audit_brand_voice", "clarify_offer_slice", "write_job_story",
+    "critique_coach_surface", "gate_check_product", "diagnose_ci_red", "audit_write_paths",
+    "propose_ufo_slice", "draft_architecture_note", "summarize_month_revenue", "open_items_list",
+    "expense_note", "cashflow_snapshot", "deep_dive_notes", "create_exercise_sheet", "process_call_transcript",
+  ].includes(skillId);
+  return {
+    ok: true,
+    engine: model,
+    source: "mock",
+    title: `${skillId || "skill"} · ${name}`,
+    preview: templates[skillId] || `Mock-Ergebnis für ${skillId}.`,
+    requiresApproval,
+  };
+}
+
+const state = {
+  queue: [],
+  chat: readLs(LS.chat, []),
+  busy: false,
+  sync: "mock",
+};
+
+const $ = (sel) => document.querySelector(sel);
+
+function log(role, text) {
+  state.chat.push({ id: uid(), role, text, at: now() });
+  state.chat = state.chat.slice(-100);
+  writeLs(LS.chat, state.chat);
+  renderChat();
+}
+
+function renderHeader() {
+  $(".brand h1").textContent = ROLE.title;
+  $(".icon").textContent = ROLE.icon;
+  $(".git-badge").textContent = ROLE.gitBadge;
+  const kpiRoot = $(".kpis");
+  kpiRoot.innerHTML = ROLE.kpis.map((k) => {
+    const val = k.id === "queue" ? String(state.queue.filter((q) => q.status === "pending_approval").length) : k.value;
+    return `<div class="kpi"><span class="n">${val}</span><span class="l">${k.label}</span></div>`;
+  }).join("");
+  const sel = $("#model");
+  sel.innerHTML = MODELS.map((m) => `<option value="${m.id}" ${m.id === llmRouter.model ? "selected" : ""}>${m.label}</option>`).join("");
+}
+
+function renderFocus() {
+  const root = $("#focus");
+  root.innerHTML = ROLE.focus.map((card, idx) => `
+    <article class="card" data-focus="${idx}">
+      <h3>${card.title}</h3>
+      <p class="sub">${card.meta}</p>
+      <ul>${card.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
+      <div class="actions">
+        ${card.skills.map(([id, label]) => `<button class="btn" data-skill="${id}" data-focus="${idx}">${label}</button>`).join("")}
+      </div>
+    </article>`).join("");
+}
+
+function renderLauncher() {
+  $("#launcher").innerHTML = ROLE.launcher.map((s) => `
+    <button class="skill" data-launch="${s.id}" type="button">
+      <strong>${s.title}</strong><span>${s.sub}</span>
+    </button>`).join("");
+}
+
+function renderChat() {
+  const root = $("#chat");
+  if (!state.chat.length) {
+    root.innerHTML = `<p class="empty">Konsole bereit — Skills oder Chat nutzen.</p>`;
+    return;
+  }
+  root.innerHTML = state.chat.map((m) => `
+    <div class="msg ${m.role}"><span class="who">${m.role === "user" ? "Du" : m.role === "system" ? "System" : ROLE.id.toUpperCase()}</span>${escapeHtml(m.text)}</div>
+  `).join("");
+  root.scrollTop = root.scrollHeight;
+}
+
+function renderQueue() {
+  const root = $("#queue");
+  const pending = state.queue.filter((q) => q.status === "pending_approval");
+  if (!pending.length) {
+    root.innerHTML = `<p class="empty">Keine offenen Freigaben.</p>`;
+    renderHeader();
+    return;
+  }
+  root.innerHTML = pending.map((item) => `
+    <article class="card queue-card" data-id="${item.id}">
+      <h3>${escapeHtml(item.title)}</h3>
+      <p class="sub">${escapeHtml(item.skillId)} · ${fmtTime(item.createdAt)}</p>
+      <textarea data-edit="${item.id}">${escapeHtml(item.preview)}</textarea>
+      <div class="actions">
+        <button class="btn ok" data-approve="${item.id}">✅ Freigeben &amp; Ausführen</button>
+        <button class="btn danger" data-reject="${item.id}">Verwerfen</button>
+      </div>
+    </article>`).join("");
+  renderHeader();
+}
+
+function escapeHtml(s) {
+  return String(s ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+async function ensureSeedQueue() {
+  let list = await firebaseAdapter.listApprovals();
+  if (!list.length && ROLE.mockQueue?.length) {
+    list = ROLE.mockQueue.map((m) => ({
+      id: uid(),
+      status: "pending_approval",
+      skillId: m.skillId,
+      title: m.title,
+      preview: m.preview,
+      createdAt: now(),
+      updatedAt: now(),
+    }));
+    writeLs(LS.queue, list);
+  }
+  state.queue = list;
+}
+
+async function runSkill(skillId, context = {}) {
+  if (state.busy) return;
+  state.busy = true;
+  log("system", `Skill ${skillId} mit Modell ${llmRouter.model} gestartet…`);
+  try {
+    const result = await llmRouter.run({ skillId, context });
+    log("assistant", result.preview);
+    log("system", `Fertig · Quelle ${result.source} · Engine ${result.engine}`);
+    if (result.requiresApproval) {
+      const item = {
+        id: uid(),
+        status: "pending_approval",
+        skillId,
+        title: result.title,
+        preview: result.preview,
+        createdAt: now(),
+        updatedAt: now(),
+        meta: context,
+      };
+      await firebaseAdapter.upsertApproval(item);
+      state.queue = await firebaseAdapter.listApprovals();
+      renderQueue();
+    }
+  } finally {
+    state.busy = false;
+  }
+}
+
+async function runChat(text) {
+  log("user", text);
+  state.busy = true;
+  try {
+    const result = await llmRouter.run({ message: text });
+    log("assistant", result.preview);
+  } finally {
+    state.busy = false;
+  }
+}
+
+function wire() {
+  $("#model").addEventListener("change", (e) => {
+    llmRouter.setModel(e.target.value);
+    log("system", `Modell gewechselt → ${e.target.value}`);
+  });
+  $("#focus").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-skill]");
+    if (!btn) return;
+    const card = ROLE.focus[Number(btn.dataset.focus)];
+    runSkill(btn.dataset.skill, { ...(card?.ctx || {}) });
+  });
+  $("#launcher").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-launch]");
+    if (!btn) return;
+    const id = btn.dataset.launch;
+    const defaults = {
+      draft_linkedin_post: { topic: "Vitalität 40+" },
+      draft_instagram_caption: { topic: "Alltagsenergie", format: "reel" },
+      plan_content_week: { week: "current" },
+      nurture_lead_reply: { leadName: "Lead", channel: "email", context: "Interesse am 10er" },
+      onboard_client: { name: "Neuer Klient", email: "neu@example.com", package: "10er Coaching" },
+      process_call_transcript: { transcript: "(Transkript hier einfügen)", clientName: "Session" },
+      prioritize_backlog: { items: "UFO Slice\nC-Suite\nSchmiede abhängen" },
+      draft_release_notes: { changes: "C-Suite Dashboards" },
+      package_price_check: { package: "10er Coaching", proposedPrice: "fehlt" },
+      expense_note: { vendor: "Hosting", amount: "12€", category: "tools" },
+      escalate_owner_gate: { question: "Eine SOT für Pläne?", evidence: "Zwei Schreibpfade live" },
+      plan_server_change: { change: "Workspaces static serve" },
+    };
+    runSkill(id, defaults[id] || {});
+  });
+  $("#queue").addEventListener("click", async (e) => {
+    const approve = e.target.closest("[data-approve]");
+    const reject = e.target.closest("[data-reject]");
+    if (approve) {
+      const id = approve.dataset.approve;
+      const ta = document.querySelector(`textarea[data-edit="${id}"]`);
+      const item = state.queue.find((q) => q.id === id);
+      if (!item) return;
+      item.preview = ta?.value ?? item.preview;
+      item.status = "approved";
+      item.updatedAt = now();
+      await firebaseAdapter.upsertApproval(item);
+      await firebaseAdapter.removeApproval(id);
+      state.queue = await firebaseAdapter.listApprovals();
+      log("system", `Freigegeben & ausgeführt (Stub): ${item.title}`);
+      renderQueue();
+    }
+    if (reject) {
+      const id = reject.dataset.reject;
+      await firebaseAdapter.removeApproval(id);
+      state.queue = await firebaseAdapter.listApprovals();
+      log("system", `Verworfen: ${id}`);
+      renderQueue();
+    }
+  });
+  const form = $("#composer");
+  const input = $("#prompt");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text || state.busy) return;
+    input.value = "";
+    runChat(text);
+  });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+}
+
+async function boot() {
+  const conn = await firebaseAdapter.connect();
+  state.sync = conn.mode;
+  $(".dot").classList.toggle("live", conn.mode !== "mock");
+  $(".sync-label").textContent = conn.mode === "mock" ? "Sync: lokal (Mock)" : "Sync: Firebase";
+  await ensureSeedQueue();
+  renderHeader();
+  renderFocus();
+  renderLauncher();
+  renderChat();
+  renderQueue();
+  wire();
+  if (!state.chat.length) log("system", `${ROLE.id.toUpperCase()}-Cockpit geladen · Bridge /api/csuite/run falls lokal.`);
+}
+
+boot();
+
+  </script>
+</body>
+</html>

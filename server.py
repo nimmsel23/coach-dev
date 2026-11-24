@@ -20,7 +20,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import httpx
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse, HTMLResponse
 from starlette.background import BackgroundTask
 
@@ -490,6 +490,41 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     async def coach_coo_ui():
         # Clean URL for Tailnet; assets remain under /coach/assets/*.
         return frontend(coach, "coo.html")
+
+    def _workspace_dashboard(role: str):
+        path = (ROOT / "workspaces" / role / "dashboard.html").resolve()
+        if not path.is_file() or not path.is_relative_to((ROOT / "workspaces").resolve()):
+            raise HTTPException(404, f"C-Suite dashboard fehlt: {role}")
+        return FileResponse(path, media_type="text/html; charset=utf-8")
+
+    @app.api_route("/coach/cmo", methods=["GET", "HEAD"])
+    @app.api_route("/coach/cmo/", methods=["GET", "HEAD"])
+    async def coach_cmo_ui():
+        return _workspace_dashboard("cmo")
+
+    @app.api_route("/coach/cpo", methods=["GET", "HEAD"])
+    @app.api_route("/coach/cpo/", methods=["GET", "HEAD"])
+    async def coach_cpo_ui():
+        return _workspace_dashboard("cpo")
+
+    @app.api_route("/coach/cto", methods=["GET", "HEAD"])
+    @app.api_route("/coach/cto/", methods=["GET", "HEAD"])
+    async def coach_cto_ui():
+        return _workspace_dashboard("cto")
+
+    @app.api_route("/coach/cfo", methods=["GET", "HEAD"])
+    @app.api_route("/coach/cfo/", methods=["GET", "HEAD"])
+    async def coach_cfo_ui():
+        return _workspace_dashboard("cfo")
+
+    @app.api_route("/coach/coo/dashboard", methods=["GET", "HEAD"])
+    @app.api_route("/coach/coo/dashboard/", methods=["GET", "HEAD"])
+    async def coach_coo_dashboard_ui():
+        return _workspace_dashboard("coo")
+
+    @app.api_route("/workspaces/{role}/dashboard.html", methods=["GET", "HEAD"])
+    async def workspace_dashboard_file(role: str):
+        return _workspace_dashboard(role)
 
     @app.api_route("/coach/shell", methods=["GET", "HEAD"])
     @app.api_route("/coach/shell/", methods=["GET", "HEAD"])

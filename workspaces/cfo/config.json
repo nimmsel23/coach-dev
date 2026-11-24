@@ -1,0 +1,20 @@
+{
+  "id": "cfo",
+  "title": "Chief Financial Officer",
+  "version": "1.0",
+  "focus": "Umsatz, Pakete & Belege",
+  "defaultModel": "gemini",
+  "temperature": 0.2,
+  "allowedSkills": [
+    "summarize_month_revenue",
+    "draft_invoice_reminder",
+    "package_price_check",
+    "open_items_list",
+    "expense_note",
+    "cashflow_snapshot"
+  ],
+  "requiresApproval": [
+    "draft_invoice_reminder",
+    "package_price_check"
+  ]
+}

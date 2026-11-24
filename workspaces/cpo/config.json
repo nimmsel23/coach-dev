@@ -1,0 +1,20 @@
+{
+  "id": "cpo",
+  "title": "Chief Product Officer",
+  "version": "1.0",
+  "focus": "Angebot, Coach-Produkt & Discovery",
+  "defaultModel": "gemini",
+  "temperature": 0.35,
+  "allowedSkills": [
+    "clarify_offer_slice",
+    "write_job_story",
+    "critique_coach_surface",
+    "prioritize_backlog",
+    "draft_release_notes",
+    "gate_check_product"
+  ],
+  "requiresApproval": [
+    "draft_release_notes",
+    "prioritize_backlog"
+  ]
+}
