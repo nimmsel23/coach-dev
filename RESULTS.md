@@ -1,3 +1,10 @@
+## 2026-11-24 — Workspace-Arbeitsvorrat mit lokaler und Cloud-Planseite
+
+- Eigene offene Workspace-Liste einschließlich lokaler Betreuung ohne Cloud-Konto, Suche, Filter für offene Übergaben/fehlende UID und direkter Einstieg in die vorhandene lokale Planung.
+- Klientenseite zeigt lokale Freigabe-/Versandversion und tatsächlich gelesene Cloud-Macrocycles unabhängig voneinander. Herkunftsvergleich über bestehenden LocalPlans-ID-/source-Vertrag; abweichende Versionen, fehlende Gegenstücke und Cloud-only-Pläne sichtbar, direkte Cloud-Planlinks.
+- Cache/Pending Writes bestätigen keinen Cloud-Stand; Listener nur für gewählten Klienten, sichere Abmeldung bei Wechsel, erneute Prüfung bei Fehlern. Kein automatischer Planversand oder neuer Editor, keine API-/Service-Änderung.
+- ESLint, Firebase-Build und 117 Coach-Funktionstests bestanden. Neue Tests für Herkunft/Versionsabweichung, Cache, fehlendes Gegenstück und lokale Deep-Links. Chromium-Abnahme Desktop 1600px/Mobil 390px mit synthetischen Daten: lokale-only Betreuung, Filter, Cloud-only-Plan, Versionsabweichung, Plan-Deep-Link, Klientenwechsel/Offline und kein horizontaler Überlauf. Authentifizierte echte Cloud-Abnahme bleibt offen.
+
 ## 2026-11-24 — Offene Coach-Übersicht mit lokalen Workspaces
 
 - Firebase-Coach startet in der Klientenübersicht; Suche, Aktivitätsfilter, direkte Console-/Plan-/Chat-Zugänge. Breite Seite statt verschachtelter Scroll-Panels, alle Klientenbereiche sichtbar.

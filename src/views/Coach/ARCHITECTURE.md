@@ -493,3 +493,26 @@ unklar und zeigen niemals willkürlich einen Workspace.
 `WorkspaceOverview` bleibt beim gewählten Klienten sichtbar (Desktop seitlich,
 Mobil oben). Änderungen am Backend brauchen den nächsten autorisierten Service-Reload;
 in dieser Session wird kein laufender Server neugestartet.
+
+
+## Workspace-Arbeitsvorrat und Cloud-Planstände (2026-11-24)
+
+`WorkspaceDirectory` zeigt auch reine lokale Betreuungen ohne Firebase-Profil,
+mit eigener Suche, Filter für offene Übergaben und fehlende Cloud-UID.
+`localWorkspaceUrl` öffnet die vorhandene lokale Planung mit exakter Client-ID;
+keine neue Registry oder zweiter Editor. Cloud-Aktionen verwenden bestehende
+Klienten-/Planrouten; mehrdeutige UID-Zuordnungen erzeugen keine Direktzuweisung.
+
+`useWorkspaceCloudPlans` beobachtet nur die Macrocycles des ausgewählten Klienten
+über Firestore. UID-Wechsel blendet alte Ergebnisse sofort aus; Listener werden
+abgeräumt. Cache und Pending Writes gelten nicht als bestätigter Cloud-Stand,
+Lesefehler bleiben sichtbar und können erneut geprüft werden. Cloud-Pläne bleiben
+auch bei ausgefallenem lokalen Backend sichtbar.
+
+Der Vergleich nutzt den bestehenden LocalPlans-Vertrag `local-${plan.id}` plus
+`source == coach-local-plan` und `sourceLocalVersion`. Lokale Freigabeversion,
+lokaler Versandvermerk und Cloud-headVersion werden getrennt angezeigt; Cloud-
+und lokale Versionsnummern dürfen nicht gleichgesetzt werden. Gleiche Herkunfts-
+version bedeutet keinen Inhaltsvergleich. Cloud-only-Pläne werden separat mit
+Deep-Link zum bestehenden Plan-/Feedback-Bereich angezeigt. Kein automatischer
+Versand, Rückimport oder Überschreiben, keine Backend-Änderung für diesen Schritt.

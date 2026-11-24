@@ -14,8 +14,9 @@ assert.ok(stylesheets.length, 'Build Coach before running browser acceptance');
 const builtCss = (await Promise.all(stylesheets.map(name => readFile(join('dist-coach', name), 'utf8')))).join('\n');
 const artifacts = await mkdtemp(join(tmpdir(), 'coach-dashboard-'));
 const profiles = { alice: { displayName: 'Anna Beispiel', clientStatus: 'client' }, bob: { displayName: 'Ben Muster', clientStatus: 'client' }, clara: { displayName: 'Clara Test', clientStatus: 'friend' } };
-const workspaces = [{ id: 'anna', name: 'Anna Beispiel', uids: ['alice'], plans: [{ id: 'p', name: 'Ganzkörper · Aufbau', status: 'ready', version: 2, deliveredVersion: 1 }], taskwarriorConfigured: true }];
+const workspaces = [{ id: 'anna', name: 'Anna Beispiel', uids: ['alice'], plans: [{ id: 'p', name: 'Ganzkörper · Aufbau', status: 'ready', version: 2, deliveredVersion: 1 }], taskwarriorConfigured: true }, { id: 'local-only', name: 'Lokale Betreuung Beispiel', uids: [], plans: [], taskwarriorConfigured: false }];
 const mocks = {
+  './useWorkspaceCloudPlans.js': `export const useWorkspaceCloudPlans = (uid) => ({status:'ready',plans:uid==='alice'?[{id:'local-p',name:'Cloud Aufbau',source:'coach-local-plan',sourceLocalVersion:1,version:3,status:'published'},{id:'cloud-only',name:'Nur in der Cloud',version:1,status:'published'}]:[],retry:()=>{}});`,
   '@db': `export const getGlobalInbox = async () => []; export const watchCoachInbox = () => () => {}; export const getAllUserProfiles = async () => (${JSON.stringify(profiles)}); export const updateUserProfile = async () => true;`,
   '../contexts/UserContext.jsx': `export const useUser = () => ({user:{uid:'coach',email:'coach@example.test'},authLoading:false});`,
   '../store/index.js': `export const useSettingsStore = () => ({sidebarPinned:true,setSidebarPinned:()=>{}});`,
@@ -59,12 +60,25 @@ try {
   await waitFor(`document.body.innerText.includes('Anna Beispiel') && Boolean(document.querySelector('.coach-client-grid'))`);
   assert.equal(await evaluate('document.querySelectorAll(".coach-client-item").length'),3);
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
+  await waitFor(`document.body.innerText.includes('Lokale Betreuung Beispiel')`);
+  assert.equal(await evaluate(`new URL(document.querySelector('.coach-workspace-list a').href).searchParams.get('client')`),'anna');
+  await evaluate(`document.querySelector('[aria-label="Workspaces filtern"]').value='unlinked';document.querySelector('[aria-label="Workspaces filtern"]').dispatchEvent(new Event('change',{bubbles:true}))`);
+  await waitFor(`document.querySelectorAll('.coach-workspace-list > li').length===1`);
+  assert.equal(await evaluate(`document.querySelector('.coach-workspace-list').innerText.includes('Lokale Betreuung Beispiel')`),true);
+  await evaluate(`document.querySelector('[aria-label="Workspaces filtern"]').value='all';document.querySelector('[aria-label="Workspaces filtern"]').dispatchEvent(new Event('change',{bubbles:true}))`);
   await screenshot('desktop-overview');
   await evaluate(`document.querySelector('.coach-client-item .vos-btn.primary').click()`);
   await waitFor(`document.body.innerText.includes('Ganzkörper · Aufbau')`);
   assert.equal(await evaluate(`document.querySelectorAll('.coach-client-nav button').length`),7);
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
+  await waitFor(`document.body.innerText.includes('abweichender Versionsstand') && document.body.innerText.includes('Nur in der Cloud')`);
   await screenshot('desktop-client');
+  await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+  assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
+  await evaluate(`document.querySelector('.coach-workspace').scrollIntoView({block:'start'})`);
+  await screenshot('mobile-client-plans');
+  await evaluate(`Array.from(document.querySelectorAll('.coach-workspace button')).find(b=>b.textContent==='Cloud Aufbau').click()`);
+  await waitFor(`window.location.hash.includes('plan=local-p')`);
   await evaluate(`document.querySelectorAll('.coach-client-nav button')[2].click()`);
   await waitFor(`document.body.innerText.includes('ClientMessages')`);
   await evaluate(`document.querySelector('[aria-label="Klient wechseln"]').value='bob';document.querySelector('[aria-label="Klient wechseln"]').dispatchEvent(new Event('change',{bubbles:true}))`);

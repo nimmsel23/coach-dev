@@ -1,3 +1,4 @@
+- [ ] Lokal-/Cloud-Planübersicht mit echten Coach-Konten prüfen: Cloud-only, fehlendes Gegenstück, andere Herkunft und Abweichung der sourceLocalVersion. Inhalts-/Snapshot-Vergleich ist noch offen; gleiche Herkunftsversion bestätigt keine Inhaltsgleichheit.
 - [ ] Nach autorisiertem Coach-API-Reload die neue Workspace-Übersicht aus Firebase über Tailscale mit echtem Coach-Login abnehmen; UID-Zuordnungen und Versandversion prüfen.
 - [ ] 14-Tage-Aktivitätsstatus mit angemeldetem Coach und echten Fitness-Lebenszeichen prüfen; weitere Apps als Quellen anbinden.
 # NEXT (coach-dev)

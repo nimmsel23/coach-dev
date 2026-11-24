@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fetchWorkspaceSummary, workspaceForUid } from './workspaceApi.js';
+import { cloudCounterpart, localPlanState, localWorkspaceUrl, fetchWorkspaceSummary, workspaceForUid } from './workspaceApi.js';
 
 const workspace = { id: 'client', name: 'Klient', uids: ['uid'], plans: [], taskwarriorConfigured: false };
 const user = { getIdToken: async () => 'test-token' };
@@ -28,4 +28,25 @@ test('UID matching fails closed on missing or ambiguous workspace assignments', 
   assert.equal(workspaceForUid([workspace], 'uid').workspace.id, 'client');
   assert.equal(workspaceForUid([workspace], 'other').status, 'missing');
   assert.deepEqual(workspaceForUid([workspace, { ...workspace, id: 'second' }], 'uid'), { status: 'ambiguous', workspace: null });
+});
+
+test('local release and recorded delivery are separate from live cloud provenance', () => {
+  const plan = { id: 'p', version: 2, deliveredVersion: 1 };
+  assert.equal(localPlanState({ version: 0 }).id, 'draft');
+  assert.equal(localPlanState(plan).id, 'pending');
+  assert.equal(localPlanState({ ...plan, deliveredVersion: 2 }).id, 'delivered');
+  const remote = { id: 'local-p', source: 'coach-local-plan', sourceLocalVersion: 2, version: 7 };
+  const cloud = { status: 'ready', plans: [remote] };
+  assert.match(cloudCounterpart(plan, cloud), /Inhalt nicht verglichen/);
+  assert.match(cloudCounterpart(plan, { ...cloud, status: 'cached' }), /nicht bestätigt/);
+  assert.match(cloudCounterpart(plan, { ...cloud, plans: [] }), /Kein Cloud/);
+  assert.match(cloudCounterpart(plan, { ...cloud, plans: [{ ...remote, source: 'other' }] }), /andere Herkunft/);
+  assert.match(cloudCounterpart(plan, { ...cloud, plans: [{ ...remote, sourceLocalVersion: 1 }] }), /abweichender/);
+});
+test('local planning links preserve exact workspace identity on Tailnet and localhost', () => {
+  const link = new URL(localWorkspaceUrl('a b/ü', { hostname: 'vos-coach.web.app', origin: 'https://vos-coach.web.app' }));
+  assert.equal(link.origin, 'https://ideapad.tail7a15d6.ts.net:8443');
+  assert.equal(link.pathname, '/coach/local.html');
+  assert.equal(link.searchParams.get('client'), 'a b/ü');
+  assert.equal(new URL(localWorkspaceUrl('test', { hostname: 'localhost', origin: 'http://localhost:9150' })).origin, 'http://localhost:9150');
 });

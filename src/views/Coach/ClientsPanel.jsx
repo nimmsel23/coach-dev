@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, ArrowUpRight, FolderOpen, MessageSquare, Search, Users } from 'lucide-react';
 import { useWorkspaceSummary } from './useWorkspaceSummary.js';
 import WorkspaceOverview from './WorkspaceOverview.jsx';
+import WorkspaceDirectory from './WorkspaceDirectory.jsx';
 import { workspaceForUid } from './workspaceApi.js';
 import './coachDashboard.css';
 import { getAllUserProfiles, updateUserProfile } from '@db';
@@ -145,11 +146,11 @@ export default function ClientsPanel({ unreadCounts = {} }) {
 
   if (allUids.length === 0) {
     return (
-      <div className="card flex flex-col items-center justify-center py-16 text-center">
+      <div className="coach-dashboard"><div className="card flex flex-col items-center justify-center py-16 text-center">
         <Users size={40} className="mb-3 text-fit-dim" />
         <h3 className="text-base font-semibold text-fit-ink">Keine Nutzer</h3>
         <p className="mt-1 text-xs text-fit-muted">Es haben sich noch keine Klienten registriert</p>
-      </div>
+      </div><WorkspaceDirectory state={workspaceState} profiles={profiles} onSelect={() => {}} /></div>
     );
   }
 
@@ -216,6 +217,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
           </div>
           {!uids.length && <p className="py-10 text-sm text-fit-muted">Keine Klienten für diese Auswahl.</p>}
         </section>
+        <WorkspaceDirectory state={workspaceState} profiles={profiles} onSelect={(uid) => navigate({ sub: 'clients', client: uid, detail: 'trainingplan', date: '', planId: '' })} />
         <section className="coach-feed-section" aria-label="Letzte Kraftsessions">
           <header className="mb-5 flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-semibold">Letzte Kraftsessions</h2><span className="text-sm text-fit-muted">Direkt zum Klienten und Feedback</span></header>
           <ClientWorkoutsFeed initialTypeFilter="workout" onSelectClient={setSelectedUid} />
@@ -247,7 +249,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
             {detailTab === 'trainingplan' && <ClientTrainingPlans key={selectedUid} clientUid={selectedUid} initialPlanId={route.planId} onClosePlan={() => navigate({ planId: '' })} onNavigate={setDetailTab} />}
             {detailTab === 'plan' && <AssignPlan key={selectedUid} clientUid={selectedUid} clientName={selectedName} />}
           </div>
-          <WorkspaceOverview uid={selectedUid} state={workspaceState} />
+          <WorkspaceOverview uid={selectedUid} state={workspaceState} onOpenCloud={(planId) => navigate({ detail: 'trainingplan', planId, date: '' })} />
         </div>
       </>}
     </div>
