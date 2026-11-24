@@ -1,9 +1,10 @@
-import { Dumbbell, Layers, MessageSquare, Flame, RotateCw, Sparkles } from 'lucide-react'
+import { Dumbbell, Layers, MessageSquare, Flame, RotateCw, Sparkles, Utensils } from 'lucide-react'
 
 /** Primäre Klienten-Bereiche — in Sidebar + Bottom-Nav SubTabs. */
 export const CLIENT_PRIMARY_TABS = [
   { id: 'workouts', label: 'Verlauf', icon: Dumbbell },
   { id: 'trainingplan', label: 'Plan', icon: Layers },
+  { id: 'nutrition', label: 'Ernährung', icon: Utensils },
   { id: 'messages', label: 'Chat', icon: MessageSquare },
 ]
 

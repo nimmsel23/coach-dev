@@ -516,3 +516,41 @@ und lokale Versionsnummern dürfen nicht gleichgesetzt werden. Gleiche Herkunfts
 version bedeutet keinen Inhaltsvergleich. Cloud-only-Pläne werden separat mit
 Deep-Link zum bestehenden Plan-/Feedback-Bereich angezeigt. Kein automatischer
 Versand, Rückimport oder Überschreiben, keine Backend-Änderung für diesen Schritt.
+
+
+## Ernährungsentwurf: Makros und KI-Rezepte (2026-11-24)
+
+Neuer Klientenbereich `nutrition`, Deep-Link `#/clients/<uid>/nutrition`, dazu ein
+direkter Einstieg auf der Klientenkarte. `ClientNutritionPlan` hält den Formular-
+und Ergebniszustand; innerer Editor ist nach Coach-UID und Client-UID keyed.
+`src/lib/nutrition/targets.js` rechnet deterministisch, ohne Netzwerk: Mifflin-
+Ruhebedarf × Aktivitätsfaktor oder bekannter Erhaltungsbedarf, moderates Zieldelta,
+Protein aus Bezugsgewicht, Fett aus Energieanteil/Planungsuntergrenze, Kohlenhydrate
+als Rest. Mahlzeitenbudgets erhalten die gerundeten Tagessummen exakt. Faktoren,
+Formel, Annahmen und Quellen (Mifflin, ISSN, EFSA) stehen in der Oberfläche.
+`fuelGoals` verwendet bestehende Fuel-Settings-Feldnamen inklusive `carb_ratio`;
+der Entwurf schreibt keine Fuel-Ziele und keine Intake-Logs.
+
+Explizites Speichern persistiert einen Browserentwurf unter
+`coach:nutrition-draft:v1:<coach>:<client>`; JSON-Export enthält Input, berechnete
+Ziele, optionale Rezeptideen und Quellen. Kein verstecktes Autosave, kein Cloud-
+Versand, keine Freigabeversion und kein Ersatz für die Trainingsplanversionierung.
+Lesefehler werden angezeigt; fehlgeschlagenes Speichern wird nicht als Erfolg
+bestätigt. Gespeicherte KI-Ideen werden strukturell validiert wiederhergestellt.
+
+`src/lib/nutrition/ideas.js` verwendet den bestehenden Firebase-AI-/Vertex-Zugang
+mit Gemini 2.5 Flash, Schema und 60-Sekunden-Grenze. Erst expliziter Klick sendet
+Makro-/Mahlzeitenziele, Stil, bestätigte Lebensmittel, Ausschlüsse und Kochalltag.
+Keine UID, Namen, Körperprofil- oder Krankenaktenfelder; Freitexte dürfen keine
+personenbezogenen Angaben enthalten. Eingaben sind als untrusted Daten abgegrenzt.
+Die KI liefert konkrete Rezeptnamen, geschätzte Zutatenmengen und Zubereitung,
+keine autoritativen Nährwerte oder Änderungen an den Zielzahlen. Eingabeänderung,
+Klientenwechsel und Unmount verwerfen verspätete Antworten.
+
+Rezeptnährwerte sind noch nicht gegen den Fuel-Katalog berechnet; das steht bei
+Budgets und Rezepten ausdrücklich dabei. Kein Anspruch auf Makrotreue eines KI-
+Gerichts, Allergensicherheit oder vollständige Mikronährstoffversorgung. Klinische
+Situationen/Minderjährige und unplausible oder zu niedrige Berechnungen erzeugen
+keine automatische Zielplanung. Der extern installierte Meal-Planner-Skill unter
+`~/.vos/fuel/skills/meal-planner` dient als Methodenreferenz; keine seiner AGPL-
+Skripte werden in die App importiert oder für echte Klientendaten ausgeführt.

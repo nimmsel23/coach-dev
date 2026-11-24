@@ -53,3 +53,8 @@ test('Nachrichten sind pro Klient direkt verlinkbar', () => {
   assert.equal(buildCoachHash(route), `#/clients/${UID}/messages`);
   assert.deepEqual(parseCoachHash(buildCoachHash(route)), route);
 });
+
+test('nutrition draft deep link keeps selected client and area on reload', () => {
+  const route = { sub: 'clients', client: UID, detail: 'nutrition', date: '' };
+  assert.deepEqual(parseCoachHash(buildCoachHash(route)), route);
+});

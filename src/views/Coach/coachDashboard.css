@@ -34,3 +34,19 @@
 .coach-workspace { overflow-wrap: anywhere; }
 .coach-feed-section > header > .vos-btn, .coach-workspace-list .vos-btn { flex: none; min-height: 44px; white-space: nowrap; }
 .coach-workspace .vos-btn { min-height: 44px; white-space: nowrap; }
+
+.coach-nutrition { display: grid; gap: 2rem; }
+.coach-nutrition-columns { display: grid; gap: 2rem; align-items: start; }
+.coach-nutrition-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 1rem; }
+.coach-nutrition-label { display: grid; gap: .5rem; font-size: .875rem; }
+.coach-nutrition-input { width: 100%; min-width: 0; min-height: 44px; padding: .7rem .75rem; border: 1px solid var(--dashboard-rule); border-radius: .65rem; color: var(--ink); background: var(--bg); font-size: 1rem; }
+.coach-nutrition-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.coach-nutrition-input::placeholder { color: var(--dim); }
+.coach-nutrition-result { border-top: 1px solid var(--dashboard-rule); padding-top: 1.5rem; }
+.coach-nutrition-totals { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+.coach-nutrition-totals dt { color: var(--dim); font-size: .75rem; }
+.coach-nutrition-totals dd { font-size: 1.75rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.coach-nutrition .vos-btn { min-height: 44px; flex: none; }
+.coach-nutrition-recipes { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,260px),1fr)); gap: 2rem; }
+.coach-nutrition-recipes article { border-top: 1px solid var(--dashboard-rule); padding-top: 1rem; overflow-wrap: anywhere; }
+@media (min-width: 900px) { .coach-nutrition-columns { grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); } .coach-nutrition-result { border-top: 0; border-left: 1px solid var(--dashboard-rule); padding: 0 0 0 1.5rem; } }

@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowUpRight, FolderOpen, MessageSquare, Search, Users } fro
 import { useWorkspaceSummary } from './useWorkspaceSummary.js';
 import WorkspaceOverview from './WorkspaceOverview.jsx';
 import WorkspaceDirectory from './WorkspaceDirectory.jsx';
+import ClientNutritionPlan from './ClientNutritionPlan.jsx';
 import { workspaceForUid } from './workspaceApi.js';
 import './coachDashboard.css';
 import { getAllUserProfiles, updateUserProfile } from '@db';
@@ -209,6 +210,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                 <div className="mt-5 flex flex-wrap items-center gap-2">
                   <button type="button" onClick={() => setSelectedUid(uid)} className="vos-btn primary">Console <ArrowUpRight size={14} /></button>
                   <button type="button" onClick={() => navigate({ sub: 'clients', client: uid, detail: 'trainingplan', date: '', planId: '' })} className="vos-btn">Plan</button>
+                  <button type="button" onClick={() => navigate({ sub: 'clients', client: uid, detail: 'nutrition', date: '', planId: '' })} className="vos-btn">Ernährung</button>
                   <button type="button" onClick={() => navigate({ sub: 'clients', client: uid, detail: 'messages', date: '', planId: '' })} className="vos-btn"><MessageSquare size={14} />{unread ? `${unread} neu` : 'Chat'}</button>
                 </div>
                 {manageUsers && <div className="mt-4 flex flex-wrap gap-1 border-t border-fit-line/30 pt-3">{STATUS_OPTIONS.map((option) => <button key={option.id} type="button" disabled={saving.has(uid)} aria-pressed={status === option.id} title={option.hint} onClick={() => setStatus(uid, option.id)} className={`min-h-11 rounded-lg px-3 text-xs ${status === option.id ? 'bg-fit-accent/10 text-fit-accent' : 'text-fit-muted'}`}>{option.label}</button>)}</div>}
@@ -240,6 +242,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
         })}</nav>
         <div className="coach-client-workbench">
           <div className="min-w-0">
+            {detailTab === 'nutrition' && <ClientNutritionPlan key={selectedUid} clientUid={selectedUid} />}
             {detailTab === 'messages' && <ClientMessages key={selectedUid} clientUid={selectedUid} />}
             {detailTab === 'workouts' && <ClientConsole key={selectedUid} clientUid={selectedUid} highlightDate={route.date} onDismissHighlight={route.date ? () => navigate({ date: '' }) : undefined} />}
             {detailTab === 'sixpack' && <ClientSixPack key={selectedUid} clientUid={selectedUid} />}

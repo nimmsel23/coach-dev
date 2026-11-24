@@ -1,3 +1,11 @@
+## 2026-11-24 — Ernährungsentwurf mit Makrozielen und KI-Rezeptwerkstatt
+
+- Neuer Klientenbereich „Ernährung“ samt direktem Karteneinstieg: Ziel, Körperdaten oder bekannter Erhaltungsbedarf, Aktivität, Protein-/Fettfaktoren, Bezugsgewicht, Mahlzeitenzahl, Ernährungsstil, bestätigte Lebensmittel, Ausschlüsse und Kochalltag.
+- Deterministische Tagesziele/Mahlzeitenbudgets mit nachvollziehbarer Formel und Quellen; nachvollziehbare Energie-/Makroprüfung und Planungsgrenzen. Fuel-kompatible Zielfelder, keine Intake- oder Cloud-Zieländerung.
+- Expliziter Browserentwurf pro Coach/Klient und JSON-Export. KI-Rezepte über vorhandenes Firebase AI/Gemini mit Zutatenmengen/Zubereitung, Schema/Timeout und Schutz gegen verspätete Antworten. Keine UID/Namen/Körperprofildaten im KI-Kontext; Rezeptportionen geschätzt, Nährwert-/Allergenabnahme offen.
+- Meal-Planner-Skill separat im vos-Fuel-Realm committed, mit Herkunft/AGPL und unverändertem Quellstand (PR nimmsel23/vos#152); kein Upstream-Code in App-Bundles.
+- 123 Coach-Funktionstests bestanden, einschließlich Rechenbilanz, Grenzfällen, Mahlzeitensummen, Identitätstrennung, KI-Allowlist und Ernährungs-Deep-Link. ESLint und Firebase-Build bestanden. Chromium Desktop/Mobil mit synthetischen Daten und KI-Fixture: Eingabe → Ziele → Rezeptentwurf → Speichern → Reload, Klientenwechsel und kein horizontaler Überlauf. Authentifizierte Gemini-/Fuel-Abnahme offen.
+
 ## 2026-11-24 — Workspace-Arbeitsvorrat mit lokaler und Cloud-Planseite
 
 - Eigene offene Workspace-Liste einschließlich lokaler Betreuung ohne Cloud-Konto, Suche, Filter für offene Übergaben/fehlende UID und direkter Einstieg in die vorhandene lokale Planung.

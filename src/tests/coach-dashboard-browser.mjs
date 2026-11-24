@@ -16,6 +16,8 @@ const artifacts = await mkdtemp(join(tmpdir(), 'coach-dashboard-'));
 const profiles = { alice: { displayName: 'Anna Beispiel', clientStatus: 'client' }, bob: { displayName: 'Ben Muster', clientStatus: 'client' }, clara: { displayName: 'Clara Test', clientStatus: 'friend' } };
 const workspaces = [{ id: 'anna', name: 'Anna Beispiel', uids: ['alice'], plans: [{ id: 'p', name: 'Ganzkörper · Aufbau', status: 'ready', version: 2, deliveredVersion: 1 }], taskwarriorConfigured: true }, { id: 'local-only', name: 'Lokale Betreuung Beispiel', uids: [], plans: [], taskwarriorConfigured: false }];
 const mocks = {
+  '../../contexts/UserContext.jsx': `export const useUser = () => ({user:{uid:'coach'},authLoading:false});`,
+  '../../lib/nutrition/ideas.js': `export async function generateNutritionIdeas(){return {rationale:'Praktisch verteilt.',review:['Nährwerte im Fuel-Katalog prüfen.'],recipes:Array.from({length:3},(_,i)=>({name:'Rezeptidee '+(i+1),ingredients:['Haferflocken 70 g trocken'],steps:['Mit Wasser kochen.']})),model:'fixture'};}`,
   './useWorkspaceCloudPlans.js': `export const useWorkspaceCloudPlans = (uid) => ({status:'ready',plans:uid==='alice'?[{id:'local-p',name:'Cloud Aufbau',source:'coach-local-plan',sourceLocalVersion:1,version:3,status:'published'},{id:'cloud-only',name:'Nur in der Cloud',version:1,status:'published'}]:[],retry:()=>{}});`,
   '@db': `export const getGlobalInbox = async () => []; export const watchCoachInbox = () => () => {}; export const getAllUserProfiles = async () => (${JSON.stringify(profiles)}); export const updateUserProfile = async () => true;`,
   '../contexts/UserContext.jsx': `export const useUser = () => ({user:{uid:'coach',email:'coach@example.test'},authLoading:false});`,
@@ -35,9 +37,9 @@ try {
   server = await createServer({configFile:false,root:process.cwd(),css:{postcss:{plugins:[]}},server:{host:'127.0.0.1',port:15916,strictPort:true,watch:{ignored:['**/vitalos/**','**/dist*/**','**/klienten-python/**','**/workspaces/**']}},optimizeDeps:{noDiscovery:true,entries:[],include:['react','react-dom/client','lucide-react']},plugins:[{
     name:'dashboard-fixture',enforce:'pre',
     configureServer(vite){vite.middlewares.use((req,res,next)=>{if(req.url==='/__styles.css'){res.setHeader('content-type','text/css');res.end(builtCss);return;}if(req.url!=='/__dashboard.html')return next();res.setHeader('content-type','text/html');res.end('<html data-theme="vital"><head><link rel="stylesheet" href="/__styles.css" /><meta name="viewport" content="width=device-width,initial-scale=1" /></head><body><div id="root"></div><script type="module" src="/__dashboard.jsx"></script></body></html>');});},
-    resolveId(source){if(source==='/__dashboard.jsx')return '\0dashboard-entry';if(source in mocks||nullViews.has(source)||subviews.has(source))return `\0dashboard-mock:${source}`;},
+    resolveId(source){if(source==='/__dashboard.jsx')return '\0dashboard-entry';if(source in mocks||nullViews.has(source)||subviews.has(source))return `\0dashboard-mock:${Buffer.from(source).toString('base64url')}`;},
     load(id){if(id==='\0dashboard-entry')return `import React from 'react';import{createRoot}from'react-dom/client';import Shell from '/src/shell/CoachShell.jsx';createRoot(document.getElementById('root')).render(React.createElement(Shell));`;
-      if(!id.startsWith('\0dashboard-mock:'))return;const source=id.slice('\0dashboard-mock:'.length);if(source in mocks)return mocks[source];
+      if(!id.startsWith('\0dashboard-mock:'))return;const source=Buffer.from(id.slice('\0dashboard-mock:'.length),'base64url').toString();if(source in mocks)return mocks[source];
       if(subviews.has(source))return `import React from 'react';export default function View({clientUid}){return React.createElement('section',{style:{padding:'24px 0',minHeight:180}},React.createElement('h2',null,${JSON.stringify(source.slice(2))}),React.createElement('p',null,clientUid||'Letzte Trainings deiner Klienten'));}`;
       return 'export default function View(){return null;}';}
   }]});
@@ -49,12 +51,12 @@ try {
   socket=new WebSocket(pages.find(p=>p.type==='page').webSocketDebuggerUrl);
   await new Promise(r=>socket.addEventListener('open',r,{once:true}));console.log('Browser connected');
   let seq=0;const pending=new Map();
-  socket.addEventListener('message',event=>{const msg=JSON.parse(event.data);if(msg.id){const item=pending.get(msg.id);if(item){pending.delete(msg.id);clearTimeout(item.timer);msg.error?item.reject(new Error(JSON.stringify(msg.error))):item.resolve(msg.result);}}if(msg.method==='Runtime.exceptionThrown'){const error=msg.params.exceptionDetails.exception?.description||msg.params.exceptionDetails.text;errors.push(error);console.error(error);}});
+  socket.addEventListener('message',event=>{const msg=JSON.parse(event.data);if(msg.id){const item=pending.get(msg.id);if(item){pending.delete(msg.id);clearTimeout(item.timer);msg.error?item.reject(new Error(JSON.stringify(msg.error))):item.resolve(msg.result);}}if(msg.method==='Log.entryAdded' && msg.params.entry.level==='error'){console.error('Browser log:',msg.params.entry.text);}if(msg.method==='Runtime.exceptionThrown'){const error=msg.params.exceptionDetails.exception?.description||msg.params.exceptionDetails.text;errors.push(error);console.error(error);}});
   function send(method,params={}){return new Promise((resolve,reject)=>{const id=++seq;const timer=setTimeout(()=>reject(new Error(method+' timed out')),15000);pending.set(id,{resolve,reject,timer});socket.send(JSON.stringify({id,method,params}));});}
   async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.exception?.description);return r.result.value;}
   async function waitFor(expression){for(let n=0;n<100;n++){if(errors.length)throw new Error(errors.join('\n'));if(await evaluate(expression))return;await new Promise(r=>setTimeout(r,150));}throw new Error('Not rendered: '+expression+'\n'+await evaluate('document.body.innerText'));}
   async function screenshot(name){const {data}=await send('Page.captureScreenshot',{format:'png'});await writeFile(join(artifacts,name+'.png'),Buffer.from(data,'base64'));}
-  await send('Runtime.enable');await send('Page.enable');
+  await send('Runtime.enable');await send('Page.enable');await send('Log.enable');
   await send('Emulation.setDeviceMetricsOverride',{width:1600,height:1000,deviceScaleFactor:1,mobile:false});
   await send('Page.navigate',{url:'http://127.0.0.1:15916/__dashboard.html'});console.log('Navigated');
   await waitFor(`document.body.innerText.includes('Anna Beispiel') && Boolean(document.querySelector('.coach-client-grid'))`);
@@ -69,7 +71,7 @@ try {
   await screenshot('desktop-overview');
   await evaluate(`document.querySelector('.coach-client-item .vos-btn.primary').click()`);
   await waitFor(`document.body.innerText.includes('Ganzkörper · Aufbau')`);
-  assert.equal(await evaluate(`document.querySelectorAll('.coach-client-nav button').length`),7);
+  assert.equal(await evaluate(`document.querySelectorAll('.coach-client-nav button').length`),8);
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
   await waitFor(`document.body.innerText.includes('abweichender Versionsstand') && document.body.innerText.includes('Nur in der Cloud')`);
   await screenshot('desktop-client');
@@ -79,7 +81,7 @@ try {
   await screenshot('mobile-client-plans');
   await evaluate(`Array.from(document.querySelectorAll('.coach-workspace button')).find(b=>b.textContent==='Cloud Aufbau').click()`);
   await waitFor(`window.location.hash.includes('plan=local-p')`);
-  await evaluate(`document.querySelectorAll('.coach-client-nav button')[2].click()`);
+  await evaluate(`Array.from(document.querySelectorAll('.coach-client-nav button')).find(b=>b.textContent.includes('Chat')).click()`);
   await waitFor(`document.body.innerText.includes('ClientMessages')`);
   await evaluate(`document.querySelector('[aria-label="Klient wechseln"]').value='bob';document.querySelector('[aria-label="Klient wechseln"]').dispatchEvent(new Event('change',{bubbles:true}))`);
   await waitFor(`document.body.innerText.includes('Diesem Konto ist noch kein lokaler Workspace zugeordnet.')`);
@@ -96,6 +98,37 @@ try {
   await waitFor(`document.querySelectorAll('.coach-client-item').length===1`);
   assert.equal(await evaluate(`document.querySelector('.coach-client-item').innerText.includes('Ben Muster')`),true);
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
+  await evaluate(`window.location.hash='#/clients/alice/nutrition'`);
+  await waitFor(`Boolean(document.querySelector('[aria-label="Ernährungsplanung"]'))`);
+  async function setField(name, value, tag='input') {
+    await evaluate(`(()=>{const el=document.querySelector('[name="${name}"]');Object.getOwnPropertyDescriptor(${tag==='textarea'?'HTMLTextAreaElement':tag==='select'?'HTMLSelectElement':'HTMLInputElement'}.prototype,'value').set.call(el,${JSON.stringify(value)});el.dispatchEvent(new Event('${tag==='select'?'change':'input'}',{bubbles:true}));})()`);
+  }
+  await setField('scope','general','select');await setField('age','35');await setField('weight','80');
+  await setField('method','manual','select');await setField('maintenance','2400');
+  await setField('foods','Haferflocken, Wasser','textarea');
+  await waitFor(`document.querySelector('[aria-label="Berechnete Tagesziele"]')?.innerText.includes('2400')`);
+  await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Gerichte & Rezepte')).click()`);
+  await waitFor(`document.body.innerText.includes('Rezeptidee 1')`);
+  assert.equal(await evaluate(`document.querySelectorAll('.coach-nutrition-recipes article').length`),3);
+  await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Entwurf speichern')).click()`);
+  await waitFor(`document.body.innerText.includes('Gespeichert')`);
+  await evaluate(`document.querySelector('.coach-nutrition').scrollIntoView({block:'start'})`);
+  assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
+  await evaluate(`document.querySelector('.coach-nutrition-result').scrollIntoView({block:'start'});window.scrollBy(0,-64)`);
+  await screenshot('mobile-nutrition');
+  await send('Emulation.setDeviceMetricsOverride',{width:1600,height:1100,deviceScaleFactor:1,mobile:false});
+  await evaluate(`document.querySelector('.coach-nutrition').scrollIntoView({block:'start'});window.scrollBy(0,-64)`);
+  await screenshot('desktop-nutrition');
+  await evaluate(`document.querySelector('.coach-nutrition-recipes').scrollIntoView({block:'start'});window.scrollBy(0,-64)`);
+  await screenshot('desktop-nutrition-recipes');
+  await send('Page.reload');
+  await waitFor(`document.body.innerText.includes('Rezeptidee 1')`);
+  assert.equal(await evaluate(`document.querySelector('[name="maintenance"]').value`),'2400');
+  await evaluate(`window.location.hash='#/clients/bob/nutrition'`);
+  await waitFor(`document.querySelector('[name="weight"]')?.value===''`);
+  assert.equal(await evaluate(`document.querySelectorAll('.coach-nutrition-recipes article').length`),0);
+  await setField('scope','clinical','select');await setField('age','35');
+  assert.equal(await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Gerichte & Rezepte')).disabled`),true);
   assert.deepEqual(errors,[]);
   console.log(`Dashboard browser checks passed. Screenshots: ${artifacts}`);
 } catch(error) {console.error('Browser acceptance failed:',error,errors);throw error;} finally {socket?.close();browser?.kill();server?.httpServer?.closeAllConnections();await server?.close();}
