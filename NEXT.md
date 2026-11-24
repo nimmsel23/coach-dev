@@ -1,11 +1,39 @@
 - [ ] 14-Tage-Aktivitätsstatus mit angemeldetem Coach und echten Fitness-Lebenszeichen prüfen; weitere Apps als Quellen anbinden.
 # NEXT (coach-dev)
 
-- [ ] COO-Cockpit + Bridge live: `ui:dev` → `/coo.html`, Engine `gemini`/`claude`, Skill → HITL; optional `issue`-Oneshot.
+## Ausgelassen seit C-Suite-MVP (2026-11-24) — bewusst / noch offen
+
+### Plan-UFO (diskutiert, nicht gebaut)
+- [ ] Fusion Schmiede-PlanEditor + `modules/plan` PlanEditor → **ein** Desktop-Editor (UFO, kein Calzone).
+- [ ] Slice 1: Converter `plan.json` → `training-plans/` + Desktop-Shell Speichern.
+- [ ] Eine Cloud-SOT: Deliver → `macrocycles` only; Schmiede-Routinen-Push abschaffen.
+- [ ] Auto-Push nach Schmiede-Save abschalten; nur explizites „An App übergeben“.
+- [ ] Alte Editoren abhängen (Schmiede-PlanTab + Local-Studio-UI → UFO).
+- [ ] Drift-UI Disk vs. Firestore; `canDeliver`/UID-Guard härten.
+- [ ] vos-coach Desktop-Layout **nicht** „fixen“ als Ersatz — Coach-Werkstatt bleibt coach-dev.
+
+### C-Suite / CEO-Portal (MVP da, Lücken)
+- [ ] Freigabe-Klick → Copy-CTA und/oder echter Outbound (Mail/WhatsApp); Approve führt heute nichts aus.
+- [ ] Firebase-Adapter live (Queue heute: localStorage-Mock); optional Firestore `csuite/{role}/**`.
+- [ ] Firestore-Rules: nur CEO-Account auf `csuite/**` (und verwandte Collections).
+- [ ] iframe → `postMessage` Auth-Token an Dashboards (Session-Weitergabe).
+- [ ] Rolle **CSO** (Sales) — im Gemini-Portal-Snippet genannt, bei uns nicht angelegt (CPO/CTO statt dessen).
+- [ ] React-COO (`/coach/coo`) vs. Vanilla (`/coach/coo/dashboard`) konsolidieren / eines abhängen.
+- [ ] CEO-Portal Live-Smoke: Google-Login + Tailnet `:8443/coach/ceo` + Brain-fetch + Skill→HITL.
+- [ ] `git push origin dev` der C-Suite-Commits (lokal ahead, nicht gepusht).
+- [ ] Hosting-Deploy vos-coach mit `dist-coach/workspaces/` (Brain auf Firebase Hosting).
+- [ ] Tailscale Serve `/workspaces` Root — Workaround `/coach/workspaces` (Serve-Config braucht Operator/sudo).
+
+### Explizit verworfen / nicht gewollt im MVP
+- ~~Firestore als Brain-SOT / `sync-agents.yml` Git→Firestore~~ — Git bleibt Brain-SOT (`fetch` der MD/JSON).
+- ~~vos-coach Mobile-App-Layout als Coach-Authoring~~ — coach-dev = Desktop-only, kein Klient sieht es.
+- ~~Halbe Pizza / Calzone (Simple-Mode vs. Power-Mode)~~ — UFO-Zielbild festgehalten, Bau ausstehend.
+
+### Frühere NEXT-Punkte (C-Suite-bezogen)
 - [x] C-Suite Bridge `POST /api/csuite/run` (CLI + Gemini + gh-Issue).
+- [x] CMO/CPO/CTO/CFO (+ COO dashboard.html) Workspaces + Hub-Links + CEO-Portal.
 - [ ] Freigabe-Klick → echter Outbound (Mail/WhatsApp) oder Copy-only CTA; Firestore-Rules für `csuite/**`.
-- [x] CMO/CPO/CTO/CFO (+ COO dashboard.html) Workspaces + Hub-Links.
-- [ ] C-Suite Dashboards: coach-api restart + Tailnet-Smoke; Freigabe → Copy/Outbound; Firebase-Adapter live.
+- [ ] C-Suite: Tailnet-Smoke + Firebase-Adapter live (siehe oben).
 
 - ~~Vite-8 Vorbeuge~~: esbuild-Tests + build.target Browserliste (modules/plan folgt plan-Pin).
 - [ ] Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen; danach einen explizit ausgewählten Klient/Plan als Pilot synchronisieren. Code und Browser-Build sind fertig, der laufende Prozess wurde nicht neu gestartet.
