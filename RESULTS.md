@@ -1,3 +1,7 @@
+## 2026-11-24 — C-Suite Dashboards (COO/CMO/CPO/CTO/CFO)
+
+Vanilla Dark-Cockpits unter `workspaces/{role}/dashboard.html` (Git-Brain + HITL + LLM-Switcher + Mock/Bridge). Routen `/coach/cmo|cpo|cto|cfo`, `/coach/coo/dashboard`. Hub verlinkt alle fünf. Brain-Dateien + Skills je Rolle.
+
 ## 2026-11-24 — Klienten-Aktivität nach 14 Tagen
 
 - Console: Nutzungsstatus Aktiv/Inaktiv/Unbekannt, Filter und Anzeige im Klientenheader, getrennt vom clientStatus.
