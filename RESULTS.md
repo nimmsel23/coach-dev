@@ -1,3 +1,9 @@
+## 2026-11-24 — COO Brain v1.1 (system-prompt + skills Schema)
+
+- `workspaces/coo/system-prompt.md`: Identität, Ton, Dashboard-Outputs, HITL, Eskalation.
+- `workspaces/coo/skills.json`: `tools[]` mit JSON-Schema-Parametern + `collections` (function-calling-tauglich); Namen 1:1 zu Cockpit-Buttons.
+- `src/csuite/brain.js`: normalisiert `tools`/`skills`, `toFunctionTools()` für späteren LLM-Router.
+
 ## 2026-11-24 — COO Coaching-Delivery Cockpit (MVP)
 
 Erste Schicht der Coach+Klienten-Delivery-Zentrale (Gemini-Stil: Git-Brain, HITL, Stub-Skills). Kein Org-VitalOS-COO.
