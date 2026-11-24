@@ -1,7 +1,8 @@
 # NEXT (coach-dev)
 
-- [ ] COO-Cockpit live: `npm run ui:dev` → `/coo.html` gegen `:9150` prüfen (Heute-Karten, Skill → HITL Freigabe/Verwerfen).
-- [ ] COO Schritt 2: LLM-Router (`/api/agent-run` oder OpenRouter/Vertex) + echte Outbound-Freigabe; Firestore-Rules für `csuite/**`.
+- [ ] COO-Cockpit + Bridge live: `ui:dev` → `/coo.html`, Engine `gemini`/`claude`, Skill → HITL; optional `issue`-Oneshot.
+- [x] C-Suite Bridge `POST /api/csuite/run` (CLI + Gemini + gh-Issue).
+- [ ] Freigabe-Klick → echter Outbound (Mail/WhatsApp) oder Copy-only CTA; Firestore-Rules für `csuite/**`.
 - [ ] CMO/CFO/CSO Workspaces analog zu `workspaces/coo/` (nur nach COO-Alltagstest).
 - ~~Vite-8 Vorbeuge~~: esbuild-Tests + build.target Browserliste (modules/plan folgt plan-Pin).
 - [ ] Nach dem Coach-API-Reload die neue Taskwarrior-Statusanzeige live prüfen; danach einen explizit ausgewählten Klient/Plan als Pilot synchronisieren. Code und Browser-Build sind fertig, der laufende Prozess wurde nicht neu gestartet.
