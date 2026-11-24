@@ -3,13 +3,15 @@ import assert from 'node:assert/strict';
 import process from 'node:process';
 import { Buffer } from 'node:buffer';
 import { spawn } from 'node:child_process';
-import { mkdtemp, writeFile, readFile, readdir } from 'node:fs/promises';
+import { mkdtemp, writeFile, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createServer } from 'vite';
 
-const assets = await readdir('dist-coach/assets');
-const builtCss = (await Promise.all(assets.filter(name => name.endsWith('.css')).map(name => readFile(`dist-coach/assets/${name}`, 'utf8')))).join('\n');
+const coachHtml = await readFile('dist-coach/coach.html', 'utf8');
+const stylesheets = [...coachHtml.matchAll(/href="([^"]+\.css)"/g)].map((match) => match[1]);
+assert.ok(stylesheets.length, 'Build Coach before running browser acceptance');
+const builtCss = (await Promise.all(stylesheets.map(name => readFile(join('dist-coach', name), 'utf8')))).join('\n');
 const artifacts = await mkdtemp(join(tmpdir(), 'coach-dashboard-'));
 const profiles = { alice: { displayName: 'Anna Beispiel', clientStatus: 'client' }, bob: { displayName: 'Ben Muster', clientStatus: 'client' }, clara: { displayName: 'Clara Test', clientStatus: 'friend' } };
 const workspaces = [{ id: 'anna', name: 'Anna Beispiel', uids: ['alice'], plans: [{ id: 'p', name: 'Ganzkörper · Aufbau', status: 'ready', version: 2, deliveredVersion: 1 }], taskwarriorConfigured: true }];
