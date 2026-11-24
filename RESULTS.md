@@ -1,3 +1,9 @@
+## 2026-11-24 — Coach Hub unter `/coach/` (Tailnet)
+
+- `hub.html` ist der Einstieg unter `/coach/`; Shell → `/coach/shell`, COO → `/coach/coo`.
+- Tailnet `:8443`: `/coach`, `/schmiede`, `/konsole`, plus C-Suite-/Klienten-APIs.
+- Hub: `https://ideapad.tail7a15d6.ts.net:8443/coach/`
+
 ## 2026-11-24 — COO Tailnet-Serve `:8443/coach/coo`
 
 - Server: `/coach/coo` → `coo.html` (Assets unter `/coach/assets`).
