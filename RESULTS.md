@@ -1,3 +1,25 @@
+## 2026-11-24 — COO Coaching-Delivery Cockpit (MVP)
+
+Erste Schicht der Coach+Klienten-Delivery-Zentrale (Gemini-Stil: Git-Brain, HITL, Stub-Skills). Kein Org-VitalOS-COO.
+
+- **Brain:** `workspaces/coo/` — `config.json`, `system-prompt.md`, `skills.json`, `knowledge/delivery.md`.
+- **UI:** `coo.html` + `src/csuite/` (Header/KPIs, Heute-Karten, Skill-Konsole, Freigabe-Queue); Vite coach-input `coo`.
+- **State:** `src/csuite/firestore.js` → Firestore `csuite/coo/approvals` mit `localStorage`-Fallback.
+- **Daten:** `/api/clients` + Plan-Heute + Coaching-Notes über Vite-Proxy → `:9150`; Demo-Karten wenn API down.
+- **Doku:** Abschnitt in `docs/COACH-ARCHITECTURE.md`. LLM-Router / Outbound-Send = Schritt 2.
+
+---
+
+## 2026-11-21 — Org-Dashboard-Formular über GAS (vos) + Dashboard-Bestandsaufnahme
+
+In coach-dev selbst wurde in dieser Session nichts geändert. Umgesetzt wurde ein GAS-Empfänger für die Formularfelder des Org-Dashboards in `vos`, damit sie auch ohne erreichbare coach-api ankommen. Die Bestandsaufnahme der Coach-/Coaching-Dashboards brachte keine Code-Änderung: ein Entfernen der Seite `dashboards/coach/` wurde begonnen und vollständig verworfen, ohne Commit.
+
+-   **`vos/org-dashboard/gas/Code.gs` + `appsscript.json`:** neues Standalone-GAS-Projekt „Org-Dashboard Formular“, umgebaut aus dem Vitaltrainer-Kontaktformular (`daniel-vitaltrainer-firebase/gas/contact-form`, dessen Deploy fehlt dem clasp-Login die Berechtigung). Es nimmt nur `decision` (Ja/Nein + Grund) und `line` an, Texte bis 500 Zeichen, höchstens 30 Einträge pro Minute, und schreibt in das Sheet „Org-Dashboard Antworten“. Als Web-App `@1` deployt (Script-ID `1q4Wb_bCQt1exgNC0ZEMalZ59eH2e0r6zR139zGyohIQOCvDllJSEk_fn`).
+-   **`vos/org-dashboard/src/lib/desk.tsx`:** `FORM_URL` als Fallback, wenn coach-api nicht live ist. Typecheck + Build lokal grün. README ergänzt. Commit `2dbfe1e` direkt auf `vos` `main` gepusht. Der CI-Lauf „Publish dashboards“ lief beim Session-Ende noch.
+-   **Memory `vos-dashboards-are-demo.md`:** Der Owner hält Dashboards, die an einer Markdown-Datei hängen (`vos/coaching/DASHBOARD.md`), für dämlich. Boards sollen direkt aus den echten Daten gespeist werden.
+
+---
+
 ## 2026-11-13 — AL: Fitness-Agent Skill als PT-Gehilfe neu aufgebaut (Org 1c508846)
 
 Der `fitness-agent` Skill wurde als effizienter Gehilfe für den Personal Trainer (Daniel) komplett neu geschrieben und versioniert. Er deckt nun fünf Kernabläufe ab, um Daniel vor, während und nach einer Einheit mit den nötigen Fakten zu versorgen.
