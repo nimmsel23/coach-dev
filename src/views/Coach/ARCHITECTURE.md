@@ -451,3 +451,15 @@ Vite-/Browser-Prozess mit virtuellen Daten und kontrolliert diese Abläufe bei
 vier Bildschirmgrößen. Der Test verwendet ein eigenes temporäres Cache-/
 Browserverzeichnis und beendet seine Prozesse. Entwürfe sind komponentenlokal;
 Browser-Neustart und Navigation sind keine dauerhafte Entwurfssicherung.
+
+## App-Aktivität (2026-11-24)
+
+`ClientsPanel` zeigt einen vom Klientenstatus getrennten Nutzungsstatus samt Filter.
+`useClientActivity` liest je bekanntem Profil ausschließlich den neuesten
+`fitness/{uid}/tractionDaily`-Datensatz (orderBy lastSeenAt desc, limit 1), ohne
+Sieben-Tage-Grenze und ohne historische Tagesdaten komplett zu laden.
+Ab exakt 14 × 24 Stunden gilt ein Konto als inaktiv. Fehlende, fehlerhafte,
+zukünftige oder ausschließlich gecachte Zeitpunkte ergeben „Unbekannt“.
+Eine Minutenuhr aktualisiert den Status auch ohne neue Events. Fitness sendet
+bereits Öffnungs-/Vordergrund-Events und sichtbare Fünf-Minuten-Heartbeats.
+Fuel/Relax und weitere Apps sind noch keine Aktivitätsquellen.

@@ -1,3 +1,9 @@
+## 2026-11-24 — Klienten-Aktivität nach 14 Tagen
+
+- Console: Nutzungsstatus Aktiv/Inaktiv/Unbekannt, Filter und Anzeige im Klientenheader, getrennt vom clientStatus.
+- Neuester Fitness-tractionDaily-Eintrag je Profil ohne Zeitfenster; keine vollständigen Historien-Reads. Cache-only/fehlende Daten bleiben unbekannt.
+- Grenzwert-/Timestamp-Tests und ESLint bestanden; authentifizierte Live-Abnahme offen. Weitere Apps noch nicht angebunden.
+
 ## 2026-11-24 — Coach Hub unter `/coach/` (Tailnet)
 
 - `hub.html` ist der Einstieg unter `/coach/`; Shell → `/coach/shell`, COO → `/coach/coo`.

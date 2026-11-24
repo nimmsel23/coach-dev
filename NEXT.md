@@ -1,3 +1,4 @@
+- [ ] 14-Tage-Aktivitätsstatus mit angemeldetem Coach und echten Fitness-Lebenszeichen prüfen; weitere Apps als Quellen anbinden.
 # NEXT (coach-dev)
 
 - [ ] COO-Cockpit + Bridge live: `ui:dev` → `/coo.html`, Engine `gemini`/`claude`, Skill → HITL; optional `issue`-Oneshot.

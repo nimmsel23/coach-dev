@@ -1,4 +1,5 @@
 import ClientMessages from './ClientMessages';
+import { useClientActivity } from './useClientActivity.js';
 import { useState, useEffect, useRef } from 'react';
 import { Users } from 'lucide-react';
 import { getAllUserProfiles, updateUserProfile } from '@db';
@@ -20,6 +21,8 @@ const STATUS_OPTIONS = [
 
 export default function ClientsPanel({ unreadCounts = {} }) {
   const [profiles, setProfiles] = useState({});
+  const [activityFilter, setActivityFilter] = useState('all');
+  const activity = useClientActivity(Object.keys(profiles));
   const [statuses, setStatuses] = useState({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(new Set());
@@ -110,7 +113,8 @@ export default function ClientsPanel({ unreadCounts = {} }) {
     const nameB = profiles[b].displayName || profiles[b].email || b;
     return nameA.localeCompare(nameB);
   });
-  const uids = allUids.filter((uid) => manageUsers || (statuses[uid] || 'friend') !== 'hidden');
+  const uids = allUids.filter((uid) => (manageUsers || (statuses[uid] || 'friend') !== 'hidden')
+    && (activityFilter === 'all' || activity[uid]?.status === activityFilter));
   const visibleCount = allUids.filter((uid) => (statuses[uid] || 'friend') !== 'hidden').length;
 
   if (loading && allUids.length === 0) {
@@ -162,8 +166,17 @@ export default function ClientsPanel({ unreadCounts = {} }) {
             {manageUsers ? 'Fertig' : 'Verwalten'}
           </button>
         </div>
+        <label className="px-3 py-2 text-xs text-fit-muted">
+          App-Aktivität
+          <select aria-label="App-Aktivität filtern" value={activityFilter} onChange={(event) => setActivityFilter(event.target.value)} className="mt-1 min-h-11 w-full rounded-lg border border-fit-line/40 bg-fit-bg2 px-2 text-fit-ink">
+            <option value="all">Alle</option>
+            <option value="active">Aktiv · letzte 14 Tage</option>
+            <option value="inactive">Inaktiv · ab 14 Tagen</option>
+            <option value="unknown">Unbekannt</option>
+          </select>
+        </label>
         {uids.length === 0 && (
-          <p className="px-3 py-4 text-sm text-fit-muted">Alle ausgeblendet — „Verwalten“ öffnen.</p>
+          <p className="px-3 py-4 text-sm text-fit-muted">Keine Klienten für diese Auswahl.</p>
         )}
         <ul className="divide-y divide-fit-line/20">
           {uids.map((uid) => {
@@ -182,6 +195,9 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                   <span className={`vos-led ${status} shrink-0`} />
                   <span className={`min-w-0 flex-1 truncate text-sm font-semibold ${isSelected ? 'text-fit-accent' : 'text-fit-ink'}`}>
                     {name}
+                    <span className={`mt-0.5 block truncate text-[11px] font-normal ${activity[uid]?.status === 'inactive' ? 'text-fit-accent' : 'text-fit-muted'}`} title="Bisher erfasste Fitness-App-Aktivität; keine Aussage über Trainingshäufigkeit.">
+                      {activity[uid]?.label}
+                    </span>
                   </span>
                   {unread > 0 && (
                     <span className="shrink-0 text-xs font-semibold text-fit-accent">
@@ -242,7 +258,7 @@ export default function ClientsPanel({ unreadCounts = {} }) {
                 >
                   Alle
                 </button>
-                <h3 className="truncate text-base font-semibold text-fit-ink">{selectedName}</h3>
+                <div className="min-w-0"><h3 className="truncate text-base font-semibold text-fit-ink">{selectedName}</h3><p className="text-xs text-fit-muted" title="Bisher erfasste Fitness-App-Aktivität">{activity[selectedUid]?.label || 'Aktivität unbekannt'}</p></div>
               </div>
               <label className="sr-only" htmlFor="client-status">Status</label>
               <select
