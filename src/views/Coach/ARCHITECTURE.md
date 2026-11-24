@@ -518,39 +518,42 @@ Deep-Link zum bestehenden Plan-/Feedback-Bereich angezeigt. Kein automatischer
 Versand, Rückimport oder Überschreiben, keine Backend-Änderung für diesen Schritt.
 
 
-## Ernährungsentwurf: Makros und KI-Rezepte (2026-11-24)
+## Ernährungsentwurf: CLI und Web teilen den Rezeptmechanismus (2026-11-25)
 
-Neuer Klientenbereich `nutrition`, Deep-Link `#/clients/<uid>/nutrition`, dazu ein
-direkter Einstieg auf der Klientenkarte. `ClientNutritionPlan` hält den Formular-
-und Ergebniszustand; innerer Editor ist nach Coach-UID und Client-UID keyed.
-`src/lib/nutrition/targets.js` rechnet deterministisch, ohne Netzwerk: Mifflin-
-Ruhebedarf × Aktivitätsfaktor oder bekannter Erhaltungsbedarf, moderates Zieldelta,
-Protein aus Bezugsgewicht, Fett aus Energieanteil/Planungsuntergrenze, Kohlenhydrate
-als Rest. Mahlzeitenbudgets erhalten die gerundeten Tagessummen exakt. Faktoren,
-Formel, Annahmen und Quellen (Mifflin, ISSN, EFSA) stehen in der Oberfläche.
-`fuelGoals` verwendet bestehende Fuel-Settings-Feldnamen inklusive `carb_ratio`;
-der Entwurf schreibt keine Fuel-Ziele und keine Intake-Logs.
+`src/lib/nutrition/targets.js` berechnet Tages-/Mahlzeitenziele deterministisch.
+`recipeRuns.js` besitzt Prompt, strukturierte Ein-Gericht-Prüfung und seriellen
+Batch-Scheduler. `recipe-cli.mjs` nutzt den vorhandenen Fuel-Gemini-Client als
+Transport; `ideas.js` den vorhandenen Firebase-AI-Zugang. Pro Slot genau ein
+Provideraufruf, kein versteckter Reparatur-/Retrylauf. CLI und UI verwenden dieselbe
+Prüfung. Bedienung, Regeldateien und echte Terminalabnahme in
+`src/lib/nutrition/README.md`.
 
-Explizites Speichern persistiert einen Browserentwurf unter
-`coach:nutrition-draft:v1:<coach>:<client>`; JSON-Export enthält Input, berechnete
-Ziele, optionale Rezeptideen und Quellen. Kein verstecktes Autosave, kein Cloud-
-Versand, keine Freigabeversion und kein Ersatz für die Trainingsplanversionierung.
-Lesefehler werden angezeigt; fehlgeschlagenes Speichern wird nicht als Erfolg
-bestätigt. Gespeicherte KI-Ideen werden strukturell validiert wiederhergestellt.
+Die UI bietet ein Gericht für das gewählte Mahlzeitenbudget, sieben Gerichte
+(Mo–So) für dieses Budget, Fortschritt, Stoppen und individuelles Neuerstellen.
+Das ist kein vollständiger Wochenplan mit allen täglichen Mahlzeiten. Teilresultate
+bleiben bei Fehlern/Abbruch erhalten. Input-/Regeländerung, Klientenwechsel und
+Unmount verhindern das Einspielen verspäteter Antworten. Stoppen verhindert weitere
+Aufrufe; ein bereits gesendeter Provideraufruf kann noch Kosten verursachen.
 
-`src/lib/nutrition/ideas.js` verwendet den bestehenden Firebase-AI-/Vertex-Zugang
-mit Gemini 2.5 Flash, Schema und 60-Sekunden-Grenze. Erst expliziter Klick sendet
-Makro-/Mahlzeitenziele, Stil, bestätigte Lebensmittel, Ausschlüsse und Kochalltag.
-Keine UID, Namen, Körperprofil- oder Krankenaktenfelder; Freitexte dürfen keine
-personenbezogenen Angaben enthalten. Eingaben sind als untrusted Daten abgegrenzt.
-Die KI liefert konkrete Rezeptnamen, geschätzte Zutatenmengen und Zubereitung,
-keine autoritativen Nährwerte oder Änderungen an den Zielzahlen. Eingabeänderung,
-Klientenwechsel und Unmount verwerfen verspätete Antworten.
+Keine feste Lebensmittel-Whitelist. Vorräte/Vorlieben sind optional. Österreichisches
+Standarddeutsch, Tofu nur bei ausdrücklich veganem Stil; zusätzliche FUEL-Ausschlüsse
+haben Vorrang. Paleo ist als Variante ohne Getreide, Milchprodukte, Hülsenfrüchte und
+Erdäpfel explizit benannt, Süßerdäpfel erlaubt. Stil-/Ausschlussheuristik ersetzt
+keine vollständige Allergen-/Nährwertabnahme. Zutatenmengen und berechnete Nährwerte
+bleiben KI-Schätzungen, keine bestätigten Fuel-Katalogwerte.
 
-Rezeptnährwerte sind noch nicht gegen den Fuel-Katalog berechnet; das steht bei
-Budgets und Rezepten ausdrücklich dabei. Kein Anspruch auf Makrotreue eines KI-
-Gerichts, Allergensicherheit oder vollständige Mikronährstoffversorgung. Klinische
-Situationen/Minderjährige und unplausible oder zu niedrige Berechnungen erzeugen
-keine automatische Zielplanung. Der extern installierte Meal-Planner-Skill unter
-`~/.vos/fuel/skills/meal-planner` dient als Methodenreferenz; keine seiner AGPL-
-Skripte werden in die App importiert oder für echte Klientendaten ausgeführt.
+`FUEL.md`, ersatzweise `NUTRITION.md`, ist eine menschlich gepflegte **Eingabe** im
+bestehenden Klienten-Workspace. `coach_nutrition_preferences.py` liest passende
+Regelzeilen, keine Rohprofile oder Kontaktdaten; niemals schreiben/neu anlegen.
+Die bestehende Coach-API projiziert diese unter
+`GET /api/clients/<uid>/nutrition-preferences` mit Coach-ID-Token, lokaler/Tailnet-
+Prüfung, Funnel-Sperre und eindeutiger UID-Zuordnung. Keine neue Route auf Funnel,
+kein neuer Port. Neue Route wird erst nach autorisiertem Service-Reload aktiv.
+`useNutritionPreferences` liest vor der Generierung, zeigt Regeln/Fehler und
+überspringt unbekannte Regeln bei Netz-/Serverfehlern nicht stillschweigend.
+
+Browserentwürfe und JSON-Export: Schema 2 mit `ideas.entries` (Slot, Status,
+Rezept/Fehler); bestehende Schema-1-Entwürfe werden lesend migriert. CLI speichert
+JSON plus lesbare MD-Projektion und Rohantworten zur Nachprüfung, atomar und ohne
+FUEL.md zu überschreiben. Keine neue SQLite-/Klienten-DB, keine automatischen
+Intake-Buchungen, kein Cloud-Zielupdate. Explizites Speichern bleibt erforderlich.

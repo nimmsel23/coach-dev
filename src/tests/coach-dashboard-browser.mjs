@@ -17,7 +17,9 @@ const profiles = { alice: { displayName: 'Anna Beispiel', clientStatus: 'client'
 const workspaces = [{ id: 'anna', name: 'Anna Beispiel', uids: ['alice'], plans: [{ id: 'p', name: 'Ganzkörper · Aufbau', status: 'ready', version: 2, deliveredVersion: 1 }], taskwarriorConfigured: true }, { id: 'local-only', name: 'Lokale Betreuung Beispiel', uids: [], plans: [], taskwarriorConfigured: false }];
 const mocks = {
   '../../contexts/UserContext.jsx': `export const useUser = () => ({user:{uid:'coach'},authLoading:false});`,
-  '../../lib/nutrition/ideas.js': `export async function generateNutritionIdeas(){return {rationale:'Praktisch verteilt.',review:['Nährwerte im Fuel-Katalog prüfen.'],recipes:Array.from({length:3},(_,i)=>({name:'Rezeptidee '+(i+1),ingredients:['Haferflocken 70 g trocken'],steps:['Mit Wasser kochen.']})),model:'fixture'};}`,
+  './useNutritionPreferences.js': `export const useNutritionPreferences=()=>({status:'ready',source:'FUEL.md',rules:['kein Tofu'],excludedFoods:['tofu'],retry:()=>{}});`,
+  '../../lib/nutrition/ideas.js': `export async function generateNutritionIdeas(input,targets,options={}){window.__nutritionCalls=(window.__nutritionCalls||0)+1;await new Promise(r=>setTimeout(r,100));if(window.__failDay2&&options.day===2){window.__failDay2=false;throw new Error('Testfehler für Mittwoch');}return {rationale:'Praktisch verteilt.',review:['Nährwerte im Fuel-Katalog prüfen.'],recipes:[{name:'Rezeptidee '+(options.day===null?'1':options.day+1),ingredients:['Erdäpfel 300 g roh'],steps:['Waschen.','Garen.','Anrichten.'],minutes:25,estimates:targets.mealTargets[options.mealIndex]}],model:'fixture'};}`,
+
   './useWorkspaceCloudPlans.js': `export const useWorkspaceCloudPlans = (uid) => ({status:'ready',plans:uid==='alice'?[{id:'local-p',name:'Cloud Aufbau',source:'coach-local-plan',sourceLocalVersion:1,version:3,status:'published'},{id:'cloud-only',name:'Nur in der Cloud',version:1,status:'published'}]:[],retry:()=>{}});`,
   '@db': `export const getGlobalInbox = async () => []; export const watchCoachInbox = () => () => {}; export const getAllUserProfiles = async () => (${JSON.stringify(profiles)}); export const updateUserProfile = async () => true;`,
   '../contexts/UserContext.jsx': `export const useUser = () => ({user:{uid:'coach',email:'coach@example.test'},authLoading:false});`,
@@ -105,11 +107,11 @@ try {
   }
   await setField('scope','general','select');await setField('age','35');await setField('weight','80');
   await setField('method','manual','select');await setField('maintenance','2400');
-  await setField('foods','Haferflocken, Wasser','textarea');
+  await setField('style','paleo','select');
   await waitFor(`document.querySelector('[aria-label="Berechnete Tagesziele"]')?.innerText.includes('2400')`);
-  await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Gerichte & Rezepte')).click()`);
+  await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Ein Gericht erstellen')).click()`);
   await waitFor(`document.body.innerText.includes('Rezeptidee 1')`);
-  assert.equal(await evaluate(`document.querySelectorAll('.coach-nutrition-recipes article').length`),3);
+  assert.equal(await evaluate(`document.querySelectorAll('.coach-nutrition-recipes article').length`),1);
   await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Entwurf speichern')).click()`);
   await waitFor(`document.body.innerText.includes('Gespeichert')`);
   await evaluate(`document.querySelector('.coach-nutrition').scrollIntoView({block:'start'})`);
@@ -124,11 +126,20 @@ try {
   await send('Page.reload');
   await waitFor(`document.body.innerText.includes('Rezeptidee 1')`);
   assert.equal(await evaluate(`document.querySelector('[name="maintenance"]').value`),'2400');
+  await evaluate(`window.__failDay2=true;Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Woche · 7')).click()`);
+  await waitFor(`document.body.innerText.includes('7/7 Läufe abgeschlossen')`);
+  assert.equal(await evaluate('window.__nutritionCalls'),7); // reload reset counter; exactly seven calls
+  assert.equal(await evaluate(`document.querySelectorAll('.coach-nutrition-recipes article').length`),8);
+  assert.equal(await evaluate(`document.body.innerText.includes('Testfehler für Mittwoch')`),true);
+  await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition-recipes article')).find(a=>a.textContent.includes('Testfehler für Mittwoch')).querySelector('button').click()`);
+  await waitFor(`!document.body.innerText.includes('Testfehler für Mittwoch')`);
+  assert.equal(await evaluate('window.__nutritionCalls'),8);
+  await screenshot('nutrition-week');
   await evaluate(`window.location.hash='#/clients/bob/nutrition'`);
   await waitFor(`document.querySelector('[name="weight"]')?.value===''`);
   assert.equal(await evaluate(`document.querySelectorAll('.coach-nutrition-recipes article').length`),0);
   await setField('scope','clinical','select');await setField('age','35');
-  assert.equal(await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Gerichte & Rezepte')).disabled`),true);
+  assert.equal(await evaluate(`Array.from(document.querySelectorAll('.coach-nutrition button')).find(b=>b.textContent.includes('Ein Gericht erstellen')).disabled`),true);
   assert.deepEqual(errors,[]);
   console.log(`Dashboard browser checks passed. Screenshots: ${artifacts}`);
 } catch(error) {console.error('Browser acceptance failed:',error,errors);throw error;} finally {socket?.close();browser?.kill();server?.httpServer?.closeAllConnections();await server?.close();}

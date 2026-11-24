@@ -1,0 +1,83 @@
+{
+  "testedAt": "2026-11-25",
+  "syntheticProfile": true,
+  "model": "gemini-2.5-flash",
+  "requests": 7,
+  "accepted": 4,
+  "providerErrors": [
+    "timeout",
+    "HTTP 402",
+    "HTTP 402"
+  ],
+  "results": [
+    {
+      "day": 0,
+      "status": "ready",
+      "name": "G'schmackige Hendlbrust mit Süßerdäpfel-Röster und frischem Brokkoli",
+      "estimates": {
+        "kcal": 797.4,
+        "protein": 49.7,
+        "fat": 23.5,
+        "carbs": 95.3
+      },
+      "error": null
+    },
+    {
+      "day": 1,
+      "status": "ready",
+      "name": "G'schmackige Rindfaschiertes Laibchen mit Süßerdäpfel-Stampf und geröstetem Karfiol",
+      "estimates": {
+        "kcal": 796.6,
+        "protein": 47.2,
+        "fat": 32.3,
+        "carbs": 83.3
+      },
+      "error": null
+    },
+    {
+      "day": 2,
+      "status": "ready",
+      "name": "Feine Schweinsmedaillons mit Süßerdäpfel-Kren-Püree und g'schwindem Blattspinat",
+      "estimates": {
+        "kcal": 767.4,
+        "protein": 46.5,
+        "fat": 26.1,
+        "carbs": 94.3
+      },
+      "error": null
+    },
+    {
+      "day": 3,
+      "status": "error",
+      "name": null,
+      "estimates": null,
+      "error": "The read operation timed out"
+    },
+    {
+      "day": 4,
+      "status": "ready",
+      "name": "G'schmackige Putenstreifen mit Süßerdäpfel-Kren-Püree und g'röstetem Paprika-Zucchini-Gemüse",
+      "estimates": {
+        "kcal": 743.2,
+        "protein": 47.7,
+        "fat": 22.8,
+        "carbs": 91.5
+      },
+      "error": null
+    },
+    {
+      "day": 5,
+      "status": "error",
+      "name": null,
+      "estimates": null,
+      "error": "HTTP 402"
+    },
+    {
+      "day": 6,
+      "status": "error",
+      "name": null,
+      "estimates": null,
+      "error": "HTTP 402"
+    }
+  ]
+}

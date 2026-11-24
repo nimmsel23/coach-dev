@@ -1,3 +1,4 @@
+- [ ] Nach autorisiertem Coach-API-Reload FUEL.md-Regeln im echten Coach-Login prüfen. Vollständigen Paleo-Wochenlauf erst bei geklärtem HTTP 402 erneut testen; vier echte Gerichte liegen geprüft vor, drei Slots waren Providerfehler.
 - [ ] Ernährungsentwurf mit echtem Coach-Login und Gemini abnehmen; Rezeptmengen/Nährwerte gegen bestehenden Fuel-Katalog berechnen und explizite Fuel-Zielbereitstellung mit passender Versionierung ergänzen. Browserentwürfe sind noch keine Cloud-Pläne.
 - [ ] Lokal-/Cloud-Planübersicht mit echten Coach-Konten prüfen: Cloud-only, fehlendes Gegenstück, andere Herkunft und Abweichung der sourceLocalVersion. Inhalts-/Snapshot-Vergleich ist noch offen; gleiche Herkunftsversion bestätigt keine Inhaltsgleichheit.
 - [ ] Nach autorisiertem Coach-API-Reload die neue Workspace-Übersicht aus Firebase über Tailscale mit echtem Coach-Login abnehmen; UID-Zuordnungen und Versandversion prüfen.

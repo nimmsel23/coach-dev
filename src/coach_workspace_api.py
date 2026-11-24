@@ -85,3 +85,24 @@ async def read_workspaces(request: Request):
         raise HTTPException(503, 'Workspace-Übersicht konnte nicht gelesen werden.') from exc
     from fastapi.responses import JSONResponse
     return JSONResponse(payload, headers={'Cache-Control': 'no-store'})
+
+
+@router.get('/api/clients/{uid}/nutrition-preferences', include_in_schema=False)
+async def nutrition_preferences(uid: str, request: Request):
+    local_only(request)
+    scheme, _, token = request.headers.get('authorization', '').partition(' ')
+    if scheme.lower() != 'bearer' or not token.strip():
+        raise HTTPException(401, 'Coach-Anmeldung erforderlich.')
+    await asyncio.to_thread(require_coach, token.strip())
+    def read():
+        from src.coach_nutrition_preferences import read_preferences
+        root = clients_root()
+        matches = [item for item in workspace_summary(root)['workspaces'] if uid in item['uids']]
+        if len(matches) != 1:
+            raise HTTPException(409 if matches else 404, 'Klienten-Workspace nicht eindeutig zugeordnet.' if matches else 'Kein Klienten-Workspace zugeordnet.')
+        try:
+            return read_preferences(root, matches[0]['id'])
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+    from fastapi.responses import JSONResponse
+    return JSONResponse(await asyncio.to_thread(read), headers={'Cache-Control': 'no-store'})

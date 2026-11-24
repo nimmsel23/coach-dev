@@ -1,3 +1,12 @@
+## 2026-11-25 — CLI-first: einzelne Gerichte, Wochenläufe und FUEL-Vorgaben
+
+- Gemeinsamer Rezeptmechanismus für Terminal und UI: ein Gericht/ein Aufruf, sieben serielle Wochen-Slots, Tages-Neuerstellung, Fortschritt/Stoppen, Teilresultate und Fehler erhalten. CLI nutzt bestehenden Fuel-Gemini-Client ohne Meal-Log/Katalogänderungen.
+- Keine feste Zutatenliste; optionaler Vorratskontext. Österreichisches Deutsch, Tofu ausschließlich ausdrücklich vegan; Paleo-Stil ergänzt. Zutaten-/Energiebilanz, Budgetnähe, konkrete Schritte, Roh-/Kochgewicht und gezielte Geflügel-Hygieneregeln geprüft. Modellwerte bleiben Schätzungen.
+- FUEL.md/NUTRITION.md nur als menschlich gepflegte Regelquelle gelesen, niemals erzeugt/aktualisiert. CLI `--client`/`--context`; Web-Leseroute mit Coach-Auth, Tailnet-Grenze und eindeutiger UID. Browser-/CLI-Ergebnisse als JSON, lesbare Rezepte als zusätzliche MD-Projektion.
+- Echte Terminalabnahme mit synthetischem Paleo-Profil: sieben Provideraufrufe, vier akzeptierte Gerichte, ein Timeout, zweimal HTTP 402. Keine weiteren kostenpflichtigen Versuche. Vier erfolgreiche Rohantworten mit finaler Logik offline erneut validiert; Evidence `src/lib/nutrition/examples/terminal-acceptance.json`, CLI-Anleitung in dortigem README.
+- 129 JS-Funktionstests, sechs Python-Zugriffs-/Dateitests, ESLint und Firebase-Build bestanden. Chromium-Flow: ein Klick/ein Gericht, sieben getrennte Aufrufe, Teilausfall und gezieltes Neuerstellen, Speichern/Reload und Klientenwechsel. Echter Sieben-Gerichte-Erfolg wird wegen Providerfehlern nicht behauptet.
+- Laufender Coach-Dienst nicht neu gestartet: Web-Leseroute für FUEL.md benötigt noch autorisierten API-Reload; CLI funktioniert davon unabhängig. Keine reale Klientendatei verändert.
+
 ## 2026-11-24 — Ernährungsentwurf mit Makrozielen und KI-Rezeptwerkstatt
 
 - Neuer Klientenbereich „Ernährung“ samt direktem Karteneinstieg: Ziel, Körperdaten oder bekannter Erhaltungsbedarf, Aktivität, Protein-/Fettfaktoren, Bezugsgewicht, Mahlzeitenzahl, Ernährungsstil, bestätigte Lebensmittel, Ausschlüsse und Kochalltag.

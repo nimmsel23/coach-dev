@@ -70,7 +70,7 @@ export function nutritionDraftKey(coachUid, clientUid) {
 export function nutritionAiContext(input, targets) {
   // Explicit allowlist: no UID, client name, e-mail, profile or medical file.
   const clean = normalizeNutritionInput(input);
-  return { goal: clean.goal, style: clean.style, approvedFoods: clean.foods, exclusions: clean.exclusions,
+  return { goal: clean.goal, style: clean.style, pantryPreferences: clean.foods, exclusions: clean.exclusions,
     logistics: clean.logistics, dailyTargets: { kcal: targets.targetKcal, protein: targets.proteinG, fat: targets.fatG, carbs: targets.carbsG },
     mealTargets: targets.mealTargets };
 }
@@ -84,6 +84,6 @@ export function normalizeNutritionIdeas(value, count) {
     recipes: value.recipes.map((recipe) => {
       if (!recipe || typeof recipe !== 'object') throw new Error('Ungültiges Rezept erhalten.');
       if (!Array.isArray(recipe.ingredients) || !recipe.ingredients.length || !Array.isArray(recipe.steps) || !recipe.steps.length) throw new Error('Rezept ohne Zutaten oder Zubereitung erhalten.');
-      return { name: text(recipe.name, 120), ingredients: recipe.ingredients.slice(0, 20).map((item) => text(item, 300)), steps: recipe.steps.slice(0, 10).map((item) => text(item, 600)) };
+      return { name: text(recipe.name, 120), ingredients: recipe.ingredients.slice(0, 20).map((item) => text(item, 300)), steps: recipe.steps.slice(0, 12).map((item) => text(item, 600)) };
     }) };
 }

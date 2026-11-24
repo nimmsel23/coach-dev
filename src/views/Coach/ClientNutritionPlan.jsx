@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Download, Save, Sparkles } from 'lucide-react';
+import { Download, Save, Sparkles, Square } from 'lucide-react';
 import { useUser } from '../../contexts/UserContext.jsx';
 import { calculateNutritionTargets, EMPTY_NUTRITION_INPUT, normalizeNutritionInput, normalizeNutritionIdeas, nutritionDraftKey, NUTRITION_SOURCES } from '../../lib/nutrition/targets.js';
+
+import { useNutritionPreferences } from './useNutritionPreferences.js';
+import { runRecipeSlots, RECIPE_DAYS } from '../../lib/nutrition/recipeRuns.js';
 
 const field = 'coach-nutrition-input';
 function readDraft(key) {
@@ -9,40 +12,50 @@ function readDraft(key) {
     const raw = localStorage.getItem(key);
     if (!raw) return { input: { ...EMPTY_NUTRITION_INPUT }, savedAt: '' };
     const value = JSON.parse(raw);
-    if (value.schema !== 1 || !value.input || typeof value.input !== 'object') throw new Error();
+    if (![1, 2].includes(value.schema) || !value.input || typeof value.input !== 'object') throw new Error();
     const input = normalizeNutritionInput(value.input);
-    const ideas = value.ideas ? { ...normalizeNutritionIdeas(value.ideas, calculateNutritionTargets(input).mealTargets.length), model: value.ideas.model, generatedAt: value.ideas.generatedAt } : null;
+    const ideas = value.ideas?.entries ? value.ideas : value.ideas ? { entries: normalizeNutritionIdeas(value.ideas, calculateNutritionTargets(input).mealTargets.length).recipes.map((recipe, i) => ({ id: `legacy-${i}`, day: null, mealIndex: i, status: 'ready', value: { ...value.ideas, recipes: [recipe] } })) } : { entries: [] };
+    if (!Array.isArray(ideas.entries) || ideas.entries.length > 100) throw new Error();
+    for (const entry of ideas.entries) {
+      if (typeof entry.id !== 'string' || !Number.isInteger(entry.mealIndex) || entry.mealIndex < 0 || entry.mealIndex > 5 || !['ready', 'error'].includes(entry.status)) throw new Error();
+      if (entry.status === 'ready') normalizeNutritionIdeas(entry.value, 1);
+    }
     return { input, ideas, savedAt: value.savedAt || '' };
   } catch { return { input: { ...EMPTY_NUTRITION_INPUT }, savedAt: '', error: 'Gespeicherter Ernährungsentwurf konnte nicht gelesen werden. Er wird erst durch bewusstes Speichern ersetzt.' }; }
 }
 export default function ClientNutritionPlan({ clientUid }) {
   const { user } = useUser();
+  const preferences = useNutritionPreferences(clientUid);
   if (!user?.uid || !clientUid) return <p role="status">Coach-Anmeldung und Klientenauswahl erforderlich.</p>;
-  return <NutritionEditor key={`${user.uid}:${clientUid}`} draftKey={nutritionDraftKey(user.uid, clientUid)} />;
+  return <NutritionEditor key={`${user.uid}:${clientUid}`} draftKey={nutritionDraftKey(user.uid, clientUid)} preferences={preferences} />;
 }
-function NutritionEditor({ draftKey }) {
+function NutritionEditor({ draftKey, preferences }) {
   const [initial] = useState(() => readDraft(draftKey));
   const [input, setInput] = useState(initial.input);
   const [savedAt, setSavedAt] = useState(initial.savedAt);
   const [dirty, setDirty] = useState(false);
   const [error, setError] = useState(initial.error || '');
-  const [ideas, setIdeas] = useState(initial.ideas || null);
+  const [ideas, setIdeas] = useState(initial.ideas || { entries: [] });
+  const [mealIndex, setMealIndex] = useState(0);
+  const [progress, setProgress] = useState('');
+  const controller = useRef(null);
   const [aiBusy, setAiBusy] = useState(false);
   const [aiError, setAiError] = useState('');
   const request = useRef(0);
-  useEffect(() => () => { request.current++; }, []);
+  useEffect(() => () => { request.current++; controller.current?.abort(); }, []);
+  useEffect(() => { request.current++; controller.current?.abort(); setAiBusy(false); }, [preferences.status, JSON.stringify(preferences.rules)]);
   let targets, problem;
   try { targets = calculateNutritionTargets(input); } catch (err) { problem = err.message; }
   function change(key, value) {
-    request.current++;
-    setAiBusy(false); setAiError(''); setIdeas(null); setDirty(true); setError('');
+    request.current++; controller.current?.abort();
+    setProgress(''); setAiBusy(false); setAiError(''); setIdeas({ entries: [] }); setDirty(true); setError('');
     setInput((prev) => ({ ...prev, [key]: value }));
   }
   const numberField = (key, label, min, max, step = '1') => <label className="coach-nutrition-label">{label}<input className={field} name={key} type="number" inputMode="decimal" min={min} max={max} step={step} value={input[key]} onChange={(event) => change(key, event.target.value)} /></label>;
   const selectField = (key, label, options) => <label className="coach-nutrition-label">{label}<select className={field} name={key} value={input[key]} onChange={(event) => change(key, event.target.value)}>{options.map(([value, text]) => <option key={value} value={value}>{text}</option>)}</select></label>;
   const textField = (key, label, placeholder) => <label className="coach-nutrition-label">{label}<textarea name={key} className={field} rows={3} maxLength={1500} value={input[key]} placeholder={placeholder} onChange={(event) => change(key, event.target.value)} /></label>;
   function document() {
-    return { schema: 1, kind: 'coach-nutrition-draft', input, targets, ideas, savedAt: new Date().toISOString(), status: 'draft', delivery: 'not-delivered', sources: NUTRITION_SOURCES };
+    return { schema: 2, kind: 'coach-nutrition-draft', input, targets, ideas, savedAt: new Date().toISOString(), status: 'draft', delivery: 'not-delivered', sources: NUTRITION_SOURCES };
   }
   function save() {
     if (!targets) return;
@@ -59,17 +72,28 @@ function NutritionEditor({ draftKey }) {
     const link = window.document.createElement('a'); link.href = url; link.download = 'ernaehrungsentwurf.json'; link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  async function generate() {
-    if (!targets) return;
+  async function generate(mode = 'single', retrySlot = null) {
+    if (preferences.status !== 'ready' || !targets || controller.current && !controller.current.signal.aborted && aiBusy) return;
     const revision = ++request.current;
-    setAiBusy(true); setAiError('');
+    const nextController = new AbortController(); controller.current = nextController;
+    setAiBusy(true); setAiError(''); setProgress('Startet …');
+    const slots = retrySlot ? [retrySlot] : mode === 'week'
+      ? RECIPE_DAYS.map((_, day) => ({ id: `week-${day}-${mealIndex}`, day, mealIndex }))
+      : [{ id: crypto.randomUUID(), day: null, mealIndex }];
+    const replaced = new Set(slots.map((slot) => slot.id));
+    const previousNames = ideas.entries.filter((entry) => !replaced.has(entry.id) && entry.status === 'ready').map((entry) => entry.value.recipes[0].name);
     try {
       const { generateNutritionIdeas } = await import('../../lib/nutrition/ideas.js');
-      const result = await generateNutritionIdeas(input, targets);
-      if (request.current === revision) { setIdeas(result); setDirty(true); }
+      await runRecipeSlots({ slots, signal: nextController.signal, previousNames,
+        generate: (slot) => generateNutritionIdeas(input, targets, { ...slot, preferences }),
+        onResult: (result, done, total) => {
+          if (request.current !== revision) return;
+          setIdeas((previous) => ({ entries: [...previous.entries.filter((entry) => entry.id !== result.id), result] }));
+          setDirty(true); setProgress(`${done}/${total} Läufe abgeschlossen`);
+        } });
     } catch (err) {
-      if (request.current === revision) setAiError(err.message || 'KI-Vorschlag konnte nicht erstellt werden.');
-    } finally { if (request.current === revision) setAiBusy(false); }
+      if (request.current === revision) setAiError(err.message || 'Rezeptlauf fehlgeschlagen.');
+    } finally { if (request.current === revision) { setAiBusy(false); setProgress((value) => nextController.signal.aborted ? `${value} · gestoppt` : value); } }
   }
   return <section className="coach-nutrition" aria-label="Ernährungsplanung">
     <header className="space-y-2"><h2 className="text-xl font-semibold">Ernährung planen</h2><p className="text-sm text-fit-muted">Vom Ziel zu Tagesmakros und konkreten Rezeptideen. Du prüfst und entscheidest, was zum Klienten passt.</p></header>
@@ -94,8 +118,8 @@ function NutritionEditor({ draftKey }) {
           {selectField('meals', 'Mahlzeiten pro Tag', [['2', '2 Mahlzeiten'], ['3', '3 Mahlzeiten'], ['4', '4 Mahlzeiten'], ['5', '5 Mahlzeiten'], ['6', '6 Mahlzeiten']])}
         </fieldset>
         <fieldset className="space-y-4"><legend className="mb-3 font-semibold">Gerichte, Stil & Alltag</legend>
-          {selectField('style', 'Ernährungsstil', [['mixed', 'Mischkost'], ['vegetarian', 'Vegetarisch'], ['pescatarian', 'Pescetarisch'], ['plant-based', 'Pflanzlich · Nährstoffversorgung gesondert prüfen']])}
-          {textField('foods', 'Bestätigte Lebensmittel für Rezeptideen', 'Zum Beispiel: Haferflocken, Naturjoghurt, Eier, Linsen, Reis, Brokkoli, Olivenöl …')}
+          {selectField('style', 'Ernährungsstil', [['mixed', 'Mischkost'], ['vegetarian', 'Vegetarisch'], ['pescatarian', 'Pescetarisch'], ['plant-based', 'Vegan · ausdrücklich pflanzlich'], ['paleo', 'Paleo · ohne Getreide, Milch, Hülsenfrüchte und Erdäpfel']])}
+          {textField('foods', 'Optional: Vorräte oder Vorlieben', 'Zum Beispiel: Kürbis ist noch da; gerne österreichische Küche. Leer lassen = passende Zutaten frei wählen.')}
           {textField('exclusions', 'Allergien, Unverträglichkeiten & Ausschlüsse', 'Keine bekannt — oder konkrete Lebensmittel/Zutaten eintragen')}
           {textField('logistics', 'Kochzeit, Budget, Vorlieben & Tagesablauf', 'Zum Beispiel: maximal 20 Minuten, Meal Prep, warmes Abendessen, Training am Nachmittag')}
         </fieldset>
@@ -116,18 +140,36 @@ function NutritionEditor({ draftKey }) {
         {error && <p role="alert" className="text-sm text-fit-red">{error}</p>}
         <div className="border-t border-fit-line/30 pt-5 space-y-3">
           <h3 className="font-semibold">KI-Rezeptwerkstatt</h3>
-          <p className="text-xs text-fit-muted">Mit Klick werden Zielmakros, Mahlzeitenbudgets, Ernährungsstil und deine Lebensmittel-/Alltagsangaben an Gemini gesendet. Kein Klientenname, keine UID und keine Körperprofildaten. In Freitexten bitte keine personenbezogenen Daten eintragen.</p>
-          <button type="button" className="vos-btn" disabled={!targets || !input.foods.trim() || aiBusy} onClick={generate}><Sparkles size={15} />{aiBusy ? 'Rezeptideen entstehen …' : 'Gerichte & Rezepte vorschlagen'}</button>
+          <div className="text-xs text-fit-muted" role="status">{preferences.status === 'ready' ? preferences.source ? `${preferences.source} gelesen · ${preferences.rules.length} Regeln` : 'Workspace geprüft · keine FUEL.md/NUTRITION.md vorhanden' : preferences.status === 'loading' ? 'Klientenvorgaben werden gelesen …' : preferences.error}<button type="button" className="ml-2 min-h-11 underline" onClick={preferences.retry}>Regeln neu lesen</button></div>
+          {preferences.rules?.length > 0 && <ul className="text-xs text-fit-muted space-y-1">{preferences.rules.map((rule, i) => <li key={i}>{rule}</li>)}</ul>}
+          <p className="text-xs text-fit-muted">Mit Klick werden Zielmakros, das gewählte Mahlzeitenbudget, Ernährungsstil und deine Vorlieben/Alltagsangaben an Gemini gesendet. Kein Klientenname, keine UID und keine Körperprofildaten. In Freitexten bitte keine personenbezogenen Daten eintragen.</p>
+          <label className="coach-nutrition-label">Mahlzeitenbudget<select aria-label="Mahlzeitenbudget" className={field} value={mealIndex} disabled={aiBusy} onChange={(event) => setMealIndex(Number(event.target.value))}>{(targets?.mealTargets || []).map((meal, i) => <option key={i} value={i}>Mahlzeit {i + 1} · {meal.kcal} kcal</option>)}</select></label>
+          <div className="flex flex-wrap gap-2"><button type="button" className="vos-btn" disabled={!targets || preferences.status !== 'ready' || aiBusy} onClick={() => generate('single')}><Sparkles size={15} />Ein Gericht erstellen</button><button type="button" className="vos-btn" disabled={!targets || preferences.status !== 'ready' || aiBusy} onClick={() => generate('week')}>Woche · 7 Gerichte</button>{aiBusy && <button type="button" className="vos-btn" onClick={() => controller.current?.abort()}><Square size={14} /> Stoppen</button>}</div>
+          <p role="status" className="text-xs text-fit-muted">{progress || 'Ein Klick = ein Gericht für das gewählte Budget. Woche = sieben einzelne Läufe, ein Gericht pro Tag; kein vollständiger Tagesplan.'}</p>
           {aiError && <p role="alert" className="text-sm text-fit-red">{aiError}</p>}
           <p className="text-xs text-fit-muted">KI-Entwurf mit geschätzten Portionen. Zutaten, Ausschlüsse und Rezeptnährwerte vor Verwendung anhand des Fuel-Katalogs prüfen. Die KI verändert keine Zielmakros.</p>
         </div>
         <details className="text-xs text-fit-muted"><summary className="min-h-11 cursor-pointer">Berechnungsgrundlagen</summary><ul className="space-y-2">{NUTRITION_SOURCES.map((source) => <li key={source.url}><a className="underline" href={source.url} target="_blank" rel="noopener noreferrer">{source.label}</a></li>)}</ul><p className="mt-3">Allgemeine Fitnessplanung für gesunde Erwachsene; keine medizinische Ernährungstherapie. Faktoren und Planungsgrenzen sind Startannahmen, keine individuelle Eignungsprüfung.</p></details>
       </div>
     </div>
-    {ideas && <section className="coach-feed-section space-y-5" aria-label="KI-Rezeptentwurf">
-      <header><h3 className="text-lg font-semibold">Rezeptideen zum Prüfen</h3><p className="mt-2 text-sm text-fit-muted">{ideas.rationale}</p></header>
-      <div className="coach-nutrition-recipes">{ideas.recipes.map((recipe, i) => <article key={i} className="space-y-3 min-w-0"><h4 className="font-semibold">{i + 1}. {recipe.name}</h4><p className="text-xs text-fit-muted">Mengen geschätzt · Nährwerte noch nicht berechnet</p><ul className="space-y-1 text-sm">{recipe.ingredients.map((item, n) => <li key={n}>{item}</li>)}</ul><ol className="list-decimal pl-5 space-y-2 text-sm">{recipe.steps.map((step, n) => <li key={n}>{step}</li>)}</ol></article>)}</div>
-      <div><h4 className="font-semibold">Vor Freigabe prüfen</h4><ul className="mt-2 space-y-2 text-sm text-fit-muted">{ideas.review.map((item, i) => <li key={i}>{item}</li>)}</ul></div>
+    {!!ideas.entries.length && <section className="coach-feed-section space-y-5" aria-label="KI-Rezeptentwurf">
+      <header><h3 className="text-lg font-semibold">Gerichte zum Prüfen</h3><p className="mt-2 text-sm text-fit-muted">Einzelgerichte und Wochenentwürfe · österreichisches Deutsch · Nährwerte aus geschätzten Zutatenwerten berechnet.</p></header>
+      <div className="coach-nutrition-recipes">{ideas.entries.map((entry) => {
+        const recipe = entry.value?.recipes?.[0];
+        return <article key={entry.id} className="space-y-3 min-w-0">
+          <p className="text-xs text-fit-muted">{entry.day === null ? 'Einzelgericht' : RECIPE_DAYS[entry.day]} · Mahlzeit {entry.mealIndex + 1}</p>
+          {entry.status === 'error' ? <p role="alert" className="text-sm text-fit-red">{entry.error}</p> : <>
+            <h4 className="font-semibold">{recipe.name}</h4>
+            <p className="text-xs text-fit-muted">{recipe.minutes ? `${recipe.minutes} Minuten · 1 Portion · ` : ''}Nährwerte geschätzt</p>
+            {recipe.estimates && <p className="text-sm">{recipe.estimates.kcal} kcal · {recipe.estimates.protein} g Protein · {recipe.estimates.fat} g Fett · {recipe.estimates.carbs} g Kohlenhydrate</p>}
+            <p className="text-sm text-fit-muted">{entry.value.rationale}</p>
+            <ul className="space-y-1 text-sm">{recipe.ingredients.map((item, n) => <li key={n}>{item}</li>)}</ul>
+            <ol className="list-decimal pl-5 space-y-2 text-sm">{recipe.steps.map((step, n) => <li key={n}>{step}</li>)}</ol>
+            <details className="text-xs text-fit-muted"><summary className="min-h-11 cursor-pointer">Prüfpunkte</summary>{entry.value.review.map((item, i) => <p key={i}>{item}</p>)}</details>
+          </>}
+          <button type="button" disabled={aiBusy || !targets || preferences.status !== 'ready'} className="vos-btn" onClick={() => generate('single', { id: entry.id, day: entry.day, mealIndex: entry.mealIndex })}>Dieses Gericht neu erstellen</button>
+        </article>;
+      })}</div>
     </section>}
   </section>;
 }
