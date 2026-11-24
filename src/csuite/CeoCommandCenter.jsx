@@ -30,6 +30,14 @@ const C_SUITE_ROLES = [
     description: 'Content-Pipeline, Leads & Sichtbarkeit',
   },
   {
+    id: 'cso',
+    label: 'KI-CSO (Sales)',
+    shortTitle: 'CSO',
+    mark: '◉',
+    dashboardPath: '/coach/workspaces/cso/dashboard.html',
+    description: 'Lead-Qualifizierung & Call-Briefings',
+  },
+  {
     id: 'cpo',
     label: 'KI-CPO (Product)',
     shortTitle: 'CPO',
@@ -72,6 +80,26 @@ export default function CeoCommandCenter() {
     })
     return () => unsubscribe()
   }, [])
+
+  // Same-origin iframes share Auth persistence; postMessage nudges dashboards + logs identity.
+  useEffect(() => {
+    if (!user) return undefined
+    const post = () => {
+      const frame = document.querySelector('iframe.ceo-frame')
+      frame?.contentWindow?.postMessage(
+        {
+          type: 'csuite-auth',
+          uid: user.uid,
+          email: user.email || '',
+          displayName: user.displayName || '',
+        },
+        window.location.origin,
+      )
+    }
+    post()
+    const t = window.setTimeout(post, 400)
+    return () => window.clearTimeout(t)
+  }, [user, activeRoleId, iframeKey])
 
   const handleLogin = async () => {
     setAuthError('')

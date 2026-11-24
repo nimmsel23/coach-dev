@@ -1,0 +1,137 @@
+{
+  "workspaceId": "cso",
+  "roleTitle": "Chief Sales Officer — Leads, Calls & Abschluss",
+  "defaultModel": "gemini",
+  "temperature": 0.4,
+  "version": "1.0",
+  "tools": [
+    {
+      "name": "qualify_lead",
+      "description": "Qualifiziert einen Lead (Fit, Budget-Signal, Timing, nächster Schritt). Intern.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "leadName": {
+            "type": "string"
+          },
+          "context": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "leadName",
+          "context"
+        ]
+      }
+    },
+    {
+      "name": "draft_discovery_call_brief",
+      "description": "Call-Briefing: Ziel, Agenda, 3 Fragen. Intern.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "leadName": {
+            "type": "string"
+          },
+          "goal": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "leadName"
+        ]
+      }
+    },
+    {
+      "name": "draft_followup_after_call",
+      "description": "Follow-up nach Discovery-Call. pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "leadName": {
+            "type": "string"
+          },
+          "callNotes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "leadName"
+        ]
+      }
+    },
+    {
+      "name": "objection_handle",
+      "description": "Einwand → Antwortentwurf + Grenze. Oft Queue wenn outbound.",
+      "requiresApproval": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "objection": {
+            "type": "string"
+          },
+          "leadName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "objection"
+        ]
+      }
+    },
+    {
+      "name": "propose_package_fit",
+      "description": "Paket-Empfehlung für Lead. pending_approval vor Versand.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "leadName": {
+            "type": "string"
+          },
+          "package": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "leadName",
+          "package"
+        ]
+      }
+    },
+    {
+      "name": "schedule_nudge",
+      "description": "Höflicher Termin-/Call-Nudge. pending_approval.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "leadName": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "leadName"
+        ]
+      }
+    }
+  ],
+  "collections": {
+    "readAccess": [
+      "csuite/cso/approvals",
+      "csuite/cso/threads",
+      "csuite/cso/agent_logs"
+    ],
+    "writeAccess": [
+      "csuite/cso/approvals",
+      "csuite/cso/threads",
+      "csuite/cso/agent_logs"
+    ]
+  }
+}

@@ -488,7 +488,12 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     @app.api_route("/coach/coo", methods=["GET", "HEAD"])
     @app.api_route("/coach/coo/", methods=["GET", "HEAD"])
     async def coach_coo_ui():
-        # Clean URL for Tailnet; assets remain under /coach/assets/*.
+        # Vanilla Git-brain dashboard is SOT; React cockpit kept under /coach/coo/react.
+        return RedirectResponse("/coach/coo/dashboard", status_code=302)
+
+    @app.api_route("/coach/coo/react", methods=["GET", "HEAD"])
+    @app.api_route("/coach/coo/react/", methods=["GET", "HEAD"])
+    async def coach_coo_react_ui():
         return frontend(coach, "coo.html")
 
     def _workspace_dashboard(role: str):
@@ -516,6 +521,11 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
     @app.api_route("/coach/cfo/", methods=["GET", "HEAD"])
     async def coach_cfo_ui():
         return _workspace_dashboard("cfo")
+
+    @app.api_route("/coach/cso", methods=["GET", "HEAD"])
+    @app.api_route("/coach/cso/", methods=["GET", "HEAD"])
+    async def coach_cso_ui():
+        return _workspace_dashboard("cso")
 
     @app.api_route("/coach/coo/dashboard", methods=["GET", "HEAD"])
     @app.api_route("/coach/coo/dashboard/", methods=["GET", "HEAD"])

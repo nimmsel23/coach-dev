@@ -190,6 +190,7 @@ footer.note code { color: var(--accent2); }
     </footer>
   </div>
   <script type="module">
+import { createFirebaseAdapter, copyText, mailtoDraft } from '/coach/workspaces/_shared/runtime.js';
 const ROLE = {"id": "cfo", "title": "KI-CFO · Umsatz & Belege", "icon": "▣", "gitBadge": "Git: main@cfo-v1.0", "kpis": [{"id": "revenue", "label": "Umsatz MTD", "value": "fehlt"}, {"id": "open", "label": "Offene Posten", "value": "2"}, {"id": "queue", "label": "Mahn-Entwürfe", "value": "1"}], "focus": [{"title": "Offen · Klient Schmidt", "meta": "€480 · fällig vor 8 Tagen", "bullets": ["10er-Block Rate 3/10", "Keine Erinnerung diese Woche", "Kanal: E-Mail bevorzugt"], "skills": [["draft_invoice_reminder", "Erinnerung"], ["open_items_list", "Alle Offenen"]], "ctx": {"clientName": "Schmidt", "amount": "480€", "dueDate": "2026-11-16"}}, {"title": "Monats-Snapshot November", "meta": "Buchhaltung · intern", "bullets": ["Konsole/CRM als Quelle — Zahlen nicht raten", "Belege: Tools/Hosting markieren", "Cashflow 14 Tage unsicher ohne Bank-Export"], "skills": [["summarize_month_revenue", "Umsatz"], ["cashflow_snapshot", "Cashflow"]], "ctx": {"month": "2026-11", "horizonDays": 14}}], "launcher": [{"id": "summarize_month_revenue", "title": "Monatsumsatz", "sub": "Snapshot"}, {"id": "draft_invoice_reminder", "title": "Erinnerung", "sub": "Offener Posten"}, {"id": "package_price_check", "title": "Preis-Check", "sub": "Paket"}, {"id": "expense_note", "title": "Belegnotiz", "sub": "Ausgabe erfassen"}], "mockQueue": [{"title": "Zahlungserinnerung · Schmidt", "skillId": "draft_invoice_reminder", "preview": "Hallo Herr Schmidt,\n\nkurz zur offenen Rechnung über 480€ (fällig 16.11.).\nFalls schon unterwegs — danke. Sonst einfach kurz Bescheid.\n\nFreundliche Grüße\nDaniel"}]};
 
 /** Git-as-a-Brain: load prompt + skills from same workspace folder (no Firestore sync). */
@@ -250,25 +251,13 @@ function readLs(key, fallback) {
 }
 function writeLs(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
 
-/** Firebase adapter — wire config later; mock/localStorage until then. */
-export const firebaseAdapter = {
-  mode: "mock",
-  async connect() {
-    this.mode = "mock";
-    return { ok: true, mode: "mock", note: "Keine Firebase-Config — localStorage." };
+const firebaseAdapter = createFirebaseAdapter(ROLE.id, {
+  queueKey: LS.queue,
+  onQueue: (items) => {
+    state.queue = items;
+    try { renderQueue(); } catch (_) {}
   },
-  async listApprovals() { return readLs(LS.queue, []); },
-  async upsertApproval(item) {
-    const list = await this.listApprovals();
-    const i = list.findIndex((x) => x.id === item.id);
-    if (i >= 0) list[i] = item; else list.unshift(item);
-    writeLs(LS.queue, list);
-    return item;
-  },
-  async removeApproval(id) {
-    writeLs(LS.queue, (await this.listApprovals()).filter((x) => x.id !== id));
-  },
-};
+});
 
 /** LLM / agent router — prefers Coach bridge, else realistic mock. */
 export const llmRouter = {
@@ -440,7 +429,9 @@ function renderQueue() {
       <p class="sub">${escapeHtml(item.skillId)} · ${fmtTime(item.createdAt)}</p>
       <textarea data-edit="${item.id}">${escapeHtml(item.preview)}</textarea>
       <div class="actions">
-        <button class="btn ok" data-approve="${item.id}">✅ Freigeben &amp; Ausführen</button>
+        <button class="btn ok" data-approve="${item.id}">Freigeben + Kopieren</button>
+        <button class="btn ghost" data-copy="${item.id}">Nur kopieren</button>
+        <button class="btn ghost" data-mail="${item.id}">mailto</button>
         <button class="btn danger" data-reject="${item.id}">Verwerfen</button>
       </div>
     </article>`).join("");
@@ -527,6 +518,12 @@ function wire() {
     if (!btn) return;
     const id = btn.dataset.launch;
     const defaults = {
+      qualify_lead: { leadName: "Lead", context: "Interesse am 10er" },
+      draft_discovery_call_brief: { leadName: "Lead", goal: "Passung prüfen" },
+      draft_followup_after_call: { leadName: "Lead", callNotes: "positiv, Zeitfrage" },
+      objection_handle: { leadName: "Lead", objection: "Keine Zeit" },
+      propose_package_fit: { leadName: "Lead", package: "10er Coaching" },
+      schedule_nudge: { leadName: "Lead", channel: "email" },
       draft_linkedin_post: { topic: "Vitalität 40+" },
       draft_instagram_caption: { topic: "Alltagsenergie", format: "reel" },
       plan_content_week: { week: "current" },
@@ -544,19 +541,41 @@ function wire() {
   });
   $("#queue").addEventListener("click", async (e) => {
     const approve = e.target.closest("[data-approve]");
+    const copyBtn = e.target.closest("[data-copy]");
+    const mailBtn = e.target.closest("[data-mail]");
     const reject = e.target.closest("[data-reject]");
-    if (approve) {
-      const id = approve.dataset.approve;
+    const readItem = (id) => {
       const ta = document.querySelector(`textarea[data-edit="${id}"]`);
       const item = state.queue.find((q) => q.id === id);
-      if (!item) return;
+      if (!item) return null;
       item.preview = ta?.value ?? item.preview;
+      return item;
+    };
+    if (copyBtn) {
+      const item = readItem(copyBtn.dataset.copy);
+      if (!item) return;
+      const ok = await copyText(item.preview);
+      log("system", ok ? `Kopiert: ${item.title}` : `Kopieren fehlgeschlagen: ${item.title}`);
+      return;
+    }
+    if (mailBtn) {
+      const item = readItem(mailBtn.dataset.mail);
+      if (!item) return;
+      window.location.href = mailtoDraft(item.preview, item.title);
+      log("system", `mailto geöffnet: ${item.title}`);
+      return;
+    }
+    if (approve) {
+      const id = approve.dataset.approve;
+      const item = readItem(id);
+      if (!item) return;
+      const ok = await copyText(item.preview);
       item.status = "approved";
       item.updatedAt = now();
       await firebaseAdapter.upsertApproval(item);
       await firebaseAdapter.removeApproval(id);
       state.queue = await firebaseAdapter.listApprovals();
-      log("system", `Freigegeben & ausgeführt (Stub): ${item.title}`);
+      log("system", `Freigegeben${ok ? " + in Zwischenablage" : ""} (kein Auto-Versand): ${item.title}`);
       renderQueue();
     }
     if (reject) {

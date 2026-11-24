@@ -1,0 +1,21 @@
+{
+  "id": "cso",
+  "title": "Chief Sales Officer",
+  "version": "1.0",
+  "focus": "Leads, Calls & Abschluss",
+  "defaultModel": "gemini",
+  "temperature": 0.4,
+  "allowedSkills": [
+    "qualify_lead",
+    "draft_discovery_call_brief",
+    "draft_followup_after_call",
+    "objection_handle",
+    "propose_package_fit",
+    "schedule_nudge"
+  ],
+  "requiresApproval": [
+    "draft_followup_after_call",
+    "schedule_nudge",
+    "propose_package_fit"
+  ]
+}

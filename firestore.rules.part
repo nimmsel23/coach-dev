@@ -38,3 +38,26 @@
     match /{path=**}/tractionDaily/{dayId} {
       allow read: if isCoach();
     }
+
+    // C-Suite HITL state (Git remains brain SOT; Firestore holds approvals/threads).
+    match /csuite/{role} {
+      allow read: if isCoach();
+      match /approvals/{id} {
+        allow read: if isCoach();
+        allow create, update: if isCoach()
+          && request.resource.data.keys().hasAll(['status', 'skillId', 'title', 'preview', 'ownerUid'])
+          && request.resource.data.ownerUid == request.auth.uid
+          && request.resource.data.status in ['pending_approval', 'approved', 'rejected', 'ready']
+          && request.resource.data.skillId is string
+          && request.resource.data.title is string
+          && request.resource.data.preview is string;
+        allow delete: if isCoach();
+      }
+      match /threads/{id} {
+        allow read, write: if isCoach();
+      }
+      match /agent_logs/{id} {
+        allow read, create: if isCoach();
+        allow update, delete: if false;
+      }
+    }
