@@ -1,3 +1,9 @@
+## 2026-11-24 — CEO Cockpit + Git-Brain fetch
+
+- `ceo.html` / `CeoCommandCenter.jsx`: Firebase-Auth-Portal, Tabs für COO/CMO/CPO/CTO/CFO → iframe `/workspaces/<role>/dashboard.html`.
+- Dashboards laden `./system-prompt.md` + `./skills.json` per fetch; Bridge nimmt optional `systemPrompt`/`skills`.
+- `prepare-coach-dist` kopiert `workspaces/` nach `dist-coach/workspaces/`; Server mountet `/workspaces`.
+
 ## 2026-11-24 — C-Suite Dashboards (COO/CMO/CPO/CTO/CFO)
 
 Vanilla Dark-Cockpits unter `workspaces/{role}/dashboard.html` (Git-Brain + HITL + LLM-Switcher + Mock/Bridge). Routen `/coach/cmo|cpo|cto|cfo`, `/coach/coo/dashboard`. Hub verlinkt alle fünf. Brain-Dateien + Skills je Rolle.
