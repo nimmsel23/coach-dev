@@ -19,8 +19,14 @@ Default-Form ist eine **Entscheidungssurface**, kein 40-Felder-Editor:
 | Herkunft | ein Text (wger/yuhonas/source); Korrektur im Detail-Modal |
 | Aktionen | Freigeben / Löschen / Verbessern / Details |
 
-`SourceEditor` bleibt im `ExerciseInsightModal` (Details) und im Katalog-Browser —
-nicht mehr inline auf der Karte. Klienten-`asMessage`-Pfad unverändert.
+Details öffnet `ExerciseInsightModal` mit Übersicht, Quellen zusammenführen,
+Coaching, Bearbeiten und Rohdaten. Der Dialog übernimmt das aktive Theme,
+verwendet einen gemeinsamen Scrollbereich und hält mobile Review-Aktionen sichtbar.
+Im Quellenbereich steht `SourceEditor` zuerst; Originalquellen sind aufklappbar.
+wger und yuhonas werden demselben Übungseintrag zugeordnet. Eine frühere leere
+`source_selection` blendet vorhandene Fusionsvorschläge nicht aus; gespeichert
+wird weiterhin explizit über die vorhandene Quellen-API. Im Katalog-Browser bleibt
+der Quelleneditor ebenfalls verfügbar, auf der Inbox-Karte ist er nicht inline. Klienten-`asMessage`-Pfad unverändert.
 
 ## Datenfluss Review
 

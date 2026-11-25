@@ -1,6 +1,7 @@
 import { sourceIds } from '../lib/db/shared/catalogSources.js'
+import './exercise-inspector.css'
 import SourceEditor from '../views/Inbox/SourceEditor.jsx'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import {
   BookOpen,
@@ -146,26 +147,11 @@ function toneColor(tone) {
   }
 }
 
-function ShellCard({ title, eyebrow = null, children, tone = 'default', actions = null }) {
-  const toneStyle = toneColor(tone)
-  return (
-    <section className="rounded-[24px] p-4 md:p-5" style={toneStyle}>
-      <div className="flex items-start justify-between gap-3 mb-4">
-        <div>
-          {eyebrow && (
-            <div className="text-[10px] font-black uppercase tracking-[0.24em]" style={{ color: 'var(--muted)' }}>
-              {eyebrow}
-            </div>
-          )}
-          <div className="text-sm md:text-base font-black mt-1" style={{ color: toneStyle.color }}>
-            {title}
-          </div>
-        </div>
-        {actions}
-      </div>
-      {children}
-    </section>
-  )
+function ShellCard({ title, children, actions = null }) {
+  return <section className="ei-section">
+    <div className="ei-section-heading"><h3>{title}</h3>{actions}</div>
+    {children}
+  </section>
 }
 
 function Field({ label, value, onChange, placeholder = '', rows = 3, disabled = false }) {
@@ -343,7 +329,7 @@ function buildSourceDetail(exercise, source, mergeCandidate) {
   let statusLabel = 'Nicht verknüpft'
   if (consciouslyUnlinked) {
     status = 'unlinked'
-    statusLabel = 'Bewusst getrennt'
+    statusLabel = 'Zuordnung offen'
   } else if (ids.length) {
     status = 'linked'
     statusLabel = 'Verknüpft'
@@ -436,7 +422,7 @@ function SourceProvenanceCard({ exercise, source, mergeCandidate }) {
             ))}
           </div>
         )}
-        {detail.candidate && !detail.ids.length && !detail.consciouslyUnlinked && (
+        {detail.candidate && !detail.ids.length && (
           <div
             className="rounded-2xl p-3 text-sm"
             style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', color: '#fbbf24' }}
@@ -586,7 +572,7 @@ function SheetView({ draft, lesson, roleBlocks, jointActions, muscleLanguage, ta
             {draft.learning_goal_short || <span style={{ color: 'var(--muted)' }}>Kein Ziel formuliert.</span>}
           </div>
           {draft.trainer_client_friendly && (
-            <div className="rounded-2xl px-4 py-3 text-sm leading-6" style={{ background: 'rgba(0,0,0,0.14)', borderLeft: '3px solid var(--accent)', color: 'var(--ink)' }}>
+            <div className="rounded-2xl px-4 py-3 text-sm leading-6" style={{ background: 'rgba(0,0,0,0.14)', border: '1px solid var(--line)', color: 'var(--ink)' }}>
               <div className="text-[10px] font-black uppercase tracking-[0.22em] mb-1" style={{ color: 'var(--muted)' }}>Zum Klienten</div>
               „{draft.trainer_client_friendly}"
             </div>
@@ -770,7 +756,9 @@ function EditView({ draft, setDraft }) {
 }
 
 const VIEW_OPTIONS = [
-  { id: 'sheet', label: 'Sheet', icon: BookOpen },
+  { id: 'overview', label: 'Übersicht', icon: BookOpen },
+  { id: 'sources', label: 'Quellen zusammenführen', icon: Plus },
+  { id: 'sheet', label: 'Coaching', icon: BookOpen },
   { id: 'edit', label: 'Bearbeiten', icon: PencilLine },
   { id: 'raw', label: 'Rohdaten', icon: FileSearch },
 ]
@@ -801,7 +789,24 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
   const [reviewFeedback, setReviewFeedback] = useState(exercise?.coachFeedback || exercise?.feedback || '')
   const [reviewAction, setReviewAction] = useState('')
   const [notice, setNotice] = useState('')
-  const [activeView, setActiveView] = useState('sheet')
+  const [activeView, setActiveView] = useState('overview')
+
+  const dialogRef = useRef(null)
+  useEffect(() => {
+    const previous = document.activeElement
+    const overflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    dialogRef.current?.focus()
+    return () => { document.body.style.overflow = overflow; previous?.focus?.() }
+  }, [])
+  function trapFocus(event) {
+    if (event.key !== 'Tab') return
+    const controls = [...dialogRef.current.querySelectorAll('button, a[href], input, select, textarea, summary, [tabindex="0"]')]
+      .filter(el => !el.disabled && el.getClientRects().length)
+    const first = controls[0], last = controls.at(-1)
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === dialogRef.current)) { event.preventDefault(); last?.focus() }
+    else if (!event.shiftKey && (document.activeElement === last || document.activeElement === dialogRef.current)) { event.preventDefault(); first?.focus() }
+  }
 
   useEffect(() => {
     setLocalExercise(exercise)
@@ -809,7 +814,6 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
     setExerciseNotes(exercise?.notes || '')
     setReviewFeedback(exercise?.coachFeedback || exercise?.feedback || '')
     setReviewAction('')
-    setActiveView('sheet')
   }, [exercise])
 
   useEffect(() => {
@@ -1003,7 +1007,7 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
   }
 
   function handleSourceSaved(value) {
-    const next = { ...value, file_id: inboxFileId, userId: inboxUserId, enriched: value }
+    const next = { ...localExercise, ...value, file_id: inboxFileId, userId: inboxUserId, enriched: value }
     setLocalExercise(next)
     onExerciseChange?.(next)
     if (inboxFileId) publishInboxUpdate('source_linked')
@@ -1034,30 +1038,24 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
   const btn = { background: 'var(--bg2)', border: '1px solid var(--line)', color: 'var(--ink)' }
 
   return createPortal(
-    <div className="fixed inset-0 z-50">
-      <div className="absolute inset-0 bg-fit-scrim backdrop-blur-sm" onClick={onClose} />
+    <div className="ei-overlay">
+      <div className="ei-scrim" onClick={onClose} />
 
-      <div className="absolute inset-x-0 bottom-0 md:inset-3 md:bottom-3">
+      <div className="ei-position">
         <div
-          className="mx-auto h-[94vh] md:h-full w-full max-w-none rounded-t-[28px] md:rounded-[32px] overflow-hidden shadow-2xl"
-          style={{
-            background: 'linear-gradient(180deg, rgba(18,26,28,0.98) 0%, rgba(11,16,18,0.98) 100%)',
-            border: '1px solid rgba(255,255,255,0.08)',
-          }}
+          className="ei-dialog" role="dialog" aria-modal="true" aria-labelledby="exercise-detail-title"
+          ref={dialogRef} tabIndex={-1} onKeyDown={trapFocus}
         >
           <div className="flex h-full flex-col">
             <header className="border-b px-5 py-4 md:px-6" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <div className="text-[10px] font-black uppercase tracking-[0.3em]" style={{ color: 'var(--muted)' }}>
-                    Coach Sheet
-                  </div>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <h2 className="text-2xl md:text-3xl font-black leading-tight" style={{ color: 'var(--ink)' }}>
+                    <h2 id="exercise-detail-title" className="text-2xl md:text-3xl font-black leading-tight" style={{ color: 'var(--ink)' }}>
                       {displayName}
                     </h2>
                     <MetaPill tone={hasLesson ? 'accent' : 'warn'}>
-                      {hasLesson ? 'Sheet vorhanden' : 'Noch kein Sheet'}
+                      {inboxFileId ? inboxStatusMeta.label : hasLesson ? 'Coaching vorhanden' : 'Quelldaten'}
                     </MetaPill>
                     {loadingLesson && (
                       <MetaPill tone="default">
@@ -1079,15 +1077,6 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                 </div>
 
                 <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
-                  <button onClick={copySheet} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Sheet als Markdown kopieren">
-                    <span className="inline-flex items-center gap-2"><Copy size={14} /> Copy</span>
-                  </button>
-                  <button onClick={downloadSheet} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Sheet als .md herunterladen">
-                    <span className="inline-flex items-center gap-2"><Download size={14} /> MD</span>
-                  </button>
-                  <button onClick={() => exportSheet('sheet')} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Nach Obsidian exportieren">
-                    Export
-                  </button>
                   <button onClick={onClose} aria-label="Schließen" className="rounded-2xl p-2.5" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'var(--muted)' }}>
                     <X size={18} />
                   </button>
@@ -1095,16 +1084,16 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
               </div>
             </header>
 
-            <div className="flex-1 min-h-0 overflow-y-auto md:overflow-hidden">
-              <div className="grid md:h-full md:min-h-0 grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(300px,380px)] xl:grid-cols-[minmax(0,1fr)_minmax(340px,420px)]">
-                <main className="md:min-h-0 md:overflow-y-auto p-4 md:p-6 space-y-5">
-                  <div className="flex flex-wrap items-center gap-2">
+            <div className="ei-scroll">
+              <div className="ei-content">
+                <main className="ei-main space-y-5">
+                  <nav className="ei-tabs" aria-label="Übungsdetails">
                     {VIEW_OPTIONS.map(({ id, label, icon: Icon }) => {
                       const active = activeView === id
                       return (
                         <button
                           key={id}
-                          onClick={() => setActiveView(id)}
+                          onClick={() => setActiveView(id)} aria-current={active ? 'page' : undefined}
                           className="rounded-full px-4 py-2 text-sm font-black transition-all"
                           style={active ? toneColor('accent') : {
                             background: 'rgba(255,255,255,0.04)',
@@ -1121,13 +1110,27 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                         {savingLesson ? <span className="inline-flex items-center gap-2"><Loader2 size={12} className="animate-spin" /> Speichern</span> : <span className="inline-flex items-center gap-2"><Save size={12} /> Speichern</span>}
                       </button>
                     )}
-                  </div>
+                  </nav>
 
                   {notice && (
-                    <div className="rounded-2xl px-4 py-3 text-sm font-semibold" style={toneColor('accent')}>
+                    <div role="status" className="rounded-2xl px-4 py-3 text-sm font-semibold" style={toneColor('accent')}>
                       {notice}
                     </div>
                   )}
+
+                  {activeView === 'overview' && <div className="ei-overview">
+                    <ShellCard title="Die Übung">
+                      <p className="ei-description">{formatSourceText(localExercise.description || localExercise.original_description || insight.rawDescription) || 'Noch keine Beschreibung vorhanden.'}</p>
+                      <div className="ei-facts"><div><SectionLabel>Primäre Muskeln</SectionLabel><TagCloud items={primaryLabels} /></div><div><SectionLabel>Sekundäre Muskeln</SectionLabel><TagCloud items={secondaryLabels} empty="Keine angegeben" /></div></div>
+                    </ShellCard>
+                    <ShellCard title="Ausführung"><Bullets items={rawInstructions.length ? rawInstructions : asStringList(localExercise.coaching_notes)} empty="Noch keine Anleitung vorhanden." /></ShellCard>
+                    {asStringList(localExercise.biomechanical_warnings).length > 0 && <ShellCard title="Worauf du achten solltest"><Bullets items={asStringList(localExercise.biomechanical_warnings)} empty="" /></ShellCard>}
+                    <ShellCard title="wger + yuhonas zusammenführen">
+                      <p className="ei-description">Beide Quellen ergänzen einen gemeinsamen Übungseintrag. Ordne die passende Übungsvariante zu und prüfe anschließend die angereicherten Inhalte.</p>
+                      <div className="ei-source-summary">{['wger', 'yuhonas'].map(source => <div key={source}><strong>{source}</strong><span>{sourceIds(localExercise, source, true).join(', ') || 'Passende Übung zuordnen'}</span></div>)}</div>
+                      <button className="vos-btn" onClick={() => setActiveView('sources')}>Quellen prüfen und zusammenführen</button>
+                    </ShellCard>
+                  </div>}
 
                   {activeView === 'sheet' && (hasLesson ? (
                     <SheetView
@@ -1162,6 +1165,25 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                     </div>
                   ))}
 
+                  {activeView === 'sources' && <div className="space-y-5"><h3>Quellen zu einer Übung zusammenführen</h3>
+                    <div className="mt-4 space-y-4">
+                      {(inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && (
+                        <SourceEditor
+                          key={inboxFileId || exerciseId}
+                          id={inboxFileId || exerciseId}
+                          initiallyOpen
+                          target={inboxFileId ? 'inbox' : 'approved'}
+                          exercise={localExercise}
+                          candidates={mergeCandidate}
+                          onSaved={handleSourceSaved}
+                        />
+                      )}
+                      <details className="ei-tools"><summary>Originalquellen vergleichen</summary><div className={AUTO_FIT_GRID}>
+                      <SourceProvenanceCard exercise={localExercise} source="wger" mergeCandidate={mergeCandidate} />
+                      <SourceProvenanceCard exercise={localExercise} source="yuhonas" mergeCandidate={mergeCandidate} />
+                      </div></details>
+                    </div>
+                  </div>}
                   {activeView === 'edit' && <EditView draft={lessonDraft} setDraft={setLessonDraft} />}
 
                   {activeView === 'raw' && (
@@ -1215,9 +1237,9 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                   )}
                 </main>
 
-                <aside className="md:min-h-0 md:overflow-y-auto p-4 md:p-5 space-y-4" style={{ borderLeft: '1px solid rgba(255,255,255,0.06)' }}>
+                <aside className="ei-review space-y-4">
                   {inboxFileId && (
-                    <ShellCard title="Review Actions" eyebrow="Coach Inbox" tone={inboxStatusMeta.tone}>
+                    <ShellCard title="Übung prüfen" eyebrow="Coach Inbox" tone={inboxStatusMeta.tone}>
                       <div className="space-y-3">
                         <div className="flex flex-wrap gap-2">
                           <MetaPill tone={inboxStatusMeta.tone}>{inboxStatusMeta.label}</MetaPill>
@@ -1255,15 +1277,7 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                     </ShellCard>
                   )}
 
-                  <ShellCard title="Muskeln" eyebrow="Targeting">
-                    <div className="space-y-3">
-                      <div><SectionLabel>Primär</SectionLabel><TagCloud items={primaryLabels} tone="accent" /></div>
-                      <div><SectionLabel>Sekundär</SectionLabel><TagCloud items={secondaryLabels} /></div>
-                      <div><SectionLabel>Body Regions</SectionLabel><TagCloud items={insight.regions} /></div>
-                    </div>
-                  </ShellCard>
-
-                  <ShellCard
+                  {activeView === 'edit' && <ShellCard
                     title="Meine Notizen"
                     eyebrow="Privat, nicht im Sheet"
                     actions={(
@@ -1279,28 +1293,24 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                       rows={5}
                       placeholder="Klienten-Erfahrungen, Qualitätsurteil, Merge-Hinweise."
                     />
-                  </ShellCard>
-
-                  <details className="rounded-[24px] p-4" style={{ background: 'var(--bg2)', border: '1px solid var(--line)' }}>
-                    <summary className="cursor-pointer text-sm font-black" style={{ color: 'var(--muted)' }}>Quellen (wger / yuhonas)</summary>
-                    <div className="mt-4 space-y-4">
-                      <SourceProvenanceCard exercise={localExercise} source="wger" mergeCandidate={mergeCandidate} />
-                      <SourceProvenanceCard exercise={localExercise} source="yuhonas" mergeCandidate={mergeCandidate} />
-                      {(inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && (
-                        <SourceEditor
-                          key={inboxFileId || exerciseId}
-                          id={inboxFileId || exerciseId}
-                          target={inboxFileId ? 'inbox' : 'approved'}
-                          exercise={localExercise}
-                          candidates={mergeCandidate}
-                          onSaved={handleSourceSaved}
-                        />
-                      )}
-                    </div>
-                  </details>
+                  </ShellCard>}
+                  <details className="ei-tools"><summary>Exportieren</summary><div className="flex flex-wrap gap-2 mt-3">                  <button onClick={copySheet} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Sheet als Markdown kopieren">
+                    <span className="inline-flex items-center gap-2"><Copy size={14} /> Copy</span>
+                  </button>
+                  <button onClick={downloadSheet} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Sheet als .md herunterladen">
+                    <span className="inline-flex items-center gap-2"><Download size={14} /> MD</span>
+                  </button>
+                  <button onClick={() => exportSheet('sheet')} className="rounded-2xl px-3 py-2 text-sm font-semibold" style={btn} title="Nach Obsidian exportieren">
+                    Export
+                  </button>
+</div></details>
                 </aside>
               </div>
             </div>
+            {inboxFileId && <footer className="ei-mobile-actions" aria-label="Übung prüfen">
+              <button onClick={handleReenrichInbox} disabled={Boolean(reviewAction)} style={btn}><RefreshCw size={16} /> Verbessern</button>
+              <button onClick={handleApproveInbox} disabled={Boolean(reviewAction) || inboxStatus === 'approved'} style={toneColor('accent')}><CheckCircle2 size={16} /> Freigeben</button>
+            </footer>}
           </div>
         </div>
       </div>
