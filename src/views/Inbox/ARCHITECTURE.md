@@ -32,3 +32,12 @@ der Quelleneditor ebenfalls verfügbar, auf der Inbox-Karte ist er nicht inline.
 
 `useInbox({ global: true })` → Firestore/Coach-Commands (`approve` / `delete` /
 `reenrich`). Merge-Hinweise kommen parallel über `getInboxMergeCandidates`.
+
+## GitHub-Anfragen
+
+`githubInbox.js` übernimmt den veröffentlichten Issue-Inhalt (Kategorie, Geräte,
+Muskeln, Coaching-Notizen, Fehlerbilder und explizite Quellenlinks). Dateipfad und
+Bot-Befehle werden nicht als Übungsinhalt erzeugt; der Issue-Ersteller ist keine
+Klienten-UID. Fehlende Abschnitte bleiben leer. Die Karte benennt den Prüfstatus
+und offene Quellenzuordnungen. GitHub-Entwürfe werden über „Entwurf auf GitHub
+prüfen“ bearbeitet; der Inspektor bietet für sie keine lokalen Inbox-Mutationen an.

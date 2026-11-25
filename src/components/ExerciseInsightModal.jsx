@@ -453,6 +453,7 @@ function SourceProvenanceCard({ exercise, source, mergeCandidate }) {
 const AUTO_FIT_GRID = 'grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))]'
 
 function getInboxStatusMeta(status) {
+  if (status === 'github_issue') return { label: 'Entwurf · Prüfung offen', tone: 'default' }
   if (status === 'approved') return { label: 'Freigegeben', tone: 'accent' }
   if (status === 'ai_enriched') return { label: 'KI-Entwurf bereit', tone: 'accent' }
   if (status === 'pending' || status === 'pending_review') return { label: 'Wartet auf Enrichment', tone: 'warn' }
@@ -861,6 +862,7 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
   const sourceTags = Array.isArray(localExercise.tags) ? localExercise.tags : []
   const inboxFileId = localExercise.file_id || localExercise.inbox_entry?.file_id || null
   const inboxUserId = localExercise.userId || localExercise.inbox_entry?.userId || null
+  const githubUrl = localExercise.cache_source === 'github_issue' && /^https:\/\/github\.com\//.test(localExercise.html_url || '') ? localExercise.html_url : null
   const inboxStatus = localExercise.inbox_status || localExercise.status || localExercise.inbox_entry?.status || null
   const inboxStatusMeta = getInboxStatusMeta(inboxStatus)
   const mergeCandidate = localExercise.mergeCandidate || localExercise.inbox_entry?.mergeCandidate || null
@@ -1167,7 +1169,8 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
 
                   {activeView === 'sources' && <div className="space-y-5"><h3>Quellen zu einer Übung zusammenführen</h3>
                     <div className="mt-4 space-y-4">
-                      {(inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && (
+                      {githubUrl && <p className="ei-description">Die Quellen dieses Entwurfs kannst du <a href={githubUrl} target="_blank" rel="noreferrer" className="underline">auf GitHub zuordnen</a>.</p>}
+                      {!githubUrl && (inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && (
                         <SourceEditor
                           key={inboxFileId || exerciseId}
                           id={inboxFileId || exerciseId}
@@ -1240,7 +1243,7 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                 <aside className="ei-review space-y-4">
                   {inboxFileId && (
                     <ShellCard title="Übung prüfen" eyebrow="Coach Inbox" tone={inboxStatusMeta.tone}>
-                      <div className="space-y-3">
+                      {githubUrl ? <div className="space-y-3"><p className="text-sm leading-6">Dieser Entwurf wartet auf deine Prüfung. Freigabe und Änderungen erfolgen auf GitHub.</p><a href={githubUrl} target="_blank" rel="noreferrer" className="vos-btn"><ExternalLink size={14} /> Entwurf prüfen</a></div> : <div className="space-y-3">
                         <div className="flex flex-wrap gap-2">
                           <MetaPill tone={inboxStatusMeta.tone}>{inboxStatusMeta.label}</MetaPill>
                           {inboxUserId && <MetaPill>{inboxUserId}</MetaPill>}
@@ -1273,7 +1276,7 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                             </span>
                           </button>
                         </div>
-                      </div>
+                      </div>}
                     </ShellCard>
                   )}
 
@@ -1307,7 +1310,7 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
                 </aside>
               </div>
             </div>
-            {inboxFileId && <footer className="ei-mobile-actions" aria-label="Übung prüfen">
+            {inboxFileId && !githubUrl && <footer className="ei-mobile-actions" aria-label="Übung prüfen">
               <button onClick={handleReenrichInbox} disabled={Boolean(reviewAction)} style={btn}><RefreshCw size={16} /> Verbessern</button>
               <button onClick={handleApproveInbox} disabled={Boolean(reviewAction) || inboxStatus === 'approved'} style={toneColor('accent')}><CheckCircle2 size={16} /> Freigeben</button>
             </footer>}

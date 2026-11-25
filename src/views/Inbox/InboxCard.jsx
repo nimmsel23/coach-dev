@@ -1,3 +1,4 @@
+import { translateMuscle } from '../../lib/kb/muscleTranslations.js';
 import { sourceIds } from '../../lib/db/shared/catalogSources.js';
 import { CheckCircle2, Trash2, Info, AlertTriangle, Sparkles, User, RefreshCw, MessageSquare, Brain, ExternalLink } from 'lucide-react';
 
@@ -33,7 +34,7 @@ function twoSentenceWhat(data) {
     || data.trainer_explanation?.simple
     || data.trainer_explanation?.client_friendly,
   );
-  if (!raw) return 'Noch keine Kurzbeschreibung — Details öffnen oder Verbessern.';
+  if (!raw) return 'Für diese Übungsanfrage fehlt noch eine Beschreibung.';
   const parts = raw.split(/(?<=[.!?])\s+/).filter(Boolean);
   return parts.slice(0, 2).join(' ');
 }
@@ -55,7 +56,7 @@ function originLine(data, refs) {
   );
   if (originLabel && !bits.some((bit) => bit.includes(originLabel))) bits.unshift(originLabel);
   if (data.source_review_required) bits.push('Quellenkorrektur — KI-Inhalt erneut prüfen');
-  if (!bits.length) return 'Herkunft unklar — unter Details zuordnen';
+  if (!bits.length) return 'wger + yuhonas: Zuordnung noch offen';
   return bits.join(' · ');
 }
 
@@ -69,7 +70,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
   const isPendingEnrichment = ex.status === 'pending' || ex.status === 'pending_review';
   const busy = actioning === fileId;
   const refs = sourceRefs(data);
-  const highlights = coachingHighlights(data);
+  const highlights = coachingHighlights({ ...data, coaching_notes: (data.coaching_notes || []).filter(note => asText(note) !== asText(data.description)) });
   const what = twoSentenceWhat(data);
   const origin = originLine(data, refs);
   const githubUrl = typeof ex.html_url === 'string' && ex.html_url.startsWith('https://') ? ex.html_url : null;
@@ -160,7 +161,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
   // Review-Karte: Entscheidungssurface statt 40-Felder-Editor (SourceEditor nur im Detail-Modal).
   return (
     <article className="card p-4 flex flex-col gap-3" aria-label={`Review ${data.display_name || data.name || 'Übung'}`}>
-      {showUserId && userId && (
+      {showUserId && userId && !isGithubPr && (
         <div className="flex items-center gap-2">
           <User size={12} className="text-fit-dim" />
           <span className="text-[10px] font-bold text-fit-dim uppercase tracking-widest">{userId}</span>
@@ -174,7 +175,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
           </h3>
           <div className="mt-1.5 flex flex-wrap gap-1.5">
             {data.category && <span className="vos-tag shrink-0">{data.category}</span>}
-            {!showUserId && (
+            {!showUserId && !isGithubPr && (
               isProactive
                 ? <span className="flex items-center gap-1 text-[9px] font-black px-2 py-0.5 bg-blue/10 text-blue rounded-full border border-blue/20 uppercase tracking-tighter"><Sparkles size={10} /> Proaktiv</span>
                 : <span className="text-[9px] font-black px-2 py-0.5 bg-fit-green/10 text-fit-green rounded-full border border-fit-green/20 uppercase tracking-tighter">Klient</span>
@@ -201,7 +202,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
             )}
             {isGithubPr && (
               <span className="text-[9px] font-black px-2 py-0.5 bg-fit-bg2 rounded-full border border-fit-line text-fit-dim uppercase tracking-tighter">
-                {ex.issue_number ? `GitHub #${ex.issue_number}` : `GitHub PR${ex.pr_number ? ` #${ex.pr_number}` : ''}`}
+                Entwurf · Prüfung offen
               </span>
             )}
           </div>
@@ -213,7 +214,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
       {data.primary_muscles?.length > 0 && (
         <div className="flex flex-wrap gap-1.5" aria-label="Primäre Muskeln">
           {data.primary_muscles.map((m) => (
-            <span key={m} className="text-[9px] font-bold px-2 py-0.5 bg-fit-accent/5 text-fit-accent rounded-md border border-fit-accent/10">{m}</span>
+            <span key={m} className="text-[9px] font-bold px-2 py-0.5 bg-fit-accent/5 text-fit-accent rounded-md border border-fit-accent/10">{translateMuscle(m)}</span>
           ))}
         </div>
       )}
@@ -225,7 +226,7 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
           ))}
         </ul>
       ) : (
-        <p className="text-xs text-fit-muted italic">Keine Coaching-Highlights — Verbessern oder Details.</p>
+        <p className="text-xs text-fit-muted">Noch keine Coaching-Hinweise hinterlegt.</p>
       )}
 
       <p className="text-[10px] font-semibold uppercase tracking-wide text-fit-muted">{origin}</p>
@@ -249,14 +250,14 @@ export default function InboxCard({ ex, actioning, onApprove, onDelete, onReenri
               target="_blank"
               rel="noopener noreferrer"
               className="vos-btn go"
-              title="Auf GitHub prüfen: /approve, /reenrich, /unlink … als Kommentar"
+              title="Übungsentwurf auf GitHub prüfen und freigeben"
             >
-              <ExternalLink size={13} /> Auf GitHub öffnen
+              <ExternalLink size={13} /> Entwurf auf GitHub prüfen
             </a>
             <button
               onClick={() => onInspect?.({ ...buildInspectPayload(ex, data), mergeCandidate })}
               className="vos-btn"
-              title="Kurzvorschau"
+              title="Übungsbeschreibung und Coaching-Hinweise anzeigen"
             >
               <Info size={13} /> Details
             </button>
