@@ -7,7 +7,7 @@ from fitness.firestore.coach_bridge import _execute_command, _to_firestore, proc
 
 
 def test_coach_command_routes_to_python_api():
-    response = Mock()
+    response = Mock(status_code=200)
     response.json.return_value = {"ok": True, "exercise_id": "bench_press"}
     client = MagicMock()
     client.request.return_value = response
@@ -68,3 +68,11 @@ def test_mutation_snapshot_published_before_done():
 
 def test_yaml_dates_are_safe_for_firestore():
     assert _to_firestore({"queued_at": date(2026, 9, 24)}) == {"queued_at": "2026-09-24"}
+
+
+def test_private_executor_authorizes_github_source_merge_without_http_listener():
+    from fitness.coach.sync import Executor
+    with patch('fitness.api.routers.exercises_inbox._edit_source_document', return_value={'ok': True, 'via': 'private-worker'}):
+        executor = Executor()
+        result = executor.run({'action': 'link-source', 'item_id': 'gh-14', 'payload': {'operation': 'merge'}})
+    assert result == {'ok': True, 'via': 'private-worker'}
