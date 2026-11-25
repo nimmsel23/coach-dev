@@ -73,11 +73,19 @@ class SourceFusionTests(unittest.TestCase):
                 self.assertTrue(result['ok'])
                 self.assertEqual(yaml.safe_load(path.read_text())['exercises'][0]['external_ids']['yuhonas'],['Chin-Up'])
 
+    def test_github_write_rejects_http_callers_even_with_a_forged_header(self):
+        async def receive():return {'type':'http.request','body':json.dumps({'operation':'merge','selection':{'wger':152,'yuhonas':'Chin-Up'}}).encode()}
+        with patch('fitness.catalog.core.github_drafts.write_draft') as write:
+            with self.assertRaises(HTTPException) as error:
+                asyncio.run(inbox_link_source('gh-14',Request({'type':'http','headers':[(b'x-coach-worker',b'true')]},receive)))
+            self.assertEqual(error.exception.status_code,403)
+            write.assert_not_called()
+
     def test_github_merge_uses_authoritative_file_and_blob_revision(self):
         text=yaml.safe_dump({'exercises':[{'exercise_id':'test'}]})
         async def receive():return {'type':'http.request','body':json.dumps({'operation':'merge','revision':'blob','selection':{'wger':152,'yuhonas':'Chin-Up'}}).encode()}
         with patch('fitness.catalog.core.github_drafts.read_draft',return_value=('inbox/inbox_test.yml',text,'blob')), patch('fitness.catalog.core.github_drafts.write_draft',return_value={'content':{'sha':'new-blob'}}) as write, patch('fitness.api.routers.exercises_inbox._source_entry_by_id',side_effect=lookup):
-            result=asyncio.run(inbox_link_source('gh-14',Request({'type':'http','headers':[]},receive)))
+            result=asyncio.run(inbox_link_source('gh-14',Request({'type':'http','headers':[],'state':{'authorized_coach_worker':True}},receive)))
             self.assertEqual(result['revision'],'new-blob')
             self.assertEqual(write.call_args.args[2],'blob')
             self.assertEqual(yaml.safe_load(write.call_args.args[1])['exercises'][0]['source_snapshot'],RAW)

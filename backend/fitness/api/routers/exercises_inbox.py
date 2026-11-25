@@ -223,6 +223,8 @@ async def inbox_link_source(id: str, request: Request):
         if source not in {"wger", "yuhonas"}:
             raise HTTPException(400, detail="invalid_source")
         return {"ok": True, "results": search_source_entries(source, str(body.get("query") or "")[:200])}
+    if operation == 'merge' and id.startswith('gh-') and not getattr(request.state, 'authorized_coach_worker', False):
+        raise HTTPException(403, 'github_merge_requires_authorized_worker')
     if operation in {'merge', 'inspect'}:
         import asyncio
         try:

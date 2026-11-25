@@ -82,6 +82,15 @@ class Executor:
         from fitness.api.routers import exercises_inbox
 
         api = FastAPI()
+
+        @api.middleware('http')
+        async def authorize_worker_command(request, call_next):
+            # This app has no listening socket: only the authorized Firestore
+            # command consumer owns its in-process TestClient. HTTP callers
+            # cannot manufacture this ASGI state with a request header.
+            request.state.authorized_coach_worker = True
+            return await call_next(request)
+
         api.include_router(exercises_inbox.router)
         self.client = TestClient(api, raise_server_exceptions=True)
 

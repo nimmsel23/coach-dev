@@ -152,3 +152,8 @@ validates both choices before writing and rejects stale revisions with HTTP 409.
 Candidate rejections are separate from unlinking and never delete raw sources.
 The API and the in-process Coach Sync executor must load the new code before
 publishing the UI. Hosting deployment alone does not update these Python processes.
+
+GitHub writes require the in-process Coach Sync executor's ASGI state. The
+worker-only TestClient app has no listening socket. A direct HTTP call (including
+forged worker headers) receives 403 before any GitHub write. Native local-file
+operations retain their existing route boundary.
