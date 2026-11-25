@@ -464,7 +464,7 @@ export async function editExerciseSources(id, payload) {
     if (!response.ok) throw new Error(`Quellenaktion fehlgeschlagen (${response.status})`);
     result = await response.json();
   }
-  if (result?.ok && payload.operation === 'set') {
+  if (result?.ok && ['set', 'merge'].includes(payload.operation)) {
     const { invalidateExerciseSearch } = await import('./kb.js');
     invalidateExerciseSearch();
   }

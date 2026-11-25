@@ -1,3 +1,4 @@
+import { invalidateExerciseSearch } from './kb.js';
 import { api } from "./core";
 
 export async function getInbox() {
@@ -103,7 +104,9 @@ export async function createInboxDraft(payload = {}) {
 }
 
 export async function editExerciseSources(id, payload) {
-  return api.post(`/fitness/inbox/${encodeURIComponent(id)}/link-source`, payload);
+  const result = await api.post(`/fitness/inbox/${encodeURIComponent(id)}/link-source`, payload);
+  if (result?.ok && ['set', 'merge'].includes(payload.operation)) invalidateExerciseSearch();
+  return result;
 }
 
 export function describeCoachError(err, fallback = "Fehlgeschlagen") {

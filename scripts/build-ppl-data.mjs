@@ -44,6 +44,8 @@ const EXPORT_FIELDS = [
   'tags',
   'wger_id',
   'yuhonas_id',
+  'external_ids',
+  'source_selection',
   // Ohne diese Marker stuft searchExercises/_getExerciseSource kuratierte
   // YAML-Übungen als wger/yuhonas ein (Tags) — bei Coach-only-Filter
   // verschwinden dann alle Kraft-Übungen außer speziellen Pfaden (z. B. 6Pack).

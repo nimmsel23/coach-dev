@@ -6,7 +6,7 @@ Scoped fertige Arbeit: **immer committen** (nicht auf explizites „commit“ wa
 
 Coach is the standalone coach-facing product on `dev`. The `vitalos/` submodule is a local checkout used only as historical context and, where needed, for Git merges. It is not a Coach build or Hosting dependency. Do not directly edit files inside this checkout; make changes in their owning source repository and bring them in through the intended Git merge. See `docs/COACH-ARCHITECTURE.md` for checkout and release instructions. Do not add Coach beneath VitalOS or restore the former `vitalos/coach-app` release path.
 
-Source-code edits belong only in `~/vitalos/src` or `~/dev/*-dev/src`, only on a `dev` branch, and must always be committed. Every `*-app` checkout is for intended Git merges/integration only and must not be edited directly.
+Make source-code changes in the owning repository on `dev`, and always commit scoped finished changes. Every `*-app` checkout is for intended Git merges/integration only and must not be edited directly.
 
 Use npm (package-lock.json). Commit scoped completed changes; push completed work to `dev` (CI promotes it; never force-push). Do not update the historical VitalOS gitlink as a prerequisite for Coach releases. Preserve unrelated changes.
 

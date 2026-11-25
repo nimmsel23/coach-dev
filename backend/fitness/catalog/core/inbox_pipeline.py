@@ -9,6 +9,7 @@ from fitness.catalog.core.source_selection import apply_source_selection
 
 QUEUE_OVERLAY_FIELDS = {
     "source_selection",
+    "source_rejections",
     "exercise_id",
     "id",
     "name",
@@ -39,6 +40,7 @@ QUEUE_OVERLAY_FIELDS = {
 
 REENRICH_OVERLAY_FIELDS = {
     "source_selection",
+    "source_rejections",
     "exercise_id",
     "id",
     "name",
@@ -58,6 +60,7 @@ REENRICH_OVERLAY_FIELDS = {
 
 REENRICH_PROVENANCE_FIELDS = {
     "source_selection",
+    "source_rejections",
     "wger_id",
     "wger_muscle_ids",
     "yuhonas_id",

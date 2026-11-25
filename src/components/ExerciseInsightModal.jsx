@@ -1169,8 +1169,7 @@ function ExerciseInspector({ exercise, onClose, onExerciseChange, muscleLanguage
 
                   {activeView === 'sources' && <div className="space-y-5"><h3>Quellen zu einer Übung zusammenführen</h3>
                     <div className="mt-4 space-y-4">
-                      {githubUrl && <p className="ei-description">Die Quellen dieses Entwurfs kannst du <a href={githubUrl} target="_blank" rel="noreferrer" className="underline">auf GitHub zuordnen</a>.</p>}
-                      {!githubUrl && (inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && (
+                      {(inboxFileId || localExercise.approved_at || localExercise.review_state?.status === 'approved' || ['expert', 'approved'].includes(localExercise.source)) && (
                         <SourceEditor
                           key={inboxFileId || exerciseId}
                           id={inboxFileId || exerciseId}

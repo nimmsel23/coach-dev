@@ -1,3 +1,4 @@
+import { isCuratedExercise, supersededSourceRefs, isSupersededSource } from '../shared/catalogSources.js';
 import { api } from "./core";
 import { normalizeExerciseRecord } from "../shared/exercise.js";
 import { getStaticMuscle, getStaticMuscleDocs } from "../../kb/muscles.js";
@@ -57,19 +58,19 @@ export async function saveExercise(exerciseId, data) {
 // Kuratierte Katalog-Einträge (Expert/Inbox): IDs, die trotz `yuhonas_*`-Präfix
 // echte Coach-Drafts sind, und die yuhonas-Roh-IDs, die der Katalog schon abdeckt.
 let _curatedCache = null;
+export function invalidateExerciseSearch() { _curatedCache = null; }
 async function getCuratedCatalog() {
   if (!_curatedCache) {
     _curatedCache = getAllExercises().then((all) => {
-      const curated = all.filter((r) => r.source === "expert" || r.source === "inbox");
+      const curated = all.filter((r) => isCuratedExercise(r));
       return {
         ids: new Set(curated.map((r) => r.exercise_id)),
-        rawYuhonas: new Set(
-          curated.flatMap((r) => [r.yuhonas_id, ...(r.external_ids?.yuhonas || [])]).filter(Boolean).map(String),
-        ),
+        refs: supersededSourceRefs(curated),
+        rawYuhonas: supersededSourceRefs(curated).yuhonas,
       };
     }).catch(() => {
       _curatedCache = null;
-      return { ids: new Set(), rawYuhonas: new Set() };
+      return { ids: new Set(), rawYuhonas: new Set(), refs: supersededSourceRefs([]) };
     });
   }
   return _curatedCache;
@@ -94,7 +95,7 @@ export async function searchExercises(query, limit = 12, opts = {}) {
       };
     }
     const curated = await getCuratedCatalog();
-    const rows = dropLegacyYuhonas(Array.isArray(data?.results) ? data.results : [], curated.ids);
+    const rows = dropLegacyYuhonas(Array.isArray(data?.results) ? data.results : [], curated.ids).filter(ex => !isSupersededSource(ex, curated.refs));
     const { results: hits, missing } = await searchMirrors(q, { enabled: sources, skipIds: curated.rawYuhonas });
     const results = mergeRanked(rows, hits, q, limit).map((ex) => normalizeExerciseRecord(ex));
     return {

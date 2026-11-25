@@ -2,6 +2,11 @@ from __future__ import annotations
 
 from datetime import datetime
 import uuid
+import hashlib
+import os
+import fcntl
+import tempfile
+from contextlib import contextmanager
 
 import yaml
 from fastapi import APIRouter, HTTPException, Request
@@ -136,6 +141,72 @@ def inbox_merge_candidates():
     return {"ok": True, "candidates": list_inbox_merge_candidates()}
 
 
+@contextmanager
+def _source_lock():
+    from fitness.catalog.core.paths import runtime_root
+    root = runtime_root()
+    root.mkdir(parents=True, exist_ok=True)
+    with (root / 'source-fusion.lock').open('a') as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        yield
+
+
+def _source_document(id, target, current_data):
+    if id.startswith('gh-'):
+        if target != 'inbox':
+            raise ValueError('invalid_github_target')
+        from fitness.catalog.core.github_drafts import read_draft
+        path, text, revision = read_draft(id)
+        return path, text, revision
+    from fitness.catalog.core.paths import DATA_DIR
+    path = DATA_DIR / 'exercises' / f'{id}.yml' if target == 'approved' else _draft_path_for(id, current_data)
+    if not path or not path.exists():
+        raise HTTPException(404, 'exercise_file_not_found')
+    text = path.read_text()
+    return path, text, hashlib.sha256(text.encode()).hexdigest()
+
+
+def _edit_source_document(id, body):
+    from fitness.catalog.core.source_fusion import merge_sources, source_choices
+    from fitness.catalog.agent.inbox_actions import _git_commit_paths, _rebuild_runtime_catalog
+    operation = body.get('operation')
+    target = body.get('target', 'inbox')
+    if target not in {'inbox', 'approved'}:
+        raise ValueError('invalid_source_target')
+    with _source_lock():
+        path, text, revision = _source_document(id, target, body.get('current_data') or {})
+        doc = yaml.safe_load(text) or {}
+        exercises = doc.get('exercises')
+        if not isinstance(exercises, list) or len(exercises) != 1 or not isinstance(exercises[0], dict):
+            raise ValueError('ambiguous_catalog_file')
+        ex = exercises[0]
+        if operation == 'inspect':
+            return {'ok': True, 'exercise': ex, 'revision': revision, 'sources': {source: _source_entry_by_id(source, value) for source, value in source_choices(ex).items() if value is not None}}
+        if body.get('revision') != revision:
+            raise ValueError('source_merge_conflict')
+        merged = merge_sources(ex, body.get('selection'), body.get('rejections', {}), body.get('fields', {}), _source_entry_by_id)
+        doc['exercises'] = [merged]
+        content = yaml.safe_dump(doc, allow_unicode=True, sort_keys=False)
+        if id.startswith('gh-'):
+            from fitness.catalog.core.github_drafts import write_draft
+            saved = write_draft(path, content, revision)
+            revision = saved['content']['sha']
+        else:
+            path.with_suffix('.yml.bak').write_text(text)
+            with tempfile.NamedTemporaryFile('w', dir=path.parent, delete=False) as handle:
+                handle.write(content)
+                temporary = handle.name
+            os.replace(temporary, path)
+            revision = hashlib.sha256(content.encode()).hexdigest()
+            _git_commit_paths([path], f'feat(catalog): merge sources for {id}')
+            if target == 'approved':
+                _publish_source_edit(merged)
+                _rebuild_runtime_catalog()
+            else:
+                _write_back_to_firestore(body.get('uid'), body.get('doc_id') or id, merged)
+        return {'ok': True, 'exercise': merged, 'revision': revision, 'id': id}
+
+
 @router.post("/fitness/inbox/{id}/link-source")
 async def inbox_link_source(id: str, request: Request):
     from fitness.catalog.agent.inbox_actions import _git_commit_paths, _rebuild_runtime_catalog
@@ -152,6 +223,14 @@ async def inbox_link_source(id: str, request: Request):
         if source not in {"wger", "yuhonas"}:
             raise HTTPException(400, detail="invalid_source")
         return {"ok": True, "results": search_source_entries(source, str(body.get("query") or "")[:200])}
+    if operation in {'merge', 'inspect'}:
+        import asyncio
+        try:
+            return await asyncio.to_thread(_edit_source_document, id, body)
+        except ValueError as exc:
+            raise HTTPException(409 if str(exc) == 'source_merge_conflict' else 400, str(exc)) from exc
+        except RuntimeError as exc:
+            raise HTTPException(503, str(exc)) from exc
     if operation not in {"set", "inspect"} or target not in {"inbox", "approved"}:
         raise HTTPException(400, detail="invalid_source_operation")
     current_data = body.get("current_data") if isinstance(body.get("current_data"), dict) else {}

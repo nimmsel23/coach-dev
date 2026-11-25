@@ -76,7 +76,13 @@ export const exportFitnessData = approveInbox;
 export const reenrichInbox = approveInbox;
 export const saveAnatomy = (id, data) => inspectorWrite('save-anatomy', id, data);
 export const saveExercise = (id, data) => inspectorWrite('save-exercise', id, data);
-export const editExerciseSources = approveInbox;
+export async function editExerciseSources(id, payload) {
+  if (!fixtureState.sourceApi) return approveInbox(id);
+  const response = await fetch(`${fixtureState.sourceApi}/fitness/inbox/${id}/link-source`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.detail || 'Source API failed');
+  return result;
+}
 export function updateUserProfile(uid, data) {
   fixtureState.calls.push(['profile-save',uid,data]);
   return new Promise((resolve,reject)=>{

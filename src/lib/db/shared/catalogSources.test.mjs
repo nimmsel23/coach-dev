@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { supersededSourceRefs, isSupersededSource } from './catalogSources.js';
+const raw = [{id:'wger_152', wger_id:152, source:'unreviewed'}, {id:'yuhonas_Chin-Up', yuhonas_id:'Chin-Up',source:'unreviewed'}];
+const merged = {id:'chin-up',external_ids:{wger:[152], yuhonas:['Chin-Up']},source_selection:{wger:152,yuhonas:'Chin-Up'}};
+const visible = pool => {const refs=supersededSourceRefs(pool);return pool.filter(e=>!isSupersededSource(e,refs)).map(e=>e.id)};
+test('draft source merge leaves both raw originals available',()=>assert.deepEqual(visible([...raw,{...merged,source:'inbox'}]),['wger_152','yuhonas_Chin-Up','chin-up']));
+test('expert merge exposes one entry without modifying either raw original',()=>{const before=structuredClone(raw);assert.deepEqual(visible([...raw,{...merged,source:'expert'}]),['chin-up']);assert.deepEqual(raw,before)});
+test('unlink overrides stale source refs and restores that original',()=>assert.deepEqual(visible([...raw,{...merged,source:'expert',source_selection:{wger:null,yuhonas:'Chin-Up'}}]),['wger_152','chin-up']));
+test('correcting a source restores the former original',()=>assert.deepEqual(visible([...raw,{...merged,source:'expert',source_selection:{wger:999,yuhonas:'Chin-Up'}}]),['wger_152','chin-up']));
+test('another expert can still supersede an unlinked source',()=>assert.deepEqual(visible([...raw,{...merged,source:'expert',source_selection:{wger:null,yuhonas:'Chin-Up'}},{id:'other',source:'approved',wger_id:152}]),['chin-up','other']));
+test('archived expert and stale merged flags cannot hide originals',()=>assert.deepEqual(visible([{...raw[0],merged_into:'draft'},raw[1],{...merged,source:'expert',archived:true}]),['wger_152','yuhonas_Chin-Up','chin-up']));

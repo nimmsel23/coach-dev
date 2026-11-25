@@ -141,3 +141,14 @@ Live-Daten und speichert Daniels Antworten. Das Dashboard selbst wird hier **nic
 - **Ursprünge:** schreibend nur `https://nimmsel23.github.io` oder `http://localhost|127.0.0.1:*`; sonst 403.
 - **Tests:** `PYTHONPATH=backend:. python3 -m unittest tests.test_org`
 - Änderungen an `coach_org.py` wirken erst nach `systemctl --user restart coach-api` (Owner).
+
+## Exercise source fusion
+
+`/fitness/inbox/{id}/link-source` also accepts explicit `inspect`/`merge` operations.
+The merger lives in `backend/fitness/catalog/core/source_fusion.py`; GitHub drafts
+use `github_drafts.py`. Existing Coach-worker authorization is reused, with no
+new public write surface or extra port. `inspect` supplies a revision; `merge`
+validates both choices before writing and rejects stale revisions with HTTP 409.
+Candidate rejections are separate from unlinking and never delete raw sources.
+The API and the in-process Coach Sync executor must load the new code before
+publishing the UI. Hosting deployment alone does not update these Python processes.

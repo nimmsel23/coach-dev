@@ -18,6 +18,8 @@ import { PULL_EXERCISES } from "./pull.generated.js";
 import { LEGS_EXERCISES } from "./legs.generated.js";
 export { getFavourites, toggleFavourite } from "../shared/favourites.js";
 
+const BUNDLED_EXPERTS = [...PUSH_EXERCISES, ...PULL_EXERCISES, ...LEGS_EXERCISES].filter(_isExpert);
+
 // EXERCISE_BULK_DATA (scripts/build-exercise-bulk-data.mjs, aus
 // unreviewed_wger.yml/unreviewed_yuhonas.yml) deckt den statischen,
 // praktisch nie wechselnden Rohimport-Teil des Katalogs ab (~1700 Übungen).
@@ -96,8 +98,8 @@ export async function searchExercises(query, limit = 12) {
   const q = String(query || "").trim();
   if (!q) return { ok: true, results: [], query: q, suggestions: [] };
   if (!_searchCache) {
-    const curated = await _getCuratedExercises();
-    _searchCache = mergeExercisePool(EXERCISE_BULK_DATA, curated);
+    const curated = await _getCuratedExercises().catch(() => []);
+    _searchCache = mergeExercisePool(EXERCISE_BULK_DATA, [...BUNDLED_EXPERTS, ...curated]);
   }
 
   const sources = _loadSessionSources();
@@ -113,7 +115,6 @@ export async function searchExercises(query, limit = 12) {
   const qn = _normalize(q);
   const qTokens = qn.split(" ").filter(Boolean);
   const scored = pool.map((ex) => {
-    if (ex.merged_into || ex.superseded_by) return { ex, score: 0 };
     const hay = [ex.display_name, ex.german, ex.english, ex.name, ex.exercise_id, ex.id, ...(ex.aliases || []), ...(ex.search_aliases || []), ...(ex.tags || [])].map(_normalize);
     let score = 0;
     if (hay.some((h) => h === qn))                                                    score = 100;
