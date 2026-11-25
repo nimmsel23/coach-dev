@@ -1,3 +1,10 @@
+## 2026-11-25 — Offene Ernährungsprofile, CLI und globaler SQLite-Rezeptkatalog
+
+- CLI unterstützt unabhängige Makromodi (g/kg, Energieprozent, Gramm), freie Ernährungsstile, OMAD/NOMAD, Essfenster, ungleiche Mahlzeitenbudgets, Tagesausnahmen und Alltagsbedingungen. `--check` prüft Konflikte ohne KI; übersprungene Slots verursachen keinen Provideraufruf. Keine feste Zutatenliste, keine automatische FUEL.md-Pflege.
+- Akzeptierte Gerichte zusätzlich in globalem Fuel-SQLite-Katalog: Inhalts-Hash, getrennte Varianten, Modell-Schätzkennzeichnung, Such-/JSON-Ausgabe, transaktionale Deduplizierung. Kein Klientenprofil und keine Intake-Buchung. Replay-Sicherung ausdrücklich wählbar; Entwurf bleibt bei Katalogfehler erhalten.
+- Dokumentation/Beispiele: `src/lib/nutrition/README.md`, Ratio, High-Fat-High-Protein/OMAD und gemischte Woche. 134 Coach-Funktionstests (darunter 16 gezielte Ernährungsfälle), zwei SQLite-Tests, ESLint und Coach-Firebase-Build bestanden; drei CLI-Prüfungen mit null KI-Aufrufen, vier frühere echte Gemini-Gerichte offline geprüft und gesichert. Neuer Provider-Test: HTTP 503, kein neuer erfolgreicher Wochenlauf behauptet.
+- Abschluss bewusst auf CLI/SQLite beschränkt; begonnene Web-/API-Erweiterung und Klienten-Zustellung bleiben uncommitted. Kein Dienst-Neustart und kein Produktionsdeploy.
+
 ## 2026-11-25 — CLI-first: einzelne Gerichte, Wochenläufe und FUEL-Vorgaben
 
 - Gemeinsamer Rezeptmechanismus für Terminal und UI: ein Gericht/ein Aufruf, sieben serielle Wochen-Slots, Tages-Neuerstellung, Fortschritt/Stoppen, Teilresultate und Fehler erhalten. CLI nutzt bestehenden Fuel-Gemini-Client ohne Meal-Log/Katalogänderungen.
