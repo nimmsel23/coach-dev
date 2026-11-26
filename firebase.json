@@ -11,6 +11,70 @@
       ],
       "rewrites": [
         {
+          "source": "/coach/coo/dashboard",
+          "destination": "/workspaces/coo/dashboard.html"
+        },
+        {
+          "source": "/coach/coo/dashboard/",
+          "destination": "/workspaces/coo/dashboard.html"
+        },
+        {
+          "source": "/coach/ceo",
+          "destination": "/ceo.html"
+        },
+        {
+          "source": "/coach/ceo/",
+          "destination": "/ceo.html"
+        },
+        {
+          "source": "/coach/coo",
+          "destination": "/workspaces/coo/dashboard.html"
+        },
+        {
+          "source": "/coach/coo/",
+          "destination": "/workspaces/coo/dashboard.html"
+        },
+        {
+          "source": "/coach/cmo",
+          "destination": "/workspaces/cmo/dashboard.html"
+        },
+        {
+          "source": "/coach/cmo/",
+          "destination": "/workspaces/cmo/dashboard.html"
+        },
+        {
+          "source": "/coach/cso",
+          "destination": "/workspaces/cso/dashboard.html"
+        },
+        {
+          "source": "/coach/cso/",
+          "destination": "/workspaces/cso/dashboard.html"
+        },
+        {
+          "source": "/coach/cpo",
+          "destination": "/workspaces/cpo/dashboard.html"
+        },
+        {
+          "source": "/coach/cpo/",
+          "destination": "/workspaces/cpo/dashboard.html"
+        },
+        {
+          "source": "/coach/cto",
+          "destination": "/workspaces/cto/dashboard.html"
+        },
+        {
+          "source": "/coach/cto/",
+          "destination": "/workspaces/cto/dashboard.html"
+        },
+        {
+          "source": "/coach/cfo",
+          "destination": "/workspaces/cfo/dashboard.html"
+        },
+        {
+          "source": "/coach/cfo/",
+          "destination": "/workspaces/cfo/dashboard.html"
+        },
+        {
           "source": "/portal",
           "destination": "/portal.html"
         },
@@ -22,7 +86,12 @@
       "headers": [
         {
           "source": "/release.json",
-          "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, must-revalidate"
+            }
+          ]
         },
         {
           "source": "/assets/**",

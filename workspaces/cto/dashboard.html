@@ -32,10 +32,7 @@ html, body { margin: 0; min-height: 100%; }
 body {
   font-family: var(--font);
   color: var(--ink);
-  background:
-    radial-gradient(900px 400px at 10% -10%, rgba(91,140,255,.18), transparent 50%),
-    radial-gradient(700px 360px at 100% 0%, rgba(61,214,198,.1), transparent 45%),
-    linear-gradient(180deg, #0a101c, var(--bg));
+  background: var(--bg);
 }
 button, select, textarea, input { font: inherit; color: inherit; }
 button { cursor: pointer; }
@@ -56,7 +53,7 @@ button { cursor: pointer; }
 .meta { margin: .2rem 0 0; color: var(--muted); font-size: .82rem; display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
 .badge {
   display: inline-flex; align-items: center; gap: .35rem; padding: .15rem .55rem;
-  border-radius: 999px; border: 1px solid var(--line); background: var(--bg2); font-size: .75rem;
+  border-radius: 999px; border: 1px solid var(--line); background: var(--bg2); font-size: .8rem;
 }
 .badge.ok { border-color: rgba(61,214,140,.35); color: var(--ok); }
 .badge.warn { border-color: rgba(240,180,41,.35); color: var(--warn); }
@@ -67,8 +64,8 @@ button { cursor: pointer; }
   background: rgba(255,255,255,.03); text-align: center;
 }
 .kpi .n { display: block; font-family: var(--display); font-size: 1.15rem; font-weight: 700; }
-.kpi .l { display: block; color: var(--muted); font-size: .7rem; margin-top: .15rem; }
-label.llm { display: grid; gap: .25rem; font-size: .72rem; color: var(--muted); }
+.kpi .l { display: block; color: var(--muted); font-size: .8rem; margin-top: .15rem; }
+label.llm { display: grid; gap: .25rem; font-size: .8rem; color: var(--muted); }
 label.llm select {
   min-width: 11rem; background: var(--bg2); border: 1px solid var(--line); border-radius: 10px;
   padding: .45rem .6rem;
@@ -77,7 +74,7 @@ label.llm select {
 .dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--warn); box-shadow: 0 0 0 3px rgba(240,180,41,.15); }
 .dot.live { background: var(--ok); box-shadow: 0 0 0 3px rgba(61,214,140,.15); }
 .grid {
-  display: grid; grid-template-columns: 1.05fr 1.2fr 1.05fr; gap: .85rem; min-height: 70vh;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .85rem; align-items: start;
 }
 @media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
 .panel {
@@ -88,6 +85,10 @@ label.llm select {
   margin: 0; padding: .85rem 1rem; border-bottom: 1px solid var(--line);
   font-family: var(--display); font-size: .95rem; letter-spacing: .02em;
 }
+.grid > .panel:first-child { grid-column: 1 / -1; }
+.panel { min-width: 0; }
+.skill { overflow-wrap: anywhere; }
+.skill-picker summary { cursor: pointer; padding: .5rem 0; }
 .panel-body { padding: .85rem; overflow: auto; display: grid; gap: .75rem; flex: 1; }
 .card {
   border: 1px solid var(--line); border-radius: 12px; background: var(--panel2); padding: .85rem .9rem;
@@ -112,7 +113,7 @@ label.llm select {
   background: linear-gradient(180deg, rgba(91,140,255,.08), rgba(255,255,255,.02));
 }
 .skill strong { display: block; font-size: .88rem; }
-.skill span { display: block; color: var(--muted); font-size: .75rem; margin-top: .2rem; }
+.skill span { display: block; color: var(--muted); font-size: .8rem; margin-top: .2rem; }
 .chat {
   border: 1px solid var(--line); border-radius: 12px; background: var(--bg2);
   min-height: 220px; max-height: 340px; overflow: auto; padding: .7rem; display: grid; gap: .55rem;
@@ -127,13 +128,13 @@ label.llm select {
   border: 1px solid var(--line); background: var(--bg2); padding: .7rem .8rem;
 }
 .composer-row { display: flex; justify-content: space-between; gap: .5rem; align-items: center; }
-.hint { color: var(--muted); font-size: .72rem; }
+.hint { color: var(--muted); font-size: .8rem; }
 .queue-card textarea {
   width: 100%; min-height: 120px; border-radius: 10px; border: 1px solid var(--line);
   background: var(--bg); padding: .65rem .7rem; margin: .55rem 0 .7rem;
 }
 .empty { color: var(--muted); font-size: .85rem; margin: 0; }
-footer.note { color: var(--muted); font-size: .75rem; }
+footer.note { color: var(--muted); font-size: .8rem; }
 footer.note code { color: var(--accent2); }
 </style>
 </head>
@@ -160,45 +161,45 @@ footer.note code { color: var(--accent2); }
     </header>
 
     <div class="grid">
-      <section class="panel" aria-label="Fokus">
-        <h2>Proaktiv · Fokus</h2>
+      <section class="panel" aria-label="Ablauf">
+        <h2>Ablauf</h2>
         <div class="panel-body" id="focus"></div>
       </section>
       <section class="panel" aria-label="Konsole">
-        <h2>Agent · Skills</h2>
+        <h2>Auftrag erstellen</h2>
         <div class="panel-body">
-          <div class="skills" id="launcher"></div>
+          <details class="skill-picker"><summary id="skill-label">Skill wählen (optional)</summary><div class="skills" id="launcher"></div></details>
           <div class="chat" id="chat" aria-live="polite"></div>
           <form class="composer" id="composer">
             <textarea id="prompt" placeholder="Auftrag an CTO… (Enter senden, Shift+Enter Zeile)" aria-label="Chat"></textarea>
             <div class="composer-row">
               <span class="hint">Git-Brain: workspaces/cto/</span>
-              <button class="btn" type="submit">Senden</button>
+              <button class="btn" type="submit">Auftrag starten</button>
             </div>
           </form>
         </div>
       </section>
       <section class="panel" aria-label="Freigaben">
-        <h2>Human-in-the-Loop</h2>
+        <h2>Aufträge & Ergebnisse</h2>
         <div class="panel-body" id="queue"></div>
       </section>
     </div>
 
     <footer class="note">
-      Coach-only · <code>/api/csuite/run</code> · State: localStorage / später Firebase <code>csuite/cto</code>
-      · zurück zum <a href="/coach/" style="color:var(--accent)">Hub</a>
+      Coach-only · <code>/api/csuite/run</code> · Aufträge und Dokumente: lokale Coach-Runtime
+      · <a href="http://127.0.0.1:9150/coach/coo" style="color:var(--accent)">Lokalen Coach öffnen</a> · zurück zum <a href="/coach/" style="color:var(--accent)">Hub</a>
     </footer>
   </div>
   <script type="module">
-import { createFirebaseAdapter, copyText, mailtoDraft } from '/coach/workspaces/_shared/runtime.js';
-const ROLE = {"id": "cto", "title": "KI-CTO · Coach-Werkstatt", "icon": "⬡", "gitBadge": "Git: main@cto-v1.0", "kpis": [{"id": "ci", "label": "CI (dev)", "value": "grün*"}, {"id": "paths", "label": "Plan-SOTs", "value": "2"}, {"id": "queue", "label": "Tech-Freigaben", "value": "1"}], "focus": [{"title": "Doppelte Plan-Schreibpfade", "meta": "plan.json ↔ training-plans", "bullets": ["Schmiede → routines Push", "Lokal → macrocycles Deliver", "App schreibt nicht zurück auf Disk"], "skills": [["audit_write_paths", "Write-Path Audit"], ["propose_ufo_slice", "UFO-Slice"]], "ctx": {"area": "plans", "goal": "Ein Store + Desktop-Shell"}}, {"title": "C-Suite Serve", "meta": "server.py · /coach/*", "bullets": ["Dashboards unter workspaces/*/dashboard.html", "Bridge /api/csuite/run Loopback", "Tailnet :8443 Hub"], "skills": [["plan_server_change", "Server-Plan"], ["draft_architecture_note", "Arch-Notiz"]], "ctx": {"change": "Static mount /workspaces + role routes", "topic": "C-Suite dashboards"}}], "launcher": [{"id": "diagnose_ci_red", "title": "CI-Diagnose", "sub": "Roter Lauf"}, {"id": "audit_write_paths", "title": "Write-Paths", "sub": "SOT-Audit"}, {"id": "propose_ufo_slice", "title": "UFO-Slice", "sub": "Nächster Bau"}, {"id": "escalate_owner_gate", "title": "Owner-Gate", "sub": "Eine Frage"}], "mockQueue": [{"title": "Server-Änderung · Workspaces", "skillId": "plan_server_change", "preview": "Scope:\n• GET /coach/cmo|cpo|cto|cfo → workspaces/*/dashboard.html\n• Static /workspaces/ für Brain-Dateien\n• Kein Firebase-Deploy nötig für lokal/Tailnet\n\nRisiko: niedrig. Restart coach-api."}]};
+import { createJobAdapter, runWorkspace, copyText } from '/workspaces/_shared/runtime.js';
+const ROLE = {"id": "cto", "title": "KI-CTO · Coach-Werkstatt", "icon": "⬡", "gitBadge": "Rolle aus Git", "kpis": [], "focus": [], "launcher": []};
 
 /** Git-as-a-Brain: load prompt + skills from same workspace folder (no Firestore sync). */
 let BRAIN = { systemPrompt: "", skillsConfig: null, loaded: false };
 
 async function loadWorkspaceBrain() {
   try {
-    const base = `/coach/workspaces/${ROLE.id}`;
+    const base = `/workspaces/${ROLE.id}`;
     const [promptRes, skillsRes] = await Promise.all([
       fetch(`${base}/system-prompt.md`, { cache: "no-cache" }),
       fetch(`${base}/skills.json`, { cache: "no-cache" }),
@@ -210,7 +211,7 @@ async function loadWorkspaceBrain() {
     const skillsConfig = await skillsRes.json();
     BRAIN = { systemPrompt, skillsConfig, loaded: true };
     if (skillsConfig?.version) {
-      ROLE.gitBadge = `Git: main@${ROLE.id}-v${skillsConfig.version}`;
+      ROLE.gitBadge = `Rolle: ${ROLE.id} · v${skillsConfig.version}`;
     }
     if (Array.isArray(skillsConfig?.tools)) {
       ROLE.brainToolNames = skillsConfig.tools.map((t) => t.name);
@@ -225,10 +226,9 @@ async function loadWorkspaceBrain() {
 
 
 const MODELS = [
-  { id: "claude", label: "Claude (CLI / Bridge)" },
-  { id: "gpt", label: "GPT (OpenRouter)" },
-  { id: "gemini", label: "Gemini API" },
-  { id: "local", label: "Lokal / Stub" },
+  { id: "gemini", label: "Gemini" },
+  { id: "claude", label: "Claude" },
+  { id: "codex", label: "Codex" },
 ];
 
 const LS = {
@@ -251,114 +251,32 @@ function readLs(key, fallback) {
 }
 function writeLs(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
 
-const firebaseAdapter = createFirebaseAdapter(ROLE.id, {
-  queueKey: LS.queue,
+const jobAdapter = createJobAdapter(ROLE.id, {
+  onConnection: (mode) => {
+    $(".dot").classList.toggle("live", mode === "coach");
+    $(".sync-label").textContent = mode === "coach" ? "Runtime verbunden" : "Runtime nicht verbunden";
+  },
   onQueue: (items) => {
     state.queue = items;
     try { renderQueue(); } catch (_) {}
   },
 });
 
-/** LLM / agent router — prefers Coach bridge, else realistic mock. */
+/** Start a durable job. Errors remain errors. */
 export const llmRouter = {
-  model: readLs(LS.model, "gemini"),
+  model: ["gemini", "claude", "codex"].includes(readLs(LS.model, "gemini")) ? readLs(LS.model, "gemini") : "gemini",
   setModel(id) { this.model = id; writeLs(LS.model, id); },
   async run({ skillId, context = {}, message = null }) {
-    const body = {
-      workspaceId: ROLE.id,
-      skillId: skillId || null,
-      engine: this.model === "local" ? "stub" : this.model === "gpt" ? "issue" : this.model,
-      context,
-      message,
-      systemPrompt: BRAIN.systemPrompt || undefined,
-      skills: BRAIN.skillsConfig || undefined,
-    };
-    try {
-      const res = await fetch("/api/csuite/run", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.preview) {
-          return {
-            ok: true,
-            engine: data.engine || this.model,
-            title: data.title || skillId || "Antwort",
-            preview: data.preview,
-            requiresApproval: Boolean(data.requiresApproval ?? true),
-            source: "bridge",
-          };
-        }
-      }
-    } catch (_) { /* fall through to mock */ }
-    return mockRun(skillId, context, message, this.model);
+    return runWorkspace({ workspaceId: ROLE.id, skillId: skillId || null, engine: this.model, context, message });
   },
 };
 
-function mockRun(skillId, ctx, message, model) {
-  const name = ctx.clientName || ctx.leadName || ctx.offerName || "Item";
-  if (message) {
-    return {
-      ok: true, engine: model, source: "mock", requiresApproval: false,
-      title: "Chat",
-      preview: `[${ROLE.id.toUpperCase()} · ${model}]\nZu „${String(message).slice(0, 180)}":\n• Kurzantwort als Mock — Bridge offline oder Engine lokal.\n• Nutze Skill-Buttons für strukturierte Entwürfe.`,
-    };
-  }
-  const templates = {
-    draft_linkedin_post: `Hook: ${ctx.topic || "Vitalität 40+"}\n\nDie meisten brauchen kein neues Programm — sie brauchen 3 Termine, die wirklich stattfinden.\n\nCTA: Schreib mir „Plan", wenn du den 10er-Block prüfen willst.`,
-    draft_instagram_caption: `${ctx.topic || "Thema"}\n\nWeniger Motivation. Mehr System.\n\n#vitaltrainer #coaching`,
-    plan_content_week: `KW current\n• Mo IG: Alltagsenergie\n• Mi LinkedIn: Konsistenz\n• Fr Story: Session-Behind\n• So Teaser Angebot`,
-    nurture_lead_reply: `Hallo ${name},\n\ndanke für deine Nachricht. Der 10er-Block ist 1:1, alltagsnah, ohne Show.\nKurzcall (20 Min) reicht, um zu sehen ob's passt.\n\nWann geht's dir diese Woche?`,
-    offer_teaser: `${ctx.package || "10er Coaching"} — 10 Sessions, klarer Plan, Check-ins. Substanz statt Hype.`,
-    audit_brand_voice: `Stimm-Check:\n• Substanz: ok\n• Hype-Wörter: keine gefunden (Mock)\n• CTA: vorhanden`,
-    clarify_offer_slice: `Angebot: ${ctx.offerName || "—"}\nWer: ${ctx.audience || "fehlt"}\nJob: Messbare Alltagsvitalität\nGrenze: Kein Medizin-/Therapieversprechen`,
-    write_job_story: `When ${ctx.situation || "ich am Schreibtisch Pläne baue"}\nI want eine dichte Desktop-Akte\nSo that ich nicht gegen Mobile-App-UI kämpfe`,
-    critique_coach_surface: `Surface: ${ctx.surface || "—"}\nPain: ${ctx.pain || "—"}\n• Zu viel Leerraum / Touch-Chips\n• Zu wenig parallele Felder\n• Vorschlag: Desktop-Akte, nicht App-Shell`,
-    prioritize_backlog: `NOW\n1. ${String(ctx.items || "UFO Slice 1").split("\n")[0]}\nNEXT\n2. Alte Editoren abhängen\nLATER\n3. Nice-to-haves`,
-    draft_release_notes: `Coach Hub / C-Suite\n• ${ctx.changes || "Rollen-Dashboards"}\n• HITL-Queue lokal`,
-    gate_check_product: `Proposal: ${ctx.proposal || "—"}\nObserved: Gate-Daten fehlen im Mock\nDecision: keine Store-Arbeit ohne Owner-OK`,
-    diagnose_ci_red: `Symptom: ${ctx.symptom || "unbekannt"}\nURL: ${ctx.runUrl || "—"}\nHypothese: Check-Job / Lint\nNächster Slice: Log lesen → kleinster Fix`,
-    audit_write_paths: `Area: ${ctx.area || "plans"}\n• Schmiede plan.json → routines Push\n• Lokal training-plans → macrocycles Deliver\n• Empfehlung: eine SOT`,
-    propose_ufo_slice: `Ziel: ${ctx.goal || "Desktop UFO"}\n1. Converter plan.json → training-plans\n2. Shell Schmiede-Dichte\n3. Deliver-only Cloud`,
-    draft_architecture_note: `# ${ctx.topic || "Notiz"}\n\nKurz: C-Suite Dashboards unter workspaces/, State localStorage/Firebase.`,
-    plan_server_change: `Änderung: ${ctx.change || "—"}\nSchritte: Route → FileResponse → Restart\nRisiko: niedrig`,
-    escalate_owner_gate: `Frage: ${ctx.question || "—"}\nBeleg: ${ctx.evidence || "—"}\nBrauche: Ja/Nein`,
-    summarize_month_revenue: `Monat ${ctx.month || "current"}\nIst: fehlt (keine Buchhaltungs-API im Mock)\nOffen: Posten manuell aus Konsole`,
-    draft_invoice_reminder: `Hallo ${name},\n\nkurz zur offenen Rechnung über ${ctx.amount || "—"}${ctx.dueDate ? ` (fällig ${ctx.dueDate})` : ""}.\nFalls unterwegs — danke. Sonst kurz Bescheid.\n\nGrüße\nDaniel`,
-    package_price_check: `Paket: ${ctx.package || "—"}\nVorschlag: ${ctx.proposedPrice || "fehlt"}\nAnnahme: Owner-Preisliste prüfen`,
-    open_items_list: `Offen (Mock):\n• Schmidt 480€\n• (weitere aus Konsole laden)`,
-    expense_note: `Beleg: ${ctx.vendor || "—"} · ${ctx.amount || "—"} · ${ctx.category || "ops"}`,
-    cashflow_snapshot: `${ctx.horizonDays || 14}-Tage-Blick\nEingang: unsicher\nAusgang: Hosting/Tools\nfehlt: Bank-Export`,
-    deep_dive_notes: `Deep-Dive · ${name}\n• Muster: Konsistenz\n• Stärke: Training geloggt\n• Frage: Was blockiert die nächste Stufe?`,
-    create_exercise_sheet: `# Übungsblatt — ${name}\n1. Ankommen\n2. Hauptblock\n3. Reflexion`,
-    process_call_transcript: `Erkenntnis / Hausaufgabe / Emotion / Offen (Mock, Transkript ${(ctx.transcript||"").length} Z.)`,
-    onboard_client: `Onboarding · ${ctx.name || name}\nMail: ${ctx.email || "—"}\nPaket: ${ctx.package || "—"}\n→ Freigabe vor Versand`,
-    draft_followup_email: `Betreff: Nach unserer Session\n\nHallo ${name},\n\n${ctx.sessionSummary || "• Punkte einfügen"}\n\nGrüße\nDaniel`,
-    draft_checkin_reminder: `Hey ${name}, kurz nachgefragt — wie läuft's seit ${ctx.daysSince || "einigen"} Tagen?`,
-  };
-  const requiresApproval = ![
-    "plan_content_week", "audit_brand_voice", "clarify_offer_slice", "write_job_story",
-    "critique_coach_surface", "gate_check_product", "diagnose_ci_red", "audit_write_paths",
-    "propose_ufo_slice", "draft_architecture_note", "summarize_month_revenue", "open_items_list",
-    "expense_note", "cashflow_snapshot", "deep_dive_notes", "create_exercise_sheet", "process_call_transcript",
-  ].includes(skillId);
-  return {
-    ok: true,
-    engine: model,
-    source: "mock",
-    title: `${skillId || "skill"} · ${name}`,
-    preview: templates[skillId] || `Mock-Ergebnis für ${skillId}.`,
-    requiresApproval,
-  };
-}
 
 const state = {
   queue: [],
   chat: readLs(LS.chat, []),
   busy: false,
-  sync: "mock",
+  sync: "offline",
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -385,6 +303,7 @@ function renderHeader() {
 
 function renderFocus() {
   const root = $("#focus");
+  if (!ROLE.focus.length) { root.innerHTML = `<p class="empty">Skill wählen → Auftrag beschreiben → Ergebnis prüfen → freigeben → Dokument ablegen. Alle Schritte bleiben im Verlauf erhalten. Grundlage sind die Rollenbeschreibung und deine Angaben; Klientendaten werden nicht automatisch geladen.</p>`; return; }
   root.innerHTML = ROLE.focus.map((card, idx) => `
     <article class="card" data-focus="${idx}">
       <h3>${card.title}</h3>
@@ -417,24 +336,29 @@ function renderChat() {
 
 function renderQueue() {
   const root = $("#queue");
-  const pending = state.queue.filter((q) => q.status === "pending_approval");
-  if (!pending.length) {
-    root.innerHTML = `<p class="empty">Keine offenen Freigaben.</p>`;
-    renderHeader();
-    return;
-  }
-  root.innerHTML = pending.map((item) => `
+  const labels = { queued: "Wartet", running: "Wird erstellt", pending_approval: "Bitte prüfen", approved: "Freigegeben", rejected: "Abgelehnt", completed: "Dokument abgelegt", failed: "Fehlgeschlagen" };
+  const drafts = new Map([...root.querySelectorAll('textarea:not([readonly])')].map(el => [el.dataset.edit, { value: el.value, revision: el.dataset.revision, focused: el === document.activeElement, start: el.selectionStart, end: el.selectionEnd }]));
+  root.innerHTML = state.queue.length ? state.queue.map((item) => `
     <article class="card queue-card" data-id="${item.id}">
       <h3>${escapeHtml(item.title)}</h3>
-      <p class="sub">${escapeHtml(item.skillId)} · ${fmtTime(item.createdAt)}</p>
-      <textarea data-edit="${item.id}">${escapeHtml(item.preview)}</textarea>
+      <p class="sub">${labels[item.status] || escapeHtml(item.status)} · ${fmtTime(item.updatedAt)}</p>
+      ${item.error ? `<p role="alert">${escapeHtml(item.error)}</p>` : ""}
+      ${item.preview ? `<textarea aria-label="Entwurf bearbeiten" data-edit="${item.id}" data-revision="${item.revision}" ${item.status !== "pending_approval" ? "readonly" : ""}>${escapeHtml(item.preview)}</textarea>` : ""}
       <div class="actions">
-        <button class="btn ok" data-approve="${item.id}">Freigeben + Kopieren</button>
-        <button class="btn ghost" data-copy="${item.id}">Nur kopieren</button>
-        <button class="btn ghost" data-mail="${item.id}">mailto</button>
-        <button class="btn danger" data-reject="${item.id}">Verwerfen</button>
+        ${item.status === "pending_approval" ? `<button class="btn ok" data-approve="${item.id}">Entwurf freigeben</button>` : ""}
+        ${["pending_approval", "approved"].includes(item.status) ? `<button class="btn danger" data-reject="${item.id}">Ablehnen</button>` : ""}
+        ${item.status === "approved" ? `<button class="btn ok" data-complete="${item.id}">Als Dokument ablegen</button>` : ""}
+        ${item.status === "completed" ? `<a class="btn" href="/api/csuite/runs/${item.id}/document">Dokument herunterladen</a>` : ""}
+        ${item.preview ? `<button class="btn ghost" data-copy="${item.id}">Kopieren</button>` : ""}
       </div>
-    </article>`).join("");
+    </article>`).join("") : `<p class="empty">Noch keine Aufträge. Skill wählen und deinen Auftrag im Textfeld beschreiben.</p>`;
+  for (const el of root.querySelectorAll('textarea:not([readonly])')) {
+    const draft = drafts.get(el.dataset.edit);
+    if (!draft) continue;
+    el.value = draft.value;
+    el.dataset.revision = draft.revision;
+    if (draft.focused) { el.focus(); el.setSelectionRange(draft.start, draft.end); }
+  }
   renderHeader();
 }
 
@@ -446,60 +370,25 @@ function escapeHtml(s) {
     .replaceAll('"', "&quot;");
 }
 
-async function ensureSeedQueue() {
-  let list = await firebaseAdapter.listApprovals();
-  if (!list.length && ROLE.mockQueue?.length) {
-    list = ROLE.mockQueue.map((m) => ({
-      id: uid(),
-      status: "pending_approval",
-      skillId: m.skillId,
-      title: m.title,
-      preview: m.preview,
-      createdAt: now(),
-      updatedAt: now(),
-    }));
-    writeLs(LS.queue, list);
-  }
-  state.queue = list;
+let selectedSkill = null;
+async function loadJobs() {
+  try { state.queue = await jobAdapter.listApprovals(); }
+  catch (error) { log("system", error.message); state.queue = []; }
 }
-
 async function runSkill(skillId, context = {}) {
   if (state.busy) return;
   state.busy = true;
-  log("system", `Skill ${skillId} mit Modell ${llmRouter.model} gestartet…`);
   try {
     const result = await llmRouter.run({ skillId, context });
-    log("assistant", result.preview);
-    log("system", `Fertig · Quelle ${result.source} · Engine ${result.engine}`);
-    if (result.requiresApproval) {
-      const item = {
-        id: uid(),
-        status: "pending_approval",
-        skillId,
-        title: result.title,
-        preview: result.preview,
-        createdAt: now(),
-        updatedAt: now(),
-        meta: context,
-      };
-      await firebaseAdapter.upsertApproval(item);
-      state.queue = await firebaseAdapter.listApprovals();
-      renderQueue();
-    }
-  } finally {
-    state.busy = false;
-  }
+    log("system", `Auftrag gespeichert. ${result.engine} erstellt den Entwurf; der Status bleibt nach dem Neuladen erhalten.`);
+    try { state.queue = await jobAdapter.listApprovals(); renderQueue(); }
+    catch (error) { log("system", `Auftrag gespeichert; Status gerade nicht abrufbar: ${error.message}`); }
+    return true;
+  } catch (error) { log("system", `Auftrag nicht gestartet: ${error.message}`); return false; }
+  finally { state.busy = false; }
 }
-
 async function runChat(text) {
-  log("user", text);
-  state.busy = true;
-  try {
-    const result = await llmRouter.run({ message: text });
-    log("assistant", result.preview);
-  } finally {
-    state.busy = false;
-  }
+  return runSkill(null, { brief: text });
 }
 
 function wire() {
@@ -517,37 +406,22 @@ function wire() {
     const btn = e.target.closest("[data-launch]");
     if (!btn) return;
     const id = btn.dataset.launch;
-    const defaults = {
-      qualify_lead: { leadName: "Lead", context: "Interesse am 10er" },
-      draft_discovery_call_brief: { leadName: "Lead", goal: "Passung prüfen" },
-      draft_followup_after_call: { leadName: "Lead", callNotes: "positiv, Zeitfrage" },
-      objection_handle: { leadName: "Lead", objection: "Keine Zeit" },
-      propose_package_fit: { leadName: "Lead", package: "10er Coaching" },
-      schedule_nudge: { leadName: "Lead", channel: "email" },
-      draft_linkedin_post: { topic: "Vitalität 40+" },
-      draft_instagram_caption: { topic: "Alltagsenergie", format: "reel" },
-      plan_content_week: { week: "current" },
-      nurture_lead_reply: { leadName: "Lead", channel: "email", context: "Interesse am 10er" },
-      onboard_client: { name: "Neuer Klient", email: "neu@example.com", package: "10er Coaching" },
-      process_call_transcript: { transcript: "(Transkript hier einfügen)", clientName: "Session" },
-      prioritize_backlog: { items: "UFO Slice\nC-Suite\nSchmiede abhängen" },
-      draft_release_notes: { changes: "C-Suite Dashboards" },
-      package_price_check: { package: "10er Coaching", proposedPrice: "fehlt" },
-      expense_note: { vendor: "Hosting", amount: "12€", category: "tools" },
-      escalate_owner_gate: { question: "Eine SOT für Pläne?", evidence: "Zwei Schreibpfade live" },
-      plan_server_change: { change: "Workspaces static serve" },
-    };
-    runSkill(id, defaults[id] || {});
+    selectedSkill = id;
+    $("#skill-label").textContent = `Gewählt: ${btn.querySelector("strong").textContent}`;
+    $(".skill-picker").open = false;
+    $("#prompt").placeholder = `Auftrag für ${id}: Ziel, Fakten und gewünschtes Ergebnis …`;
+    $("#prompt").focus();
+    log("system", `Skill gewählt: ${id}. Beschreibe jetzt deinen Auftrag im Textfeld.`);
   });
   $("#queue").addEventListener("click", async (e) => {
     const approve = e.target.closest("[data-approve]");
     const copyBtn = e.target.closest("[data-copy]");
-    const mailBtn = e.target.closest("[data-mail]");
     const reject = e.target.closest("[data-reject]");
     const readItem = (id) => {
       const ta = document.querySelector(`textarea[data-edit="${id}"]`);
       const item = state.queue.find((q) => q.id === id);
       if (!item) return null;
+      if (ta) item.revision = Number(ta.dataset.revision);
       item.preview = ta?.value ?? item.preview;
       return item;
     };
@@ -558,32 +432,38 @@ function wire() {
       log("system", ok ? `Kopiert: ${item.title}` : `Kopieren fehlgeschlagen: ${item.title}`);
       return;
     }
-    if (mailBtn) {
-      const item = readItem(mailBtn.dataset.mail);
+    try {
+    if (e.target.closest("[data-complete]")) {
+      const item = readItem(e.target.closest("[data-complete]").dataset.complete);
       if (!item) return;
-      window.location.href = mailtoDraft(item.preview, item.title);
-      log("system", `mailto geöffnet: ${item.title}`);
-      return;
+      item.status = "completed";
+      await jobAdapter.upsertApproval(item);
+      state.queue = await jobAdapter.listApprovals();
+      renderQueue();
+      log("system", "Freigegebenes Dokument dauerhaft abgelegt.");
     }
     if (approve) {
       const id = approve.dataset.approve;
       const item = readItem(id);
       if (!item) return;
-      const ok = await copyText(item.preview);
       item.status = "approved";
       item.updatedAt = now();
-      await firebaseAdapter.upsertApproval(item);
-      await firebaseAdapter.removeApproval(id);
-      state.queue = await firebaseAdapter.listApprovals();
-      log("system", `Freigegeben${ok ? " + in Zwischenablage" : ""} (kein Auto-Versand): ${item.title}`);
+      await jobAdapter.upsertApproval(item);
+      state.queue = await jobAdapter.listApprovals();
+      log("system", `Freigegeben: ${item.title}. Du kannst das Dokument jetzt ablegen.`);
       renderQueue();
     }
     if (reject) {
       const id = reject.dataset.reject;
-      await firebaseAdapter.removeApproval(id);
-      state.queue = await firebaseAdapter.listApprovals();
-      log("system", `Verworfen: ${id}`);
+      await jobAdapter.removeApproval(id);
+      state.queue = await jobAdapter.listApprovals();
+      log("system", `Abgelehnt und im Verlauf gespeichert: ${id}`);
       renderQueue();
+    }
+    } catch (error) {
+      log("system", `Änderung nicht gespeichert: ${error.message}`);
+      $("#queue").replaceChildren();
+      await loadJobs(); renderQueue();
     }
   });
   const form = $("#composer");
@@ -592,8 +472,11 @@ function wire() {
     e.preventDefault();
     const text = input.value.trim();
     if (!text || state.busy) return;
-    input.value = "";
-    runChat(text);
+    log("user", text);
+    const skill = selectedSkill;
+    (skill ? runSkill(skill, { brief: text }) : runChat(text)).then((started) => {
+      if (started) { input.value = ""; selectedSkill = null; $("#skill-label").textContent = "Skill wählen (optional)"; input.placeholder = "Beschreibe deinen Auftrag …"; }
+    });
   });
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -604,12 +487,16 @@ function wire() {
 }
 
 async function boot() {
-  const conn = await firebaseAdapter.connect();
+  const conn = await jobAdapter.connect();
   state.sync = conn.mode;
-  $(".dot").classList.toggle("live", conn.mode !== "mock");
-  $(".sync-label").textContent = conn.mode === "mock" ? "Sync: lokal (Mock)" : "Sync: Firebase";
+  $(".dot").classList.toggle("live", conn.mode === "coach");
+  $(".sync-label").textContent = conn.mode === "coach" ? "Runtime verbunden" : "Runtime nicht verbunden";
+  if (conn.note) log("system", conn.note);
   const brain = await loadWorkspaceBrain();
-  await ensureSeedQueue();
+  ROLE.focus = [];
+  ROLE.kpis = [{ id: "queue", label: "Offene Freigaben", value: "0" }];
+  if (brain.loaded) ROLE.launcher = (brain.skillsConfig.tools || brain.skillsConfig.skills || []).map((tool) => ({ id: tool.name || tool.id, title: (tool.name || tool.id).replaceAll("_", " "), sub: tool.description || "" }));
+  await loadJobs();
   renderHeader();
   renderFocus();
   renderLauncher();
@@ -619,7 +506,7 @@ async function boot() {
   if (!state.chat.length) {
     const brainNote = brain.loaded
       ? `Brain: system-prompt.md + skills.json v${brain.skillsConfig?.version || "?"}`
-      : `Brain-Fetch fehlgeschlagen (${brain.error || "offline"}) — eingebettetes ROLE bleibt aktiv`;
+      : `Rollenbeschreibung nicht geladen (${brain.error || "offline"}). Bitte neu laden.`;
     log("system", `${ROLE.id.toUpperCase()}-Cockpit · ${brainNote} · Bridge /api/csuite/run`);
   }
 }

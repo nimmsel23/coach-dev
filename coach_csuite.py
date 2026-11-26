@@ -15,8 +15,10 @@ import re
 import shutil
 import subprocess
 import tempfile
+import asyncio
 import urllib.error
 import urllib.request
+from urllib.parse import urlparse
 from pathlib import Path
 from typing import Any
 
@@ -56,6 +58,9 @@ class IssueBody(BaseModel):
 
 def guard(request: Request) -> None:
     client = request.client.host if request.client else ""
+    origin = request.headers.get("origin")
+    if origin and urlparse(origin).hostname not in {"localhost", "127.0.0.1", "::1"}:
+        raise HTTPException(403, "Workspace-Aufträge nur über die lokale Coach-Oberfläche.")
     if client not in LOCAL_HOSTS:
         raise HTTPException(403, "C-Suite-Bridge nur lokal (127.0.0.1).")
 
@@ -135,6 +140,8 @@ def gemini_keys() -> list[str]:
 
 
 def load_workspace(workspace_id: str) -> dict[str, Any]:
+    if workspace_id not in {"coo", "cmo", "cso", "cpo", "cto", "cfo"}:
+        raise HTTPException(404, "Unbekannter Workspace")
     ws = WORKSPACES / workspace_id
     if not ws.is_dir():
         raise HTTPException(404, f"Workspace nicht gefunden: {workspace_id}")
@@ -148,6 +155,12 @@ def load_workspace(workspace_id: str) -> dict[str, Any]:
     config: dict[str, Any] = {}
     if config_path.is_file():
         config = json.loads(config_path.read_text(encoding="utf-8"))
+    knowledge = []
+    for path in sorted((ws / "knowledge").glob("*.md")):
+        if path.resolve().is_relative_to(ws.resolve()):
+            knowledge.append(f"## {path.name}\n{path.read_text(encoding='utf-8')}")
+    if knowledge:
+        prompt += "\n\n# Workspace-Wissen\n" + "\n\n".join(knowledge)
     tools = skills.get("tools") or skills.get("skills") or []
     return {
         "id": workspace_id,
@@ -172,7 +185,7 @@ def skill_meta(ws: dict[str, Any], skill_id: str | None) -> dict[str, Any] | Non
 def build_user_prompt(ws: dict[str, Any], skill: dict[str, Any] | None, body: RunBody) -> str:
     parts = [
         f"Workspace: {ws['id']}",
-        "Aufgabe: Erzeuge einen fertigen Entwurf für das COO-Cockpit.",
+        "Aufgabe: Erzeuge einen fertigen Entwurf für diesen Workspace.",
         "Regeln: Keine Außenwirkung ausführen. Fehlende Fakten als „fehlt:“ markieren.",
         "Antwort nur als nutzbarer Text (Briefing/Analyse/Mail-Entwurf) — kein Meta-Geplänkel.",
     ]
@@ -308,7 +321,7 @@ def run_codex(system: str, user: str) -> str:
     prompt = f"{system.strip()}\n\n---\n\n{user}"
     # Non-interactive exec if available; fall back to print-style.
     return _run_cmd(
-        [bin_path, "exec", "--skip-git-repo-check", prompt],
+        [bin_path, "exec", "--sandbox", "read-only", "--skip-git-repo-check", prompt],
         timeout=DEFAULT_TIMEOUT,
     )
 
@@ -397,13 +410,13 @@ def create_github_issue(title: str, body: str, labels: list[str]) -> dict[str, A
 def engine_status() -> list[dict[str, Any]]:
     rows = []
     for engine, binary in ENGINES_CLI.items():
+        if engine not in {"claude", "codex"}:
+            continue
         path = shutil.which(binary)
         if engine == "cursor-agent" and not path:
             path = shutil.which("agent")
         rows.append({"id": engine, "available": bool(path), "path": path})
     rows.append({"id": "gemini", "available": bool(gemini_key()), "path": "api"})
-    rows.append({"id": "issue", "available": bool(shutil.which("gh")), "path": shutil.which("gh")})
-    rows.append({"id": "stub", "available": True, "path": "builtin"})
     return rows
 
 
@@ -440,8 +453,11 @@ def default_title(skill: dict[str, Any] | None, body: RunBody) -> str:
     return f"{sid} · {name}".strip(" ·")
 
 
-def create_router() -> APIRouter:
+def create_router(runtime=None) -> APIRouter:
+    from coach_csuite_runtime import Runtime, install_routes
+    runtime = runtime or Runtime()
     router = APIRouter(prefix="/api/csuite", tags=["csuite"])
+    install_routes(router, runtime, guard)
 
     @router.get("/engines")
     async def engines(request: Request):
@@ -451,26 +467,12 @@ def create_router() -> APIRouter:
     @router.post("/run")
     async def run(request: Request, body: RunBody):
         guard(request)
-        ws = load_workspace(body.workspaceId)
-        if isinstance(body.systemPrompt, str) and body.systemPrompt.strip():
-            ws["prompt"] = body.systemPrompt.strip()
-        if isinstance(body.skills, dict) and body.skills:
-            ws["skills"] = body.skills
-            ws["tools"] = body.skills.get("tools") or body.skills.get("skills") or ws["tools"]
-        skill = skill_meta(ws, body.skillId)
-        system = ws["prompt"] or "Du bist ein C-Suite-Agent für Daniels Coaching-Business."
-        user = build_user_prompt(ws, skill, body)
-        text, used = run_engine(body.engine, system, user, skill, body)
-        requires = bool(skill.get("requiresApproval")) if skill else True
-        return {
-            "ok": True,
-            "engine": used,
-            "workspaceId": body.workspaceId,
-            "skillId": body.skillId,
-            "requiresApproval": requires,
-            "title": default_title(skill, body),
-            "preview": text,
-        }
+        # Compatibility endpoint also records the real result and failures.
+        run = runtime.create(body)
+        result = await asyncio.to_thread(runtime.wait, run["id"])
+        if result["status"] == "failed":
+            raise HTTPException(502, result["error"])
+        return {"ok": True, **result}
 
     @router.post("/issue")
     async def issue(request: Request, body: IssueBody):

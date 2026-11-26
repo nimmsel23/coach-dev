@@ -18,7 +18,7 @@ const C_SUITE_ROLES = [
     label: 'KI-COO (Operations)',
     shortTitle: 'COO',
     mark: '◎',
-    dashboardPath: '/coach/workspaces/coo/dashboard.html',
+    dashboardPath: '/workspaces/coo/dashboard.html',
     description: 'Session-Prep, Onboarding & Klienten-Erfolg',
   },
   {
@@ -26,7 +26,7 @@ const C_SUITE_ROLES = [
     label: 'KI-CMO (Marketing)',
     shortTitle: 'CMO',
     mark: '◈',
-    dashboardPath: '/coach/workspaces/cmo/dashboard.html',
+    dashboardPath: '/workspaces/cmo/dashboard.html',
     description: 'Content-Pipeline, Leads & Sichtbarkeit',
   },
   {
@@ -34,7 +34,7 @@ const C_SUITE_ROLES = [
     label: 'KI-CSO (Sales)',
     shortTitle: 'CSO',
     mark: '◉',
-    dashboardPath: '/coach/workspaces/cso/dashboard.html',
+    dashboardPath: '/workspaces/cso/dashboard.html',
     description: 'Lead-Qualifizierung & Call-Briefings',
   },
   {
@@ -42,7 +42,7 @@ const C_SUITE_ROLES = [
     label: 'KI-CPO (Product)',
     shortTitle: 'CPO',
     mark: '◇',
-    dashboardPath: '/coach/workspaces/cpo/dashboard.html',
+    dashboardPath: '/workspaces/cpo/dashboard.html',
     description: 'Angebot, Coach-Produkt & Backlog',
   },
   {
@@ -50,7 +50,7 @@ const C_SUITE_ROLES = [
     label: 'KI-CTO (Technik)',
     shortTitle: 'CTO',
     mark: '⬡',
-    dashboardPath: '/coach/workspaces/cto/dashboard.html',
+    dashboardPath: '/workspaces/cto/dashboard.html',
     description: 'Werkstatt, Schreibpfade & CI',
   },
   {
@@ -58,7 +58,7 @@ const C_SUITE_ROLES = [
     label: 'KI-CFO (Finance)',
     shortTitle: 'CFO',
     mark: '▣',
-    dashboardPath: '/coach/workspaces/cfo/dashboard.html',
+    dashboardPath: '/workspaces/cfo/dashboard.html',
     description: 'Umsatz, Posten & Belege',
   },
 ]
@@ -136,7 +136,7 @@ export default function CeoCommandCenter() {
           <p className="ceo-pill">CEO Kommandozentrale</p>
           <h1>Coaching C-Suite</h1>
           <p className="ceo-muted">
-            Anmelden für isolierte Agenten-Workspaces und Freigabe-Queues. Brain bleibt Git
+            Anmelden für die Rollen-Dashboards. Aufträge laufen auf dem lokalen Coach-Server. Brain bleibt Git
             (<code>workspaces/&lt;rolle&gt;/</code>).
           </p>
           {authError ? <p className="ceo-error">{authError}</p> : null}
@@ -144,7 +144,7 @@ export default function CeoCommandCenter() {
             Mit Google anmelden
           </button>
           <p className="ceo-hint">
-            Lokal ohne Auth-Zwang: Hub unter <a href="/coach/">/coach/</a> oder Direkt-Dashboards.
+            Die Anmeldung verbindet noch keine Runtime. Lokal direkt starten: <a href="http://127.0.0.1:9150/coach/coo">COO öffnen</a>.
           </p>
         </div>
       </div>
@@ -234,7 +234,7 @@ export default function CeoCommandCenter() {
           src={activeRole.dashboardPath}
           title={activeRole.label}
           className="ceo-frame"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads"
         />
       </main>
     </div>

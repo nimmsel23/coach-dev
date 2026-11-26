@@ -16,6 +16,8 @@ on:
       - '.gitmodules'
       - 'modules/plan'
       - 'src/**'
+      - 'ceo.html'
+      - 'workspaces/**'
       - 'coach.html'
       - 'coach-shell.html'
       - 'local.html'
