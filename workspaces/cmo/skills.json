@@ -3,8 +3,120 @@
   "roleTitle": "Chief Marketing Officer — Sichtbarkeit, Leads & Markenstimme",
   "defaultModel": "gemini",
   "temperature": 0.7,
-  "version": "1.1",
+  "version": "1.3",
   "tools": [
+    {
+      "name": "draft_social_post",
+      "title": "✍️ LinkedIn-Post aus Roh-Idee",
+      "description": "Schreibe einen LinkedIn-Post mit konkretem Einstieg, hilfreicher Substanz und einer unaufdringlichen Einladung.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "idea": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Anonymisiertes Briefing mit belegbaren Fakten."
+          },
+          "audience": {
+            "type": "string",
+            "description": "Zielgruppe, optional."
+          },
+          "goal": {
+            "type": "string",
+            "description": "Gewünschte nächste Handlung, optional."
+          }
+        },
+        "required": [
+          "idea"
+        ]
+      }
+    },
+    {
+      "name": "draft_newsletter",
+      "title": "📧 Newsletter-Entwurf erstellen",
+      "description": "Erstelle Betreff, Preheader und einen persönlichen Newsletter mit einer klaren nächsten Handlung.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "topic": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Anonymisiertes Briefing mit belegbaren Fakten."
+          },
+          "audience": {
+            "type": "string",
+            "description": "Zielgruppe, optional."
+          },
+          "goal": {
+            "type": "string",
+            "description": "Gewünschte nächste Handlung, optional."
+          }
+        },
+        "required": [
+          "topic"
+        ]
+      }
+    },
+    {
+      "name": "generate_hooks",
+      "title": "🎯 Hook- & Winkel-Varianten",
+      "description": "Erstelle fünf unterschiedliche, ehrliche Einstiege mit jeweils einem konkreten inhaltlichen Winkel.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "topic": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Anonymisiertes Briefing mit belegbaren Fakten."
+          },
+          "audience": {
+            "type": "string",
+            "description": "Zielgruppe, optional."
+          },
+          "goal": {
+            "type": "string",
+            "description": "Gewünschte nächste Handlung, optional."
+          }
+        },
+        "required": [
+          "topic"
+        ]
+      }
+    },
+    {
+      "name": "repurpose_coaching_insight",
+      "title": "♻️ Coaching-Impuls recyceln",
+      "description": "Verwandle eine anonymisierte Coaching-Erkenntnis in einen Post und einen kurzen Newsletter-Impuls.",
+      "requiresApproval": true,
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "insight": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Anonymisiertes Briefing mit belegbaren Fakten."
+          },
+          "audience": {
+            "type": "string",
+            "description": "Zielgruppe, optional."
+          },
+          "goal": {
+            "type": "string",
+            "description": "Gewünschte nächste Handlung, optional."
+          }
+        },
+        "required": [
+          "insight"
+        ]
+      }
+    },
     {
       "name": "draft_linkedin_post",
       "description": "Erstellt einen LinkedIn-Post-Entwurf (Hook, Substanz, CTA) für Vitaltrainer. Immer pending_approval — kein Publish ohne CEO-Freigabe. Nutzen wenn ein Thema/Slot im Fokus liegt oder Daniel einen Post anfordert.",
@@ -21,7 +133,9 @@
             "description": "Optionaler Winkel (Alltag, Mythos, Case)."
           }
         },
-        "required": ["topic"]
+        "required": [
+          "topic"
+        ]
       }
     },
     {
@@ -37,11 +151,17 @@
           },
           "format": {
             "type": "string",
-            "enum": ["reel", "carousel", "static"],
+            "enum": [
+              "reel",
+              "carousel",
+              "static"
+            ],
             "description": "Format-Hinweis für Tonlänge."
           }
         },
-        "required": ["topic"]
+        "required": [
+          "topic"
+        ]
       }
     },
     {
@@ -78,7 +198,10 @@
             "description": "Was der Lead geschrieben/gefragt hat."
           }
         },
-        "required": ["leadName", "context"]
+        "required": [
+          "leadName",
+          "context"
+        ]
       }
     },
     {
@@ -93,7 +216,9 @@
             "description": "Paketname (z. B. 10er Coaching)."
           }
         },
-        "required": ["package"]
+        "required": [
+          "package"
+        ]
       }
     },
     {
@@ -108,7 +233,9 @@
             "description": "Zu prüfender Text."
           }
         },
-        "required": ["draft"]
+        "required": [
+          "draft"
+        ]
       }
     }
   ],
@@ -124,5 +251,10 @@
       "csuite/cmo/agent_logs"
     ],
     "notes": "Reichweiten-/Lead-Rohdaten kommen später aus Coach-APIs oder manueller CEO-Eingabe. Außenwirkung nur über approvals mit status pending_approval."
+  },
+  "llm": {
+    "endpoint": "",
+    "responseField": "text",
+    "notes": "Optionales HTTPS-Gateway: POST {model, temperature, systemPrompt, tool, parameters}; Antwort {text}. Firebase-ID-Token als Bearer. Provider-Schlüssel bleiben auf dem Gateway. Ohne Gateway: manueller Prompt-Transfer."
   }
 }
