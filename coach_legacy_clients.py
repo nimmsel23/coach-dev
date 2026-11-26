@@ -4,13 +4,16 @@ UI SOT: coach-dev/klienten-ui/{schmiede,konsole} (nicht mehr ~/dev/klienten-dev)
 """
 from __future__ import annotations
 
+import asyncio
 import importlib
+import json
 import logging
 import os
 import sys
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRoute
 
 from coach_klienten_ui import konsole_dir, legacy_ui, schmiede_dir, spa_document, ui_root
@@ -44,6 +47,25 @@ _KONSOLE_PREFIXES = (
 )
 
 
+async def run_plan_push(client_id: str, dry_run: bool = False):
+    """Run the existing explicit publisher with the same client root as Coach."""
+    args = [os.getenv("COACH_PUSH_PYTHON", "/usr/bin/python3"),
+            str(Path(__file__).resolve().parent / "coach_plan_push.py"), client_id]
+    if dry_run:
+        args.append("--dry-run")
+    proc = await asyncio.create_subprocess_exec(
+        *args, env={**os.environ, "CLIENTS_ROOT": str(clients_root())},
+        stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    out, err = await proc.communicate()
+    try:
+        body = json.loads(out.decode() or "{}")
+    except ValueError:
+        body = {}
+    if proc.returncode != 0:
+        body = {"error": (err.decode() or out.decode()).strip()[-500:]}
+    return proc.returncode, body
+
+
 def include_legacy_clients(app):
     source = Path(
         os.getenv(
@@ -73,6 +95,17 @@ def include_legacy_clients(app):
 
     async def local_guard(request: Request):
         local_only(request)
+
+    push_routes = APIRouter(dependencies=[Depends(client_guard)])
+
+    @push_routes.post("/k/{client_id}/plan/push")
+    async def plan_push(client_id: str, dry_run: bool = False):
+        code, body = await run_plan_push(client_id, dry_run)
+        status = 200 if code == 0 else (409 if "FIREBASE_UID" in str(body.get("error", "")) else 502)
+        return JSONResponse({**body, "ok": code == 0}, status_code=status)
+
+    # Register before the legacy /plan/{...} routes and frontend catch-all.
+    app.include_router(push_routes)
 
     client_routes = APIRouter()
     client_routes.routes = [

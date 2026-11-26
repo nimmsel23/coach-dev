@@ -200,6 +200,36 @@ class CoachServerTest(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual((await client.get('http://localhost/k/unknown/plan')).status_code,404)
         self.assertFalse(self.requests)
 
+    async def test_clientforge_explicit_firestore_push(self):
+        clients = self.root / "clients"
+        (clients / "fixture").mkdir(parents=True)
+        (clients / "fixture" / "client.json").write_text('{"name":"Fixture"}')
+        with patch.dict("os.environ", {"CLIENTS_ROOT": str(clients)}), patch(
+            "coach_legacy_clients.run_plan_push", return_value=(0, {"written": ["plan-a"]})
+        ) as push:
+            async with self.client() as client:
+                response = await client.post("http://localhost/k/fixture/plan/push?dry_run=true")
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json(), {"ok": True, "written": ["plan-a"]})
+                push.assert_awaited_once_with("fixture", True)
+                push.reset_mock()
+                for url, headers, status in [
+                    ("http://localhost/k/missing/plan/push", {}, 404),
+                    ("http://localhost/k/fixture/plan/push", {"Origin": "https://other.test"}, 403),
+                    ("http://localhost/k/fixture/plan/push", {"tailscale-funnel-request": "1"}, 403),
+                ]:
+                    self.assertEqual((await client.post(url, headers=headers)).status_code, status)
+                push.assert_not_awaited()
+                for result, status in [
+                    ((1, {"error": "keine FIREBASE_UID"}), 409),
+                    ((1, {"error": "Firestore unavailable"}), 502),
+                ]:
+                    push.return_value = result
+                    response = await client.post("http://localhost/k/fixture/plan/push")
+                    self.assertEqual(response.status_code, status)
+                    self.assertFalse(response.json()["ok"])
+                    self.assertEqual(response.json()["error"], result[1]["error"])
+
     async def test_self_proxy_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "points back to Coach"):
             create_app(backend_urls={"fitness": "http://127.0.0.1:9150"})

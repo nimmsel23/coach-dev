@@ -11,6 +11,8 @@ nachziehen. `FOCUS.md` / `FREEDOM.md` aktiv; `FRAME.md` optional später.
 
 ## Offen
 
+- [ ] Nach Owner-Reload von `coach-api.service` den ClientForge-Button „Push Firestore“ für Matthias-Mayer erneut prüfen; fehlende POST-Route in `server.py` ist korrigiert (405).
+
 - [ ] **Fuel-Upstream-Cutover (optional):** `/api/fuel` noch Proxy → VitalOS
       `:8000`; in-process erst nach Fuel/VitalOS-Freigabe — nicht per Tree-Move.
 - [ ] **KB-Gitlink wiederherstellen:** Seit `710614d9` ist `backend/fitness/catalog/kb`
