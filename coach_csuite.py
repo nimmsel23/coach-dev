@@ -41,6 +41,10 @@ ENGINES_CLI = {
 
 class RunBody(BaseModel):
     workspaceId: str = "coo"
+    clientId: str | None = None
+    eventId: str | None = None
+    expectedEventRevision: str | None = None
+    expectedContextRevision: str | None = None
     skillId: str | None = None
     engine: str = "claude"
     context: dict[str, Any] = Field(default_factory=dict)
@@ -58,6 +62,11 @@ class IssueBody(BaseModel):
 
 def guard(request: Request) -> None:
     client = request.client.host if request.client else ""
+    if "tailscale-funnel-request" in request.headers:
+        raise HTTPException(403, "Nicht über Funnel verfügbar.")
+    host = request.url.hostname or ""
+    if host not in LOCAL_HOSTS and not (client == "testclient" and host == "testserver"):
+        raise HTTPException(403, "Lokaler Coach-Hostname erforderlich.")
     origin = request.headers.get("origin")
     if origin and urlparse(origin).hostname not in {"localhost", "127.0.0.1", "::1"}:
         raise HTTPException(403, "Workspace-Aufträge nur über die lokale Coach-Oberfläche.")

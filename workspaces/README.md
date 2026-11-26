@@ -27,10 +27,12 @@ Revisionen schützen vor dem Überschreiben gleichzeitiger Entscheidungen.
 `config.json`, `system-prompt.md`, `skills.json` und `knowledge/*.md` gehören zur
 Rolle. Der Server lädt Prompt, Skill und Wissen; er speichert den verwendeten
 Stand mit einem Hash am Auftrag. Browser-Prompt-Overrides werden ignoriert.
-Die Runtime erzeugt Entwürfe aus diesem Rollenwissen und dem eingegebenen
-Kontext. Sie liest nicht automatisch Klientenakten, Mail oder Kalender.
-Skill-Beschreibungen beschreiben den fachlichen Zweck, keine bereits vorhandenen
-Datenzugriffe. Es gibt keinen autonomen Versand oder Deployment durch Freigabe.
+Der COO lädt nach ausdrücklicher Klientenauswahl dessen vorhandene Coaching-
+Notizen, KLIENT.md, lokale Plan-Metadaten und gespeicherte Fitness-Trainings.
+Die vorhandene Registry und ihre UID-Zuordnung bleiben maßgeblich. Andere
+Rollen erhalten dadurch keinen Klientenkontext. Mail wird nicht gelesen.
+Zugriffe außerhalb dieses Quellenpakets werden durch eine Skill-Beschreibung
+allein nicht ausgeführt. Es gibt keinen autonomen Versand oder Deployment durch Freigabe.
 Der konkrete Abschluss dieses Ablaufs ist ein abgelegtes Dokument.
 
 ## Hosting ist kein Backend
@@ -56,5 +58,36 @@ Die Bridge ist loopback-only; fremde Browser-Origins werden abgewiesen.
 Revisionen, Herkunftsschutz und Fehler. Für Browser-Akzeptanz zuerst
 `python3 scripts/tests/csuite-browser-backend.py`, dann
 `node src/tests/csuite-runtime-browser.mjs`. Der Browser-Test verwendet eine
-kontrollierte Engine und eine temporäre Datenbank; er prüft sechs Rollen sowie
+kontrollierte Engine und eine temporäre Datenbank; er prüft den COO-Einstieg sowie
 Bearbeitung, Freigabe, Neuladen, Dokument, Ablehnung, Fehler und mobile Breite.
+
+## COO als Arbeitseinstieg
+
+Unter `/coach/coo` einen Klienten oder Kontakt auswählen. Der geladene Stand
+zeigt Quellen und Datenlücken getrennt. „Gespräch vorbereiten“, „Trainingsstand
+prüfen“ und „Follow-up entwerfen“ geben das geprüfte Quellenpaket an den Auftrag
+weiter. Der Server liest die Quellen selbst und weist veraltete Stände mit 409
+zurück; im Browser eingeschleuste andere Klientendaten werden nicht übernommen.
+Die Auftragsliste kann nach dem ausgewählten Klienten gefiltert werden.
+
+Google-Termine der nächsten sieben Tage kommen lesend über das vorhandene `gog`.
+Standard ist der Hauptkalender von `nimmdaniel@gmail.com`; überschreibbar mit
+`COACH_CALENDAR_ID` und `COACH_GOG_ACCOUNT`. Die Integration lädt `~/.env/gog.env`
+im Unterprozess und nutzt den vorhandenen Datei-Schlüsselbund; abweichend über
+`COACH_GOG_KEYRING_BACKEND`. Sie exportiert keine Tokens und fordert kein neues
+OAuth-Login an. Es werden nur ID, Titel, Start und Ende projiziert, keine
+Beschreibungen, Anhänge oder Teilnehmer. Ein Termin wird dem ausgewählten
+Klienten ausdrücklich vom Coach zugeordnet, nie über einen ähnlichen Namen.
+Vor der KI-Erstellung prüft der Server den Termin erneut. Auth-/Lesefehler sind
+keine leeren Kalender. Ohne ausgewählten Termin bleibt die Vorbereitung möglich.
+
+Zusätzliche API: `GET /api/csuite/coo/overview`,
+`GET /api/csuite/coo/clients/<id>/context`, `GET /api/csuite/coo/calendar`.
+`POST /api/csuite/runs` übernimmt `clientId`, `expectedContextRevision` und optional
+`eventId`/`expectedEventRevision`. Alle Zugriffe bleiben lokal, `no-store`, und
+werden bei Funnel-/fremdem Hostzugriff abgewiesen. Es gibt keine automatische
+Veröffentlichung, Nachricht oder Änderung an Klientenakten/Kalenderterminen.
+
+Prüfung: `python3 -m unittest src.test_csuite_runtime src.test_coo_operations
+src.test_coo_calendar`. Der Browser-Test nutzt ausschließlich temporäre Klienten
+und einen kontrollierten Kalender. Echte Quellen wurden separat nur lesend geprüft.

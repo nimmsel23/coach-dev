@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0b1220" />
-  <title>KI-COO · Coaching-Delivery · C-Suite</title>
+  <title>COO · Klienten & nächste Schritte · C-Suite</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
@@ -136,6 +136,22 @@ label.llm select {
 .empty { color: var(--muted); font-size: .85rem; margin: 0; }
 footer.note { color: var(--muted); font-size: .8rem; }
 footer.note code { color: var(--accent2); }
+.coo-roster { display: grid; grid-template-columns: minmax(16rem, 1fr) 1fr; gap: 1rem; border-bottom: 1px solid var(--line); padding-bottom: 1rem; }
+.coo-roster label { display: grid; gap: .5rem; align-content: start; }
+.coo-roster select { width: 100%; background: var(--bg2); border: 1px solid var(--line); padding: .65rem; border-radius: 8px; }
+.coo-roster p { margin: .4rem 0; }
+.coo-context-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; }
+.coo-context-head h3 { margin-bottom: .25rem; }
+.coo-actions { margin: .75rem 0; }
+.coo-context-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+.coo-context-grid section { min-width: 0; }
+.coo-context-grid h4 { margin: 1rem 0 .6rem; }
+.coo-context-grid p, .coo-context-grid li { font-size: .9rem; line-height: 1.5; overflow-wrap: anywhere; white-space: pre-wrap; }
+.coo-context-grid ul { padding-left: 1.2rem; }
+.coo-context-grid li { margin-bottom: .6rem; }
+.coo-context-grid pre { white-space: pre-wrap; font-family: inherit; font-size: .9rem; max-height: 24rem; overflow: auto; }
+.coo-context-grid summary { cursor: pointer; padding: .5rem 0; }
+@media (max-width: 800px) { .coo-roster, .coo-context-grid { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
@@ -147,7 +163,7 @@ footer.note code { color: var(--accent2); }
           <h1></h1>
           <p class="meta">
             <span class="badge git-badge"></span>
-            <span class="badge warn">HITL aktiv</span>
+            <span class="badge warn">Du prüfst und entscheidest</span>
           </p>
         </div>
       </div>
@@ -162,16 +178,16 @@ footer.note code { color: var(--accent2); }
 
     <div class="grid">
       <section class="panel" aria-label="Ablauf">
-        <h2>Ablauf</h2>
+        <h2>Dein COO-Arbeitsplatz</h2>
         <div class="panel-body" id="focus"></div>
       </section>
       <section class="panel" aria-label="Konsole">
-        <h2>Auftrag erstellen</h2>
+        <h2>Eigener Auftrag zum Klienten</h2>
         <div class="panel-body">
           <details class="skill-picker"><summary id="skill-label">Skill wählen (optional)</summary><div class="skills" id="launcher"></div></details>
           <div class="chat" id="chat" aria-live="polite"></div>
           <form class="composer" id="composer">
-            <textarea id="prompt" placeholder="Auftrag an COO… (Enter senden, Shift+Enter Zeile)" aria-label="Chat"></textarea>
+            <textarea id="prompt" placeholder="Was soll der COO für diesen Klienten vorbereiten?" aria-label="Chat"></textarea>
             <div class="composer-row">
               <span class="hint">Git-Brain: workspaces/coo/</span>
               <button class="btn" type="submit">Auftrag starten</button>
@@ -192,7 +208,8 @@ footer.note code { color: var(--accent2); }
   </div>
   <script type="module">
 import { createJobAdapter, runWorkspace, copyText } from '/workspaces/_shared/runtime.js';
-const ROLE = {"id": "coo", "title": "KI-COO · Coaching-Delivery", "icon": "◎", "gitBadge": "Rolle aus Git", "kpis": [], "focus": [], "launcher": []};
+import { mountCooFrontdoor, selectedClientContext } from '/workspaces/_shared/coo.js';
+const ROLE = {"id": "coo", "title": "COO · Klienten & nächste Schritte", "icon": "◎", "gitBadge": "Rolle aus Git", "kpis": [], "focus": [], "launcher": []};
 
 /** Git-as-a-Brain: load prompt + skills from same workspace folder (no Firestore sync). */
 let BRAIN = { systemPrompt: "", skillsConfig: null, loaded: false };
@@ -267,7 +284,9 @@ export const llmRouter = {
   model: ["gemini", "claude", "codex"].includes(readLs(LS.model, "gemini")) ? readLs(LS.model, "gemini") : "gemini",
   setModel(id) { this.model = id; writeLs(LS.model, id); },
   async run({ skillId, context = {}, message = null }) {
-    return runWorkspace({ workspaceId: ROLE.id, skillId: skillId || null, engine: this.model, context, message });
+    const selected = selectedClientContext();
+    if (!selected) throw new Error("Bitte zuerst einen Klienten auswählen und den Stand laden.");
+    return runWorkspace({ workspaceId: ROLE.id, skillId: skillId || null, engine: this.model, context, message, ...selected });
   },
 };
 
@@ -338,7 +357,9 @@ function renderQueue() {
   const root = $("#queue");
   const labels = { queued: "Wartet", running: "Wird erstellt", pending_approval: "Bitte prüfen", approved: "Freigegeben", rejected: "Abgelehnt", completed: "Dokument abgelegt", failed: "Fehlgeschlagen" };
   const drafts = new Map([...root.querySelectorAll('textarea:not([readonly])')].map(el => [el.dataset.edit, { value: el.value, revision: el.dataset.revision, focused: el === document.activeElement, start: el.selectionStart, end: el.selectionEnd }]));
-  root.innerHTML = state.queue.length ? state.queue.map((item) => `
+  const clientId = selectedClientContext()?.clientId;
+  const visibleJobs = clientId ? state.queue.filter(item => item.context?.clientId === clientId) : state.queue;
+  root.innerHTML = visibleJobs.length ? visibleJobs.map((item) => `
     <article class="card queue-card" data-id="${item.id}">
       <h3>${escapeHtml(item.title)}</h3>
       <p class="sub">${labels[item.status] || escapeHtml(item.status)} · ${fmtTime(item.updatedAt)}</p>
@@ -351,7 +372,7 @@ function renderQueue() {
         ${item.status === "completed" ? `<a class="btn" href="/api/csuite/runs/${item.id}/document">Dokument herunterladen</a>` : ""}
         ${item.preview ? `<button class="btn ghost" data-copy="${item.id}">Kopieren</button>` : ""}
       </div>
-    </article>`).join("") : `<p class="empty">Noch keine Aufträge. Skill wählen und deinen Auftrag im Textfeld beschreiben.</p>`;
+    </article>`).join("") : `<p class="empty">Noch keine Aufträge zu dieser Auswahl. Starte oben eine Gesprächsvorbereitung oder beschreibe einen eigenen Auftrag.</p>`;
   for (const el of root.querySelectorAll('textarea:not([readonly])')) {
     const draft = drafts.get(el.dataset.edit);
     if (!draft) continue;
@@ -498,7 +519,7 @@ async function boot() {
   if (brain.loaded) ROLE.launcher = (brain.skillsConfig.tools || brain.skillsConfig.skills || []).map((tool) => ({ id: tool.name || tool.id, title: (tool.name || tool.id).replaceAll("_", " "), sub: tool.description || "" }));
   await loadJobs();
   renderHeader();
-  renderFocus();
+  await mountCooFrontdoor($("#focus"), { onAction: runSkill, onSelect: renderQueue });
   renderLauncher();
   renderChat();
   renderQueue();

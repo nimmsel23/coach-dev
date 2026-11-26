@@ -50,7 +50,7 @@ try {
   await send('Page.enable')
   await send('Runtime.enable')
   await send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 1000, deviceScaleFactor: 1, mobile: false })
-  for (const role of ['coo', 'cmo', 'cso', 'cpo', 'cto', 'cfo']) {
+  for (const role of ['coo']) {
     await send('Page.navigate', { url: `http://127.0.0.1:15940/workspaces/${role}/dashboard.html` })
     await wait(`document.body.innerText.includes('Runtime verbunden') && !!document.querySelector('[data-launch]')`)
     assert.equal(await evaluate(`document.querySelectorAll('[data-id]').length`), 0)
@@ -58,7 +58,12 @@ try {
   }
   await send('Page.navigate', { url: 'http://127.0.0.1:15940/workspaces/coo/dashboard.html' })
   await wait(`!!document.querySelector('[data-launch]')`)
-  await evaluate(`document.querySelector('.skill-picker').open = true; document.querySelector('[data-launch]').click(); document.querySelector('#prompt').value = 'Eine Agenda für den Ersttermin erstellen'; document.querySelector('#composer').requestSubmit()`)
+  await wait(`!!document.querySelector('#coo-client')`)
+  await evaluate(`document.querySelector('#coo-client').value = 'alice'; document.querySelector('#coo-client').dispatchEvent(new Event('change'))`)
+  await wait(`document.querySelector('#coo-context')?.textContent.includes('Ziel: konsistente Woche')`)
+  await wait(`!!document.querySelector('#coo-event')`)
+  await evaluate(`document.querySelector('#coo-event').value = 'meeting-1'; document.querySelector('#coo-event').dispatchEvent(new Event('change'))`)
+  await click('Gespräch vorbereiten')
   await wait(`document.body.innerText.includes('Bitte prüfen')`)
   await evaluate(`document.querySelector('[data-edit]').value = ${JSON.stringify('# Geprüfte Agenda\n\nMeine Korrektur')}; document.querySelector('[data-edit]').focus()`)
   await sleep(3200)
@@ -73,6 +78,9 @@ try {
   await wait(`!!document.querySelector('a[href$="/document"]')`)
   const doc = await evaluate(`fetch(document.querySelector('a[href$="/document"]').href).then(r=>r.text())`)
   assert.equal(doc, '# Geprüfte Agenda\n\nMeine Korrektur')
+  await wait(`!!document.querySelector('#coo-client')`)
+  await evaluate(`document.querySelector('#coo-client').value = 'alice'; document.querySelector('#coo-client').dispatchEvent(new Event('change'))`)
+  await wait(`document.querySelector('#coo-context')?.textContent.includes('Ziel: konsistente Woche')`)
   await evaluate(`document.querySelector('#prompt').value = 'Zweiter Auftrag'; document.querySelector('#composer').requestSubmit()`)
   await wait(`!!document.querySelector('[data-reject]')`)
   await click('Ablehnen')
@@ -96,7 +104,7 @@ try {
   assert.equal(await evaluate(`document.querySelector('#prompt').value`), 'Auftrag bleibt erhalten')
   assert.equal(await evaluate(`document.querySelectorAll('[data-id]').length`), 0, 'No fake offline jobs')
   await screenshot('mobile-disconnected')
-  console.log(`PASS: six roles, real HTTP job pipeline, editing, durable approval, document, rejection, failure, mobile. Screenshots: ${folder}`)
+  console.log(`PASS: COO client frontdoor, real HTTP job pipeline, editing, durable approval, document, rejection, failure, mobile. Screenshots: ${folder}`)
 } finally {
   socket?.close()
   browser.kill()

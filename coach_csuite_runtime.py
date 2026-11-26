@@ -27,9 +27,10 @@ class Decision(BaseModel):
 
 
 class Runtime:
-    def __init__(self, path=None, runner=None):
+    def __init__(self, path=None, runner=None, operations=None):
         self.path = Path(path or os.environ.get('COACH_CSUITE_DB', Path.home() / '.local/state/coach/csuite.sqlite3'))
         self.path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+        self.operations = operations
         self.runner = runner
         self.pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix='csuite')
         self.futures = {}
@@ -42,6 +43,12 @@ class Runtime:
                 if item['status'] in ('queued', 'running'):
                     self._change(db, item, status='failed', error='Server wurde unterbrochen. Auftrag erneut starten.')
         self.path.chmod(0o600)
+
+    def coo(self):
+        if self.operations is None:
+            from coach_coo_operations import CooOperations
+            self.operations = CooOperations()
+        return self.operations
 
     @contextmanager
     def db(self):
@@ -82,6 +89,15 @@ class Runtime:
             raise HTTPException(400, 'Engine wählen: claude, gemini oder codex. Keine Demo-Ergebnisse.')
         if not (body.message or '').strip() and not body.context:
             raise HTTPException(400, 'Bitte einen Auftrag mit Kontext eingeben.')
+        if body.clientId:
+            if body.workspaceId != 'coo':
+                raise HTTPException(400, 'Klientenkontext ist an den COO gebunden.')
+            snapshot = self.coo().context(body.clientId)
+            if body.expectedContextRevision != snapshot['revision']:
+                raise HTTPException(409, 'Klientendaten wurden geändert. Bitte den Stand neu laden und erneut prüfen.')
+            if body.eventId:
+                snapshot['appointment'] = self.coo().appointment(body.eventId, body.expectedEventRevision)
+            body = body.model_copy(update={'context': {**body.context, 'clientId': body.clientId, 'clientName': snapshot['client']['name'], 'clientContext': snapshot}})
         ws = load_workspace(body.workspaceId)
         skill = skill_meta(ws, body.skillId)
         # The server-owned Git brain is authoritative, never browser-supplied prompts.
@@ -146,6 +162,24 @@ class Runtime:
 
 def install_routes(router, runtime, guard):
     from coach_csuite import RunBody
+
+    @router.get('/coo/calendar')
+    def coo_calendar(request: Request, refresh: bool = False):
+        guard(request)
+        from fastapi.responses import JSONResponse
+        return JSONResponse(runtime.coo().calendar(refresh=refresh), headers={'Cache-Control': 'no-store'})
+
+    @router.get('/coo/overview')
+    def coo_overview(request: Request):
+        guard(request)
+        from fastapi.responses import JSONResponse
+        return JSONResponse(runtime.coo().overview(runtime.list('coo')), headers={'Cache-Control': 'no-store'})
+
+    @router.get('/coo/clients/{client_id}/context')
+    def coo_context(request: Request, client_id: str):
+        guard(request)
+        from fastapi.responses import JSONResponse
+        return JSONResponse(runtime.coo().context(client_id), headers={'Cache-Control': 'no-store'})
 
     @router.get('/runs')
     def runs(request: Request, workspaceId: str = 'coo'):

@@ -1,5 +1,5 @@
 /** Local Coach job runtime. No fabricated results and no browser-only approvals. */
-async function api(path, body) {
+export async function api(path, body) {
   let res
   try {
     res = await fetch(`/api/csuite${path}`, {
