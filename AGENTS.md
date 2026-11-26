@@ -4,6 +4,10 @@
 
 Scoped fertige Arbeit: **immer committen** (nicht auf explizites „commit“ warten).
 
+`TODO.md`, `RESULTS.md` und `NEXT.md` immer pro Repo im jeweiligen Root pflegen,
+keine globalen Sammellisten. `RESULTS.md` bleibt lokal und ignoriert; niemals
+tracken oder committen. TODO/NEXT behalten ihre vorhandene Tracking-Konvention.
+
 Coach is the standalone coach-facing product on `dev`. The `vitalos/` submodule is a local checkout used only as historical context and, where needed, for Git merges. It is not a Coach build or Hosting dependency. Do not directly edit files inside this checkout; make changes in their owning source repository and bring them in through the intended Git merge. See `docs/COACH-ARCHITECTURE.md` for checkout and release instructions. Do not add Coach beneath VitalOS or restore the former `vitalos/coach-app` release path.
 
 Make source-code changes in the owning repository on `dev`, and always commit scoped finished changes. Every `*-app` checkout is for intended Git merges/integration only and must not be edited directly.

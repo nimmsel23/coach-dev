@@ -57,3 +57,6 @@ dist-catalog/
 dist-coach.pre-*/
 *.py.pre-*
 /archive/klienten-dev-rest-*/
+
+# Local per-repository session log
+/RESULTS.md
