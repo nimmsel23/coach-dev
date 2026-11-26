@@ -1,137 +1,98 @@
 {
   "workspaceId": "cso",
-  "roleTitle": "Chief Sales Officer — Leads, Calls & Abschluss",
-  "defaultModel": "gemini",
-  "temperature": 0.4,
+  "roleTitle": "Chief Sales Officer — Beratender Vertrieb",
   "version": "1.0",
+  "defaultModel": "claude",
+  "temperature": 0.4,
   "tools": [
     {
-      "name": "qualify_lead",
-      "description": "Qualifiziert einen Lead (Fit, Budget-Signal, Timing, nächster Schritt). Intern.",
-      "requiresApproval": false,
+      "name": "prepare_discovery_briefing",
+      "title": "📋 Erstgespräch-Briefing erstellen",
+      "description": "Interne CEO-Vorbereitung: Fakten, Datenlücken, drei Fit-Kriterien, Gesprächsagenda, offene Fragen und nächster Schritt.",
+      "requiresApproval": true,
       "parameters": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
-          "leadName": {
-            "type": "string"
-          },
           "context": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "description": "Anonymisierte Ausgangslage, Ziel, bisheriger Kontakt und bekannte Angebotsdaten."
           }
         },
         "required": [
-          "leadName",
           "context"
         ]
       }
     },
     {
-      "name": "draft_discovery_call_brief",
-      "description": "Call-Briefing: Ziel, Agenda, 3 Fragen. Intern.",
-      "requiresApproval": false,
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "leadName": {
-            "type": "string"
-          },
-          "goal": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "leadName"
-        ]
-      }
-    },
-    {
-      "name": "draft_followup_after_call",
-      "description": "Follow-up nach Discovery-Call. pending_approval.",
+      "name": "qualify_lead_fit",
+      "title": "🔍 Lead vorqualifizieren (Fit-Check)",
+      "description": "Prüfe Zielklarheit/Leidensdruck, Umsetzungsbereitschaft und realistisches Budget jeweils als belegt, offen oder unpassend. Begründe Fit/offen/kein Fit. Eine optionale Inbound-Antwort braucht Freigabe.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
-          "leadName": {
-            "type": "string"
-          },
-          "callNotes": {
-            "type": "string"
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "description": "Anonymisierte Anfrage mit bekannten Zielen, Bereitschaft, Budget und Programmrahmen."
           }
         },
         "required": [
-          "leadName"
+          "context"
         ]
       }
     },
     {
-      "name": "objection_handle",
-      "description": "Einwand → Antwortentwurf + Grenze. Oft Queue wenn outbound.",
-      "requiresApproval": false,
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "objection": {
-            "type": "string"
-          },
-          "leadName": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "objection"
-        ]
-      }
-    },
-    {
-      "name": "propose_package_fit",
-      "description": "Paket-Empfehlung für Lead. pending_approval vor Versand.",
+      "name": "handle_sales_objection",
+      "title": "🛡️ Einwand-Behandlung & Gesprächsleitfaden",
+      "description": "Einwand verstehen: empathische Spiegelung, diagnostische Rückfragen, ehrliche Antwort, Grenze und nächster Schritt. Keine Überredung.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
-          "leadName": {
-            "type": "string"
-          },
-          "package": {
-            "type": "string"
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "description": "Wörtlicher Einwand, Call-Kontext und belegbare Angebotsdetails."
           }
         },
         "required": [
-          "leadName",
-          "package"
+          "context"
         ]
       }
     },
     {
-      "name": "schedule_nudge",
-      "description": "Höflicher Termin-/Call-Nudge. pending_approval.",
+      "name": "draft_sales_followup",
+      "title": "✉️ Follow-up nach Verkaufsgespräch",
+      "description": "Kurzer persönlicher Entwurf für Follow-up, Inbound-Antwort oder Kalendereinladung: Bezug, offene Frage, unverbindlicher nächster Schritt. Keine Termine oder Links erfinden.",
       "requiresApproval": true,
       "parameters": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
-          "leadName": {
-            "type": "string"
-          },
-          "channel": {
-            "type": "string"
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20000,
+            "description": "Call-Notizen oder Inbound-Anfrage, gewünschter Nachrichtentyp, vereinbarter nächster Schritt."
           }
         },
         "required": [
-          "leadName"
+          "context"
         ]
       }
     }
   ],
-  "collections": {
-    "readAccess": [
-      "csuite/cso/approvals",
-      "csuite/cso/threads",
-      "csuite/cso/agent_logs"
-    ],
-    "writeAccess": [
-      "csuite/cso/approvals",
-      "csuite/cso/threads",
-      "csuite/cso/agent_logs"
-    ]
+  "llm": {
+    "endpoint": "",
+    "responseField": "text",
+    "notes": "Optionales vertrauenswürdiges HTTPS-Gateway. POST {model, temperature, systemPrompt, tool, parameters} mit Firebase-ID-Token als Bearer; Antwort {text}. Modell-IDs: claude, gpt, gemini, openrouter_local. Gateway validiert Token, Coach-Berechtigung, Schemas und Provider-Zuordnung. Anbieter-Schlüssel nur serverseitig. Ohne Gateway nutzt callLLM die lokale Coach-Runtime /api/csuite/runs. GPT wird auf Codex abgebildet; OpenRouter/Lokal benötigt das Gateway."
   }
 }
