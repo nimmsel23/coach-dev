@@ -104,6 +104,30 @@ def include_legacy_clients(app):
         status = 200 if code == 0 else (409 if "FIREBASE_UID" in str(body.get("error", "")) else 502)
         return JSONResponse({**body, "ok": code == 0}, status_code=status)
 
+    # Regelbare client.env-Schalter (z. B. FRAME_*) — Grundsatz Klienten/AGENTS.md.
+    @push_routes.get("/k/{client_id}/client-env")
+    async def client_env_get(client_id: str):
+        import coach_client_env as ce
+        ce.CLIENTS_ROOT = clients_root()
+        try:
+            return ce.settings_view(client_id)
+        except ce.EnvError as error:
+            raise HTTPException(404, str(error))
+
+    @push_routes.post("/k/{client_id}/client-env")
+    async def client_env_set(client_id: str, request: Request):
+        import coach_client_env as ce
+        ce.CLIENTS_ROOT = clients_root()
+        body = await request.json()
+        updates = body.get("set") if isinstance(body, dict) else None
+        if not isinstance(updates, dict) or not updates:
+            raise HTTPException(400, 'erwartet {"set": {"KEY": "WERT", ...}}')
+        try:
+            ce.write_env(client_id, {str(k): "" if v is None else str(v) for k, v in updates.items()})
+            return ce.settings_view(client_id)
+        except ce.EnvError as error:
+            raise HTTPException(400, str(error))
+
     # Register before the legacy /plan/{...} routes and frontend catch-all.
     app.include_router(push_routes)
 

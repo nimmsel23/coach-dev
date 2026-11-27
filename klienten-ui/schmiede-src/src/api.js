@@ -100,3 +100,7 @@ export const ENTSPANNUNGS_TYPEN = [
 export function getCoachingNote(klientId, date) { return api(`/k/${klientId}/coaching-note?date=${date}`) }
 export function saveCoachingNote(klientId, date, note) { return post(`/k/${klientId}/coaching-note`, { date, note }) }
 export function listCoachingNotes(klientId, limit = 50) { return api(`/k/${klientId}/coaching-notes?limit=${limit}`) }
+
+// Regelbare client.env-Schalter (FRAME_* …)
+export function getClientEnv(klientId) { return api(`/k/${klientId}/client-env`) }
+export function setClientEnv(klientId, werte) { return post(`/k/${klientId}/client-env`, { set: werte }) }

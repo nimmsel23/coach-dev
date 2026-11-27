@@ -9,6 +9,7 @@ import { EntspannungsEditor } from "./EntspannungsEditor.jsx";
 import { SessionKalender } from "./SessionKalender.jsx";
 import { AppUpdatePanel } from "./AppUpdatePanel.jsx";
 import { NotizenTab } from "./NotizenTab.jsx";
+import { SchalterTab } from "./SchalterTab.jsx";
 import "./clients.css";
 
 const SCHMIEDE_TABS = [
@@ -20,6 +21,7 @@ const SCHMIEDE_TABS = [
   { id: "journal",     label: "Journal" },
   { id: "entspannung", label: "Entspannung" },
   { id: "kalender",    label: "Kalender" },
+  { id: "schalter",    label: "Schalter" },
 ];
 
 function idAusUrl() {
@@ -209,7 +211,7 @@ export function ClientForgeApp() {
     [klienten, ausgewähltId],
   );
   const basisLädt = plan === null || habits === null || loggedHabits === null || loggedWorkouts === null || fuelPlan === null;
-  const skipLoadGate = ["kalender", "entspannung", "heute", "journal", "notizen"].includes(aktTab);
+  const skipLoadGate = ["kalender", "entspannung", "heute", "journal", "notizen", "schalter"].includes(aktTab);
 
   function wähleKlient(id) {
     setAusgewähltId(id);
@@ -303,6 +305,7 @@ export function ClientForgeApp() {
                     />
                   )}
                   {aktTab === "notizen" && <NotizenTab klientId={ausgewähltId} />}
+                  {aktTab === "schalter" && <SchalterTab klientId={ausgewähltId} />}
                   {aktTab === "journal" && <JournalTab klientId={ausgewähltId} />}
                   {aktTab === "fuel" && (
                     <FuelPlanEditor klientId={ausgewähltId} fuelPlan={fuelPlan} onGespeichert={setFuelPlan} />

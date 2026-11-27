@@ -49,6 +49,8 @@ COMMANDS = {
     'mail': Command('fitness.mail.cli', 'Fitbit-Mail-Pipeline'),
     'activity': Command('fitness.activity.cli', 'Aktivitäten erfassen und verwalten'),
     'fitness': Command('fitness.cli', 'Vollständige bestehende Fitness-CLI'),
+    'client-env': Command('coach_client_env', 'Regelbare client.env-Schalter eines Klienten anzeigen/setzen', entry='env_main'),
+    'frame': Command('coach_client_env', 'Frame-Map-Interview pro Klient: status|on|off', entry='frame_main'),
     # klienten-python / Praxis (venv unter KLIENTEN_PYTHON_ROOT)
     'praxis': Command(
         'klienten_manager.praxis_cli',
