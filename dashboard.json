@@ -1,12 +1,12 @@
 {
  "evidence": {
-  "generated_at": "2026-11-26T14:23:54+00:00",
+  "generated_at": "2026-11-27T14:17:41+00:00",
   "repo": "nimmsel23/coach-dev",
   "meta": {
    "name": "coach-dev",
    "description": null,
    "html_url": "https://github.com/nimmsel23/coach-dev",
-   "pushed_at": "2026-11-26T13:31:04Z",
+   "pushed_at": "2026-11-27T14:09:28Z",
    "default_branch": "dev",
    "visibility": "public",
    "pages_url": "https://nimmsel23.github.io/coach-dev/"
@@ -21,14 +21,38 @@
    "dev_behind": 0,
    "dev_ahead": 0,
    "oldest_unpromoted": null,
-   "dev_head": "788aef77 2026-11-26T14:29:57+01:00",
-   "master_head": "788aef77 2026-11-26T14:29:57+01:00"
+   "dev_head": "2694d331 2026-11-27T15:07:56+01:00",
+   "master_head": "2694d331 2026-11-27T15:07:56+01:00"
   },
   "work": {
    "branch": "master",
-   "sha": "788aef77fa456873d59f80c67e381692ad369d0f"
+   "sha": "2694d331d7fc61f2c7d47ead982f6ab4a3a400b6"
   },
   "commits": [
+   {
+    "sha": "2694d331",
+    "date": "2026-11-27T15:07:56+01:00",
+    "author": "Alpha",
+    "subject": "fix(coo): include every registered person regardless of role"
+   },
+   {
+    "sha": "4187a591",
+    "date": "2026-11-27T14:31:52+01:00",
+    "author": "Alpha",
+    "subject": "feat(coo): unify client tools and commit reviewed drafts"
+   },
+   {
+    "sha": "0119fcd1",
+    "date": "2026-11-27T11:50:13+01:00",
+    "author": "Alpha",
+    "subject": "feat(coach): serve local video management through existing backend"
+   },
+   {
+    "sha": "3a629e21",
+    "date": "2026-11-27T11:47:24+01:00",
+    "author": "Alpha",
+    "subject": "feat(klienten): client.env-Schalter (Frame-Interview) per CLI, API und Schmiede regelbar"
+   },
    {
     "sha": "788aef77",
     "date": "2026-11-26T14:29:57+01:00",
@@ -124,40 +148,12 @@
     "date": "2026-11-24T23:19:52+01:00",
     "author": "Alpha",
     "subject": "feat(coach): connect workspace worklist with local and cloud plan states"
-   },
-   {
-    "sha": "15dc8d09",
-    "date": "2026-11-24T18:44:14+01:00",
-    "author": "Alpha",
-    "subject": "test(coach): use exact hosting styles for dashboard acceptance"
-   },
-   {
-    "sha": "21471074",
-    "date": "2026-11-24T18:42:23+01:00",
-    "author": "Alpha",
-    "subject": "feat(coach): open dashboard and integrate local workspace overview"
-   },
-   {
-    "sha": "90c6599c",
-    "date": "2026-11-24T18:20:47+01:00",
-    "author": "Alpha",
-    "subject": "feat(csuite): close HITL, Firebase, CSO, COO gaps"
-   },
-   {
-    "sha": "378f0ec4",
-    "date": "2026-11-24T18:20:47+01:00",
-    "author": "Alpha",
-    "subject": "docs: auto-update RESULTS.md"
    }
   ],
   "activity": [
    {
-    "day": "2026-11-06",
-    "n": 5
-   },
-   {
     "day": "2026-11-07",
-    "n": 18
+    "n": 15
    },
    {
     "day": "2026-11-08",
@@ -234,18 +230,22 @@
    {
     "day": "2026-11-26",
     "n": 7
+   },
+   {
+    "day": "2026-11-27",
+    "n": 4
    }
   ],
   "workflows": [
    {
-    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "name": "Gemini CI Agent",
     "branch": "dev",
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-26T13:30:55Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45829876326",
-    "sha": "788aef7"
+    "created_at": "2026-11-27T14:09:32Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/46013373025",
+    "sha": "2694d33"
    },
    {
     "name": "PR-AutoMerge (Dependabot -> dev)",
@@ -253,9 +253,19 @@
     "event": "workflow_run",
     "status": "completed",
     "conclusion": "skipped",
-    "created_at": "2026-11-26T13:30:55Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45829876294",
-    "sha": "788aef7"
+    "created_at": "2026-11-27T14:09:18Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/46013337195",
+    "sha": "2694d33"
+   },
+   {
+    "name": "Auto-Promote dev -> master (Check (Coach))",
+    "branch": "dev",
+    "event": "workflow_run",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-27T14:09:18Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/46013336944",
+    "sha": "2694d33"
    },
    {
     "name": "Check (Coach)",
@@ -263,19 +273,9 @@
     "event": "push",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-26T13:30:02Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45829720996",
-    "sha": "788aef7"
-   },
-   {
-    "name": "Gemini CI Agent",
-    "branch": "dev",
-    "event": "workflow_run",
-    "status": "completed",
-    "conclusion": "success",
-    "created_at": "2026-11-26T13:21:27Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45828345670",
-    "sha": "6e9061d"
+    "created_at": "2026-11-27T14:08:29Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/46013216963",
+    "sha": "2694d33"
    },
    {
     "name": "Deploy Coach",
@@ -283,9 +283,9 @@
     "event": "push",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-26T13:20:15Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45828152534",
-    "sha": "6e9061d"
+    "created_at": "2026-11-27T14:08:29Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/46013216860",
+    "sha": "2694d33"
    },
    {
     "name": "Merge-Agent",
@@ -293,9 +293,9 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-26T11:17:02Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45809170295",
-    "sha": "e744bf0"
+    "created_at": "2026-11-27T12:08:29Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45996154914",
+    "sha": "3a629e2"
    },
    {
     "name": "CI-Heilung (rote Läufe wiederholen)",
@@ -303,9 +303,9 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-26T04:56:55Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45758392642",
-    "sha": "e744bf0"
+    "created_at": "2026-11-27T08:12:36Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45963908517",
+    "sha": "788aef7"
    },
    {
     "name": "Org-Bot (PR anlegen & mergen)",
@@ -313,23 +313,12 @@
     "event": "schedule",
     "status": "completed",
     "conclusion": "success",
-    "created_at": "2026-11-26T04:25:54Z",
-    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45755156125",
-    "sha": "e744bf0"
+    "created_at": "2026-11-27T05:22:48Z",
+    "url": "https://github.com/nimmsel23/coach-dev/actions/runs/45945450352",
+    "sha": "788aef7"
    }
   ],
   "issues": [
-   {
-    "number": 30,
-    "title": "Dashboard-Lage: rot",
-    "created_at": "2026-11-25T14:54:21Z",
-    "updated_at": "2026-11-25T14:54:21Z",
-    "labels": [
-     "dashboard"
-    ],
-    "url": "https://github.com/nimmsel23/coach-dev/issues/30",
-    "author": "github-actions[bot]"
-   },
    {
     "number": 29,
     "title": "Ausbaustufe: `gas-coach-summary/` (verwaist)",
