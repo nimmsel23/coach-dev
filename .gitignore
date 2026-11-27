@@ -60,3 +60,6 @@ dist-coach.pre-*/
 
 # Local per-repository session log
 /RESULTS.md
+
+# Local build of the Firebase video management UI
+/public-coach/videos/

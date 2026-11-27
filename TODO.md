@@ -39,3 +39,5 @@ nachziehen. `FOCUS.md` / `FREEDOM.md` aktiv; `FRAME.md` optional später.
 - [x] **fitness-dev-KB-Kopie:** Beobachtet 2026-11-11 AL — fitness-dev hat keine
       Dateikopie mehr (`fitness/catalog/kb` → Symlink `~/dev/fitness`). Drift-Ort
       ist Coach: vendored Tree statt Gitlink (siehe TODO KB-Gitlink).
+
+- [x] Lokales Video-Control über bestehenden Coach-Server :9150/videos/ ausliefern (bin/coach-video-control).

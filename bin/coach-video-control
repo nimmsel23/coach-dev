@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Lokales Firebase-Video-Werkzeug über den bestehenden Coach-Server ausliefern.
+set -euo pipefail
+coach_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
+video_root="${SIXPACK_ROOT:-$(dirname "$coach_root")/6pack-dev}"
+cd "$video_root"
+./scripts/pnpm-cloud.sh run build:video-control
+mkdir -p "$coach_root/public-coach/videos"
+cp -R "$video_root/dist-video-control/." "$coach_root/public-coach/videos/"
+cp "$video_root/dist-video-control/video-control.html" "$coach_root/public-coach/videos/index.html"
+printf '%s\n' 'Video-Control: http://localhost:9150/videos/'
