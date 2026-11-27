@@ -12,6 +12,7 @@ export async function mountCooFrontdoor(root, { onAction, onSelect }) {
   let selection = 0
   let snapshot = null
   let logRevision = null
+  let calendarSection = null
   root.innerHTML = '<p>Klienten und Arbeitsstand werden geladen …</p>'
   async function loadClient(id) {
     const request = ++selection
@@ -23,6 +24,8 @@ export async function mountCooFrontdoor(root, { onAction, onSelect }) {
     logRevision = null
     onSelect()
     const panel = root.querySelector('#coo-context')
+    if (calendarSection && panel.contains(calendarSection)) root.querySelector('.coo-main').append(calendarSection)
+    if (calendarSection) calendarSection.querySelector('summary').innerHTML = 'Termin zuordnen <span>optional</span>'
     panel.innerHTML = '<p role="status">Klientenstand wird geladen …</p>'
     try {
       const data = await api(`/coo/clients/${encodeURIComponent(id)}/context`)
@@ -34,24 +37,22 @@ export async function mountCooFrontdoor(root, { onAction, onSelect }) {
       onSelect()
       const labels = { available: 'Vorhanden', empty: 'Noch keine Einträge', error: 'Lesefehler', 'not-linked': 'Nicht zugeordnet', 'not-synced': 'Kein lokaler Datenstand' }
       panel.innerHTML = `
-        <div class="coo-context-head"><div><h3>${escape(data.client.name)}</h3><p class="sub">${data.client.role === 'contact' ? 'Kontakt' : 'Klient'} · Stand geladen ${new Date(data.checkedAt).toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' })}</p></div><a class="btn ghost" href="/k/${encodeURIComponent(id)}">Klientenakte öffnen</a></div>
-        <div class="actions coo-actions">
+        <div class="coo-context-head"><div><h3>${escape(data.client.name)}</h3><p class="sub">Unterlagen geladen um ${new Date(data.checkedAt).toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' })}</p></div><a class="btn ghost" href="/k/${encodeURIComponent(id)}">Klientenakte öffnen</a></div>
+        <div class="coo-task-heading"><h4>Was steht an?</h4><p>Der COO bereitet vor. Du prüfst das Ergebnis.</p></div><div class="actions coo-actions">
           <button class="btn ok" data-coo-action="prepare">Gespräch vorbereiten</button>
           <button class="btn" data-coo-action="review">Trainingsstand prüfen</button>
           <button class="btn" data-coo-action="followup">Follow-up entwerfen</button>
-          <button class="btn" data-coo-log>Trainingsverlauf & frühere Entwürfe</button>
-          <button class="btn ghost" data-coo-refresh>Stand neu laden</button>
         </div>
-        <p class="hint">Beim Start werden die unten aufgeführten Klientendaten mit dem oben gewählten KI-Modell verarbeitet. Das Ergebnis erscheint zur Prüfung.</p>
-        <div data-coo-log-panel></div>
-        <div class="coo-context-grid">
-          <section><h4>Letzte Notizen</h4>${data.notes.length ? data.notes.map(note => `<p><strong>${escape(date(note.date))}</strong><br>${escape(note.text)}</p>`).join('') : '<p>Keine datierten Coaching-Notizen vorhanden.</p>'}
+        <p class="hint">Verwendet die unten aufgeführten Unterlagen und dein gewähltes KI-Modell. Es wird keine Nachricht versendet.</p>
+        <div class="source-toolbar"><h4>Vorhandene Unterlagen</h4><button class="btn ghost" data-coo-refresh>Stand neu laden</button></div><div class="coo-context-grid">
+          <section><h4>Letzte Notizen</h4>${data.notes.length ? data.notes.slice(0, 1).map(note => `<p><strong>${escape(date(note.date))}</strong><br>${escape(note.text.slice(0, 240))}${note.text.length > 240 ? '…' : ''}</p>`).join('') + ((data.notes.length > 1 || data.notes[0].text.length > 240) ? `<details><summary>Alle Notizen lesen (${data.notes.length})</summary>${data.notes.map(note => `<p><strong>${escape(date(note.date))}</strong><br>${escape(note.text)}</p>`).join('')}</details>` : '') : '<p>Keine datierten Coaching-Notizen vorhanden.</p>'}
           ${data.memo.length ? `<details><summary>Klienten-Merkblatt lesen</summary><pre>${escape(data.memo[0].text)}</pre></details>` : '<p>Kein Klienten-Merkblatt hinterlegt.</p>'}</section>
-          <section><h4>Letzte gespeicherte Trainings</h4>${data.workouts.length ? `<ul>${data.workouts.map(item => `<li>${escape(date(item.finishedAt))} · ${escape(item.name)}</li>`).join('')}</ul>` : '<p>Keine gespeicherten Trainings in den gelesenen Quellen.</p>'}
+          <section><h4>Letzte gespeicherte Trainings</h4>${data.workouts.length ? `<ul>${data.workouts.slice(0, 3).map(item => `<li>${escape(date(item.finishedAt))} · ${escape(item.name)}</li>`).join('')}</ul>${data.workouts.length > 3 ? `<details><summary>Weitere ${data.workouts.length - 3} Trainings</summary><ul>${data.workouts.slice(3).map(item => `<li>${escape(date(item.finishedAt))} · ${escape(item.name)}</li>`).join('')}</ul></details>` : ''}` : '<p>Keine gespeicherten Trainings in den gelesenen Quellen.</p>'}
           <h4>Trainingspläne</h4>${data.plans.length ? `<ul>${data.plans.map(item => `<li>${escape(item.name)} · ${({ published: 'Freigegeben', draft: 'Entwurf', archived: 'Archiviert' })[item.status] || escape(item.status)} · Version ${escape(item.version)}<br><span class="hint">Geändert ${escape(date(item.updatedAt))}${item.deliveredAt ? ` · übergeben ${escape(date(item.deliveredAt))}` : ' · keine Übergabe dokumentiert'}</span></li>`).join('')}</ul>` : '<p>Kein lokaler Trainingsplan vorhanden.</p>'}</section>
-          <section><h4>Dokumentierte offene Punkte</h4>${data.followups.length ? `<ul>${data.followups.map(item => `<li>${escape(item.text)} <span class="hint">(${escape(item.source)})</span></li>`).join('')}</ul>` : '<p>Keine offenen Checkboxen in den gelesenen Notizen. Das ist keine Bestätigung, dass alles erledigt ist.</p>'}
-          <details><summary>Verwendete Quellen</summary><ul>${data.sources.map(source => `<li>${escape(source.label)}: ${labels[source.status] || escape(source.status)}${source.message ? ` — ${escape(source.message)}` : ''}</li>`).join('')}</ul></details></section>
-        </div>`
+          <section><h4>Dokumentierte offene Punkte</h4>${data.followups.length ? `<ul>${data.followups.map(item => `<li>${escape(item.text)} <span class="hint">(${escape(item.source)})</span></li>`).join('')}</ul>` : '<p>Keine offenen Punkte in den gelesenen Notizen markiert.</p>'}
+          <details><summary>Quellenstand ansehen</summary><ul>${data.sources.map(source => `<li>${escape(source.label)}: ${labels[source.status] || escape(source.status)}${source.message ? ` — ${escape(source.message)}` : ''}</li>`).join('')}</ul></details></section>
+        </div><div class="training-access"><button class="btn" data-coo-log>Trainingsverlauf & frühere Entwürfe</button></div><div data-coo-log-panel></div>`
+      if (calendarSection) panel.querySelector('.coo-task-heading').before(calendarSection)
     } catch (error) {
       if (request !== selection) return
       panel.innerHTML = `<p role="alert">Klientenstand nicht verfügbar: ${escape(error.message)}</p><button class="btn" data-coo-refresh>Erneut laden</button>`
@@ -59,8 +60,27 @@ export async function mountCooFrontdoor(root, { onAction, onSelect }) {
   }
   try {
     const data = await api('/coo/overview')
-    root.innerHTML = `<nav class="actions" aria-label="Arbeitsbereiche"><a class="btn ghost" href="/workspace/">Workspace öffnen</a><a class="btn ghost" href="/coach/local.html">Trainingsplanung öffnen</a></nav><div class="coo-roster"><label>Klient oder Kontakt<select id="coo-client"><option value="">Bitte auswählen</option>${data.clients.map(client => `<option value="${escape(client.id)}">${escape(client.name)}${client.role === 'contact' ? ' · Kontakt' : ''}${client.openJobs ? ` · ${client.openJobs} offen` : ''}</option>`).join('')}</select></label><div id="coo-calendar"><strong>Termine</strong><p>Google-Kalender wird geladen …</p></div></div><div id="coo-context"><p>${data.clients.length ? 'Wähle einen Klienten. Der COO lädt seine vorhandenen Unterlagen.' : 'Keine sichtbaren Klienten in der vorhandenen Registry.'}</p></div>`
+    root.innerHTML = `<aside class="coo-sidebar" aria-label="Personenauswahl">
+      <div class="people-head"><h2>Personen</h2><span>${data.clients.length}</span></div>
+      <label class="people-search">Person suchen<input type="search" id="coo-search" placeholder="Name eingeben" autocomplete="off"></label>
+      <select id="coo-client" aria-label="Ausgewählte Person" class="sr-only" tabindex="-1" aria-hidden="true"><option value="">Bitte auswählen</option>${data.clients.map(client => `<option value="${escape(client.id)}">${escape(client.name)}</option>`).join('')}</select>
+      <div class="people-list">${data.clients.map(client => `<button type="button" class="person" data-person="${escape(client.id)}" aria-pressed="false"><span class="person-initial" aria-hidden="true">${escape(client.name.trim().slice(0,1))}</span><span><strong>${escape(client.name)}</strong><small>${client.openJobs ? `${client.openJobs} offene Aufträge` : 'Akte öffnen'}</small></span></button>`).join('')}</div>
+      <p id="people-empty" hidden>Keine Person mit diesem Namen.</p>
+      <nav aria-label="Arbeitsbereiche"><a href="/workspace/">Workspace öffnen</a><a href="/coach/local.html">Trainingsplanung öffnen</a></nav>
+    </aside><div class="coo-main"><div id="coo-context"><div class="coo-welcome"><h2>Mit wem arbeitest du heute?</h2><p>Wähle eine Person. Hier kommen ihre Unterlagen, die Gesprächsvorbereitung und die nächsten Schritte zusammen.</p></div></div><details class="calendar-section"><summary>Termin zuordnen <span>optional</span></summary><div id="coo-calendar"><p>Google-Kalender wird geladen …</p></div></details></div>`
+    calendarSection = root.querySelector('.calendar-section')
+    root.querySelector('#coo-search').addEventListener('input', event => {
+      const query = event.target.value.trim().toLocaleLowerCase('de')
+      let matches = 0
+      for (const button of root.querySelectorAll('[data-person]')) {
+        button.hidden = !button.textContent.toLocaleLowerCase('de').includes(query)
+        if (!button.hidden) matches++
+      }
+      root.querySelector('#people-empty').hidden = matches > 0
+    })
     root.querySelector('#coo-client').addEventListener('change', event => {
+      try { sessionStorage.setItem('coo-selected-person', event.target.value) } catch {}
+      for (const button of root.querySelectorAll('[data-person]')) button.setAttribute('aria-pressed', String(button.dataset.person === event.target.value))
       if (event.target.value) loadClient(event.target.value)
       else { selection++; selected = null; selectedEvent = null; snapshot = null; if (root.querySelector("#coo-event")) root.querySelector("#coo-event").disabled = true; root.querySelector('#coo-context').innerHTML = '<p>Bitte einen Klienten auswählen.</p>'; onSelect() }
     })
@@ -75,11 +95,19 @@ export async function mountCooFrontdoor(root, { onAction, onSelect }) {
         panel.querySelector('#coo-event')?.addEventListener('change', event => {
           const item = calendar.events.find(row => row.id === event.target.value)
           selectedEvent = item ? { eventId: item.id, expectedEventRevision: item.revision } : null
+          calendarSection.querySelector('summary').textContent = item ? `Termin: ${when(item.start)} – ${item.title}` : 'Termin zuordnen (optional)'
         })
       } catch (error) { panel.innerHTML = `<p role="alert">Kalenderstand unbekannt: ${escape(error.message)}</p>` }
     }
     loadCalendar()
     root.addEventListener('click', async event => {
+      const person = event.target.closest('[data-person]')
+      if (person) {
+        const select = root.querySelector('#coo-client')
+        select.value = person.dataset.person
+        select.dispatchEvent(new Event('change'))
+        return
+      }
       if (event.target.closest('[data-coo-refresh]')) {
         const id = root.querySelector('#coo-client').value
         if (id) await loadClient(id)
@@ -123,6 +151,13 @@ export async function mountCooFrontdoor(root, { onAction, onSelect }) {
       button.disabled = true
       try { await onAction(skillId, { brief, operation: button.dataset.cooAction }) } finally { button.disabled = false }
     })
+    try {
+      const saved = sessionStorage.getItem('coo-selected-person')
+      if (data.clients.some(person => person.id === saved)) {
+        root.querySelector('#coo-client').value = saved
+        root.querySelector('#coo-client').dispatchEvent(new Event('change'))
+      }
+    } catch {}
   } catch (error) {
     root.innerHTML = `<p role="alert">COO-Arbeitsstand nicht erreichbar: ${escape(error.message)}</p><button class="btn" data-coo-retry>Erneut verbinden</button>`
     root.querySelector('[data-coo-retry]').addEventListener('click', () => mountCooFrontdoor(root, { onAction, onSelect }), { once: true })
