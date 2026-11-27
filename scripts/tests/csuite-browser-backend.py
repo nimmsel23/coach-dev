@@ -1,5 +1,7 @@
 """Browser fixture: production job code + isolated DB + controlled engine output."""
 import sys
+import os
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -24,6 +26,18 @@ def fixture_engine(engine, system, user, skill, body):
 
 
 with tempfile.TemporaryDirectory(prefix='csuite-browser-') as folder:
+    archive = Path(folder) / 'archive'
+    archive.mkdir()
+    def git(*args):
+        subprocess.run(['git', '-C', str(archive), *args], check=True, capture_output=True)
+    git('init', '-b', 'master')
+    git('config', 'user.name', 'Browser Test')
+    git('config', 'user.email', 'browser@example.invalid')
+    git('remote', 'add', 'origin', 'git@github.com:nimmsel23/business-vitaltraining.git')
+    (archive / 'README').write_text('fixture')
+    git('add', 'README')
+    git('commit', '-m', 'initial')
+    os.environ['COACH_CLIENT_ARCHIVE_ROOT'] = str(archive)
     clients = Path(folder) / 'clients'
     for cid, name in [('alice', 'Alice Beispiel'), ('bob', 'Bob Beispiel')]:
         root = clients / cid

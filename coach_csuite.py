@@ -458,7 +458,7 @@ def run_engine(engine: str, system: str, user: str, skill: dict[str, Any] | None
 
 def default_title(skill: dict[str, Any] | None, body: RunBody) -> str:
     name = (body.context or {}).get("clientName") or (body.context or {}).get("name") or ""
-    sid = (skill or {}).get("name") or body.skillId or "chat"
+    sid = {"prepare": "Gesprächsvorbereitung", "review": "Trainingsstand", "followup": "Follow-up"}.get((body.context or {}).get("operation")) or (skill or {}).get("name") or body.skillId or "Auftrag"
     return f"{sid} · {name}".strip(" ·")
 
 

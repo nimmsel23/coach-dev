@@ -97,6 +97,14 @@ class Runtime:
                 raise HTTPException(409, 'Klientendaten wurden geändert. Bitte den Stand neu laden und erneut prüfen.')
             if body.eventId:
                 snapshot['appointment'] = self.coo().appointment(body.eventId, body.expectedEventRevision)
+            if body.context.get('includeFitnessLog'):
+                from coach_coo_tools import client_log
+                log = client_log(self.coo(), body.clientId)
+                if log.get('status') != 'available':
+                    raise HTTPException(503, 'Trainingsverlauf nicht verfügbar.')
+                if body.context.get('expectedLogRevision') != log['revision']:
+                    raise HTTPException(409, 'Trainingsverlauf wurde geändert. Bitte erneut laden.')
+                snapshot['fitnessLog'] = log
             body = body.model_copy(update={'context': {**body.context, 'clientId': body.clientId, 'clientName': snapshot['client']['name'], 'clientContext': snapshot}})
         ws = load_workspace(body.workspaceId)
         skill = skill_meta(ws, body.skillId)
@@ -145,12 +153,18 @@ class Runtime:
             item = self.get(run_id, db)
             if body.expectedRevision != item['revision']:
                 raise HTTPException(409, 'Auftrag wurde geändert. Bitte neu laden.')
+            if item.get('git') and body.status == 'rejected':
+                raise HTTPException(409, 'Das Dokument ist bereits committed. Eine Korrektur benötigt einen neuen Entwurf.')
             if body.status not in allowed.get(item['status'], set()):
                 raise HTTPException(409, 'Dieser Statuswechsel ist nicht möglich.')
             if body.status == 'approved':
                 text = body.preview if body.preview is not None else item['preview']
                 if not text.strip():
                     raise HTTPException(422, 'Ein leerer Entwurf kann nicht freigegeben werden.')
+                if item['workspaceId'] == 'coo' and item.get('context', {}).get('clientId'):
+                    self.coo().context(item['context']['clientId'])
+                    from coach_coo_approvals import commit_approval
+                    item['git'] = commit_approval(item, text)
                 item['preview'] = text
                 item['approvedAt'] = now()
             if body.status == 'completed':
@@ -181,6 +195,16 @@ def install_routes(router, runtime, guard):
         from fastapi.responses import JSONResponse
         return JSONResponse(runtime.coo().context(client_id), headers={'Cache-Control': 'no-store'})
 
+    @router.get('/coo/clients/{client_id}/log')
+    def coo_log(request: Request, client_id: str):
+        guard(request)
+        from coach_coo_tools import client_log
+        from fastapi.responses import JSONResponse
+        try:
+            return JSONResponse(client_log(runtime.coo(), client_id), headers={'Cache-Control': 'no-store'})
+        except (OSError, ValueError, ImportError) as error:
+            raise HTTPException(503, 'fitness-log ist derzeit nicht verfügbar. Lokale Datenablage prüfen.') from error
+
     @router.get('/runs')
     def runs(request: Request, workspaceId: str = 'coo'):
         guard(request)
@@ -205,7 +229,7 @@ def install_routes(router, runtime, guard):
     def document(request: Request, run_id: str):
         guard(request)
         item = runtime.get(run_id)
-        if item['status'] != 'completed':
+        if item['status'] != 'completed' and not item.get('git'):
             raise HTTPException(409, 'Dokument wurde noch nicht freigegeben und abgelegt.')
-        return Response(item['artifact'], media_type='text/markdown', headers={
+        return Response(item.get('artifact', item['preview']), media_type='text/markdown', headers={
             'Content-Disposition': f'attachment; filename="{item["id"]}.md"', 'Cache-Control': 'no-store'})

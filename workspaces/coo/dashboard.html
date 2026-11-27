@@ -152,6 +152,12 @@ footer.note code { color: var(--accent2); }
 .coo-context-grid pre { white-space: pre-wrap; font-family: inherit; font-size: .9rem; max-height: 24rem; overflow: auto; }
 .coo-context-grid summary { cursor: pointer; padding: .5rem 0; }
 @media (max-width: 800px) { .coo-roster, .coo-context-grid { grid-template-columns: minmax(0, 1fr); } }
+.draft-prose { max-width:75ch; overflow-wrap:anywhere; line-height:1.65; margin:1rem 0; }
+.draft-prose h1 { font-size:1.4rem; } .draft-prose h2 { font-size:1.2rem; } .draft-prose h3 { font-size:1.05rem; }
+.draft-prose :is(h1,h2,h3,h4) { margin:1.5em 0 .5em; } .draft-prose p { white-space:normal; }
+.draft-prose pre { overflow:auto; white-space:pre; padding:1rem; background:var(--panel); }
+.draft-prose table { display:block; overflow:auto; border-collapse:collapse; } .draft-prose :is(td,th) { padding:.5rem; border:1px solid var(--line); }
+.draft-prose a { color:inherit; text-decoration:underline; } [hidden] { display:none !important; }
 </style>
 </head>
 <body>
@@ -207,6 +213,7 @@ footer.note code { color: var(--accent2); }
     </footer>
   </div>
   <script type="module">
+import { renderMarkdown } from '/workspaces/_shared/markdown.js';
 import { createJobAdapter, runWorkspace, copyText } from '/workspaces/_shared/runtime.js';
 import { mountCooFrontdoor, selectedClientContext } from '/workspaces/_shared/coo.js';
 const ROLE = {"id": "coo", "title": "COO · Klienten & nächste Schritte", "icon": "◎", "gitBadge": "Rolle aus Git", "kpis": [], "focus": [], "launcher": []};
@@ -353,23 +360,34 @@ function renderChat() {
   root.scrollTop = root.scrollHeight;
 }
 
+function draftTitle(item) {
+  const ctx = item.context || {};
+  const brief = ctx.brief || '';
+  const title = {prepare:'Gesprächsvorbereitung', review:'Trainingsstand', followup:'Follow-up'}[ctx.operation]
+    || (brief.startsWith('Bereite das nächste Gespräch') ? 'Gesprächsvorbereitung' : brief.startsWith('Prüfe den dokumentierten Trainingsstand') ? 'Trainingsstand' : null)
+    || (item.skillId === 'draft_followup_email' ? 'Follow-up' : null)
+    || item.preview?.match(/^#\s+(.+)$/m)?.[1] || item.title;
+  return title + (ctx.clientName && !title.includes(ctx.clientName) ? ` · ${ctx.clientName}` : '');
+}
 function renderQueue() {
   const root = $("#queue");
   const labels = { queued: "Wartet", running: "Wird erstellt", pending_approval: "Bitte prüfen", approved: "Freigegeben", rejected: "Abgelehnt", completed: "Dokument abgelegt", failed: "Fehlgeschlagen" };
-  const drafts = new Map([...root.querySelectorAll('textarea:not([readonly])')].map(el => [el.dataset.edit, { value: el.value, revision: el.dataset.revision, focused: el === document.activeElement, start: el.selectionStart, end: el.selectionEnd }]));
+  const drafts = new Map([...root.querySelectorAll('textarea:not([readonly])')].map(el => [el.dataset.edit, { value: el.value, editing: !el.hidden, revision: el.dataset.revision, focused: el === document.activeElement, start: el.selectionStart, end: el.selectionEnd }]));
   const clientId = selectedClientContext()?.clientId;
   const visibleJobs = clientId ? state.queue.filter(item => item.context?.clientId === clientId) : state.queue;
   root.innerHTML = visibleJobs.length ? visibleJobs.map((item) => `
     <article class="card queue-card" data-id="${item.id}">
-      <h3>${escapeHtml(item.title)}</h3>
+      <h3>${escapeHtml(draftTitle(item))}</h3>
       <p class="sub">${labels[item.status] || escapeHtml(item.status)} · ${fmtTime(item.updatedAt)}</p>
       ${item.error ? `<p role="alert">${escapeHtml(item.error)}</p>` : ""}
-      ${item.preview ? `<textarea aria-label="Entwurf bearbeiten" data-edit="${item.id}" data-revision="${item.revision}" ${item.status !== "pending_approval" ? "readonly" : ""}>${escapeHtml(item.preview)}</textarea>` : ""}
+      ${item.preview ? `<div class="draft-prose" data-preview="${item.id}">${renderMarkdown(drafts.get(item.id)?.value ?? item.preview)}</div><textarea hidden aria-label="Entwurf bearbeiten" data-edit="${item.id}" data-revision="${item.revision}" ${item.status !== "pending_approval" ? "readonly" : ""}>${escapeHtml(item.preview)}</textarea>` : ""}
+      ${item.status === 'pending_approval' && item.context?.clientId ? `<p class="hint">Freigabe speichert und committet diesen Text in business-vitaltraining · klienten/freigaben/${escapeHtml(item.context.clientId)}/. Kein automatischer Push.</p>` : ''}
+      ${item.git ? `<p class="hint">Committed · ${escapeHtml(item.git.commit.slice(0, 8))}<br>${escapeHtml(item.git.repository)} · ${escapeHtml(item.git.path)}</p>` : ''}
       <div class="actions">
-        ${item.status === "pending_approval" ? `<button class="btn ok" data-approve="${item.id}">Entwurf freigeben</button>` : ""}
-        ${["pending_approval", "approved"].includes(item.status) ? `<button class="btn danger" data-reject="${item.id}">Ablehnen</button>` : ""}
-        ${item.status === "approved" ? `<button class="btn ok" data-complete="${item.id}">Als Dokument ablegen</button>` : ""}
-        ${item.status === "completed" ? `<a class="btn" href="/api/csuite/runs/${item.id}/document">Dokument herunterladen</a>` : ""}
+        ${item.status === "pending_approval" ? `<button class="btn ok" data-approve="${item.id}"> ${item.context?.clientId ? "Freigeben & committen" : "Entwurf freigeben"}</button><button class="btn" data-toggle-edit="${item.id}">${drafts.get(item.id)?.editing ? "Vorschau" : "Bearbeiten"}</button>` : ""}
+        ${["pending_approval", "approved"].includes(item.status) && !item.git ? `<button class="btn danger" data-reject="${item.id}">Ablehnen</button>` : ""}
+        ${item.status === "approved" && !item.git ? `<button class="btn ok" data-complete="${item.id}">Als Dokument ablegen</button>` : ""}
+        ${item.status === "completed" || item.git ? `<a class="btn" href="/api/csuite/runs/${item.id}/document">Dokument herunterladen</a>` : ""}
         ${item.preview ? `<button class="btn ghost" data-copy="${item.id}">Kopieren</button>` : ""}
       </div>
     </article>`).join("") : `<p class="empty">Noch keine Aufträge zu dieser Auswahl. Starte oben eine Gesprächsvorbereitung oder beschreibe einen eigenen Auftrag.</p>`;
@@ -377,6 +395,8 @@ function renderQueue() {
     const draft = drafts.get(el.dataset.edit);
     if (!draft) continue;
     el.value = draft.value;
+    el.hidden = !draft.editing;
+    root.querySelector(`[data-preview="${el.dataset.edit}"]`).hidden = draft.editing;
     el.dataset.revision = draft.revision;
     if (draft.focused) { el.focus(); el.setSelectionRange(draft.start, draft.end); }
   }
@@ -435,6 +455,17 @@ function wire() {
     log("system", `Skill gewählt: ${id}. Beschreibe jetzt deinen Auftrag im Textfeld.`);
   });
   $("#queue").addEventListener("click", async (e) => {
+    const toggle = e.target.closest('[data-toggle-edit]');
+    if (toggle) {
+      const ta = $("#queue").querySelector(`[data-edit="${toggle.dataset.toggleEdit}"]`);
+      const preview = $("#queue").querySelector(`[data-preview="${toggle.dataset.toggleEdit}"]`);
+      ta.hidden = !ta.hidden;
+      preview.hidden = !ta.hidden;
+      preview.innerHTML = renderMarkdown(ta.value);
+      toggle.textContent = ta.hidden ? 'Bearbeiten' : 'Vorschau';
+      if (!ta.hidden) ta.focus();
+      return;
+    }
     const approve = e.target.closest("[data-approve]");
     const copyBtn = e.target.closest("[data-copy]");
     const reject = e.target.closest("[data-reject]");
@@ -471,7 +502,7 @@ function wire() {
       item.updatedAt = now();
       await jobAdapter.upsertApproval(item);
       state.queue = await jobAdapter.listApprovals();
-      log("system", `Freigegeben: ${item.title}. Du kannst das Dokument jetzt ablegen.`);
+      log("system", `Freigegeben: ${draftTitle(item)}. ${item.context?.clientId ? "Dokument im Vitaltraining-Repository committed." : "Du kannst das Dokument jetzt ablegen."}`);
       renderQueue();
     }
     if (reject) {
@@ -483,7 +514,6 @@ function wire() {
     }
     } catch (error) {
       log("system", `Änderung nicht gespeichert: ${error.message}`);
-      $("#queue").replaceChildren();
       await loadJobs(); renderQueue();
     }
   });

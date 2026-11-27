@@ -214,3 +214,31 @@ close callback without restarting the focus effect for each typed character.
 The isolated browser fixture `?login` checks copy, four viewport sizes, font
 size, Tab/Shift-Tab wrapping, Escape and restored focus. Real Safari keyboard
 behaviour remains a separate device acceptance requirement.
+
+## Gemeinsamer COO-Arbeitsplatz (2026-11-27)
+
+`/coach/coo` verbindet die bestehende Klientenauswahl mit Kalender, Notizen,
+Plänen, Trainingsdaten und Entwürfen. Workspace und Planeditor sind direkt
+verlinkt; ihre jeweiligen Ablagen bleiben erhalten. Der Workspace wird nicht
+pauschal als KI-Kontext eingelesen.
+
+`GET /api/csuite/coo/clients/<id>/log` verwendet die Services von `fitness-log`
+(exakter Registry-Slug, verknüpfte UIDs): 90 Tage, maximal 30 Trainingstage und
+20 frühere Konsolen-Entwürfe. Die CLI fasst mehrere Einheiten pro Tag zusammen.
+Frühere Konsolen-Entwürfe sind zur Ansicht; ihre Freigaben werden nicht migriert.
+„Verlauf mit COO auswerten“ übergibt diesen sichtbaren Stand ausdrücklich an die
+KI. Der Server lädt ihn erneut und prüft seine Revision vor dem Start.
+
+Neue und bestehende COO-Ergebnisse zeigen Markdown als bereinigte Leseansicht,
+mit separatem Bearbeiten-Modus. Freigabe eines klientengebundenen COO-Entwurfs
+committet ausschließlich den geprüften Text unter
+`~/vitaltraining/klienten/freigaben/<id>/<datum>-<auftrag>.md` im bestehenden
+`nimmsel23/business-vitaltraining`-Repository. Kein Push, keine Nachricht und
+keine Änderung am Klientenstamm. SHA und Zielpfad erscheinen im Ergebnis.
+Git-Fehler lassen den Auftrag offen. Bereits committed Dokumente werden durch
+einen neuen Entwurf korrigiert. Ungebundene alte Aufträge behalten die bisherige
+Dokumentfreigabe. `COACH_CLIENT_ARCHIVE_ROOT` kann einen bestehenden Checkout
+desselben Repositorys wählen; Tests verwenden ausschließlich temporäre Repos.
+
+Der lokale Jobzustand liegt in SQLite (`coach_csuite_runtime.py`), nicht im alten
+Firestore/localStorage-Fallback. Private API-Routen bleiben lokal geschützt.

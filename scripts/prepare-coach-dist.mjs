@@ -1,3 +1,4 @@
+import './build-workspace-markdown.mjs'
 // coach-shell.html -> index.html; coach.html remains the React app embedded by the shell.
 // Splash, SW (coach-sw.js inkl. Precache der Assets), SW-Register und Manifest-Patch
 // macht danach scripts/mini-app-shell (@vos/mini-app-shell, Konfig: mini-app.json).

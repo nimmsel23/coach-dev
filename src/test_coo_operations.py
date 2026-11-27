@@ -75,6 +75,19 @@ class CooTests(unittest.TestCase):
         self.assertNotIn('FORGED', self.seen[0])
         self.assertNotIn('BOB-ONLY', self.seen[0])
 
+    def test_explicit_cli_context_is_reloaded_and_revision_checked(self):
+        from unittest.mock import patch
+        context = self.ops.context('alice')
+        payload = {'workspaceId': 'coo', 'clientId': 'alice', 'engine': 'gemini', 'expectedContextRevision': context['revision'], 'context': {'includeFitnessLog': True, 'expectedLogRevision': 'old', 'fitnessLog': 'forged'}, 'message': 'Prüfen'}
+        with patch('coach_coo_tools.client_log', return_value={'status': 'available', 'revision': 'current', 'sessions': ['SERVER-CLI']}):
+            self.assertEqual(self.client.post('/api/csuite/runs', json=payload).status_code, 409)
+            payload['context']['expectedLogRevision'] = 'current'
+            result = self.client.post('/api/csuite/runs', json=payload)
+            self.assertEqual(result.status_code, 202)
+            item = self.runtime.wait(result.json()['id'])
+            self.assertEqual(item['context']['clientContext']['fitnessLog']['sessions'], ['SERVER-CLI'])
+            self.assertIn('SERVER-CLI', self.seen[-1])
+
     def test_explicit_calendar_selection_is_refreshed_and_bound(self):
         event = {'id': 'appointment', 'title': 'Gespräch', 'start': '2026-11-27T10:00:00+01:00', 'revision': 'one'}
         self.ops.calendar_reader = lambda **kwargs: {'status': 'connected', 'events': [event]}
