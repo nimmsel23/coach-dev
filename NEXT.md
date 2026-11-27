@@ -1,3 +1,4 @@
+- [ ] Nach Owner-Reload von `coach-api.service` den ClientForge-Button „Push Firestore“ für Matthias-Mayer erneut prüfen; fehlende POST-Route in `server.py` ist korrigiert (405).
 - [ ] Erweiterte CLI-Profile und globalen Rezeptkatalog in der Web-Oberfläche fertig integrieren; explizite Klienten-Zustellung separat umsetzen und abnehmen. CLI/SQLite sind abgeschlossen; Provider-Verfügbarkeit bleibt extern zu prüfen.
 - [ ] Nach autorisiertem Coach-API-Reload FUEL.md-Regeln im echten Coach-Login prüfen. Vollständigen Paleo-Wochenlauf erst bei geklärtem HTTP 402 erneut testen; vier echte Gerichte liegen geprüft vor, drei Slots waren Providerfehler.
 - [ ] Ernährungsentwurf mit echtem Coach-Login und Gemini abnehmen; Rezeptmengen/Nährwerte gegen bestehenden Fuel-Katalog berechnen und explizite Fuel-Zielbereitstellung mit passender Versionierung ergänzen. Browserentwürfe sind noch keine Cloud-Pläne.
@@ -99,3 +100,13 @@
 **Gemini-Review (potenzielle blinde Flecken, 2026-11-24):**
 *   **Ungeprüfte Annahme zur `local_only`-Guard-Abdeckung:** Die Anpassung der `local_only`-Guard-Logik für Tailnet-Zugriff erfolgte explizit in `coach_local_plans.py`. Es wurde nicht explizit verifiziert, ob andere lokale UIs wie die Konsole (die von `coach_legacy_clients.py` bedient wird) dieselbe aktualisierte Guard-Funktion verwenden oder eine eigene, potenziell noch blockierende Logik besitzen.
 *   **Mangel an konkreten Details im Konflikt-Audit:** Der Audit zu Widersprüchen zwischen `coach-dev/src` und `klienten-ui/schmiede-src` identifiz
+
+- [ ] CEO-Portal Live-Smoke mit Google-Login (manuell am Desktop).
+- [ ] Hosting-Deploy vos-coach mit `dist-coach/workspaces/` (explizites Deploy-OK nötig).
+- [ ] Tailscale Serve `/workspaces` Root — Workaround `/coach/workspaces` bleibt (Operator/sudo).
+
+**Gemini-Review (potenzielle blinde Flecken, 2026-11-24):**
+*   **Firebase-Konfiguration im Shared Runtime hartkodiert:** Die `firebaseConfig` in `workspaces/_shared/runtime.js` ist hartkodiert, anstatt Umgebungsvariablen (`import.meta.env`) zu nutzen, wie es im Haupt-React-Portal geschieht. Dies ist unflexibel und ein potenzielles Wartungs-/Sicherheitsrisiko.
+*   **`ensureSeedQueue()` bei Firebase-Fallback:** Die `boot()`-Funktion in den Dashboards ruft `ensureSeedQueue()` auch dann auf, wenn der Firebase-Adapter in den `mock`-Modus fällt. Dies könnte dazu führen, dass Mock-Daten in `localStorage` geschrieben werden, die potenziell echte (aber temporär nicht erreichbare) Firestore-Daten überschreiben, wenn die Verbindung später wiederhergestellt wird.
+*   **"Ausführen" von Freigaben nur clientseitig:** Die "Freigeben & Ausführen"-Logik wurde auf clientseitiges Kopieren und `mailto`-Links beschränkt. Ein echtes "Ausführen" (z.B. Versand einer E-Mail über einen Backend-Dienst) ist weiterhin nicht implementiert, was eine Kernfunktion eines "Agenten" unvollständig lässt.
+- [ ] `tests/test_coach_cli.py` schlägt fehl (erwartet `backend.notifier.cli`, schon vor dem client.env-Commit 3a629e21) — reparieren oder Test anpassen.
