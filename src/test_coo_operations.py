@@ -19,6 +19,7 @@ class CooTests(unittest.TestCase):
             'bob': {'name': 'Bob', 'firebase_uid': 'uid-bob', 'role': 'client'},
             'hidden': {'name': 'Hidden', 'coach_visible': False},
             'owner': {'name': 'Owner', 'role': 'coach'},
+            'tester': {'name': 'Tester', 'role': 'tester', 'status': 'freund'},
         }.items():
             folder = self.root / client_id
             folder.mkdir(parents=True)
@@ -48,7 +49,7 @@ class CooTests(unittest.TestCase):
         response = self.client.get('/api/csuite/coo/overview')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.headers['cache-control'], 'no-store')
-        self.assertEqual([row['id'] for row in response.json()['clients']], ['alice', 'bob'])
+        self.assertEqual([row['id'] for row in response.json()['clients']], ['alice', 'bob', 'hidden', 'owner', 'tester'])
         context = self.ops.context('alice')
         serialized = json.dumps(context)
         self.assertIn('ALICE-ONLY', serialized)
@@ -110,9 +111,10 @@ class CooTests(unittest.TestCase):
         profile.write_text(json.dumps({'name': 'Bob'}))
         self.assertEqual(next(s['status'] for s in self.ops.context('bob')['sources'] if s['id'] == 'workouts'), 'not-linked')
 
-    def test_hidden_clients_foreign_links_and_public_proxy_are_rejected(self):
-        for client_id in ['hidden', 'owner', 'unknown']:
-            self.assertEqual(self.client.get(f'/api/csuite/coo/clients/{client_id}/context').status_code, 404)
+    def test_all_registered_roles_allowed_but_foreign_links_and_public_proxy_rejected(self):
+        for client_id in ['hidden', 'owner', 'tester']:
+            self.assertEqual(self.client.get(f'/api/csuite/coo/clients/{client_id}/context').status_code, 200)
+        self.assertEqual(self.client.get('/api/csuite/coo/clients/unknown/context').status_code, 404)
         outside = Path(self.tmp.name) / 'outside.md'
         outside.write_text('OUTSIDE-SECRET')
         (self.root / 'alice/KLIENT.md').unlink()

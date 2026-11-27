@@ -26,8 +26,6 @@ class CooOperations:
             profile = plans_module.read(self.store.client(item['id']) / 'client.json') or {}
             status = str(profile.get('status') or '')
             role = profile.get('role') or ('contact' if status in {'freund', 'interessent', 'lead', 'kontakt'} else 'client')
-            if role not in {'client', 'contact'} or profile.get('coach_visible') is False:
-                continue
             result.append({'id': item['id'], 'name': item['name'], 'role': role, 'status': status})
         return result
 
@@ -54,7 +52,7 @@ class CooOperations:
     def context(self, client_id):
         client = next((row for row in self.clients() if row['id'] == client_id), None)
         if not client:
-            raise HTTPException(404, 'Klient nicht gefunden oder nicht sichtbar.')
+            raise HTTPException(404, 'Person nicht in der Klientenablage gefunden.')
         folder = self.store.client(client_id)
         profile = plans_module.read(folder / 'client.json') or {}
         sources = []
