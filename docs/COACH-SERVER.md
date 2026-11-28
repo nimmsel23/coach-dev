@@ -125,6 +125,7 @@ Live-Daten und speichert Daniels Antworten. Das Dashboard selbst wird hier **nic
 | Route | Zweck |
 | --- | --- |
 | `GET /api/org/state` | `{live, today, coaching, answers}` — Coaching-Lage anonym (K-xx/T-xx) aus `~/.vos/coaching/report.py --json`, letzte 30 Owner-Antworten |
+| `GET /api/org/coaching` | `{today, rows}` — Coaching-Lage **mit Namen**, live aus den Trainingsdaten (`coach_coaching.py`: App-Sessions + vorgemerkte `~/Klienten/<slug>/sessions`; letzte Einheit, Pause, Rhythmus 4 Wo., fälliger Block, Ø RPE). Gleicher Guard wie `/state`; Abnehmer: Coaching-Seite der Dashboards (`~/.vos/dashboard/coaching-live.js`), Daten nur im Owner-Browser |
 | `POST /api/org/decision` | `{id, status: angenommen\|abgelehnt, reason?}` — Ja/Nein zum Wochenbrief |
 | `POST /api/org/line` | `{text}` (≤ 500 Zeichen) — „Eine Zeile, wenn du willst“ |
 

@@ -67,5 +67,14 @@ class OrgRouterTest(unittest.TestCase):
         self.assertEqual(self.local.post("/api/org/line", json={"text": "a" * 501}).status_code, 413)
 
 
+    def test_coaching_live_same_guard(self):
+        with patch("coach_coaching.build", return_value={"today": "2026-11-28", "rows": []}):
+            ok = self.local.get("/api/org/coaching", headers={"Origin": "https://nimmsel23.github.io"})
+            self.assertEqual(ok.status_code, 200)
+            self.assertEqual(ok.json()["rows"], [])
+            self.assertEqual(self.local.get("/api/org/coaching", headers={"Origin": "https://evil.example"}).status_code, 403)
+            self.assertEqual(self.remote.get("/api/org/coaching").status_code, 403)
+
+
 if __name__ == "__main__":
     unittest.main()

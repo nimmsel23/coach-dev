@@ -5,6 +5,8 @@ Das Dashboard liegt als statische GitHub Page unter https://nimmsel23.github.io/
 und legt Daniels Antworten ab. Ohne coach-api bleibt die Page beim Schnappschuss.
 
   GET  /api/org/state     Coaching-Lage (anonym, aus ~/.vos/coaching/report.py) + letzte Antworten
+  GET  /api/org/coaching  Coaching-Lage mit Namen, live aus den Trainingsdaten (coach_coaching.py) —
+                          für die Coaching-Seite der Dashboards; nur Laptop/Owner-Tailnet, nie im Repo
   POST /api/org/decision  {"id", "status": "angenommen"|"abgelehnt", "reason"?}
   POST /api/org/line      {"text"}  — „Eine Zeile, wenn du willst“
 
@@ -159,6 +161,12 @@ def create_router() -> APIRouter:
             "coaching": coaching(),
             "answers": read_answers(),
         }
+
+    @router.get("/coaching")
+    async def coaching_live(request: Request):
+        guard(request)
+        from coach_coaching import build
+        return build()
 
     async def body(request: Request) -> dict:
         raw = await request.body()
