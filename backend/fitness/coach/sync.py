@@ -258,6 +258,7 @@ def run(
 
     listeners: list = []
     extras: list = []
+    observers: list = []
     if catalog and not dry_run:
         try:
             from fitness.firestore.mirror import start_catalog_watchers
@@ -271,6 +272,14 @@ def run(
             extras.append(start_enrichment_watcher())
         except Exception as exc:
             logger.warning(f"Enrichment-Watcher nicht gestartet: {exc}")
+        try:
+            # kb/muscles/*.yml live nach Firestore (vormals nur im fitness.api-Lifespan,
+            # der in coach-api nicht läuft; pre-push-Hook bleibt Fallback).
+            from fitness.catalog.api.muscle_watcher import start_muscle_kb_watcher
+
+            observers.append(start_muscle_kb_watcher())
+        except Exception as exc:
+            logger.warning(f"Muscle-KB-Watcher nicht gestartet: {exc}")
     listeners.append(
         worker.db.collection(COMMANDS).where("status", "==", "queued").on_snapshot(lambda *_: wake.set())
     )
@@ -298,6 +307,9 @@ def run(
                 pass
         for obs, thread, ev in extras:
             ev.set()
+            obs.stop()
+            obs.join(timeout=5)
+        for obs in observers:
             obs.stop()
             obs.join(timeout=5)
         logger.info("coach-sync beendet")

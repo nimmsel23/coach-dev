@@ -154,6 +154,10 @@ Watcher startet, lief hier nie. Früher spiegelte der Node-Server (`backend/node
 `onSnapshot` beim Start), danach Staging `fitness-preview.service` (:8100, inaktiv). Nicht parallel starten:
 `fitness-preview.service`, `fitness-firestore-daemon.service` (darf nicht aktiviert werden).
 
+Der übrige Lifespan von `fitness.api.main` liegt in `coach-sync.service` (`fitness/coach/sync.py run`):
+Katalog-/Inbox-Listener, Coach-Bridge-Befehle, Enrichment und seit 2026-11-28 der `kb/muscles`-Live-Push
+(`start_muscle_kb_watcher`). Damit läuft nichts mehr nur im nie gestarteten fitness.api-Lifespan.
+
 ## Exercise source fusion
 
 `/fitness/inbox/{id}/link-source` also accepts explicit `inspect`/`merge` operations.
