@@ -198,9 +198,7 @@ def configured_backends(overrides: dict[str, str] | None = None) -> dict[str, ht
         if url.scheme not in ("http", "https") or not url.host or url.query or url.fragment or url.username or url.password:
             raise ValueError(f"Backend {name} must be an HTTP(S) URL without credentials or query")
         coach_ports = {int(os.environ.get("COACH_PORT", "9150"))}
-        alias = os.environ.get("COACH_ALIAS_PORT", "").strip()
-        if alias.isdigit():
-            coach_ports.add(int(alias))
+        coach_ports.update(int(port) for port in os.environ.get("COACH_ALIAS_PORT", "").split(",") if port.strip().isdigit())
         if url.host in ("localhost", "127.0.0.1", "::1", "0.0.0.0") and url.port in coach_ports:
             raise ValueError(f"Backend {name} points back to Coach; choose a separate domain worker port")
         urls[name] = url
@@ -703,27 +701,27 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--host", default=os.environ.get("COACH_HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.environ.get("COACH_PORT", "9150")))
-    # Alias default 8788 (ehem. vital-hub); COACH_ALIAS_PORT=0 schaltet ab.
-    parser.add_argument("--alias-port", type=int, default=int(os.environ.get("COACH_ALIAS_PORT", "8788")))
+    # Alias-Ports (Komma-Liste), default 8788 (ehem. vital-hub) und 5200 (ehem. klienten-dev); COACH_ALIAS_PORT=0 schaltet ab.
+    parser.add_argument("--alias-port", default=os.environ.get("COACH_ALIAS_PORT", "8788,5200"))
     parser.add_argument("--reload", action="store_true")
     args = parser.parse_args()
     os.environ["COACH_PORT"] = str(args.port)
-    alias = args.alias_port if args.alias_port and args.alias_port != args.port else 0
-    if alias:
-        os.environ["COACH_ALIAS_PORT"] = str(alias)
+    aliases = [int(p) for p in str(args.alias_port).split(",") if p.strip().isdigit() and int(p) not in (0, args.port)]
+    if aliases:
+        os.environ["COACH_ALIAS_PORT"] = ",".join(map(str, aliases))
     else:
         os.environ.pop("COACH_ALIAS_PORT", None)
 
-    if args.reload or not alias:
+    if args.reload or not aliases:
         uvicorn.run("server:app", host=args.host, port=args.port, reload=args.reload, app_dir=str(ROOT))
     else:
-        # Gleiche App auf :9150 und ehem. Hub-Port :8788 (vital-hub.service aus).
-        async def _serve_both() -> None:
+        # Gleiche App auf :9150 und den Alias-Ports (ehem. vital-hub :8788, klienten-dev :5200).
+        async def _serve_all() -> None:
             app_obj = create_app()
             servers = [
-                uvicorn.Server(uvicorn.Config(app_obj, host=args.host, port=args.port, log_level="info")),
-                uvicorn.Server(uvicorn.Config(app_obj, host=args.host, port=alias, log_level="info")),
+                uvicorn.Server(uvicorn.Config(app_obj, host=args.host, port=port, log_level="info"))
+                for port in [args.port, *aliases]
             ]
             await asyncio.gather(*(server.serve() for server in servers))
 
-        asyncio.run(_serve_both())
+        asyncio.run(_serve_all())

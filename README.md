@@ -19,8 +19,8 @@ Zuständigkeiten: [docs/OWNERSHIP-MAP.md](./docs/OWNERSHIP-MAP.md).
 
 `server.py` hört standardmäßig auf `127.0.0.1:9150` (`COACH_HOST` / `COACH_PORT`,
 auch `--host` / `--port`). Die Unit [`systemd/coach-api.service`](./systemd/coach-api.service)
-setzt dieselben Werte und trägt den Alias `fitness-api.service`. Zusätzlich
-bindet der Prozess den Alias-Port `8788` (`COACH_ALIAS_PORT`), sofern er nicht
+setzt dieselben Werte und trägt die Aliase `fitness-api.service` und `vital-hub.service`. Zusätzlich
+bindet der Prozess die Alias-Ports `8788` und `5200` (`COACH_ALIAS_PORT`, Komma-Liste), sofern er nicht
 auf `0` gesetzt ist. Liveness: `GET /health` und `GET /_coach/health`.
 
 Unter `:9150` liegen die gebaute Katalog-UI auf `/` und `/catalog-ui/`, die
