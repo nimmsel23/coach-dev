@@ -10,6 +10,8 @@ WorkingDirectory=%h/dev/coach-dev
 ExecStart=/usr/bin/python3 %h/dev/coach-dev/server.py
 Environment=COACH_HOST=127.0.0.1
 Environment=COACH_PORT=9150
+# Einziger Nutzerdaten-Sync (Firestore <-> ~/.aos/users); fitness-preview.service nicht parallel.
+Environment=FITNESS_SYNC_OWNER=1
 Environment=COACH_ALIAS_PORT=8788,5200
 Environment=COACH_FITNESS_BACKEND_ROOT=%h/dev/coach-dev/backend
 Environment=PYTHONPATH=%h/dev/coach-dev/backend:%h/dev/coach-dev:%h/dev/coach-dev/anatomy-kb

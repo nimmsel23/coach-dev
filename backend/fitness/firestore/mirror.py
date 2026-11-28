@@ -240,7 +240,10 @@ def on_habits(col_snapshot, changes, read_time):
         if uid not in defs_maps:
             habits_dir.mkdir(parents=True, exist_ok=True)
             defs_file = habits_dir / "definitions.json"
-            defs = json.loads(defs_file.read_text()) if defs_file.exists() else []
+            try:
+                defs = json.loads(defs_file.read_text()) if defs_file.exists() else []
+            except ValueError:
+                defs = []  # leere/kaputte Datei darf den Listener nicht beenden
             defs_maps[uid] = {h["uuid"]: h for h in defs}
             changed_dirs[uid] = habits_dir
         doc_id = change.document.id

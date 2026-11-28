@@ -143,6 +143,17 @@ Live-Daten und speichert Daniels Antworten. Das Dashboard selbst wird hier **nic
 - **Tests:** `PYTHONPATH=backend:. python3 -m unittest tests.test_org`
 - Änderungen an `coach_org.py` wirken erst nach `systemctl --user restart coach-api` (Owner).
 
+## Nutzerdaten-Sync (seit 2026-11-28)
+
+coach-api ist mit `FITNESS_SYNC_OWNER=1` (in `systemd/coach-api.service`) der **einzige** Nutzerdaten-Sync:
+Firestore `fitness/*/sessions|journal|habits…` → `~/.aos/users/<uid>/fitness/` (collectionGroup, alle Klienten)
+und lokale Session-JSONs → Firestore. Start/Stop in `server.py::start_userdata_sync()` im Lifespan.
+
+Warum nötig: `server.py` mountet aus `backend/fitness` nur Router; der Lifespan von `fitness.api.main`, der die
+Watcher startet, lief hier nie. Früher spiegelte der Node-Server (`backend/node/firestore-mirror.mjs`,
+`onSnapshot` beim Start), danach Staging `fitness-preview.service` (:8100, inaktiv). Nicht parallel starten:
+`fitness-preview.service`, `fitness-firestore-daemon.service` (darf nicht aktiviert werden).
+
 ## Exercise source fusion
 
 `/fitness/inbox/{id}/link-source` also accepts explicit `inspect`/`merge` operations.

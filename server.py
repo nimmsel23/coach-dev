@@ -110,6 +110,45 @@ def _ensure_backend_on_path() -> Path:
     return source_root
 
 
+def start_userdata_sync() -> tuple[list, list]:
+    """Nutzerdaten-Sync Firestore <-> ~/.aos/users/<uid>/fitness, nur mit FITNESS_SYNC_OWNER=1.
+
+    coach-api mountet aus backend/fitness nur die Router; der Lifespan von fitness.api.main
+    (der diese Watcher startet) läuft hier nie. Ohne diesen Block synct seit dem Aufgehen von
+    Fitness in coach-api niemand die App-Workouts. Genau EIN Prozess darf Sync-Besitzer sein —
+    fitness-preview.service (:8100) dann nicht parallel starten.
+    """
+    if os.environ.get("FITNESS_SYNC_OWNER") != "1":
+        return [], []
+    watchers, observers = [], []
+    try:
+        from fitness.firestore.mirror import start_userdata_watchers
+        watchers = start_userdata_watchers()
+    except Exception:
+        logging.exception("Nutzerdaten-Watcher nicht gestartet")
+    try:
+        from fitness.firestore.local_watch import start_session_file_watcher
+        observers.append(start_session_file_watcher())
+    except Exception:
+        logging.exception("Session-Filesystem-Watcher nicht gestartet")
+    logging.info("FITNESS_SYNC_OWNER=1 — coach-api ist der einzige Nutzerdaten-Sync.")
+    return watchers, observers
+
+
+def stop_userdata_sync(watchers: list, observers: list) -> None:
+    for w in watchers:
+        try:
+            w.unsubscribe()
+        except Exception:
+            pass
+    for o in observers:
+        try:
+            o.stop()
+            o.join(timeout=5)
+        except Exception:
+            pass
+
+
 def attach_fitness_api(app: FastAPI) -> bool:
     """Inbox/Catalog/Workouts from backend/fitness (same process as coach-api)."""
     _ensure_backend_on_path()
@@ -231,12 +270,14 @@ def create_app(*, catalog_directory: Path | None = None, coach_directory: Path |
                 from coach_taskwarrior_scheduler import run_scheduler
                 interval = int(os.environ.get('COACH_TASKWARRIOR_SYNC_INTERVAL_SECONDS', '60'))
                 scheduler_task = asyncio.create_task(run_scheduler(stop_scheduler, interval))
+            sync = start_userdata_sync() if app.state.fitness_api_local else ([], [])
             try:
                 yield
             finally:
                 stop_scheduler.set()
                 if scheduler_task:
                     await scheduler_task
+                stop_userdata_sync(*sync)
 
     app = FastAPI(title="Coach backend", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 
